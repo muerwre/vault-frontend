@@ -1,2 +1,47 @@
+@import "~raleway-cyrillic/raleway.css";
+
 body {
+  background: $main_bg_color;
+  background: $main_bg_color url("../sprites/dots.svg");
+  //url("http://vault48.org/pixmaps/texture.jpg");
+  //background: #111111;
+  color: $main_text_color;
+  font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background: url("../sprites/circles.svg");
+    pointer-events: none;
+    background-size: cover;
+  }
+}
+
+:global(.padded) {
+  padding: $gap;
+}
+
+:global(.default_container) {
+  max-width: $content_width;
+  margin: auto;
+}
+
+:global(.content_container) {
+  background: $content_bg_color;
+}
+
+
+:global(.head_container) {
+  background: $main_bg_color;
+}
+
+:global(.footer) {
+  height: 40px;
 }

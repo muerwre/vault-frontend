@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-weight: 500;
+  padding: $gap $spc;
+}
+
+.logo {
+  font-size: 1.4em;
+  font-weight: 800;
+  display: flex;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.plugs {
+  display: flex;
+
+  > div {
+    //margin: 8px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: $gap;
+
+    &::after {
+      content: ' ';
+      margin-left: $spc;
+      background: white;
+      width: 2px;
+      height: $gap;
+      display: block;
+    }
+  }
+}
+
+.profile {
+  padding: 5px 10px;
+  box-shadow: white 0 0 0 1px;
+  border-radius: 10px;
+}
+
+.user_button {
+  padding: 0 $gap;
+  display: flex;
+  align-items: center;
+}
+
+.user_avatar {
+  width: 16px;
+  height: 16px;
+  background: transparentize(white, 0.5);
+  margin-right: $gap;
+}

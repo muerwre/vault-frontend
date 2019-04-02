@@ -6,30 +6,22 @@ import { SomeComponent } from '$components/SomeComponent';
 import { ConnectedRouter } from "connected-react-router";
 import { history } from "$redux/store";
 import { NavLink, Switch, Route } from 'react-router-dom';
+import { MainLayout } from "$containers/MainLayout";
+import { FlowLayout } from "$containers/FlowLayout";
 
 interface IAppProps {}
 interface IAppState {}
 
 class Component extends React.Component<IAppProps, IAppState> {
-  state = { };
-
   render() {
     return (
       <ConnectedRouter history={history}>
         <div>
-          <div>
-            <NavLink exact to="/" activeClassName="active">
-              Root
-            </NavLink>
-            <NavLink to="/somepath" activeClassName="active">
-              Something
-            </NavLink>
-          </div>
           <Switch>
             <Route
               exact
               path="/"
-              component={SomeComponent}
+              component={FlowLayout}
             />
             <Route
               path="/somepath"

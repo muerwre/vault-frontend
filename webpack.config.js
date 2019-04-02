@@ -34,7 +34,7 @@ const resolve = {
     $redux: join(__dirname, 'src/redux'),
     $utils: join(__dirname, 'src/utils'),
   },
-  extensions: ['*', '.ts', '.tsx', '.js', '.jsx', '.json']
+  extensions: ['*', '.ts', '.tsx', '.js', '.jsx', '.json', '.scss']
 };
 
 /* Configuration */
@@ -78,7 +78,6 @@ module.exports = () => {
           test: /\.scss$/,
           use: [
             { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
-            // { loader: 'css-loader' },
             {
               loader: 'css-loader',
               options: {
@@ -88,7 +87,14 @@ module.exports = () => {
                 localIdentName: '[name]__[local]__[hash:base64:5]'
               }
             },
-            { loader: 'sass-loader' },
+            { loader: 'resolve-url-loader' },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+                sourceMapContents: false
+              }
+            },
             {
               loader: 'sass-resources-loader',
               options: {
@@ -111,7 +117,7 @@ module.exports = () => {
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: 'fonts/'
+              // outputPath: '/font'
             }
           }
         },
