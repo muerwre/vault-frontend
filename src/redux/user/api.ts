@@ -1,4 +1,4 @@
-import { api } from "$utils/api";
+import { api, authMiddleware } from "$utils/api";
 import { API } from "$constants/api";
 import { IApiUser } from "$redux/user/constants";
 
