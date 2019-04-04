@@ -9,21 +9,14 @@ import { push } from 'connected-react-router'
 function* sendLoginRequestSaga({ username, password }: ReturnType<typeof ActionCreators.userSendLoginRequest>): SagaIterator {
   if (!username || !password) return yield put(userSetLoginError({ error: USER_ERRORS.EMPTY_CREDENTIALS }));
 
-  const { token, status, user }: { token: string, status: number, user: IApiUser } = yield call(apiUserLogin, { username, password });
+  const { token, status, user }:
+    { token: string, status: number, user: IApiUser } = yield call(apiUserLogin, { username, password });
 
   if (!token) return yield put(userSetLoginError({ error: USER_STATUSES[status] || USER_ERRORS.INVALID_CREDENTIALS }));
 
   const { id, role, email, activated } = user;
 
-  yield put(userSetUser({
-    token,
-    id,
-    role,
-    email,
-    username: user.username,
-    activated,
-  }));
-
+  yield put(userSetUser({ token, id, role, email, username: user.username, activated, }));
   yield put(push('/'));
 }
 
