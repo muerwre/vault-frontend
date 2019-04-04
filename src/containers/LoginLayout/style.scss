@@ -25,6 +25,6 @@
   align-items: stretch;
   justify-content: stretch;
   background: rgba(0,0,0,0.1);
-  box-shadow: inset rgba(0,0,0,0.3) 0 0 0 1px;
-  //@include outer_shadow();
+
+  @include outer_shadow();
 }
