@@ -1,6 +1,5 @@
 import * as React from 'react';
 const style = require('./style.scss');
-const logo_sm = require('$sprites/logo_sm.svg');
 
 export const Header = () => (
   <div className="default_container head_container">
@@ -14,10 +13,13 @@ export const Header = () => (
         <div>boris</div>
         <div>flow</div>
       </div>
-      <div className={style.user_button}>
-        <div className={style.user_avatar} />
-        gvorcek
-      </div>
     </div>
   </div>
 );
+
+/*
+  <div className={style.user_button}>
+    <div className={style.user_avatar} />
+    gvorcek
+  </div>
+ */

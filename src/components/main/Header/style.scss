@@ -3,7 +3,8 @@
   align-items: center;
   justify-content: flex-end;
   font-weight: 500;
-  padding: $gap $spc;
+  //padding: $gap 0;
+  height: 100px;
 }
 
 .logo {
@@ -34,6 +35,8 @@
       height: $gap;
       display: block;
     }
+
+    &:last-child::after { display: none; }
   }
 }
 
