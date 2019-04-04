@@ -14,9 +14,9 @@ function* sendLoginRequestSaga({ username, password }: ReturnType<typeof ActionC
 
   if (!token) return yield put(userSetLoginError({ error: USER_STATUSES[status] || USER_ERRORS.INVALID_CREDENTIALS }));
 
-  const { id, role, email, activated } = user;
+  const { id, role, email, activated: is_activated } = user;
 
-  yield put(userSetUser({ token, id, role, email, username: user.username, activated, }));
+  yield put(userSetUser({ token, id, role, email, username: user.username, is_activated, is_user: true }));
   yield put(push('/'));
 }
 

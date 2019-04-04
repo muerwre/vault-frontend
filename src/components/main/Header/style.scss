@@ -14,6 +14,7 @@
 
 .plugs {
   display: flex;
+  user-select: none;
 
   > div {
     //margin: 8px;
@@ -29,6 +30,10 @@
       width: 2px;
       height: $gap;
       display: block;
+    }
+
+    &:first-child {
+      padding-left: $spc + $gap;
     }
 
     &:last-child {
@@ -50,11 +55,16 @@
   padding: 0 $gap;
   display: flex;
   align-items: center;
+  background: white;
+  color: $main_bg_color;
+  height: 20px;
+  border-radius: $input_radius;
+  font-size: $text_small;
 }
 
 .user_avatar {
-  width: 16px;
-  height: 16px;
-  background: transparentize(white, 0.5);
-  margin-right: $gap;
+  //width: 16px;
+  //height: 16px;
+  //background: transparentize(white, 0.5);
+  //margin-right: $gap;
 }

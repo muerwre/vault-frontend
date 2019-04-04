@@ -7,8 +7,10 @@ export interface IUserProfile {
   username: string,
   email: string,
   role: string,
-  activated: boolean,
   token: string,
+
+  is_activated: boolean,
+  is_user: boolean,
 }
 
 export interface IUserFormStateLogin {
@@ -58,7 +60,8 @@ const INITIAL_STATE: IUserState = {
     email: '',
     role: '',
     token: '',
-    activated: false,
+    is_activated: false,
+    is_user: false,
   },
   form_state: {
     login: {

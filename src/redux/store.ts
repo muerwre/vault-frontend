@@ -12,7 +12,7 @@ import { routerMiddleware } from 'connected-react-router'
 
 const userPersistConfig: PersistConfig = {
   key: 'user',
-  whitelist: ['user', 'logo', 'provider', 'speed'],
+  whitelist: ['profile'],
   storage,
 };
 
