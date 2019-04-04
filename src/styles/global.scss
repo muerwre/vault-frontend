@@ -25,6 +25,18 @@ body {
   }
 }
 
+:global(.gap) {
+  height: $gap;
+}
+
+:global(.spc) {
+  height: $spc;
+
+  &:global(.double) { height: $spc * 2; }
+  &:global(.quadro) { height: $spc * 4; }
+  &:global(.sixty)  { height: $spc * 6; }
+}
+
 :global(.padded) {
   padding: $gap;
 }
@@ -46,3 +58,4 @@ body {
 :global(.footer) {
   height: 40px;
 }
+

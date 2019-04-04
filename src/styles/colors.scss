@@ -1,6 +1,21 @@
+$color_red: #ff3344;
+$color_yellow: #ffd60f;
+$color_blue: complement($color_red);
+//$color_yellow: complement($color_red);
+//$color_yellow: yellow;
+
 $main_bg_color: #161616;
 $main_text_color: white;
 
 $content_bg_color: #222222;
+$content_bg_secondary: darken($content_bg_color, 3%);
 
 $cell_bg: transparentize(white, 0.95);
+
+$text_normal: 16px;
+$text_small: 14px;
+$text_big: 20px;
+$text_sign: 22px;
+
+$input_bg_color: transparentize(black, 0.8);
+$button_bg_color: #ff3344;

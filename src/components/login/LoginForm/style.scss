@@ -1,0 +1,43 @@
+.container {
+  display: grid;
+  flex: 1;
+
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr;
+  grid-row-gap: $grid_line;
+  grid-column-gap: $grid_line;
+}
+
+.area_left {
+  grid-column-end: span 3;
+  background: $content_bg_color;
+  padding: $spc;
+  border-radius: $panel_radius 0 0 $panel_radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include outer_shadow();
+}
+
+.area_right {
+  grid-column-end: span 1;
+  background: $content_bg_secondary;
+  padding: $spc;
+  border-radius: $panel_radius 0 0 $panel_radius;
+  user-select: none;
+
+  @include outer_shadow();
+}
+
+.area_sign {
+  font-size: $text_sign;
+  font-weight: 800;
+  line-height: 1.2em;
+}
+
+.inputs {
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}

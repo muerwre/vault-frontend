@@ -1,0 +1,15 @@
+.container {
+
+}
+
+.form {
+  width: $content_width;
+  min-height: $cell * 2;
+  box-sizing: border-box;
+  border-radius: $panel_radius;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+
+  //@include outer_shadow();
+}

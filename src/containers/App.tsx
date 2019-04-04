@@ -2,12 +2,11 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { hot } from 'react-hot-loader';
-import { SomeComponent } from '$components/SomeComponent';
 import { ConnectedRouter } from "connected-react-router";
 import { history } from "$redux/store";
 import { NavLink, Switch, Route } from 'react-router-dom';
-import { MainLayout } from "$containers/MainLayout";
 import { FlowLayout } from "$containers/FlowLayout";
+import { LoginLayout } from "$containers/LoginLayout";
 
 interface IAppProps {}
 interface IAppState {}
@@ -24,8 +23,8 @@ class Component extends React.Component<IAppProps, IAppState> {
               component={FlowLayout}
             />
             <Route
-              path="/somepath"
-              component={SomeComponent}
+              path="/login"
+              component={LoginLayout}
             />
           </Switch>
         </div>

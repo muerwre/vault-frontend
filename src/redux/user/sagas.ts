@@ -1,25 +1,34 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
-import { delay } from 'redux-saga';
-import { USER_ACTIONS } from "$redux/user/constants";
+import { call, put, takeLatest } from 'redux-saga/effects';
+import { SagaIterator } from 'redux-saga';
+import { IApiUser, USER_ACTIONS, USER_ERRORS, USER_STATUSES } from "$redux/user/constants";
+import * as ActionCreators from '$redux/user/actions';
+import { apiUserLogin } from "$redux/user/api";
+import { userSetLoginError, userSetUser } from "$redux/user/actions";
+import { push } from 'connected-react-router'
 
-// Worker Saga for SET_EDITOR_LOCATION_INPUT reducer
-/*
-function* fetchSuggestions({ payload }) {
-  const { value } = payload;
+function* sendLoginRequestSaga({ username, password }: ReturnType<typeof ActionCreators.userSendLoginRequest>): SagaIterator {
+  if (!username || !password) return yield put(userSetLoginError({ error: USER_ERRORS.EMPTY_CREDENTIALS }));
 
-  yield delay(300);
-  try {
-    const results = yield call(someFunction, arguments);
-    yield put({ type: TYPES.ANOTHER_ACTION, payload: { results } });
-  } catch (e) {
-    yield put({ type: TYPES.ANOTHER_ACTION, payload: { results } });
-  }
+  const { token, status, user }: { token: string, status: number, user: IApiUser } = yield call(apiUserLogin, { username, password });
+
+  if (!token) return yield put(userSetLoginError({ error: USER_STATUSES[status] || USER_ERRORS.INVALID_CREDENTIALS }));
+
+  const { id, role, email, activated } = user;
+
+  yield put(userSetUser({
+    token,
+    id,
+    role,
+    email,
+    username: user.username,
+    activated,
+  }));
+
+  yield put(push('/'));
 }
-*/
 
 function* mySaga() {
-  // fetch autocompletion on location input
-  //yield takeLatest(TYPES.ACTION, function);
+  yield takeLatest(USER_ACTIONS.SEND_LOGIN_REQUEST, sendLoginRequestSaga);
 }
 
 export default mySaga;

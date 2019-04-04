@@ -1,12 +1,12 @@
 import * as React from 'react';
+import { Logo } from "$components/main/Logo";
+
 const style = require('./style.scss');
 
 export const Header = () => (
   <div className="default_container head_container">
     <div className={style.container}>
-      <div className={style.logo}>
-        VAULT
-      </div>
+      <Logo />
       <div className={style.spacer} />
       <div className={style.plugs}>
         <div>depth</div>

@@ -1,0 +1,37 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.label {
+  background: $input_bg_color;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 2px $gap;
+}
+
+.container {
+  height: $input_height;
+  background: $input_bg_color;
+  border-radius: $input_radius;
+  flex-direction: row;
+  flex: 1 0;
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  justify-content: center;
+  @include input_shadow();
+}
+
+.input {
+  outline: none;
+  background: transparent;
+  flex: 1;
+  border: none;
+  font-size: inherit;
+  color: white;
+  padding: 0 $gap;
+  box-sizing: border-box;
+}

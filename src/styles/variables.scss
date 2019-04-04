@@ -6,6 +6,33 @@ $gap: 8px;
 $spc: $gap * 2;
 $panel_radius: 1px;
 
+$grid_line: 4px;
+
+$input_height: 32px;
+$input_radius: 2px;
+
+$info_height: 24px;
+
 @mixin outer_shadow() {
-  box-shadow: transparentize(white, 0.92) -1px -1px, transparentize(black, 0.8) 1px 1px;
+  box-shadow: inset transparentize(white, 0.95) 0 1px,
+              inset transparentize(black, 0.5) 0 -1px;
+}
+
+@mixin inner_shadow() {
+  box-shadow: inset transparentize(white, 0.95) 0 -1px,
+              inset transparentize(black, 0.5) 0 1px;
+}
+
+@mixin input_shadow() {
+  box-shadow: inset transparentize(white, 0.92) 0 -1px,
+              inset transparentize(black, 0.8) 0 1px;
+}
+
+@mixin modal_mixin() {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

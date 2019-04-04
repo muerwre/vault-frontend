@@ -1,0 +1,28 @@
+.container {
+  min-height: $info_height;
+  border-radius: $input_radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $text_small;
+  line-height: 1.2em;
+  padding: $gap;
+  background: transparentize(white, 0.9);
+
+  &:global(.danger) {
+    color: white;
+    background: transparentize($color_red, 0.5);
+  }
+
+  &:global(.warning) {
+    color: white;
+    background: transparentize($color_yellow, 0.5);
+  }
+
+  &:global(.primary) {
+    color: white;
+    background: transparentize($color_blue, 0.5);
+  }
+
+}
+

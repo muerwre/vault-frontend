@@ -1,5 +1,5 @@
 import { createReducer } from 'reduxsauce';
-import * as ACTIONS from "$redux/user/actions";
+import * as ActionCreators from "$redux/user/actions";
 import { USER_ACTIONS } from "$redux/user/constants";
 
 export interface IUserProfile {
@@ -8,13 +8,14 @@ export interface IUserProfile {
   email: string,
   role: string,
   activated: boolean,
+  token: string,
 }
 
 export interface IUserFormStateLogin {
   error: string,
 }
 
-export type IRootState = Readonly<{
+export type IUserState = Readonly<{
   profile: IUserProfile,
   form_state: {
     login: IUserFormStateLogin,
@@ -23,23 +24,40 @@ export type IRootState = Readonly<{
 
 type UnsafeReturnType<T> = T extends (...args: any[]) => infer R ? R : any;
 interface ActionHandler<T> {
-  (state: IRootState, payload: UnsafeReturnType<T>): IRootState;
+  (state: IUserState, payload: UnsafeReturnType<T>): IUserState;
 }
 
-const someActionHandler: ActionHandler<typeof ACTIONS.someAction> = (state) => {
-  return { ...state };
-};
+const setLoginErrorHandler: ActionHandler<typeof ActionCreators.userSetLoginError> = (state, { error }) => ({
+  ...state,
+  form_state: {
+    ...state.form_state,
+    login: {
+      ...state.form_state.login,
+      error,
+    }
+  }
+});
+
+const setUserHandler: ActionHandler<typeof ActionCreators.userSetUser> = (state, { profile }) => ({
+  ...state,
+  profile: {
+    ...state.profile,
+    ...profile,
+  }
+});
 
 const HANDLERS = {
-  [USER_ACTIONS.SOME_ACTION]: someActionHandler,
+  [USER_ACTIONS.SET_LOGIN_ERROR]: setLoginErrorHandler,
+  [USER_ACTIONS.SET_USER]: setUserHandler,
 };
 
-const INITIAL_STATE: IRootState = {
+const INITIAL_STATE: IUserState = {
   profile: {
     id: 0,
     username: '',
     email: '',
     role: '',
+    token: '',
     activated: false,
   },
   form_state: {
