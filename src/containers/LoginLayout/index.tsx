@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { LoginForm } from '$components/login/LoginForm';
-import { MainLayout } from "$containers/MainLayout";
+import { Header } from "$components/main/Header";
 
 const style = require('./style.scss');
 
 export const LoginLayout: React.FunctionComponent<{}> = () => (
-  <MainLayout>
-    <div className="default_container">
+  <div className={style.wrapper}>
+    <div className={style.header}>
+      <Header />
+    </div>
+    <div className={style.container}>
       <LoginForm />
     </div>
-  </MainLayout>
+  </div>
 );

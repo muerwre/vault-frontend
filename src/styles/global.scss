@@ -1,7 +1,12 @@
 @import "~raleway-cyrillic/raleway.css";
 
+html {
+  min-height: 100vh;
+}
+
 body {
   background: $main_bg_color;
+  min-height: 100vh;
   //background: $main_bg_color url("../sprites/dots.svg");
   background: url("http://vault48.org/pixmaps/texture.jpg");
   //background: #111111;
@@ -22,6 +27,14 @@ body {
     background: url("http://vault48.org/pixmaps/texture_alt.jpg");
     pointer-events: none;
     //background-size: cover;
+  }
+}
+
+:global(#app) {
+  min-height: 100vh;
+
+  & > div {
+    min-height: 100vh;
   }
 }
 
