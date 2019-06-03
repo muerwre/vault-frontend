@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Header } from "$components/main/Header";
-import {SidePane} from "$components/main/SidePane";
+import { SidePane } from "$components/main/SidePane";
 
 const style = require('./style.scss');
 
