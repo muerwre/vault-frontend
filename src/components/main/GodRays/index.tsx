@@ -40,22 +40,22 @@ export class GodRays extends React.Component<IGodRaysProps> {
 
     rays.map(({ angle, iterator, weight, speed, pulsar, opacity }, index) => {
       const gradient = ctx.createLinearGradient(0, 0, 0, height * 1.3);
-      gradient.addColorStop(0.2, `rgba(255, 255, 255, ${opacity * 0.1})`);
-      gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+      gradient.addColorStop(0.2, `rgba(255, 60, 40, ${opacity * 0.1})`);
+      gradient.addColorStop(1, `rgba(255, 60, 40, 0)`);
 
       const gradient2 = ctx.createLinearGradient(0, 0, 0, height * 1.3);
-      gradient2.addColorStop(0.2, `rgba(255, 255, 255, ${opacity * 0.2})`);
-      gradient2.addColorStop(1, "rgba(255, 255, 255, 0)");
+      gradient2.addColorStop(0.2, `rgba(255, 40, 100, ${opacity * 0.2})`);
+      gradient2.addColorStop(1, "rgba(255, 40, 100, 0)");
 
       ctx.save();
-      ctx.translate(width / 2, -600);
+      ctx.translate(width / 2, -900);
       ctx.rotate(angle);
-      ctx.translate(-width / 2, 600);
+      ctx.translate(-width / 2, 900);
 
       ctx.beginPath();
       ctx.fillStyle = gradient;
-      ctx.moveTo(((width / 2) - (weight / 2)), -600);
-      ctx.lineTo(((width / 2) + (weight / 2)), -600);
+      ctx.moveTo(((width / 2) - (weight / 2)), -900);
+      ctx.lineTo(((width / 2) + (weight / 2)), -900);
       ctx.lineTo(((width / 2) + (weight / 2 + 300)), height * 1.4);
       ctx.lineTo(((width / 2) - (weight / 2 + 300)), height * 1.4);
       ctx.fill();
@@ -63,8 +63,8 @@ export class GodRays extends React.Component<IGodRaysProps> {
 
       ctx.beginPath();
       ctx.fillStyle = gradient2;
-      ctx.moveTo(((width / 2) - (weight / 6)), -600);
-      ctx.lineTo(((width / 2) + (weight / 6)), -600);
+      ctx.moveTo(((width / 2) - (weight / 6)), -900);
+      ctx.lineTo(((width / 2) + (weight / 6)), -900);
       ctx.lineTo(((width / 2) + (weight / 6 + 50)), height * 1.4);
       ctx.lineTo(((width / 2) - (weight / 6 + 250)), height * 1.4);
       ctx.fill();
