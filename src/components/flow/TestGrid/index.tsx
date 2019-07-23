@@ -1,5 +1,4 @@
 import * as React from 'react';
-import classnames from 'classnames';
 import { Cell } from "~/components/flow/Cell";
 
 const style = require('./style.scss');
@@ -9,11 +8,15 @@ export const TestGrid = () => (
     <Cell
       height={1}
       width={4}
-      title="Example cell"
+      title="Example cell Example cell Example cell Example cell Example cell Example cell Example cell "
+      is_hero
     />
 
     <Cell />
-    <Cell height={2} />
+    <Cell
+      height={2}
+      title="Example cell Example cell Example cell Example cell Example cell Example cell Example cell "
+    />
     <Cell width={2} />
     <Cell />
   </div>
