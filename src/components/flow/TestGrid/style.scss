@@ -24,6 +24,7 @@ $cols: $content_width / $cell;
   display: flex;
   flex: 0 0;
   background: $cell_bg;
+  border-radius: 4px;
 
   @include outer_shadow();
   //&::after {
