@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { API } from "$constants/api";
-import { store } from '$redux/store';
+import { API } from "~/constants/api";
+import { store } from '~/redux/store';
 import { push } from "connected-react-router";
 
 export const authMiddleware = r => {

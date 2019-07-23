@@ -4,8 +4,8 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import createSagaMiddleware from 'redux-saga';
 import { connectRouter } from 'connected-react-router'
-import userReducer from '$redux/user/reducer';
-import userSaga from '$redux/user/sagas';
+import userReducer from '~/redux/user/reducer';
+import userSaga from '~/redux/user/sagas';
 import { createBrowserHistory } from 'history';
 import { PersistConfig, Persistor } from "redux-persist/es/types";
 import { routerMiddleware } from 'connected-react-router'

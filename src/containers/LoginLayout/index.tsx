@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { LoginForm } from '$components/login/LoginForm';
-import { Header } from "$components/main/Header";
-import { GodRays } from "$components/main/GodRays";
+import { LoginForm } from '~/components/login/LoginForm';
+import { Header } from "~/components/main/Header";
+import { GodRays } from "~/components/main/GodRays";
 
 const style = require('./style.scss');
 

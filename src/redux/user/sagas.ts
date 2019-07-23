@@ -1,9 +1,9 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-import { IApiUser, USER_ACTIONS, USER_ERRORS, USER_STATUSES } from "$redux/user/constants";
-import * as ActionCreators from '$redux/user/actions';
-import { apiUserLogin } from "$redux/user/api";
-import { userSetLoginError, userSetUser } from "$redux/user/actions";
+import { IApiUser, USER_ACTIONS, USER_ERRORS, USER_STATUSES } from "~/redux/user/constants";
+import * as ActionCreators from '~/redux/user/actions';
+import { apiUserLogin } from "~/redux/user/api";
+import { userSetLoginError, userSetUser } from "~/redux/user/actions";
 import { push } from 'connected-react-router'
 
 function* sendLoginRequestSaga({ username, password }: ReturnType<typeof ActionCreators.userSendLoginRequest>): SagaIterator {

@@ -21,6 +21,7 @@ export const SidePane = ({ }) => {
   return (
     <div className={styles.pane} style={{ left }}>
       <div className={classNames(styles.group, 'logo')} />
+
       <div className={styles.group}>
         <div className={styles.btn} />
         <div className={styles.btn} />

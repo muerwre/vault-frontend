@@ -25,14 +25,7 @@ const devtool = isDevelopment ? 'cheap-module-eval-source-map' : 'source-map';
 const resolve = {
   alias: {
     'react-dom': '@hot-loader/react-dom',
-    $components: join(__dirname, 'src/components'),
-    $containers: join(__dirname, 'src/containers'),
-    $constants: join(__dirname, 'src/constants'),
-    $sprites: join(__dirname, 'src/sprites'),
-    $config: join(__dirname, './config'),
-    $styles: join(__dirname, 'src/styles'),
-    $redux: join(__dirname, 'src/redux'),
-    $utils: join(__dirname, 'src/utils'),
+    '~': join(__dirname, 'src'),
   },
   extensions: ['*', '.ts', '.tsx', '.js', '.jsx', '.json', '.scss']
 };
@@ -171,7 +164,7 @@ module.exports = () => {
     },
     devServer: {
       historyApiFallback: true,
-      port: 8000,
+      port: 4848,
       // host: '192.168.88.40',
       contentBase: 'dist',
       publicPath: '/',

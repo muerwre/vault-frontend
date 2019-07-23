@@ -1,6 +1,6 @@
-import { api, authMiddleware } from "$utils/api";
-import { API } from "$constants/api";
-import { IApiUser } from "$redux/user/constants";
+import { api, authMiddleware } from "~/utils/api";
+import { API } from "~/constants/api";
+import { IApiUser } from "~/redux/user/constants";
 
 export const apiUserLogin = (
   { username, password }:

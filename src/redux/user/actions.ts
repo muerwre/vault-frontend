@@ -1,5 +1,5 @@
-import { USER_ACTIONS } from "$redux/user/constants";
-import { IUserProfile } from "$redux/user/reducer";
+import { USER_ACTIONS } from "~/redux/user/constants";
+import { IUserProfile } from "~/redux/user/reducer";
 
 export const userSendLoginRequest = ({
   username, password

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Logo } from "$components/main/Logo";
+import { Logo } from "~/components/main/Logo";
 import { connect } from 'react-redux';
-import { IUserProfile, IUserState } from "$redux/user/reducer";
+import { IUserProfile, IUserState } from "~/redux/user/reducer";
 
 const style = require('./style.scss');
 

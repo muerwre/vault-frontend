@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { SidePane } from "$components/main/SidePane";
+import { SidePane } from "~/components/main/SidePane";
+import { Header } from "~/components/main/Header";
 
-const style = require('./style.scss');
+import * as styles from './styles.scss';
 
 export const MainLayout = ({ children }) => (
-  <div className={style.wrapper}>
+  <div className={styles.wrapper}>
     {
       // <Header />
     }

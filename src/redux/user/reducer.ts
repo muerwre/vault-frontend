@@ -1,6 +1,6 @@
 import { createReducer } from 'reduxsauce';
-import * as ActionCreators from "$redux/user/actions";
-import { USER_ACTIONS } from "$redux/user/constants";
+import * as ActionCreators from "~/redux/user/actions";
+import { USER_ACTIONS } from "~/redux/user/constants";
 
 export interface IUserProfile {
   id: number,

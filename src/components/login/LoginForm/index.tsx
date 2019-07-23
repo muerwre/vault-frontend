@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { TextInput } from "$components/input/TextInput";
-import { Button } from "$components/input/Button";
+import { TextInput } from "~/components/input/TextInput";
+import { Button } from "~/components/input/Button";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { userSendLoginRequest, userSetLoginError } from "$redux/user/actions";
-import { IUserFormStateLogin, IUserState } from "$redux/user/reducer";
-import { Info } from "$components/input/Info";
+import { userSendLoginRequest, userSetLoginError } from "~/redux/user/actions";
+import { IUserFormStateLogin, IUserState } from "~/redux/user/reducer";
+import { Info } from "~/components/input/Info";
 
-const login = require('$containers/LoginLayout/style');
+const login = require('~/containers/LoginLayout/style');
 const style = require('./style.scss');
 
 interface ILoginFormProps {

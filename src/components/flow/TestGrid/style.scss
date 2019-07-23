@@ -18,47 +18,6 @@ $cols: $content_width / $cell;
   grid-row-gap: $grid_line;
 }
 
-.cell {
-  padding: $gap / 4;
-  box-sizing: border-box;
-  display: flex;
-  flex: 0 0;
-  background: $cell_bg;
-  border-radius: 4px;
-
-  @include outer_shadow();
-  //&::after {
-  //  content: ' ';
-  //  background: transparentize(white, 0.9);
-  //  width: 100%;
-  //  height: 100%;
-  //}
-}
-
-.vert_2 {
-  grid-row-end: span 2;
-}
-
-.vert_3 {
-  grid-row-end: span 3;
-}
-
-.vert_4 {
-  grid-row-end: span 3;
-}
-
-.hor_2 {
-  grid-column-end: span 2;
-}
-
-.hor_3 {
-  grid-column-end: span 3;
-}
-
-.hor_4 {
-  grid-column-end: span 4;
-}
-
 .pad_last {
   grid-column-end: $cols + 1;
 }
