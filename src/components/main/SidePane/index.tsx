@@ -3,22 +3,20 @@ import * as styles from './styles.scss';
 import classNames from 'classnames';
 
 interface IProps {
-  container: React.RefObject<HTMLDivElement>;
 }
 
 export const SidePane: FC<IProps> = ({
-  container,
 }) => {
+  const content_width = 1100;
   const [left, setLeft] = useState(0);
 
   const moveThis = useCallback(() => {
-    const shift = window.innerWidth > (1024 + 64 + 20)
-      ? ((window.innerWidth - 1024 - 64 - 20) / 2) - 54 - 10 + 64
+    const shift = window.innerWidth > (content_width + 64 + 20)
+      ? ((window.innerWidth - content_width - 64 - 20) / 2) - 54 - 10 + 64
       : 10;
 
     setLeft(shift);
-    console.log({ shift });
-  }, [setLeft, container]);
+  }, [setLeft]);
 
   useEffect(() => {
     moveThis();
@@ -29,7 +27,7 @@ export const SidePane: FC<IProps> = ({
       window.removeEventListener('resize', moveThis);
       document.removeEventListener('DOMContentLoaded', moveThis);
     }
-  }, [container]);
+  }, []);
 
   return (
     <div className={styles.pane} style={{ transform: `translate(${left}px, 0px)` }}>
