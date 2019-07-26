@@ -1,0 +1,13 @@
+.padder {
+  padding: $gap;
+
+  &:global(.horizontal) {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &:global(.vertical) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

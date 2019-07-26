@@ -1,0 +1,6 @@
+.card {
+  background-color: #111111;
+  border-radius: $panel_radius;
+
+  @include outer_shadow();
+}

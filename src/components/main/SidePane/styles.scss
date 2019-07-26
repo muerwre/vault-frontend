@@ -16,18 +16,20 @@
   margin: ($gap / 2) 0;
   background: #191919;
   box-sizing: border-box;
-  box-shadow: #222222 0 0 0 1px;
 
   &:global(.logo) {
-    color: white;
     height: (54px * 1.5) + $gap / 2;
     background: white;
     background-size: 140px;
     font-weight: 600;
     font-size: 14px;
     text-align: center;
-    padding-top: 66px;
     box-shadow: inset #111111 0 -1px, inset #222222 0 1px;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: $font_24_semibold;
   }
 
   .btn {
@@ -47,8 +49,9 @@
 
 .btn {
   height: 54px;
-  box-shadow: inset #111111 0 -1px, inset #222222 0 1px;
+  box-shadow: inset transparentize(black, 0.9) 0 -1px, inset transparentize(white, 0.95) 0 1px;
   border-radius: $panel_radius;
+  background: #191919;
 }
 
 .flexy {
