@@ -3,15 +3,15 @@ import { LoginForm } from '~/components/login/LoginForm';
 import { Header } from "~/components/main/Header";
 import { GodRays } from "~/components/main/GodRays";
 
-const style = require('./style.scss');
+import * as styles from './styles.scss';
 
 export const LoginLayout: React.FunctionComponent<{}> = () => (
-  <div className={style.wrapper}>
+  <div className={styles.wrapper}>
     <GodRays />
-    <div className={style.header}>
+    <div className={styles.header}>
       <Header />
     </div>
-    <div className={style.container}>
+    <div className={styles.container}>
       <LoginForm />
     </div>
   </div>

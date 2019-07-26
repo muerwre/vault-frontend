@@ -7,8 +7,8 @@ import { userSendLoginRequest, userSetLoginError } from "~/redux/user/actions";
 import { IUserFormStateLogin, IUserState } from "~/redux/user/reducer";
 import { Info } from "~/components/input/Info";
 
-const login = require('~/containers/LoginLayout/style');
-const style = require('./style.scss');
+import * as login from '~/containers/login/LoginLayout/styles.scss';
+import * as style from './style.scss';
 
 interface ILoginFormProps {
   error: IUserFormStateLogin['error'],

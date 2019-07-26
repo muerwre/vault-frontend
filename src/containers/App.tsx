@@ -5,8 +5,10 @@ import { hot } from 'react-hot-loader';
 import { ConnectedRouter } from "connected-react-router";
 import { history } from "~/redux/store";
 import { NavLink, Switch, Route } from 'react-router-dom';
-import { FlowLayout } from "~/containers/FlowLayout";
-import { LoginLayout } from "~/containers/LoginLayout";
+import { FlowLayout } from "~/containers/flow/FlowLayout";
+import { LoginLayout } from "~/containers/login/LoginLayout";
+import { MainLayout } from "~/containers/main/MainLayout";
+import { ImageExample } from "~/containers/examples/ImageExample";
 
 interface IAppProps {}
 interface IAppState {}
@@ -15,19 +17,17 @@ class Component extends React.Component<IAppProps, IAppState> {
   render() {
     return (
       <ConnectedRouter history={history}>
-        <div>
+        <MainLayout>
           <Switch>
-            <Route
-              exact
-              path="/"
-              component={FlowLayout}
-            />
+            <Route path="/examples/image" component={ImageExample} />
+            <Route path="/" component={FlowLayout} />
+
             <Route
               path="/login"
               component={LoginLayout}
             />
           </Switch>
-        </div>
+        </MainLayout>
       </ConnectedRouter>
     );
   }

@@ -1,9 +1,3 @@
-/*
-  LAYOUT PACKING:
-  https://github.com/rexxars/react-layout-pack
-  https://github.com/gxapplications/react-gridifier
-  https://github.com/STRML/react-grid-layout
- */
 import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';

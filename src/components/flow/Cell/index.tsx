@@ -7,6 +7,7 @@ interface IProps {
   width?: number;
   title?: string;
   is_hero?: boolean;
+  is_stamp?: boolean;
 }
 
 const Cell: FC<IProps> = ({
@@ -14,6 +15,7 @@ const Cell: FC<IProps> = ({
   height = 1,
   title,
   is_hero,
+  is_stamp,
 }) => (
     <div
       className={classNames(styles.cell, { is_hero })}

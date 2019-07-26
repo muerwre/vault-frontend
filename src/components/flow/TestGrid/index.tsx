@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Cell } from "~/components/flow/Cell";
+import { range } from 'ramda';
 
 const style = require('./style.scss');
 
@@ -11,13 +12,14 @@ export const TestGrid = () => (
       title="Example cell Example cell Example cell Example cell Example cell Example cell Example cell "
       is_hero
     />
-
-    <Cell />
-    <Cell
-      height={2}
-      title="Example cell Example cell Example cell Example cell Example cell Example cell Example cell "
-    />
-    <Cell width={2} />
-    <Cell />
+    {
+      range(1,20).map(el => (
+        <Cell
+          width={1}
+          height={1}
+          title="Example cell Example cell Example cell Example cell Example cell Example cell Example cell "
+        />
+      ))
+    }
   </div>
 );

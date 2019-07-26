@@ -1,25 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, LegacyRef, ReactChild, useCallback, useEffect, useState } from 'react';
 import * as styles from './styles.scss';
 import classNames from 'classnames';
 
-export const SidePane = ({ }) => {
+interface IProps {
+  container: React.RefObject<HTMLDivElement>;
+}
+
+export const SidePane: FC<IProps> = ({
+  container,
+}) => {
   const [left, setLeft] = useState(0);
 
-  const moveThis = () => {
-    const shift = ((document.body.getBoundingClientRect().width - 1024) / 2) - 54 - 10;
+  const moveThis = useCallback(() => {
+    const shift = window.innerWidth > (1024 + 64 + 20)
+      ? ((window.innerWidth - 1024 - 64 - 20) / 2) - 54 - 10 + 64
+      : 10;
+
     setLeft(shift);
-  };
+    console.log({ shift });
+  }, [setLeft, container]);
 
   useEffect(() => {
-    window.addEventListener('resize', moveThis)
+    moveThis();
+    window.addEventListener('resize', moveThis);
+    document.addEventListener('DOMContentLoaded', moveThis);
 
-    return () => { window.removeEventListener('resize', moveThis); }
-  });
-
-  useEffect(moveThis, []);
+    return () => {
+      window.removeEventListener('resize', moveThis);
+      document.removeEventListener('DOMContentLoaded', moveThis);
+    }
+  }, [container]);
 
   return (
-    <div className={styles.pane} style={{ left }}>
+    <div className={styles.pane} style={{ transform: `translate(${left}px, 0px)` }}>
       <div className={classNames(styles.group, 'logo')} />
 
       <div className={styles.group}>
