@@ -9,6 +9,7 @@ import { NodePanel } from "~/components/node/NodePanel";
 import { Filler } from "~/components/containers/Filler";
 import { Tag } from "~/components/node/Tag";
 import { TagField } from "~/components/containers/TagField";
+import {NodeRelated} from "~/components/node/NodeRelated";
 
 interface IProps {}
 
@@ -82,13 +83,24 @@ const ImageExample: FC<IProps> = () => (
                 </Padder>
 
                 <TagField>
+                  <Tag title="Избранный" feature="red" />
+                  <Tag title="Some another tag" feature="blue" />
+                  <Tag title="Плэйлист" feature="green" />
+                  <Tag title="/Revelations" feature="olive" />
                   <Tag title="Tag" />
-                  <Tag title="Some tag" color="red" />
-                  <Tag title="Some another tag" color="blue" />
-                  <Tag title="Some tag" color="green" />
-                  <Tag title="Some tag" color="olive" />
-                  <Tag title="Some tag" color="black" />
+                  <Tag title="Фотография" feature="black" />
+                  <Tag title="С музыкой" feature="black" />
                 </TagField>
+
+                <NodeRelated
+                  title="First album"
+                />
+
+                <div />
+
+                <NodeRelated
+                  title="Second album"
+                />
               </Group>
             </div>
           </Group>

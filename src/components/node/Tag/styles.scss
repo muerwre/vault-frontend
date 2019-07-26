@@ -12,6 +12,10 @@
   box-shadow: $shadow_depth_2;
   margin: ($gap / 2) $gap ($gap / 2) 0;
 
+  &:global(.is_hoverable) {
+    cursor: pointer;
+  }
+
   &:global(.red) {
     background: $red;
   }
@@ -35,6 +39,7 @@
     background: transparentize(black, 0.7);
     box-shadow: none;
     color: transparentize(white, 0.6);
+    font: $font_12_medium;
 
     .hole::after { background: transparentize(white, 0.98); }
   }

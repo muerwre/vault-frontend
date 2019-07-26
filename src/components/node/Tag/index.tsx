@@ -1,17 +1,22 @@
 import React, { FC } from 'react';
 import * as styles from './styles.scss';
 import classNames = require("classnames");
+import {ITag} from "~/redux/types";
 
 interface IProps {
-  title: string;
-  color?: 'red' | 'blue' | 'green' | 'olive' | 'black';
+  title: ITag['title'];
+  feature?: ITag['feature'];
+
+  is_hoverable?: boolean;
 }
 
 const Tag: FC<IProps> = ({
   title,
-  color,
+  feature,
+
+  is_hoverable,
 }) => (
-  <div className={classNames(styles.tag, color)}>
+  <div className={classNames(styles.tag, feature, { is_hoverable })}>
     <div className={styles.hole} />
     <div className={styles.title}>{title}</div>
   </div>
