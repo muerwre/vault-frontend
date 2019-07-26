@@ -61,7 +61,7 @@ module.exports = () => {
                 modules: true,
                 sourceMap: true,
                 importLoaders: 2,
-                localIdentName: '[name]__[local]__[hash:base64:5]'
+                localIdentName: '[folder]__[local]__[hash:base64:5]'
               }
             },
             { loader: 'less-loader' }
@@ -77,7 +77,7 @@ module.exports = () => {
                 modules: true,
                 sourceMap: true,
                 importLoaders: 2,
-                localIdentName: '[name]__[local]__[hash:base64:5]'
+                localIdentName: '[folder]__[local]__[hash:base64:5]'
               }
             },
             { loader: 'resolve-url-loader' },

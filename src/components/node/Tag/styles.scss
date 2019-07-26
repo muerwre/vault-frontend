@@ -17,16 +17,15 @@
   }
 
   &:global(.red) {
-    background: $red;
+    background: $red_gradient;
   }
 
   &:global(.blue) {
-    background: $blue;
-    //color: transparentize(black, 0.4);
+    background: $blue_gradient;
   }
 
   &:global(.green) {
-    background: $green;
+    background: $green_gradient;
     color: transparentize(black, 0.4);
   }
 

@@ -1,6 +1,7 @@
 import React, { FC, LegacyRef, ReactChild, useCallback, useEffect, useState } from 'react';
 import * as styles from './styles.scss';
 import classNames from 'classnames';
+import {Group} from "~/components/containers/Group";
 
 interface IProps {
 }
@@ -31,18 +32,26 @@ export const SidePane: FC<IProps> = ({
 
   return (
     <div className={styles.pane} style={{ transform: `translate(${left}px, 0px)` }}>
-      <div
-        className={classNames(styles.group, 'logo')}
-      >
-        <div>V</div>
-      </div>
+      <Group>
+        <div className={classNames(styles.btn, "orange")}><div>‹</div></div>
 
-      <div className={styles.group}>
-        <div className={styles.btn} />
-        <div className={styles.btn} />
-        <div className={styles.btn} />
-        <div className={styles.btn} />
-      </div>
+        <div
+          className={classNames(styles.group, 'logo')}
+        >
+          <div>V</div>
+        </div>
+
+        <div className={styles.btn}><div>P</div></div>
+
+        <div className={styles.btn}><div>F</div></div>
+
+        <div className={styles.group}>
+          <div className={styles.btn} />
+          <div className={styles.btn} />
+          <div className={styles.btn} />
+          <div className={styles.btn} />
+        </div>
+      </Group>
 
       <div className={styles.flexy} />
 

@@ -4,6 +4,12 @@ $dark_blue: #3c75ff;
 $blue: #3ca1ff;
 $green: #00d2b9;
 $olive: #8bc12a;
+$orange: #ff7549;
+
+$red_gradient: linear-gradient(170deg, $orange, $red);
+$blue_gradient: linear-gradient(170deg, $green, $dark_blue);
+$green_gradient: linear-gradient(170deg, $green, $olive);
+$purple_gradient: linear-gradient(170deg, $red, $dark_blue);
 //$color_yellow: complement($color_red);
 //$color_yellow: yellow;
 

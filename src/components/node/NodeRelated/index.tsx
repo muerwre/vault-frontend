@@ -16,7 +16,7 @@ const NodeRelated: FC<IProps> = ({
     </div>
     <div className={styles.grid}>
       {
-        range(1,7).map(el => (<div className={styles.item} />))
+        range(1,7).map(el => (<div className={styles.item} key={el} />))
       }
     </div>
   </Group>
