@@ -5,8 +5,9 @@ $content_width: $cell * 4;
 $gap: 10px;
 $spc: $gap * 2;
 
-$cell_radius: 4px;
-$panel_radius: 4px;
+$radius: 3px;
+$cell_radius: $radius;
+$panel_radius: $radius;
 
 $grid_line: 4px;
 
