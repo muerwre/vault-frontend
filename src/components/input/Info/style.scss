@@ -11,18 +11,17 @@
 
   &:global(.danger) {
     color: white;
-    background: transparentize($color_red, 0.5);
+    background: transparentize($red, 0.5);
   }
 
   &:global(.warning) {
     color: white;
-    background: transparentize($color_yellow, 0.5);
+    background: transparentize($red, 0.5);
   }
 
   &:global(.primary) {
     color: white;
-    background: transparentize($color_blue, 0.5);
+    background: transparentize($red, 0.5);
   }
-
 }
 

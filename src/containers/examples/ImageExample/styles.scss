@@ -30,6 +30,7 @@
 
 .node {
   background: $node_bg;
+  box-shadow: $node_shadow;
 }
 
 .image {
@@ -40,7 +41,7 @@
   background: #161616;
   flex: 1;
   border-radius: $panel_radius;
-  box-shadow: transparentize(black, 0.3) 0 4px, inset transparentize(white, 0.98) 0 1px;
+  box-shadow: $comment_shadow;
   //position: relative;
   //top: -64px
 }

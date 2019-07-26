@@ -52,7 +52,6 @@
 
 .mark {
   flex: 0 0 32px;
-  background: red;
   position: relative;
 
   &::after {
@@ -62,7 +61,7 @@
     right: 4px;
     width: 24px;
     height: 52px;
-    background: #ff3344;
+    background: $olive;
     box-shadow: transparentize(black, 0.8) 4px 2px;
   }
 }

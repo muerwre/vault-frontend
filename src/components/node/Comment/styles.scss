@@ -2,6 +2,7 @@
   background: $comment_bg;
   min-height: 200px;
   display: flex;
+  box-shadow: $comment_shadow;
 }
 
 .text {
