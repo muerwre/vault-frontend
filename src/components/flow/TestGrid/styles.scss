@@ -17,6 +17,7 @@ $cols: $content_width / $cell;
   grid-auto-flow: row dense;
   grid-column-gap: $grid_line;
   grid-row-gap: $grid_line;
+  //
 }
 
 .pad_last {
