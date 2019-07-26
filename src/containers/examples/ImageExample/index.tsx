@@ -9,9 +9,13 @@ import { Comment } from "~/components/node/Comment";
 interface IProps {}
 
 const ImageExample: FC<IProps> = () => (
-    <Card>
+    <Card className={styles.node}>
       <Group>
-        <div className={styles.image_container} />
+        <div
+          className={styles.image_container}
+        >
+          <img className={styles.image} src="http://37.192.131.144/full/photos/photo-20120702-99383.jpg" />
+        </div>
 
         <Padder horizontal>
           <Group horizontal>

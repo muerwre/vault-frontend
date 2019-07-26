@@ -14,7 +14,7 @@
   width: 54px;
   border-radius: $panel_radius;
   margin: ($gap / 2) 0;
-  background: #191919;
+  background: $panel_bg;
   box-sizing: border-box;
 
   &:global(.logo) {
