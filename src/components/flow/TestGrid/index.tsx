@@ -29,7 +29,7 @@ export const TestGrid = () => (
         <Cell
           width={Math.floor(Math.random() * 3)}
           height={Math.floor(Math.random() * 3)}
-          title="Example cell Example cell Example cell Example cell Example cell Example cell Example cell "
+          title={`Cell ${el}`}
         />
       ))
     }
