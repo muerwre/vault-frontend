@@ -15,7 +15,6 @@ $cols: $content_width / $cell;
   //grid-template-rows: $cell * 1.2 - 4;
   grid-auto-rows: 256px;
   grid-auto-flow: row dense;
-
   grid-column-gap: $grid_line;
   grid-row-gap: $grid_line;
 }
