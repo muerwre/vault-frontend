@@ -1,0 +1,28 @@
+
+.button {
+  fill: white;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  flex: 0 0 38px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.title {
+  font: $font_16_semibold;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.description {
+  font: $font_12_regular;
+  color: transparentize(white, 0.6);
+  white-space: nowrap;
+}

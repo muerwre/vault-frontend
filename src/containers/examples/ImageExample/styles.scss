@@ -45,30 +45,3 @@
   //position: relative;
   //top: -64px
 }
-
-.button {
-  fill: white;
-  height: 48px;
-  display: flex;
-  align-items: center;
-}
-
-.button_icon {
-  flex: 0 0 38px;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-}
-
-.button_title {
-  font: $font_16_semibold;
-  text-transform: uppercase;
-  margin-bottom: 2px;
-  white-space: nowrap;
-  flex: 1;
-}
-
-.button_desc {
-  font: $font_12_regular;
-  color: transparentize(white, 0.7);
-}
