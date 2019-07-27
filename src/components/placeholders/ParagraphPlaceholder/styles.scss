@@ -1,0 +1,10 @@
+.para {
+  display: grid;
+  grid-template-columns: auto;
+  grid-auto-columns: auto;
+  grid-template-rows: 1fr;
+  grid-column-gap: $gap;
+  grid-auto-flow: column;
+
+  div { display: inline-flex; margin-right: $gap; }
+}
