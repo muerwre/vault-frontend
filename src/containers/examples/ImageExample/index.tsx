@@ -10,6 +10,7 @@ import { Filler } from "~/components/containers/Filler";
 import { Tag } from "~/components/node/Tag";
 import { TagField } from "~/components/containers/TagField";
 import {NodeRelated} from "~/components/node/NodeRelated";
+import {Tags} from "~/components/node/Tags";
 
 interface IProps {}
 
@@ -82,13 +83,17 @@ const ImageExample: FC<IProps> = () => (
                   </Group>
                 </Padder>
 
-                <TagField>
-                  <Tag title="Избранный" feature="red" />
-                  <Tag title="Плэйлист" feature="green" />
-                  <Tag title="Tag" />
-                  <Tag title="Фотография" feature="black" />
-                  <Tag title="С музыкой" feature="black" />
-                </TagField>
+                {
+                  <Tags
+                    tags={[
+                      { title: 'Избранный', feature: 'red' },
+                      { title: 'Плейлист', feature: 'green' },
+                      { title: 'Просто' },
+                      { title: '+ фото', feature: 'black' },
+                      { title: '+ с музыкой', feature: 'black' },
+                    ]}
+                  />
+                }
 
                 <NodeRelated
                   title="First album"

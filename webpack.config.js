@@ -9,7 +9,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const htmlPlugin = new HtmlWebPackPlugin({
   template: './src/index.html',
   filename: './index.html',
-  title: 'Empty React Project',
+  title: 'VLT',
   hash: false,
   // favicon: 'src/sprites/favicon.png',
 });
