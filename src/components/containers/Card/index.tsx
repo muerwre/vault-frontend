@@ -7,8 +7,12 @@ type IProps = React.HTMLAttributes<HTMLDivElement> & {}
 const Card: FC<IProps> = ({
   className,
   children,
+  ...props
 }) => (
-    <div className={classNames(styles.card, className)}>
+    <div
+      className={classNames(styles.card, className)}
+      {...props}
+    >
       {children}
     </div>
 );

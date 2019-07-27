@@ -9,6 +9,7 @@ import { NodePanel } from "~/components/node/NodePanel";
 import { NodeRelated } from "~/components/node/NodeRelated";
 import { Tags } from "~/components/node/Tags";
 import { MenuButton } from "~/components/node/MenuButton";
+import { NodeNoComments } from "~/components/node/NodeNoComments";
 
 interface IProps {}
 
@@ -26,6 +27,8 @@ const ImageExample: FC<IProps> = () => (
         <Padder>
           <Group horizontal className={styles.content}>
             <Group className={styles.comments}>
+              <NodeNoComments />
+
               {
                 range(1,6).map(el => (
                   <Comment

@@ -1,8 +1,12 @@
 .wrap {
   background: $comment_bg;
-  min-height: 200px;
+  min-height: 64px;
   display: flex;
   box-shadow: $comment_shadow;
+
+  &:global(.is_empty) {
+    opacity: 0.5;
+  }
 }
 
 .text {

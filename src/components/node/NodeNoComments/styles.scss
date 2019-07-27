@@ -1,0 +1,6 @@
+.wrap {
+  height: 300px;
+  overflow: hidden;
+
+  @include after_shade($node_bg);
+}
