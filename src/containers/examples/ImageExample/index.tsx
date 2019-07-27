@@ -84,9 +84,7 @@ const ImageExample: FC<IProps> = () => (
 
                 <TagField>
                   <Tag title="Избранный" feature="red" />
-                  <Tag title="Some another tag" feature="blue" />
                   <Tag title="Плэйлист" feature="green" />
-                  <Tag title="/Revelations" feature="olive" />
                   <Tag title="Tag" />
                   <Tag title="Фотография" feature="black" />
                   <Tag title="С музыкой" feature="black" />
@@ -95,8 +93,6 @@ const ImageExample: FC<IProps> = () => (
                 <NodeRelated
                   title="First album"
                 />
-
-                <div />
 
                 <NodeRelated
                   title="Second album"

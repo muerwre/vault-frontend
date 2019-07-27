@@ -55,9 +55,7 @@ export const SidePane: FC<IProps> = ({
 
       <div className={styles.flexy} />
 
-      <div className={styles.group}>
-        <div className={styles.btn} />
-      </div>
+      <div className={styles.btn}>S</div>
     </div>
   );
 };

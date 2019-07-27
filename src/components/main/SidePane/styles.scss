@@ -54,11 +54,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font: $font_24_semibold;
+  font: $font_24_medium;
 
   &:global(.orange) {
     background: linear-gradient(280deg, $red, $orange);
     color: transparentize(black, 0.7);
+    width: 66px;
+    border-radius: 6px 0 0 6px;
+    position: relative;
+    left: 0;
   }
 }
 

@@ -1,6 +1,7 @@
 .wrap {
   padding: $gap;
   background: transparentize(black, 0.8);
+  border-radius: $panel_radius;
 }
 
 .grid {
@@ -21,7 +22,7 @@
 .title {
   font: $font_14_semibold;
   text-transform: uppercase;
-  color: transparentize(white, 0.7);
+  color: transparentize(white, 0.3);
   flex-direction: row;
   display: flex;
   align-items: center;
