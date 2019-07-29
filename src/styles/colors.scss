@@ -15,13 +15,14 @@ $purple_gradient: linear-gradient(170deg, $red, $dark_blue);
 //$color_yellow: yellow;
 
 //$main_bg_color: #161616;
-$main_bg_color: #111214;
+//main_bg_color: #111214;
+$main_bg_color: #2b2c34;
 $main_text_color: white;
 
-$content_bg_color: #222222;
-$content_bg_secondary: darken($content_bg_color, 3%);
+$content_bg: darken($main_bg_color, 4%);
+$content_bg_secondary: darken($content_bg, 3%);
 
-$cell_bg: lighten($main_bg_color, 5%);
+$cell_bg: lighten($main_bg_color, 0%);
 
 $text_normal: 16px;
 $text_small: 14px;
@@ -31,18 +32,20 @@ $text_sign: 22px;
 $input_bg_color: transparentize(black, 0.8);
 $button_bg_color: $red_gradient;
 
-$comment_bg: lighten($main_bg_color, 4%);
+$comment_bg: lighten($main_bg_color, 0%);
 $panel_bg: transparent;
-$node_bg: lighten($main_bg_color, 1%);
+$node_bg: $content_bg;
 $node_image_bg: lighten($main_bg_color, 4%);
-$node_title_background: darken($main_bg_color, 4%);
+$node_title_background: darken($main_bg_color, 8%);
 
-$editor_panel_bg: transparentize(white, 0.98);
-$editor_bg: lighten($main_bg_color, 4%);
+$editor_bg: $content_bg;
+$editor_panel_bg: darken($editor_bg, 4%);
 
 $scroll_color: $red_gradient;
 $scroll_inactive_opacity: 0.5;
 
-$side_pane_btn_color: lighten($main_bg_color, 5%);
+$side_pane_btn_color: lighten($main_bg_color, 0%);
 
-$node_buttons_bg: transparentize(black, 0.8);
+$node_buttons_bg: darken($main_bg_color, 6%);
+
+$tag_bg: lighten($main_bg_color, 4%);

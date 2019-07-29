@@ -14,7 +14,7 @@ import { NodeNoComments } from "~/components/node/NodeNoComments";
 interface IProps {}
 
 const ImageExample: FC<IProps> = () => (
-    <Card className={styles.node}>
+    <Card className={styles.node} seamless>
       <div
         className={styles.image_container}
       >
