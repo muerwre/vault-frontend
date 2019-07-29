@@ -1,5 +1,5 @@
 .wrap {
-  background: #090909;
+  background: $node_title_background;
   padding: $gap;
   box-sizing: border-box;
   display: flex;
@@ -40,7 +40,6 @@
   height: 54px;
   border-radius: $radius $radius 0 0;
   background: linear-gradient(176deg, #f42a00, #5c1085);
-  background: #222222;
   position: absolute;
   bottom: 0;
   right: 10px;

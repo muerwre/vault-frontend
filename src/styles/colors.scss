@@ -15,7 +15,7 @@ $purple_gradient: linear-gradient(170deg, $red, $dark_blue);
 //$color_yellow: yellow;
 
 //$main_bg_color: #161616;
-$main_bg_color: #131112;
+$main_bg_color: #111214;
 $main_text_color: white;
 
 $content_bg_color: #222222;
@@ -33,7 +33,7 @@ $button_bg_color: $red_gradient;
 
 $comment_bg: lighten($main_bg_color, 4%);
 $panel_bg: transparent;
-$node_bg: $main_bg_color;
+$node_bg: lighten($main_bg_color, 1%);
 $node_image_bg: lighten($main_bg_color, 4%);
 $node_title_background: darken($main_bg_color, 4%);
 
@@ -42,3 +42,7 @@ $editor_bg: lighten($main_bg_color, 4%);
 
 $scroll_color: $red_gradient;
 $scroll_inactive_opacity: 0.5;
+
+$side_pane_btn_color: lighten($main_bg_color, 5%);
+
+$node_buttons_bg: transparentize(black, 0.8);

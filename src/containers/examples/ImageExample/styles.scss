@@ -38,7 +38,7 @@
 }
 
 .buttons {
-  background: #161616;
+  background: $node_buttons_bg;
   flex: 1;
   border-radius: $panel_radius;
   box-shadow: $comment_shadow;
