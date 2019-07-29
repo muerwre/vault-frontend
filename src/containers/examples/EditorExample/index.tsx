@@ -19,7 +19,7 @@ const EditorExample: FC<IProps> = () => (
     <Card className={styles.wrap} seamless>
       <Group horizontal className={styles.group} seamless>
         <div className={styles.editor}>
-          <Panel className={styles.editor_panel}>
+          <Panel>
             <TextInput onChange={console.log} label="Название" />
           </Panel>
 
@@ -36,10 +36,6 @@ const EditorExample: FC<IProps> = () => (
         </div>
 
         <div className={styles.panel}>
-          <Panel>
-            <TextInput onChange={console.log} label="Название" />
-          </Panel>
-
           <Panel className={styles.panel_main}>
             <Group>
               <Tags
@@ -52,11 +48,14 @@ const EditorExample: FC<IProps> = () => (
                 ]}
               />
 
-              <Filler />
+              <Card className={styles.feature_card}>Layout setup</Card>
 
               <Card className={styles.feature_card}>Cover changer</Card>
 
               <Card className={styles.feature_card}>Track</Card>
+
+              <Filler />
+
             </Group>
           </Panel>
 
