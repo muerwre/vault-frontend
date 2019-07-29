@@ -3,11 +3,11 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: $input_height;
+  position: relative;
 }
 
 .label {
-  background: transparentize(black, 0.8);
+  // background: transparentize(black, 0.8);
   font: $font_14_medium;
   // color: transparentize(white, 0.5);
   text-transform: uppercase;
@@ -16,7 +16,18 @@
   align-items: center;
   justify-content: flex-start;
   border-radius: $radius 0 0 $radius;
-  @include input_shadow();
+  //@include input_shadow();
+
+  padding: 0 5px;
+  position: absolute;
+  bottom: $input_height - 3px;
+  font: $font_10_semibold;
+  background-color: white;
+  color: transparentize(white, 0.5);
+  border-radius: $radius;
+  left: 6px;
+  background: $content_bg;
+  height: 10px;
 }
 
 .container {
