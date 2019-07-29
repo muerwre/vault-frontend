@@ -1,15 +1,22 @@
 .wrapper {
+  height: $input_height;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  height: $input_height;
 }
 
 .label {
-  background: $input_bg_color;
-  font-size: 10px;
+  background: transparentize(black, 0.8);
+  font: $font_14_medium;
+  // color: transparentize(white, 0.5);
   text-transform: uppercase;
-  font-weight: 600;
   padding: 2px $gap;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: $radius 0 0 $radius;
+  @include input_shadow();
 }
 
 .container {
@@ -20,7 +27,7 @@
   flex: 1 0;
   display: flex;
   align-self: stretch;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   @include input_shadow();
 }

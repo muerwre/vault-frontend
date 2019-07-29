@@ -3,6 +3,7 @@
   align-items: stretch;
   justify-content: center;
   display: flex;
+  background: $editor_bg;
 }
 
 .group {
@@ -13,10 +14,35 @@
 }
 
 .panel {
-  background: red;
+  background: $editor_panel_bg;
   flex: 0 0 33%;
+  border-radius: 0 $radius $radius 0;
+  padding: $gap;
+  box-sizing: border-box;
+  @include outer_shadow();
 }
 
 .editor {
   flex: 1;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.editor_panel {
+  padding: $gap;
+}
+
+.editor_image_panel {
+  flex: 1;
+}
+
+.editor_image_container {
+  flex: 1;
+}
+
+.editor_image {
+  background: lighten($main_bg_color, 20%);
+  padding-bottom: 100%;
+  border-radius: $radius;
 }

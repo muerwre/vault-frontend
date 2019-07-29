@@ -89,6 +89,7 @@
     "sass-loader": "^7.1.0",
     "sass-resources-loader": "^2.0.0",
     "scrypt": "^6.0.3",
-    "throttle-debounce": "^2.1.0"
+    "throttle-debounce": "^2.1.0",
+    "tt-react-custom-scrollbars": "latest"
   }
 }

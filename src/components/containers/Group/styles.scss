@@ -39,4 +39,8 @@
   &.wrap {
     flex-wrap: wrap;
   }
+
+  &.seamless > * {
+    margin: 0;
+  }
 }

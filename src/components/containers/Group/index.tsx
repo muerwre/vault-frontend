@@ -7,6 +7,7 @@ type IProps = React.HTMLAttributes<HTMLDivElement> & {
   top?: boolean;
   bottom?: boolean;
   wrap?: boolean;
+  seamless?: boolean;
 };
 
 const Group: FC<IProps> = ({
@@ -16,6 +17,7 @@ const Group: FC<IProps> = ({
   top = false,
   bottom = false,
   wrap = false,
+  seamless = false,
  ...props
 }) => (
   <div
@@ -27,6 +29,7 @@ const Group: FC<IProps> = ({
         [styles.top]: top,
         [styles.bottom]: bottom,
         [styles.wrap]: wrap,
+        [styles.seamless]: seamless,
       },
       className,
     )}

@@ -1,0 +1,6 @@
+.grid {
+  display: grid;
+  grid-auto-rows: 1fr;
+  grid-column-gap: $gap;
+  grid-row-gap: $gap;
+}

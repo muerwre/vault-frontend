@@ -1,6 +1,5 @@
 import * as React from 'react';
-
-const style = require('./style.scss');
+import * as styles from './styles.scss';
 
 interface ITextInputProps {
   type?: 'text' | 'password',
@@ -19,16 +18,16 @@ export const TextInput: React.FunctionComponent<ITextInputProps> = ({
   value='',
 }) => (
   <div
-    className={style.wrapper}
+    className={styles.wrapper}
   >
-    {
-      label &&
-      <div className={style.label}>{label}</div>
-    }
-    <div className={style.container}>
+    <div className={styles.container}>
+      {
+        label &&
+        <div className={styles.label}>{label}</div>
+      }
       <input
         placeholder={placeholder}
-        className={style.input}
+        className={styles.input}
         type={type}
         onChange={onChange}
         value={value}
