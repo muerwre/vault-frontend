@@ -1,6 +1,11 @@
 .card {
   background-color: #111111;
   border-radius: $panel_radius;
+  padding: $gap;
 
   @include outer_shadow();
+
+  &:global(.seamless) {
+    padding: 0;
+  }
 }

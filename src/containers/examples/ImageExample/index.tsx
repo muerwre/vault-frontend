@@ -60,17 +60,15 @@ const ImageExample: FC<IProps> = () => (
                   </Group>
                 </Padder>
 
-                {
-                  <Tags
-                    tags={[
-                      { title: 'Избранный', feature: 'red' },
-                      { title: 'Плейлист', feature: 'green' },
-                      { title: 'Просто' },
-                      { title: '+ фото', feature: 'black' },
-                      { title: '+ с музыкой', feature: 'black' },
-                    ]}
-                  />
-                }
+                <Tags
+                  tags={[
+                    { title: 'Избранный', feature: 'red' },
+                    { title: 'Плейлист', feature: 'green' },
+                    { title: 'Просто' },
+                    { title: '+ фото', feature: 'black' },
+                    { title: '+ с музыкой', feature: 'black' },
+                  ]}
+                />
 
                 <NodeRelated
                   title="First album"

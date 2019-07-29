@@ -3,15 +3,16 @@ import * as styles from './styles.scss';
 import classNames = require("classnames");
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
-
+  seamless?: boolean;
 }
 
 const Panel: FC<IProps> = ({
   className,
   children,
+  seamless,
   ...props
 }) => (
-    <div className={classNames(styles.panel, className)} {...props}>
+    <div className={classNames(styles.panel, className, { seamless })} {...props}>
       {children}
     </div>
 );

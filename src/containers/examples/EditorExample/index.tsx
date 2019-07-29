@@ -8,11 +8,15 @@ import { Panel } from "~/components/containers/Panel";
 import { TextInput } from "~/components/input/TextInput";
 import classNames = require("classnames");
 import { Scroll } from "~/components/containers/Scroll";
+import { Grid } from "~/components/containers/Grid";
+import { Tags } from "~/components/node/Tags";
+import { Button } from "~/components/input/Button";
+import { Filler } from "~/components/containers/Filler";
 
 interface IProps {}
 
 const EditorExample: FC<IProps> = () => (
-    <Card className={styles.wrap}>
+    <Card className={styles.wrap} seamless>
       <Group horizontal className={styles.group} seamless>
         <div className={styles.editor}>
           <Panel className={styles.editor_panel}>
@@ -29,20 +33,36 @@ const EditorExample: FC<IProps> = () => (
               </CellGrid>
             </Scroll>
           </Panel>
-
-          <Panel className={styles.editor_panel}>
-            Cover panel
-          </Panel>
         </div>
 
         <div className={styles.panel}>
-          <Group>
-            <Card>
-              <Padder>
-                panel
-              </Padder>
-            </Card>
-          </Group>
+          <Panel>
+            <TextInput onChange={console.log} label="Название" />
+          </Panel>
+
+          <Panel className={styles.panel_main}>
+            <Group>
+              <Tags
+                tags={[
+                  { title: 'Избранный', feature: 'red' },
+                  { title: 'Плейлист', feature: 'green' },
+                  { title: 'Просто' },
+                  { title: '+ фото', feature: 'black' },
+                  { title: '+ с музыкой', feature: 'black' },
+                ]}
+              />
+
+              <Filler />
+
+              <Card className={styles.feature_card}>Cover changer</Card>
+
+              <Card className={styles.feature_card}>Track</Card>
+            </Group>
+          </Panel>
+
+          <Panel>
+            <Button>Submit?</Button>
+          </Panel>
         </div>
       </Group>
     </Card>

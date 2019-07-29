@@ -17,8 +17,9 @@
   background: $editor_panel_bg;
   flex: 0 0 33%;
   border-radius: 0 $radius $radius 0;
-  padding: $gap;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   @include outer_shadow();
 }
 
@@ -30,7 +31,6 @@
 }
 
 .editor_panel {
-  padding: $gap;
 }
 
 .editor_image_panel {
@@ -42,7 +42,16 @@
 }
 
 .editor_image {
-  background: lighten($main_bg_color, 20%);
+  background: transparentize(white, 0.95);
   padding-bottom: 100%;
   border-radius: $radius;
+}
+
+.feature_card {
+  height: 100px;
+}
+
+.panel_main {
+  flex: 1;
+  display: flex;
 }

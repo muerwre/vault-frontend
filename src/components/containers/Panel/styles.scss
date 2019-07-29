@@ -1,3 +1,7 @@
 .panel {
+  padding: $gap;
+
   @include outer_shadow();
+
+  &:global(.seamless) { padding: 0; }
 }

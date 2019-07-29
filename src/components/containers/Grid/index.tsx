@@ -22,7 +22,7 @@ const Grid: FC<IProps> = ({
   style = {},
   columns = 'auto',
   rows = 'auto',
-  gap = 20,
+  gap = 10,
   ...props
 }) => (
   <div
