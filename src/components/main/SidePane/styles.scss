@@ -18,13 +18,13 @@
 
   &:global(.logo) {
     height: (54px * 1.5) + $gap / 2;
-    background: white;
+    background: $red_gradient;
     background-size: 140px;
     font-weight: 600;
     font-size: 14px;
     text-align: center;
     box-shadow: inset #111111 0 -1px, inset #222222 0 1px;
-    color: black;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -13,7 +13,7 @@ export const SidePane: FC<IProps> = ({
 
   const moveThis = useCallback(() => {
     const shift = window.innerWidth > (content_width + 64 + 20)
-      ? ((window.innerWidth - content_width - 64 - 20) / 2) - 54 + 64
+      ? ((window.innerWidth - content_width - 64 - 20) / 2) - 54 + 64 // + content_width + 74
       : 10;
 
     setLeft(shift);
