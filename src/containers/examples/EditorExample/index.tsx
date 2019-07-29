@@ -38,6 +38,12 @@ const EditorExample: FC<IProps> = () => (
         <div className={styles.panel}>
           <Panel className={styles.panel_main}>
             <Group>
+              <Card className={styles.feature_card}>Layout setup</Card>
+
+              <Card className={styles.feature_card}>Cover changer</Card>
+
+              <Card className={styles.feature_card}>Track</Card>
+
               <Tags
                 tags={[
                   { title: 'Избранный', feature: 'red' },
@@ -47,12 +53,6 @@ const EditorExample: FC<IProps> = () => (
                   { title: '+ с музыкой', feature: 'black' },
                 ]}
               />
-
-              <Card className={styles.feature_card}>Layout setup</Card>
-
-              <Card className={styles.feature_card}>Cover changer</Card>
-
-              <Card className={styles.feature_card}>Track</Card>
 
               <Filler />
 
