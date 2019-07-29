@@ -9,6 +9,7 @@
   font-weight: 600;
   font-size: $text_small;
   cursor: pointer;
+  flex: 1;
 
   @include outer_shadow();
 }

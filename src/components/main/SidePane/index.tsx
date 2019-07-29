@@ -33,8 +33,6 @@ export const SidePane: FC<IProps> = ({
   return (
     <div className={styles.pane} style={{ transform: `translate(${left}px, 0px)` }}>
       <Group>
-        <div className={classNames(styles.btn, "orange")}><div>‹</div></div>
-
         <div
           className={classNames(styles.group, 'logo')}
         >

@@ -15,16 +15,17 @@
 
 .panel {
   background: $editor_panel_bg;
-  flex: 0 0 33%;
-  border-radius: 0 $radius $radius 0;
+  flex: 1;
+  //border-radius: 0 $radius $radius 0;
+  border-radius: $radius 0 $radius 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  @include outer_shadow();
+  //@include outer_shadow();
 }
 
 .editor {
-  flex: 1;
+  flex: 2;
   display: flex;
   align-items: stretch;
   flex-direction: column;
@@ -55,4 +56,12 @@
 .panel_main {
   flex: 1;
   display: flex;
+}
+
+.close_icon {
+  height: 24px;
+  width: 24px;
+  background: transparentize(white, 0.95);
+  flex: 0 0 24px;
+  border-radius: $radius;
 }

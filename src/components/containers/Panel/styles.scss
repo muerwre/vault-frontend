@@ -1,5 +1,11 @@
 .panel {
   padding: $gap;
+  min-height: $input_height + $gap;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  box-sizing: border-box;
+  flex-direction: row;
 
   @include outer_shadow();
 

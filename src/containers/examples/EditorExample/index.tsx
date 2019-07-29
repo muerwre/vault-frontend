@@ -17,52 +17,63 @@ interface IProps {}
 
 const EditorExample: FC<IProps> = () => (
     <Card className={styles.wrap} seamless>
-      <Group horizontal className={styles.group} seamless>
-        <div className={styles.editor}>
-          <Panel>
-            <TextInput onChange={console.log} label="Название" />
-          </Panel>
+      <Group seamless style={{ flex: 1 }}>
+        <Panel>
+          <Group horizontal>
+            <Filler>TITLE</Filler>
+            <div className={styles.close_icon} />
+          </Group>
+        </Panel>
 
-          <Panel className={classNames(styles.editor_panel, styles.editor_image_panel)}>
-            <Scroll>
-              <CellGrid className={styles.editor_image_container} size={200}>
-                <div className={styles.editor_image} />
-                <div className={styles.editor_image} />
-                <div className={styles.editor_image} />
-                <div className={styles.editor_image} />
-              </CellGrid>
-            </Scroll>
-          </Panel>
-        </div>
+        <Group horizontal className={styles.group} seamless>
+          <div className={styles.editor}>
+            <Panel>
+              <TextInput onChange={console.log} label="Название" />
+            </Panel>
 
-        <div className={styles.panel}>
-          <Panel className={styles.panel_main}>
-            <Group>
-              <Card className={styles.feature_card}>Layout setup</Card>
+            <Panel className={classNames(styles.editor_panel, styles.editor_image_panel)}>
+              <Scroll>
+                <CellGrid className={styles.editor_image_container} size={200}>
+                  <div className={styles.editor_image} />
+                  <div className={styles.editor_image} />
+                  <div className={styles.editor_image} />
+                  <div className={styles.editor_image} />
+                </CellGrid>
+              </Scroll>
+            </Panel>
+          </div>
 
-              <Card className={styles.feature_card}>Cover changer</Card>
+          <div className={styles.panel}>
+            <Filler>
+              <Padder>
+                <Group>
+                  <Card className={styles.feature_card}>Layout setup</Card>
 
-              <Card className={styles.feature_card}>Track</Card>
+                  <Card className={styles.feature_card}>Cover changer</Card>
 
-              <Tags
-                tags={[
-                  { title: 'Избранный', feature: 'red' },
-                  { title: 'Плейлист', feature: 'green' },
-                  { title: 'Просто' },
-                  { title: '+ фото', feature: 'black' },
-                  { title: '+ с музыкой', feature: 'black' },
-                ]}
-              />
+                  <Card className={styles.feature_card}>Track</Card>
 
-              <Filler />
+                  <Tags
+                    tags={[
+                      { title: 'Избранный', feature: 'red' },
+                      { title: 'Плейлист', feature: 'green' },
+                      { title: 'Просто' },
+                      { title: '+ фото', feature: 'black' },
+                      { title: '+ с музыкой', feature: 'black' },
+                    ]}
+                  />
 
-            </Group>
-          </Panel>
+                  <Filler />
 
-          <Panel>
-            <Button>Submit?</Button>
-          </Panel>
-        </div>
+                </Group>
+              </Padder>
+            </Filler>
+
+            <Panel>
+              <Button>Submit?</Button>
+            </Panel>
+          </div>
+        </Group>
       </Group>
     </Card>
 );
