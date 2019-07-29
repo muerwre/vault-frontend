@@ -1,0 +1,22 @@
+.wrap {
+  height: calc(100vh - 20px);
+  align-items: stretch;
+  justify-content: center;
+  display: flex;
+}
+
+.group {
+  display: flex;
+  align-items: stretch !important;
+  justify-content: stretch;
+  flex: 1;
+}
+
+.panel {
+  background: red;
+  flex: 0 0 33%;
+}
+
+.editor {
+  flex: 1;
+}
