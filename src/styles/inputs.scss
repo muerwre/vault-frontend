@@ -2,21 +2,24 @@
   position: relative;
   min-height: 40px;
   border-radius: $input_radius;
-  box-shadow: $input_shadow;
+  //box-shadow: $input_shadow;
   flex: 1;
   display: flex;
   opacity: 1;
   transition: opacity 0.25s;
   z-index: 1;
 
+  @include inner_shadow();
+  background: $input_bg_color;
+
   &::before {
     content: ' ';
-    background: linear-gradient(270deg, white $gap, transparentize(white, 1));
+    background: linear-gradient(270deg, $input_bg_color $gap, transparentize($input_bg_color, 1));
     position: absolute;
     width: $gap * 2;
-    height: $input_height - 4px;
-    top: 2px;
-    right: 2px;
+    height: $input_height;
+    top: 0;
+    right: 1px;
     transform: translateX(0);
     transition: transform 0.25s;
     border-radius: 0 $input_radius $input_radius 0;
@@ -52,7 +55,7 @@
     }
 
     .title {
-      color: transparentize(black, 0.3);
+      color: transparentize(white, 0.3);
     }
   }
 
@@ -67,6 +70,7 @@
     padding: 0 18px;
     flex: 1 0 0;
     outline: none;
+    color: white;
   }
 
   &.required {
@@ -106,7 +110,7 @@
     &.focused {
       .title {
         padding-right: 16px;
-        color: black;
+        color: transparentize(white, 0.3);
       }
     }
   }
@@ -183,7 +187,7 @@
     font: inherit;
     box-sizing: border-box;
     background: transparent;
-    color: black;
+    color: white;
     flex: 1;
     resize: none;
   }
@@ -227,7 +231,7 @@
     width: 100%;
     top: 12px;
     bottom: auto;
-    padding: 0 14px;
+    padding: 0 16px;
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
@@ -235,34 +239,36 @@
     transition: top 0.25s, bottom 0.25s, font 0.25s, color 0.25s;
     pointer-events: none;
     touch-action: none;
-    color: transparentize(black, 0.3);
+    color: transparentize(white, 0.3);
     text-transform: capitalize;
 
     span {
-      background: white;
+      font: $font;
+      //background: $input_bg_color;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      padding: 0 5px;
+      padding: 0 2px;
+      text-transform: uppercase;
     }
   }
 
   &.focused .title, &.has_value .title {
-    font: $font_12_regular;
-    top: -10px;
+    font: $font_10_semibold;
+    top: -6px;
     bottom: auto;
   }
 
   &.has_value {
-    box-shadow: $input_shadow_filled;
+    //box-shadow: $input_shadow_filled;
 
     .title {
-      color: #C2C2C2;
+      color: transparentize(white, 0.3);
     }
 
     &.focused {
       .title {
-        color: transparentize(black, 0.3);
+        color: transparentize(white, 0.3);
       }
     }
   }

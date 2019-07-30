@@ -12,6 +12,7 @@ import { Grid } from "~/components/containers/Grid";
 import { Tags } from "~/components/node/Tags";
 import { Button } from "~/components/input/Button";
 import { Filler } from "~/components/containers/Filler";
+import { InputText } from "~/components/input/InputText";
 
 interface IProps {}
 
@@ -28,7 +29,11 @@ const EditorExample: FC<IProps> = () => (
         <Group horizontal className={styles.group} seamless>
           <div className={styles.editor}>
             <Panel>
-              <TextInput onChange={console.log} label="Название" />
+              <TextInput onChange={console.log} label="Название" value="Значение" />
+            </Panel>
+
+            <Panel>
+              <InputText title="Заголовок" />
             </Panel>
 
             <Panel className={classNames(styles.editor_panel, styles.editor_image_panel)}>
