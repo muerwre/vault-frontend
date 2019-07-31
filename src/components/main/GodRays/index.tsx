@@ -117,14 +117,14 @@ export class GodRays extends React.Component<IGodRaysProps> {
         width: '100%',
         height: '100%',
         zIndex: -1,
-        opacity: 0.5,
+        opacity: 1,
         pointerEvents: 'none',
       }}>
         <canvas
           width={width}
           height={height + 100}
           style={{
-            filter: 'blur(20px)',
+            filter: 'blur(50px)',
             position: 'relative',
             top: -100,
           }}

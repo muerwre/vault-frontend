@@ -12,6 +12,7 @@ import { ImageExample } from "~/containers/examples/ImageExample";
 import { EditorExample } from "~/containers/examples/EditorExample";
 import { HorizontalExample } from "~/containers/examples/HorizontalExample";
 import { Sprites } from "~/sprites/Sprites";
+import {GodRays} from "~/components/main/GodRays";
 
 interface IAppProps {}
 interface IAppState {}
@@ -21,6 +22,8 @@ class Component extends React.Component<IAppProps, IAppState> {
     return (
       <ConnectedRouter history={history}>
         <MainLayout>
+          <GodRays />
+
           <Sprites />
 
           <Switch>
