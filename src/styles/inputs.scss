@@ -254,7 +254,8 @@
   }
 
   &.focused .title, &.has_value .title {
-    font: $font_10_semibold;
+    // font: $font_10_semibold;
+    font-size: 10px;
     top: -6px;
     bottom: auto;
   }
