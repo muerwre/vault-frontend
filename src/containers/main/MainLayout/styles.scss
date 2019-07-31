@@ -1,14 +1,19 @@
 .wrapper {
   width: 100%;
-  padding: $gap $gap $gap 74px;
+  // padding: $gap $gap $gap 74px;
+  padding: 0 $gap;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  flex-direction: row;
+  //align-items: flex-start;
+  //justify-content: center;
+  flex-direction: column;
   box-sizing: border-box;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .content {
-  flex: 0 1 $content_width;
+  // flex: 0 1 $content_width;
   position: relative;
+  width: 100%;
+  max-width: $content_width;
 }

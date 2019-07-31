@@ -1,8 +1,8 @@
 import * as React from 'react';
-const style = require('./style.scss');
+import * as styles from './style.scss';
 
 export const Logo = () => (
-  <div className={style.logo}>
+  <div className={styles.logo}>
     VAULT
   </div>
 );

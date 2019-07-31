@@ -3,8 +3,7 @@
   align-items: center;
   justify-content: flex-end;
   font-weight: 500;
-  //padding: $gap 0;
-  height: 100px;
+  height: 96px;
 }
 
 
@@ -15,21 +14,30 @@
 .plugs {
   display: flex;
   user-select: none;
+  font: $font_16_medium;
+  text-transform: uppercase;
 
   > div {
-    //margin: 8px;
     display: flex;
     align-items: center;
     position: relative;
     padding: $gap;
+    cursor: pointer;
+    transition: color 0.25s;
+
+    &:hover {
+      color: $red;
+    }
 
     &::after {
       content: ' ';
       margin-left: $spc;
       background: white;
-      width: 2px;
+      width: 4px;
       height: $gap;
       display: block;
+      opacity: 0.2;
+      border-radius: 4px;
     }
 
     &:first-child {
@@ -52,19 +60,16 @@
 }
 
 .user_button {
-  padding: 0 $gap;
-  display: flex;
   align-items: center;
-  background: white;
-  color: $main_bg_color;
-  height: 20px;
   border-radius: $input_radius;
-  font-size: $text_small;
+  font: $font_16_medium;
+  text-transform: uppercase;
+  flex: 0 !important;
 }
 
 .user_avatar {
-  //width: 16px;
-  //height: 16px;
-  //background: transparentize(white, 0.5);
-  //margin-right: $gap;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: $radius;
 }

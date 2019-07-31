@@ -17,6 +17,7 @@ const Comment: FC<IProps> = ({
 }) => (
     <Card
       className={classNames(styles.wrap, className, { is_empty, is_loading })}
+      seamless
       {...props}
     >
       <div className={styles.thumb}>

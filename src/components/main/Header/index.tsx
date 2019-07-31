@@ -3,7 +3,9 @@ import { Logo } from "~/components/main/Logo";
 import { connect } from 'react-redux';
 import { IUserProfile, IUserState } from "~/redux/user/reducer";
 
-const style = require('./style.scss');
+import * as style from './style.scss';
+import {Filler} from "~/components/containers/Filler";
+import {Group} from "~/components/containers/Group";
 
 interface IHeaderProps {
   username?: IUserProfile['username'],
@@ -14,20 +16,21 @@ export const Component: React.FunctionComponent<IHeaderProps> = ({ username, is_
   <div className="default_container head_container">
     <div className={style.container}>
       <Logo />
-      <div className={style.spacer} />
-      {
-        is_user && username &&
-        <div className={style.user_button}>
-          <div className={style.user_avatar} />
-          {username}
-        </div>
-      }
+
+      <Filler />
+
       <div className={style.plugs}>
         <div>depth</div>
         <div>boris</div>
         <div>flow</div>
       </div>
 
+      <Filler />
+
+      <Group horizontal className={style.user_button}>
+        <div>username</div>
+        <div className={style.user_avatar} />
+      </Group>
     </div>
   </div>
 );

@@ -1,6 +1,9 @@
 .logo {
-  font-size: $text_sign;
-  font-weight: 800;
+  // font-family: Raleway;
+  //font-size: $text_sign;
+  //font-weight: 800;
+  font: $font_24_bold;
+  //font-family: Raleway;
   display: flex;
   user-select: none;
 }
