@@ -10,4 +10,5 @@
   @include outer_shadow();
 
   &:global(.seamless) { padding: 0; }
+  &:global(.stretchy) { flex: 1; align-items: flex-start; }
 }

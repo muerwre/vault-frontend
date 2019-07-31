@@ -10,6 +10,8 @@ import { LoginLayout } from "~/containers/login/LoginLayout";
 import { MainLayout } from "~/containers/main/MainLayout";
 import { ImageExample } from "~/containers/examples/ImageExample";
 import { EditorExample } from "~/containers/examples/EditorExample";
+import { HorizontalExample } from "~/containers/examples/HorizontalExample";
+import { Sprites } from "~/sprites/Sprites";
 
 interface IAppProps {}
 interface IAppState {}
@@ -19,9 +21,12 @@ class Component extends React.Component<IAppProps, IAppState> {
     return (
       <ConnectedRouter history={history}>
         <MainLayout>
+          <Sprites />
+
           <Switch>
             <Route path="/examples/image" component={ImageExample} />
             <Route path="/examples/edit" component={EditorExample} />
+            <Route path="/examples/horizontal" component={HorizontalExample} />
             <Route path="/" component={FlowLayout} />
 
             <Route path="/login" component={LoginLayout} />

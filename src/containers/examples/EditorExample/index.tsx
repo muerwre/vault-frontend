@@ -8,11 +8,12 @@ import { Panel } from "~/components/containers/Panel";
 import { TextInput } from "~/components/input/TextInput";
 import classNames = require("classnames");
 import { Scroll } from "~/components/containers/Scroll";
-import { Grid } from "~/components/containers/Grid";
 import { Tags } from "~/components/node/Tags";
 import { Button } from "~/components/input/Button";
 import { Filler } from "~/components/containers/Filler";
 import { InputText } from "~/components/input/InputText";
+import {Grid} from "~/components/containers/Grid";
+import {Icon} from "~/components/input/Icon";
 
 interface IProps {}
 
@@ -20,14 +21,6 @@ const EditorExample: FC<IProps> = () => (
     <Card className={styles.wrap} seamless>
       <Group horizontal className={styles.group} seamless>
         <div className={styles.editor}>
-          <Panel>
-            <TextInput onChange={console.log} label="Название" value="Значение" />
-          </Panel>
-
-          <Panel>
-            <InputText title="Заголовок" />
-          </Panel>
-
           <Panel className={classNames(styles.editor_panel, styles.editor_image_panel)}>
             <Scroll>
               <CellGrid className={styles.editor_image_container} size={200}>
@@ -41,30 +34,35 @@ const EditorExample: FC<IProps> = () => (
         </div>
 
         <div className={styles.panel}>
-          <Filler>
-            <Padder>
-              <Group>
-                <Card className={styles.feature_card}>Layout setup</Card>
+          <Panel>
+            <Group>
+              <InputText title="Заголовок" />
 
-                <Card className={styles.feature_card}>Cover changer</Card>
+              <Tags
+                tags={[
+                  { title: 'Избранный', feature: 'red' },
+                  { title: 'Плейлист', feature: 'green' },
+                  { title: 'Просто' },
+                  { title: '+ фото', feature: 'black' },
+                  { title: '+ с музыкой', feature: 'black' },
+                ]}
+              />
+            </Group>
+          </Panel>
 
-                <Card className={styles.feature_card}>Track</Card>
+          <Panel stretchy>
+            <Group>
+              <Card className={styles.feature_card}>ОБОИ ПОСТА</Card>
 
-                <Tags
-                  tags={[
-                    { title: 'Избранный', feature: 'red' },
-                    { title: 'Плейлист', feature: 'green' },
-                    { title: 'Просто' },
-                    { title: '+ фото', feature: 'black' },
-                    { title: '+ с музыкой', feature: 'black' },
-                  ]}
-                />
+              <Card className={styles.feature_card}>МУЗЫКА</Card>
 
-                <Filler />
+              <Card className={styles.feature_card}>
+                <Icon icon="cell-single" />
+              </Card>
 
-              </Group>
-            </Padder>
-          </Filler>
+              <Filler />
+            </Group>
+          </Panel>
 
           <Panel>
             <Button>Submit?</Button>

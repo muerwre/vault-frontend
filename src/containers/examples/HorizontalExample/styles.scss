@@ -3,19 +3,19 @@
   justify-content: center;
   display: flex;
   background: $editor_bg;
-  flex: 1;
+  //flex: 1;
 }
 
 .group {
   display: flex;
   align-items: stretch !important;
   justify-content: stretch;
-  flex: 1;
+  //flex: 1;
 }
 
 .panel {
   background: $editor_panel_bg;
-  flex: 1;
+  //flex: 1;
   border-radius: $radius;
   box-sizing: border-box;
   display: flex;
@@ -23,7 +23,7 @@
 }
 
 .editor {
-  flex: 2;
+  //flex: 2;
   display: flex;
   align-items: stretch;
   flex-direction: column;
@@ -33,7 +33,7 @@
 }
 
 .editor_image_panel {
-  flex: 1;
+  // flex: 1;
 }
 
 .editor_image_container {
@@ -47,14 +47,8 @@
 }
 
 .feature_card {
-  height: 120px;
-  background: darken($main_bg_color, 6%);
-  color: transparentize(white, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-transform: uppercase;
-  font: $font_18_semibold;
+  height: 100px;
+  background: darken($main_bg_color, 3%);
 }
 
 .panel_main {

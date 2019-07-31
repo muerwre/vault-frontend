@@ -17,13 +17,15 @@
   font: $font_16_medium;
   text-transform: uppercase;
 
-  > div {
+  > a {
     display: flex;
     align-items: center;
     position: relative;
     padding: $gap;
     cursor: pointer;
     transition: color 0.25s;
+    text-decoration: none;
+    color: white;
 
     &:hover {
       color: $red;
@@ -65,6 +67,7 @@
   font: $font_16_medium;
   text-transform: uppercase;
   flex: 0 !important;
+  opacity: 0.3;
 }
 
 .user_avatar {

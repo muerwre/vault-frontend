@@ -8,12 +8,14 @@ body {
   background: darken($main_bg_color, 12%);
   min-height: 100vh;
   //background: $main_bg_color url("../sprites/dots.svg");
-  // background: url("http://vault48.org/pixmaps/texture.jpg");
+  //background: url("http://vault48.org/pixmaps/texture.jpg");
   //background: #111111;
   color: $main_text_color;
   font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   font-size: 16px;
+  fill: white;
+  stroke: white;
 
   &::before {
     content: '';
@@ -24,8 +26,8 @@ body {
     left: 0;
     z-index: -1;
     // background: url("../sprites/circles.svg");
-    // background: url("http://vault48.org/pixmaps/texture_alt.jpg");
-    background: linear-gradient(darken($main_bg_color, 15%), darken($main_bg_color, 12%));
+    //background: url("http://vault48.org/pixmaps/texture_alt.jpg");
+    //background: linear-gradient(darken($main_bg_color, 15%), darken($main_bg_color, 12%));
     pointer-events: none;
     //background-size: cover;
   }
