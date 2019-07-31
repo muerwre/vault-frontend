@@ -1,9 +1,9 @@
 .wrap {
-  height: calc(100vh - 20px);
   align-items: stretch;
   justify-content: center;
   display: flex;
   background: $editor_bg;
+  flex: 1;
 }
 
 .group {

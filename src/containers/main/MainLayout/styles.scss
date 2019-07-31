@@ -1,10 +1,7 @@
 .wrapper {
   width: 100%;
-  // padding: $gap $gap $gap 74px;
   padding: 0 $gap;
   display: flex;
-  //align-items: flex-start;
-  //justify-content: center;
   flex-direction: column;
   box-sizing: border-box;
   align-items: center;
@@ -12,8 +9,11 @@
 }
 
 .content {
-  // flex: 0 1 $content_width;
+  flex: 1;
   position: relative;
   width: 100%;
   max-width: $content_width;
+  display: flex;
+  padding-bottom: 10px;
+  flex-direction: column;
 }
