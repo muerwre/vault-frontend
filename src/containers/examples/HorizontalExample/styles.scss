@@ -11,12 +11,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background: darken($content_bg, 4%);
 }
 
 .editor {
+  background: $content_bg;
   min-height: 200px;
   min-width: 50vw;
-  background: darken($content_bg, 4%);
+
   border-radius: $radius;
   display: flex;
   align-items: stretch;
@@ -27,4 +29,50 @@
 }
 
 .panel {
+
+}
+
+.features {
+  display: flex;
+}
+
+.feature_add_btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 24px;
+  background: $red_gradient;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature {
+  background: lighten($content_bg, 4%);
+  padding: $gap $gap $gap 20px;
+  border-radius: 24px;
+  font: $font_14_semibold;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.feature_cell {
+  background: lighten($content_bg, 4%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  box-sizing: border-box;
+  border-radius: $radius;
+}
+
+.uploads {
+  flex: 1;
+  padding-bottom: 0;
+}
+
+.cell {
+  background: lighten($content_bg, 6%);
+  border-radius: $radius;
+  padding-bottom: 100%;
 }
