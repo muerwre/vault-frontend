@@ -12,17 +12,12 @@
     "target": "es2018",
     "isolatedModules": true,
     "jsx": "react",
-    "lib": [ "es2015", "DOM", "es6" ],
+    "lib": ["es2015", "dom", "es6"],
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
     }
   },
-  "include": [
-    "./src/**/*",
-    "./custom.d.ts"
-  ],
-  "exclude": [
-    "./__tests__/**/*"
-  ]
+  "include": ["./src/**/*", "./custom.d.ts"],
+  "exclude": ["./__tests__/**/*"]
 }

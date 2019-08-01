@@ -2,18 +2,15 @@ import React, { FC } from 'react';
 import { Card } from "~/components/containers/Card";
 import * as styles from './styles.scss';
 import { Group } from "~/components/containers/Group";
-import { Padder } from "~/components/containers/Padder";
 import { CellGrid } from "~/components/containers/CellGrid";
 import { Panel } from "~/components/containers/Panel";
-import { TextInput } from "~/components/input/TextInput";
-import classNames = require("classnames");
+import classNames from "classnames";
 import { Scroll } from "~/components/containers/Scroll";
 import { Tags } from "~/components/node/Tags";
 import { Button } from "~/components/input/Button";
 import { Filler } from "~/components/containers/Filler";
 import { InputText } from "~/components/input/InputText";
-import {Grid} from "~/components/containers/Grid";
-import {Icon} from "~/components/input/Icon";
+import { Icon } from "~/components/input/Icon";
 
 interface IProps {}
 
@@ -52,12 +49,21 @@ const EditorExample: FC<IProps> = () => (
 
           <Panel stretchy>
             <Group>
-              <Card className={styles.feature_card}>ОБОИ ПОСТА</Card>
+              <Card className={styles.feature_card}>
+                <div className={styles.cover} />
+              </Card>
 
-              <Card className={styles.feature_card}>МУЗЫКА</Card>
+              <Card className={styles.feature_card} style={{ justifyContent: 'flex-start', height: 72 }}>
+                <Icon icon="play" size={48} />
+              </Card>
 
               <Card className={styles.feature_card}>
-                <Icon icon="cell-single" />
+                <Group horizontal className={styles.views}>
+                  <Icon icon="cell-single" size={48} />
+                  <Icon icon="cell-double-h" size={48} />
+                  <Icon icon="cell-single" size={48} />
+                  <Icon icon="cell-double-h" size={48} />
+                </Group>                
               </Card>
 
               <Filler />

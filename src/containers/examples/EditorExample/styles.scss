@@ -29,9 +29,6 @@
   flex-direction: column;
 }
 
-.editor_panel {
-}
-
 .editor_image_panel {
   flex: 1;
 }
@@ -47,7 +44,7 @@
 }
 
 .feature_card {
-  height: 120px;
+  // height: 120px;
   background: darken($main_bg_color, 6%);
   color: transparentize(white, 0.5);
   display: flex;
@@ -56,6 +53,16 @@
   text-transform: uppercase;
   font: $font_18_semibold;
   box-shadow: none;
+  padding: 0;
+}
+
+.cover {
+  border-radius: $radius;
+  background: url('http://37.192.131.144/full/attached/2017/11/f01fdaaea789915284757634baf7cd11.jpg');
+  flex: 1;
+  height: 120px;
+  background-size: cover;
+  opacity: 0.3;
 }
 
 .panel_main {
@@ -69,4 +76,8 @@
   background: transparentize(white, 0.95);
   flex: 0 0 24px;
   border-radius: $radius;
+}
+
+.views {
+  
 }
