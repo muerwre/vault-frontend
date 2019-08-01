@@ -12,7 +12,7 @@ import { ImageExample } from "~/containers/examples/ImageExample";
 import { EditorExample } from "~/containers/examples/EditorExample";
 import { HorizontalExample } from "~/containers/examples/HorizontalExample";
 import { Sprites } from "~/sprites/Sprites";
-import {GodRays} from "~/components/main/GodRays";
+import { URLS } from "~/constants/urls";
 
 interface IAppProps {}
 interface IAppState {}
@@ -22,17 +22,14 @@ class Component extends React.Component<IAppProps, IAppState> {
     return (
       <ConnectedRouter history={history}>
         <MainLayout>
-          <GodRays />
-
           <Sprites />
 
           <Switch>
-            <Route path="/examples/image" component={ImageExample} />
-            <Route path="/examples/edit" component={EditorExample} />
-            <Route path="/examples/horizontal" component={HorizontalExample} />
-            <Route path="/" component={FlowLayout} />
+            <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
+            <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
+            <Route exact path={URLS.BASE} component={FlowLayout} />
 
-            <Route path="/login" component={LoginLayout} />
+            <Route path={URLS.AUTH.LOGIN} component={LoginLayout} />
 
             <Redirect to="/" />
           </Switch>

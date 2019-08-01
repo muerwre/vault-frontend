@@ -30,6 +30,7 @@ export const TestGrid = () => (
           width={Math.floor(Math.random() * 3)}
           height={Math.floor(Math.random() * 3)}
           title={`Cell ${el}`}
+          key={el}
         />
       ))
     }
