@@ -70,12 +70,17 @@
   flex: 1;
   padding: $gap;
   padding-bottom: 0;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   display: grid;
   align-items: center;
   justify-content: center;
   grid-column-gap: $gap;
   grid-row-gap: $gap;
+
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+
+  @media(max-width: 600px) {
+    grid-template-columns: repeat(auto-fill, minmax(30vw, 1fr));
+  }
 }
 
 .cell {
