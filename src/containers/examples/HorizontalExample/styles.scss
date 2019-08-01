@@ -3,7 +3,7 @@
   justify-content: center;
   display: flex;
   background: $editor_bg;
-  //flex: 1;
+  flex: 1;
 }
 
 .group {
@@ -23,7 +23,7 @@
 }
 
 .editor {
-  //flex: 2;
+  flex: 1;
   display: flex;
   align-items: stretch;
   flex-direction: column;

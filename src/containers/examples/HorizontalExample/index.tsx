@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 import { Card } from "~/components/containers/Card";
-import * as styles from './styles.scss';
+import * as styles from "./styles.scss";
 import { Group } from "~/components/containers/Group";
 import { Padder } from "~/components/containers/Padder";
 import { CellGrid } from "~/components/containers/CellGrid";
@@ -10,7 +10,7 @@ import { Scroll } from "~/components/containers/Scroll";
 import { Tags } from "~/components/node/Tags";
 import { Button } from "~/components/input/Button";
 import { InputText } from "~/components/input/InputText";
-import {Grid} from "~/components/containers/Grid";
+import { Grid } from "~/components/containers/Grid";
 
 interface IProps {}
 
@@ -18,8 +18,8 @@ const HorizontalExample: FC<IProps> = () => (
   <Card className={styles.wrap} seamless>
     <Group className={styles.group} seamless>
       <div className={styles.editor}>
-        <Panel className={classNames(styles.editor_panel, styles.editor_image_panel)}>
-          <Scroll autoHeight autoHeightMax={500}>
+        <Scroll>
+          <Padder>
             <CellGrid className={styles.editor_image_container} size={200}>
               <div className={styles.editor_image} />
               <div className={styles.editor_image} />
@@ -29,46 +29,33 @@ const HorizontalExample: FC<IProps> = () => (
               <div className={styles.editor_image} />
               <div className={styles.editor_image} />
               <div className={styles.editor_image} />
-              <div className={styles.editor_image} />
-              <div className={styles.editor_image} />
-              <div className={styles.editor_image} />
-              <div className={styles.editor_image} />
-              <div className={styles.editor_image} />
-              <div className={styles.editor_image} />
             </CellGrid>
-          </Scroll>
-        </Panel>
-        <Panel>
-          <InputText title="Заголовок" />
-        </Panel>
+          </Padder>
+        </Scroll>
       </div>
 
       <div className={styles.panel}>
         <Padder>
-          <Grid columns="1fr 1fr 1fr">
-            <Group>
-              <Card className={styles.feature_card}>Layout setup</Card>
-
-              <Card className={styles.feature_card}>Cover changer</Card>
-
-              <Card className={styles.feature_card}>Track</Card>
-            </Group>
-
+          <Grid columns="2fr 1fr 1fr">
             <div>
-              <Tags
-                tags={[
-                  { title: 'Избранный', feature: 'red' },
-                  { title: 'Плейлист', feature: 'green' },
-                  { title: 'Просто' },
-                  { title: '+ фото', feature: 'black' },
-                  { title: '+ с музыкой', feature: 'black' },
-                ]}
-              />
+              <Group>
+                <InputText title="Название" />
+
+                <Tags
+                  tags={[
+                    { title: "Избранный", feature: "red" },
+                    { title: "Плейлист", feature: "green" },
+                    { title: "Просто" },
+                    { title: "+ фото", feature: "black" },
+                    { title: "+ с музыкой", feature: "black" }
+                  ]}
+                />
+              </Group>
             </div>
 
-            <div>
-              <Button>Submit?</Button>
-            </div>
+            <div />
+
+            <div />
           </Grid>
         </Padder>
       </div>
