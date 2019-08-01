@@ -7,7 +7,6 @@ import {InputText} from "~/components/input/InputText";
 import {Button} from "~/components/input/Button";
 import {Filler} from "~/components/containers/Filler";
 import {Icon} from "~/components/input/Icon";
-import {CellGrid} from "~/components/containers/CellGrid";
 
 interface IProps {}
 
@@ -15,11 +14,14 @@ const HorizontalExample: FC<IProps> = () => (
   <div className={styles.wrap}>
     <Card seamless className={styles.card}>
       <div className={styles.editor}>
-        <Padder className={styles.uploads}>
-          <CellGrid size={150}>
-            <div className={styles.cell} />
-          </CellGrid>
-        </Padder>
+        <div className={styles.uploads}>
+          <div className={styles.cell} />
+          <div className={styles.cell} />
+          <div className={styles.cell} />
+          <div className={styles.cell} />
+          <div className={styles.cell} />
+          <div className={styles.cell} />
+        </div>
 
         <Padder className={styles.features}>
           <Group horizontal>
