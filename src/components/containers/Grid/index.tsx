@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
-import classNames from 'classnames';
-import * as styles from './styles.scss';
+import React, { FC } from "react";
+import classNames from "classnames";
+import * as styles from "./styles.scss";
 
 type IProps = React.HTMLAttributes<HTMLDivElement> & {
   horizontal?: boolean;
@@ -10,39 +10,42 @@ type IProps = React.HTMLAttributes<HTMLDivElement> & {
   size?: string;
   square?: boolean;
   gap?: number;
+  stretchy?: boolean;
 };
 
 const Grid: FC<IProps> = ({
   children,
-  className = '',
+  className = "",
   horizontal = false,
   vertical = false,
   square = false,
-  size = 'auto',
+  size = "auto",
   style = {},
-  columns = 'auto',
-  rows = 'auto',
+  columns = "auto",
+  rows = "auto",
   gap = 10,
+  stretchy,
   ...props
 }) => (
   <div
-    className={classNames(
-      styles.grid,
-      className,
-      {
-        [styles.horizontal]: horizontal,
-        [styles.vertical]: !horizontal,
-        [styles.square]: square,
-      },
-    )}
+    className={classNames(styles.grid, className, {
+      [styles.horizontal]: horizontal,
+      [styles.vertical]: !horizontal,
+      [styles.square]: square,
+      [styles.stretchy]: stretchy
+    })}
     style={{
       ...style,
-      gridTemplateColumns: square ? `repeat(auto-fill, ${(columns !== 'auto' && columns) || size})` : columns,
-      gridTemplateRows: square ? `repeat(auto-fill, ${(rows !== 'auto' && rows) || size})` : rows,
+      gridTemplateColumns: square
+        ? `repeat(auto-fill, ${(columns !== "auto" && columns) || size})`
+        : columns,
+      gridTemplateRows: square
+        ? `repeat(auto-fill, ${(rows !== "auto" && rows) || size})`
+        : rows,
       gridAutoRows: rows,
       gridAutoColumns: columns,
       gridRowGap: gap,
-      gridColumnGap: gap,
+      gridColumnGap: gap
     }}
     {...props}
   >

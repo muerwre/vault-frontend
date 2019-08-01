@@ -15,4 +15,8 @@
   &.square {
     grid-auto-flow: dense;
   }
+
+  &.stretchy {
+    flex: 1;
+  }
 }

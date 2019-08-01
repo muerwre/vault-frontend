@@ -44,7 +44,7 @@
 }
 
 .feature_card {
-  // height: 120px;
+  height: 120px;
   background: darken($main_bg_color, 6%);
   color: transparentize(white, 0.5);
   display: flex;
@@ -58,7 +58,7 @@
 
 .cover {
   border-radius: $radius;
-  background: url('http://37.192.131.144/full/attached/2017/11/f01fdaaea789915284757634baf7cd11.jpg');
+  background: url("http://37.192.131.144/full/attached/2017/11/f01fdaaea789915284757634baf7cd11.jpg");
   flex: 1;
   height: 120px;
   background-size: cover;
@@ -79,5 +79,9 @@
 }
 
 .views {
-  
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

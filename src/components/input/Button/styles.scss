@@ -1,6 +1,10 @@
 @keyframes pulse {
-  0% { opacity: 1; }
-  100% { opacity: 0.3; }
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+  }
 }
 
 .button {
@@ -28,23 +32,27 @@
   justify-content: center;
 
   // box-shadow: transparentize(#E933A5, 0.6) 0 2px 8px;
-  box-shadow: transparentize(#E933A5, 0.6) 0 0 0;
+  box-shadow: transparentize(#e933a5, 0.6) 0 0 0;
   filter: grayscale(0);
 
   transition: opacity 0.25s, filter 0.25s, box-shadow 0.25s;
   opacity: 0.8;
 
+  span {
+    flex: 1;
+  }
+
   &:hover {
     opacity: 1;
-    box-shadow: transparentize(#E933A5, 0.4) 0 2px 8px;
+    box-shadow: transparentize(#e933a5, 0.4) 0 2px 8px;
 
     &:global(.disabled) {
-      box-shadow: transparentize(#E933A5, 0.6) 0 0 0;
+      box-shadow: transparentize(#e933a5, 0.6) 0 0 0;
       cursor: auto;
     }
 
     &:active {
-      box-shadow: transparentize(#E933A5, 0.6) 0 0 0;
+      box-shadow: transparentize(#e933a5, 0.6) 0 0 0;
     }
   }
 
@@ -72,7 +80,12 @@
     color: $red;
   }
 
-  &:global(.disabled), &:global(.grey) {
+  &:global(.stretchy) {
+    flex: 1;
+  }
+
+  &:global(.disabled),
+  &:global(.grey) {
     opacity: 0.3;
     //background: black;
     filter: grayscale(100%);
@@ -84,7 +97,8 @@
   }
 
   &:global(.is_loading) {
-    span, svg {
+    span,
+    svg {
       animation: pulse 0.25s infinite alternate;
     }
   }
@@ -92,16 +106,34 @@
   > * {
     margin: 0 5px;
 
-    &:first-child { margin-left: 0; }
-    &:last-child { margin-right: 0; }
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }
 
-.micro { height: 20px; font: $font_12_semibold; padding: 0 15px;}
-.mini { height: 28px; }
-.normal { height: 38px; }
-.big { height: 40px; }
-.giant { height: 50px; padding: 0 15px; min-width: 50px; }
+.micro {
+  height: 20px;
+  font: $font_12_semibold;
+  padding: 0 15px;
+}
+.mini {
+  height: 28px;
+}
+.normal {
+  height: 38px;
+}
+.big {
+  height: 40px;
+}
+.giant {
+  height: 50px;
+  padding: 0 15px;
+  min-width: 50px;
+}
 .disabled {
   opacity: 0.5;
 }
