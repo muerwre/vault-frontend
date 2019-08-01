@@ -64,7 +64,7 @@ $input_shadow_filled: $input_shadow;
 
 @mixin outer_shadow() {
   box-shadow: inset transparentize(white, 0.95) 0 1px,
-              inset transparentize(black, 0.5) 0 -1px;
+              transparentize(black, 0.8) 0 3px;
 }
 
 @mixin inner_shadow() {

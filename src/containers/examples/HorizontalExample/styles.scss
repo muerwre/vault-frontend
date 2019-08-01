@@ -1,65 +1,30 @@
 .wrap {
-  align-items: stretch;
+  flex: 1;
+  align-items: center;
   justify-content: center;
   display: flex;
-  background: $editor_bg;
-  flex: 1;
+  flex-direction: column;
 }
 
-.group {
-  display: flex;
-  align-items: stretch !important;
-  justify-content: stretch;
-  //flex: 1;
-}
-
-.panel {
-  background: $editor_panel_bg;
-  //flex: 1;
-  border-radius: $radius;
-  box-sizing: border-box;
+.card {
+  padding: 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .editor {
-  flex: 1;
+  min-height: 200px;
+  min-width: 50vw;
+  background: darken($content_bg, 4%);
+  border-radius: $radius;
   display: flex;
   align-items: stretch;
+  justify-content: stretch;
   flex-direction: column;
-}
-
-.editor_panel {
-}
-
-.editor_image_panel {
-  // flex: 1;
-}
-
-.editor_image_container {
   flex: 1;
+  @include outer_shadow();
 }
 
-.editor_image {
-  background: transparentize(white, 0.95);
-  padding-bottom: 100%;
-  border-radius: $radius;
-}
-
-.feature_card {
-  height: 100px;
-  background: darken($main_bg_color, 3%);
-}
-
-.panel_main {
-  flex: 1;
-  display: flex;
-}
-
-.close_icon {
-  height: 24px;
-  width: 24px;
-  background: transparentize(white, 0.95);
-  flex: 0 0 24px;
-  border-radius: $radius;
+.panel {
 }
