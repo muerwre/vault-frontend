@@ -56,6 +56,7 @@
 
   .pan {
     border-radius: 0 0 $radius $radius;
+    box-shadow: transparentize($color: black, $amount: 0.8) 0 8px 0;
   }
 }
 
@@ -88,7 +89,7 @@
 
 .pan {
   background: darken($content_bg, 4%);
-  height: 64px;
+  max-height: 64px;
 }
 
 .children {
