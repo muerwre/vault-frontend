@@ -13,35 +13,40 @@ import { EditorExample } from "~/containers/examples/EditorExample";
 import { HorizontalExample } from "~/containers/examples/HorizontalExample";
 import { Sprites } from "~/sprites/Sprites";
 import { URLS } from "~/constants/urls";
+import { Modal } from "~/containers/dialogs/Modal";
+import { selectModal } from "~/redux/modal/selectors";
+import { BlurWrapper } from "../components/containers/BlurWrapper/index";
 
-interface IAppProps {}
-interface IAppState {}
+const mapStateToProps = selectModal;
+const mapDispatchToProps = {};
 
-class Component extends React.Component<IAppProps, IAppState> {
+type IProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps> & {};
+
+class Component extends React.Component<IProps, {}> {
   render() {
     return (
       <ConnectedRouter history={history}>
-        <MainLayout>
-          <Sprites />
+        <BlurWrapper is_blurred={this.props.is_shown}>
+          <MainLayout>
+            <Modal />
+            <Sprites />
 
-          <Switch>
-            <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
-            <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
-            <Route path="/examples/horizontal" component={HorizontalExample} />
-            <Route exact path={URLS.BASE} component={FlowLayout} />
+            <Switch>
+              <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
+              <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
+              <Route path="/examples/horizontal" component={HorizontalExample} />
+              <Route exact path={URLS.BASE} component={FlowLayout} />
 
-            <Route path={URLS.AUTH.LOGIN} component={LoginLayout} />
+              <Route path={URLS.AUTH.LOGIN} component={LoginLayout} />
 
-            <Redirect to="/" />
-          </Switch>
-        </MainLayout>
+              <Redirect to="/" />
+            </Switch>
+          </MainLayout>
+        </BlurWrapper>
       </ConnectedRouter>
     );
   }
 }
-
-const mapStateToProps = (state, props) => ({});
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(
   mapStateToProps,

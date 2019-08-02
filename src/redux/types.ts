@@ -2,10 +2,13 @@ import { DetailedHTMLProps, InputHTMLAttributes } from "react";
 
 export type ITag = {
   title: string;
-  feature?: 'red' | 'blue' | 'green' | 'olive' | 'black';
-}
+  feature?: "red" | "blue" | "green" | "olive" | "black";
+};
 
-export type IInputTextProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
+export type IInputTextProps = DetailedHTMLProps<
+  InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+> & {
   wrapperClassName?: string;
   handler?: (value: string) => void;
   required?: boolean;
@@ -20,3 +23,5 @@ export type IInputTextProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputEle
 };
 
 export type IIcon = string;
+
+export type ValueOf<T> = T[keyof T];

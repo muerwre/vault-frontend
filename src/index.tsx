@@ -1,3 +1,6 @@
+/*
+  sortable grid: http://clauderic.github.io/react-sortable-hoc/#/basic-configuration/grid?_k=hjqdj1
+*/
 import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';

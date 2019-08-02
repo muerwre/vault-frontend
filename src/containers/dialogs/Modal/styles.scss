@@ -1,0 +1,54 @@
+.fixed {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: appear 0.25s forwards;
+}
+
+.content_scroller {
+  width: 100%;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.content_padder {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparentize($color: #000000, $amount: 0.5);
+  cursor: pointer;
+}
