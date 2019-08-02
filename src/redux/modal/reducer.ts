@@ -9,7 +9,7 @@ export interface IModalState {
 }
 
 const INITIAL_STATE: IModalState = {
-  is_shown: true,
+  is_shown: false,
   dialog: DIALOGS.TEST
 };
 
