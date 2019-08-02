@@ -3,7 +3,7 @@ import * as styles from "./styles.scss";
 import { IState } from "~/redux/store";
 import * as ACTIONS from "~/redux/modal/actions";
 import { connect } from "react-redux";
-import { DIALOG_CONTENT } from "~/redux/modal/constants";
+import { DIALOG_CONTENT, IDialogProps } from "~/redux/modal/constants";
 import ReactDOM from "react-dom";
 
 const mapStateToProps = ({ modal }: IState) => ({ ...modal });
@@ -38,7 +38,7 @@ const ModalUnconnected: FC<IProps> = ({
             {React.createElement(DIALOG_CONTENT[dialog], {
               onRequestClose,
               onDialogChange: modalShowDialog
-            } as Attributes)}
+            } as IDialogProps)}
           </div>
         </div>
       </div>

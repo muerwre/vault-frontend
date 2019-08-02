@@ -26,6 +26,7 @@
   justify-content: stretch;
   flex-direction: column;
   flex: 1;
+
   @include outer_shadow();
 }
 
@@ -69,7 +70,7 @@
 .uploads {
   flex: 1;
   padding: $gap;
-  padding-bottom: 0;
+  // padding-bottom: 0;
   display: grid;
   align-items: center;
   justify-content: center;

@@ -1,4 +1,5 @@
 import { DetailedHTMLProps, InputHTMLAttributes } from "react";
+import { DIALOGS } from "~/redux/modal/constants";
 
 export type ITag = {
   title: string;
@@ -25,3 +26,8 @@ export type IInputTextProps = DetailedHTMLProps<
 export type IIcon = string;
 
 export type ValueOf<T> = T[keyof T];
+
+export interface IDialogProps {
+  onRequestClose: () => void;
+  onDialogChange: (dialog: ValueOf<typeof DIALOGS>) => void;
+}
