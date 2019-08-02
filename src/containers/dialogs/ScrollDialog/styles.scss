@@ -1,0 +1,97 @@
+.container {
+  height: 100vh;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0;
+  box-sizing: border-box;
+  flex: 1 1 800px;
+  z-index: 1;
+
+  &:global(.has_title) {
+    padding-top: 64px + 15px; // +15px
+  }
+
+  &:global(.has_buttons) {
+    padding-bottom: 64px + 15px; // +15px
+  }
+}
+
+.top,
+.bottom {
+  width: 100%;
+  height: 64px;
+  position: absolute;
+  top: 20px;
+  bottom: auto;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $gap;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.bottom {
+  bottom: 20px;
+  top: auto;
+
+  .pan {
+    border-radius: 0 0 $radius $radius;
+  }
+}
+
+.wrap {
+  flex: 0 1 800px;
+  height: 100%;
+}
+
+.scroll_wrap {
+  flex: 0 1 840px;
+  height: 100%;
+}
+
+.content_wrap {
+  padding: 0 20px;
+}
+
+.top_sticky {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding-top: $gap * 2;
+  margin-top: -$gap;
+  z-index: -1;
+  background: transparentize(white, 0.1);
+  border-radius: $radius;
+  box-shadow: transparentize(black, 0.9) 0 15px 15px;
+}
+
+.pan {
+  background: darken($content_bg, 4%);
+  height: 64px;
+}
+
+.children {
+  background: $content_bg;
+  radius: $radius;
+}

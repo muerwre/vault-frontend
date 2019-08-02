@@ -1,5 +1,6 @@
 import { ValueOf } from "~/redux/types";
 import { HorizontalExample } from "~/containers/examples/HorizontalExample";
+import { ExampleDialog } from "~/containers/dialogs/ExampleDialog";
 
 export const MODAL_ACTIONS = {
   SET_SHOWN: "MODAL.SET_SHOWN",
@@ -12,7 +13,7 @@ export const DIALOGS = {
 };
 
 export const DIALOG_CONTENT = {
-  [DIALOGS.TEST]: HorizontalExample
+  [DIALOGS.TEST]: ExampleDialog
 };
 
 export interface IDialogProps {
