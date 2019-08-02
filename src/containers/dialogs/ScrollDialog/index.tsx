@@ -21,7 +21,6 @@ const ScrollDialog: FC<IProps> = ({
   children,
   title,
   buttons,
-  size = "medium",
   width = 800,
   top_sticky,
   top_sticky_offset,
@@ -61,7 +60,7 @@ const ScrollDialog: FC<IProps> = ({
       <div
         className={classNames(styles.content, {
           has_buttons: !!buttons,
-          has_title: !!title
+          has_title: true
         })}
         style={{ flexBasis: width }}
       >
@@ -80,6 +79,14 @@ const ScrollDialog: FC<IProps> = ({
                   <div className={styles.top_sticky}>{top_sticky}</div>
                 )}
               </div>
+            </div>
+          </div>
+        )}
+
+        {!title && (
+          <div className={styles.top}>
+            <div className={styles.wrap} style={{ flexBasis: width }}>
+              <div className={styles.top_cap} />
             </div>
           </div>
         )}

@@ -1,12 +1,12 @@
-import React, { FC } from "react";
-import { Card } from "~/components/containers/Card";
-import * as styles from "./styles.scss";
-import {Padder} from "~/components/containers/Padder";
-import {Group} from "~/components/containers/Group";
-import {InputText} from "~/components/input/InputText";
-import {Button} from "~/components/input/Button";
-import {Filler} from "~/components/containers/Filler";
-import {Icon} from "~/components/input/Icon";
+import React, { FC } from 'react';
+import { Card } from '~/components/containers/Card';
+import * as styles from './styles.scss';
+import { Padder } from '~/components/containers/Padder';
+import { Group } from '~/components/containers/Group';
+import { InputText } from '~/components/input/InputText';
+import { Button } from '~/components/input/Button';
+import { Filler } from '~/components/containers/Filler';
+import { Icon } from '~/components/input/Icon';
 
 interface IProps {}
 

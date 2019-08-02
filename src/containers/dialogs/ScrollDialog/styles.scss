@@ -50,6 +50,13 @@
   z-index: 2;
 }
 
+.top {
+  .wrap {
+    display: flex;
+    align-items: flex-end;
+  }
+}
+
 .bottom {
   bottom: 15px;
   top: auto;
@@ -94,5 +101,22 @@
 
 .children {
   background: $content_bg;
-  radius: $radius;
+  border-radius: $radius;
+}
+
+.top_cap {
+  height: $radius;
+  background: $content_bg;
+  border-radius: $radius $radius 0 0;
+  flex: 1;
+  position: relative;
+
+  &::after {
+    position: absolute;
+    content: " ";
+    width: 100%;
+    height: $gap;
+    background: linear-gradient($content_bg, transparentize($content_bg, 1));
+    bottom: -$gap;
+  }
 }

@@ -1,7 +1,7 @@
-import { MODAL_HANDLERS } from "~/redux/modal/handlers";
-import { createReducer } from "~/utils/reducer";
-import { DIALOGS } from "~/redux/modal/constants";
-import { ValueOf } from "~/redux/types";
+import { MODAL_HANDLERS } from '~/redux/modal/handlers';
+import { createReducer } from '~/utils/reducer';
+import { DIALOGS } from '~/redux/modal/constants';
+import { ValueOf } from '~/redux/types';
 
 export interface IModalState {
   is_shown: boolean;
@@ -10,7 +10,7 @@ export interface IModalState {
 
 const INITIAL_STATE: IModalState = {
   is_shown: true,
-  dialog: DIALOGS.LOGIN
+  dialog: DIALOGS.LOGIN,
 };
 
 export default createReducer(INITIAL_STATE, MODAL_HANDLERS);

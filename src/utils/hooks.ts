@@ -1,24 +1,24 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 export const useCloseOnEscape = (onRequestClose: () => void, ignore_inputs = false) => {
   const onEscape = useCallback(
     event => {
-      if (event.key !== "Escape") return;
+      if (event.key !== 'Escape') return;
       if (
         ignore_inputs &&
-        (event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA")
+        (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA')
       )
         return;
 
       onRequestClose();
     },
-    [onRequestClose]
+    [onRequestClose],
   );
 
   useEffect(() => {
-    window.addEventListener("keyup", onEscape);
+    window.addEventListener('keyup', onEscape);
 
     return () => {
-      window.removeEventListener("keyup", onEscape);
+      window.removeEventListener('keyup', onEscape);
     };
   }, [onEscape]);
 };

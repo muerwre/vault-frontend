@@ -1,12 +1,12 @@
-import React, { FC } from "react";
-import { ScrollDialog } from "../ScrollDialog";
-import { IDialogProps } from "~/redux/modal/constants";
-import { useCloseOnEscape } from "~/utils/hooks";
-import { Group } from "~/components/containers/Group";
-import { InputText } from "~/components/input/InputText";
-import { Button } from "../../../components/input/Button/index";
-import { Padder } from "~/components/containers/Padder";
-import * as styles from "~/containers/examples/HorizontalExample/styles.scss";
+import React, { FC } from 'react';
+import { ScrollDialog } from '../ScrollDialog';
+import { IDialogProps } from '~/redux/modal/constants';
+import { useCloseOnEscape } from '~/utils/hooks';
+import { Group } from '~/components/containers/Group';
+import { InputText } from '~/components/input/InputText';
+import { Button } from '../../../components/input/Button/index';
+import { Padder } from '~/components/containers/Padder';
+import * as styles from '~/containers/examples/HorizontalExample/styles.scss';
 
 type IProps = IDialogProps & {};
 

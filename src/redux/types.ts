@@ -1,10 +1,10 @@
-import { DetailedHTMLProps, InputHTMLAttributes } from "react";
-import { DIALOGS } from "~/redux/modal/constants";
+import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import { DIALOGS } from '~/redux/modal/constants';
 
-export type ITag = {
+export interface ITag {
   title: string;
-  feature?: "red" | "blue" | "green" | "olive" | "black";
-};
+  feature?: 'red' | 'blue' | 'green' | 'olive' | 'black';
+}
 
 export type IInputTextProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,

@@ -1,4 +1,4 @@
-@import 'colors';
+@import "colors";
 
 $cell: 256px;
 $content_width: 1100px;
@@ -25,7 +25,9 @@ $medium: 500;
 $light: 300;
 $extra_light: 200;
 
-$font: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+  "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+  "Noto Color Emoji";
 
 $font_48_semibold: $semibold 48px $font;
 $font_24_bold: $bold 24px $font;
@@ -54,7 +56,7 @@ $shadow_depth_1: transparentize(black, 0.8) 0 1px, inset transparentize(white, 0
 $shadow_depth_2: transparentize(black, 0.8) 0 2px, inset transparentize(white, 0.98) 0 1px;
 
 $comment_shadow: $shadow_depth_2;
-$node_shadow:  transparentize(black, 0.8) 1px 2px;
+$node_shadow: transparentize(black, 0.8) 1px 2px;
 
 $tag_height: 22px;
 
@@ -63,18 +65,15 @@ $input_shadow_error: inset $red 0 0 0 1px;
 $input_shadow_filled: $input_shadow;
 
 @mixin outer_shadow() {
-  box-shadow: inset transparentize(white, 0.95) 0 1px,
-              transparentize(black, 0.8) 0 3px;
+  box-shadow: inset transparentize(white, 0.95) 0 1px, transparentize(black, 0.8) 0 3px;
 }
 
 @mixin inner_shadow() {
-  box-shadow: inset transparentize(white, 0.95) 0 -1px,
-              inset transparentize(black, 0.5) 0 1px;
+  box-shadow: inset transparentize(white, 0.95) 0 -1px, inset transparentize(black, 0.5) 0 1px;
 }
 
 @mixin input_shadow() {
-  box-shadow: inset transparentize(white, 0.92) 0 -1px,
-              inset transparentize(black, 0.8) 0 1px;
+  box-shadow: inset transparentize(white, 0.92) 0 -1px, inset transparentize(black, 0.8) 0 1px;
 }
 
 @mixin modal_mixin() {
@@ -90,7 +89,7 @@ $input_shadow_filled: $input_shadow;
   position: $position;
 
   &::after {
-    content: ' ';
+    content: " ";
     position: absolute;
     bottom: 0;
     left: 0;
