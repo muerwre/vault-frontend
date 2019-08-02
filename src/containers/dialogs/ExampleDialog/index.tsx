@@ -26,7 +26,7 @@ const ExampleDialog: FC<IProps> = ({ onRequestClose }) => {
   useCloseOnEscape(onRequestClose);
 
   return (
-    <ScrollDialog buttons={buttons} width={720}>
+    <ScrollDialog buttons={buttons} width={860}>
       <div className={styles.uploads}>
         <div className={styles.cell} />
         <div className={styles.cell} />

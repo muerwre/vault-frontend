@@ -10,7 +10,7 @@ export interface IModalState {
 
 const INITIAL_STATE: IModalState = {
   is_shown: true,
-  dialog: DIALOGS.LOGIN,
+  dialog: DIALOGS.TEST,
 };
 
 export default createReducer(INITIAL_STATE, MODAL_HANDLERS);

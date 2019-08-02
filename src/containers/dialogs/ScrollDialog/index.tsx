@@ -28,11 +28,11 @@ const ScrollDialog: FC<IProps> = ({
   onOverlayClick,
   onRefCapture
 }) => {
-  const [height, setHeight] = useState(window.innerHeight - 240);
+  const [height, setHeight] = useState(window.innerHeight - 120);
   const [show_top_sticky, setShowTopSticky] = useState(false);
   const [ref, setRef] = useState(null);
 
-  const onResize = useCallback(() => setHeight(window.innerHeight - 240), []);
+  const onResize = useCallback(() => setHeight(window.innerHeight - 120), []);
 
   useEffect(() => {
     window.addEventListener("resize", onResize);
@@ -60,7 +60,7 @@ const ScrollDialog: FC<IProps> = ({
       <div
         className={classNames(styles.content, {
           has_buttons: !!buttons,
-          has_title: true
+          has_title: !!title,
         })}
         style={{ flexBasis: width }}
       >

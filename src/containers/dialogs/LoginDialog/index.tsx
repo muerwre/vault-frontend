@@ -4,7 +4,7 @@ import { IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
 import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
-import { Button } from '../../../components/input/Button/index';
+import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
 import * as styles from './styles.scss';
 type IProps = IDialogProps & {};
@@ -12,8 +12,6 @@ type IProps = IDialogProps & {};
 const LoginDialog: FC<IProps> = ({ onRequestClose }) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-
-  const title = <div>title</div>;
 
   const buttons = (
     <Padder>
@@ -26,7 +24,7 @@ const LoginDialog: FC<IProps> = ({ onRequestClose }) => {
   useCloseOnEscape(onRequestClose);
 
   return (
-    <ScrollDialog buttons={buttons} width={300}>
+    <ScrollDialog buttons={buttons} width={260}>
       <Padder>
         <div className={styles.wrap}>
           <Group>

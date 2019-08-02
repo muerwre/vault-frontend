@@ -20,17 +20,17 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 0;
+  padding: 10px 0 0 0;
   box-sizing: border-box;
   flex: 1 1 800px;
   z-index: 1;
 
   &:global(.has_title) {
-    padding-top: 64px + 15px; // +15px
+    padding-top: 60px + 10px; // +15px
   }
 
   &:global(.has_buttons) {
-    padding-bottom: 64px + 15px; // +15px
+    padding-bottom: 60px + 10px; // +15px
   }
 }
 
@@ -51,6 +51,11 @@
 }
 
 .top {
+  height: 10px;
+  top: 0;
+
+  &:global(.has_buttons) { height: 60px; top: 15px;}
+
   .wrap {
     display: flex;
     align-items: flex-end;
