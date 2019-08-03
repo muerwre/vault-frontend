@@ -1,29 +1,23 @@
 import * as React from "react";
 import { Logo } from "~/components/main/Logo";
 import { connect } from "react-redux";
-import { IUserState } from "~/redux/user/reducer";
 import { push as historyPush } from "connected-react-router";
 
 import * as style from "./style.scss";
 import { Filler } from "~/components/containers/Filler";
 import { Link } from "react-router-dom";
+import {selectUser} from "~/redux/auth/selectors";
+import {Group} from "~/components/containers/Group";
 
-const mapStateToProps = ({
-  user: {
-    profile: { username, is_user }
-  }
-}: {
-  user: IUserState;
-}) => ({ username, is_user });
+const mapStateToProps = selectUser;
 
 const mapDispatchToProps = {
   push: historyPush
 };
 
-type IHeaderProps = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps & {};
+type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-export const Component: React.FunctionComponent<IHeaderProps> = ({
+const HeaderUnconnected: React.FunctionComponent<IProps> = ({
   username,
   is_user
 }) => {
@@ -43,16 +37,18 @@ export const Component: React.FunctionComponent<IHeaderProps> = ({
 
         <Filler />
 
-        {/* <Group horizontal className={style.user_button}>
+        <Group horizontal className={style.user_button}>
           <div>username</div>
           <div className={style.user_avatar}/>
-        </Group> */}
+        </Group>
       </div>
     </div>
   );
 };
 
-export const Header = connect(
+const Header = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Component);
+)(HeaderUnconnected);
+
+export { Header };

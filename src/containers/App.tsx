@@ -6,7 +6,6 @@ import { ConnectedRouter } from "connected-react-router";
 import { history } from "~/redux/store";
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 import { FlowLayout } from "~/containers/flow/FlowLayout";
-import { LoginLayout } from "~/containers/login/LoginLayout";
 import { MainLayout } from "~/containers/main/MainLayout";
 import { ImageExample } from "~/containers/examples/ImageExample";
 import { EditorExample } from "~/containers/examples/EditorExample";
@@ -15,7 +14,7 @@ import { Sprites } from "~/sprites/Sprites";
 import { URLS } from "~/constants/urls";
 import { Modal } from "~/containers/dialogs/Modal";
 import { selectModal } from "~/redux/modal/selectors";
-import { BlurWrapper } from "../components/containers/BlurWrapper/index";
+import { BlurWrapper } from "~/components/containers/BlurWrapper";
 
 const mapStateToProps = selectModal;
 const mapDispatchToProps = {};
@@ -36,8 +35,6 @@ class Component extends React.Component<IProps, {}> {
               <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
               <Route path="/examples/horizontal" component={HorizontalExample} />
               <Route exact path={URLS.BASE} component={FlowLayout} />
-
-              <Route path={URLS.AUTH.LOGIN} component={LoginLayout} />
 
               <Redirect to="/" />
             </Switch>

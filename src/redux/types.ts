@@ -31,3 +31,9 @@ export interface IDialogProps {
   onRequestClose: () => void;
   onDialogChange: (dialog: ValueOf<typeof DIALOGS>) => void;
 }
+
+export interface IResultWithStatus<T> {
+  status: number;
+  data: T;
+  error?: string;
+}

@@ -11,3 +11,6 @@ export const authMiddleware = r => {
 export const api = axios.create({
   baseURL: API.BASE,
 });
+
+export const resultMiddleware = ({ status, data }) => ({ status, data });
+export const errorMiddleware = ({ status, data, response }) => ({ status, data: data || { response } });

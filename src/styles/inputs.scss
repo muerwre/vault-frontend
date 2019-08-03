@@ -18,7 +18,7 @@
     position: absolute;
     width: $gap * 2;
     height: $input_height;
-    top: 0;
+    top: 1px;
     right: 1px;
     transform: translateX(0);
     transition: transform 0.25s;
@@ -282,11 +282,12 @@
     color: $red;
 
     span {
-      background: white;
+      background: $content_bg;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      padding: 0 5px;
+      padding: 0 2px;
+      border-radius: $radius;
     }
   }
 

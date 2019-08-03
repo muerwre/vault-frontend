@@ -1,6 +1,6 @@
 export const API = {
-  BASE: 'http://localhost:3000',
+  BASE: 'http://localhost:3333',
   USER: {
-    LOGIN: '/user/login',
+    LOGIN: '/auth/login',
   }
 };

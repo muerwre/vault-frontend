@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, {FC, FormEvent, useCallback, useEffect, useState} from 'react';
 import { ScrollDialog } from '../ScrollDialog';
 import { IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
@@ -7,11 +7,31 @@ import { InputText } from '~/components/input/InputText';
 import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
 import * as styles from './styles.scss';
-type IProps = IDialogProps & {};
+import {selectAuthLogin} from "~/redux/auth/selectors";
+import * as ACTIONS from '~/redux/auth/actions';
+import {connect} from "react-redux";
 
-const LoginDialog: FC<IProps> = ({ onRequestClose }) => {
+const mapStateToProps = selectAuthLogin;
+
+const mapDispatchToProps = {
+  userSendLoginRequest: ACTIONS.userSendLoginRequest,
+  userSetLoginError: ACTIONS.userSetLoginError,
+};
+
+type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
+
+const LoginDialogUnconnected: FC<IProps> = ({ onRequestClose, error , userSendLoginRequest, userSetLoginError }) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
+
+  const onSubmit = useCallback((event: FormEvent) => {
+    event.preventDefault();
+    userSendLoginRequest({ username, password });
+  }, [userSendLoginRequest, username, password]);
+
+  useEffect(() => {
+    if (error) userSetLoginError(null);
+  }, [username, password]);
 
   const buttons = (
     <Padder>
@@ -23,23 +43,29 @@ const LoginDialog: FC<IProps> = ({ onRequestClose }) => {
 
   useCloseOnEscape(onRequestClose);
 
+  console.log({ error });
+
   return (
-    <ScrollDialog buttons={buttons} width={260}>
-      <Padder>
-        <div className={styles.wrap}>
-          <Group>
-            <h2>РЕШИТЕЛЬНО ВОЙТИ</h2>
+    <form onSubmit={onSubmit}>
+      <ScrollDialog buttons={buttons} width={260}>
+        <Padder>
+          <div className={styles.wrap}>
+            <Group>
+              <h2>РЕШИТЕЛЬНО ВОЙТИ</h2>
 
-            <div />
-            <div />
+              <div />
+              <div />
 
-            <InputText title="Логин" handler={setUserName} value={username} />
-            <InputText title="Пароль" handler={setPassword} value={password} />
-          </Group>
-        </div>
-      </Padder>
-    </ScrollDialog>
+              <InputText title="Логин" handler={setUserName} value={username} error={error} />
+              <InputText title="Пароль" handler={setPassword} value={password} />
+            </Group>
+          </div>
+        </Padder>
+      </ScrollDialog>
+    </form>
   );
 };
+
+const LoginDialog = connect(mapStateToProps, mapDispatchToProps)(LoginDialogUnconnected);
 
 export { LoginDialog };
