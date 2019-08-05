@@ -22,7 +22,8 @@
     "jsx-curly-spacing": [true, "never"],
     "jsx-equals-spacing": [true, "never"],
     "jsx-no-multiline-js": false,
-    "jsx-boolean-value": false
+    "jsx-boolean-value": false,
+    "prefer-array-literal": false
   },
   "rulesDirectory": []
 }
