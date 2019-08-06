@@ -10,12 +10,14 @@ interface IProps {
   buttons?: JSX.Element;
   size?: "medium" | "big";
   width?: number;
-  onOverlayClick?: MouseEventHandler<HTMLDivElement>;
-  onRefCapture?: (ref: any) => void;
   error?: string;
 
   top_sticky?: ReactChild;
   top_sticky_offset?: number;
+
+  onOverlayClick?: MouseEventHandler<HTMLDivElement>;
+  onRefCapture?: (ref: any) => void;
+  onClose?: () => void;
 }
 
 const ScrollDialog: FC<IProps> = ({
@@ -27,7 +29,8 @@ const ScrollDialog: FC<IProps> = ({
   top_sticky_offset,
   error,
   onOverlayClick,
-  onRefCapture
+  onRefCapture,
+  onClose,
 }) => {
   const [height, setHeight] = useState(window.innerHeight - 120);
   const [show_top_sticky, setShowTopSticky] = useState(false);
@@ -74,6 +77,8 @@ const ScrollDialog: FC<IProps> = ({
         {!!title && (
           <div className={styles.top}>
             <div className={styles.wrap} style={{ flexBasis: width }}>
+              { onClose && <div className={styles.close} onClick={onClose}/> }
+
               <div className={styles.pan}>
                 {title}
                 {show_top_sticky && top_sticky && (
@@ -87,6 +92,8 @@ const ScrollDialog: FC<IProps> = ({
         {!title && (
           <div className={styles.top}>
             <div className={styles.wrap} style={{ flexBasis: width }}>
+              { onClose && <div className={styles.close} onClick={onClose}/> }
+
               <div className={styles.top_cap} />
             </div>
           </div>

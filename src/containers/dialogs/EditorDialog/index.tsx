@@ -41,7 +41,7 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor }) => {
   useCloseOnEscape(onRequestClose);
 
   return (
-    <ScrollDialog buttons={buttons} width={860}>
+    <ScrollDialog buttons={buttons} width={860} onClose={onRequestClose}>
       <div className={styles.editor}>
         <ImageEditor
           data={data}
