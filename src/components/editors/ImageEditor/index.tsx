@@ -47,7 +47,7 @@ const ImageEditor: FC<IProps> = ({
       onDrop={onDrop}
     >
       <div>{data.type}</div>
-      <input type="file" onChange={onInputChange} />
+      <input type="file" onChange={onInputChange} accept="image/*" />
     </form>
   );
 };
