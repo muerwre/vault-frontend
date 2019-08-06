@@ -54,7 +54,10 @@
   height: 10px;
   top: 0;
 
-  &:global(.has_buttons) { height: 60px; top: 15px;}
+  &:global(.has_buttons) {
+    height: 60px;
+    top: 15px;
+  }
 
   .wrap {
     display: flex;
@@ -75,6 +78,7 @@
 .wrap {
   flex: 0 1 800px;
   height: 100%;
+  position: relative;
 }
 
 .scroll_wrap {
@@ -124,5 +128,29 @@
     height: $radius;
     background: linear-gradient($content_bg, transparentize($content_bg, 1));
     bottom: -$gap;
+  }
+}
+
+.error {
+  background: linear-gradient(transparentize($red, 1), $red);
+  position: absolute;
+  width: 100%;
+  height: auto;
+  bottom: 100%;
+  left: 0;
+  padding: $gap * 2 $gap;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: $font_14_regular;
+  border-radius: 0 0 $radius $radius;
+  pointer-events: none;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+
+  &:global(.active) {
+    opacity: 1;
   }
 }
