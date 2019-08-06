@@ -1,5 +1,5 @@
 import { createReducer } from "~/utils/reducer";
-import { IFile } from "~/constants/cells";
+import { IFile } from "~/redux/types";
 import { UUID } from "../types";
 import { UPLOAD_HANDLERS } from "./handlers";
 

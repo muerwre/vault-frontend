@@ -7,10 +7,15 @@ import { InputText } from '~/components/input/InputText';
 import { Button } from '../../../components/input/Button/index';
 import { Padder } from '~/components/containers/Padder';
 import * as styles from '~/containers/examples/HorizontalExample/styles.scss';
+import { connect } from 'react-redux';
+import { selectNode } from '~/redux/node/selectors';
+
+const mapStateToProps = selectNode;
+const mapDispatchToProps = {};
 
 type IProps = IDialogProps & {};
 
-const ExampleDialog: FC<IProps> = ({ onRequestClose }) => {
+const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose }) => {
   const title = <div>title</div>;
 
   const buttons = (
@@ -39,4 +44,6 @@ const ExampleDialog: FC<IProps> = ({ onRequestClose }) => {
   );
 };
 
-export { ExampleDialog };
+const EditorDialog = connect(mapStateToProps, mapDispatchToProps)(EditorDialogUnconnected)
+
+export { EditorDialog };

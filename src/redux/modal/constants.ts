@@ -1,6 +1,6 @@
 import { ValueOf } from '~/redux/types';
 import { HorizontalExample } from '~/containers/examples/HorizontalExample';
-import { ExampleDialog } from '~/containers/dialogs/ExampleDialog';
+import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { LoginDialog } from '~/containers/dialogs/LoginDialog';
 
 export const MODAL_ACTIONS = {
@@ -15,7 +15,7 @@ export const DIALOGS = {
 };
 
 export const DIALOG_CONTENT = {
-  [DIALOGS.EDITOR]: ExampleDialog,
+  [DIALOGS.EDITOR]: EditorDialog,
   [DIALOGS.LOGIN]: LoginDialog,
 };
 
