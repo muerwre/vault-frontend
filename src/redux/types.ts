@@ -32,8 +32,60 @@ export interface IDialogProps {
   onDialogChange: (dialog: ValueOf<typeof DIALOGS>) => void;
 }
 
+export interface IApiErrorResult {
+  detail?: string;
+  code?: string;
+}
+
 export interface IResultWithStatus<T> {
-  status: number;
-  data: T;
+  status: any;
+  data?: Partial<T> & IApiErrorResult;
   error?: string;
+  debug?: string;
+}
+
+export type UUID = string;
+
+export interface IFile {
+  id: UUID;
+  user_id: UUID;
+  node_id: UUID;
+
+  name: string;
+  path: string;
+  full_path: string;
+  size: number;
+
+  type: 'image' | 'text' | 'audio' | 'video';
+  mime: MimeType;
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface INode {
+  id?: UUID;
+  user_id: UUID;
+
+  files: IFile[];
+
+  cover: IFile['id'];
+  type: 'image';
+
+  brief?: {
+    thumbnail?: string;
+    description?: string;
+    owner?: string;
+    comments?: number;
+  };
+
+  options: {
+    flow: {
+      display: 'single' | 'double' | 'quadro';
+      has_description: boolean;
+    }
+  };
+
+  createdAt?: string;
+  updatedAt?: string;
 }
