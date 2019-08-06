@@ -57,10 +57,10 @@ export interface IFile {
   size: number;
 
   type: 'image' | 'text' | 'audio' | 'video';
-  mime: MimeType;
+  mime: string;
 
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface INode {
