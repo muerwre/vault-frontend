@@ -67,6 +67,7 @@ export interface INode {
   id?: UUID;
   user_id: UUID;
 
+  title: string;
   files: IFile[];
 
   cover: IFile['id'];
@@ -82,7 +83,7 @@ export interface INode {
   options: {
     flow: {
       display: 'single' | 'double' | 'quadro';
-      has_description: boolean;
+      show_description: boolean;
     }
   };
 

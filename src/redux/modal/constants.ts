@@ -10,12 +10,12 @@ export const MODAL_ACTIONS = {
 };
 
 export const DIALOGS = {
-  TEST: 'TEST',
+  EDITOR: 'EDITOR',
   LOGIN: 'LOGIN',
 };
 
 export const DIALOG_CONTENT = {
-  [DIALOGS.TEST]: ExampleDialog,
+  [DIALOGS.EDITOR]: ExampleDialog,
   [DIALOGS.LOGIN]: LoginDialog,
 };
 

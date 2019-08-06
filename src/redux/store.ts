@@ -8,17 +8,23 @@ import { createBrowserHistory } from "history";
 import { PersistConfig, Persistor } from "redux-persist/es/types";
 import { routerMiddleware } from "connected-react-router";
 
-import userReducer from "~/redux/auth/reducer";
-import userSaga from "~/redux/auth/sagas";
+import authReducer from "~/redux/auth/reducer";
+import authSaga from "~/redux/auth/sagas";
+
+import nodeReducer, { INodeState } from "~/redux/node/reducer";
+import nodeSaga from "~/redux/node/sagas";
+
+import uploadReducer, { IUploadState } from "~/redux/uploads/reducer";
+import uploadSaga from "~/redux/node/sagas";
 
 import { IAuthState } from "~/redux/auth/types";
 
 import modalReducer, { IModalState } from "~/redux/modal/reducer";
 import { IState } from "~/redux/store";
 
-const userPersistConfig: PersistConfig = {
-  key: "user",
-  whitelist: ["profile"],
+const authPersistConfig: PersistConfig = {
+  key: "auth",
+  whitelist: ["token"],
   storage
 };
 
@@ -26,6 +32,8 @@ export interface IState {
   auth: IAuthState;
   modal: IModalState;
   router: RouterState;
+  node: INodeState;
+  uploads: IUploadState;
 }
 
 export const sagaMiddleware = createSagaMiddleware();
@@ -38,15 +46,19 @@ const composeEnhancers =
 
 export const store = createStore(
   combineReducers<IState>({
-    auth: persistReducer(userPersistConfig, userReducer),
+    auth: persistReducer(authPersistConfig, authReducer),
     modal: modalReducer,
-    router: connectRouter(history)
+    router: connectRouter(history),
+    node: nodeReducer,
+    uploads: uploadReducer,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
 
 export function configureStore(): { store: Store<IState>; persistor: Persistor } {
-  sagaMiddleware.run(userSaga);
+  sagaMiddleware.run(authSaga);
+  sagaMiddleware.run(nodeSaga);
+  sagaMiddleware.run(uploadSaga);
 
   const persistor = persistStore(store);
 
