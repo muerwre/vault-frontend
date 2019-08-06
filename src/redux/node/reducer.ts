@@ -1,6 +1,6 @@
 import { createReducer } from "~/utils/reducer";
 import { INode } from "../types";
-import { EMPTY_NODE } from "./constants";
+import {EMPTY_BLOCK, EMPTY_NODE} from "./constants";
 import { NODE_HANDLERS } from "./handlers";
 
 export type INodeState = Readonly<{
@@ -13,6 +13,10 @@ export type INodeState = Readonly<{
 const INITIAL_STATE: INodeState = {
   editor: {
     ...EMPTY_NODE,
+    type: 'image',
+    blocks: [
+      { ...EMPTY_BLOCK, type: 'image' },
+    ]
   },
   is_loading: false,
   error: null,

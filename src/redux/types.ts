@@ -64,6 +64,12 @@ export interface IFile {
   updatedAt?: string;
 }
 
+export interface IBlock {
+  type: 'image' | 'text' | 'media' | 'youtube' | 'video',
+  temp_ids: UUID[];
+  attaches: UUID[];
+}
+
 export interface INode {
   id?: UUID;
   user_id: UUID;
@@ -73,6 +79,8 @@ export interface INode {
 
   cover: IFile['id'];
   type: 'image';
+
+  blocks: IBlock[];
 
   brief?: {
     thumbnail?: string;

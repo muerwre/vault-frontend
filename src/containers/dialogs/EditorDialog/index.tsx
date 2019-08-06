@@ -4,7 +4,7 @@ import { IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
 import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
-import { Button } from '../../../components/input/Button/index';
+import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
 import * as styles from './styles.scss';
 import { connect } from 'react-redux';

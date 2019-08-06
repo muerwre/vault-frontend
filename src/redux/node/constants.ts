@@ -1,4 +1,10 @@
-import { INode } from "../types";
+import {IBlock, INode} from "../types";
+
+export const EMPTY_BLOCK: IBlock = {
+  type: null,
+  temp_ids: [],
+  attaches: [],
+};
 
 export const EMPTY_NODE: INode = {
   id: null,
@@ -10,6 +16,8 @@ export const EMPTY_NODE: INode = {
 
   cover: null,
   type: null,
+
+  blocks: [],
 
   options: {
     flow: {
