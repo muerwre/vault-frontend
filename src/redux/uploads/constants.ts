@@ -1,5 +1,11 @@
 import { IFile } from "~/redux/types";
 
+const prefix = 'UPLOAD.';
+
+export const UPLOAD_ACTIONS = {
+  UPLOAD_FILES: `${prefix}UPLOAD_FILES`,
+};
+
 export const EMPTY_FILE: IFile = {
   id: null,
   user_id: null,

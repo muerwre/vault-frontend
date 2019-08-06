@@ -15,7 +15,7 @@ import nodeReducer, { INodeState } from "~/redux/node/reducer";
 import nodeSaga from "~/redux/node/sagas";
 
 import uploadReducer, { IUploadState } from "~/redux/uploads/reducer";
-import uploadSaga from "~/redux/node/sagas";
+import uploadSaga from "~/redux/uploads/sagas";
 
 import { IAuthState } from "~/redux/auth/types";
 

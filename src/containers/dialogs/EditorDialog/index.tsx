@@ -11,23 +11,33 @@ import { connect } from 'react-redux';
 import { selectNode } from '~/redux/node/selectors';
 import { ImageEditor } from '~/components/editors/ImageEditor';
 import { EditorPanel } from '~/components/editors/EditorPanel';
+import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
+import {uploadUploadFiles} from "~/redux/uploads/actions";
 
 const mapStateToProps = selectNode;
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
+};
 
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor }) => {
+const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, uploadUploadFiles }) => {
   const [data, setData] = useState(editor);
+
   const setTitle = useCallback(title => {
     setData({ ...data, title });
   }, [setData, data]);
+
+  const onUpload = useCallback((files: File[]) => {
+    uploadUploadFiles(files, 'editor');
+  }, [uploadUploadFiles]);
 
   const buttons = (
     <Padder style={{ position: 'relative' }}>
       <EditorPanel
         data={data}
         setData={setData}
+        onUpload={onUpload}
       />
 
       <Group horizontal>
@@ -46,6 +56,7 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor }) => {
         <ImageEditor
           data={data}
           setData={setData}
+          onUpload={onUpload}
         />
       </div>
     </ScrollDialog>
