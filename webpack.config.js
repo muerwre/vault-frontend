@@ -1,15 +1,15 @@
-// import webpack from 'webpack';
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { join } = require('path');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const htmlPlugin = new HtmlWebPackPlugin({
   template: './src/index.html',
   filename: './index.html',
-  title: 'VLT',
+  title: 'VAULT',
   hash: false,
   // favicon: 'src/sprites/favicon.png',
 });
@@ -38,6 +38,7 @@ module.exports = () => {
     htmlPlugin,
     miniCssExractPlugin,
     new webpack.HashedModuleIdsPlugin(),
+    new Dotenv(),
   ];
 
   return {
