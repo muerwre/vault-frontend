@@ -9,7 +9,9 @@ interface IProps {
 
 const ImageEditor: FC<IProps> = ({
 }) => (
-    <div className={styles.uploads} />
+    <div className={styles.uploads}>
+      <div />
+    </div>
   )
 
 export { ImageEditor };

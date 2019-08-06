@@ -10,6 +10,7 @@ import * as styles from './styles.scss';
 import { connect } from 'react-redux';
 import { selectNode } from '~/redux/node/selectors';
 import { ImageEditor } from '~/components/editors/ImageEditor';
+import { EditorPanel } from '~/components/editors/EditorPanel';
 
 const mapStateToProps = selectNode;
 const mapDispatchToProps = {};
@@ -23,7 +24,12 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor }) => {
   }, [setData, data]);
 
   const buttons = (
-    <Padder>
+    <Padder style={{ position: 'relative' }}>
+      <EditorPanel
+        data={data}
+        setData={setData}
+      />
+
       <Group horizontal>
         <InputText title="Название" value={data.title} handler={setTitle} />
 
