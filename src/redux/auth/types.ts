@@ -17,7 +17,7 @@ export interface IUser {
 
 export type IAuthState = Readonly<{
   user: IUser;
-  token: IToken;
+  token: string;
 
   login: {
     error: string;

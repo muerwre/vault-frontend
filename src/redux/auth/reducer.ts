@@ -1,14 +1,14 @@
-import {EMPTY_TOKEN, EMPTY_USER, AUTH_USER_ACTIONS} from "~/redux/auth/constants";
+import { EMPTY_USER } from "~/redux/auth/constants";
 import { createReducer } from "~/utils/reducer";
-import {IAuthState} from "~/redux/auth/types";
-import {AUTH_USER_HANDLERS} from "~/redux/auth/handlers";
+import { IAuthState } from "~/redux/auth/types";
+import { AUTH_USER_HANDLERS } from "~/redux/auth/handlers";
 
 const HANDLERS = {
   ...AUTH_USER_HANDLERS,
 };
 
 const INITIAL_STATE: IAuthState = {
-  token: { ...EMPTY_TOKEN },
+  token: null,
   user: { ...EMPTY_USER },
   login: {
     error: null,

@@ -38,9 +38,9 @@ export const errorMiddleware = <T extends any>(debug): IResultWithStatus<T> =>
     ? debug.response
     : {
       status: HTTP_RESPONSES.CONNECTION_REFUSED,
-      data: null,
+      data: {},
       debug,
-      error: 'Network_Disconnected',
+      error: 'Ошибка сети',
     };
 
 export const configWithToken = (
