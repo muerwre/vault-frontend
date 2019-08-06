@@ -24,7 +24,7 @@ import { IState } from "~/redux/store";
 
 const authPersistConfig: PersistConfig = {
   key: "auth",
-  whitelist: ["token"],
+  whitelist: ["token", "user"],
   storage
 };
 

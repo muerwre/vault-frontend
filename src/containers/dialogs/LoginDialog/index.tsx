@@ -1,4 +1,4 @@
-import React, {FC, FormEvent, useCallback, useEffect, useState} from 'react';
+import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { ScrollDialog } from '../ScrollDialog';
 import { IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
@@ -7,9 +7,9 @@ import { InputText } from '~/components/input/InputText';
 import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
 import * as styles from './styles.scss';
-import {selectAuthLogin} from "~/redux/auth/selectors";
+import { selectAuthLogin } from "~/redux/auth/selectors";
 import * as ACTIONS from '~/redux/auth/actions';
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 const mapStateToProps = selectAuthLogin;
 
@@ -20,7 +20,7 @@ const mapDispatchToProps = {
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
 
-const LoginDialogUnconnected: FC<IProps> = ({ onRequestClose, error , userSendLoginRequest, userSetLoginError }) => {
+const LoginDialogUnconnected: FC<IProps> = ({ onRequestClose, error, userSendLoginRequest, userSetLoginError }) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -47,7 +47,7 @@ const LoginDialogUnconnected: FC<IProps> = ({ onRequestClose, error , userSendLo
 
   return (
     <form onSubmit={onSubmit}>
-      <ScrollDialog buttons={buttons} width={260}>
+      <ScrollDialog buttons={buttons} width={260} error={error}>
         <Padder>
           <div className={styles.wrap}>
             <Group>
@@ -56,7 +56,7 @@ const LoginDialogUnconnected: FC<IProps> = ({ onRequestClose, error , userSendLo
               <div />
               <div />
 
-              <InputText title="Логин" handler={setUserName} value={username} error={error} />
+              <InputText title="Логин" handler={setUserName} value={username} />
               <InputText title="Пароль" handler={setPassword} value={password} />
             </Group>
           </div>

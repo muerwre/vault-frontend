@@ -12,6 +12,7 @@ interface IProps {
   width?: number;
   onOverlayClick?: MouseEventHandler<HTMLDivElement>;
   onRefCapture?: (ref: any) => void;
+  error?: string;
 
   top_sticky?: ReactChild;
   top_sticky_offset?: number;
@@ -24,7 +25,7 @@ const ScrollDialog: FC<IProps> = ({
   width = 800,
   top_sticky,
   top_sticky_offset,
-
+  error,
   onOverlayClick,
   onRefCapture
 }) => {
@@ -94,6 +95,8 @@ const ScrollDialog: FC<IProps> = ({
         {!!buttons && (
           <div className={styles.bottom}>
             <div className={styles.wrap} style={{ flexBasis: width }}>
+              <div className={classNames(styles.error, { active: error })}>{error}</div>
+
               <div className={styles.pan}>{buttons}</div>
             </div>
           </div>
@@ -102,7 +105,7 @@ const ScrollDialog: FC<IProps> = ({
         <div
           className={styles.scroll_wrap}
           style={{ flexBasis: width + 40 }}
-          // style={{ flexBasis: width }}
+        // style={{ flexBasis: width }}
         >
           <Scroll
             className="dialog_scroll"
