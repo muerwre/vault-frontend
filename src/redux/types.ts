@@ -47,9 +47,10 @@ export interface IResultWithStatus<T> {
 export type UUID = string;
 
 export interface IFile {
-  id: UUID;
-  user_id: UUID;
-  node_id: UUID;
+  id?: UUID;
+  temp_id?: UUID;
+  user_id?: UUID;
+  node_id?: UUID;
 
   name: string;
   path: string;

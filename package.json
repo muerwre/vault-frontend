@@ -96,6 +96,7 @@
     "tslint-config-airbnb": "^5.11.1",
     "tslint-react": "^4.0.0",
     "tslint-react-hooks": "^2.2.1",
-    "tt-react-custom-scrollbars": "latest"
+    "tt-react-custom-scrollbars": "latest",
+    "uuid4": "^1.1.4"
   }
 }
