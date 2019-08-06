@@ -24,7 +24,10 @@ const ImageEditor: FC<IProps> = ({
   }, [eventPreventer]);
 
   return (
-    <form className={styles.uploads} onDrop={e => { console.log(e.dataTransfer.files);}}>
+    <form
+      className={styles.uploads}
+      onDrop={e => { console.log(e.dataTransfer.files);}}
+    >
       <div>{data.type}</div>
     </form>
   );

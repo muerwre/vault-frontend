@@ -120,6 +120,7 @@
   border-radius: $radius $radius 0 0;
   flex: 1;
   position: relative;
+  box-shadow: inset transparentize(white, 0.95) 0 1px;
 
   &::after {
     position: absolute;
