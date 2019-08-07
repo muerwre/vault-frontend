@@ -11,9 +11,10 @@ module.exports = {
   plugins: ['@typescript-eslint', 'react', 'jsx-a11y', 'import', 'react-hooks'],
   settings: {
     'import/resolver': {
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      },
+      // node: {
+      //   extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      // },
+      typescript: {},
     },
   },
   rules: {
@@ -22,6 +23,7 @@ module.exports = {
     '@typescript-eslint/indent': ['error', 2],
     'comma-dangle': 0,
     'no-restricted-syntax': 1,
+    'react/prop-types': 0,
     'new-cap': 1,
     'no-continue': 1,
     'no-underscore-dangle': 1,

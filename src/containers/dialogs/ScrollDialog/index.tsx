@@ -1,14 +1,14 @@
-import React, { FC, MouseEventHandler, ReactChild, useCallback, useEffect, useState } from "react";
+import React, { FC, MouseEventHandler, ReactChild, useCallback, useEffect, useState } from 'react';
 // import { DialogPanel } from '~/components/panels/DialogPanel';
-import { Scroll } from "~/components/containers/Scroll";
-import * as styles from "./styles.scss";
-import classNames from "classnames";
+import classNames from 'classnames';
+import { Scroll } from '~/components/containers/Scroll';
+import * as styles from './styles.scss';
 
 interface IProps {
   children: React.ReactChild;
   title?: JSX.Element;
   buttons?: JSX.Element;
-  size?: "medium" | "big";
+  size?: 'medium' | 'big';
   width?: number;
   error?: string;
 
@@ -39,8 +39,8 @@ const ScrollDialog: FC<IProps> = ({
   const onResize = useCallback(() => setHeight(window.innerHeight - 120), []);
 
   useEffect(() => {
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, []);
 
   const onScroll = useCallback(
@@ -71,13 +71,13 @@ const ScrollDialog: FC<IProps> = ({
         <div
           className={styles.overlay}
           onClick={onOverlayClick}
-          style={{ cursor: onOverlayClick ? "pointer" : "" }}
+          style={{ cursor: onOverlayClick ? 'pointer' : '' }}
         />
 
         {!!title && (
           <div className={styles.top}>
             <div className={styles.wrap} style={{ flexBasis: width }}>
-              { onClose && <div className={styles.close} onClick={onClose}/> }
+              {onClose && <div className={styles.close} onClick={onClose} />}
 
               <div className={styles.pan}>
                 {title}
@@ -92,7 +92,7 @@ const ScrollDialog: FC<IProps> = ({
         {!title && (
           <div className={styles.top}>
             <div className={styles.wrap} style={{ flexBasis: width }}>
-              { onClose && <div className={styles.close} onClick={onClose}/> }
+              {onClose && <div className={styles.close} onClick={onClose} />}
 
               <div className={styles.top_cap} />
             </div>
@@ -112,7 +112,7 @@ const ScrollDialog: FC<IProps> = ({
         <div
           className={styles.scroll_wrap}
           style={{ flexBasis: width + 40 }}
-        // style={{ flexBasis: width }}
+          // style={{ flexBasis: width }}
         >
           <Scroll
             className="dialog_scroll"
