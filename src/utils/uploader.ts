@@ -42,9 +42,9 @@ export const fakeUploader = ({
   onProgress,
   mustSucceed
 }: {
-file: { url?: string; error?: string };
-onProgress: (current: number, total: number) => void;
-mustSucceed: boolean;
+  file: { url?: string; error?: string };
+  onProgress: (current: number, total: number) => void;
+  mustSucceed: boolean;
 }): Promise<IResultWithStatus<IFile>> => {
   const { url, error } = file;
 
