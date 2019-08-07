@@ -1,21 +1,21 @@
 module.exports = {
-  extends: ['airbnb', 'airbnb-base', 'plugin:@typescript-eslint/recommended'],
+  extends: ['airbnb', 'airbnb-base', 'plugin:@typescript-eslint/recommended', 'prettier'],
   // "parser": "babel-eslint",
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
-      jsx: true,
+      jsx: true
     },
-    project: './tsconfig.json',
+    project: './tsconfig.json'
   },
-  plugins: ['@typescript-eslint', 'react', 'jsx-a11y', 'import', 'react-hooks'],
+  plugins: ['@typescript-eslint', 'react', 'jsx-a11y', 'import', 'react-hooks', 'prettier'],
   settings: {
     'import/resolver': {
       // node: {
       //   extensions: ['.js', '.jsx', '.ts', '.tsx'],
       // },
-      typescript: {},
-    },
+      typescript: {}
+    }
   },
   rules: {
     indent: ['error', 2],
@@ -48,11 +48,12 @@ module.exports = {
     'import/prefer-default-export': 0,
     'no-return-await': 0,
     'prefer-promise-reject-errors': 0,
+    'import/order': 0
   },
   globals: {
     document: false,
     window: false,
     HTMLInputElement: false,
-    HTMLDivElement: false,
-  },
+    HTMLDivElement: false
+  }
 };

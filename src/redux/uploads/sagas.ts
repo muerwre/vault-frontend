@@ -11,7 +11,7 @@ function* uploadCall({ temp_id, onProgress, file }) {
   return yield call(reqWrapper, fakeUploader, { file: { url: 'some', error: 'cant do this boss' }, onProgress, mustSucceed: true });
 }
 
-function* onUploadProgress(chan) {
+function* onUploadProgress(chan) {  
   while (true) {
     const { progress, temp_id }: { progress: number; temp_id: string } = yield take(chan);
 
