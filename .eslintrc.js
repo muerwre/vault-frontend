@@ -46,6 +46,8 @@ module.exports = {
     'no-nested-ternary': 1,
     'arrow-parens': 0,
     'import/prefer-default-export': 0,
+    'no-return-await': 0,
+    'prefer-promise-reject-errors': 0,
   },
   globals: {
     document: false,

@@ -2,13 +2,13 @@ import { takeEvery, all, spawn, call, put, take, fork, race } from 'redux-saga/e
 import { UPLOAD_ACTIONS } from '~/redux/uploads/constants';
 import { uploadUploadFiles, uploadSetStatus, uploadAddStatus, uploadDropStatus } from './actions';
 import { reqWrapper } from '../auth/sagas';
-import { createUploader, uploadGetThumb } from '~/utils/uploader';
+import { createUploader, uploadGetThumb, fakeUploader } from '~/utils/uploader';
 import { HTTP_RESPONSES } from '~/utils/api';
 import { VALIDATORS } from '~/utils/validators';
 import { UUID, IFileWithUUID } from '../types';
 
 function* uploadCall({ temp_id, onProgress, file }) {
-  return yield call(reqWrapper, console.log, { file, onProgress });
+  return yield call(reqWrapper, fakeUploader, { file: { url: 'some', error: 'cant do this boss' }, onProgress, mustSucceed: true });
 }
 
 function* onUploadProgress(chan) {
@@ -41,7 +41,7 @@ function* uploadFile({ file, temp_id }: IFileWithUUID) {
 
   const preview = yield call(uploadGetThumb, file);
 
-  yield put(    
+  yield put(
     uploadAddStatus(
       // replace with the one, what adds file upload status
       temp_id,
@@ -53,7 +53,9 @@ function* uploadFile({ file, temp_id }: IFileWithUUID) {
     )
   );
 
-  const { result, cancel, cancel_editing, save_inventory } = yield race({
+  const {
+    result, cancel, cancel_editing, save_inventory,
+  } = yield race({
     result: call(uploadWorker, file, temp_id),
     cancel: call(uploadCancelWorker, temp_id),
     // subject_cancel: call(uploadSubjectCancelWorker, subject)

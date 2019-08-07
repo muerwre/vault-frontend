@@ -1,7 +1,9 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, {
+  FC, useCallback, useEffect, useState
+} from 'react';
+import uuid from 'uuid4';
 import { INode, IFileWithUUID } from '~/redux/types';
 import * as styles from './styles.scss';
-import uuid from 'uuid4';
 
 interface IProps {
   data: INode;
@@ -14,20 +16,22 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
   const [temp, setTemp] = useState([]);
 
   const onDrop = useCallback(
-    (event: DragEvent) => {
+    (event: React.DragEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length)
-        return;
+      if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length) return;
 
       const files: IFileWithUUID[] = Array.from(event.dataTransfer.files).map(
         (file: File): IFileWithUUID => ({
           file,
           temp_id: uuid(),
-          subject: 'editor',
+          subject: 'editor'
         })
       );
 
+      const temps = files.map(file => file.temp_id);
+
+      setTemp(temps);
       onUpload(files);
     },
     [onUpload]
@@ -43,10 +47,13 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
         (file: File): IFileWithUUID => ({
           file,
           temp_id: uuid(),
-          subject: 'editor',
+          subject: 'editor'
         })
       );
 
+      const temps = files.map(file => file.temp_id);
+
+      setTemp(temps);
       onUpload(files);
     },
     [onUpload]
