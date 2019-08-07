@@ -1,6 +1,4 @@
-import React, {
-  FC, useCallback, useEffect, useState
-} from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import uuid from 'uuid4';
 import { INode, IFileWithUUID } from '~/redux/types';
 import * as styles from './styles.scss';
@@ -31,10 +29,10 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
 
       const temps = files.map(file => file.temp_id);
 
-      setTemp(temps);
+      setTemp([...temp, ...temps]);
       onUpload(files);
     },
-    [onUpload]
+    [onUpload, temp]
   );
 
   const onInputChange = useCallback(
@@ -53,10 +51,10 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
 
       const temps = files.map(file => file.temp_id);
 
-      setTemp(temps);
+      setTemp([...temp, ...temps]);
       onUpload(files);
     },
-    [onUpload]
+    [onUpload, temp]
   );
 
   useEffect(() => {
@@ -68,6 +66,8 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
       window.removeEventListener('drop', eventPreventer, false);
     };
   }, [eventPreventer]);
+
+  useEffect(() => console.log({ temp }), [temp]);
 
   return (
     <form className={styles.uploads} onDrop={onDrop}>
