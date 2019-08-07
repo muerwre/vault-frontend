@@ -88,7 +88,7 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
         console.log(`${id} uploaded`);
         // do setData to append this file
         setData({ ...data, files: [...data.files, files[status.uuid]] });
-        setTemp(temp.filter(el => el === id));
+        setTemp(temp.filter(el => el !== id));
       }
     });
   }, [statuses, files]);
