@@ -5,7 +5,7 @@ import { reqWrapper } from '../auth/sagas';
 import { createUploader, uploadGetThumb, fakeUploader } from '~/utils/uploader';
 import { HTTP_RESPONSES } from '~/utils/api';
 import { VALIDATORS } from '~/utils/validators';
-import { UUID, IFileWithUUID } from '../types';
+import { UUID, IFileWithUUID, IResultWithStatus, IFile } from '../types';
 
 function* uploadCall({ temp_id, onProgress, file }) {
   return yield call(reqWrapper, fakeUploader, { file: { url: 'some', error: 'cant do this boss' }, onProgress, mustSucceed: true });
@@ -68,7 +68,7 @@ function* uploadFile({ file, temp_id }: IFileWithUUID) {
     return yield put(uploadDropStatus(temp_id));
   }
 
-  const { data, error } = result;
+  const { data, error }: IResultWithStatus<IFile> = result;
 
   if (error) {
     return yield put(
@@ -76,13 +76,15 @@ function* uploadFile({ file, temp_id }: IFileWithUUID) {
     );
   }
 
+  console.log('upload', data);
+
   yield put(
     uploadSetStatus(temp_id, {
       is_uploading: false,
       error: null,
-      uuid: data.uuid,
-      url: data.url,
-      thumbnail_url: data.url,
+      uuid: data.id,
+      url: data.full_path,
+      thumbnail_url: data.full_path,
     })
   );
 

@@ -3,6 +3,7 @@ import { eventChannel, END, EventChannel } from 'redux-saga';
 import { VALIDATORS } from '~/utils/validators';
 import { IResultWithStatus, IFile } from '~/redux/types';
 import { HTTP_RESPONSES } from './api';
+import { EMPTY_FILE } from '~/redux/uploads/constants';
 
 export const IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
 
@@ -60,7 +61,7 @@ export const fakeUploader = ({
     setTimeout(() => {
       onProgress(2, 2);
       if (mustSucceed) {
-        resolve({ status: HTTP_RESPONSES.CREATED, data: { id: uuid() } });
+        resolve({ status: HTTP_RESPONSES.CREATED, data: { ...EMPTY_FILE, id: uuid() } });
       } else {
         reject({ response: { statusText: error } });
       }
