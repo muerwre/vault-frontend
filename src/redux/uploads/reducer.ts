@@ -4,7 +4,14 @@ import { UUID } from "../types";
 import { UPLOAD_HANDLERS } from "./handlers";
 
 export interface IUploadStatus {
-  progress: number; is_loading: boolean; error: string;
+  is_uploading: boolean;
+  error: string;
+  preview: string;
+  uuid: UUID;
+  url: string;
+  thumbnail_url: string;
+  type: string;
+  progress: number;
 }
 
 export interface IUploadState {

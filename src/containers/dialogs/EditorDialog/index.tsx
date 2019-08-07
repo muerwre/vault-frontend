@@ -12,7 +12,7 @@ import { selectNode } from '~/redux/node/selectors';
 import { ImageEditor } from '~/components/editors/ImageEditor';
 import { EditorPanel } from '~/components/editors/EditorPanel';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
-import {uploadUploadFiles} from "~/redux/uploads/actions";
+import { IFileWithUUID } from '~/redux/types';
 
 const mapStateToProps = selectNode;
 const mapDispatchToProps = {
@@ -24,21 +24,23 @@ type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDisp
 const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, uploadUploadFiles }) => {
   const [data, setData] = useState(editor);
 
-  const setTitle = useCallback(title => {
-    setData({ ...data, title });
-  }, [setData, data]);
+  const setTitle = useCallback(
+    title => {
+      setData({ ...data, title });
+    },
+    [setData, data]
+  );
 
-  const onUpload = useCallback((files: File[]) => {
-    uploadUploadFiles(files, 'editor');
-  }, [uploadUploadFiles]);
+  const onUpload = useCallback(
+    (files: IFileWithUUID[]) => {
+      uploadUploadFiles(files);
+    },
+    [uploadUploadFiles]
+  );
 
   const buttons = (
     <Padder style={{ position: 'relative' }}>
-      <EditorPanel
-        data={data}
-        setData={setData}
-        onUpload={onUpload}
-      />
+      <EditorPanel data={data} setData={setData} onUpload={onUpload} />
 
       <Group horizontal>
         <InputText title="Название" value={data.title} handler={setTitle} />
@@ -53,16 +55,15 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, uploadUpl
   return (
     <ScrollDialog buttons={buttons} width={860} onClose={onRequestClose}>
       <div className={styles.editor}>
-        <ImageEditor
-          data={data}
-          setData={setData}
-          onUpload={onUpload}
-        />
+        <ImageEditor data={data} setData={setData} onUpload={onUpload} />
       </div>
     </ScrollDialog>
   );
 };
 
-const EditorDialog = connect(mapStateToProps, mapDispatchToProps)(EditorDialogUnconnected)
+const EditorDialog = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EditorDialogUnconnected);
 
 export { EditorDialog };

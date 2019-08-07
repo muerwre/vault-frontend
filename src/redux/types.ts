@@ -67,6 +67,7 @@ export interface IFile {
 export interface IFileWithUUID {
   temp_id?: UUID;
   file: File;
+  subject: string;
 }
 
 export interface IBlock {

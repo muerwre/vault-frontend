@@ -1,51 +1,69 @@
-import React, {FC, useCallback, useEffect} from 'react';
-import { INode } from '~/redux/types';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import { INode, IFileWithUUID } from '~/redux/types';
 import * as styles from './styles.scss';
+import uuid from 'uuid4';
 
 interface IProps {
-  data: INode,
+  data: INode;
   setData: (val: INode) => void;
-  onUpload: (val: File[]) => void;
+  onUpload: (val: IFileWithUUID[]) => void;
 }
 
-const ImageEditor: FC<IProps> = ({
-  data,
-  setData,
-  onUpload,
-}) => {
+const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
   const eventPreventer = useCallback(event => event.preventDefault(), []);
+  const [temp, setTemp] = useState([]);
 
-  const onDrop = useCallback(event => {
-    event.preventDefault();
+  const onDrop = useCallback(
+    (event: DragEvent) => {
+      event.preventDefault();
 
-    if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length) return;
+      if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length)
+        return;
 
-    onUpload(event.dataTransfer.files);
-  }, [onUpload]);
+      const files: IFileWithUUID[] = Array.from(event.dataTransfer.files).map(
+        (file: File): IFileWithUUID => ({
+          file,
+          temp_id: uuid(),
+          subject: 'editor',
+        })
+      );
 
-  const onInputChange = useCallback(event => {
-    event.preventDefault();
+      onUpload(files);
+    },
+    [onUpload]
+  );
 
-    if (!event.target.files || !event.target.files.length) return;
+  const onInputChange = useCallback(
+    event => {
+      event.preventDefault();
 
-    onUpload(event.target.files);
-  }, [onUpload]);
+      if (!event.target.files || !event.target.files.length) return;
+
+      const files: IFileWithUUID[] = Array.from(event.target.files).map(
+        (file: File): IFileWithUUID => ({
+          file,
+          temp_id: uuid(),
+          subject: 'editor',
+        })
+      );
+
+      onUpload(files);
+    },
+    [onUpload]
+  );
 
   useEffect(() => {
-    window.addEventListener("dragover", eventPreventer,false);
-    window.addEventListener("drop",eventPreventer,false);
+    window.addEventListener('dragover', eventPreventer, false);
+    window.addEventListener('drop', eventPreventer, false);
 
     return () => {
-      window.removeEventListener("dragover", eventPreventer,false);
-      window.removeEventListener("drop",eventPreventer,false);
-    }
+      window.removeEventListener('dragover', eventPreventer, false);
+      window.removeEventListener('drop', eventPreventer, false);
+    };
   }, [eventPreventer]);
 
   return (
-    <form
-      className={styles.uploads}
-      onDrop={onDrop}
-    >
+    <form className={styles.uploads} onDrop={onDrop}>
       <div>{data.type}</div>
       <input type="file" onChange={onInputChange} accept="image/*" multiple />
     </form>

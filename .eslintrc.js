@@ -44,6 +44,8 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'no-nested-ternary': 1,
+    'arrow-parens': 0,
+    'import/prefer-default-export': 0,
   },
   globals: {
     document: false,

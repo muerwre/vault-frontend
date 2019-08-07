@@ -1,10 +1,15 @@
 import { IFile } from "~/redux/types";
+import { IUploadState, IUploadStatus } from "./reducer";
 
 const prefix = 'UPLOAD.';
 
 export const UPLOAD_ACTIONS = {
   UPLOAD_FILES: `${prefix}UPLOAD_FILES`,
   UPLOAD_CANCEL: `${prefix}UPLOAD_CANCEL`,
+
+  ADD_STATUS: `${prefix}ADD_STATUS`,
+  DROP_STATUS: `${prefix}DROP_STATUS`,
+  SET_STATUS: `${prefix}SET_STATUS`,
 };
 
 export const EMPTY_FILE: IFile = {
@@ -19,3 +24,14 @@ export const EMPTY_FILE: IFile = {
   type: 'image',
   mime: 'image/jpeg',
 };
+
+export const EMPTY_UPLOAD_STATUS: IUploadStatus = {
+  is_uploading: false,
+  preview: null,
+  error: null,
+  uuid: null,
+  url: null,
+  progress: 0,
+  thumbnail_url: null,
+  type: null,
+}
