@@ -91,7 +91,7 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
         setTemp(temp.filter(el => el === id));
       }
     });
-  }, [statuses, temp, setData, data, setTemp]);
+  }, [statuses, files]);
 
   return (
     <form className={styles.uploads} onDrop={onDrop}>
