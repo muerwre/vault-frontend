@@ -3,10 +3,9 @@ import { createStore, applyMiddleware, combineReducers, compose, Store } from "r
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import createSagaMiddleware from "redux-saga";
-import { connectRouter, RouterState } from "connected-react-router";
+import { connectRouter, RouterState, routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { PersistConfig, Persistor } from "redux-persist/es/types";
-import { routerMiddleware } from "connected-react-router";
 
 import authReducer from "~/redux/auth/reducer";
 import authSaga from "~/redux/auth/sagas";
@@ -20,7 +19,6 @@ import uploadSaga from "~/redux/uploads/sagas";
 import { IAuthState } from "~/redux/auth/types";
 
 import modalReducer, { IModalState } from "~/redux/modal/reducer";
-import { IState } from "~/redux/store";
 
 const authPersistConfig: PersistConfig = {
   key: "auth",
