@@ -10,6 +10,8 @@ export const UPLOAD_ACTIONS = {
   ADD_STATUS: `${prefix}ADD_STATUS`,
   DROP_STATUS: `${prefix}DROP_STATUS`,
   SET_STATUS: `${prefix}SET_STATUS`,
+
+  ADD_FILE: `${prefix}ADD_FILE`,
 };
 
 export const EMPTY_FILE: IFile = {

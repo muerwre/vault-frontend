@@ -78,14 +78,20 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
   useEffect(() => console.log({ data }), [data]);
 
   useEffect(() => {
-    Object.entries(files).forEach(([id, file]) => {
-      if (temp.includes(id) && !!file.id) {
+    console.log({ temp, files });
+
+    Object.entries(statuses).forEach(([id, status]) => {
+      // todo: make this working
+      console.log({ id, uuid: status.uuid, file: files[status.uuid], files });
+
+      if (temp.includes(id) && !!status.uuid && files[status.uuid]) {
+        console.log(`${id} uploaded`);
         // do setData to append this file
-        setData({ ...data, files: [...data.files, file] });
+        setData({ ...data, files: [...data.files, files[status.uuid]] });
         setTemp(temp.filter(el => el === id));
       }
     });
-  }, [files, temp, setData, data, setTemp]);
+  }, [statuses, temp, setData, data, setTemp]);
 
   return (
     <form className={styles.uploads} onDrop={onDrop}>

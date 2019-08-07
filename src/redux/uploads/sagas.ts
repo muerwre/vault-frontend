@@ -1,6 +1,6 @@
 import { takeEvery, all, spawn, call, put, take, fork, race } from 'redux-saga/effects';
 import { UPLOAD_ACTIONS } from '~/redux/uploads/constants';
-import { uploadUploadFiles, uploadSetStatus, uploadAddStatus, uploadDropStatus } from './actions';
+import { uploadUploadFiles, uploadSetStatus, uploadAddStatus, uploadDropStatus, uploadAddFile } from './actions';
 import { reqWrapper } from '../auth/sagas';
 import { createUploader, uploadGetThumb, fakeUploader } from '~/utils/uploader';
 import { HTTP_RESPONSES } from '~/utils/api';
@@ -68,7 +68,7 @@ function* uploadFile({ file, temp_id }: IFileWithUUID) {
     return yield put(uploadDropStatus(temp_id));
   }
 
-  const { data, error }: IResultWithStatus<IFile> = result;
+  const { data, error }: { data: IFile & { detail: any }; error: string } = result;
 
   if (error) {
     return yield put(
@@ -88,6 +88,8 @@ function* uploadFile({ file, temp_id }: IFileWithUUID) {
       progress: 1,
     })
   );
+
+  yield put(uploadAddFile(data));
 
   return { error: null, status: HTTP_RESPONSES.CREATED, data: {} }; // add file here as data
 }

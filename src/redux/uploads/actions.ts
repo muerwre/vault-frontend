@@ -1,5 +1,5 @@
 import { UPLOAD_ACTIONS } from "~/redux/uploads/constants";
-import { IFileWithUUID, UUID } from "../types";
+import { IFileWithUUID, UUID, IFile } from "../types";
 import { IUploadStatus } from "./reducer";
 
 export const uploadUploadFiles = (files: IFileWithUUID[]) => ({
@@ -11,6 +11,11 @@ export const uploadAddStatus = (temp_id: UUID, status?: Partial<IUploadStatus>) 
   temp_id,
   status,
   type: UPLOAD_ACTIONS.ADD_STATUS,
+});
+
+export const uploadAddFile = (file: IFile) => ({
+  file,
+  type: UPLOAD_ACTIONS.ADD_FILE,
 });
 
 export const uploadSetStatus = (temp_id: UUID, status?: Partial<IUploadStatus>) => ({
