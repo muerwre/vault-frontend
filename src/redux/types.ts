@@ -64,6 +64,11 @@ export interface IFile {
   updatedAt?: string;
 }
 
+export interface IFileWithUUID {
+  temp_id?: UUID;
+  file: File;
+}
+
 export interface IBlock {
   type: 'image' | 'text' | 'media' | 'youtube' | 'video',
   temp_ids: UUID[];

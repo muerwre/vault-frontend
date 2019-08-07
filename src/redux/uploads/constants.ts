@@ -4,6 +4,7 @@ const prefix = 'UPLOAD.';
 
 export const UPLOAD_ACTIONS = {
   UPLOAD_FILES: `${prefix}UPLOAD_FILES`,
+  UPLOAD_CANCEL: `${prefix}UPLOAD_CANCEL`,
 };
 
 export const EMPTY_FILE: IFile = {
