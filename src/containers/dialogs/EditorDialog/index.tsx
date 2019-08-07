@@ -11,17 +11,13 @@ import { connect } from 'react-redux';
 import { selectNode } from '~/redux/node/selectors';
 import { ImageEditor } from '~/components/editors/ImageEditor';
 import { EditorPanel } from '~/components/editors/EditorPanel';
-import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
-import { IFileWithUUID } from '~/redux/types';
 
 const mapStateToProps = selectNode;
-const mapDispatchToProps = {
-  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
-};
+const mapDispatchToProps = {};
 
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, uploadUploadFiles }) => {
+const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor }) => {
   const [data, setData] = useState(editor);
 
   const setTitle = useCallback(
@@ -31,16 +27,9 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, uploadUpl
     [setData, data]
   );
 
-  const onUpload = useCallback(
-    (files: IFileWithUUID[]) => {
-      uploadUploadFiles(files);
-    },
-    [uploadUploadFiles]
-  );
-
   const buttons = (
     <Padder style={{ position: 'relative' }}>
-      <EditorPanel data={data} setData={setData} onUpload={onUpload} />
+      <EditorPanel data={data} setData={setData} />
 
       <Group horizontal>
         <InputText title="Название" value={data.title} handler={setTitle} />
@@ -55,7 +44,7 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, uploadUpl
   return (
     <ScrollDialog buttons={buttons} width={860} onClose={onRequestClose}>
       <div className={styles.editor}>
-        <ImageEditor data={data} setData={setData} onUpload={onUpload} />
+        <ImageEditor data={data} setData={setData} />
       </div>
     </ScrollDialog>
   );

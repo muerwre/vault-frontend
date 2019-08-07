@@ -50,16 +50,20 @@ export const fakeUploader = ({
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      onProgress(1, 2);
-    }, 100);
+      onProgress(1, 3);
+    }, 1000);
 
     setTimeout(() => {
-      onProgress(2, 2);
+      onProgress(2, 3);
+    }, 2000);
+
+    setTimeout(() => {
+      onProgress(3, 3);
       if (mustSucceed) {
         resolve({ status: HTTP_RESPONSES.CREATED, data: { ...EMPTY_FILE, id: uuid() } });
       } else {
         reject({ response: { statusText: error } });
       }
-    }, 500);
+    }, 3000);
   });
 };

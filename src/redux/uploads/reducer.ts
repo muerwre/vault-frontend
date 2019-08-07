@@ -9,8 +9,8 @@ export interface IUploadStatus {
   preview: string;
   uuid: UUID;
   url: string;
-  thumbnail_url: string;
   type: string;
+  thumbnail_url: string;
   progress: number;
 }
 

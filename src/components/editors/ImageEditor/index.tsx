@@ -2,14 +2,21 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import uuid from 'uuid4';
 import { INode, IFileWithUUID } from '~/redux/types';
 import * as styles from './styles.scss';
+import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
+import { connect } from 'react-redux';
+import { selectUploadStatuses, selectUploads } from '~/redux/uploads/selectors';
 
-interface IProps {
+const mapStateToProps = selectUploads;
+const mapDispatchToProps = {
+  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
+};
+
+type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
   data: INode;
   setData: (val: INode) => void;
-  onUpload: (val: IFileWithUUID[]) => void;
 }
 
-const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
+const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, statuses, files }) => {
   const eventPreventer = useCallback(event => event.preventDefault(), []);
   const [temp, setTemp] = useState([]);
 
@@ -19,7 +26,7 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
 
       if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length) return;
 
-      const files: IFileWithUUID[] = Array.from(event.dataTransfer.files).map(
+      const items: IFileWithUUID[] = Array.from(event.dataTransfer.files).map(
         (file: File): IFileWithUUID => ({
           file,
           temp_id: uuid(),
@@ -27,12 +34,12 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
         })
       );
 
-      const temps = files.map(file => file.temp_id);
+      const temps = items.map(file => file.temp_id);
 
       setTemp([...temp, ...temps]);
-      onUpload(files);
+      uploadUploadFiles(items);
     },
-    [onUpload, temp]
+    [uploadUploadFiles, temp]
   );
 
   const onInputChange = useCallback(
@@ -41,7 +48,7 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
 
       if (!event.target.files || !event.target.files.length) return;
 
-      const files: IFileWithUUID[] = Array.from(event.target.files).map(
+      const items: IFileWithUUID[] = Array.from(event.target.files).map(
         (file: File): IFileWithUUID => ({
           file,
           temp_id: uuid(),
@@ -49,12 +56,12 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
         })
       );
 
-      const temps = files.map(file => file.temp_id);
+      const temps = items.map(file => file.temp_id);
 
       setTemp([...temp, ...temps]);
-      onUpload(files);
+      uploadUploadFiles(items);
     },
-    [onUpload, temp]
+    [uploadUploadFiles, temp]
   );
 
   useEffect(() => {
@@ -68,6 +75,17 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
   }, [eventPreventer]);
 
   useEffect(() => console.log({ temp }), [temp]);
+  useEffect(() => console.log({ data }), [data]);
+
+  useEffect(() => {
+    Object.entries(files).forEach(([id, file]) => {
+      if (temp.includes(id) && !!file.id) {
+        // do setData to append this file
+        setData({ ...data, files: [...data.files, file] });
+        setTemp(temp.filter(el => el === id));
+      }
+    });
+  }, [files, temp, setData, data, setTemp]);
 
   return (
     <form className={styles.uploads} onDrop={onDrop}>
@@ -77,4 +95,5 @@ const ImageEditor: FC<IProps> = ({ data, setData, onUpload }) => {
   );
 };
 
+const ImageEditor = connect(mapStateToProps, mapDispatchToProps)(ImageEditorUnconnected)
 export { ImageEditor };
