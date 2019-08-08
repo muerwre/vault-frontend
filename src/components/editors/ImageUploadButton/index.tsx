@@ -10,7 +10,8 @@ const ImageUploadButton: FC<IProps> = ({
   onUpload,
 }) => (
     <div className={styles.wrap}>
-      <input type="file" onChange={onUpload} />
+      <input type="file" onChange={onUpload} accept="image/*" multiple />
+
       <div className={styles.icon}>
         <Icon size={32} icon="plus" />
       </div>
