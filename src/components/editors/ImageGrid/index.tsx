@@ -1,4 +1,4 @@
-import React, { FC, ReactChildren } from 'react';
+import React, { FC, ReactChildren, useCallback } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import * as styles from './styles.scss';
 import { ImageUpload } from '~/components/upload/ImageUpload';
@@ -8,6 +8,7 @@ import { IUploadStatus } from '~/redux/uploads/reducer';
 interface IProps {
   items: IFile[];
   locked: IUploadStatus[];
+  onFileMove: (o: number, n: number) => void;
 };
 
 const SortableItem = SortableElement(({ children }) => <div className={styles.item}>{children}</div>);
@@ -44,11 +45,12 @@ const SortableList = SortableContainer(({ items, locked }: { items: IFile[], loc
 const ImageGrid: FC<IProps> = ({
   items,
   locked,
+  onFileMove,
 }) => {
-
+  const onMove = useCallback(({ oldIndex, newIndex }) => onFileMove(oldIndex, newIndex), [onFileMove]);
 
   return (
-    <SortableList onSortEnd={console.log} axis="xy" items={items} locked={locked} />
+    <SortableList onSortEnd={onMove} axis="xy" items={items} locked={locked} />
   )
 }
 

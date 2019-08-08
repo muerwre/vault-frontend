@@ -7,6 +7,7 @@ import { selectUploads } from '~/redux/uploads/selectors';
 import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';
 import { ImageGrid } from '~/components/editors/ImageGrid';
+import { moveArrItem } from '~/utils/fn';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -18,11 +19,13 @@ type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
   setData: (val: INode) => void;
 }
 
-
-
 const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, statuses, files }) => {
   const eventPreventer = useCallback(event => event.preventDefault(), []);
   const [temp, setTemp] = useState([]);
+
+  const onFileMove = useCallback((old_index: number, new_index: number) => {
+    setData(assocPath(['files'], moveArrItem(old_index, new_index, data.files), data));
+  }, [data, setData]);
 
   const onFileAdd = useCallback((file: IFile) => {
     setData(assocPath(['files'], append(file, data.files), data));
@@ -96,6 +99,7 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
 
   return (
     <ImageGrid
+      onFileMove={onFileMove}
       items={data.files}
       locked={temp.filter(id => !!statuses[id]).map(id => statuses[id])}
     />
