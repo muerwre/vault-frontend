@@ -19,6 +19,7 @@ const SortableList = SortableContainer(({ items, locked }: { items: IFile[], loc
         items.map((file, index) => (
           <SortableItem key={file.id} index={index}>
             <ImageUpload
+              id={file.id}
               thumb={file.url}
             />
           </SortableItem>

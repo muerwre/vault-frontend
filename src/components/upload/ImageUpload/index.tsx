@@ -20,7 +20,7 @@ const ImageUpload: FC<IProps> = ({
   return (
     <div className={styles.wrap}>
       <div className={classNames(styles.thumb_wrap, { is_uploading })}>
-        {thumb && <div className={styles.thumb} style={{ background: `url("${thumb}")` }} />}
+        {thumb && <div className={styles.thumb} style={{ background: `url("${thumb}")` }}>{id}</div>}
         {is_uploading && <div className={styles.progress}><ArcProgress size={72} progress={progress} /></div>}
       </div>
     </div>
