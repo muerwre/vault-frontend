@@ -1,6 +1,6 @@
 .grid {
   min-height: 200px;
-  padding-bottom: 60px;
+  padding-bottom: 62px;
   box-sizing: border-box;
 
   display: grid;
@@ -20,6 +20,6 @@
   // width: 25%;
   // float: left;
   // padding: $gap / 2;
-  z-index: 100;
+  z-index: 10;
   box-sizing: border-box;
 }
