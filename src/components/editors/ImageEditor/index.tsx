@@ -102,6 +102,8 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
       onFileMove={onFileMove}
       items={data.files}
       locked={temp.filter(id => !!statuses[id]).map(id => statuses[id])}
+      onUpload={onInputChange}
+      onDrop={onDrop}
     />
   );
 };

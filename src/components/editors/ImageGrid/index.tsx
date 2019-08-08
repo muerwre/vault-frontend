@@ -1,21 +1,24 @@
-import React, { FC, ReactChildren, useCallback } from 'react';
+import React, { FC, ReactChildren, useCallback, ChangeEventHandler, DragEventHandler } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import * as styles from './styles.scss';
 import { ImageUpload } from '~/components/upload/ImageUpload';
 import { IFile } from '~/redux/types';
 import { IUploadStatus } from '~/redux/uploads/reducer';
+import { ImageUploadButton } from '~/components/editors/ImageUploadButton';
 
 interface IProps {
   items: IFile[];
   locked: IUploadStatus[];
   onFileMove: (o: number, n: number) => void;
+  onUpload?: ChangeEventHandler<HTMLInputElement>;
+  onDrop: DragEventHandler<HTMLFormElement>;
 };
 
 const SortableItem = SortableElement(({ children }) => <div className={styles.item}>{children}</div>);
 
-const SortableList = SortableContainer(({ items, locked }: { items: IFile[], locked: IUploadStatus[] }) => {
+const SortableList = SortableContainer(({ items, locked, onUpload, onDrop }: { items: IFile[]; locked: IUploadStatus[]; onUpload: ChangeEventHandler<HTMLInputElement>; onDrop: DragEventHandler<HTMLFormElement> }) => {
   return (
-    <div className={styles.grid}>
+    <form className={styles.grid} onDrop={onDrop}>
       {
         items.map((file, index) => (
           <SortableItem key={file.id} index={index} collection={0}>
@@ -37,7 +40,9 @@ const SortableList = SortableContainer(({ items, locked }: { items: IFile[], loc
           </SortableItem>
         ))
       }
-    </div>
+
+      <ImageUploadButton onUpload={onUpload} />
+    </form>
   );
 });
 
@@ -45,11 +50,13 @@ const ImageGrid: FC<IProps> = ({
   items,
   locked,
   onFileMove,
+  onUpload,
+  onDrop,
 }) => {
   const onMove = useCallback(({ oldIndex, newIndex }) => onFileMove(oldIndex, newIndex), [onFileMove]);
 
   return (
-    <SortableList onSortEnd={onMove} axis="xy" items={items} locked={locked} />
+    <SortableList onSortEnd={onMove} axis="xy" items={items} locked={locked} onUpload={onUpload} onDrop={onDrop} />
   )
 }
 
