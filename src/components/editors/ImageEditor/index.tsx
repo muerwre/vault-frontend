@@ -1,13 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import uuid from 'uuid4';
 import { INode, IFileWithUUID, IFile } from '~/redux/types';
-import * as styles from './styles.scss';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { connect } from 'react-redux';
 import { selectUploads } from '~/redux/uploads/selectors';
 import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';
-import { ImageUpload } from '~/components/upload/ImageUpload';
+import { ImageGrid } from '~/components/editors/ImageGrid';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -18,6 +17,8 @@ type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
   data: INode;
   setData: (val: INode) => void;
 }
+
+
 
 const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, statuses, files }) => {
   const eventPreventer = useCallback(event => event.preventDefault(), []);
@@ -100,7 +101,19 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
   }, [statuses, files]);
 
   return (
-    <form className={styles.uploads} onDrop={onDrop}>
+    <ImageGrid
+      items={data.files}
+      locked={temp.map(id => statuses[id])}
+    />
+  );
+};
+
+const ImageEditor = connect(mapStateToProps, mapDispatchToProps)(ImageEditorUnconnected)
+export { ImageEditor };
+
+/*
+
+<SortableList onSortEnd={console.log} axis="xy">
       {
         data.files.map(file => (
           <ImageUpload
@@ -108,7 +121,22 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
           />
         ))
       }
-      {
+    </SortableList>
+
+  <form className={styles.uploads} onDrop={onDrop}>
+  {
+    temp.map(id => (
+      statuses[id] && (
+        <ImageUpload
+          thumb={statuses[id].preview}
+          progress={statuses[id].progress}
+          is_uploading
+        />
+      )
+    ))
+  }
+
+  {
         temp.map(id => (
           statuses[id] && (
             <ImageUpload
@@ -119,11 +147,6 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
           )
         ))
       }
-
-      <input type="file" onChange={onInputChange} accept="image/*" multiple />
-    </form>
-  );
-};
-
-const ImageEditor = connect(mapStateToProps, mapDispatchToProps)(ImageEditorUnconnected)
-export { ImageEditor };
+  <input type="file" onChange={onInputChange} accept="image/*" multiple />
+</form>
+*/

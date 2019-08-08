@@ -19,7 +19,19 @@ const INITIAL_STATE: INodeState = {
     blocks: [
       { ...EMPTY_BLOCK, type: 'image' },
     ],
-    files: [{ ...EMPTY_FILE, id: uuid() }, { ...EMPTY_FILE, id: uuid() }]
+    files: [
+      { ...EMPTY_FILE, id: uuid() },
+      { ...EMPTY_FILE, id: uuid() },
+      { ...EMPTY_FILE, id: uuid() },
+      { ...EMPTY_FILE, id: uuid() },
+      { ...EMPTY_FILE, id: uuid() },
+      { ...EMPTY_FILE, id: uuid() },
+      { ...EMPTY_FILE, id: uuid() },
+      { ...EMPTY_FILE, id: uuid() },
+      { ...EMPTY_FILE, id: uuid() },
+      { ...EMPTY_FILE, id: uuid() },
+      { ...EMPTY_FILE, id: uuid() },
+    ]
   },
   is_loading: false,
   error: null,
