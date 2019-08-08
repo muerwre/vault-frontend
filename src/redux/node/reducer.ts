@@ -1,7 +1,9 @@
 import { createReducer } from "~/utils/reducer";
 import { INode } from "../types";
-import {EMPTY_BLOCK, EMPTY_NODE} from "./constants";
+import { EMPTY_BLOCK, EMPTY_NODE } from "./constants";
 import { NODE_HANDLERS } from "./handlers";
+import { EMPTY_FILE } from "../uploads/constants";
+import uuid from 'uuid4';
 
 export type INodeState = Readonly<{
   is_loading: boolean;
@@ -16,7 +18,8 @@ const INITIAL_STATE: INodeState = {
     type: 'image',
     blocks: [
       { ...EMPTY_BLOCK, type: 'image' },
-    ]
+    ],
+    files: [{ ...EMPTY_FILE, id: uuid() }, { ...EMPTY_FILE, id: uuid() }]
   },
   is_loading: false,
   error: null,

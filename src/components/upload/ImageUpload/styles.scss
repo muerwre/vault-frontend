@@ -1,0 +1,52 @@
+.wrap {
+  background: lighten($content_bg, 4%);
+  padding-bottom: 100%;
+  border-radius: $radius;
+  position: relative;
+}
+
+.thumb_wrap {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  border-radius: $radius;
+  overflow: hidden;
+
+  &:global(.is_uploading) {
+    .thumb {
+      filter: blur(16px);
+    }
+  }
+}
+
+.thumb {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  border-radius: $radius;
+  background: no-repeat 50% 50%;
+  background-size: cover;
+}
+
+.progress {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparentize(black, 0.5);
+
+  svg {
+    fill: none;
+    // stroke: white
+    fill: white;
+  }
+}

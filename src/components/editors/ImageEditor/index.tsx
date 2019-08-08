@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { selectUploads } from '~/redux/uploads/selectors';
 import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';
+import { ImageUpload } from '~/components/upload/ImageUpload';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -100,7 +101,25 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
 
   return (
     <form className={styles.uploads} onDrop={onDrop}>
-      <div>{data.type}</div>
+      {
+        data.files.map(file => (
+          <ImageUpload
+            thumb={file.url}
+          />
+        ))
+      }
+      {
+        temp.map(id => (
+          statuses[id] && (
+            <ImageUpload
+              thumb={statuses[id].preview}
+              progress={statuses[id].progress}
+              is_uploading
+            />
+          )
+        ))
+      }
+
       <input type="file" onChange={onInputChange} accept="image/*" multiple />
     </form>
   );

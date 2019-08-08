@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import * as styles from './styles.scss';
-import { INode, IFileWithUUID } from '~/redux/types';
+import { INode } from '~/redux/types';
 
 interface IProps {
   data: INode;
