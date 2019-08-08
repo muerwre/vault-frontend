@@ -49,6 +49,7 @@ function* uploadFile({ file, temp_id }: IFileWithUUID) {
         preview,
         is_uploading: true,
         type: file.type,
+        temp_id,
       }
     )
   );

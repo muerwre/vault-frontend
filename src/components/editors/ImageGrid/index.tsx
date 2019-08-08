@@ -17,10 +17,21 @@ const SortableList = SortableContainer(({ items, locked }: { items: IFile[], loc
     <div className={styles.grid}>
       {
         items.map((file, index) => (
-          <SortableItem key={file.id} index={index}>
+          <SortableItem key={file.id} index={index} collection={0}>
             <ImageUpload
               id={file.id}
               thumb={file.url}
+            />
+          </SortableItem>
+        ))
+      }
+      {
+        locked.map((item, index) => (
+          <SortableItem key={item.temp_id} index={index} collection={1} disabled>
+            <ImageUpload
+              thumb={item.preview}
+              progress={item.progress}
+              is_uploading
             />
           </SortableItem>
         ))

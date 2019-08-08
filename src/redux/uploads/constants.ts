@@ -37,4 +37,5 @@ export const EMPTY_UPLOAD_STATUS: IUploadStatus = {
   progress: 0,
   thumbnail_url: null,
   type: null,
+  temp_id: null,
 }

@@ -86,14 +86,8 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
   useEffect(() => console.log({ data }), [data]);
 
   useEffect(() => {
-    console.log({ temp, files });
-
     Object.entries(statuses).forEach(([id, status]) => {
-      // todo: make this working
-      console.log({ id, uuid: status.uuid, file: files[status.uuid], files });
-
       if (temp.includes(id) && !!status.uuid && files[status.uuid]) {
-        console.log(`${id} uploaded`);
         onFileAdd(files[status.uuid]);
         setTemp(temp.filter(el => el !== id));
       }
@@ -103,7 +97,7 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
   return (
     <ImageGrid
       items={data.files}
-      locked={temp.map(id => statuses[id])}
+      locked={temp.filter(id => !!statuses[id]).map(id => statuses[id])}
     />
   );
 };
