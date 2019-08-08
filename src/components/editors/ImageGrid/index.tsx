@@ -54,7 +54,7 @@ const ImageGrid: FC<IProps> = ({
   const onMove = useCallback(({ oldIndex, newIndex }) => onFileMove(oldIndex, newIndex), [onFileMove]);
 
   return (
-    <SortableList onSortEnd={onMove} axis="xy" items={items} locked={locked} onUpload={onUpload} onDrop={onDrop} />
+    <SortableList onSortEnd={onMove} axis="xy" items={items} locked={locked} onUpload={onUpload} onDrop={onDrop} pressDelay={100} />
   )
 }
 
