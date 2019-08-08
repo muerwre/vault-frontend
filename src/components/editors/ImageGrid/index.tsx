@@ -40,8 +40,6 @@ const SortableList = SortableContainer(({ items, locked, onUpload, onDrop }: { i
           </SortableItem>
         ))
       }
-
-      <ImageUploadButton onUpload={onUpload} />
     </form>
   );
 });

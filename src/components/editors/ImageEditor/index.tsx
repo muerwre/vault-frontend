@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState, ChangeEventHandler, DragEventHandler } from 'react';
 import uuid from 'uuid4';
 import { INode, IFileWithUUID, IFile } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
@@ -8,6 +8,7 @@ import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';
 import { ImageGrid } from '~/components/editors/ImageGrid';
 import { moveArrItem } from '~/utils/fn';
+import { IUploadStatus } from '~/redux/uploads/reducer';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -16,92 +17,19 @@ const mapDispatchToProps = {
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
   data: INode;
+  pending_files: IUploadStatus[];
   setData: (val: INode) => void;
+  onFileMove: (o: number, n: number) => void;
+  onInputChange: ChangeEventHandler<HTMLInputElement>;
+  onDrop: DragEventHandler<HTMLFormElement>;
 }
 
-const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, statuses, files }) => {
-  const eventPreventer = useCallback(event => event.preventDefault(), []);
-  const [temp, setTemp] = useState([]);
-
-  const onFileMove = useCallback((old_index: number, new_index: number) => {
-    setData(assocPath(['files'], moveArrItem(old_index, new_index, data.files), data));
-  }, [data, setData]);
-
-  const onFileAdd = useCallback((file: IFile) => {
-    setData(assocPath(['files'], append(file, data.files), data));
-  }, [data, setData]);
-
-  const onDrop = useCallback(
-    (event: React.DragEvent<HTMLFormElement>) => {
-      event.preventDefault();
-
-      if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length) return;
-
-      const items: IFileWithUUID[] = Array.from(event.dataTransfer.files).map(
-        (file: File): IFileWithUUID => ({
-          file,
-          temp_id: uuid(),
-          subject: 'editor'
-        })
-      );
-
-      const temps = items.map(file => file.temp_id);
-
-      setTemp([...temp, ...temps]);
-      uploadUploadFiles(items);
-    },
-    [uploadUploadFiles, temp]
-  );
-
-  const onInputChange = useCallback(
-    event => {
-      event.preventDefault();
-
-      if (!event.target.files || !event.target.files.length) return;
-
-      const items: IFileWithUUID[] = Array.from(event.target.files).map(
-        (file: File): IFileWithUUID => ({
-          file,
-          temp_id: uuid(),
-          subject: 'editor'
-        })
-      );
-
-      const temps = items.map(file => file.temp_id);
-
-      setTemp([...temp, ...temps]);
-      uploadUploadFiles(items);
-    },
-    [uploadUploadFiles, temp]
-  );
-
-  useEffect(() => {
-    window.addEventListener('dragover', eventPreventer, false);
-    window.addEventListener('drop', eventPreventer, false);
-
-    return () => {
-      window.removeEventListener('dragover', eventPreventer, false);
-      window.removeEventListener('drop', eventPreventer, false);
-    };
-  }, [eventPreventer]);
-
-  useEffect(() => console.log({ temp }), [temp]);
-  useEffect(() => console.log({ data }), [data]);
-
-  useEffect(() => {
-    Object.entries(statuses).forEach(([id, status]) => {
-      if (temp.includes(id) && !!status.uuid && files[status.uuid]) {
-        onFileAdd(files[status.uuid]);
-        setTemp(temp.filter(el => el !== id));
-      }
-    });
-  }, [statuses, files]);
-
+const ImageEditorUnconnected: FC<IProps> = ({ data, onFileMove, onInputChange, onDrop, pending_files }) => {
   return (
     <ImageGrid
       onFileMove={onFileMove}
       items={data.files}
-      locked={temp.filter(id => !!statuses[id]).map(id => statuses[id])}
+      locked={pending_files}
       onUpload={onInputChange}
       onDrop={onDrop}
     />
@@ -110,43 +38,3 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
 
 const ImageEditor = connect(mapStateToProps, mapDispatchToProps)(ImageEditorUnconnected)
 export { ImageEditor };
-
-/*
-
-<SortableList onSortEnd={console.log} axis="xy">
-      {
-        data.files.map(file => (
-          <ImageUpload
-            thumb={file.url}
-          />
-        ))
-      }
-    </SortableList>
-
-  <form className={styles.uploads} onDrop={onDrop}>
-  {
-    temp.map(id => (
-      statuses[id] && (
-        <ImageUpload
-          thumb={statuses[id].preview}
-          progress={statuses[id].progress}
-          is_uploading
-        />
-      )
-    ))
-  }
-
-  {
-        temp.map(id => (
-          statuses[id] && (
-            <ImageUpload
-              thumb={statuses[id].preview}
-              progress={statuses[id].progress}
-              is_uploading
-            />
-          )
-        ))
-      }
-  <input type="file" onChange={onInputChange} accept="image/*" multiple />
-</form>
-*/
