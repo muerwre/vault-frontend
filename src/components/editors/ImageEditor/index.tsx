@@ -1,10 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import uuid from 'uuid4';
-import { INode, IFileWithUUID } from '~/redux/types';
+import { INode, IFileWithUUID, IFile } from '~/redux/types';
 import * as styles from './styles.scss';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { connect } from 'react-redux';
-import { selectUploadStatuses, selectUploads } from '~/redux/uploads/selectors';
+import { selectUploads } from '~/redux/uploads/selectors';
+import assocPath from 'ramda/es/assocPath';
+import append from 'ramda/es/append';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -19,6 +21,10 @@ type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
 const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, statuses, files }) => {
   const eventPreventer = useCallback(event => event.preventDefault(), []);
   const [temp, setTemp] = useState([]);
+
+  const onFileAdd = useCallback((file: IFile) => {
+    setData(assocPath(['files'], append(file, data.files), data));
+  }, [data, setData]);
 
   const onDrop = useCallback(
     (event: React.DragEvent<HTMLFormElement>) => {
@@ -86,8 +92,7 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, uploadUploadFiles, 
 
       if (temp.includes(id) && !!status.uuid && files[status.uuid]) {
         console.log(`${id} uploaded`);
-        // do setData to append this file
-        setData({ ...data, files: [...data.files, files[status.uuid]] });
+        onFileAdd(files[status.uuid]);
         setTemp(temp.filter(el => el !== id));
       }
     });

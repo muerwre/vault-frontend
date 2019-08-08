@@ -19,9 +19,10 @@ export const EMPTY_FILE: IFile = {
   user_id: null,
   node_id: null,
 
-  name: 'somefile.jpg',
-  path: '/covers/',
-  full_path: '/covers/somefile.jpg',
+  name: 'mario-collage-800x450.jpg',
+  path: '/wp-content/uploads/2017/09/',
+  full_path: '/wp-content/uploads/2017/09/mario-collage-800x450.jpg',
+  url: 'https://cdn.arstechnica.net/wp-content/uploads/2017/09/mario-collage-800x450.jpg',
   size: 2400000,
   type: 'image',
   mime: 'image/jpeg',

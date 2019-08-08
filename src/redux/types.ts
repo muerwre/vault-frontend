@@ -55,6 +55,7 @@ export interface IFile {
   name: string;
   path: string;
   full_path: string;
+  url: string;
   size: number;
 
   type: 'image' | 'text' | 'audio' | 'video';
