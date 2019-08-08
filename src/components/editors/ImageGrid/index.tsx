@@ -37,7 +37,6 @@ const SortableList = SortableContainer(({ items, locked }: { items: IFile[], loc
           </SortableItem>
         ))
       }
-      <div style={{ clear: 'both' }} />
     </div>
   );
 });
