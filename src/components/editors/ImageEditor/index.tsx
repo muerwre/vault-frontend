@@ -1,20 +1,13 @@
 import React, {
   FC,
-  useCallback,
-  useEffect,
-  useState,
   ChangeEventHandler,
   DragEventHandler
 } from 'react';
-import uuid from 'uuid4';
 import { connect } from 'react-redux';
-import assocPath from 'ramda/es/assocPath';
-import append from 'ramda/es/append';
-import { INode, IFileWithUUID, IFile } from '~/redux/types';
+import { INode } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
-import { moveArrItem } from '~/utils/fn';
 import { IUploadStatus } from '~/redux/uploads/reducer';
 
 const mapStateToProps = selectUploads;

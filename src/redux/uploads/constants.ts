@@ -11,7 +11,7 @@ export const UPLOAD_ACTIONS = {
   DROP_STATUS: `${prefix}DROP_STATUS`,
   SET_STATUS: `${prefix}SET_STATUS`,
 
-  ADD_FILE: `${prefix}ADD_FILE`,
+  ADD_FILE: `${prefix}ADD_FILE`
 };
 
 export const EMPTY_FILE: IFile = {
@@ -25,7 +25,7 @@ export const EMPTY_FILE: IFile = {
   url: 'https://cdn.arstechnica.net/wp-content/uploads/2017/09/mario-collage-800x450.jpg',
   size: 2400000,
   type: 'image',
-  mime: 'image/jpeg',
+  mime: 'image/jpeg'
 };
 
 export const EMPTY_UPLOAD_STATUS: IUploadStatus = {
@@ -37,5 +37,5 @@ export const EMPTY_UPLOAD_STATUS: IUploadStatus = {
   progress: 0,
   thumbnail_url: null,
   type: null,
-  temp_id: null,
+  temp_id: null
 };

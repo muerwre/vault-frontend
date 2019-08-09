@@ -1,6 +1,4 @@
-import {
-  takeEvery, all, spawn, call, put, take, fork, race
-} from 'redux-saga/effects';
+import { takeEvery, all, spawn, call, put, take, fork, race } from 'redux-saga/effects';
 import { UPLOAD_ACTIONS } from '~/redux/uploads/constants';
 import {
   uploadUploadFiles, uploadSetStatus, uploadAddStatus, uploadDropStatus, uploadAddFile
