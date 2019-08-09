@@ -18,10 +18,8 @@ module.exports = {
     },
   },
   rules: {
-    indent: ['error', 2],
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/indent': ['warn', 2],
-    "indent": "off",
     'comma-dangle': 0,
     'no-restricted-syntax': 1,
     'react/prop-types': 0,
@@ -49,7 +47,9 @@ module.exports = {
     'max-line-length': [true, 100],
     // 'max-len': 100,
     // 'max-len': { "code": 100 },
-    'max-len': ["warn", { "code": 100 }]
+    'max-len': ["warn", { "code": 100 }],
+    "template-curly-spacing": "off",
+    indent: "off"
   },
   globals: {
     document: false,
