@@ -12,7 +12,7 @@ import { selectToken } from './selectors';
 import { URLS } from '~/constants/urls';
 import { DIALOGS } from '../modal/constants';
 import { IResultWithStatus } from '../types';
-import { IToken, IUser } from './types';
+import { IUser } from './types';
 
 export function* reqWrapper(requestAction, props = {}): ReturnType<typeof requestAction> {
   const { access } = yield select(selectToken);
@@ -29,17 +29,15 @@ export function* reqWrapper(requestAction, props = {}): ReturnType<typeof reques
   return result;
 }
 
-function* sendLoginRequestSaga({ username, password }: ReturnType<typeof ActionCreators.userSendLoginRequest>): SagaIterator {
+function* sendLoginRequestSaga({ username, password }: ReturnType<typeof ActionCreators.userSendLoginRequest>) {
   if (!username || !password) return;
 
   const { error, data: { token, user } }: IResultWithStatus<{ token: string; user: IUser }> = yield call(apiUserLogin, { username, password });
 
-  console.log({ token, error });
-
-  if (error) return yield put(userSetLoginError(error));
+  if (error) { yield put(userSetLoginError(error)); return; }
 
   yield put(authSetToken(token));
-  yield put(authSetUser(user));
+  yield put(authSetUser({ ...user, is_user: true }));
   yield put(modalSetShown(false));
 }
 
