@@ -32,3 +32,21 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+:global {
+  .vert-1 {
+    grid-row-end: span 1;
+  }
+
+  .vert-2 {
+    grid-row-end: span 2;
+  }
+
+  .hor-1 {
+    grid-column-end: span 1;
+  }
+
+  .hor-2 {
+    grid-column-end: span 2;
+  }
+}

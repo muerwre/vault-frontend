@@ -60,7 +60,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
               <div />
               <div />
 
-              <InputText title="Логин" handler={setUserName} value={username} />
+              <InputText title="Логин" handler={setUserName} value={username} autoFocus />
               <InputText title="Пароль" handler={setPassword} value={password} />
             </Group>
           </div>

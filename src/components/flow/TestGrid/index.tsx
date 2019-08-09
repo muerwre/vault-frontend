@@ -23,7 +23,7 @@ export const TestGrid = () => (
     <div className={styles.grid_test}>
       <div
         style={{
-          gridRow: '2 / 4',
+          gridRow: '1 / 3',
           gridColumn: '-2 / -1',
           background: '#090909',
           borderRadius: 4,
@@ -34,8 +34,8 @@ export const TestGrid = () => (
 
       {range(1, 20).map(el => (
         <Cell
-          width={Math.floor(Math.random() * 3)}
-          height={Math.floor(Math.random() * 3)}
+          width={Math.floor(Math.random() * 2 + 1)}
+          height={Math.floor(Math.random() * 2 + 1)}
           title={`Cell ${el}`}
           key={el}
         />

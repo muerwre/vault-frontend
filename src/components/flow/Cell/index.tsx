@@ -18,10 +18,10 @@ const Cell: FC<IProps> = ({
   is_hero,
 }) => (
   <div
-    className={classNames(styles.cell, { is_hero })}
+    className={classNames(styles.cell, `vert-${height}`, `hor-${width}`)}
     style={{
-      gridRowEnd: `span ${height}`,
-      gridColumnEnd: `span ${width}`,
+      // gridRowEnd: `span ${height}`,
+      // gridColumnEnd: `span ${width}`,
     }}
   >
     { title && <div className={styles.title}>{title}</div> }
