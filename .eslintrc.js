@@ -50,10 +50,10 @@ module.exports = {
     'max-len': ["warn", { "code": 100 }],
     "template-curly-spacing": "off",
     "comma-dangle": ["warn", {
-      "arrays": "never",
-      "objects": "always",
-      "imports": "never",
-      "exports": "never",
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
       "functions": "never"
     }],
     indent: "off"

@@ -1,5 +1,5 @@
 import React, {
-  FC, ReactChildren, useCallback, ChangeEventHandler, DragEventHandler
+  FC, useCallback, ChangeEventHandler, DragEventHandler
 } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import * as styles from './styles.scss';
@@ -15,7 +15,7 @@ interface IProps {
   onDrop: DragEventHandler<HTMLFormElement>;
 }
 
-const SortableItem = SortableElement(({ children }) => (
+const SortableItem = SortableElement(({ children, }) => (
   <div className={styles.item}>{children}</div>
 ));
 
@@ -23,7 +23,7 @@ const SortableList = SortableContainer(
   ({
     items,
     locked,
-    onDrop
+    onDrop,
   }: {
   items: IFile[];
   locked: IUploadStatus[];
@@ -46,9 +46,9 @@ const SortableList = SortableContainer(
 );
 
 const ImageGrid: FC<IProps> = ({
-  items, locked, onFileMove, onUpload, onDrop
+  items, locked, onFileMove, onUpload, onDrop,
 }) => {
-  const onMove = useCallback(({ oldIndex, newIndex }) => onFileMove(oldIndex, newIndex), [
+  const onMove = useCallback(({ oldIndex, newIndex, }) => onFileMove(oldIndex, newIndex), [
     onFileMove
   ]);
 
@@ -60,7 +60,7 @@ const ImageGrid: FC<IProps> = ({
       locked={locked}
       onUpload={onUpload}
       onDrop={onDrop}
-      pressDelay={100}
+      pressDelay={window.innerWidth < 768 ? 200 : 0}
       helperClass={styles.helper}
     />
   );

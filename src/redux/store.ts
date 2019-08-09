@@ -1,6 +1,4 @@
-import {
-  createStore, applyMiddleware, combineReducers, compose, Store
-} from 'redux';
+import { createStore, applyMiddleware, combineReducers, compose, Store } from 'redux';
 
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -25,7 +23,7 @@ import modalReducer, { IModalState } from '~/redux/modal/reducer';
 const authPersistConfig: PersistConfig = {
   key: 'auth',
   whitelist: ['token', 'user'],
-  storage
+  storage,
 };
 
 export interface IState {
@@ -39,9 +37,10 @@ export interface IState {
 export const sagaMiddleware = createSagaMiddleware();
 export const history = createBrowserHistory();
 
-const composeEnhancers = typeof window === 'object' && (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-  ? (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-  : compose;
+const composeEnhancers =
+  typeof window === 'object' && (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+    : compose;
 
 export const store = createStore(
   combineReducers<IState>({
