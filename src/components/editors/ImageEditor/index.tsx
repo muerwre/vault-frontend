@@ -45,4 +45,5 @@ const ImageEditor = connect(
   mapStateToProps,
   mapDispatchToProps
 )(ImageEditorUnconnected);
+
 export { ImageEditor };

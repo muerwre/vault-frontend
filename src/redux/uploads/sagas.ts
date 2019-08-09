@@ -36,6 +36,7 @@ function* uploadWorker(file: File, temp_id: UUID) {
 
   return yield call(promise, { temp_id, file });
 }
+
 function* uploadFile({ file, temp_id }: IFileWithUUID) {
   if (!file.type || !VALIDATORS.IS_IMAGE_MIME(file.type)) {
     return { error: 'File_Not_Image', status: HTTP_RESPONSES.BAD_REQUEST, data: {} };
