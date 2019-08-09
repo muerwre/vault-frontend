@@ -73,8 +73,9 @@ export interface IFileWithUUID {
 
 export interface IBlock {
   type: 'image' | 'text' | 'media' | 'youtube' | 'video';
-  temp_ids: UUID[];
-  attaches: UUID[];
+  files: UUID[];
+  content: string;
+  embeds: string[];
 }
 
 export interface INode {
@@ -84,7 +85,7 @@ export interface INode {
   title: string;
   files: IFile[];
 
-  cover: IFile['id'];
+  cover: IFile;
   type: 'image';
 
   blocks: IBlock[];

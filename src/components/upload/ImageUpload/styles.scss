@@ -3,6 +3,7 @@
   padding-bottom: 100%;
   border-radius: $radius;
   position: relative;
+  user-select: none;
 }
 
 .thumb_wrap {
@@ -30,7 +31,8 @@
   border-radius: $radius;
   background: no-repeat 50% 50%;
   background-size: cover;
-  opacity: 0.3;
+  opacity: 1;
+  filter: saturate(0);
 }
 
 .progress {
@@ -50,4 +52,8 @@
     // stroke: white
     fill: white;
   }
+}
+
+.helper {
+  opacity: 0.3;
 }

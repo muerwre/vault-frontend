@@ -15,7 +15,9 @@ interface IProps {
   onDrop: DragEventHandler<HTMLFormElement>;
 }
 
-const SortableItem = SortableElement(({ children }) => <div className={styles.item}>{children}</div>);
+const SortableItem = SortableElement(({ children }) => (
+  <div className={styles.item}>{children}</div>
+));
 
 const SortableList = SortableContainer(
   ({
@@ -23,10 +25,10 @@ const SortableList = SortableContainer(
     locked,
     onDrop
   }: {
-    items: IFile[];
-    locked: IUploadStatus[];
-    onUpload: ChangeEventHandler<HTMLInputElement>;
-    onDrop: DragEventHandler<HTMLFormElement>;
+  items: IFile[];
+  locked: IUploadStatus[];
+  onUpload: ChangeEventHandler<HTMLInputElement>;
+  onDrop: DragEventHandler<HTMLFormElement>;
   }) => (
     <form className={styles.grid} onDrop={onDrop}>
       {items.map((file, index) => (
@@ -46,7 +48,9 @@ const SortableList = SortableContainer(
 const ImageGrid: FC<IProps> = ({
   items, locked, onFileMove, onUpload, onDrop
 }) => {
-  const onMove = useCallback(({ oldIndex, newIndex }) => onFileMove(oldIndex, newIndex), [onFileMove]);
+  const onMove = useCallback(({ oldIndex, newIndex }) => onFileMove(oldIndex, newIndex), [
+    onFileMove
+  ]);
 
   return (
     <SortableList
@@ -57,6 +61,7 @@ const ImageGrid: FC<IProps> = ({
       onUpload={onUpload}
       onDrop={onDrop}
       pressDelay={100}
+      helperClass={styles.helper}
     />
   );
 };
