@@ -15,9 +15,8 @@ export const apiUserLogin = ({
 }: {
   username: string;
   password: string;
-}): Promise<IResultWithStatus<{ token: string; status?: number }>> =>
-  api
-    .post(API.USER.LOGIN, { username, password })
-    .then(resultMiddleware)
-    .catch(errorMiddleware)
-    .then(userLoginTransform);
+}): Promise<IResultWithStatus<{ token: string; status?: number }>> => api
+  .post(API.USER.LOGIN, { username, password })
+  .then(resultMiddleware)
+  .catch(errorMiddleware)
+  .then(userLoginTransform);

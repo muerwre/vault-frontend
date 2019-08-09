@@ -1,4 +1,10 @@
-import React, { FC, useState, useCallback, useEffect } from 'react';
+import React, {
+  FC, useState, useCallback, useEffect
+} from 'react';
+import { connect } from 'react-redux';
+import assocPath from 'ramda/es/assocPath';
+import append from 'ramda/es/append';
+import uuid from 'uuid4';
 import { ScrollDialog } from '../ScrollDialog';
 import { IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
@@ -7,19 +13,15 @@ import { InputText } from '~/components/input/InputText';
 import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
 import * as styles from './styles.scss';
-import { connect } from 'react-redux';
 import { selectNode } from '~/redux/node/selectors';
 import { ImageEditor } from '~/components/editors/ImageEditor';
 import { EditorPanel } from '~/components/editors/EditorPanel';
-import assocPath from 'ramda/es/assocPath';
-import append from 'ramda/es/append';
 import { moveArrItem } from '~/utils/fn';
 import { IFile, IFileWithUUID } from '~/redux/types';
-import uuid from 'uuid4';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { editor } = selectNode(state);
   const { statuses, files } = selectUploads(state);
 
@@ -32,7 +34,9 @@ const mapDispatchToProps = {
 
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, uploadUploadFiles, files, statuses }) => {
+const EditorDialogUnconnected: FC<IProps> = ({
+  onRequestClose, editor, uploadUploadFiles, files, statuses
+}) => {
   const [data, setData] = useState(editor);
   const eventPreventer = useCallback(event => event.preventDefault(), []);
   const [temp, setTemp] = useState([]);
@@ -68,7 +72,7 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, uploadUpl
   );
 
   const onInputChange = useCallback(
-    event => {
+    (event) => {
       event.preventDefault();
 
       if (!event.target.files || !event.target.files.length) return;
@@ -109,10 +113,10 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, uploadUpl
         setTemp(temp.filter(el => el !== id));
       }
     });
-  }, [statuses, files]);
+  }, [statuses, files, temp, onFileAdd]);
 
   const setTitle = useCallback(
-    title => {
+    (title) => {
       setData({ ...data, title });
     },
     [setData, data]

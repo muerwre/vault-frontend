@@ -1,4 +1,4 @@
-import {IBlock, INode} from "../types";
+import { IBlock, INode } from '../types';
 
 export const EMPTY_BLOCK: IBlock = {
   type: null,
@@ -25,4 +25,4 @@ export const EMPTY_NODE: INode = {
       show_description: false,
     }
   },
-}
+};

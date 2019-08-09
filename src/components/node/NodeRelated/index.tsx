@@ -1,7 +1,7 @@
-import React, {FC, HTMLAttributes} from 'react';
+import React, { FC, HTMLAttributes } from 'react';
 import { range } from 'ramda';
 import * as styles from './styles.scss';
-import {Group} from "~/components/containers/Group";
+import { Group } from '~/components/containers/Group';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {}
 
@@ -16,7 +16,7 @@ const NodeRelated: FC<IProps> = ({
     </div>
     <div className={styles.grid}>
       {
-        range(1,7).map(el => (<div className={styles.item} key={el} />))
+        range(1, 7).map(el => (<div className={styles.item} key={el} />))
       }
     </div>
   </Group>

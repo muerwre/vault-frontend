@@ -7,8 +7,8 @@ export interface ITag {
 }
 
 export type IInputTextProps = DetailedHTMLProps<
-  InputHTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
+InputHTMLAttributes<HTMLInputElement>,
+HTMLInputElement
 > & {
   wrapperClassName?: string;
   handler?: (value: string) => void;
@@ -72,7 +72,7 @@ export interface IFileWithUUID {
 }
 
 export interface IBlock {
-  type: 'image' | 'text' | 'media' | 'youtube' | 'video',
+  type: 'image' | 'text' | 'media' | 'youtube' | 'video';
   temp_ids: UUID[];
   attaches: UUID[];
 }
@@ -100,7 +100,7 @@ export interface INode {
     flow: {
       display: 'single' | 'double' | 'quadro';
       show_description: boolean;
-    }
+    };
   };
 
   createdAt?: string;

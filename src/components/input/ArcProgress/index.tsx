@@ -5,7 +5,7 @@ import { describeArc } from '~/utils/dom';
 interface IProps {
   size: number;
   progress: number;
-};
+}
 
 export const ArcProgress: FC<IProps> = ({ size, progress }) => (
   <svg className={styles.icon} width={size} height={size}>

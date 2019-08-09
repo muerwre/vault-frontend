@@ -1,6 +1,6 @@
-import { createReducer } from "~/utils/reducer";
-import { IFile, UUID } from "~/redux/types";
-import { UPLOAD_HANDLERS } from "./handlers";
+import { createReducer } from '~/utils/reducer';
+import { IFile, UUID } from '~/redux/types';
+import { UPLOAD_HANDLERS } from './handlers';
 
 export interface IUploadStatus {
   is_uploading: boolean;

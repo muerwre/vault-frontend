@@ -13,7 +13,7 @@ export function createUploader<T extends {}, R extends {}>(
 ): [(args: T) => (args: T & { onProgress: (current: number, total: number) => void }) => any, EventChannel<any>] {
   let emit;
 
-  const chan = eventChannel(emitter => {
+  const chan = eventChannel((emitter) => {
     emit = emitter;
     return () => null;
   });
@@ -27,7 +27,7 @@ export function createUploader<T extends {}, R extends {}>(
   return [wrappedCallback, chan];
 }
 
-export const uploadGetThumb = async file => {
+export const uploadGetThumb = async (file) => {
   if (!file.type || !VALIDATORS.IS_IMAGE_MIME(file.type)) return '';
 
   return await new Promise((resolve, reject) => {

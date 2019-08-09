@@ -1,17 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback, useEffect, useRef, useState
+} from 'react';
+
 export const useCloseOnEscape = (onRequestClose: () => void, ignore_inputs = false) => {
   const onEscape = useCallback(
-    event => {
+    (event) => {
       if (event.key !== 'Escape') return;
       if (
-        ignore_inputs &&
-        (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA')
-      )
-        return;
+        ignore_inputs
+        && (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA')
+      ) return;
 
       onRequestClose();
     },
-    [onRequestClose],
+    [ignore_inputs, onRequestClose],
   );
 
   useEffect(() => {
@@ -30,5 +32,5 @@ export const useDelayedReady = (setReady: (val: boolean) => void, delay: number 
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, []);
+  }, [delay, setReady]);
 };

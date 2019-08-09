@@ -1,7 +1,7 @@
 import React, { FC, ChangeEventHandler } from 'react';
 import * as styles from './styles.scss';
 import { INode } from '~/redux/types';
-import { ImageUploadButton } from '~/components/editors/ImageUploadButton';
+import { EditorUploadButton } from '~/components/editors/EditorUploadButton';
 
 interface IProps {
   data: INode;
@@ -11,7 +11,7 @@ interface IProps {
 
 const EditorPanel: FC<IProps> = ({ onUpload }) => (
   <div className={styles.panel}>
-    <ImageUploadButton onUpload={onUpload} />
+    <EditorUploadButton onUpload={onUpload} />
   </div>
 );
 

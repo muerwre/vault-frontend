@@ -1,6 +1,6 @@
-import {AUTH_USER_ACTIONS} from "~/redux/auth/constants";
-import * as ActionCreators from "~/redux/auth/actions";
-import {IAuthState} from "~/redux/auth/types";
+import { AUTH_USER_ACTIONS } from '~/redux/auth/constants';
+import * as ActionCreators from '~/redux/auth/actions';
+import { IAuthState } from '~/redux/auth/types';
 
 interface ActionHandler<T> {
   (state: IAuthState, payload: T extends (...args: any[]) => infer R ? R : any): IAuthState;

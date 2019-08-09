@@ -1,10 +1,11 @@
 import React, { FC, HTMLAttributes } from 'react';
 import * as styles from './styles.scss';
-import classNames = require("classnames");
+
+import classNames = require('classnames');
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   seamless?: boolean;
-  stretchy?: boolean
+  stretchy?: boolean;
 }
 
 const Panel: FC<IProps> = ({
@@ -14,9 +15,9 @@ const Panel: FC<IProps> = ({
   stretchy,
   ...props
 }) => (
-    <div className={classNames(styles.panel, className, { seamless, stretchy })} {...props}>
-      {children}
-    </div>
+  <div className={classNames(styles.panel, className, { seamless, stretchy })} {...props}>
+    {children}
+  </div>
 );
 
 export { Panel };

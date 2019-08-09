@@ -1,7 +1,8 @@
-import React, {FC, HTMLAttributes} from 'react';
-import { Card } from "~/components/containers/Card";
+import React, { FC, HTMLAttributes } from 'react';
+import { Card } from '~/components/containers/Card';
 import * as styles from './styles.scss';
-import classNames = require("classnames");
+
+import classNames = require('classnames');
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
@@ -14,17 +15,17 @@ const Comment: FC<IProps> = ({
   className,
   ...props
 }) => (
-    <Card
-      className={classNames(styles.wrap, className, { is_empty, is_loading })}
-      seamless
-      {...props}
-    >
-      <div className={styles.thumb}>
-        <div className={styles.thumb_image} />
-      </div>
+  <Card
+    className={classNames(styles.wrap, className, { is_empty, is_loading })}
+    seamless
+    {...props}
+  >
+    <div className={styles.thumb}>
+      <div className={styles.thumb_image} />
+    </div>
 
-      <div className={styles.text} />
-    </Card>
+    <div className={styles.text} />
+  </Card>
 );
 
 export { Comment };

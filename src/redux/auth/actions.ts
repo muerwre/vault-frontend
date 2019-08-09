@@ -1,10 +1,10 @@
-import { AUTH_USER_ACTIONS } from "~/redux/auth/constants";
-import {IAuthState, IUser} from "~/redux/auth/types";
+import { AUTH_USER_ACTIONS } from '~/redux/auth/constants';
+import { IAuthState, IUser } from '~/redux/auth/types';
 
 export const userSendLoginRequest = ({
   username, password
 }: {
-  username: string, password: string
+  username: string; password: string;
 }) => ({ type: AUTH_USER_ACTIONS.SEND_LOGIN_REQUEST, username, password });
 
 export const userSetLoginError = (error: IAuthState['login']['error']) => ({

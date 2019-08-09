@@ -1,16 +1,16 @@
-import React, { FC } from "react";
-import { Card } from "~/components/containers/Card";
-import * as styles from "./styles.scss";
-import { Group } from "~/components/containers/Group";
-import { Padder } from "~/components/containers/Padder";
-import range from "ramda/es/range";
-import { Comment } from "~/components/node/Comment";
-import { NodePanel } from "~/components/node/NodePanel";
-import { NodeRelated } from "~/components/node/NodeRelated";
-import { Tags } from "~/components/node/Tags";
-import { MenuButton } from "~/components/node/MenuButton";
-import { NodeNoComments } from "~/components/node/NodeNoComments";
-import { InputText } from "~/components/input/InputText";
+import React, { FC } from 'react';
+import range from 'ramda/es/range';
+import { Card } from '~/components/containers/Card';
+import * as styles from './styles.scss';
+import { Group } from '~/components/containers/Group';
+import { Padder } from '~/components/containers/Padder';
+import { Comment } from '~/components/node/Comment';
+import { NodePanel } from '~/components/node/NodePanel';
+import { NodeRelated } from '~/components/node/NodeRelated';
+import { Tags } from '~/components/node/Tags';
+import { MenuButton } from '~/components/node/MenuButton';
+import { NodeNoComments } from '~/components/node/NodeNoComments';
+import { InputText } from '~/components/input/InputText';
 
 interface IProps {}
 
@@ -55,11 +55,11 @@ const ImageExample: FC<IProps> = () => (
 
               <Tags
                 tags={[
-                  { title: "Избранный", feature: "red" },
-                  { title: "Плейлист", feature: "green" },
-                  { title: "Просто" },
-                  { title: "+ фото", feature: "black" },
-                  { title: "+ с музыкой", feature: "black" }
+                  { title: 'Избранный', feature: 'red' },
+                  { title: 'Плейлист', feature: 'green' },
+                  { title: 'Просто' },
+                  { title: '+ фото', feature: 'black' },
+                  { title: '+ с музыкой', feature: 'black' }
                 ]}
               />
 

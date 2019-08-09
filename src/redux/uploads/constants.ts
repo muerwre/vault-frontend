@@ -1,5 +1,5 @@
-import { IFile } from "~/redux/types";
-import { IUploadState, IUploadStatus } from "./reducer";
+import { IFile } from '~/redux/types';
+import { IUploadState, IUploadStatus } from './reducer';
 
 const prefix = 'UPLOAD.';
 
@@ -38,4 +38,4 @@ export const EMPTY_UPLOAD_STATUS: IUploadStatus = {
   thumbnail_url: null,
   type: null,
   temp_id: null,
-}
+};

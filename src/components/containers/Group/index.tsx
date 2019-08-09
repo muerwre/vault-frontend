@@ -18,7 +18,7 @@ const Group: FC<IProps> = ({
   bottom = false,
   wrap = false,
   seamless = false,
- ...props
+  ...props
 }) => (
   <div
     className={classNames(

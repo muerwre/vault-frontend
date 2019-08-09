@@ -1,4 +1,6 @@
-import React, { FC, MouseEventHandler, ReactChild, useCallback, useEffect, useState } from 'react';
+import React, {
+  FC, MouseEventHandler, ReactChild, useCallback, useEffect, useState
+} from 'react';
 // import { DialogPanel } from '~/components/panels/DialogPanel';
 import classNames from 'classnames';
 import { Scroll } from '~/components/containers/Scroll';
@@ -41,7 +43,7 @@ const ScrollDialog: FC<IProps> = ({
   useEffect(() => {
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-  }, []);
+  }, [onResize]);
 
   const onScroll = useCallback(
     ({ target: { scrollTop = 0 } = {} } = {}) => {
@@ -54,7 +56,7 @@ const ScrollDialog: FC<IProps> = ({
     [top_sticky, top_sticky_offset, show_top_sticky, setShowTopSticky]
   );
 
-  useEffect(() => onScroll(), []);
+  useEffect(() => onScroll(), [onScroll]);
   useEffect(() => {
     if (ref && onRefCapture) onRefCapture(ref);
   }, [ref, onRefCapture]);

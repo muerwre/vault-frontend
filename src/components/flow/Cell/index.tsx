@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import * as styles from './styles.scss';
-import classNames = require("classnames");
+
+import classNames = require('classnames');
 
 interface IProps {
   height?: number;
@@ -16,15 +17,15 @@ const Cell: FC<IProps> = ({
   title,
   is_hero,
 }) => (
-    <div
-      className={classNames(styles.cell, { is_hero })}
-      style={{
-        gridRowEnd: `span ${height}`,
-        gridColumnEnd: `span ${width}`,
-      }}
-    >
-      { title && <div className={styles.title}>{title}</div> }
-    </div>
+  <div
+    className={classNames(styles.cell, { is_hero })}
+    style={{
+      gridRowEnd: `span ${height}`,
+      gridColumnEnd: `span ${width}`,
+    }}
+  >
+    { title && <div className={styles.title}>{title}</div> }
+  </div>
 );
 
 export { Cell };

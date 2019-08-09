@@ -1,9 +1,9 @@
-import { createReducer } from "~/utils/reducer";
-import { INode } from "../types";
-import { EMPTY_BLOCK, EMPTY_NODE } from "./constants";
-import { NODE_HANDLERS } from "./handlers";
-import { EMPTY_FILE } from "../uploads/constants";
 import uuid from 'uuid4';
+import { createReducer } from '~/utils/reducer';
+import { INode } from '../types';
+import { EMPTY_BLOCK, EMPTY_NODE } from './constants';
+import { NODE_HANDLERS } from './handlers';
+import { EMPTY_FILE } from '../uploads/constants';
 
 export type INodeState = Readonly<{
   is_loading: boolean;

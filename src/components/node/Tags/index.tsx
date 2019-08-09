@@ -1,7 +1,7 @@
-import React, {FC, HTMLAttributes} from 'react';
-import {TagField} from "~/components/containers/TagField";
-import {ITag} from "~/redux/types";
-import {Tag} from "~/components/node/Tag";
+import React, { FC, HTMLAttributes } from 'react';
+import { TagField } from '~/components/containers/TagField';
+import { ITag } from '~/redux/types';
+import { Tag } from '~/components/node/Tag';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   tags: ITag[];

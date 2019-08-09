@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import classNames from "classnames";
-import * as styles from "./styles.scss";
+import React, { FC } from 'react';
+import classNames from 'classnames';
+import * as styles from './styles.scss';
 
 type IProps = React.HTMLAttributes<HTMLDivElement> & {
   horizontal?: boolean;
@@ -15,14 +15,14 @@ type IProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const Grid: FC<IProps> = ({
   children,
-  className = "",
+  className = '',
   horizontal = false,
   vertical = false,
   square = false,
-  size = "auto",
+  size = 'auto',
   style = {},
-  columns = "auto",
-  rows = "auto",
+  columns = 'auto',
+  rows = 'auto',
   gap = 10,
   stretchy,
   ...props
@@ -37,10 +37,10 @@ const Grid: FC<IProps> = ({
     style={{
       ...style,
       gridTemplateColumns: square
-        ? `repeat(auto-fill, ${(columns !== "auto" && columns) || size})`
+        ? `repeat(auto-fill, ${(columns !== 'auto' && columns) || size})`
         : columns,
       gridTemplateRows: square
-        ? `repeat(auto-fill, ${(rows !== "auto" && rows) || size})`
+        ? `repeat(auto-fill, ${(rows !== 'auto' && rows) || size})`
         : rows,
       gridAutoRows: rows,
       gridAutoColumns: columns,

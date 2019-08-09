@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Cell } from '~/components/flow/Cell';
 import { range } from 'ramda';
+import { Cell } from '~/components/flow/Cell';
 
 import * as styles from './styles.scss';
 

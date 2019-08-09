@@ -2,12 +2,12 @@ import * as React from 'react';
 import * as styles from './styles.scss';
 
 interface ITextInputProps {
-  type?: 'text' | 'password',
-  placeholder?: string,
-  label?: string,
-  value?: string,
+  type?: 'text' | 'password';
+  placeholder?: string;
+  label?: string;
+  value?: string;
 
-  onChange: React.ChangeEventHandler,
+  onChange: React.ChangeEventHandler;
 }
 
 export const TextInput: React.FunctionComponent<ITextInputProps> = ({
@@ -15,15 +15,15 @@ export const TextInput: React.FunctionComponent<ITextInputProps> = ({
   placeholder = '',
   label,
   onChange = () => {},
-  value='',
+  value = '',
 }) => (
   <div
     className={styles.wrapper}
   >
     <div className={styles.container}>
       {
-        label &&
-        <div className={styles.label}>{label}</div>
+        label
+        && <div className={styles.label}>{label}</div>
       }
       <input
         placeholder={placeholder}

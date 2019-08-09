@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 interface IGodRaysProps {
-  raised?: boolean,
+  raised?: boolean;
 }
 
 export class GodRays extends React.Component<IGodRaysProps> {
@@ -30,22 +30,26 @@ export class GodRays extends React.Component<IGodRaysProps> {
       return setTimeout(() => window.requestAnimationFrame(this.draw), 1000);
     }
 
-    const { width, height, rays, particles } = this.state;
+    const {
+      width, height, rays, particles
+    } = this.state;
 
     const ctx = this.canvas.getContext('2d');
 
-    ctx.globalCompositeOperation = "luminosity";
+    ctx.globalCompositeOperation = 'luminosity';
     ctx.clearRect(0, 0, width, height + 100); // clear canvas
     ctx.save();
 
-    rays.map(({ angle, iterator, weight, speed, pulsar, opacity }, index) => {
+    rays.map(({
+      angle, iterator, weight, speed, pulsar, opacity
+    }, index) => {
       const gradient = ctx.createLinearGradient(0, 0, 0, height * 1.3);
       gradient.addColorStop(0.2, `rgba(255, 60, 40, ${opacity * 0.1})`);
-      gradient.addColorStop(1, `rgba(255, 60, 40, 0)`);
+      gradient.addColorStop(1, 'rgba(255, 60, 40, 0)');
 
       const gradient2 = ctx.createLinearGradient(0, 0, 0, height * 1.3);
       gradient2.addColorStop(0.2, `rgba(255, 40, 100, ${opacity * 0.2})`);
-      gradient2.addColorStop(1, "rgba(255, 40, 100, 0)");
+      gradient2.addColorStop(1, 'rgba(255, 40, 100, 0)');
 
       ctx.save();
       ctx.translate(width / 2, -900);
@@ -106,7 +110,7 @@ export class GodRays extends React.Component<IGodRaysProps> {
     this.init();
   }
 
-  render(){
+  render() {
     const { width, height } = this.state;
 
     return (
@@ -119,7 +123,8 @@ export class GodRays extends React.Component<IGodRaysProps> {
         zIndex: -1,
         opacity: 1,
         pointerEvents: 'none',
-      }}>
+      }}
+      >
         <canvas
           width={width}
           height={height + 100}
@@ -128,12 +133,13 @@ export class GodRays extends React.Component<IGodRaysProps> {
             position: 'relative',
             top: -100,
           }}
-          ref={el => { this.canvas = el; }}
+          ref={(el) => { this.canvas = el; }}
         />
       </div>
     );
   }
 
   canvas: HTMLCanvasElement;
+
   inc;
-};
+}

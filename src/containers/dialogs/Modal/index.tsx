@@ -1,10 +1,10 @@
 import React, { Attributes, FC, useCallback } from 'react';
+import { connect } from 'react-redux';
+import ReactDOM from 'react-dom';
 import * as styles from './styles.scss';
 import { IState } from '~/redux/store';
 import * as ACTIONS from '~/redux/modal/actions';
-import { connect } from 'react-redux';
 import { DIALOG_CONTENT, IDialogProps } from '~/redux/modal/constants';
-import ReactDOM from 'react-dom';
 
 const mapStateToProps = ({ modal }: IState) => ({ ...modal });
 const mapDispatchToProps = {

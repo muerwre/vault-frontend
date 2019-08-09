@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import * as styles from './styles.scss';
-import classNames = require("classnames");
-import {ITag} from "~/redux/types";
+import { ITag } from '~/redux/types';
+
+import classNames = require('classnames');
 
 interface IProps {
   title: ITag['title'];

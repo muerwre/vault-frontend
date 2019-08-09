@@ -1,7 +1,7 @@
-import { EMPTY_USER } from "~/redux/auth/constants";
-import { createReducer } from "~/utils/reducer";
-import { IAuthState } from "~/redux/auth/types";
-import { AUTH_USER_HANDLERS } from "~/redux/auth/handlers";
+import { EMPTY_USER } from '~/redux/auth/constants';
+import { createReducer } from '~/utils/reducer';
+import { IAuthState } from '~/redux/auth/types';
+import { AUTH_USER_HANDLERS } from '~/redux/auth/handlers';
 
 const HANDLERS = {
   ...AUTH_USER_HANDLERS,

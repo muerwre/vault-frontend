@@ -14,6 +14,6 @@ type Handlers<State, Types extends string, Actions extends Action<Types>> = {
 export const createReducer = (
   initialState,
   handlers,
-) => (state = initialState, action) => handlers.hasOwnProperty(action.type)
+) => (state = initialState, action) => (handlers.hasOwnProperty(action.type)
   ? handlers[action.type](state, action)
-  : state;
+  : state);

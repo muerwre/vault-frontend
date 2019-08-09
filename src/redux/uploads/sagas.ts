@@ -1,11 +1,15 @@
-import { takeEvery, all, spawn, call, put, take, fork, race } from 'redux-saga/effects';
+import {
+  takeEvery, all, spawn, call, put, take, fork, race
+} from 'redux-saga/effects';
 import { UPLOAD_ACTIONS } from '~/redux/uploads/constants';
-import { uploadUploadFiles, uploadSetStatus, uploadAddStatus, uploadDropStatus, uploadAddFile } from './actions';
+import {
+  uploadUploadFiles, uploadSetStatus, uploadAddStatus, uploadDropStatus, uploadAddFile
+} from './actions';
 import { reqWrapper } from '../auth/sagas';
 import { createUploader, uploadGetThumb, fakeUploader } from '~/utils/uploader';
 import { HTTP_RESPONSES } from '~/utils/api';
 import { VALIDATORS } from '~/utils/validators';
-import { UUID, IFileWithUUID, IResultWithStatus, IFile } from '../types';
+import { UUID, IFileWithUUID, IFile } from '../types';
 
 function* uploadCall({ temp_id, onProgress, file }) {
   return yield call(reqWrapper, fakeUploader, { file: { url: 'some', error: 'cant do this boss' }, onProgress, mustSucceed: true });

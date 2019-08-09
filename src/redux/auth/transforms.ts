@@ -1,5 +1,5 @@
-import { IResultWithStatus } from "~/redux/types";
-import { HTTP_RESPONSES } from "~/utils/api";
+import { IResultWithStatus } from '~/redux/types';
+import { HTTP_RESPONSES } from '~/utils/api';
 
 export const userLoginTransform = ({ status, data, error }: IResultWithStatus<any>): IResultWithStatus<any> => {
   switch (true) {

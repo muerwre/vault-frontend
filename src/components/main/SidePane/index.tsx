@@ -1,7 +1,9 @@
-import React, { FC, LegacyRef, ReactChild, useCallback, useEffect, useState } from 'react';
-import * as styles from './styles.scss';
+import React, {
+  FC, LegacyRef, ReactChild, useCallback, useEffect, useState
+} from 'react';
 import classNames from 'classnames';
-import {Group} from "~/components/containers/Group";
+import * as styles from './styles.scss';
+import { Group } from '~/components/containers/Group';
 
 interface IProps {
 }
@@ -28,8 +30,8 @@ export const SidePane: FC<IProps> = ({
     return () => {
       window.removeEventListener('resize', moveThis);
       document.removeEventListener('DOMContentLoaded', moveThis);
-    }
-  }, []);
+    };
+  }, [moveThis]);
 
   return (
     <div className={styles.pane} style={{ transform: `translate(${left}px, 0px)` }}>

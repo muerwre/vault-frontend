@@ -26,7 +26,6 @@ export const describeArc = (
   startAngle: number = 0,
   endAngle: number = 360,
 ): string => {
-
   const start = polarToCartesian(x, y, radius, endAngle);
   const end = polarToCartesian(x, y, radius, startAngle);
 

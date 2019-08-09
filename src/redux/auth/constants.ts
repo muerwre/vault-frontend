@@ -1,4 +1,4 @@
-import {IToken, IUser} from "~/redux/auth/types";
+import { IToken, IUser } from '~/redux/auth/types';
 
 export const AUTH_USER_ACTIONS = {
   SEND_LOGIN_REQUEST: 'SEND_LOGIN_REQUEST',
@@ -39,11 +39,11 @@ export const EMPTY_USER: IUser = {
 };
 
 export interface IApiUser {
-  id: number,
-  username: string,
-  email: string,
-  role: string,
-  activated: boolean,
-  createdAt: string,
-  updatedAt: string,
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+  activated: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

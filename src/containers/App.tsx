@@ -1,20 +1,22 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { hot } from "react-hot-loader";
-import { ConnectedRouter } from "connected-react-router";
-import { history } from "~/redux/store";
-import { NavLink, Switch, Route, Redirect } from "react-router-dom";
-import { FlowLayout } from "~/containers/flow/FlowLayout";
-import { MainLayout } from "~/containers/main/MainLayout";
-import { ImageExample } from "~/containers/examples/ImageExample";
-import { EditorExample } from "~/containers/examples/EditorExample";
-import { HorizontalExample } from "~/containers/examples/HorizontalExample";
-import { Sprites } from "~/sprites/Sprites";
-import { URLS } from "~/constants/urls";
-import { Modal } from "~/containers/dialogs/Modal";
-import { selectModal } from "~/redux/modal/selectors";
-import { BlurWrapper } from "~/components/containers/BlurWrapper";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { hot } from 'react-hot-loader';
+import { ConnectedRouter } from 'connected-react-router';
+import {
+  NavLink, Switch, Route, Redirect
+} from 'react-router-dom';
+import { history } from '~/redux/store';
+import { FlowLayout } from '~/containers/flow/FlowLayout';
+import { MainLayout } from '~/containers/main/MainLayout';
+import { ImageExample } from '~/containers/examples/ImageExample';
+import { EditorExample } from '~/containers/examples/EditorExample';
+import { HorizontalExample } from '~/containers/examples/HorizontalExample';
+import { Sprites } from '~/sprites/Sprites';
+import { URLS } from '~/constants/urls';
+import { Modal } from '~/containers/dialogs/Modal';
+import { selectModal } from '~/redux/modal/selectors';
+import { BlurWrapper } from '~/components/containers/BlurWrapper';
 
 const mapStateToProps = selectModal;
 const mapDispatchToProps = {};

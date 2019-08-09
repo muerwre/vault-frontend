@@ -1,26 +1,27 @@
 module.exports = {
-  extends: ['airbnb', 'airbnb-base', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  extends: ['airbnb', 'airbnb-base', 'prettier/@typescript-eslint', 'plugin:@typescript-eslint/recommended'],
   // "parser": "babel-eslint",
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
+      jsx: true,
     },
-    project: './tsconfig.json'
+    project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'react', 'jsx-a11y', 'import', 'react-hooks', 'prettier'],
+  plugins: ['@typescript-eslint', 'react', 'jsx-a11y', 'import', 'react-hooks'],
   settings: {
     'import/resolver': {
       // node: {
       //   extensions: ['.js', '.jsx', '.ts', '.tsx'],
       // },
-      typescript: {}
-    }
+      typescript: {},
+    },
   },
   rules: {
     indent: ['error', 2],
     '@typescript-eslint/explicit-function-return-type': 0,
-    '@typescript-eslint/indent': ['error', 2],
+    '@typescript-eslint/indent': ['warn', 2],
+    "indent": "off",
     'comma-dangle': 0,
     'no-restricted-syntax': 1,
     'react/prop-types': 0,
@@ -44,16 +45,16 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'no-nested-ternary': 1,
-    'arrow-parens': 0,
     'import/prefer-default-export': 0,
-    'no-return-await': 0,
-    'prefer-promise-reject-errors': 0,
-    'import/order': 0
+    'max-line-length': [true, 100],
+    // 'max-len': 100,
+    // 'max-len': { "code": 100 },
+    'max-len': ["warn", { "code": 100 }]
   },
   globals: {
     document: false,
     window: false,
     HTMLInputElement: false,
-    HTMLDivElement: false
-  }
+    HTMLDivElement: false,
+  },
 };

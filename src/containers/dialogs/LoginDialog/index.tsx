@@ -1,4 +1,7 @@
-import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
+import React, {
+  FC, FormEvent, useCallback, useEffect, useState
+} from 'react';
+import { connect } from 'react-redux';
 import { ScrollDialog } from '../ScrollDialog';
 import { IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
@@ -7,9 +10,8 @@ import { InputText } from '~/components/input/InputText';
 import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
 import * as styles from './styles.scss';
-import { selectAuthLogin } from "~/redux/auth/selectors";
+import { selectAuthLogin } from '~/redux/auth/selectors';
 import * as ACTIONS from '~/redux/auth/actions';
-import { connect } from "react-redux";
 
 const mapStateToProps = selectAuthLogin;
 
@@ -20,7 +22,9 @@ const mapDispatchToProps = {
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
 
-const LoginDialogUnconnected: FC<IProps> = ({ onRequestClose, error, userSendLoginRequest, userSetLoginError }) => {
+const LoginDialogUnconnected: FC<IProps> = ({
+  onRequestClose, error, userSendLoginRequest, userSetLoginError
+}) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -31,7 +35,7 @@ const LoginDialogUnconnected: FC<IProps> = ({ onRequestClose, error, userSendLog
 
   useEffect(() => {
     if (error) userSetLoginError(null);
-  }, [username, password]);
+  }, [username, password, error, userSetLoginError]);
 
   const buttons = (
     <Padder>

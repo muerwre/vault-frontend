@@ -4,7 +4,7 @@ import * as styles from './styles.scss';
 interface IProps {}
 
 const NodeLayout: FC<IProps> = () => (
-  <div></div>
+  <div />
 );
 
 export { NodeLayout };

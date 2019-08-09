@@ -4,8 +4,8 @@ import React, {
   useCallback,
   useState, useEffect,
 } from 'react';
-import * as styles from '~/styles/inputs.scss';
 import classNames from 'classnames';
+import * as styles from '~/styles/inputs.scss';
 import { Icon } from '~/components/input/Icon';
 import { IInputTextProps } from '~/redux/types';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
@@ -31,8 +31,8 @@ const InputText: FC<IInputTextProps> = ({
     [handler],
   );
 
-  const onFocus = useCallback(() => setFocused(true), [focused]);
-  const onBlur = useCallback(() => setFocused(false), [focused]);
+  const onFocus = useCallback(() => setFocused(true), []);
+  const onBlur = useCallback(() => setFocused(false), []);
 
   useEffect(() => {
     if (onRef) onRef(inner_ref);
@@ -50,7 +50,8 @@ const InputText: FC<IInputTextProps> = ({
         [styles.has_error]: !!error,
         [styles.has_loader]: is_loading,
       },
-    )}>
+    )}
+    >
       <div className={styles.input}>
         <input
           type="text"

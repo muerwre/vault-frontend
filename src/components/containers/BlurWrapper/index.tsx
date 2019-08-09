@@ -1,5 +1,5 @@
-import React, { AllHTMLAttributes, FC } from "react";
-import * as styles from "./styles.scss";
+import React, { AllHTMLAttributes, FC } from 'react';
+import * as styles from './styles.scss';
 
 type IProps = AllHTMLAttributes<HTMLDivElement> & { is_blurred: boolean };
 
