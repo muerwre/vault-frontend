@@ -2,8 +2,9 @@ import { IBlock, INode } from '../types';
 
 export const EMPTY_BLOCK: IBlock = {
   type: null,
-  temp_ids: [],
-  attaches: [],
+  files: [],
+  content: null,
+  embeds: [],
 };
 
 export const EMPTY_NODE: INode = {
@@ -23,6 +24,6 @@ export const EMPTY_NODE: INode = {
     flow: {
       display: 'single',
       show_description: false,
-    }
+    },
   },
 };

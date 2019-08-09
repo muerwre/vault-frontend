@@ -6,7 +6,7 @@ import { Logo } from '~/components/main/Logo';
 
 import * as style from './style.scss';
 import { Filler } from '~/components/containers/Filler';
-import { selectUser } from '~/redux/auth/selectors';
+import { selectUser, selectAuthLogin } from '~/redux/auth/selectors';
 import { Group } from '~/components/containers/Group';
 
 const mapStateToProps = selectUser;
@@ -17,10 +17,7 @@ const mapDispatchToProps = {
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const HeaderUnconnected: React.FunctionComponent<IProps> = ({
-  username,
-  is_user
-}) => (
+const HeaderUnconnected: React.FunctionComponent<IProps> = ({ username, is_user }) => (
   <div className="default_container head_container">
     <div className={style.container}>
       <Logo />
@@ -36,10 +33,19 @@ const HeaderUnconnected: React.FunctionComponent<IProps> = ({
 
       <Filler />
 
-      <Group horizontal className={style.user_button}>
-        <div>username</div>
-        <div className={style.user_avatar} />
-      </Group>
+      {is_user && (
+        <Group horizontal className={style.user_button}>
+          <div>{username}</div>
+          <div className={style.user_avatar} />
+        </Group>
+      )}
+
+      {!is_user && (
+        <Group horizontal className={style.user_button}>
+          <div>ВДОХНУТЬ</div>
+          <div className={style.user_avatar} />
+        </Group>
+      )}
     </div>
   </div>
 );

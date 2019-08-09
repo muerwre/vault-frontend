@@ -49,6 +49,13 @@ module.exports = {
     // 'max-len': { "code": 100 },
     'max-len': ["warn", { "code": 100 }],
     "template-curly-spacing": "off",
+    "comma-dangle": ["warn", {
+      "arrays": "never",
+      "objects": "always",
+      "imports": "never",
+      "exports": "never",
+      "functions": "never"
+    }],
     indent: "off"
   },
   globals: {
