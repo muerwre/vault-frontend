@@ -47,11 +47,9 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
   useCloseOnEscape(onRequestClose);
 
-  console.log({ error });
-
   return (
     <form onSubmit={onSubmit}>
-      <ScrollDialog buttons={buttons} width={260} error={error}>
+      <ScrollDialog buttons={buttons} width={260} error={error} onClose={onRequestClose}>
         <Padder>
           <div className={styles.wrap}>
             <Group>

@@ -21,9 +21,8 @@ const mapDispatchToProps = {
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
-  const onLogin = useCallback(() => {
-    showDialog(DIALOGS.LOGIN);
-  }, [showDialog]);
+  const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
+  const onOpenEditor = useCallback(() => showDialog(DIALOGS.EDITOR), [showDialog]);
 
   return (
     <div className="default_container head_container">
@@ -35,8 +34,7 @@ const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
         <div className={style.plugs}>
           <Link to="/">flow</Link>
           <Link to="/examples/image">image</Link>
-          <Link to="/examples/edit">editor</Link>
-          <Link to="/examples/horizontal">horizontal</Link>
+          <div onClick={onOpenEditor}>editor</div>
         </div>
 
         <Filler />

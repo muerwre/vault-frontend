@@ -16,7 +16,8 @@
   font: $font_16_medium;
   text-transform: uppercase;
 
-  > a {
+  > a,
+  > div {
     display: flex;
     align-items: center;
     position: relative;
