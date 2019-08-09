@@ -6,7 +6,6 @@
   height: 96px;
 }
 
-
 .spacer {
   flex: 1;
 }
@@ -49,9 +48,10 @@
     &:last-child {
       padding-right: 0;
 
-      &::after { display: none; }
+      &::after {
+        display: none;
+      }
     }
-
   }
 }
 
@@ -68,6 +68,7 @@
   text-transform: uppercase;
   flex: 0 !important;
   opacity: 0.3;
+  cursor: pointer;
 }
 
 .user_avatar {

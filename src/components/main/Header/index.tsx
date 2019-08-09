@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { push as historyPush } from 'connected-react-router';
 import { Link } from 'react-router-dom';
@@ -6,49 +6,57 @@ import { Logo } from '~/components/main/Logo';
 
 import * as style from './style.scss';
 import { Filler } from '~/components/containers/Filler';
-import { selectUser, selectAuthLogin } from '~/redux/auth/selectors';
+import { selectUser } from '~/redux/auth/selectors';
 import { Group } from '~/components/containers/Group';
+import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import { DIALOGS } from '~/redux/modal/constants';
 
 const mapStateToProps = selectUser;
 
 const mapDispatchToProps = {
-  push: historyPush
+  push: historyPush,
+  showDialog: MODAL_ACTIONS.modalShowDialog,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const HeaderUnconnected: React.FunctionComponent<IProps> = ({ username, is_user }) => (
-  <div className="default_container head_container">
-    <div className={style.container}>
-      <Logo />
+const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
+  const onLogin = useCallback(() => {
+    showDialog(DIALOGS.LOGIN);
+  }, [showDialog]);
 
-      <Filler />
+  return (
+    <div className="default_container head_container">
+      <div className={style.container}>
+        <Logo />
 
-      <div className={style.plugs}>
-        <Link to="/">flow</Link>
-        <Link to="/examples/image">image</Link>
-        <Link to="/examples/edit">editor</Link>
-        <Link to="/examples/horizontal">horizontal</Link>
+        <Filler />
+
+        <div className={style.plugs}>
+          <Link to="/">flow</Link>
+          <Link to="/examples/image">image</Link>
+          <Link to="/examples/edit">editor</Link>
+          <Link to="/examples/horizontal">horizontal</Link>
+        </div>
+
+        <Filler />
+
+        {is_user && (
+          <Group horizontal className={style.user_button}>
+            <div>{username}</div>
+            <div className={style.user_avatar} />
+          </Group>
+        )}
+
+        {!is_user && (
+          <Group horizontal className={style.user_button} onClick={onLogin}>
+            <div>ВДОХ</div>
+          </Group>
+        )}
       </div>
-
-      <Filler />
-
-      {is_user && (
-        <Group horizontal className={style.user_button}>
-          <div>{username}</div>
-          <div className={style.user_avatar} />
-        </Group>
-      )}
-
-      {!is_user && (
-        <Group horizontal className={style.user_button}>
-          <div>ВДОХНУТЬ</div>
-          <div className={style.user_avatar} />
-        </Group>
-      )}
     </div>
-  </div>
-);
+  );
+};
 
 const Header = connect(
   mapStateToProps,

@@ -35,7 +35,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
   useEffect(() => {
     if (error) userSetLoginError(null);
-  }, [username, password, error, userSetLoginError]);
+  }, [username, password]);
 
   const buttons = (
     <Padder>
