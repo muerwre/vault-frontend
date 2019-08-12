@@ -1,4 +1,5 @@
 import { takeEvery, all, spawn, call, put, take, fork, race } from 'redux-saga/effects';
+import { postUploadFile } from './api';
 import { UPLOAD_ACTIONS } from '~/redux/uploads/constants';
 import {
   uploadUploadFiles, uploadSetStatus, uploadAddStatus, uploadDropStatus, uploadAddFile
@@ -9,8 +10,10 @@ import { HTTP_RESPONSES } from '~/utils/api';
 import { VALIDATORS } from '~/utils/validators';
 import { UUID, IFileWithUUID, IFile } from '../types';
 
+
 function* uploadCall({  temp_id, onProgress, file }) {
-  return yield call(reqWrapper, fakeUploader, { file: { url: 'some', error: 'cant do this boss' }, onProgress, mustSucceed: true });
+  // return yield call(reqWrapper, fakeUploader, { file: { url: 'some', error: 'cant do this boss' }, onProgress, mustSucceed: true });
+  return yield call(reqWrapper, postUploadFile, { file: { url: 'some', error: 'cant do this boss' }, onProgress, mustSucceed: true });
 }
 
 function* onUploadProgress(chan) {

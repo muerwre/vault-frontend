@@ -3,5 +3,6 @@ export const API = {
   USER: {
     LOGIN: '/auth/login',
     ME: '/auth/me', //
-  }
+    UPLOAD: (target, type) => `/upload/${target}/${type}`,
+  },
 };
