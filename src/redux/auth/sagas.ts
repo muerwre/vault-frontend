@@ -1,5 +1,5 @@
 import {
-  call, put, takeLatest, select
+ call, put, takeLatest, select,
 } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
 import { push } from 'connected-react-router';
@@ -15,9 +15,13 @@ import { IResultWithStatus } from '../types';
 import { IUser } from './types';
 
 export function* reqWrapper(requestAction, props = {}): ReturnType<typeof requestAction> {
-  const { access } = yield select(selectToken);
+  const access = yield select(selectToken);
+
+  console.log('firing reqWrapper');
 
   const result = yield call(requestAction, { access, ...props });
+
+  console.log('at reqWrapper', { result });
 
   if (result && result.status === 401) {
     yield put(push(URLS.BASE));
@@ -26,15 +30,29 @@ export function* reqWrapper(requestAction, props = {}): ReturnType<typeof reques
     return result;
   }
 
+  console.log('reqWrapper will return');
+  
   return result;
 }
 
-function* sendLoginRequestSaga({ username, password }: ReturnType<typeof ActionCreators.userSendLoginRequest>) {
+function* sendLoginRequestSaga({
+  username,
+  password,
+}: ReturnType<typeof ActionCreators.userSendLoginRequest>) {
   if (!username || !password) return;
 
-  const { error, data: { token, user } }: IResultWithStatus<{ token: string; user: IUser }> = yield call(apiUserLogin, { username, password });
+  const {
+    error,
+    data: { token, user },
+  }: IResultWithStatus<{ token: string; user: IUser }> = yield call(apiUserLogin, {
+    username,
+    password,
+  });
 
-  if (error) { yield put(userSetLoginError(error)); return; }
+  if (error) {
+    yield put(userSetLoginError(error));
+    return;
+  }
 
   yield put(authSetToken(token));
   yield put(authSetUser({ ...user, is_user: true }));

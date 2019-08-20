@@ -1,5 +1,5 @@
 import React, {
-  FC, useState, useCallback, useEffect
+ FC, useState, useCallback, useEffect,
 } from 'react';
 import { connect } from 'react-redux';
 import assocPath from 'ramda/es/assocPath';
@@ -20,6 +20,7 @@ import { moveArrItem } from '~/utils/fn';
 import { IFile, IFileWithUUID } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
+import { UPLOAD_TARGETS, UPLOAD_TYPES, UPLOAD_SUBJECTS } from '~/redux/uploads/constants';
 
 const mapStateToProps = (state) => {
   const { editor } = selectNode(state);
@@ -35,19 +36,29 @@ const mapDispatchToProps = {
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const EditorDialogUnconnected: FC<IProps> = ({
-  onRequestClose, editor, uploadUploadFiles, files, statuses
+  onRequestClose,
+  editor,
+  uploadUploadFiles,
+  files,
+  statuses,
 }) => {
   const [data, setData] = useState(editor);
   const eventPreventer = useCallback(event => event.preventDefault(), []);
   const [temp, setTemp] = useState([]);
 
-  const onFileMove = useCallback((old_index: number, new_index: number) => {
-    setData(assocPath(['files'], moveArrItem(old_index, new_index, data.files), data));
-  }, [data, setData]);
+  const onFileMove = useCallback(
+    (old_index: number, new_index: number) => {
+      setData(assocPath(['files'], moveArrItem(old_index, new_index, data.files), data));
+    },
+    [data, setData]
+  );
 
-  const onFileAdd = useCallback((file: IFile) => {
-    setData(assocPath(['files'], append(file, data.files), data));
-  }, [data, setData]);
+  const onFileAdd = useCallback(
+    (file: IFile) => {
+      setData(assocPath(['files'], append(file, data.files), data));
+    },
+    [data, setData]
+  );
 
   const onDrop = useCallback(
     (event: React.DragEvent<HTMLFormElement>) => {
@@ -59,7 +70,9 @@ const EditorDialogUnconnected: FC<IProps> = ({
         (file: File): IFileWithUUID => ({
           file,
           temp_id: uuid(),
-          subject: 'editor'
+          subject: UPLOAD_SUBJECTS.EDITOR,
+          target: UPLOAD_TARGETS.NODES,
+          type: UPLOAD_TYPES.IMAGE,
         })
       );
 
@@ -81,7 +94,9 @@ const EditorDialogUnconnected: FC<IProps> = ({
         (file: File): IFileWithUUID => ({
           file,
           temp_id: uuid(),
-          subject: 'editor'
+          subject: UPLOAD_SUBJECTS.EDITOR,
+          target: UPLOAD_TARGETS.NODES,
+          type: UPLOAD_TYPES.IMAGE,
         })
       );
 
@@ -124,11 +139,7 @@ const EditorDialogUnconnected: FC<IProps> = ({
 
   const buttons = (
     <Padder style={{ position: 'relative' }}>
-      <EditorPanel
-        data={data}
-        setData={setData}
-        onUpload={onInputChange}
-      />
+      <EditorPanel data={data} setData={setData} onUpload={onInputChange} />
 
       <Group horizontal>
         <InputText title="Название" value={data.title} handler={setTitle} />
