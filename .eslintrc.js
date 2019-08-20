@@ -1,6 +1,5 @@
 module.exports = {
-  extends: ['airbnb', 'airbnb-base', 'prettier/@typescript-eslint', 'plugin:@typescript-eslint/recommended'],
-  // "parser": "babel-eslint",
+  extends: ['plugin:@typescript-eslint/recommended', 'prettier/@typescript-eslint', 'airbnb', 'airbnb-base'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -11,15 +10,12 @@ module.exports = {
   plugins: ['@typescript-eslint', 'react', 'jsx-a11y', 'import', 'react-hooks'],
   settings: {
     'import/resolver': {
-      // node: {
-      //   extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      // },
       typescript: {},
     },
   },
   rules: {
     '@typescript-eslint/explicit-function-return-type': 0,
-    '@typescript-eslint/indent': ['warn', 2],
+    // '@typescript-eslint/indent': ['warn', 2],
     'comma-dangle': 0,
     'no-restricted-syntax': 1,
     'react/prop-types': 0,
@@ -63,5 +59,6 @@ module.exports = {
     window: false,
     HTMLInputElement: false,
     HTMLDivElement: false,
+    FormData: false,
   },
 };

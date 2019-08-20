@@ -68,7 +68,8 @@ export interface IFile {
 export interface IFileWithUUID {
   temp_id?: UUID;
   file: File;
-  subject: string;
+  target: string;
+  type: string;
 }
 
 export interface IBlock {
@@ -107,3 +108,5 @@ export interface INode {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export type IUploadProgressHandler = (current: number, total: number) => void;

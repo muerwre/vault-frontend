@@ -1,4 +1,6 @@
-import { IResultWithStatus, IFile } from '~/redux/types';
+import {
+ IResultWithStatus, IFile, IUploadProgressHandler, IFileWithUUID,
+} from '~/redux/types';
 import { api, configWithToken } from '~/utils/api';
 import { API } from '~/constants/api';
 
@@ -7,11 +9,9 @@ export const postUploadFile = ({
   file,
   target = 'others',
   type = 'image',
-}: {
-access: string;
-file: File;
-target: string;
-type: string;
+}: IFileWithUUID & {
+  access: string;
+  onProgress: IUploadProgressHandler;
 }): Promise<IResultWithStatus<IFile>> => {
   const data = new FormData();
   data.append('file', file);
