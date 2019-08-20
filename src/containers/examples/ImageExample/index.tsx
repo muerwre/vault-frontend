@@ -18,7 +18,7 @@ const ImageExample: FC<IProps> = () => (
     <div className={styles.image_container}>
       <img
         className={styles.image}
-        src="http://37.192.131.144/full/attached/2017/11/f01fdaaea789915284757634baf7cd11.jpg"
+        src="http://37.192.131.144/full/attached/2019/08/e4fb2a1d0a2e20d499aaa1f5f83a7115.jpg"
         alt=""
       />
     </div>
