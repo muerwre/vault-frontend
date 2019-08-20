@@ -37,14 +37,17 @@
 }
 
 .buttons {
-  height: 54px;
-  border-radius: $radius $radius 0 0;
-  background: linear-gradient(176deg, #f42a00, #5c1085);
-  position: absolute;
-  bottom: 0;
-  right: 10px;
-  width: 270px;
-  display: flex;
+  flex: 0;
+  padding-right: $gap;
+  fill: transparentize(white, 0.7);
+  //height: 54px;
+  //border-radius: $radius $radius 0 0;
+  //background: linear-gradient(176deg, #f42a00, #5c1085);
+  //position: absolute;
+  //bottom: 0;
+  //right: 10px;
+  //width: 270px;
+  //display: flex;
 }
 
 .mark {

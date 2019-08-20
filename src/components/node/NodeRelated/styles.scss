@@ -1,7 +1,8 @@
 .wrap {
-  padding: $gap;
-  background: transparentize(black, 0.8);
+  // padding: $gap;
+  //background: transparentize(black, 0.8);
   border-radius: $panel_radius;
+  padding: $gap 0;
 }
 
 .grid {
@@ -14,7 +15,7 @@
 }
 
 .item {
-  background: #222222;
+  background: darken($content_bg, 2%);
   padding-bottom: 100%;
   border-radius: $cell_radius;
 }
@@ -29,6 +30,7 @@
 }
 
 .line {
+  display: none;
   flex: 1;
   height: 2px;
   background: transparentize(white, 0.95);

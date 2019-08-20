@@ -38,16 +38,6 @@ const ImageExample: FC<IProps> = () => (
 
           <div className={styles.panel}>
             <Group style={{ flex: 1 }}>
-              <Padder className={styles.buttons}>
-                <Group>
-                  <MenuButton title="На главной" description="плывет по течению" icon="star" />
-
-                  <MenuButton title="Видно всем" icon="star" />
-
-                  <MenuButton title="Редактировать" icon="star" />
-                </Group>
-              </Padder>
-
               <Tags
                 tags={[
                   { title: 'Избранный', feature: 'red' },
@@ -70,3 +60,15 @@ const ImageExample: FC<IProps> = () => (
 );
 
 export { ImageExample };
+
+/*
+<Padder className={styles.buttons}>
+  <Group>
+    <MenuButton title="На главной" description="плывет по течению" icon="star" />
+
+    <MenuButton title="Видно всем" icon="star" />
+
+    <MenuButton title="Редактировать" icon="star" />
+  </Group>
+</Padder>
+ */

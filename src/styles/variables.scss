@@ -101,3 +101,24 @@ $input_shadow_filled: $input_shadow;
     touch-action: none;
   }
 }
+
+@mixin phone {
+  @content;
+}
+
+@mixin tablet {
+  @media (max-width: 599px) { @content; }
+}
+
+@mixin vertical_at_tablet {
+  @media (max-width: 599px) {
+    flex-direction: column !important;
+
+    & > * {
+      margin: $gap/2 0 !important;
+
+      &:first-child { margin-top: 0 !important; }
+      &:last-child { margin-bottom: 0 !important; }
+    }
+  }
+}
