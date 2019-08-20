@@ -1,12 +1,13 @@
 .wrap {
-  background: $node_title_background;
+  // background: $node_title_background;
+  background: $content_bg;
   padding: $gap;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: stretch;
-  border-radius: $cell_radius $cell_radius 0 0;
-  box-shadow: transparentize(white, 0.97) 0 1px, inset transparentize(white, 0.97) 0 1px;
+  border-radius: $radius $radius 0 0;
+  //box-shadow: transparentize(white, 0.97) 0 1px, inset transparentize(white, 0.97) 0 1px;
   position: relative;
   margin-top: -$radius;
 }
