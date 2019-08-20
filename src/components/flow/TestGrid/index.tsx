@@ -6,31 +6,10 @@ import * as styles from './styles.scss';
 
 export const TestGrid = () => (
   <div>
-    <div
-      style={{
-        // gridRow: "1 / 2",
-        // gridColumn: "1 / -1",
-        background: '#222222',
-        borderRadius: 6,
-        height: 300,
-        marginBottom: 4,
-        display: 'flex',
-      }}
-    >
-      HERO
-    </div>
-
     <div className={styles.grid_test}>
-      <div
-        style={{
-          gridRow: '1 / 3',
-          gridColumn: '-2 / -1',
-          background: '#090909',
-          borderRadius: 4,
-        }}
-      >
-        STAMP
-      </div>
+      <div className={styles.hero}>HERO</div>
+
+      <div className={styles.stamp}>STAMP</div>
 
       {range(1, 20).map(el => (
         <Cell

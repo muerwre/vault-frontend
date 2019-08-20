@@ -10,17 +10,16 @@ import { NodeRelated } from '~/components/node/NodeRelated';
 import { Tags } from '~/components/node/Tags';
 import { MenuButton } from '~/components/node/MenuButton';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { InputText } from '~/components/input/InputText';
 
 interface IProps {}
 
 const ImageExample: FC<IProps> = () => (
   <Card className={styles.node} seamless>
-    <InputText />
     <div className={styles.image_container}>
       <img
         className={styles.image}
         src="http://37.192.131.144/full/attached/2017/11/f01fdaaea789915284757634baf7cd11.jpg"
+        alt=""
       />
     </div>
 
@@ -41,11 +40,7 @@ const ImageExample: FC<IProps> = () => (
             <Group style={{ flex: 1 }}>
               <Padder className={styles.buttons}>
                 <Group>
-                  <MenuButton
-                    title="На главной"
-                    description="плывет по течению"
-                    icon="star"
-                  />
+                  <MenuButton title="На главной" description="плывет по течению" icon="star" />
 
                   <MenuButton title="Видно всем" icon="star" />
 
@@ -59,7 +54,7 @@ const ImageExample: FC<IProps> = () => (
                   { title: 'Плейлист', feature: 'green' },
                   { title: 'Просто' },
                   { title: '+ фото', feature: 'black' },
-                  { title: '+ с музыкой', feature: 'black' }
+                  { title: '+ с музыкой', feature: 'black' },
                 ]}
               />
 
