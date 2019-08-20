@@ -2,14 +2,16 @@ $red: #ff3344;
 $yellow: #ffd60f;
 $dark_blue: #3c75ff;
 $blue: #3ca1ff;
-$green: #00d2b9;
+ $green: #00d2b9;
+//$green: #00503c;
 $olive: #8bc12a;
 $orange: #ff7549;
 $grass: #41800d;
+$wisegreen: #007962;
 
 $red_gradient: linear-gradient(165deg, $orange -50%, $red 150%);
 $blue_gradient: linear-gradient(170deg, $green, $dark_blue);
-$green_gradient: linear-gradient(170deg, $olive -20%, $grass 120%);
+$green_gradient: linear-gradient(170deg, adjust_hue($wisegreen, 15deg) 0%, $wisegreen 100%);
 $purple_gradient: linear-gradient(170deg, $red, $dark_blue);
 $cyan_gradient: linear-gradient(260deg, #3c75ff -50%, #7b2653 150%);
 
