@@ -23,13 +23,10 @@ type IProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps> & {
 const Component: FC<IProps> = ({ is_shown }) => (
   <ConnectedRouter history={history}>
     <BlurWrapper is_blurred={is_shown}>
-      <Modal />
-      <Sprites />
-
-      <Switch>
-
-
         <MainLayout>
+          <Modal />
+          <Sprites />
+
           <Switch>
             <Route exact path={URLS.BASE} component={FlowLayout} />
             <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
@@ -39,7 +36,6 @@ const Component: FC<IProps> = ({ is_shown }) => (
             <Redirect to="/" />
           </Switch>
         </MainLayout>
-      </Switch>
     </BlurWrapper>
   </ConnectedRouter>
 );

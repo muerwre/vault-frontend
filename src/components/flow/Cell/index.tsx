@@ -23,7 +23,7 @@ const Cell: FC<IProps> = ({
   <div
     className={
       classNames(
-        styles.cell, 
+        styles.cell,
         `vert-${height}`,
         `hor-${width}`,
         { is_text },
@@ -33,8 +33,11 @@ const Cell: FC<IProps> = ({
       // gridColumnEnd: `span ${width}`,
     }}
   >
-    {is_text && <div className={styles.text}>{TEXTS.LOREM_IPSUM}</div>}
-    { title && <div className={styles.title}>{title}</div> }
+    {is_text && <div className={styles.text}>
+      <div className={styles.text_title}>{title}</div>
+      {TEXTS.LOREM_IPSUM}
+      </div>}
+    {title && <div className={styles.title}>{title}</div>}
   </div>
 );
 

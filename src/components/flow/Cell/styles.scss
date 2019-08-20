@@ -14,34 +14,64 @@
     }
   }
 
+  &:global(.is_text) {
+    .title {
+      display: none;
+    }
+  }
+
   @include outer_shadow();
 }
 
 .text {
-  line-height: 1.6em;
-  font-size: 18px;
-  font: $font_18_regular;
+  font: $font_16_regular;
+  line-height: 1.3em;
+  letter-spacing: 0.5px;
   position: absolute;
   top: 0;
   left: 0;
   padding: $gap;
+  background: $content_bg;
+  height: 100%;
+  overflow: hidden;
+
+  &::after {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    pointer-events: none;
+    touch-action: none;
+    background: linear-gradient(transparentize($content_bg, 1), $content_bg 70px);
+    z-index: 1;
+    border-radius: 0 0 $radius $radius;
+  }
 }
 
-.title {
+.title, .text_title {
   font: $font_cell_title;
 
   text-transform: uppercase;
-  height: 1em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 0 $gap;
 
+
+  box-sizing: border-box;
+}
+
+.title {
+  padding: 0 $gap;
   position: absolute;
   bottom: $gap;
   left: 0;
   width: 100%;
-  box-sizing: border-box;
+}
+
+.text_title {
+  margin-bottom: $gap / 2;
 }
 
 :global {
