@@ -18,12 +18,12 @@
     width: 30px;
     height: 30px;
     box-sizing: border-box;
-    opacity: .3;
     cursor: pointer;
-    transition: opacity 0.25s;
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: .5;
+    transition: opacity 0.25s;
 
     &:hover {
       opacity: 1;
@@ -37,6 +37,12 @@
       // background: white;
       border-radius: 8px;
       box-shadow: inset white 0 0 0 2px;
+    }
+
+    &:global(.is_active) {
+      &::after {
+        background: white;
+      }
     }
   }
 }

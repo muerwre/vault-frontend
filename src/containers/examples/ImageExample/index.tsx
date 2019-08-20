@@ -15,7 +15,7 @@ interface IProps {}
 
 const ImageExample: FC<IProps> = () => (
   <Card className={styles.node} seamless>
-    <ImageSwitcher />
+    <ImageSwitcher total={5} current={2} />
 
     <div className={styles.image_container}>
       <img
