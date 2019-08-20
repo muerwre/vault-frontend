@@ -27,10 +27,11 @@ const Component: FC<IProps> = ({ is_shown }) => (
       <Sprites />
 
       <Switch>
-        <Route exact path={URLS.BASE} component={FlowLayout} />
+
 
         <MainLayout>
           <Switch>
+            <Route exact path={URLS.BASE} component={FlowLayout} />
             <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
             <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
             <Route path="/examples/horizontal" component={HorizontalExample} />

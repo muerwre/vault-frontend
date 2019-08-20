@@ -4,8 +4,5 @@ import * as styles from './styles.scss';
 import { Header } from '~/components/main/Header';
 
 export const FlowLayout = () => (
-  <div className={styles.wrap}>
-    <Header />
     <TestGrid />
-  </div>
 );

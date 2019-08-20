@@ -25,33 +25,31 @@ const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
   const onOpenEditor = useCallback(() => showDialog(DIALOGS.EDITOR), [showDialog]);
 
   return (
-    <div>
-      <div className={style.container}>
-        <Logo />
+    <div className={style.container}>
+      <Logo />
 
-        <Filler />
+      <Filler />
 
-        <div className={style.plugs}>
-          <Link to="/">flow</Link>
-          <Link to="/examples/image">image</Link>
-          <div onClick={onOpenEditor}>editor</div>
-        </div>
-
-        <Filler />
-
-        {is_user && (
-          <Group horizontal className={style.user_button}>
-            <div>{username}</div>
-            <div className={style.user_avatar} />
-          </Group>
-        )}
-
-        {!is_user && (
-          <Group horizontal className={style.user_button} onClick={onLogin}>
-            <div>ВДОХ</div>
-          </Group>
-        )}
+      <div className={style.plugs}>
+        <Link to="/">flow</Link>
+        <Link to="/examples/image">image</Link>
+        <div onClick={onOpenEditor}>editor</div>
       </div>
+
+      <Filler />
+
+      {is_user && (
+        <Group horizontal className={style.user_button}>
+          <div>{username}</div>
+          <div className={style.user_avatar} />
+        </Group>
+      )}
+
+      {!is_user && (
+        <Group horizontal className={style.user_button} onClick={onLogin}>
+          <div>ВДОХ</div>
+        </Group>
+      )}
     </div>
   );
 };

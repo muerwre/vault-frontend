@@ -5,9 +5,9 @@ import { Header } from '~/components/main/Header';
 
 export const MainLayout = ({ children }) => (
   <div className={styles.wrapper}>
-    <Header />
-
     <div className={styles.content}>
+      <Header />
+
       {children}
     </div>
   </div>
