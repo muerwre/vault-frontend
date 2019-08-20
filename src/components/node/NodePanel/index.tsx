@@ -15,9 +15,13 @@ const NodePanel: FC<IProps> = () => (
       </Filler>
     </Group>
 
-    <Group horizontal className={styles.buttons}>
+    <div className={styles.buttons}>
+      <Icon icon="edit" size={24} />
+
+      <div className={styles.sep} />
+
       <Icon icon="heart" size={24} />
-    </Group>
+    </div>
   </div>
 );
 
