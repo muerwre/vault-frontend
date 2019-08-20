@@ -12,15 +12,21 @@ interface IProps {
 }
 
 const ImageUpload: FC<IProps> = ({
-  thumb,
-  id,
-  progress,
-  is_uploading,
+ thumb, id, progress, is_uploading,
 }) => (
   <div className={styles.wrap}>
     <div className={classNames(styles.thumb_wrap, { is_uploading })}>
-      {thumb && <div className={styles.thumb} style={{ background: `url("${thumb}")` }}>{id}</div>}
-      {is_uploading && <div className={styles.progress}><ArcProgress size={72} progress={progress} /></div>}
+      {thumb && (
+        <div
+          className={styles.thumb}
+          style={{ backgroundImage: `url("${process.env.API_HOST}${thumb}")` }}
+        />
+      )}
+      {is_uploading && (
+        <div className={styles.progress}>
+          <ArcProgress size={72} progress={progress} />
+        </div>
+      )}
     </div>
   </div>
 );

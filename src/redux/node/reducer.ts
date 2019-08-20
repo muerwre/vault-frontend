@@ -16,22 +16,8 @@ const INITIAL_STATE: INodeState = {
   editor: {
     ...EMPTY_NODE,
     type: 'image',
-    blocks: [
-      { ...EMPTY_BLOCK, type: 'image' },
-    ],
-    files: [
-      { ...EMPTY_FILE, id: uuid() },
-      { ...EMPTY_FILE, id: uuid() },
-      { ...EMPTY_FILE, id: uuid() },
-      { ...EMPTY_FILE, id: uuid() },
-      { ...EMPTY_FILE, id: uuid() },
-      { ...EMPTY_FILE, id: uuid() },
-      { ...EMPTY_FILE, id: uuid() },
-      { ...EMPTY_FILE, id: uuid() },
-      { ...EMPTY_FILE, id: uuid() },
-      { ...EMPTY_FILE, id: uuid() },
-      { ...EMPTY_FILE, id: uuid() },
-    ]
+    blocks: [{ ...EMPTY_BLOCK, type: 'image' }],
+    files: [],
   },
   is_loading: false,
   error: null,

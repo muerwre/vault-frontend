@@ -1,8 +1,4 @@
-import React, {
-  FC,
-  ChangeEventHandler,
-  DragEventHandler
-} from 'react';
+import React, { FC, ChangeEventHandler, DragEventHandler } from 'react';
 import { connect } from 'react-redux';
 import { INode } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
@@ -12,25 +8,26 @@ import { IUploadStatus } from '~/redux/uploads/reducer';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
-  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles
+  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & {
-  data: INode;
-  pending_files: IUploadStatus[];
-  setData: (val: INode) => void;
-  onFileMove: (o: number, n: number) => void;
-  onInputChange: ChangeEventHandler<HTMLInputElement>;
-  onDrop: DragEventHandler<HTMLFormElement>;
-};
+    data: INode;
+    pending_files: IUploadStatus[];
+
+    setData: (val: INode) => void;
+    onFileMove: (o: number, n: number) => void;
+    onInputChange: ChangeEventHandler<HTMLInputElement>;
+    onDrop: DragEventHandler<HTMLFormElement>;
+  };
 
 const ImageEditorUnconnected: FC<IProps> = ({
   data,
   onFileMove,
   onInputChange,
   onDrop,
-  pending_files
+  pending_files,
 }) => (
   <ImageGrid
     onFileMove={onFileMove}

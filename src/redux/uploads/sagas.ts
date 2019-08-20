@@ -1,16 +1,35 @@
-import { takeEvery, all, spawn, call, put, take, fork, race } from 'redux-saga/effects';
+import {
+ takeEvery, all, spawn, call, put, take, fork, race,
+} from 'redux-saga/effects';
+import { postUploadFile } from './api';
 import { UPLOAD_ACTIONS } from '~/redux/uploads/constants';
 import {
-  uploadUploadFiles, uploadSetStatus, uploadAddStatus, uploadDropStatus, uploadAddFile
+  uploadUploadFiles,
+  uploadSetStatus,
+  uploadAddStatus,
+  uploadDropStatus,
+  uploadAddFile,
 } from './actions';
 import { reqWrapper } from '../auth/sagas';
-import { createUploader, uploadGetThumb, fakeUploader } from '~/utils/uploader';
+import { createUploader, uploadGetThumb } from '~/utils/uploader';
 import { HTTP_RESPONSES } from '~/utils/api';
 import { VALIDATORS } from '~/utils/validators';
-import { UUID, IFileWithUUID, IFile } from '../types';
+import { IFileWithUUID, IFile, IUploadProgressHandler } from '../types';
 
-function* uploadCall({  temp_id, onProgress, file }) {
-  return yield call(reqWrapper, fakeUploader, { file: { url: 'some', error: 'cant do this boss' }, onProgress, mustSucceed: true });
+function* uploadCall({
+  file,
+  temp_id,
+  target,
+  type,
+  onProgress,
+}: IFileWithUUID & { onProgress: IUploadProgressHandler }) {
+  return yield call(reqWrapper, postUploadFile, {
+    file,
+    temp_id,
+    type,
+    target,
+    onProgress,
+  });
 }
 
 function* onUploadProgress(chan) {
@@ -30,14 +49,27 @@ function* uploadCancelWorker(id) {
   return true;
 }
 
-function* uploadWorker(file: File, temp_id: UUID) {
-  const [promise, chan] = createUploader<{ temp_id; file }, { temp_id }>(uploadCall, { temp_id });
-  yield fork(onUploadProgress, chan);
+function* uploadWorker({
+ file, temp_id, target, type,
+}: IFileWithUUID) {
+  const [promise, chan] = createUploader<Partial<IFileWithUUID>, Partial<IFileWithUUID>>(
+    uploadCall,
+    { temp_id, target, type }
+  );
 
-  return yield call(promise, { temp_id, file });
+  fork(onUploadProgress, chan);
+
+  return yield call(promise, {
+    temp_id,
+    file,
+    target,
+    type,
+  });
 }
 
-function* uploadFile({ file, temp_id }: IFileWithUUID) {
+function* uploadFile({
+ file, temp_id, type, target, subject,
+}: IFileWithUUID) {
   if (!file.type || !VALIDATORS.IS_IMAGE_MIME(file.type)) {
     return { error: 'File_Not_Image', status: HTTP_RESPONSES.BAD_REQUEST, data: {} };
   }
@@ -57,10 +89,13 @@ function* uploadFile({ file, temp_id }: IFileWithUUID) {
     )
   );
 
-  const {
-    result, cancel, cancel_editing, save_inventory,
-  } = yield race({
-    result: call(uploadWorker, file, temp_id),
+  const { result, cancel, cancel_editing } = yield race({
+    result: call(uploadWorker, {
+      file,
+      temp_id,
+      target,
+      type,
+    }),
     cancel: call(uploadCancelWorker, temp_id),
     // subject_cancel: call(uploadSubjectCancelWorker, subject)
     // add here CANCEL_UPLOADS worker, that will watch for subject
@@ -68,7 +103,7 @@ function* uploadFile({ file, temp_id }: IFileWithUUID) {
     // save_inventory: take(INVENTORY_ACTIONS.SAVE_INVENTORY),
   }) as any;
 
-  if (cancel || cancel_editing || save_inventory) {
+  if (cancel || cancel_editing) {
     return yield put(uploadDropStatus(temp_id));
   }
 
@@ -79,8 +114,6 @@ function* uploadFile({ file, temp_id }: IFileWithUUID) {
       uploadSetStatus(temp_id, { is_uploading: false, error: data.detail || error })
     );
   }
-
-  console.log('upload', data);
 
   yield put(
     uploadSetStatus(temp_id, {

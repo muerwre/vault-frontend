@@ -1,11 +1,8 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { hot } from 'react-hot-loader';
 import { ConnectedRouter } from 'connected-react-router';
-import {
-  NavLink, Switch, Route, Redirect
-} from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { history } from '~/redux/store';
 import { FlowLayout } from '~/containers/flow/FlowLayout';
 import { MainLayout } from '~/containers/main/MainLayout';
@@ -23,29 +20,28 @@ const mapDispatchToProps = {};
 
 type IProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps> & {};
 
-class Component extends React.Component<IProps, {}> {
-  render() {
-    return (
-      <ConnectedRouter history={history}>
-        <BlurWrapper is_blurred={this.props.is_shown}>
-          <MainLayout>
-            <Modal />
-            <Sprites />
+const Component: FC<IProps> = ({ is_shown }) => (
+  <ConnectedRouter history={history}>
+    <BlurWrapper is_blurred={is_shown}>
+      <Modal />
+      <Sprites />
 
-            <Switch>
-              <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
-              <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
-              <Route path="/examples/horizontal" component={HorizontalExample} />
-              <Route exact path={URLS.BASE} component={FlowLayout} />
+      <Switch>
+        <Route exact path={URLS.BASE} component={FlowLayout} />
 
-              <Redirect to="/" />
-            </Switch>
-          </MainLayout>
-        </BlurWrapper>
-      </ConnectedRouter>
-    );
-  }
-}
+        <MainLayout>
+          <Switch>
+            <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
+            <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
+            <Route path="/examples/horizontal" component={HorizontalExample} />
+
+            <Redirect to="/" />
+          </Switch>
+        </MainLayout>
+      </Switch>
+    </BlurWrapper>
+  </ConnectedRouter>
+);
 
 export default connect(
   mapStateToProps,

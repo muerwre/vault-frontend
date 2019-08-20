@@ -25,7 +25,7 @@ const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
   const onOpenEditor = useCallback(() => showDialog(DIALOGS.EDITOR), [showDialog]);
 
   return (
-    <div className="default_container head_container">
+    <div>
       <div className={style.container}>
         <Logo />
 
