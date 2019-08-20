@@ -31,7 +31,7 @@
   top: 0;
   left: 0;
   padding: $gap;
-  background: $content_bg;
+  background: darken($content_bg, 4%);
   height: 100%;
   overflow: hidden;
 
