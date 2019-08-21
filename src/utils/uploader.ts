@@ -10,7 +10,10 @@ export const IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/
 export function createUploader<T extends {}, R extends {}>(
   callback: (args: any) => any,
   payload: R
-): [(args: T) => (args: T & { onProgress: (current: number, total: number) => void }) => any, EventChannel<any>] {
+): [
+  (args: T) => (args: T & { onProgress: (current: number, total: number) => void }) => any,
+  EventChannel<any>
+] {
   let emit;
 
   const chan = eventChannel((emitter) => {
@@ -18,8 +21,8 @@ export function createUploader<T extends {}, R extends {}>(
     return () => null;
   });
 
-  const onProgress = (current: number, total: number): void => {
-    emit(current >= total ? END : { ...payload, progress: parseFloat((current / total).toFixed(1)) });
+  const onProgress = ({ loaded, total }: { loaded: number; total: number }): void => {
+    emit(loaded >= total ? END : { ...payload, progress: parseFloat((loaded / total).toFixed(1)) });
   };
 
   const wrappedCallback = args => callback({ ...args, onProgress });
@@ -40,7 +43,7 @@ export const uploadGetThumb = async (file) => {
 export const fakeUploader = ({
   file,
   onProgress,
-  mustSucceed
+  mustSucceed,
 }: {
   file: { url?: string; error?: string };
   onProgress: (current: number, total: number) => void;

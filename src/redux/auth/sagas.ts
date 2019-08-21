@@ -17,11 +17,7 @@ import { IUser } from './types';
 export function* reqWrapper(requestAction, props = {}): ReturnType<typeof requestAction> {
   const access = yield select(selectToken);
 
-  console.log('firing reqWrapper');
-
   const result = yield call(requestAction, { access, ...props });
-
-  console.log('at reqWrapper', { result });
 
   if (result && result.status === 401) {
     yield put(push(URLS.BASE));
@@ -29,8 +25,6 @@ export function* reqWrapper(requestAction, props = {}): ReturnType<typeof reques
 
     return result;
   }
-
-  console.log('reqWrapper will return');
   
   return result;
 }

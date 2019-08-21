@@ -57,18 +57,20 @@ function* uploadWorker({
     { temp_id, target, type }
   );
 
-  fork(onUploadProgress, chan);
+  yield fork(onUploadProgress, chan);
 
-  return yield call(promise, {
+  const result = yield call(promise, {
     temp_id,
     file,
     target,
     type,
   });
+
+  return result;
 }
 
 function* uploadFile({
- file, temp_id, type, target, subject,
+ file, temp_id, type, target,
 }: IFileWithUUID) {
   if (!file.type || !VALIDATORS.IS_IMAGE_MIME(file.type)) {
     return { error: 'File_Not_Image', status: HTTP_RESPONSES.BAD_REQUEST, data: {} };

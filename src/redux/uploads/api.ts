@@ -9,6 +9,7 @@ export const postUploadFile = ({
   file,
   target = 'others',
   type = 'image',
+  onProgress,
 }: IFileWithUUID & {
   access: string;
   onProgress: IUploadProgressHandler;
@@ -16,5 +17,9 @@ export const postUploadFile = ({
   const data = new FormData();
   data.append('file', file);
 
-  return api.post(API.USER.UPLOAD(target, type), data, configWithToken(access));
+  return api.post(
+    API.USER.UPLOAD(target, type),
+    data,
+    configWithToken(access, { onUploadProgress: onProgress })
+  );
 };

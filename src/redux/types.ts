@@ -112,4 +112,4 @@ export interface INode {
   updatedAt?: string;
 }
 
-export type IUploadProgressHandler = (current: number, total: number) => void;
+export type IUploadProgressHandler = (progressEvent: any) => void;

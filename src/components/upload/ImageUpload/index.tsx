@@ -16,12 +16,7 @@ const ImageUpload: FC<IProps> = ({
 }) => (
   <div className={styles.wrap}>
     <div className={classNames(styles.thumb_wrap, { is_uploading })}>
-      {thumb && (
-        <div
-          className={styles.thumb}
-          style={{ backgroundImage: `url("${process.env.API_HOST}${thumb}")` }}
-        />
-      )}
+      {thumb && <div className={styles.thumb} style={{ backgroundImage: `url("${thumb}")` }} />}
       {is_uploading && (
         <div className={styles.progress}>
           <ArcProgress size={72} progress={progress} />
