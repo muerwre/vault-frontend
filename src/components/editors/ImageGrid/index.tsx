@@ -1,5 +1,5 @@
 import React, {
-  FC, useCallback, ChangeEventHandler, DragEventHandler
+ FC, useCallback, ChangeEventHandler, DragEventHandler,
 } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import * as styles from './styles.scss';
@@ -12,10 +12,9 @@ interface IProps {
   locked: IUploadStatus[];
   onFileMove: (o: number, n: number) => void;
   onUpload?: ChangeEventHandler<HTMLInputElement>;
-  onDrop: DragEventHandler<HTMLFormElement>;
 }
 
-const SortableItem = SortableElement(({ children, }) => (
+const SortableItem = SortableElement(({ children }) => (
   <div className={styles.item}>{children}</div>
 ));
 
@@ -23,14 +22,12 @@ const SortableList = SortableContainer(
   ({
     items,
     locked,
-    onDrop,
   }: {
-  items: IFile[];
-  locked: IUploadStatus[];
-  onUpload: ChangeEventHandler<HTMLInputElement>;
-  onDrop: DragEventHandler<HTMLFormElement>;
+    items: IFile[];
+    locked: IUploadStatus[];
+    onUpload: ChangeEventHandler<HTMLInputElement>;
   }) => (
-    <form className={styles.grid} onDrop={onDrop}>
+    <div className={styles.grid}>
       {items.map((file, index) => (
         <SortableItem key={file.id} index={index} collection={0}>
           <ImageUpload id={file.id} thumb={file.url} />
@@ -41,15 +38,15 @@ const SortableList = SortableContainer(
           <ImageUpload thumb={item.preview} progress={item.progress} is_uploading />
         </SortableItem>
       ))}
-    </form>
+    </div>
   )
 );
 
 const ImageGrid: FC<IProps> = ({
-  items, locked, onFileMove, onUpload, onDrop,
+ items, locked, onFileMove, onUpload,
 }) => {
-  const onMove = useCallback(({ oldIndex, newIndex, }) => onFileMove(oldIndex, newIndex), [
-    onFileMove
+  const onMove = useCallback(({ oldIndex, newIndex }) => onFileMove(oldIndex, newIndex), [
+    onFileMove,
   ]);
 
   return (
@@ -59,7 +56,6 @@ const ImageGrid: FC<IProps> = ({
       items={items}
       locked={locked}
       onUpload={onUpload}
-      onDrop={onDrop}
       pressDelay={window.innerWidth < 768 ? 200 : 0}
       helperClass={styles.helper}
     />

@@ -16,7 +16,7 @@ const INITIAL_STATE: INodeState = {
   editor: {
     ...EMPTY_NODE,
     type: 'image',
-    blocks: [{ ...EMPTY_BLOCK, type: 'image' }],
+    blocks: [],
     files: [],
   },
   is_loading: false,

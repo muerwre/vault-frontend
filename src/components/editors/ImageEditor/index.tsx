@@ -17,16 +17,14 @@ type IProps = ReturnType<typeof mapStateToProps> &
     pending_files: IUploadStatus[];
 
     setData: (val: INode) => void;
-    onFileMove: (o: number, n: number) => void;
+    onFileMove: (from: number, to: number) => void;
     onInputChange: ChangeEventHandler<HTMLInputElement>;
-    onDrop: DragEventHandler<HTMLFormElement>;
   };
 
 const ImageEditorUnconnected: FC<IProps> = ({
   data,
   onFileMove,
   onInputChange,
-  onDrop,
   pending_files,
 }) => (
   <ImageGrid
@@ -34,7 +32,6 @@ const ImageEditorUnconnected: FC<IProps> = ({
     items={data.files}
     locked={pending_files}
     onUpload={onInputChange}
-    onDrop={onDrop}
   />
 );
 

@@ -1,5 +1,5 @@
 import React, {
- FC, useState, useCallback, useEffect,
+ FC, useState, useCallback, useEffect, FormEvent,
 } from 'react';
 import { connect } from 'react-redux';
 import assocPath from 'ramda/es/assocPath';
@@ -61,7 +61,7 @@ const EditorDialogUnconnected: FC<IProps> = ({
   );
 
   const onDrop = useCallback(
-    (event: React.DragEvent<HTMLFormElement>) => {
+    (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
 
       if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length) return;
@@ -118,8 +118,8 @@ const EditorDialogUnconnected: FC<IProps> = ({
     };
   }, [eventPreventer]);
 
-  useEffect(() => console.log({ temp }), [temp]);
-  useEffect(() => console.log({ data }), [data]);
+  // useEffect(() => console.log({ temp }), [temp]);
+  // useEffect(() => console.log({ data }), [data]);
 
   useEffect(() => {
     Object.entries(statuses).forEach(([id, status]) => {
@@ -137,12 +137,17 @@ const EditorDialogUnconnected: FC<IProps> = ({
     [setData, data]
   );
 
+  const onSubmit = useCallback((event: FormEvent) => {
+    event.preventDefault();
+    console.log({ data });
+  }, [data]);
+
   const buttons = (
     <Padder style={{ position: 'relative' }}>
       <EditorPanel data={data} setData={setData} onUpload={onInputChange} />
 
       <Group horizontal>
-        <InputText title="Название" value={data.title} handler={setTitle} />
+        <InputText title="Название" value={data.title} handler={setTitle} autoFocus />
 
         <Button title="Сохранить" iconRight="check" />
       </Group>
@@ -152,19 +157,20 @@ const EditorDialogUnconnected: FC<IProps> = ({
   useCloseOnEscape(onRequestClose);
 
   return (
-    <ScrollDialog buttons={buttons} width={860} onClose={onRequestClose}>
-      <div className={styles.editor}>
-        <ImageEditor
-          data={data}
-          setData={setData}
-          pending_files={temp.filter(id => !!statuses[id]).map(id => statuses[id])}
-          onUpload={onInputChange}
-          onFileMove={onFileMove}
-          onInputChange={onInputChange}
-          onDrop={onDrop}
-        />
-      </div>
-    </ScrollDialog>
+    <form onSubmit={onSubmit} className={styles.form}>
+      <ScrollDialog buttons={buttons} width={860} onClose={onRequestClose}>
+        <div className={styles.editor} onDrop={onDrop}>
+          <ImageEditor
+            data={data}
+            pending_files={temp.filter(id => !!statuses[id]).map(id => statuses[id])}
+            setData={setData}
+            onUpload={onInputChange}
+            onFileMove={onFileMove}
+            onInputChange={onInputChange}
+          />
+        </div>
+      </ScrollDialog>
+    </form>
   );
 };
 
