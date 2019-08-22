@@ -19,6 +19,7 @@ import { EditorPanel } from '~/components/editors/EditorPanel';
 import { moveArrItem } from '~/utils/fn';
 import { IFile, IFileWithUUID } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
+import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { UPLOAD_TARGETS, UPLOAD_TYPES, UPLOAD_SUBJECTS } from '~/redux/uploads/constants';
 
@@ -31,6 +32,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
+  nodeSave: NODE_ACTIONS.nodeSave,
 };
 
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
@@ -38,9 +40,11 @@ type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDisp
 const EditorDialogUnconnected: FC<IProps> = ({
   onRequestClose,
   editor,
-  uploadUploadFiles,
   files,
   statuses,
+
+  uploadUploadFiles,
+  nodeSave,
 }) => {
   const [data, setData] = useState(editor);
   const eventPreventer = useCallback(event => event.preventDefault(), []);
@@ -139,8 +143,9 @@ const EditorDialogUnconnected: FC<IProps> = ({
 
   const onSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
+    nodeSave(data);
     console.log({ data });
-  }, [data]);
+  }, [data, nodeSave]);
 
   const buttons = (
     <Padder style={{ position: 'relative' }}>
