@@ -90,7 +90,7 @@ export interface INode {
   files: IFile[];
 
   cover: IFile;
-  type: 'image';
+  type: string;
 
   blocks: IBlock[];
 
