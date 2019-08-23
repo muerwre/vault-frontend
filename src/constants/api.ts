@@ -5,4 +5,7 @@ export const API = {
     ME: '/auth/me', //
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
   },
+  NODE: {
+    SAVE: '/node/',
+  },
 };

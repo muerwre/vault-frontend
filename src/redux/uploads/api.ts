@@ -1,7 +1,10 @@
 import {
  IResultWithStatus, IFile, IUploadProgressHandler, IFileWithUUID,
 } from '~/redux/types';
-import { api, configWithToken } from '~/utils/api';
+import {
+ api, configWithToken, resultMiddleware, errorMiddleware,
+} from '~/utils/api';
+
 import { API } from '~/constants/api';
 
 export const postUploadFile = ({
@@ -21,5 +24,7 @@ export const postUploadFile = ({
     API.USER.UPLOAD(target, type),
     data,
     configWithToken(access, { onUploadProgress: onProgress })
+      .then(resultMiddleware)
+      .catch(errorMiddleware)
   );
 };

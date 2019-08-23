@@ -1,5 +1,6 @@
 import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { DIALOGS } from '~/redux/modal/constants';
+import { ERRORS } from '~/constants/errors';
 
 export interface ITag {
   title: string;
@@ -112,4 +113,9 @@ export interface INode {
   updatedAt?: string;
 }
 
+<<<<<<< HEAD
 export type IUploadProgressHandler = (progressEvent: any) => void;
+=======
+export type IUploadProgressHandler = (current: number, total: number) => void;
+export type IValidationErrors = Record<string, keyof typeof ERRORS>;
+>>>>>>> 148974ab7db3e8500e236e312dd546d39e5c322b
