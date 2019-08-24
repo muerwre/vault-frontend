@@ -17,7 +17,7 @@ export const postNode = ({
 export const getNodes = ({
   skip = 0,
 }: {
-  skip?: number;
+  skip: number;
 }): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
   api
     .get(API.NODE.GET, { params: { skip } })

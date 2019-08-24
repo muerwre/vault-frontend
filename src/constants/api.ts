@@ -7,5 +7,6 @@ export const API = {
   },
   NODE: {
     SAVE: '/node/',
+    GET: '/node/',
   },
 };

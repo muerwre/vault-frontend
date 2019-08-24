@@ -1,11 +1,20 @@
-import { takeLatest, call } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 import { NODE_ACTIONS } from './constants';
-import { nodeSave } from './actions';
+import { nodeSave, nodeSetSaveErrors } from './actions';
 import { postNode } from './api';
 import { reqWrapper } from '../auth/sagas';
 
 function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
-  const { data, errors } = yield call(reqWrapper, postNode, { node });
+  yield put(nodeSetSaveErrors({}));
+
+  const {
+    data,
+    data: { errors },
+  } = yield call(reqWrapper, postNode, { node });
+
+  if (errors && Object.values(errors).length > 0) {
+    return yield put(nodeSetSaveErrors(errors));
+  }
 
   console.log({ data, errors });
 }
