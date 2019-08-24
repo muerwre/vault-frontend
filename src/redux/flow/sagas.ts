@@ -2,11 +2,22 @@ import { takeLatest, call } from 'redux-saga/effects';
 import { REHYDRATE } from 'redux-persist';
 import { FLOW_ACTIONS } from './constants';
 import { getNodes } from '../node/api';
+import { flowSetNodes } from './actions';
 
 function* onGetFlow() {
-  const { data, error } = yield call(getNodes, {});
+  const {
+    data: { nodes = null },
+    error,
+  } = yield call(getNodes, {});
 
-  console.log('flow', { data, error });
+  if (!nodes) {
+    // todo: set error empty response
+  }
+
+  // todo: write nodes
+  // yield put(flowSetNodes());
+
+  console.log('flow', { nodes, error });
 }
 
 export default function* nodeSaga() {
