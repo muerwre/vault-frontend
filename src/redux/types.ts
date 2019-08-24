@@ -113,5 +113,5 @@ export interface INode {
   updatedAt?: string;
 }
 
-export type IUploadProgressHandler = (current: number, total: number) => void;
+export type IUploadProgressHandler = (progress: ProgressEvent) => void;
 export type IValidationErrors = Record<string, keyof typeof ERRORS>;

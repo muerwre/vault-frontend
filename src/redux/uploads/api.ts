@@ -20,11 +20,12 @@ export const postUploadFile = ({
   const data = new FormData();
   data.append('file', file);
 
-  return api.post(
-    API.USER.UPLOAD(target, type),
-    data,
-    configWithToken(access, { onUploadProgress: onProgress })
-      .then(resultMiddleware)
-      .catch(errorMiddleware)
-  );
+  return api
+    .post(
+      API.USER.UPLOAD(target, type),
+      data,
+      configWithToken(access, { onUploadProgress: onProgress })
+    )
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
 };
