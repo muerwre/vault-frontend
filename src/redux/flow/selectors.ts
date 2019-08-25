@@ -1,4 +1,4 @@
 import { IState } from '../store';
-import { INodeState } from './reducer';
+import { IFlowState } from './reducer';
 
-export const selectNode = (state: IState): INodeState => state.node;
+export const selectFlow = (state: IState): IFlowState => state.flow;
