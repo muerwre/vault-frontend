@@ -58,7 +58,8 @@ module.exports = () => {
         {
           test: /\.less$/,
           use: [
-            { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
+            // { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
+            { loader: MiniCssExtractPlugin.loader },
             // { loader: 'css-loader' },
             {
               loader: 'css-loader',
