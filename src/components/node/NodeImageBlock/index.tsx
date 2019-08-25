@@ -39,8 +39,6 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
   ]);
 
   useEffect(() => {
-    console.log({ height });
-
     if (!refs || !refs.current[current] || !loaded[current]) return setHeight(320);
 
     const el = refs.current[current];

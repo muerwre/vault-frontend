@@ -36,14 +36,9 @@ const NodeLayoutUnconnected: FC<IProps> = ({
   useEffect(() => {
     if (is_loading) return;
     nodeLoadNode(id, null);
-    // todo: if node not loading, load it!
   }, []);
 
-  useEffect(() => console.log({ is_loading }), [is_loading]);
-
   const block = node && node.type && NODE_COMPONENTS[node.type] && NODE_COMPONENTS[node.type];
-  // const view = block && block[is_loading ? 'placeholder' : 'component'];
-  // console.log({ block, view });
 
   return (
     <Card className={styles.node} seamless>
