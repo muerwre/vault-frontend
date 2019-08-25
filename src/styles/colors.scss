@@ -2,7 +2,7 @@ $red: #ff3344;
 $yellow: #ffd60f;
 $dark_blue: #3c75ff;
 $blue: #3ca1ff;
- $green: #00d2b9;
+$green: #00d2b9;
 //$green: #00503c;
 $olive: #8bc12a;
 $orange: #ff7549;
@@ -35,7 +35,7 @@ $button_bg_color: $red_gradient;
 $comment_bg: lighten($main_bg_color, 0%);
 $panel_bg: transparent;
 $node_bg: darken($content_bg, 4%);
-$node_image_bg: lighten($main_bg_color, 4%);
+$node_image_bg: darken($main_bg_color, 2%);
 $node_title_background: darken($main_bg_color, 8%);
 
 $editor_bg: $content_bg;

@@ -8,11 +8,12 @@
   position: relative;
   overflow: hidden;
   transition: height 0.5s;
+  user-select: none;
 
   .image {
-    max-height: 800px;
+    max-height: 960px;
+    max-width: 100%;
     opacity: 1;
-    width: 100%;
     border-radius: $radius $radius 0 0;
   }
 }
@@ -27,6 +28,9 @@
   touch-action: none;
   z-index: 1;
   transition: opacity 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:global(.is_active) {
     opacity: 1;

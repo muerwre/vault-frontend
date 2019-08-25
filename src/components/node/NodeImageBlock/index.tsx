@@ -24,8 +24,8 @@ interface IProps {
 const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(0);
-  const refs = useRef<HTMLDivElement[]>([]);
-  // const [refs, setRefs] = useState<Record<number, HTMLDivElement | RefObject<any>>>({});
+  const [loaded, setLoaded] = useState<Record<number, boolean>>({});
+  const refs = useRef<Record<number, HTMLDivElement>>({});
 
   const images = useMemo(
     () =>
@@ -33,16 +33,13 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
     [node]
   );
 
-  const setRef = useCallback(
-    index => el => {
-      refs.current[index] = el;
-    },
-    [refs]
-  );
+  const setRef = useCallback(index => el => (refs.current[index] = el), [refs]);
+  const onImageLoad = useCallback(index => () => setLoaded({ ...loaded, [index]: true }), [
+    setLoaded,
+    loaded,
+  ]);
 
   useEffect(() => {
-    console.log({ refs });
-
     if (!refs || !refs.current[current]) return;
 
     const el = refs.current[current];
@@ -50,7 +47,7 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
     const element_height = el.getBoundingClientRect && el.getBoundingClientRect().height;
 
     setHeight(element_height);
-  }, [refs, current]);
+  }, [refs, current, loaded]);
 
   return (
     <div className={classNames(styles.wrap, { is_loading })}>
@@ -61,7 +58,9 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
           <div className={styles.image_container} style={{ height }}>
             {images.map((file, index) => (
               <div
-                className={classNames(styles.image_wrap, { is_active: index === current })}
+                className={classNames(styles.image_wrap, {
+                  is_active: index === current && loaded[index],
+                })}
                 ref={setRef(index)}
                 key={file.id}
               >
@@ -70,6 +69,7 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
                   src={getImageSize(file.url, 'node')}
                   alt=""
                   key={file.id}
+                  onLoad={onImageLoad(index)}
                 />
               </div>
             ))}
