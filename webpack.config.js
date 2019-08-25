@@ -16,7 +16,7 @@ const htmlPlugin = new HtmlWebPackPlugin({
 
 const miniCssExractPlugin = new MiniCssExtractPlugin({
   filename: '[name].css',
-  chunkFilename: '[id].css'
+  chunkFilename: '[id].css',
 });
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -54,7 +54,10 @@ module.exports = () => {
         {
           test: /\.less$/,
           use: [
-            { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
+            isDevelopment
+              ? { loader: 'style-loader' }
+              : { loader: MiniCssExtractPlugin.loader, options: { filename: '[name].[contenthash].css' } },
+            // { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
             // { loader: 'css-loader' },
             {
               loader: 'css-loader',
