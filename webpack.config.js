@@ -14,11 +14,6 @@ const htmlPlugin = new HtmlWebPackPlugin({
   // favicon: 'src/sprites/favicon.png',
 });
 
-const miniCssExractPlugin = new MiniCssExtractPlugin({
-  filename: '[name].css',
-  chunkFilename: '[id].css',
-});
-
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const devtool = isDevelopment ? 'cheap-module-eval-source-map' : 'source-map';
 
@@ -36,12 +31,12 @@ module.exports = () => {
   /* Export */
   const plugins = [
     htmlPlugin,
-    miniCssExractPlugin,
+    // miniCssExractPlugin,
     new webpack.HashedModuleIdsPlugin(),
     new Dotenv(),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
-      chunkFilename: '[id].[hash].css',
+      chunkFilename: '[id].[contenthash].css',
     }),
   ];
 
@@ -58,8 +53,8 @@ module.exports = () => {
         {
           test: /\.less$/,
           use: [
-            // { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
-            { loader: MiniCssExtractPlugin.loader },
+            { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
+            // { loader: MiniCssExtractPlugin.loader },
             // { loader: 'css-loader' },
             {
               loader: 'css-loader',
@@ -76,8 +71,8 @@ module.exports = () => {
         {
           test: /\.scss$/,
           use: [
-            // { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
-            { loader: MiniCssExtractPlugin.loader, options: { filename: '[name].[hash].css' } },
+            { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
+            // { loader: MiniCssExtractPlugin.loader, options: { filename: '[name].[hash].css' } },
             {
               loader: 'css-loader',
               options: {
