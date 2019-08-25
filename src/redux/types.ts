@@ -114,4 +114,5 @@ export interface INode {
 }
 
 export type IUploadProgressHandler = (progress: ProgressEvent) => void;
-export type IValidationErrors = Record<string, ValueOf<typeof ERRORS>>;
+export type IError = ValueOf<typeof ERRORS>;
+export type IValidationErrors = Record<string, IError>;
