@@ -23,3 +23,13 @@ export const getNodes = ({
     .get(API.NODE.GET, { params: { skip } })
     .then(resultMiddleware)
     .catch(errorMiddleware);
+
+export const getNode = ({
+  id,
+}: {
+  id: string | number;
+}): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
+  api
+    .get(API.NODE.GET_NODE(id))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);

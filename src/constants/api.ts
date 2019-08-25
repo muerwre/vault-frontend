@@ -8,5 +8,6 @@ export const API = {
   NODE: {
     SAVE: '/node/',
     GET: '/node/',
+    GET_NODE: (id: number | string) => `/node/${id}`,
   },
 };

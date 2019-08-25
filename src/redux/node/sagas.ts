@@ -9,7 +9,7 @@ import {
   nodeSetLoading,
   nodeSetCurrent,
 } from './actions';
-import { postNode } from './api';
+import { postNode, getNode } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
@@ -45,10 +45,20 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
 
   yield put(push(URLS.NODE_URL(id)));
 
-  yield delay(1000);
+  const {
+    data: { node, error },
+  } = yield call(getNode, { id });
 
   yield put(nodeSetLoading(false));
+
+  if (error) {
+    return yield put(nodeSetSaveErrors({ error }));
+  }
+
   yield put(nodeSetSaveErrors({}));
+  yield put(nodeSetCurrent(node));
+
+  return;
 }
 
 export default function* nodeSaga() {

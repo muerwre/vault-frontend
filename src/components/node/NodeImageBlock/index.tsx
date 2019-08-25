@@ -12,9 +12,11 @@ interface IProps {
 }
 
 const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
-  const images = useMemo(() => node.files.filter(({ type }) => type === UPLOAD_TYPES.IMAGE), [
-    node,
-  ]);
+  const images = useMemo(
+    () =>
+      (node && node.files && node.files.filter(({ type }) => type === UPLOAD_TYPES.IMAGE)) || [],
+    [node]
+  );
 
   return (
     <div className={classNames(styles.wrap, { is_loading })}>
