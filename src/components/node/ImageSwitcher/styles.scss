@@ -14,6 +14,11 @@
   border-radius: 24px;
   padding: 0 3px;
   flex-wrap: wrap;
+  transition: background-color 0.5s;
+
+  &:hover {
+    background: transparentize(black, 0.2);
+  }
 
   & > div {
     width: 30px;

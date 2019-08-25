@@ -56,7 +56,12 @@ module.exports = () => {
           use: [
             isDevelopment
               ? { loader: 'style-loader' }
-              : { loader: MiniCssExtractPlugin.loader, options: { filename: '[name].[contenthash].css' } },
+              : {
+                loader: MiniCssExtractPlugin.loader({
+                  filename: '[name].[contenthash].css',
+                  chunkFilename: '[id].css',
+                }),
+              },
             // { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
             // { loader: 'css-loader' },
             {
