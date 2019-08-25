@@ -7,6 +7,8 @@
   border-radius: $cell_radius;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+  color: white;
 
   &:global(.is_hero) {
     .title {
@@ -56,14 +58,12 @@
 
   text-transform: uppercase;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 
   box-sizing: border-box;
 }
 
 .title {
-  max-height: 2em;
+  max-height: 2.6em;
 }
 
 .text_title {

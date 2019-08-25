@@ -1,8 +1,10 @@
 import React, { FC, useState, useCallback } from 'react';
+import { NavLink } from 'react-router-dom';
 import { INode } from '~/redux/types';
 import * as styles from './styles.scss';
 import { getImageSize } from '~/utils/dom';
 import classNames = require('classnames');
+import { URLS } from '~/constants/urls';
 
 interface IProps {
   node: INode;
@@ -14,7 +16,7 @@ interface IProps {
   is_text?: boolean;
 }
 
-const Cell: FC<IProps> = ({ node: { title, brief }, is_text = false }) => {
+const Cell: FC<IProps> = ({ node: { id, title, brief }, is_text = false }) => {
   const [is_loaded, setIsLoaded] = useState(false);
 
   const onImageLoad = useCallback(() => {
@@ -22,7 +24,10 @@ const Cell: FC<IProps> = ({ node: { title, brief }, is_text = false }) => {
   }, [setIsLoaded]);
 
   return (
-    <div className={classNames(styles.cell, 'vert-1', 'hor-1', { is_text: false })}>
+    <NavLink
+      to={URLS.NODE_URL(id)}
+      className={classNames(styles.cell, 'vert-1', 'hor-1', { is_text: false })}
+    >
       <div className={styles.face}>{title && <div className={styles.title}>{title}</div>}</div>
 
       {brief && brief.thumbnail && (
@@ -36,7 +41,7 @@ const Cell: FC<IProps> = ({ node: { title, brief }, is_text = false }) => {
           <img src={getImageSize(brief.thumbnail, 'medium')} onLoad={onImageLoad} alt="" />
         </div>
       )}
-    </div>
+    </NavLink>
   );
 };
 

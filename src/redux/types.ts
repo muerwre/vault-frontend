@@ -84,7 +84,7 @@ export interface IBlock {
 }
 
 export interface INode {
-  id?: UUID;
+  id?: number;
   user_id: UUID;
 
   title: string;
