@@ -13,53 +13,7 @@ import { ImageSwitcher } from '~/components/node/ImageSwitcher';
 
 interface IProps {}
 
-const ImageExample: FC<IProps> = () => (
-  <Card className={styles.node} seamless>
-    <ImageSwitcher total={5} current={2} onChange={console.log} />
-
-    <div className={styles.image_container}>
-      <img
-        className={styles.image}
-        src="http://37.192.131.144/full/attached/2019/08/e4fb2a1d0a2e20d499aaa1f5f83a7115.jpg"
-        alt=""
-      />
-    </div>
-
-    <NodePanel />
-
-    <Group>
-      <Padder>
-        <Group horizontal className={styles.content}>
-          <Group className={styles.comments}>
-            <NodeNoComments />
-
-            {range(1, 6).map(el => (
-              <Comment key={el} />
-            ))}
-          </Group>
-
-          <div className={styles.panel}>
-            <Group style={{ flex: 1 }}>
-              <Tags
-                tags={[
-                  { title: 'Избранный', feature: 'red' },
-                  { title: 'Плейлист', feature: 'green' },
-                  { title: 'Просто' },
-                  { title: '+ фото', feature: 'black' },
-                  { title: '+ с музыкой', feature: 'black' },
-                ]}
-              />
-
-              <NodeRelated title="First album" />
-
-              <NodeRelated title="Second album" />
-            </Group>
-          </div>
-        </Group>
-      </Padder>
-    </Group>
-  </Card>
-);
+const ImageExample: FC<IProps> = () => <Card className={styles.node} seamless></Card>;
 
 export { ImageExample };
 

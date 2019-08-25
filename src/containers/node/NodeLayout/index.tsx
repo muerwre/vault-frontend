@@ -30,6 +30,8 @@ const NodeLayoutUnconnected: FC<IProps> = ({
     params: { id },
   },
   is_loading,
+  is_loading_comments,
+  comments = [],
   current: node,
   nodeLoadNode,
 }) => {
@@ -50,8 +52,11 @@ const NodeLayoutUnconnected: FC<IProps> = ({
         <Padder>
           <Group horizontal className={styles.content}>
             <Group className={styles.comments}>
-              <NodeNoComments />
-              <NodeComments />
+              {is_loading_comments || !comments.length || true ? (
+                <NodeNoComments is_loading={is_loading_comments} />
+              ) : (
+                <NodeComments />
+              )}
             </Group>
 
             <div className={styles.panel}>

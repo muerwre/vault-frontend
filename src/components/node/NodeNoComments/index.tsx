@@ -1,16 +1,25 @@
 import React, { FC } from 'react';
-import { Comment } from '~/components/node/Comment';
 import * as styles from './styles.scss';
 import { Group } from '~/components/containers/Group';
+import classNames from 'classnames';
+import { Filler } from '~/components/containers/Filler';
+import { ERRORS } from '~/constants/errors';
+import { t } from '~/utils/trans';
 
-interface IProps {}
+interface IProps {
+  is_loading: boolean;
+}
 
-const NodeNoComments: FC<IProps> = () => (
-  <Group className={styles.wrap}>
-    <Comment is_empty is_loading={false} style={{ height: 94 }} />
-    <Comment is_empty is_loading={false} style={{ height: 104 }} />
-    <Comment is_empty is_loading={false} style={{ height: 100 }} />
-  </Group>
+const NodeNoComments: FC<IProps> = ({ is_loading = false }) => (
+  <>
+    <Group className={classNames(styles.wrap, { is_loading })}>
+      <div className={styles.card} />
+      <div className={styles.card}>{!is_loading && t(ERRORS.NO_COMMENTS)}</div>
+      <div className={styles.card} />
+    </Group>
+
+    <Filler />
+  </>
 );
 
 export { NodeNoComments };

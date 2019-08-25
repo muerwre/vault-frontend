@@ -8,6 +8,7 @@ import {
   nodeLoadNode,
   nodeSetLoading,
   nodeSetCurrent,
+  nodeSetLoadingComments,
 } from './actions';
 import { postNode, getNode } from './api';
 import { reqWrapper } from '../auth/sagas';
@@ -39,6 +40,7 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
 
 function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetLoading(true));
+  yield put(nodeSetLoadingComments(true));
   yield put(nodeSetSaveErrors({}));
 
   if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
@@ -57,6 +59,10 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
 
   yield put(nodeSetSaveErrors({}));
   yield put(nodeSetCurrent(node));
+
+  // todo: load comments
+  yield delay(500);
+  yield put(nodeSetLoadingComments(false));
 
   return;
 }

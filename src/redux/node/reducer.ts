@@ -4,12 +4,15 @@ import { EMPTY_NODE } from './constants';
 import { NODE_HANDLERS } from './handlers';
 
 export type INodeState = Readonly<{
-  is_loading: boolean;
   editor: INode;
-  current: Partial<INode>;
+  current: INode;
   comments: IComment[];
+
   error: string;
   errors: Record<string, string>;
+
+  is_loading: boolean;
+  is_loading_comments: boolean;
 }>;
 
 const INITIAL_STATE: INodeState = {
@@ -19,9 +22,10 @@ const INITIAL_STATE: INodeState = {
     blocks: [],
     files: [],
   },
-  current: {},
+  current: { ...EMPTY_NODE },
   comments: [],
   is_loading: false,
+  is_loading_comments: false,
   error: null,
   errors: {},
 };

@@ -23,6 +23,11 @@ export const nodeSetLoading = (is_loading: INodeState['is_loading']) => ({
   type: NODE_ACTIONS.SET_LOADING,
 });
 
+export const nodeSetLoadingComments = (is_loading_comments: INodeState['is_loading_comments']) => ({
+  is_loading_comments,
+  type: NODE_ACTIONS.SET_LOADING_COMMENTS,
+});
+
 export const nodeSetCurrent = (current: INodeState['current']) => ({
   current,
   type: NODE_ACTIONS.SET_CURRENT,

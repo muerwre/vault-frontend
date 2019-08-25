@@ -10,6 +10,7 @@ export const NODE_ACTIONS = {
 
   SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,
   SET_LOADING: `${prefix}SET_LOADING`,
+  SET_LOADING_COMMENTS: `${prefix}SET_LOADING_COMMENTS`,
   SET_CURRENT: `${prefix}SET_CURRENT`,
 };
 
