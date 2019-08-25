@@ -53,3 +53,6 @@ export const describeArc = (
 };
 
 export const getURL = url => `${process.env.API_HOST}${url}`;
+
+export const getImageSize = (image: string, size?: string): string =>
+  `${process.env.API_HOST}${image}`;

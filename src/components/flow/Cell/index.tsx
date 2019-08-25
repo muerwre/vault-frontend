@@ -1,44 +1,52 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useCallback } from 'react';
+import { INode } from '~/redux/types';
 import * as styles from './styles.scss';
-import { TEXTS } from '~/constants/texts';
-
+import { getImageSize } from '~/utils/dom';
 import classNames = require('classnames');
 
 interface IProps {
-  height?: number;
-  width?: number;
-  title?: string;
-  is_hero?: boolean;
-  is_stamp?: boolean;
+  node: INode;
+  // height?: number;
+  // width?: number;
+  // title?: string;
+  // is_hero?: boolean;
+  // is_stamp?: boolean;
   is_text?: boolean;
 }
 
-const Cell: FC<IProps> = ({
-  width = 1,
-  height = 1,
-  title,
-  is_hero,
-  is_text = (Math.random() > 0.8),
-}) => (
-  <div
-    className={
-      classNames(
-        styles.cell,
-        `vert-${height}`,
-        `hor-${width}`,
-        { is_text },
+const Cell: FC<IProps> = ({ node: { title, brief }, is_text = false }) => {
+  const [is_loaded, setIsLoaded] = useState(false);
+
+  const onImageLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, [setIsLoaded]);
+
+  return (
+    <div className={classNames(styles.cell, 'vert-1', 'hor-1', { is_text: false })}>
+      <div className={styles.face}>{title && <div className={styles.title}>{title}</div>}</div>
+
+      {brief && brief.thumbnail && (
+        <div
+          className={styles.thumbnail}
+          style={{
+            backgroundImage: `url("${getImageSize(brief.thumbnail, 'medium')}")`,
+            opacity: is_loaded ? 1 : 0,
+          }}
+        >
+          <img src={getImageSize(brief.thumbnail, 'medium')} onLoad={onImageLoad} alt="" />
+        </div>
       )}
-    style={{
-      // gridRowEnd: `span ${height}`,
-      // gridColumnEnd: `span ${width}`,
-    }}
-  >
-    {is_text && <div className={styles.text}>
-      <div className={styles.text_title}>{title}</div>
-      {TEXTS.LOREM_IPSUM}
-      </div>}
-    {title && <div className={styles.title}>{title}</div>}
-  </div>
-);
+    </div>
+  );
+};
 
 export { Cell };
+
+/*
+  {is_text && (
+    <div className={styles.text}>
+      <div className={styles.text_title}>{node.title}</div>
+      {TEXTS.LOREM_IPSUM}
+    </div>
+  )}
+*/

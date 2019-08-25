@@ -1,8 +1,19 @@
-import * as React from 'react';
-import { TestGrid } from '~/components/flow/TestGrid';
-import * as styles from './styles.scss';
-import { Header } from '~/components/main/Header';
+import React, { FC } from 'react';
+import { connect } from 'react-redux';
+import { FlowGrid } from '~/components/flow/FlowGrid';
+import { selectFlow } from '~/redux/flow/selectors';
 
-export const FlowLayout = () => (
-    <TestGrid />
-);
+const mapStateToProps = selectFlow;
+
+const mapDispatchToProps = {};
+
+type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
+
+const FlowLayoutUnconnected: FC<IProps> = ({ nodes }) => <FlowGrid nodes={nodes} />;
+
+const FlowLayout = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FlowLayoutUnconnected);
+
+export { FlowLayout, FlowLayoutUnconnected };
