@@ -8,6 +8,7 @@ import { EMPTY_FILE } from '../uploads/constants';
 export type INodeState = Readonly<{
   is_loading: boolean;
   editor: INode;
+  current: INode;
   error: string;
   errors: Record<string, string>;
 }>;
@@ -19,6 +20,7 @@ const INITIAL_STATE: INodeState = {
     blocks: [],
     files: [],
   },
+  current: null,
   is_loading: false,
   error: null,
   errors: {},

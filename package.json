@@ -14,9 +14,10 @@
     "url": "https://github.com/muerwre/my-empty-react-project"
   },
   "devDependencies": {
-    "@babel/types": "7.5.5",
     "@babel/cli": "^7.0.0-rc.1",
     "@babel/preset-env": "^7.0.0-rc.1",
+    "@babel/types": "7.5.5",
+    "@types/react-router": "^5.0.3",
     "autoresponsive-react": "^1.1.31",
     "awesome-typescript-loader": "^5.2.1",
     "babel-core": "^6.26.3",

@@ -1,0 +1,14 @@
+.placeholder {
+  height: 33vw;
+  background: transparentize(black, 0.8);
+  border: $radius $radius 0 0;
+  @include outer_shadow();
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    fill: transparentize(white, 0.95);
+  }
+}

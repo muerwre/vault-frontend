@@ -4,16 +4,26 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fade {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0.1; transform: scale(4); }
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.1;
+    transform: scale(4);
+  }
 }
 
 .wrap {
-  animation: spin infinite steps(9, end) 1s;
+  animation: spin infinite 1s linear;
   display: inline-flex;
 }

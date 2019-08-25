@@ -3,17 +3,20 @@ import { Cell } from '~/components/flow/Cell';
 
 import * as styles from './styles.scss';
 import { IFlowState } from '~/redux/flow/reducer';
+import { INode } from '~/redux/types';
 
-type IProps = Partial<IFlowState> & {};
+type IProps = Partial<IFlowState> & {
+  onSelect: (id: INode['id']) => void;
+};
 
-export const FlowGrid: FC<IProps> = ({ nodes }) => (
+export const FlowGrid: FC<IProps> = ({ nodes, onSelect }) => (
   <div>
     <div className={styles.grid_test}>
       <div className={styles.hero}>HERO</div>
       <div className={styles.stamp}>STAMP</div>
 
       {nodes.map(node => (
-        <Cell key={node.id} node={node} />
+        <Cell key={node.id} node={node} onSelect={onSelect} />
       ))}
     </div>
   </div>

@@ -1,10 +1,11 @@
 import React, { FC, useState, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 import { INode } from '~/redux/types';
-import * as styles from './styles.scss';
+import { URLS } from '~/constants/urls';
 import { getImageSize } from '~/utils/dom';
 import classNames = require('classnames');
-import { URLS } from '~/constants/urls';
+
+import * as styles from './styles.scss';
 
 interface IProps {
   node: INode;
@@ -13,20 +14,23 @@ interface IProps {
   // title?: string;
   // is_hero?: boolean;
   // is_stamp?: boolean;
+  onSelect: (id: INode['id']) => void;
   is_text?: boolean;
 }
 
-const Cell: FC<IProps> = ({ node: { id, title, brief }, is_text = false }) => {
+const Cell: FC<IProps> = ({ node: { id, title, brief }, onSelect, is_text = false }) => {
   const [is_loaded, setIsLoaded] = useState(false);
 
   const onImageLoad = useCallback(() => {
     setIsLoaded(true);
   }, [setIsLoaded]);
 
+  const onClick = useCallback(() => onSelect(id), [onSelect, id]);
+
   return (
-    <NavLink
-      to={URLS.NODE_URL(id)}
+    <div
       className={classNames(styles.cell, 'vert-1', 'hor-1', { is_text: false })}
+      onClick={onClick}
     >
       <div className={styles.face}>{title && <div className={styles.title}>{title}</div>}</div>
 
@@ -41,7 +45,7 @@ const Cell: FC<IProps> = ({ node: { id, title, brief }, is_text = false }) => {
           <img src={getImageSize(brief.thumbnail, 'medium')} onLoad={onImageLoad} alt="" />
         </div>
       )}
-    </NavLink>
+    </div>
   );
 };
 
