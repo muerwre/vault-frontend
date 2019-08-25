@@ -6,7 +6,7 @@ import { IFlowState } from '~/redux/flow/reducer';
 import { INode } from '~/redux/types';
 
 type IProps = Partial<IFlowState> & {
-  onSelect: (id: INode['id']) => void;
+  onSelect: (id: INode['id'], type: INode['type']) => void;
 };
 
 export const FlowGrid: FC<IProps> = ({ nodes, onSelect }) => (

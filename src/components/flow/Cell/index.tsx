@@ -14,18 +14,18 @@ interface IProps {
   // title?: string;
   // is_hero?: boolean;
   // is_stamp?: boolean;
-  onSelect: (id: INode['id']) => void;
+  onSelect: (id: INode['id'], type: INode['type']) => void;
   is_text?: boolean;
 }
 
-const Cell: FC<IProps> = ({ node: { id, title, brief }, onSelect, is_text = false }) => {
+const Cell: FC<IProps> = ({ node: { id, title, brief, type }, onSelect, is_text = false }) => {
   const [is_loaded, setIsLoaded] = useState(false);
 
   const onImageLoad = useCallback(() => {
     setIsLoaded(true);
   }, [setIsLoaded]);
 
-  const onClick = useCallback(() => onSelect(id), [onSelect, id]);
+  const onClick = useCallback(() => onSelect(id, type), [onSelect, id]);
 
   return (
     <div

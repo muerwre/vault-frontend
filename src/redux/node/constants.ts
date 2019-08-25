@@ -1,15 +1,16 @@
+import { FC } from 'react';
 import { IBlock, INode, ValueOf } from '../types';
 import { NodeImageBlock } from '~/components/node/NodeImageBlock';
 import { NodeImageBlockPlaceholder } from '~/components/node/NodeImageBlockPlaceholder';
-import { ReactElement, FC } from 'react';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
-  SAVE: `${prefix}NODE.SAVE`,
+  SAVE: `${prefix}SAVE`,
   LOAD_NODE: `${prefix}LOAD_NODE`,
 
-  SET_SAVE_ERRORS: `${prefix}NODE.SET_SAVE_ERRORS`,
-  SET_LOADING: `${prefix}NODE.SET_LOADING`,
+  SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,
+  SET_LOADING: `${prefix}SET_LOADING`,
+  SET_CURRENT: `${prefix}SET_CURRENT`,
 };
 
 export const EMPTY_BLOCK: IBlock = {
@@ -47,14 +48,8 @@ export const NODE_TYPES = {
   TEXT: 'text',
 };
 
-type INodeComponents = Record<
-  ValueOf<typeof NODE_TYPES>,
-  Record<'component' | 'placeholder', FC<{ node: INode }>>
->;
+type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<{ node: INode; is_loading: boolean }>>;
 
 export const NODE_COMPONENTS: INodeComponents = {
-  [NODE_TYPES.IMAGE]: {
-    component: NodeImageBlock,
-    placeholder: NodeImageBlockPlaceholder,
-  },
+  [NODE_TYPES.IMAGE]: NodeImageBlock,
 };

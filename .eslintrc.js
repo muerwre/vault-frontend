@@ -52,7 +52,8 @@ module.exports = {
       "exports": "always-multiline",
       "functions": "never"
     }],
-    indent: "off"
+    indent: "off",
+    "import/order": "off"
   },
   globals: {
     document: false,

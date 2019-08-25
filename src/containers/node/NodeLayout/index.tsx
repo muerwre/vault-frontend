@@ -14,9 +14,12 @@ import * as styles from './styles.scss';
 import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
 import { NODE_COMPONENTS } from '~/redux/node/constants';
+import * as NODE_ACTIONS from '~/redux/node/actions';
 
 const mapStateToProps = selectNode;
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
+};
 
 type IProps = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps &
@@ -28,22 +31,23 @@ const NodeLayoutUnconnected: FC<IProps> = ({
   },
   is_loading,
   current: node,
+  nodeLoadNode,
 }) => {
   useEffect(() => {
-    // if (is_loading) return;
+    if (is_loading) return;
+    nodeLoadNode(id, null);
     // todo: if node not loading, load it!
   }, []);
 
   useEffect(() => console.log({ is_loading }), [is_loading]);
 
   const block = node && node.type && NODE_COMPONENTS[node.type] && NODE_COMPONENTS[node.type];
-  const view = block && block[is_loading ? 'placeholder' : 'component'];
-
-  console.log({ block, view });
+  // const view = block && block[is_loading ? 'placeholder' : 'component'];
+  // console.log({ block, view });
 
   return (
     <Card className={styles.node} seamless>
-      {view && createElement(view, { node })}
+      {block && createElement(block, { node, is_loading })}
 
       <NodePanel />
 
