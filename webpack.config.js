@@ -41,7 +41,7 @@ module.exports = () => {
     new Dotenv(),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
-      chunkFilename: '[id].css',
+      chunkFilename: '[id].[hash].css',
     }),
   ];
 
