@@ -39,6 +39,10 @@ module.exports = () => {
     miniCssExractPlugin,
     new webpack.HashedModuleIdsPlugin(),
     new Dotenv(),
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css',
+      chunkFilename: '[id].css',
+    }),
   ];
 
   return {
@@ -49,20 +53,12 @@ module.exports = () => {
           use: [
             { loader: 'style-loader' },
             { loader: 'css-loader' }
-          ]
+          ],
         },
         {
           test: /\.less$/,
           use: [
-            isDevelopment
-              ? { loader: 'style-loader' }
-              : {
-                loader: MiniCssExtractPlugin.loader({
-                  filename: '[name].[contenthash].css',
-                  chunkFilename: '[id].css',
-                }),
-              },
-            // { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
+            { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
             // { loader: 'css-loader' },
             {
               loader: 'css-loader',
