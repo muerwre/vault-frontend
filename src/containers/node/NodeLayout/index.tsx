@@ -1,21 +1,18 @@
-import React, { FC, createElement } from 'react';
+import React, { FC, createElement, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
-import range from 'ramda/es/range';
+import { connect } from 'react-redux';
+
 import { selectNode } from '~/redux/node/selectors';
 import { Card } from '~/components/containers/Card';
-import { ImageSwitcher } from '~/components/node/ImageSwitcher';
+
 import { NodePanel } from '~/components/node/NodePanel';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { Comment } from '~/components/node/Comment';
-
-import { Tags } from '~/components/node/Tags';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import * as styles from './styles.scss';
 import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
-import { NodeImageBlockPlaceholder } from '~/components/node/NodeImageBlockPlaceholder';
 import { NODE_COMPONENTS } from '~/redux/node/constants';
 
 const mapStateToProps = selectNode;
@@ -25,21 +22,28 @@ type IProps = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps &
   RouteComponentProps<{ id: string }> & {};
 
-const NodeLayout: FC<IProps> = ({
+const NodeLayoutUnconnected: FC<IProps> = ({
   match: {
     params: { id },
   },
   is_loading,
   current: node,
 }) => {
+  useEffect(() => {
+    // if (is_loading) return;
+    // todo: if node not loading, load it!
+  }, []);
+
+  useEffect(() => console.log({ is_loading }), [is_loading]);
+
   const block = node && node.type && NODE_COMPONENTS[node.type] && NODE_COMPONENTS[node.type];
   const view = block && block[is_loading ? 'placeholder' : 'component'];
+
+  console.log({ block, view });
 
   return (
     <Card className={styles.node} seamless>
       {view && createElement(view, { node })}
-
-      <NodeImageBlockPlaceholder />
 
       <NodePanel />
 
@@ -67,4 +71,9 @@ const NodeLayout: FC<IProps> = ({
   );
 };
 
-export { NodeLayout };
+const NodeLayout = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NodeLayoutUnconnected);
+
+export { NodeLayout, NodeLayoutUnconnected };

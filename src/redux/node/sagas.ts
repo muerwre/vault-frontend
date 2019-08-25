@@ -1,4 +1,6 @@
-import { takeLatest, call, put, select } from 'redux-saga/effects';
+import { takeLatest, call, put, select, delay } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
+
 import { NODE_ACTIONS } from './constants';
 import { nodeSave, nodeSetSaveErrors, nodeLoadNode, nodeSetLoading } from './actions';
 import { postNode } from './api';
@@ -7,7 +9,6 @@ import { flowSetNodes } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
 import { modalSetShown } from '../modal/actions';
 import { selectFlowNodes } from '../flow/selectors';
-import { push } from 'connected-react-router';
 import { URLS } from '~/constants/urls';
 
 function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
@@ -35,6 +36,11 @@ function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetSaveErrors({}));
 
   yield put(push(URLS.NODE_URL(id)));
+
+  yield delay(1000);
+
+  yield put(nodeSetLoading(false));
+  yield put(nodeSetSaveErrors({}));
 }
 
 export default function* nodeSaga() {

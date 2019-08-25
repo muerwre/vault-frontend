@@ -5,6 +5,7 @@ import { INodeState } from './reducer';
 
 const setSaveErrors = (state: INodeState, { errors }: ReturnType<typeof nodeSetSaveErrors>) =>
   assocPath(['errors'], errors, state);
+
 const setLoading = (state: INodeState, { is_loading }: ReturnType<typeof nodeSetLoading>) =>
   assocPath(['is_loading'], is_loading, state);
 
