@@ -76,7 +76,8 @@ module.exports = () => {
         {
           test: /\.scss$/,
           use: [
-            { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
+            // { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
+            { loader: MiniCssExtractPlugin.loader, options: { filename: '[name].[hash].css' } },
             {
               loader: 'css-loader',
               options: {
