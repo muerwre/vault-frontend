@@ -1,4 +1,4 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { NODE_ACTIONS } from './constants';
 import { nodeSave, nodeSetSaveErrors } from './actions';
 import { postNode } from './api';
@@ -6,6 +6,7 @@ import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
 import { modalSetShown } from '../modal/actions';
+import { selectFlowNodes } from '../flow/selectors';
 
 function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   yield put(nodeSetSaveErrors({}));
@@ -22,8 +23,9 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
     return yield put(nodeSetSaveErrors({ error: ERRORS.EMPTY_RESPONSE }));
   }
 
-  yield put(flowSetNodes({ [result.id]: result }));
-  yield put(modalSetShown(false));
+  const nodes = yield select(selectFlowNodes);
+  yield put(flowSetNodes([result, ...nodes]));
+  return yield put(modalSetShown(false));
 }
 
 export default function* nodeSaga() {
