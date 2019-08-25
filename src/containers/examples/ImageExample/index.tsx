@@ -9,13 +9,13 @@ import { NodePanel } from '~/components/node/NodePanel';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { Tags } from '~/components/node/Tags';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { ImageSwitcher } from "~/components/node/ImageSwitcher";
+import { ImageSwitcher } from '~/components/node/ImageSwitcher';
 
 interface IProps {}
 
 const ImageExample: FC<IProps> = () => (
   <Card className={styles.node} seamless>
-    <ImageSwitcher total={5} current={2} />
+    <ImageSwitcher total={5} current={2} onChange={console.log} />
 
     <div className={styles.image_container}>
       <img
