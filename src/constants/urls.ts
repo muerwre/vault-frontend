@@ -7,5 +7,5 @@ export const URLS = {
     EDITOR: '/examples/edit',
     IMAGE: '/examples/image',
   },
-  NODE_URL: (id: number) => `/cell/${id}`,
+  NODE_URL: (id: number) => `/post${id}`,
 };
