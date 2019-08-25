@@ -38,12 +38,18 @@
       // background: white;
       border-radius: 8px;
       box-shadow: inset white 0 0 0 2px;
+      transform: scale(0.5);
+      transition: transform 0.5s;
     }
 
     &:global(.is_active) {
       &::after {
         background: white;
       }
+    }
+
+    &:global(.is_loaded)::after {
+      transform: scale(1);
     }
   }
 }
