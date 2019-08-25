@@ -113,6 +113,10 @@ export interface INode {
   updatedAt?: string;
 }
 
+export interface IComment {
+  text: string;
+}
+
 export type IUploadProgressHandler = (progress: ProgressEvent) => void;
 export type IError = ValueOf<typeof ERRORS>;
 export type IValidationErrors = Record<string, IError>;
