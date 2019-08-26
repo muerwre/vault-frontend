@@ -1,4 +1,4 @@
-import { INode, IValidationErrors } from '../types';
+import { INode, IValidationErrors, IComment } from '../types';
 import { NODE_ACTIONS } from './constants';
 import { INodeState } from './reducer';
 
@@ -31,4 +31,20 @@ export const nodeSetLoadingComments = (is_loading_comments: INodeState['is_loadi
 export const nodeSetCurrent = (current: INodeState['current']) => ({
   current,
   type: NODE_ACTIONS.SET_CURRENT,
+});
+
+export const nodePostComment = (data: IComment, id: INode['id']) => ({
+  data,
+  id,
+  type: NODE_ACTIONS.POST_COMMENT,
+});
+
+export const nodeSetSendingComment = (is_sending_comment: boolean) => ({
+  is_sending_comment,
+  type: NODE_ACTIONS.SET_SENDING_COMMENT,
+});
+
+export const nodeSetComments = (comments: IComment[]) => ({
+  comments,
+  type: NODE_ACTIONS.SET_COMMENTS,
 });

@@ -13,6 +13,7 @@ export type INodeState = Readonly<{
 
   is_loading: boolean;
   is_loading_comments: boolean;
+  is_sending_comment: boolean;
 }>;
 
 const INITIAL_STATE: INodeState = {
@@ -24,8 +25,11 @@ const INITIAL_STATE: INodeState = {
   },
   current: { ...EMPTY_NODE },
   comments: [],
+
   is_loading: false,
   is_loading_comments: false,
+  is_sending_comment: false,
+
   error: null,
   errors: {},
 };

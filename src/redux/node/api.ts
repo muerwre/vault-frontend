@@ -1,5 +1,5 @@
 import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils/api';
-import { INode, IResultWithStatus } from '../types';
+import { INode, IResultWithStatus, IComment } from '../types';
 import { API } from '~/constants/api';
 
 export const postNode = ({
@@ -31,5 +31,19 @@ export const getNode = ({
 }): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
   api
     .get(API.NODE.GET_NODE(id))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const postNodeComment = ({
+  id,
+  data,
+  access,
+}: {
+  access: string;
+  id: number;
+  data: IComment;
+}): Promise<IResultWithStatus<{ comment: Comment }>> =>
+  api
+    .post(API.NODE.COMMENT(id), data, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);

@@ -116,12 +116,12 @@ export interface INode {
 
 export interface IComment {
   text: string;
-  attaches: IFile[];
+  files: IFile[];
   is_private: boolean;
   owner: IUser;
 
-  created_at: string;
-  update_at: string;
+  created_at?: string;
+  update_at?: string;
 }
 
 export type IUploadProgressHandler = (progress: ProgressEvent) => void;

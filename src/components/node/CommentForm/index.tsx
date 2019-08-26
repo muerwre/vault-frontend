@@ -1,18 +1,27 @@
-import React, { FC, useCallback, useState, ChangeEvent, ChangeEventHandler } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { Textarea } from '~/components/input/Textarea';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import * as styles from './styles.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import assocPath from 'ramda/es/assocPath';
-import { InputHandler, INode } from '~/redux/types';
+import { InputHandler, INode, IComment } from '~/redux/types';
+import { connect } from 'react-redux';
+import * as NODE_ACTIONS from '~/redux/node/actions';
+import { EMPTY_COMMENT } from '~/redux/node/constants';
 
-interface IProps {
-  id: INode['id'];
-}
+const mapStateToProps = () => ({});
+const mapDispatchToProps = {
+  nodePostComment: NODE_ACTIONS.nodePostComment,
+};
 
-const CommentForm: FC<IProps> = ({ id }) => {
-  const [data, setData] = useState({ text: '' });
+type IProps = ReturnType<typeof mapStateToProps> &
+  typeof mapDispatchToProps & {
+    id: INode['id'];
+  };
+
+const CommentFormUnconnected: FC<IProps> = ({ nodePostComment, id }) => {
+  const [data, setData] = useState<IComment>({ ...EMPTY_COMMENT });
 
   const onInput = useCallback<InputHandler>(
     text => {
@@ -24,9 +33,9 @@ const CommentForm: FC<IProps> = ({ id }) => {
   const onSubmit = useCallback(
     event => {
       event.preventDefault();
-      console.log({ data });
+      nodePostComment(data, id);
     },
-    [data]
+    [data, nodePostComment, id]
   );
 
   return (
@@ -46,4 +55,9 @@ const CommentForm: FC<IProps> = ({ id }) => {
   );
 };
 
-export { CommentForm };
+const CommentForm = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommentFormUnconnected);
+
+export { CommentForm, CommentFormUnconnected };

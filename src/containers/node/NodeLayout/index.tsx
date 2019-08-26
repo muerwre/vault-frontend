@@ -55,10 +55,10 @@ const NodeLayoutUnconnected: FC<IProps> = ({
             <Group className={styles.comments}>
               <CommentForm id={node.id || null} />
 
-              {is_loading_comments || !comments.length || true ? (
+              {is_loading_comments || !comments.length ? (
                 <NodeNoComments is_loading={is_loading_comments} />
               ) : (
-                <NodeComments />
+                <NodeComments comments={comments} />
               )}
             </Group>
 

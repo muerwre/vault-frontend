@@ -1,7 +1,6 @@
 import { FC } from 'react';
-import { IBlock, INode, ValueOf } from '../types';
+import { IBlock, INode, ValueOf, IComment } from '../types';
 import { NodeImageBlock } from '~/components/node/NodeImageBlock';
-import { NodeImageBlockPlaceholder } from '~/components/node/NodeImageBlockPlaceholder';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -11,7 +10,10 @@ export const NODE_ACTIONS = {
   SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,
   SET_LOADING: `${prefix}SET_LOADING`,
   SET_LOADING_COMMENTS: `${prefix}SET_LOADING_COMMENTS`,
+  SET_SENDING_COMMENT: `${prefix}SET_SENDING_COMMENT`,
   SET_CURRENT: `${prefix}SET_CURRENT`,
+  POST_COMMENT: `${prefix}POST_COMMENT`,
+  SET_COMMENTS: `${prefix}SET_COMMENTS`,
 };
 
 export const EMPTY_BLOCK: IBlock = {
@@ -53,4 +55,11 @@ type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<{ node: INode; is_l
 
 export const NODE_COMPONENTS: INodeComponents = {
   [NODE_TYPES.IMAGE]: NodeImageBlock,
+};
+
+export const EMPTY_COMMENT: IComment = {
+  text: '',
+  files: [],
+  is_private: false,
+  owner: null,
 };

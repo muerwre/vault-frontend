@@ -9,14 +9,18 @@ import {
   nodeSetLoading,
   nodeSetCurrent,
   nodeSetLoadingComments,
+  nodePostComment,
+  nodeSetSendingComment,
+  nodeSetComments,
 } from './actions';
-import { postNode, getNode } from './api';
+import { postNode, getNode, postNodeComment } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
 import { modalSetShown } from '../modal/actions';
 import { selectFlowNodes } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
+import { selectNode } from './selectors';
 
 function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   yield put(nodeSetSaveErrors({}));
@@ -67,7 +71,27 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   return;
 }
 
+function* onPostComment({ data, id }: ReturnType<typeof nodePostComment>) {
+  yield put(nodeSetSendingComment(true));
+  const {
+    data: { comment },
+    error,
+  } = yield call(reqWrapper, postNodeComment, { data, id });
+  yield put(nodeSetSendingComment(false));
+
+  if (error || !comment) {
+    return yield put(nodeSetSaveErrors({ error: error || ERRORS.EMPTY_RESPONSE }));
+  }
+
+  console.log({ comment });
+
+  const { comments } = yield select(selectNode);
+
+  yield put(nodeSetComments([...comments, comment]));
+}
+
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
+  yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
 }
