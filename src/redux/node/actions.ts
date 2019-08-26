@@ -12,7 +12,7 @@ export const nodeSetSaveErrors = (errors: IValidationErrors) => ({
   type: NODE_ACTIONS.SET_SAVE_ERRORS,
 });
 
-export const nodeLoadNode = (id: string | number, node_type: INode['type']) => ({
+export const nodeLoadNode = (id: number, node_type: INode['type']) => ({
   id,
   node_type,
   type: NODE_ACTIONS.LOAD_NODE,

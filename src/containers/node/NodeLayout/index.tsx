@@ -38,8 +38,8 @@ const NodeLayoutUnconnected: FC<IProps> = ({
 }) => {
   useEffect(() => {
     if (is_loading) return;
-    nodeLoadNode(id, null);
-  }, []);
+    nodeLoadNode(parseInt(id, 10), null);
+  }, [nodeLoadNode, id]);
 
   const block = node && node.type && NODE_COMPONENTS[node.type] && NODE_COMPONENTS[node.type];
 

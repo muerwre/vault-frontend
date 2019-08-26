@@ -13,7 +13,7 @@ import {
   nodeSetSendingComment,
   nodeSetComments,
 } from './actions';
-import { postNode, getNode, postNodeComment } from './api';
+import { postNode, getNode, postNodeComment, getNodeComments } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
@@ -65,7 +65,12 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetCurrent(node));
 
   // todo: load comments
-  yield delay(500);
+  const {
+    data: { comments },
+  } = yield call(getNodeComments, { id });
+
+  yield put(nodeSetComments(comments || []));
+
   yield put(nodeSetLoadingComments(false));
 
   return;
