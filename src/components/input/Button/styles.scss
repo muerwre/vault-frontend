@@ -85,8 +85,8 @@
   &:global(.disabled),
   &:global(.grey) {
     opacity: 0.3;
-    //background: black;
-    filter: grayscale(100%);
+    background: lighten(black, 2%);
+    // filter: grayscale(100%);
   }
 
   &:global(.icon) {
@@ -99,6 +99,16 @@
     svg {
       animation: pulse 0.25s infinite alternate;
     }
+  }
+
+  &:global(.has_icon_left) {
+    padding-left: $gap;
+    padding-right: $gap;
+  }
+
+  &:global(.has_icon_right) {
+    padding-left: $gap;
+    padding-right: $gap;
   }
 
   > * {
@@ -117,9 +127,11 @@
   height: 20px;
   font: $font_12_semibold;
   padding: 0 15px;
+  border-radius: $radius / 2;
 }
 .mini {
   height: 28px;
+  border-radius: $radius / 2;
 }
 .normal {
   height: 38px;
@@ -135,6 +147,7 @@
 .disabled {
   opacity: 0.5;
 }
+
 .icon_left {
   margin-right: 10px;
   width: 20px;

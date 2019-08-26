@@ -53,7 +53,8 @@ module.exports = {
       "functions": "never"
     }],
     indent: "off",
-    "import/order": "off"
+    "import/order": "off",
+    "arrow-parens": ["warn", "as-needed"],
   },
   globals: {
     document: false,

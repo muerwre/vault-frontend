@@ -1,0 +1,19 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  flex: 1;
+  padding: $gap / 2;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  background: transparentize(black, 0.8);
+  padding: $gap / 2;
+  border-radius: 0 0 $radius $radius;
+
+  @include outer_shadow();
+}

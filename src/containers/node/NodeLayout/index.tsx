@@ -15,6 +15,7 @@ import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
 import { NODE_COMPONENTS } from '~/redux/node/constants';
 import * as NODE_ACTIONS from '~/redux/node/actions';
+import { CommentForm } from '~/components/node/CommentForm';
 
 const mapStateToProps = selectNode;
 const mapDispatchToProps = {
@@ -52,6 +53,8 @@ const NodeLayoutUnconnected: FC<IProps> = ({
         <Padder>
           <Group horizontal className={styles.content}>
             <Group className={styles.comments}>
+              <CommentForm id={node.id || null} />
+
               {is_loading_comments || !comments.length || true ? (
                 <NodeNoComments is_loading={is_loading_comments} />
               ) : (

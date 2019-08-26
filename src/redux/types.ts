@@ -1,6 +1,7 @@
 import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
+import { IUser } from './auth/types';
 
 export interface ITag {
   title: string;
@@ -115,8 +116,15 @@ export interface INode {
 
 export interface IComment {
   text: string;
+  attaches: IFile[];
+  is_private: boolean;
+  owner: IUser;
+
+  created_at: string;
+  update_at: string;
 }
 
 export type IUploadProgressHandler = (progress: ProgressEvent) => void;
 export type IError = ValueOf<typeof ERRORS>;
 export type IValidationErrors = Record<string, IError>;
+export type InputHandler<T = string> = (val: T) => void;

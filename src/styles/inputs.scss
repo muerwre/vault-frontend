@@ -88,7 +88,9 @@
   }
 
   &.has_loader {
-    &::before { transform: translateX(-40px); }
+    &::before {
+      transform: translateX(-40px);
+    }
 
     .loader {
       flex-basis: 40px;
@@ -96,8 +98,12 @@
   }
 
   &.has_status {
-    &::before { transform: translateX(-40px); }
-    &.focused::before { transform: translateX(0); }
+    &::before {
+      transform: translateX(-40px);
+    }
+    &.focused::before {
+      transform: translateX(0);
+    }
 
     .status {
       flex-basis: 40px;
@@ -116,8 +122,12 @@
   }
 
   &.focused.has_status.has_loader {
-    &::before { transform: translateX(-80px); }
-    &.focused::before { transform: translateX(-40px); }
+    &::before {
+      transform: translateX(-80px);
+    }
+    &.focused::before {
+      transform: translateX(-40px);
+    }
   }
 
   &.has_error {
@@ -127,7 +137,8 @@
       color: transparentize(red, 0.4) !important;
     }
 
-    input, textarea {
+    input,
+    textarea {
       color: $red;
     }
   }
@@ -181,7 +192,8 @@
     }
   }
 
-  .input_text, .textarea {
+  .input_text,
+  .textarea {
     outline: none;
     border: none;
     font: inherit;
@@ -198,7 +210,8 @@
     width: 100%;
   }
 
-  .status, .loader {
+  .status,
+  .loader {
     flex: 0 0 0;
     transition: flex-basis 500ms;
     position: relative;
@@ -253,7 +266,8 @@
     }
   }
 
-  &.focused .title, &.has_value .title {
+  &.focused .title,
+  &.has_value .title {
     // font: $font_10_semibold;
     font-size: 10px;
     top: -6px;
@@ -324,7 +338,8 @@
 }
 
 .options {
-  .option, .option_title {
+  .option,
+  .option_title {
     height: $input_height;
     display: flex;
     align-items: center;

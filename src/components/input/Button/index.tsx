@@ -1,12 +1,12 @@
 import classnames from 'classnames';
-import React, { ButtonHTMLAttributes, DetailedHTMLProps, FC } from 'react';
+import React, { ButtonHTMLAttributes, DetailedHTMLProps, FC, createElement } from 'react';
 import * as styles from './styles.scss';
 import { Icon } from '~/components/input/Icon';
 import { IIcon } from '~/redux/types';
 
 type IButtonProps = DetailedHTMLProps<
-ButtonHTMLAttributes<HTMLButtonElement>,
-HTMLButtonElement
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
 > & {
   size?: 'mini' | 'normal' | 'big' | 'giant' | 'micro';
   iconLeft?: IIcon;
@@ -35,26 +35,29 @@ export const Button: FC<IButtonProps> = ({
   is_loading,
   title,
   stretchy,
+  disabled,
   ...props
-}) => React.createElement(seamless || non_submitting ? 'div' : 'button', {
-  className: classnames(styles.button, className, styles[size], {
-    red,
-    grey,
-    seamless,
-    transparent,
-    disabled: props.disabled,
-    icon: (iconLeft || iconRight) && !title && !children,
-    is_loading,
-    stretchy
-  }),
-  children: [
-    iconLeft && <Icon icon={iconLeft} size={20} key={0} />,
-    title ? (
-      <span key={1}>{title}</span>
-    ) : (
-      (children && <span key={1}>{children}</span>) || null
-    ),
-    iconRight && <Icon icon={iconRight} size={20} key={2} />
-  ],
-  ...props
-});
+}) =>
+  createElement(
+    seamless || non_submitting ? 'div' : 'button',
+    {
+      className: classnames(styles.button, className, styles[size], {
+        red,
+        grey,
+        seamless,
+        transparent,
+        disabled,
+        is_loading,
+        stretchy,
+        icon: (iconLeft || iconRight) && !title && !children,
+        has_icon_left: !!iconLeft,
+        has_icon_right: !!iconRight,
+      }),
+      ...props,
+    },
+    [
+      iconLeft && <Icon icon={iconLeft} size={20} key={0} />,
+      title ? <span key={1}>{title}</span> : (children && <span key={1}>{children}</span>) || null,
+      iconRight && <Icon icon={iconRight} size={20} key={2} />,
+    ]
+  );

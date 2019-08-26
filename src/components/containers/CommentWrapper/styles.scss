@@ -1,0 +1,26 @@
+.wrap {
+  background: $comment_bg;
+  min-height: 64px;
+  display: flex;
+  box-shadow: $comment_shadow;
+
+  &:global(.is_empty) {
+    opacity: 0.5;
+  }
+}
+
+.text {
+  flex: 1;
+}
+
+.thumb {
+  flex: 0 0 64px;
+  background: transparentize(black, 0.9);
+  border-radius: $panel_radius 0 0 $panel_radius;
+}
+
+.thumb_image {
+  height: 64px;
+  background: transparentize(white, 0.97);
+  border-radius: $panel_radius 0 0 $panel_radius;
+}

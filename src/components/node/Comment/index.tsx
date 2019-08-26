@@ -1,31 +1,17 @@
 import React, { FC, HTMLAttributes } from 'react';
-import { Card } from '~/components/containers/Card';
-import * as styles from './styles.scss';
-
-import classNames = require('classnames');
+import { CommentWrapper } from '~/components/containers/CommentWrapper';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
   is_loading?: boolean;
-}
+  photo?: string;
+  comment?: any;
+};
 
-const Comment: FC<IProps> = ({
-  is_empty,
-  is_loading,
-  className,
-  ...props
-}) => (
-  <Card
-    className={classNames(styles.wrap, className, { is_empty, is_loading })}
-    seamless
-    {...props}
-  >
-    <div className={styles.thumb}>
-      <div className={styles.thumb_image} />
-    </div>
-
-    <div className={styles.text} />
-  </Card>
+const Comment: FC<IProps> = ({ comment, is_empty, is_loading, className, photo, ...props }) => (
+  <CommentWrapper is_empty={is_empty} is_loading={is_loading} photo={photo} {...props}>
+    <div>Something!</div>
+  </CommentWrapper>
 );
 
 export { Comment };
