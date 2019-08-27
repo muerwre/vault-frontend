@@ -2,6 +2,8 @@ import React, { FC, HTMLAttributes } from 'react';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import { IComment } from '~/redux/types';
 import * as styles from './styles.scss';
+import { formatCommentText } from '~/utils/dom';
+import { Group } from '~/components/containers/Group';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
@@ -12,7 +14,14 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
 
 const Comment: FC<IProps> = ({ comment, is_empty, is_loading, className, photo, ...props }) => (
   <CommentWrapper is_empty={is_empty} is_loading={is_loading} photo={photo} {...props}>
-    {comment.text && <div className={styles.text}>{comment.text}</div>}
+    {comment.text && (
+      <Group
+        className={styles.text}
+        dangerouslySetInnerHTML={{
+          __html: formatCommentText(comment.user && comment.user.username, comment.text),
+        }}
+      />
+    )}
   </CommentWrapper>
 );
 

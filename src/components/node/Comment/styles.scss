@@ -1,3 +1,8 @@
 .text {
   padding: $gap / 2;
+  font-weight: 300;
+
+  b {
+    font-weight: 600;
+  }
 }

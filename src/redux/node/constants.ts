@@ -63,5 +63,5 @@ export const EMPTY_COMMENT: IComment = {
   text: '',
   files: [],
   is_private: false,
-  owner: null,
+  user: null,
 };

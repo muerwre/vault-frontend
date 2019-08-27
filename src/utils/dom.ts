@@ -55,4 +55,13 @@ export const describeArc = (
 export const getURL = url => `${process.env.API_HOST}${url}`;
 
 export const getImageSize = (image: string, size?: string): string =>
-  `${process.env.API_HOST}${image}`;
+  `${process.env.API_HOST}${image}`.replace('{size}', size);
+
+export const formatCommentText = (author, text: string) =>
+  text
+    .replace(/(\n{2,})/gi, '\n')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .split('\n')
+    .map((el, index) => (index === 0 ? `<p><b>${author}</b>: ${el}</p>` : `<p>${el}</p>`))
+    .join('');

@@ -118,7 +118,7 @@ export interface IComment {
   text: string;
   files: IFile[];
   is_private: boolean;
-  owner: IUser;
+  user: IUser;
 
   created_at?: string;
   update_at?: string;
