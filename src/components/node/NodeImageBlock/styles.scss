@@ -1,3 +1,15 @@
+.wrap {
+  &:global(.is_animated) {
+    .image_container {
+      transition: height 0.5s;
+    }
+
+    .image_wrap {
+      transition: opacity 0.5s;
+    }
+  }
+}
+
 .image_container {
   width: 100%;
   background: $node_image_bg;
@@ -7,7 +19,6 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
-  transition: height 0.5s;
   user-select: none;
 
   .image {
@@ -27,7 +38,6 @@
   pointer-events: none;
   touch-action: none;
   z-index: 1;
-  transition: opacity 0.5s;
   display: flex;
   align-items: center;
   justify-content: center;

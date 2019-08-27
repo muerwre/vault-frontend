@@ -1,7 +1,7 @@
 import { takeLatest, call, put, select, delay } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
-import { NODE_ACTIONS, EMPTY_NODE } from './constants';
+import { NODE_ACTIONS, EMPTY_NODE, EMPTY_COMMENT } from './constants';
 import {
   nodeSave,
   nodeSetSaveErrors,
@@ -12,6 +12,7 @@ import {
   nodePostComment,
   nodeSetSendingComment,
   nodeSetComments,
+  nodeSetCommentData,
 } from './actions';
 import { postNode, getNode, postNodeComment, getNodeComments } from './api';
 import { reqWrapper } from '../auth/sagas';
@@ -76,12 +77,14 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   return;
 }
 
-function* onPostComment({ data, id }: ReturnType<typeof nodePostComment>) {
+function* onPostComment() {
+  const { current, comment_data } = yield select(selectNode);
+
   yield put(nodeSetSendingComment(true));
   const {
     data: { comment },
     error,
-  } = yield call(reqWrapper, postNodeComment, { data, id });
+  } = yield call(reqWrapper, postNodeComment, { data: comment_data, id: current.id });
   yield put(nodeSetSendingComment(false));
 
   if (error || !comment) {
@@ -92,7 +95,8 @@ function* onPostComment({ data, id }: ReturnType<typeof nodePostComment>) {
 
   const { comments } = yield select(selectNode);
 
-  yield put(nodeSetComments([...comments, comment]));
+  yield put(nodeSetComments([comment, ...comments]));
+  yield put(nodeSetCommentData({ ...EMPTY_COMMENT }));
 }
 
 export default function* nodeSaga() {

@@ -7,6 +7,7 @@ import {
   nodeSetLoadingComments,
   nodeSetSendingComment,
   nodeSetComments,
+  nodeSetCommentData,
 } from './actions';
 import { INodeState } from './reducer';
 
@@ -32,6 +33,11 @@ const setSendingComment = (
 const setComments = (state: INodeState, { comments }: ReturnType<typeof nodeSetComments>) =>
   assocPath(['comments'], comments, state);
 
+const setCommentData = (
+  state: INodeState,
+  { comment_data }: ReturnType<typeof nodeSetCommentData>
+) => assocPath(['comment_data'], comment_data, state);
+
 export const NODE_HANDLERS = {
   [NODE_ACTIONS.SAVE]: setSaveErrors,
   [NODE_ACTIONS.SET_LOADING]: setLoading,
@@ -39,4 +45,5 @@ export const NODE_HANDLERS = {
   [NODE_ACTIONS.SET_CURRENT]: setCurrent,
   [NODE_ACTIONS.SET_SENDING_COMMENT]: setSendingComment,
   [NODE_ACTIONS.SET_COMMENTS]: setComments,
+  [NODE_ACTIONS.SET_COMMENT_DATA]: setCommentData,
 };

@@ -1,16 +1,16 @@
 .wrap {
-  display: flex;
-  flex-direction: column-reverse !important;
+  // display: flex;
+  // flex-direction: column !important;
 
-  & > div {
-    margin: ($gap / 2) 0;
+  // & > div {
+  //   margin: ($gap / 2) 0;
 
-    &:last-child {
-      margin-top: 0;
-    }
+  //   &:last-child {
+  //     margin-top: 0;
+  //   }
 
-    &:first-child {
-      margin-bottom: 0;
-    }
-  }
+  //   &:first-child {
+  //     margin-bottom: 0;
+  //   }
+  // }
 }

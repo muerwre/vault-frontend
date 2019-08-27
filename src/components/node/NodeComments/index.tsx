@@ -12,13 +12,13 @@ interface IProps {
 }
 
 const NodeComments: FC<IProps> = ({ comments }) => (
-  <div className={styles.wrap}>
-    <Filler />
-
+  <Group className={styles.wrap}>
     {comments.map(comment => (
       <Comment key={comment.id} comment={comment} />
     ))}
-  </div>
+
+    <Filler />
+  </Group>
 );
 
 export { NodeComments };

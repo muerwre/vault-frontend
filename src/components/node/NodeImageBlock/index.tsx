@@ -21,6 +21,7 @@ interface IProps {
 }
 
 const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
+  const [is_animated, setIsAnimated] = useState(false);
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(320);
   const [loaded, setLoaded] = useState<Record<number, boolean>>({});
@@ -48,8 +49,14 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
     setHeight(element_height);
   }, [refs, current, loaded]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 250);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className={classNames(styles.wrap, { is_loading })}>
+    <div className={classNames(styles.wrap, { is_loading, is_animated })}>
       <div>
         <ImageSwitcher
           total={images.length}

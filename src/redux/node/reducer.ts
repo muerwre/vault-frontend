@@ -1,12 +1,13 @@
 import { createReducer } from '~/utils/reducer';
 import { INode, IComment } from '../types';
-import { EMPTY_NODE } from './constants';
+import { EMPTY_NODE, EMPTY_COMMENT } from './constants';
 import { NODE_HANDLERS } from './handlers';
 
 export type INodeState = Readonly<{
   editor: INode;
   current: INode;
   comments: IComment[];
+  comment_data: IComment;
 
   error: string;
   errors: Record<string, string>;
@@ -24,6 +25,7 @@ const INITIAL_STATE: INodeState = {
     files: [],
   },
   current: { ...EMPTY_NODE },
+  comment_data: { ...EMPTY_COMMENT },
   comments: [],
 
   is_loading: false,
