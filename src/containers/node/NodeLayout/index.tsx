@@ -53,7 +53,7 @@ const NodeLayoutUnconnected: FC<IProps> = ({
         <Padder>
           <Group horizontal className={styles.content}>
             <Group className={styles.comments}>
-              <CommentForm id={node.id || null} />
+              <CommentForm id={0} />
 
               {is_loading_comments || !comments.length ? (
                 <NodeNoComments is_loading={is_loading_comments} />

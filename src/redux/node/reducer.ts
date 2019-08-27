@@ -7,7 +7,7 @@ export type INodeState = Readonly<{
   editor: INode;
   current: INode;
   comments: IComment[];
-  comment_data: IComment;
+  comment_data: Record<number, IComment>;
 
   error: string;
   errors: Record<string, string>;
@@ -25,7 +25,7 @@ const INITIAL_STATE: INodeState = {
     files: [],
   },
   current: { ...EMPTY_NODE },
-  comment_data: { ...EMPTY_COMMENT },
+  comment_data: { 0: { ...EMPTY_COMMENT } },
   comments: [],
 
   is_loading: false,

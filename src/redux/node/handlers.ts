@@ -35,8 +35,8 @@ const setComments = (state: INodeState, { comments }: ReturnType<typeof nodeSetC
 
 const setCommentData = (
   state: INodeState,
-  { comment_data }: ReturnType<typeof nodeSetCommentData>
-) => assocPath(['comment_data'], comment_data, state);
+  { id, comment }: ReturnType<typeof nodeSetCommentData>
+) => assocPath(['comment_data', id], comment, state);
 
 export const NODE_HANDLERS = {
   [NODE_ACTIONS.SAVE]: setSaveErrors,

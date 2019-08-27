@@ -42,6 +42,11 @@
     flex: 1;
   }
 
+  &:global(.disabled) {
+    touch-action: none;
+    pointer-events: none;
+  }
+
   &:hover {
     opacity: 1;
 

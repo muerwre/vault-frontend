@@ -47,6 +47,7 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetLoading(true));
   yield put(nodeSetLoadingComments(true));
   yield put(nodeSetSaveErrors({}));
+  yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
 
   if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
 
@@ -77,26 +78,28 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   return;
 }
 
-function* onPostComment() {
+function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
   const { current, comment_data } = yield select(selectNode);
 
   yield put(nodeSetSendingComment(true));
   const {
-    data: { comment },
+    data: { comment, id: target_id },
     error,
-  } = yield call(reqWrapper, postNodeComment, { data: comment_data, id: current.id });
+  } = yield call(reqWrapper, postNodeComment, { data: comment_data[id], id: current.id });
   yield put(nodeSetSendingComment(false));
 
   if (error || !comment) {
     return yield put(nodeSetSaveErrors({ error: error || ERRORS.EMPTY_RESPONSE }));
   }
 
-  console.log({ comment });
+  const { current: current_node } = yield select(selectNode);
 
-  const { comments } = yield select(selectNode);
-
-  yield put(nodeSetComments([comment, ...comments]));
-  yield put(nodeSetCommentData({ ...EMPTY_COMMENT }));
+  if (current_node && current_node.id === current.id) {
+    // if user still browsing that node
+    const { comments } = yield select(selectNode);
+    yield put(nodeSetComments([comment, ...comments]));
+    yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
+  }
 }
 
 export default function* nodeSaga() {

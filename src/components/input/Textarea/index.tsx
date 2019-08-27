@@ -6,6 +6,8 @@ import React, {
   useLayoutEffect,
   useRef,
   useState,
+  HTMLAttributes,
+  TextareaHTMLAttributes,
 } from 'react';
 import { getStyle } from '~/utils/dom';
 import classNames from 'classnames';
@@ -13,7 +15,7 @@ import classNames from 'classnames';
 import * as styles from '~/styles/inputs.scss';
 import { Icon } from '../Icon';
 
-interface IProps {
+type IProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   value: string;
   placeholder?: string;
   rows?: number;
@@ -24,7 +26,7 @@ interface IProps {
   required?: boolean;
   status?: 'error' | 'success' | '';
   title?: string;
-}
+};
 
 const Textarea = memo<IProps>(
   ({
@@ -37,6 +39,7 @@ const Textarea = memo<IProps>(
     required = false,
     title = '',
     status = '',
+    ...props
   }) => {
     const [rows, setRows] = useState(minRows || 1);
     const [focused, setFocused] = useState(false);
@@ -99,6 +102,7 @@ const Textarea = memo<IProps>(
             ref={textarea}
             onFocus={onFocus}
             onBlur={onBlur}
+            {...props}
           />
         </div>
 

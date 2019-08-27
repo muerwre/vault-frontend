@@ -33,7 +33,8 @@ export const nodeSetCurrent = (current: INodeState['current']) => ({
   type: NODE_ACTIONS.SET_CURRENT,
 });
 
-export const nodePostComment = () => ({
+export const nodePostComment = (id: number) => ({
+  id,
   type: NODE_ACTIONS.POST_COMMENT,
 });
 
@@ -47,7 +48,8 @@ export const nodeSetComments = (comments: IComment[]) => ({
   type: NODE_ACTIONS.SET_COMMENTS,
 });
 
-export const nodeSetCommentData = (comment_data: IComment) => ({
-  comment_data,
+export const nodeSetCommentData = (id: number, comment: IComment) => ({
+  id,
+  comment,
   type: NODE_ACTIONS.SET_COMMENT_DATA,
 });
