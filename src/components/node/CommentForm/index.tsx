@@ -1,11 +1,11 @@
-import React, { FC, useCallback, KeyboardEventHandler } from 'react';
+import React, { FC, useCallback, KeyboardEventHandler, useEffect } from 'react';
 import { Textarea } from '~/components/input/Textarea';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import * as styles from './styles.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import assocPath from 'ramda/es/assocPath';
-import { InputHandler, IFileWithUUID } from '~/redux/types';
+import { InputHandler, IFileWithUUID, IFile, IComment } from '~/redux/types';
 import { connect } from 'react-redux';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
@@ -14,8 +14,15 @@ import { Group } from '~/components/containers/Group';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS, UPLOAD_TYPES } from '~/redux/uploads/constants';
 import uuid from 'uuid4';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
+import { selectUploads } from '~/redux/uploads/selectors';
+import { IState } from '~/redux/store';
+import pipe from 'ramda/es/pipe';
 
-const mapStateToProps = selectNode;
+const mapStateToProps = (state: IState) => ({
+  node: selectNode(state),
+  uploads: selectUploads(state),
+});
+
 const mapDispatchToProps = {
   nodePostComment: NODE_ACTIONS.nodePostComment,
   nodeSetCommentData: NODE_ACTIONS.nodeSetCommentData,
@@ -28,8 +35,8 @@ type IProps = ReturnType<typeof mapStateToProps> &
   };
 
 const CommentFormUnconnected: FC<IProps> = ({
-  comment_data,
-  is_sending_comment,
+  node: { comment_data, is_sending_comment },
+  uploads: { statuses, files },
   id,
   nodePostComment,
   nodeSetCommentData,
@@ -85,14 +92,33 @@ const CommentFormUnconnected: FC<IProps> = ({
     [onSubmit]
   );
 
-  const comment = comment_data[id];
+  const onFileAdd = useCallback(
+    (file: IFile, temp_id: string) => {
+      const comment = comment_data[id];
+      nodeSetCommentData(id, pipe(
+        assocPath(['files'], [...comment.files, file]),
+        assocPath(['temp_ids'], comment.temp_ids.filter(el => el !== temp_id))
+      )(comment) as IComment);
+    },
+    [nodeSetCommentData, comment_data, id]
+  );
+
+  useEffect(() => {
+    Object.entries(statuses).forEach(([file_id, status]) => {
+      const comment = comment_data[id];
+
+      if (comment.temp_ids.includes(file_id) && !!status.uuid && files[status.uuid]) {
+        onFileAdd(files[status.uuid], file_id);
+      }
+    });
+  }, [statuses, comment_data, id, nodeSetCommentData, onFileAdd, files]);
 
   return (
     <CommentWrapper>
       <form onSubmit={onSubmit}>
         <div className={styles.input}>
           <Textarea
-            value={comment.text}
+            value={comment_data[id].text}
             handler={onInput}
             onKeyDown={onKeyDown}
             disabled={is_sending_comment}
