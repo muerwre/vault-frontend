@@ -17,6 +17,8 @@ import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { IState } from '~/redux/store';
 import pipe from 'ramda/es/pipe';
+import { ImageUpload } from '~/components/upload/ImageUpload';
+import { getImageSize } from '~/utils/dom';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -123,6 +125,23 @@ const CommentFormUnconnected: FC<IProps> = ({
             onKeyDown={onKeyDown}
             disabled={is_sending_comment}
           />
+        </div>
+
+        <div className={styles.uploads}>
+          {comment_data[id].files.map(file => (
+            <ImageUpload id={file.id} thumb={getImageSize(file.url)} key={file.id} />
+          ))}
+          {comment_data[id].temp_ids.map(
+            status =>
+              statuses[status] && (
+                <ImageUpload
+                  id={statuses[status].uuid}
+                  thumb={statuses[status].preview}
+                  key={status}
+                  progress={statuses[status].progress}
+                />
+              )
+          )}
         </div>
 
         <Group horizontal className={styles.buttons}>
