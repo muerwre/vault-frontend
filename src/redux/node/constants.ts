@@ -62,6 +62,7 @@ export const NODE_COMPONENTS: INodeComponents = {
 export const EMPTY_COMMENT: IComment = {
   text: '',
   files: [],
+  temp_ids: [],
   is_private: false,
   user: null,
 };

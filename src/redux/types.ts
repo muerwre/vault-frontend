@@ -116,6 +116,7 @@ export interface INode {
 
 export interface IComment {
   text: string;
+  temp_ids?: string[];
   files: IFile[];
   is_private: boolean;
   user: IUser;

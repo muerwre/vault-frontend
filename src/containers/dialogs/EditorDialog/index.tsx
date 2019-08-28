@@ -1,6 +1,4 @@
-import React, {
- FC, useState, useCallback, useEffect, FormEvent,
-} from 'react';
+import React, { FC, useState, useCallback, useEffect, FormEvent } from 'react';
 import { connect } from 'react-redux';
 import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';
@@ -23,7 +21,7 @@ import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { UPLOAD_TARGETS, UPLOAD_TYPES, UPLOAD_SUBJECTS } from '~/redux/uploads/constants';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { editor } = selectNode(state);
   const { statuses, files } = selectUploads(state);
 
@@ -50,6 +48,26 @@ const EditorDialogUnconnected: FC<IProps> = ({
   const eventPreventer = useCallback(event => event.preventDefault(), []);
   const [temp, setTemp] = useState([]);
 
+  const onUpload = useCallback(
+    (uploads: File[]) => {
+      const items: IFileWithUUID[] = Array.from(uploads).map(
+        (file: File): IFileWithUUID => ({
+          file,
+          temp_id: uuid(),
+          subject: UPLOAD_SUBJECTS.EDITOR,
+          target: UPLOAD_TARGETS.NODES,
+          type: UPLOAD_TYPES.IMAGE,
+        })
+      );
+
+      const temps = items.map(file => file.temp_id);
+
+      setTemp([...temp, ...temps]);
+      uploadUploadFiles(items);
+    },
+    [setTemp, uploadUploadFiles, temp]
+  );
+
   const onFileMove = useCallback(
     (old_index: number, new_index: number) => {
       setData(assocPath(['files'], moveArrItem(old_index, new_index, data.files), data));
@@ -68,48 +86,23 @@ const EditorDialogUnconnected: FC<IProps> = ({
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
 
-      if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length) return;
+      if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length)
+        return;
 
-      const items: IFileWithUUID[] = Array.from(event.dataTransfer.files).map(
-        (file: File): IFileWithUUID => ({
-          file,
-          temp_id: uuid(),
-          subject: UPLOAD_SUBJECTS.EDITOR,
-          target: UPLOAD_TARGETS.NODES,
-          type: UPLOAD_TYPES.IMAGE,
-        })
-      );
-
-      const temps = items.map(file => file.temp_id);
-
-      setTemp([...temp, ...temps]);
-      uploadUploadFiles(items);
+      onUpload(Array.from(event.dataTransfer.files));
     },
-    [uploadUploadFiles, temp]
+    [onUpload]
   );
 
   const onInputChange = useCallback(
-    (event) => {
+    event => {
       event.preventDefault();
 
       if (!event.target.files || !event.target.files.length) return;
 
-      const items: IFileWithUUID[] = Array.from(event.target.files).map(
-        (file: File): IFileWithUUID => ({
-          file,
-          temp_id: uuid(),
-          subject: UPLOAD_SUBJECTS.EDITOR,
-          target: UPLOAD_TARGETS.NODES,
-          type: UPLOAD_TYPES.IMAGE,
-        })
-      );
-
-      const temps = items.map(file => file.temp_id);
-
-      setTemp([...temp, ...temps]);
-      uploadUploadFiles(items);
+      onUpload(Array.from(event.target.files));
     },
-    [uploadUploadFiles, temp]
+    [onUpload]
   );
 
   useEffect(() => {
@@ -122,9 +115,6 @@ const EditorDialogUnconnected: FC<IProps> = ({
     };
   }, [eventPreventer]);
 
-  // useEffect(() => console.log({ temp }), [temp]);
-  // useEffect(() => console.log({ data }), [data]);
-
   useEffect(() => {
     Object.entries(statuses).forEach(([id, status]) => {
       if (temp.includes(id) && !!status.uuid && files[status.uuid]) {
@@ -135,17 +125,19 @@ const EditorDialogUnconnected: FC<IProps> = ({
   }, [statuses, files, temp, onFileAdd]);
 
   const setTitle = useCallback(
-    (title) => {
+    title => {
       setData({ ...data, title });
     },
     [setData, data]
   );
 
-  const onSubmit = useCallback((event: FormEvent) => {
-    event.preventDefault();
-    nodeSave(data);
-    console.log({ data });
-  }, [data, nodeSave]);
+  const onSubmit = useCallback(
+    (event: FormEvent) => {
+      event.preventDefault();
+      nodeSave(data);
+    },
+    [data, nodeSave]
+  );
 
   const buttons = (
     <Padder style={{ position: 'relative' }}>
