@@ -1,10 +1,4 @@
-import {
-  api,
-  authMiddleware,
-  errorMiddleware,
-  resultMiddleware,
-  configWithToken,
-} from '~/utils/api';
+import { api, errorMiddleware, resultMiddleware, configWithToken } from '~/utils/api';
 import { API } from '~/constants/api';
 import { IResultWithStatus } from '~/redux/types';
 import { userLoginTransform } from '~/redux/auth/transforms';

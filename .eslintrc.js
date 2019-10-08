@@ -1,5 +1,11 @@
 module.exports = {
-  extends: ['plugin:@typescript-eslint/recommended', 'prettier/@typescript-eslint', 'airbnb', 'airbnb-base'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'prettier/@typescript-eslint',
+    'airbnb',
+    'airbnb-base',
+    'prettier',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -25,6 +31,18 @@ module.exports = {
     'global-require': 1,
     'react/no-multi-comp': 1,
     'react/jsx-filename-extension': 0,
+    'react/jsx-wrap-multilines': [
+      'warn',
+      {
+        declaration: 'parens',
+        assignment: 'parens',
+        return: 'parens',
+        arrow: 'parens',
+        condition: 'ignore',
+        logical: 'ignore',
+        prop: 'ignore',
+      },
+    ],
     '@typescript-eslint/camelcase': 0,
     '@typescript-eslint/interface-name-prefix': 0,
     camelcase: 0,
@@ -43,18 +61,21 @@ module.exports = {
     'max-line-length': [true, 100],
     // 'max-len': 100,
     // 'max-len': { "code": 100 },
-    'max-len': ["warn", { "code": 100 }],
-    "template-curly-spacing": "off",
-    "comma-dangle": ["warn", {
-      "arrays": "always-multiline",
-      "objects": "always-multiline",
-      "imports": "always-multiline",
-      "exports": "always-multiline",
-      "functions": "never"
-    }],
-    indent: "off",
-    "import/order": "off",
-    "arrow-parens": ["warn", "as-needed"],
+    'max-len': ['warn', { code: 100 }],
+    'template-curly-spacing': 'off',
+    'comma-dangle': [
+      'warn',
+      {
+        arrays: 'always-multiline',
+        objects: 'always-multiline',
+        imports: 'always-multiline',
+        exports: 'always-multiline',
+        functions: 'never',
+      },
+    ],
+    indent: 'off',
+    'import/order': 'off',
+    'arrow-parens': ['warn', 'as-needed'],
   },
   globals: {
     document: false,
