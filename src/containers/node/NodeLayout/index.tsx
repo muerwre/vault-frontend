@@ -63,7 +63,7 @@ const NodeLayoutUnconnected: FC<IProps> = ({
             </Group>
 
             <div className={styles.panel}>
-              <Group style={{ flex: 1 }}>
+              <Group style={{ flex: 1, minWidth: 0 }}>
                 <NodeTags />
 
                 <NodeRelated title="First album" />

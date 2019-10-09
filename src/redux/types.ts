@@ -5,7 +5,7 @@ import { IUser } from './auth/types';
 
 export interface ITag {
   title: string;
-  feature?: 'red' | 'blue' | 'green' | 'olive' | 'black';
+  feature?: 'red' | 'blue' | 'green' | 'olive' | 'black' | 'input';
 }
 
 export type IInputTextProps = DetailedHTMLProps<
