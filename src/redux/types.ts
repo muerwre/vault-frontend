@@ -4,8 +4,15 @@ import { ERRORS } from '~/constants/errors';
 import { IUser } from './auth/types';
 
 export interface ITag {
+  id: number;
   title: string;
-  feature?: 'red' | 'blue' | 'green' | 'olive' | 'black' | 'input';
+
+  data: Record<string, string>;
+  user: IUser;
+  nodes: INode[];
+
+  readonly created_at: string;
+  readonly updated_at: string;
 }
 
 export type IInputTextProps = DetailedHTMLProps<
