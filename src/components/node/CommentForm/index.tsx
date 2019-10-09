@@ -1,4 +1,4 @@
-import React, { FC, useCallback, KeyboardEventHandler } from 'react';
+import React, { FC, useCallback, KeyboardEventHandler, useEffect } from 'react';
 import { Textarea } from '~/components/input/Textarea';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import * as styles from './styles.scss';
@@ -14,8 +14,14 @@ import { Group } from '~/components/containers/Group';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS, UPLOAD_TYPES } from '~/redux/uploads/constants';
 import uuid from 'uuid4';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
+import { selectUploads } from '~/redux/uploads/selectors';
+import { IState } from '~/redux/store';
 
-const mapStateToProps = selectNode;
+const mapStateToProps = (state: IState) => ({
+  node: selectNode(state),
+  uploads: selectUploads(state),
+});
+
 const mapDispatchToProps = {
   nodePostComment: NODE_ACTIONS.nodePostComment,
   nodeSetCommentData: NODE_ACTIONS.nodeSetCommentData,
@@ -28,8 +34,8 @@ type IProps = ReturnType<typeof mapStateToProps> &
   };
 
 const CommentFormUnconnected: FC<IProps> = ({
-  comment_data,
-  is_sending_comment,
+  node: { comment_data, is_sending_comment },
+  uploads: { statuses, files },
   id,
   nodePostComment,
   nodeSetCommentData,
@@ -85,6 +91,49 @@ const CommentFormUnconnected: FC<IProps> = ({
     [onSubmit]
   );
 
+  useEffect(() => {
+    const temp_ids = (comment_data && comment_data[id] && comment_data[id].temp_ids) || [];
+    const added_files = temp_ids
+      .map(temp_uuid => statuses[temp_uuid] && statuses[temp_uuid].uuid)
+      .map(el => !!el && files[el])
+      .filter(el => !!el && !comment_data[id].files.some(file => file.id === el.id));
+
+    const filtered_temps = temp_ids.filter(
+      temp_id =>
+        statuses[temp_id] &&
+        statuses[temp_id].uuid &&
+        !added_files.some(file => file.id === statuses[temp_id].uuid)
+    );
+
+    console.log({ temp_ids, added_files });
+
+    // if (added_files.length) {
+    nodeSetCommentData(id, {
+      ...comment_data[id],
+      temp_ids: filtered_temps,
+      files: [...comment_data[id].files, ...added_files],
+    });
+    // }
+
+    // if (filtered_temps.length) {
+    // leaving only currently uploading files
+    // nodeSetCommentData(id, assocPath(['temp_ids'], filtered_temps, comment_data[id]));
+    // }
+
+    // console.log({
+    // statuses,
+    // temp_ids,
+    // filtered_temps,
+    // added_files,
+    // });
+    // Object.entries(statuses).forEach(([id, status]) => {
+    // if (temp.includes(id) && !!status.uuid && files[status.uuid]) {
+    // onFileAdd(files[status.uuid]);
+    // setTemp(temp.filter(el => el !== id));
+    // }
+    // });
+  }, [statuses, files]);
+
   const comment = comment_data[id];
 
   return (
@@ -111,6 +160,21 @@ const CommentFormUnconnected: FC<IProps> = ({
           </Button>
         </Group>
       </form>
+      {comment.temp_ids.map(
+        temp_id =>
+          statuses[temp_id] &&
+          statuses[temp_id].is_uploading && (
+            <div key={statuses[temp_id].temp_id}>{statuses[temp_id].progress}</div>
+          )
+      )}
+      {comment.files.map(
+        file =>
+          file.name && (
+            <div key={file.id}>
+              {file.name} {file.mime} {file.size}
+            </div>
+          )
+      )}
     </CommentWrapper>
   );
 };
