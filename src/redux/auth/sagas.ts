@@ -1,6 +1,6 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import { AUTH_USER_ACTIONS } from '~/redux/auth/constants';
+import { AUTH_USER_ACTIONS, EMPTY_USER, USER_ERRORS } from '~/redux/auth/constants';
 import {
   authSetToken,
   userSetLoginError,
@@ -10,8 +10,6 @@ import {
 import { apiUserLogin, apiAuthGetUser } from '~/redux/auth/api';
 import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
 import { selectToken } from './selectors';
-import { URLS } from '~/constants/urls';
-import { DIALOGS } from '../modal/constants';
 import { IResultWithStatus } from '../types';
 import { IUser } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
@@ -22,10 +20,7 @@ export function* reqWrapper(requestAction, props = {}): ReturnType<typeof reques
   const result = yield call(requestAction, { access, ...props });
 
   if (result && result.status === 401) {
-    yield put(push(URLS.BASE));
-    yield put(modalShowDialog(DIALOGS.LOGIN));
-
-    return result;
+    return { error: USER_ERRORS.UNAUTHORIZED, data: {} };
   }
 
   return result;
@@ -56,8 +51,22 @@ function* checkUserSaga({ key }: RehydrateAction) {
   if (key !== 'auth') return;
 
   const {
+    error,
     data: { user },
   }: IResultWithStatus<{ user: IUser }> = yield call(reqWrapper, apiAuthGetUser);
+
+  console.log({ error, user });
+
+  if (error) {
+    yield put(
+      authSetUser({
+        ...EMPTY_USER,
+        is_user: false,
+      })
+    );
+
+    return;
+  }
 
   yield put(authSetUser({ ...user, is_user: true }));
 }
