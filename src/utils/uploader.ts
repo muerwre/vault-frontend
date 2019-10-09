@@ -71,11 +71,9 @@ export const fakeUploader = ({
   });
 };
 
-export const getFileType = (file: File) => {
-  console.log({ type: file.type });
-
+export const getFileType = (file: File): keyof typeof UPLOAD_TYPES => {
   return (
     (file.type && Object.keys(FILE_MIMES).find(mime => FILE_MIMES[mime].includes(file.type))) ||
-    UPLOAD_TYPES.OTHER
+    null
   );
 };

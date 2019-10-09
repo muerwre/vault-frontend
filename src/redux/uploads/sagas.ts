@@ -1,8 +1,6 @@
-import {
- takeEvery, all, spawn, call, put, take, fork, race,
-} from 'redux-saga/effects';
+import { takeEvery, all, spawn, call, put, take, fork, race } from 'redux-saga/effects';
 import { postUploadFile } from './api';
-import { UPLOAD_ACTIONS } from '~/redux/uploads/constants';
+import { UPLOAD_ACTIONS, FILE_MIMES } from '~/redux/uploads/constants';
 import {
   uploadUploadFiles,
   uploadSetStatus,
@@ -49,9 +47,7 @@ function* uploadCancelWorker(id) {
   return true;
 }
 
-function* uploadWorker({
- file, temp_id, target, type,
-}: IFileWithUUID) {
+function* uploadWorker({ file, temp_id, target, type }: IFileWithUUID) {
   const [promise, chan] = createUploader<Partial<IFileWithUUID>, Partial<IFileWithUUID>>(
     uploadCall,
     { temp_id, target, type }
@@ -69,10 +65,8 @@ function* uploadWorker({
   return result;
 }
 
-function* uploadFile({
- file, temp_id, type, target,
-}: IFileWithUUID) {
-  if (!file.type || !VALIDATORS.IS_IMAGE_MIME(file.type)) {
+function* uploadFile({ file, temp_id, type, target }: IFileWithUUID) {
+  if (!file.type || !file.type || !FILE_MIMES[type].includes(file.type)) {
     return { error: 'File_Not_Image', status: HTTP_RESPONSES.BAD_REQUEST, data: {} };
   }
 
@@ -137,6 +131,6 @@ function* uploadFiles({ files }: ReturnType<typeof uploadUploadFiles>) {
   yield all(files.map(file => spawn(uploadFile, file)));
 }
 
-export default function* () {
+export default function*() {
   yield takeEvery(UPLOAD_ACTIONS.UPLOAD_FILES, uploadFiles);
 }
