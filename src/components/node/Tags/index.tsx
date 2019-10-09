@@ -35,7 +35,9 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
   const onInput = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
       setInput(value);
-      if (timer) clearTimeout(timer.current);
+      if (timer) {
+        clearTimeout(timer.current);
+      }
     },
     [setInput, timer]
   );
@@ -69,8 +71,10 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
   const onSubmit = useCallback(() => {
     if (length(tags) === length(data) && isEmpty(symmetricDifference(tags, data))) return;
 
+    if (timer.current) clearTimeout(timer.current);
+
     onTagsChange(data.map(tag => tag.title));
-  }, [tags, data, onTagsChange]);
+  }, [tags, data, onTagsChange, timer]);
 
   const onBlur = useCallback(() => {
     clearTimeout(timer.current);
@@ -79,10 +83,14 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
 
   useEffect(() => setData(tags), [tags]);
   useEffect(() => {
-    timer.current = setTimeout(onSubmit, 3000);
+    timer.current = setTimeout(() => {
+      onSubmit();
+    }, 3000);
 
-    return () => clearTimeout(timer.current);
-  }, [data]);
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, [data, tags]);
 
   return (
     <TagField {...props}>
