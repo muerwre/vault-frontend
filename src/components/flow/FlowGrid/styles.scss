@@ -8,7 +8,7 @@ $cols: $content_width / $cell;
 .grid_test {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax($cell, 1fr));
-  grid-template-rows: 360px;
+  grid-template-rows: $cell;
   grid-auto-rows: $cell;
   grid-auto-flow: row dense;
   grid-column-gap: $grid_line;
@@ -22,8 +22,8 @@ $cols: $content_width / $cell;
 .hero {
   grid-row-start: 1;
   grid-row-end: span 1;
-  grid-column-start: 0;
-  grid-column-end: span 4;
+  grid-column-start: 1;
+  grid-column-end: -1;
   // gridRow: "1 / 2",
   // gridColumn: "1 / -1",
   background: darken($content_bg, 2%);
