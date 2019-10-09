@@ -16,6 +16,7 @@ import uuid from 'uuid4';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { IState } from '~/redux/store';
+import { getFileType } from '~/utils/uploader';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -53,7 +54,7 @@ const CommentFormUnconnected: FC<IProps> = ({
           temp_id: uuid(),
           subject: UPLOAD_SUBJECTS.COMMENT,
           target: UPLOAD_TARGETS.COMMENTS,
-          type: UPLOAD_TYPES.IMAGE,
+          type: getFileType(file),
         })
       );
 
@@ -127,7 +128,8 @@ const CommentFormUnconnected: FC<IProps> = ({
         </div>
 
         <Group horizontal className={styles.buttons}>
-          <input type="file" onInput={onInputChange} multiple />
+          <input type="file" onInput={onInputChange} multiple accept="image/*" />
+          <input type="file" onInput={onInputChange} multiple accept="audio/*" />
 
           <Filler />
 
@@ -138,6 +140,7 @@ const CommentFormUnconnected: FC<IProps> = ({
           </Button>
         </Group>
       </form>
+
       {comment.temp_ids.map(
         temp_id =>
           statuses[temp_id] &&
@@ -145,11 +148,12 @@ const CommentFormUnconnected: FC<IProps> = ({
             <div key={statuses[temp_id].temp_id}>{statuses[temp_id].progress}</div>
           )
       )}
+
       {comment.files.map(
         file =>
           file.name && (
             <div key={file.id}>
-              {file.name} {file.mime} {file.size}
+              [{file.mime}] {file.name}
             </div>
           )
       )}

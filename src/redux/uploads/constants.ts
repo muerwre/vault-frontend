@@ -60,3 +60,8 @@ export const UPLOAD_TYPES: Record<string, IUploadType> = {
   VIDEO: 'video',
   OTHER: 'other',
 };
+
+export const FILE_MIMES = {
+  [UPLOAD_TYPES.image]: ['image/jpeg', 'image/jpg', 'image/png'],
+  [UPLOAD_TYPES.audio]: ['audio/mpeg3', 'audio/mpeg', 'audio/mp3'],
+};
