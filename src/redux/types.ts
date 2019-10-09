@@ -110,6 +110,8 @@ export interface INode {
     };
   };
 
+  tags: ITag[];
+
   createdAt?: string;
   updatedAt?: string;
 }

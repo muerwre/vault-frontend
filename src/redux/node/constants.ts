@@ -37,6 +37,7 @@ export const EMPTY_NODE: INode = {
   type: null,
 
   blocks: [],
+  tags: [],
 
   options: {
     flow: {

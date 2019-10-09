@@ -16,8 +16,13 @@ import { NodeTags } from '~/components/node/NodeTags';
 import { NODE_COMPONENTS } from '~/redux/node/constants';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { CommentForm } from '~/components/node/CommentForm';
+import { selectUser } from '~/redux/auth/selectors';
 
-const mapStateToProps = selectNode;
+const mapStateToProps = state => ({
+  node: selectNode(state),
+  user: selectUser(state),
+});
+
 const mapDispatchToProps = {
   nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
 };
@@ -30,10 +35,8 @@ const NodeLayoutUnconnected: FC<IProps> = ({
   match: {
     params: { id },
   },
-  is_loading,
-  is_loading_comments,
-  comments = [],
-  current: node,
+  node: { is_loading, is_loading_comments, comments = [], current: node },
+  user: { is_user },
   nodeLoadNode,
 }) => {
   useEffect(() => {
@@ -64,7 +67,7 @@ const NodeLayoutUnconnected: FC<IProps> = ({
 
             <div className={styles.panel}>
               <Group style={{ flex: 1, minWidth: 0 }}>
-                <NodeTags />
+                <NodeTags is_editable={is_user} tags={node.tags} onChange={console.log} />
 
                 <NodeRelated title="First album" />
 

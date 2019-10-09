@@ -6,7 +6,7 @@ import { Tag } from '~/components/node/Tag';
 type IProps = HTMLAttributes<HTMLDivElement> & {
   tags: ITag[];
   is_editable?: boolean;
-  onChange?: (tags: string[]) => void;
+  onTagsChange?: (tags: string[]) => void;
 };
 
 export const Tags: FC<IProps> = ({ tags, is_editable, onChange, ...props }) => {
@@ -25,7 +25,7 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onChange, ...props }) => {
         <Tag key={tag.title} title={tag.title} feature={tag.feature} />
       ))}
 
-      <Tag title={input} onInput={onInput} />
+      {is_editable && <Tag title={input} onInput={onInput} />}
     </TagField>
   );
 };
