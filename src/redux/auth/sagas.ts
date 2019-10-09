@@ -1,5 +1,4 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
 import { AUTH_USER_ACTIONS, EMPTY_USER, USER_ERRORS } from '~/redux/auth/constants';
 import {
   authSetToken,
@@ -8,7 +7,7 @@ import {
   userSendLoginRequest,
 } from '~/redux/auth/actions';
 import { apiUserLogin, apiAuthGetUser } from '~/redux/auth/api';
-import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
+import { modalSetShown } from '~/redux/modal/actions';
 import { selectToken } from './selectors';
 import { IResultWithStatus } from '../types';
 import { IUser } from './types';
@@ -54,8 +53,6 @@ function* checkUserSaga({ key }: RehydrateAction) {
     error,
     data: { user },
   }: IResultWithStatus<{ user: IUser }> = yield call(reqWrapper, apiAuthGetUser);
-
-  console.log({ error, user });
 
   if (error) {
     yield put(
