@@ -2,43 +2,43 @@
   sortable grid: http://clauderic.github.io/react-sortable-hoc/#/basic-configuration/grid?_k=hjqdj1
   
   [BUGS]
-  
-  todo: flow hangs on empty response
+
+  TODO: flow hangs on empty response
   
   [CONTENT]
 
-  todo: adding photos to comments
-  todo: adding media to comments
-  todo: adding media to posts
-  todo: adding text to posts
-  todo: covers for posts
-  todo: wallpapers for posts
-  todo: changing flow appearance for posts
+  TODO: adding photos to comments
+  TODO: adding media to comments
+  TODO: adding media to posts
+  TODO: adding text to posts
+  TODO: covers for posts
+  TODO: wallpapers for posts
+  TODO: changing flow appearance for posts
 
-  todo: display for all node types
-  todo: related by tags
-  todo: sticky left column
-  todo: adaptive relates count
+  TODO: display for all node types
+  TODO: related by tags
+  TODO: sticky left column
+  TODO: adaptive relates count
 
-  todo: boris page
-  todo: user profile and settings
+  TODO: boris page
+  TODO: user profile and settings
 
   [IMPORT]
 
-  todo: import users properly
-  todo: auth using md5 fallback
-  todo: import files properly
-  todo: import nodes properly
-  todo: import comments properly
-  todo: convert comment content properly
-  todo: convert post text properly
+  TODO: import users properly
+  TODO: auth using md5 fallback
+  TODO: import files properly
+  TODO: import nodes properly
+  TODO: import comments properly
+  TODO: convert comment content properly
+  TODO: convert post text properly
 
   [NOT TODAY]
 
-  todo: swipable image slideshow
-  todo: notifications
-  todo: PMs
-  todo: 
+  TODO: swipable image slideshow
+  TODO: notifications
+  TODO: PMs
+  TODO: 
 
 */
 import * as React from 'react';
