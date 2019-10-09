@@ -13,8 +13,9 @@ import {
   nodeSetSendingComment,
   nodeSetComments,
   nodeSetCommentData,
+  nodeUpdateTags,
 } from './actions';
-import { postNode, getNode, postNodeComment, getNodeComments } from './api';
+import { postNode, getNode, postNodeComment, getNodeComments, updateNodeTags } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
@@ -102,8 +103,16 @@ function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
   }
 }
 
+function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
+  yield delay(1000);
+  const result = yield call(reqWrapper, updateNodeTags, { id, tags });
+
+  console.log({ result });
+}
+
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
+  yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
 }

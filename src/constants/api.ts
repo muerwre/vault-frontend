@@ -13,5 +13,6 @@ export const API = {
     GET_NODE: (id: number | string) => `/node/${id}`,
 
     COMMENT: (id: INode['id']) => `/node/${id}/comment`,
+    UPDATE_TAGS: (id: INode['id']) => `/node/${id}/tags`,
   },
 };

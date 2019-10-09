@@ -16,6 +16,8 @@ export const NODE_ACTIONS = {
 
   POST_COMMENT: `${prefix}POST_COMMENT`,
   SET_COMMENTS: `${prefix}SET_COMMENTS`,
+
+  UPDATE_TAGS: `${prefix}UPDATE_TAGS`,
 };
 
 export const EMPTY_BLOCK: IBlock = {

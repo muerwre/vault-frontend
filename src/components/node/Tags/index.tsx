@@ -9,14 +9,10 @@ import React, {
   useRef,
 } from 'react';
 import { TagField } from '~/components/containers/TagField';
-import { ITag } from '~/redux/types';
+import { ITag, INode } from '~/redux/types';
 import { Tag } from '~/components/node/Tag';
 import uniq from 'ramda/es/uniq';
-import equals from 'ramda/es/equals';
 import { setTimeout } from 'timers';
-import identity from 'ramda/es/identity';
-import countBy from 'ramda/es/countBy';
-import eqBy from 'ramda/es/eqBy';
 import length from 'ramda/es/length';
 import isEmpty from 'ramda/es/isEmpty';
 import symmetricDifference from 'ramda/es/symmetricDifference';
@@ -34,10 +30,8 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
 
   const onInput = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+      clearTimeout(timer.current);
       setInput(value);
-      if (timer) {
-        clearTimeout(timer.current);
-      }
     },
     [setInput, timer]
   );

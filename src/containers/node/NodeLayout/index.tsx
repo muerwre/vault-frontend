@@ -1,4 +1,4 @@
-import React, { FC, createElement, useEffect } from 'react';
+import React, { FC, createElement, useEffect, useCallback } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 
@@ -25,6 +25,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
+  nodeUpdateTags: NODE_ACTIONS.nodeUpdateTags,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -38,12 +39,19 @@ const NodeLayoutUnconnected: FC<IProps> = ({
   node: { is_loading, is_loading_comments, comments = [], current: node },
   user: { is_user },
   nodeLoadNode,
+  nodeUpdateTags,
 }) => {
   useEffect(() => {
     if (is_loading) return;
     nodeLoadNode(parseInt(id, 10), null);
   }, [nodeLoadNode, id]);
 
+  const onTagsChange = useCallback(
+    (tags: string[]) => {
+      nodeUpdateTags(node.id, tags);
+    },
+    [node, nodeUpdateTags]
+  );
   const block = node && node.type && NODE_COMPONENTS[node.type] && NODE_COMPONENTS[node.type];
 
   return (
@@ -67,7 +75,7 @@ const NodeLayoutUnconnected: FC<IProps> = ({
 
             <div className={styles.panel}>
               <Group style={{ flex: 1, minWidth: 0 }}>
-                <NodeTags is_editable={is_user} tags={node.tags} onChange={console.log} />
+                <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
 
                 <NodeRelated title="First album" />
 
