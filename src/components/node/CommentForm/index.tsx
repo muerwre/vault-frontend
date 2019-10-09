@@ -11,7 +11,7 @@ import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { Group } from '~/components/containers/Group';
-import { UPLOAD_SUBJECTS, UPLOAD_TARGETS, UPLOAD_TYPES } from '~/redux/uploads/constants';
+import { UPLOAD_SUBJECTS, UPLOAD_TARGETS } from '~/redux/uploads/constants';
 import uuid from 'uuid4';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
@@ -149,14 +149,7 @@ const CommentFormUnconnected: FC<IProps> = ({
           )
       )}
 
-      {comment.files.map(
-        file =>
-          file.name && (
-            <div key={file.id}>
-              [{file.mime}] {file.name}
-            </div>
-          )
-      )}
+      {comment.files.map(file => file.name && <div key={file.id}>{file.name}</div>)}
     </CommentWrapper>
   );
 };

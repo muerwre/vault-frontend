@@ -33,11 +33,13 @@ export function createUploader<T extends {}, R extends {}>(
 export const uploadGetThumb = async file => {
   if (!file.type || !VALIDATORS.IS_IMAGE_MIME(file.type)) return '';
 
-  return await new Promise((resolve, reject) => {
+  const thumb = await new Promise(resolve => {
     const reader = new FileReader();
     reader.onloadend = () => resolve(reader.result || '');
     reader.readAsDataURL(file);
   });
+
+  return thumb;
 };
 
 export const fakeUploader = ({
@@ -49,7 +51,7 @@ export const fakeUploader = ({
   onProgress: (current: number, total: number) => void;
   mustSucceed: boolean;
 }): Promise<IResultWithStatus<IFile>> => {
-  const { url, error } = file;
+  const { error } = file;
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {

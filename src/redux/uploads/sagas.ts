@@ -11,7 +11,6 @@ import {
 import { reqWrapper } from '../auth/sagas';
 import { createUploader, uploadGetThumb } from '~/utils/uploader';
 import { HTTP_RESPONSES } from '~/utils/api';
-import { VALIDATORS } from '~/utils/validators';
 import { IFileWithUUID, IFile, IUploadProgressHandler } from '../types';
 
 function* uploadCall({
@@ -97,13 +96,13 @@ function* uploadFile({ file, temp_id, type, target }: IFileWithUUID) {
     // add here CANCEL_UPLOADS worker, that will watch for subject
     // cancel_editing: take(UPLOAD_ACTIONS.CANCEL_EDITING),
     // save_inventory: take(INVENTORY_ACTIONS.SAVE_INVENTORY),
-  }) as any;
+  });
 
   if (cancel || cancel_editing) {
     return yield put(uploadDropStatus(temp_id));
   }
 
-  const { data, error }: { data: IFile & { detail: any }; error: string } = result;
+  const { data, error }: { data: IFile & { detail: string }; error: string } = result;
 
   if (error) {
     return yield put(

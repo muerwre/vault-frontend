@@ -83,5 +83,6 @@ module.exports = {
     HTMLInputElement: false,
     HTMLDivElement: false,
     FormData: false,
+    FileReader: false,
   },
 };
