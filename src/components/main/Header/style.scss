@@ -47,11 +47,11 @@
     }
 
     &:last-child {
-      padding-right: 0;
+      // padding-right: 0;
 
-      &::after {
-        display: none;
-      }
+      // &::after {
+      // display: none;
+      // }
     }
   }
 }
@@ -70,11 +70,12 @@
   flex: 0 !important;
   opacity: 0.3;
   cursor: pointer;
+  margin-left: $gap;
 }
 
 .user_avatar {
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
   background: white;
   border-radius: $radius;
 }

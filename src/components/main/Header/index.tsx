@@ -36,11 +36,8 @@ const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
         <div onClick={onOpenEditor}>editor</div>
       </div>
 
-      <Filler />
-
       {is_user && (
         <Group horizontal className={style.user_button}>
-          <div>{username}</div>
           <div className={style.user_avatar} />
         </Group>
       )}
