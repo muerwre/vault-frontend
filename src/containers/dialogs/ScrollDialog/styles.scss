@@ -111,7 +111,7 @@
 
 .children {
   background: $content_bg;
-  border-radius: $radius;
+  border-radius: $radius $radius 0 0;
 }
 
 .top_cap {
@@ -124,7 +124,7 @@
 
   &::after {
     position: absolute;
-    content: " ";
+    content: ' ';
     width: 100%;
     height: $radius;
     background: linear-gradient($content_bg, transparentize($content_bg, 1));

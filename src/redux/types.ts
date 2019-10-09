@@ -93,7 +93,7 @@ export interface IBlock {
 
 export interface INode {
   id?: number;
-  user_id: UUID;
+  user: Partial<IUser>;
 
   title: string;
   files: IFile[];

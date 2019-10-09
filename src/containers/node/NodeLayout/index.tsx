@@ -58,7 +58,7 @@ const NodeLayoutUnconnected: FC<IProps> = ({
     <Card className={styles.node} seamless>
       {block && createElement(block, { node, is_loading })}
 
-      <NodePanel />
+      <NodePanel node={node} />
 
       <Group>
         <Padder>

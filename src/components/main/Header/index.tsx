@@ -31,13 +31,13 @@ const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
       <Filler />
 
       <div className={style.plugs}>
-        <Link to="/">flow</Link>
-        <Link to="/examples/image">image</Link>
         <div onClick={onOpenEditor}>editor</div>
+        <Link to="/">flow</Link>
       </div>
 
       {is_user && (
         <Group horizontal className={style.user_button}>
+          <div>{username}</div>
           <div className={style.user_avatar} />
         </Group>
       )}

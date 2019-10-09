@@ -2,16 +2,19 @@ import React, { FC } from 'react';
 import * as styles from './styles.scss';
 import { Group } from '~/components/containers/Group';
 import { Filler } from '~/components/containers/Filler';
-import {Icon} from "~/components/input/Icon";
+import { Icon } from '~/components/input/Icon';
+import { INode } from '~/redux/types';
 
-interface IProps {}
+interface IProps {
+  node: INode;
+}
 
-const NodePanel: FC<IProps> = () => (
+const NodePanel: FC<IProps> = ({ node: { title, user } }) => (
   <div className={styles.wrap}>
     <Group horizontal className={styles.panel}>
       <Filler>
-        <div className={styles.title}>Node title</div>
-        <div className={styles.name}>~author</div>
+        <div className={styles.title}>{title || '...'}</div>
+        {user && user.username && <div className={styles.name}>~ {user.username}</div>}
       </Filler>
     </Group>
 

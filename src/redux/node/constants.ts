@@ -31,7 +31,7 @@ export const EMPTY_BLOCK: IBlock = {
 export const EMPTY_NODE: INode = {
   id: null,
 
-  user_id: null,
+  user: null,
 
   title: '',
   files: [],
