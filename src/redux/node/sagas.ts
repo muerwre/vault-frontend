@@ -14,6 +14,7 @@ import {
   nodeSetComments,
   nodeSetCommentData,
   nodeUpdateTags,
+  nodeSetTags,
 } from './actions';
 import { postNode, getNode, postNodeComment, getNodeComments, updateNodeTags } from './api';
 import { reqWrapper } from '../auth/sagas';
@@ -23,6 +24,7 @@ import { modalSetShown } from '../modal/actions';
 import { selectFlowNodes } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
+import { IResultWithStatus, INode } from '../types';
 
 function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   yield put(nodeSetSaveErrors({}));
@@ -105,9 +107,15 @@ function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
 
 function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
   yield delay(1000);
-  const result = yield call(reqWrapper, updateNodeTags, { id, tags });
+  const {
+    data: { node },
+  }: IResultWithStatus<{ node: INode }> = yield call(reqWrapper, updateNodeTags, { id, tags });
 
-  console.log({ result });
+  const { current } = yield select(selectNode);
+
+  if (!node || !node.id || node.id !== current.id) return;
+
+  yield put(nodeSetTags(node.tags));
 }
 
 export default function* nodeSaga() {

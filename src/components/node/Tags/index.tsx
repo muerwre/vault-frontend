@@ -25,7 +25,7 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
 
 export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) => {
   const [input, setInput] = useState('');
-  const [data, setData] = useState(tags);
+  const [data, setData] = useState([]);
   const timer = useRef(null);
 
   const onInput = useCallback(
@@ -51,6 +51,7 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
               .split(',')
               .map((title: string) => title.trim().substr(0, 32))
               .filter(el => el.length > 0)
+              .filter(el => !tags.some(tag => tag.title.trim() === el.trim()))
               .map(title => ({
                 title,
               })),
@@ -63,36 +64,39 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
   );
 
   const onSubmit = useCallback(() => {
-    if (length(tags) === length(data) && isEmpty(symmetricDifference(tags, data))) return;
+    if (!data.length) return;
+    onTagsChange(uniq([...tags, ...data]).map(tag => tag.title));
+  }, [tags, data, onTagsChange]);
 
-    if (timer.current) clearTimeout(timer.current);
+  // const onBlur = useCallback(() => {
+  // clearTimeout(timer.current);
+  // onSubmit();
+  // }, [onSubmit, timer]);
 
-    onTagsChange(data.map(tag => tag.title));
-  }, [tags, data, onTagsChange, timer]);
+  // useEffect(() => {
+  //   timer.current = setTimeout(() => {
+  //     onSubmit();
+  //   }, 3000);
 
-  const onBlur = useCallback(() => {
-    clearTimeout(timer.current);
-    onSubmit();
-  }, [onSubmit, timer]);
+  //   return () => {
+  //     clearTimeout(timer.current);
+  //   };
+  // }, [data]);
 
-  useEffect(() => setData(tags), [tags]);
   useEffect(() => {
-    timer.current = setTimeout(() => {
-      onSubmit();
-    }, 3000);
-
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, [data, tags]);
+    setData(data.filter(({ title }) => !tags.some(tag => tag.title.trim() === title.trim())));
+  }, [tags]);
 
   return (
     <TagField {...props}>
+      {tags.map(tag => (
+        <Tag key={tag.title} title={tag.title} feature={tag.feature} />
+      ))}
       {data.map(tag => (
         <Tag key={tag.title} title={tag.title} feature={tag.feature} />
       ))}
 
-      {is_editable && <Tag title={input} onInput={onInput} onKeyUp={onKeyUp} onBlur={onBlur} />}
+      {is_editable && <Tag title={input} onInput={onInput} onKeyUp={onKeyUp} onBlur={onSubmit} />}
     </TagField>
   );
 };
