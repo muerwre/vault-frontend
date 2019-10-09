@@ -62,9 +62,9 @@ function* checkUserSaga({ key }: RehydrateAction) {
   yield put(authSetUser({ ...user, is_user: true }));
 }
 
-function* mySaga() {
+function* authSaga() {
   yield takeLatest(REHYDRATE, checkUserSaga);
   yield takeLatest(AUTH_USER_ACTIONS.SEND_LOGIN_REQUEST, sendLoginRequestSaga);
 }
 
-export default mySaga;
+export default authSaga;

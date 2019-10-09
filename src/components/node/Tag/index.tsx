@@ -1,4 +1,10 @@
-import React, { FC, ReactElement, ChangeEvent, ChangeEventHandler } from 'react';
+import React, {
+  FC,
+  ReactElement,
+  ChangeEvent,
+  ChangeEventHandler,
+  KeyboardEventHandler,
+} from 'react';
 import * as styles from './styles.scss';
 import { ITag } from '~/redux/types';
 
@@ -10,6 +16,7 @@ interface IProps {
 
   is_hoverable?: boolean;
   onInput?: ChangeEventHandler<HTMLInputElement>;
+  onKeyUp?: KeyboardEventHandler;
 }
 
 const Tag: FC<IProps> = ({
@@ -18,6 +25,7 @@ const Tag: FC<IProps> = ({
 
   is_hoverable,
   onInput,
+  onKeyUp,
 }) => (
   <div className={classNames(styles.tag, feature, { is_hoverable, input: !!onInput })}>
     <div className={styles.hole} />
@@ -27,10 +35,11 @@ const Tag: FC<IProps> = ({
       <input
         type="text"
         value={title}
-        onChange={onInput}
         size={1}
         placeholder="Добавить"
         maxLength={24}
+        onChange={onInput}
+        onKeyUp={onKeyUp}
       />
     )}
   </div>
