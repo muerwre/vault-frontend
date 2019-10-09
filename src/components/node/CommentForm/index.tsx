@@ -41,7 +41,6 @@ const CommentFormUnconnected: FC<IProps> = ({
   nodeSetCommentData,
   uploadUploadFiles,
 }) => {
-  // const [data, setData] = useState<IComment>({ ...EMPTY_COMMENT });
   const onInputChange = useCallback(
     event => {
       event.preventDefault();
@@ -101,37 +100,16 @@ const CommentFormUnconnected: FC<IProps> = ({
     const filtered_temps = temp_ids.filter(
       temp_id =>
         statuses[temp_id] &&
-        statuses[temp_id].uuid &&
-        !added_files.some(file => file.id === statuses[temp_id].uuid)
+        (!statuses[temp_id].uuid || !added_files.some(file => file.id === statuses[temp_id].uuid))
     );
 
-    console.log({ temp_ids, added_files });
-
-    // if (added_files.length) {
-    nodeSetCommentData(id, {
-      ...comment_data[id],
-      temp_ids: filtered_temps,
-      files: [...comment_data[id].files, ...added_files],
-    });
-    // }
-
-    // if (filtered_temps.length) {
-    // leaving only currently uploading files
-    // nodeSetCommentData(id, assocPath(['temp_ids'], filtered_temps, comment_data[id]));
-    // }
-
-    // console.log({
-    // statuses,
-    // temp_ids,
-    // filtered_temps,
-    // added_files,
-    // });
-    // Object.entries(statuses).forEach(([id, status]) => {
-    // if (temp.includes(id) && !!status.uuid && files[status.uuid]) {
-    // onFileAdd(files[status.uuid]);
-    // setTemp(temp.filter(el => el !== id));
-    // }
-    // });
+    if (added_files.length) {
+      nodeSetCommentData(id, {
+        ...comment_data[id],
+        temp_ids: filtered_temps,
+        files: [...comment_data[id].files, ...added_files],
+      });
+    }
   }, [statuses, files]);
 
   const comment = comment_data[id];
@@ -149,7 +127,7 @@ const CommentFormUnconnected: FC<IProps> = ({
         </div>
 
         <Group horizontal className={styles.buttons}>
-          <input type="file" onInput={onInputChange} />
+          <input type="file" onInput={onInputChange} multiple />
 
           <Filler />
 
