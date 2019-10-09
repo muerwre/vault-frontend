@@ -6,3 +6,10 @@
     font-weight: 600;
   }
 }
+
+.images {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  column-gap: $grid_line;
+}

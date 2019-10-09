@@ -86,7 +86,7 @@ function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
 
   yield put(nodeSetSendingComment(true));
   const {
-    data: { comment, id: target_id },
+    data: { comment },
     error,
   } = yield call(reqWrapper, postNodeComment, { data: comment_data[id], id: current.id });
   yield put(nodeSetSendingComment(false));
