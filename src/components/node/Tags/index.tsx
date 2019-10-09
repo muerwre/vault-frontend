@@ -39,13 +39,18 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
         setInput(data[data.length - 1].title);
       }
 
-      if (key === 'Enter' || key === ',') {
+      if (key === 'Enter' || key === ',' || key === 'Comma') {
         setData(
           uniq([
             ...data,
             ...input
               .split(',')
-              .map((title: string) => title.trim().substr(0, 32))
+              .map((title: string) =>
+                title
+                  .trim()
+                  .substr(0, 32)
+                  .toLowerCase()
+              )
               .filter(el => el.length > 0)
               .filter(el => !tags.some(tag => tag.title.trim() === el.trim()))
               .map(title => ({
