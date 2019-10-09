@@ -27,7 +27,9 @@ const Comment: FC<IProps> = ({ comment, is_empty, is_loading, className, photo, 
     {comment.files && comment.files.length > 0 && (
       <div className={styles.images}>
         {comment.files.map(file => (
-          <ImageUpload thumb={getURL(file.url)} />
+          <div>
+            <img src={getURL(file.url)} />
+          </div>
         ))}
       </div>
     )}
