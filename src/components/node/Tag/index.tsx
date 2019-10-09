@@ -4,14 +4,14 @@ import { ITag } from '~/redux/types';
 
 import classNames = require('classnames');
 
-const getTagFeature = (tag: ITag) => {
+const getTagFeature = (tag: Partial<ITag>) => {
   if (tag.title.substr(0, 1) === '/') return 'green';
 
   return '';
 };
 
 interface IProps {
-  tag: ITag;
+  tag: Partial<ITag>;
 
   is_hoverable?: boolean;
   onInput?: ChangeEventHandler<HTMLInputElement>;

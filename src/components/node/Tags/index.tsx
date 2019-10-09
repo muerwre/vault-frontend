@@ -9,16 +9,12 @@ import React, {
   useRef,
 } from 'react';
 import { TagField } from '~/components/containers/TagField';
-import { ITag, INode } from '~/redux/types';
+import { ITag } from '~/redux/types';
 import { Tag } from '~/components/node/Tag';
 import uniq from 'ramda/es/uniq';
-import { setTimeout } from 'timers';
-import length from 'ramda/es/length';
-import isEmpty from 'ramda/es/isEmpty';
-import symmetricDifference from 'ramda/es/symmetricDifference';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
-  tags: ITag[];
+  tags: Partial<ITag>[];
   is_editable?: boolean;
   onTagsChange?: (tags: string[]) => void;
 };
