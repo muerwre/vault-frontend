@@ -68,21 +68,6 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
     onTagsChange(uniq([...tags, ...data]).map(tag => tag.title));
   }, [tags, data, onTagsChange]);
 
-  // const onBlur = useCallback(() => {
-  // clearTimeout(timer.current);
-  // onSubmit();
-  // }, [onSubmit, timer]);
-
-  // useEffect(() => {
-  //   timer.current = setTimeout(() => {
-  //     onSubmit();
-  //   }, 3000);
-
-  //   return () => {
-  //     clearTimeout(timer.current);
-  //   };
-  // }, [data]);
-
   useEffect(() => {
     setData(data.filter(({ title }) => !tags.some(tag => tag.title.trim() === title.trim())));
   }, [tags]);
@@ -90,13 +75,16 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
   return (
     <TagField {...props}>
       {tags.map(tag => (
-        <Tag key={tag.title} title={tag.title} feature={tag.feature} />
-      ))}
-      {data.map(tag => (
-        <Tag key={tag.title} title={tag.title} feature={tag.feature} />
+        <Tag key={tag.title} tag={tag} />
       ))}
 
-      {is_editable && <Tag title={input} onInput={onInput} onKeyUp={onKeyUp} onBlur={onSubmit} />}
+      {data.map(tag => (
+        <Tag key={tag.title} tag={tag} />
+      ))}
+
+      {is_editable && (
+        <Tag tag={{ title: input }} onInput={onInput} onKeyUp={onKeyUp} onBlur={onSubmit} />
+      )}
     </TagField>
   );
 };

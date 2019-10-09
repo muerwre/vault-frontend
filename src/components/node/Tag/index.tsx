@@ -4,9 +4,14 @@ import { ITag } from '~/redux/types';
 
 import classNames = require('classnames');
 
+const getTagFeature = (tag: ITag) => {
+  if (tag.title.substr(0, 1) === '/') return 'green';
+
+  return '';
+};
+
 interface IProps {
-  title: ITag['title'];
-  feature?: ITag['feature'];
+  tag: ITag;
 
   is_hoverable?: boolean;
   onInput?: ChangeEventHandler<HTMLInputElement>;
@@ -14,23 +19,15 @@ interface IProps {
   onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
-const Tag: FC<IProps> = ({
-  title,
-  feature,
-
-  is_hoverable,
-  onInput,
-  onKeyUp,
-  onBlur,
-}) => (
-  <div className={classNames(styles.tag, feature, { is_hoverable, input: !!onInput })}>
+const Tag: FC<IProps> = ({ tag, is_hoverable, onInput, onKeyUp, onBlur }) => (
+  <div className={classNames(styles.tag, getTagFeature(tag), { is_hoverable, input: !!onInput })}>
     <div className={styles.hole} />
-    <div className={styles.title}>{title}</div>
+    <div className={styles.title}>{tag.title}</div>
 
     {onInput && (
       <input
         type="text"
-        value={title}
+        value={tag.title}
         size={1}
         placeholder="Добавить"
         maxLength={24}
@@ -43,5 +40,3 @@ const Tag: FC<IProps> = ({
 );
 
 export { Tag };
-
-// </div>
