@@ -89,7 +89,6 @@
     "react-dom": "^16.10.2",
     "react-grid-layout": "^0.16.6",
     "react-hot-loader": "^4.12.15",
-    "react-jplayer": "^7.2.0",
     "react-layout-pack": "^0.2.3",
     "react-packery-component": "^1.0.2",
     "react-redux": "^6.0.1",
