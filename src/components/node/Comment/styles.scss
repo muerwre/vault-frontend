@@ -1,3 +1,5 @@
+@import 'flexbin/flexbin.scss';
+
 .text {
   padding: $gap / 2;
   font-weight: 300;
@@ -8,14 +10,26 @@
   }
 }
 
-@import 'flexbin/flexbin.scss';
-
 .images {
-  padding: 10px;
+  padding: $gap;
 
-  @include flexbin(150px, 10px);
+  @include flexbin(240px, 10px);
 
   img {
     border-radius: $radius;
+  }
+}
+
+.audios {
+  padding: $gap;
+
+  & > div {
+    height: 64px;
+    border-radius: $radius;
+    background: lighten($color: $comment_bg, $amount: 5%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 }
