@@ -11,6 +11,9 @@ export class PlayerClass {
       const { duration: total, currentTime: current } = this.element;
       const progress = (current / total) * 100;
 
+      this.current = current || 0;
+      this.total = total || 0;
+
       this.element.dispatchEvent(
         new CustomEvent('playprogress', {
           detail: { current, total, progress },
@@ -18,6 +21,10 @@ export class PlayerClass {
       );
     });
   }
+
+  public current: number = 0;
+
+  public total: number = 0;
 
   public element: HTMLAudioElement = new Audio();
 
@@ -45,6 +52,14 @@ export class PlayerClass {
 
   public getDuration = () => {
     return this.element.currentTime;
+  };
+
+  public jumpToTime = (time: number) => {
+    this.element.currentTime = time;
+  };
+
+  public jumpToPercent = (percent: number) => {
+    this.element.currentTime = (this.total * percent) / 100;
   };
 }
 
