@@ -1,8 +1,9 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { push as historyPush } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import { Logo } from '~/components/main/Logo';
+import { Player } from '~/utils/player';
 
 import * as style from './style.scss';
 import { Filler } from '~/components/containers/Filler';
@@ -23,6 +24,10 @@ type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
 const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
   const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
   const onOpenEditor = useCallback(() => showDialog(DIALOGS.EDITOR), [showDialog]);
+
+  useEffect(() => {
+    console.log({ Player });
+  }, []);
 
   return (
     <div className={style.container}>
