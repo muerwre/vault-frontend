@@ -54,7 +54,14 @@ const Comment: FC<IProps> = ({ comment, is_empty, is_loading, className, photo, 
       {groupped.audio && (
         <div className={styles.audios}>
           {groupped.audio.map(file => (
-            <div key={file.id} onClick={() => Player.setSrc(getURL(file.url))}>
+            <div
+              key={file.id}
+              onClick={() => {
+                Player.set(getURL(file.url));
+                Player.load();
+                Player.play();
+              }}
+            >
               {file.name}
             </div>
           ))}

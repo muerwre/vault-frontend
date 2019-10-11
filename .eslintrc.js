@@ -84,5 +84,7 @@ module.exports = {
     HTMLDivElement: false,
     FormData: false,
     FileReader: false,
+    Audio: false,
+    CustomEvent: false,
   },
 };
