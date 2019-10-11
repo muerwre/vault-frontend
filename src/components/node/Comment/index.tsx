@@ -10,6 +10,7 @@ import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';
 import reduce from 'ramda/es/reduce';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
+import { Player } from '~/utils/player';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
@@ -53,7 +54,9 @@ const Comment: FC<IProps> = ({ comment, is_empty, is_loading, className, photo, 
       {groupped.audio && (
         <div className={styles.audios}>
           {groupped.audio.map(file => (
-            <div key={file.id}>{file.name}</div>
+            <div key={file.id} onClick={() => Player.setSrc(getURL(file.url))}>
+              {file.name}
+            </div>
           ))}
         </div>
       )}
