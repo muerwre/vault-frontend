@@ -2,7 +2,7 @@ type PlayerEventType = keyof HTMLMediaElementEventMap;
 
 type PlayerEventListener = (
   this: HTMLAudioElement,
-  ev: HTMLMediaElementEventMap[keyof HTMLMediaElementEventMap]
+  event: HTMLMediaElementEventMap[keyof HTMLMediaElementEventMap]
 ) => void;
 
 export class PlayerClass {
