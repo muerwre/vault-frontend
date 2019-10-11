@@ -1,9 +1,9 @@
-// import { Howl } from 'howler';
-// import { store } from '~/redux/store';
+type PlayerEventType = keyof HTMLMediaElementEventMap;
 
-// export const Player: HTMLAudioElement = new Audio();
-//
-// console.log(Player);
+type PlayerEventListener = (
+  this: HTMLAudioElement,
+  ev: HTMLMediaElementEventMap[keyof HTMLMediaElementEventMap]
+) => void;
 
 export class PlayerClass {
   public constructor() {
@@ -38,7 +38,7 @@ export class PlayerClass {
     this.element.addEventListener(type, callback);
   };
 
-  public off = (type: string, callback) => {
+  public off = (type: PlayerEventType, callback: PlayerEventListener) => {
     this.element.removeEventListener(type, callback);
   };
 
