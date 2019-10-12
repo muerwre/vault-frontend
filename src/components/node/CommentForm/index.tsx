@@ -19,6 +19,7 @@ import { IState } from '~/redux/store';
 import { getFileType } from '~/utils/uploader';
 import { selectUser } from '~/redux/auth/selectors';
 import { getURL } from '~/utils/dom';
+import { ButtonGroup } from '~/components/input/ButtonGroup';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -133,14 +134,21 @@ const CommentFormUnconnected: FC<IProps> = ({
         </div>
 
         <Group horizontal className={styles.buttons}>
-          <input type="file" onInput={onInputChange} multiple accept="image/*" />
-          <input type="file" onInput={onInputChange} multiple accept="audio/*" />
+          <ButtonGroup>
+            <Button iconLeft="image" size="small" grey iconOnly>
+              <input type="file" onInput={onInputChange} multiple accept="image/*" />
+            </Button>
+
+            <Button iconRight="enter" size="small" grey iconOnly>
+              <input type="file" onInput={onInputChange} multiple accept="audio/*" />
+            </Button>
+          </ButtonGroup>
 
           <Filler />
 
           {is_sending_comment && <LoaderCircle size={20} />}
 
-          <Button size="mini" grey iconRight="enter" disabled={is_sending_comment}>
+          <Button size="small" grey iconRight="enter" disabled={is_sending_comment}>
             Сказать
           </Button>
         </Group>
