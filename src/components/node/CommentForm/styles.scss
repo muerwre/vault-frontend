@@ -1,6 +1,10 @@
 .wrap {
   display: flex;
   flex-direction: column;
+
+  textarea {
+    min-height: 62px !important;
+  }
 }
 
 .input {

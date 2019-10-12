@@ -121,13 +121,14 @@ const CommentFormUnconnected: FC<IProps> = ({
 
   return (
     <CommentWrapper photo={getURL(photo)}>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className={styles.wrap}>
         <div className={styles.input}>
           <Textarea
             value={comment.text}
             handler={onInput}
             onKeyDown={onKeyDown}
             disabled={is_sending_comment}
+            minRows={2}
           />
         </div>
 
