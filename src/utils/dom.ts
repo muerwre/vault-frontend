@@ -71,5 +71,7 @@ export const formatCommentText = (author, text: string) =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .split('\n')
-    .map((el, index) => (index === 0 ? `<p><b>${author}</b>: ${el}</p>` : `<p>${el}</p>`))
+    .map((el, index) =>
+      index === 0 ? `${author ? `<p><b>${author}</b>: ` : ''}${el}</p>` : `<p>${el}</p>`
+    )
     .join('');

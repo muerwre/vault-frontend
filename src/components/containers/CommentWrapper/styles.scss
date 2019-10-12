@@ -2,10 +2,15 @@
   background: $comment_bg;
   min-height: $comment_height;
   display: flex;
-  box-shadow: $comment_shadow;
+  // box-shadow: $comment_shadow;
 
   &:global(.is_empty) {
     opacity: 0.5;
+  }
+
+  &:global(.is_same) {
+    margin: 0 !important;
+    border-radius: 0;
   }
 }
 

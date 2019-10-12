@@ -9,15 +9,16 @@ import append from 'ramda/es/append';
 import reduce from 'ramda/es/reduce';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { Player } from '~/utils/player';
+import classNames from 'classnames';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
   is_loading?: boolean;
-  photo?: string;
   comment?: IComment;
+  is_same?: boolean;
 };
 
-const Comment: FC<IProps> = ({ comment, is_empty, is_loading, className, photo, ...props }) => {
+const Comment: FC<IProps> = ({ comment, is_empty, is_same, is_loading, className, ...props }) => {
   const groupped = useMemo<Record<keyof typeof UPLOAD_TYPES, IFile[]>>(
     () =>
       reduce(
@@ -30,16 +31,21 @@ const Comment: FC<IProps> = ({ comment, is_empty, is_loading, className, photo, 
 
   return (
     <CommentWrapper
+      className={className}
       is_empty={is_empty}
       is_loading={is_loading}
       photo={getURL(comment.user.photo)}
+      is_same={is_same}
       {...props}
     >
       {comment.text && (
         <Group
           className={styles.text}
           dangerouslySetInnerHTML={{
-            __html: formatCommentText(comment.user && comment.user.username, comment.text),
+            __html: formatCommentText(
+              !is_same && comment.user && comment.user.username,
+              comment.text
+            ),
           }}
         />
       )}
