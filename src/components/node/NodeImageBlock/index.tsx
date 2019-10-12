@@ -78,7 +78,7 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
             >
               <img
                 className={styles.image}
-                src={getImageSize(file.url, 'node')}
+                src={getImageSize(file, 'node')}
                 alt=""
                 key={file.id}
                 onLoad={onImageLoad(index)}

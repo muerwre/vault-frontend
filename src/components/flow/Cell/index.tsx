@@ -1,5 +1,4 @@
 import React, { FC, useState, useCallback } from 'react';
-import { NavLink } from 'react-router-dom';
 import { INode } from '~/redux/types';
 import { URLS } from '~/constants/urls';
 import { getImageSize } from '~/utils/dom';
@@ -38,11 +37,11 @@ const Cell: FC<IProps> = ({ node: { id, title, brief, type }, onSelect, is_text 
         <div
           className={styles.thumbnail}
           style={{
-            backgroundImage: `url("${getImageSize(brief.thumbnail, 'medium')}")`,
+            backgroundImage: `url("${brief.thumbnail}")`,
             opacity: is_loaded ? 1 : 0,
           }}
         >
-          <img src={getImageSize(brief.thumbnail, 'medium')} onLoad={onImageLoad} alt="" />
+          <img src={brief.thumbnail} onLoad={onImageLoad} alt="" />
         </div>
       )}
     </div>

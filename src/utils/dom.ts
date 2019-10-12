@@ -58,12 +58,12 @@ export const getURL = (file: IFile) => {
   if (!file || !file.url) return null;
 
   return file.url
-    .replace('REMOTE_OLD://', process.env.REMOTE_OLD)
-    .replace('REMOTE_CURRENT://', process.env.REMOTE_CURRENT);
+    .replace('REMOTE_CURRENT://', process.env.REMOTE_CURRENT)
+    .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
 };
 
-export const getImageSize = (image: string, size?: string): string =>
-  `${process.env.API_HOST}${image}`.replace('{size}', size);
+export const getImageSize = (file: IFile, size?: string): string => getURL(file);
+// `${process.env.API_HOST}${image}`.replace('{size}', size);
 
 export const formatCommentText = (author, text: string) =>
   text
