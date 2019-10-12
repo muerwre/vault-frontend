@@ -1,17 +1,28 @@
 @import 'flexbin/flexbin.scss';
 
 .text {
-  @include outer_shadow();
+  // @include outer_shadow();
 
   padding: $gap;
   font-weight: 300;
   font: $font_16_regular;
   min-height: $comment_height;
   box-sizing: border-box;
+  position: relative;
 
   b {
     font-weight: 600;
   }
+}
+
+.date {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font: $font_12_regular;
+  color: transparentize($color: white, $amount: 0.8);
+  padding: 2px 4px;
+  border-radius: 0 0 $radius 0;
 }
 
 .images {

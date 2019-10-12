@@ -1,4 +1,6 @@
 import { IFile } from '~/redux/types';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import { ru } from 'date-fns/locale';
 
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -75,3 +77,6 @@ export const formatCommentText = (author, text: string) =>
       index === 0 ? `${author ? `<p><b>${author}</b>: ` : ''}${el}</p>` : `<p>${el}</p>`
     )
     .join('');
+
+export const getPrettyDate = (date: string): string =>
+  formatDistanceToNow(new Date(date), { locale: ru, includeSeconds: true, addSuffix: true });

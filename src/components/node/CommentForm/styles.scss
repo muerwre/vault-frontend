@@ -9,7 +9,7 @@
 
 .input {
   flex: 1;
-  padding: $gap / 2;
+  padding: ($gap / 2) ($gap / 2 + 1px);
 }
 
 .buttons {
@@ -24,5 +24,5 @@
     fill: transparentize(white, 0.9);
   }
 
-  @include outer_shadow();
+  // @include outer_shadow();
 }

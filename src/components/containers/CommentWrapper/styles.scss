@@ -2,6 +2,8 @@
   background: $comment_bg;
   min-height: $comment_height;
   display: flex;
+  position: relative;
+  box-shadow: none;
   // box-shadow: $comment_shadow;
 
   &:global(.is_empty) {

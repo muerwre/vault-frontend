@@ -2,7 +2,7 @@ import React, { FC, HTMLAttributes, useMemo } from 'react';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import { IComment, IFile } from '~/redux/types';
 import * as styles from './styles.scss';
-import { formatCommentText, getURL } from '~/utils/dom';
+import { formatCommentText, getURL, getPrettyDate } from '~/utils/dom';
 import { Group } from '~/components/containers/Group';
 import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';
@@ -49,6 +49,8 @@ const Comment: FC<IProps> = ({ comment, is_empty, is_same, is_loading, className
           }}
         />
       )}
+
+      <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
 
       {groupped.image && (
         <div className={styles.images}>
