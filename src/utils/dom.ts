@@ -54,7 +54,7 @@ export const describeArc = (
   ].join(' ');
 };
 
-export const getURL = (file: IFile) => {
+export const getURL = (file: Partial<IFile>) => {
   if (!file || !file.url) return null;
 
   return file.url
