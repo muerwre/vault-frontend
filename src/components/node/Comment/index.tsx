@@ -4,8 +4,6 @@ import { IComment, IFile } from '~/redux/types';
 import * as styles from './styles.scss';
 import { formatCommentText, getURL } from '~/utils/dom';
 import { Group } from '~/components/containers/Group';
-import { ImageUpload } from '~/components/upload/ImageUpload';
-import { getFileType } from '~/utils/uploader';
 import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';
 import reduce from 'ramda/es/reduce';

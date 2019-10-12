@@ -1,6 +1,6 @@
 .wrap {
   background: $comment_bg;
-  min-height: 64px;
+  min-height: $comment_height;
   display: flex;
   box-shadow: $comment_shadow;
 
@@ -14,13 +14,13 @@
 }
 
 .thumb {
-  flex: 0 0 64px;
+  flex: 0 0 $comment_height;
   background: transparentize(black, 0.9);
   border-radius: $panel_radius 0 0 $panel_radius;
 }
 
 .thumb_image {
-  height: 64px;
+  height: $comment_height;
   background: transparentize(white, 0.97);
   border-radius: $panel_radius 0 0 $panel_radius;
 }

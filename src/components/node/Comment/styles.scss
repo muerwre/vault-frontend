@@ -1,9 +1,13 @@
 @import 'flexbin/flexbin.scss';
 
 .text {
-  padding: $gap / 2;
+  @include outer_shadow();
+
+  padding: $gap;
   font-weight: 300;
   font: $font_16_regular;
+  min-height: $comment_height;
+  box-sizing: border-box;
 
   b {
     font-weight: 600;
@@ -11,9 +15,7 @@
 }
 
 .images {
-  // padding: $gap;
-
-  @include flexbin(240px, 10px);
+  @include flexbin(240px, 5px);
 
   img {
     border-radius: $radius;
@@ -21,12 +23,11 @@
 }
 
 .audios {
-  // padding: $gap;
-
   & > div {
-    height: 64px;
+    @include outer_shadow();
+
+    height: $comment_height;
     border-radius: $radius;
-    background: lighten($color: $comment_bg, $amount: 5%);
     display: flex;
     justify-content: center;
     align-items: center;
