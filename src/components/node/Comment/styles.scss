@@ -11,7 +11,7 @@
 }
 
 .images {
-  padding: $gap;
+  // padding: $gap;
 
   @include flexbin(240px, 10px);
 
@@ -21,7 +21,7 @@
 }
 
 .audios {
-  padding: $gap;
+  // padding: $gap;
 
   & > div {
     height: 64px;
