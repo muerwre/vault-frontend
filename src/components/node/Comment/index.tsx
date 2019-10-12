@@ -29,7 +29,12 @@ const Comment: FC<IProps> = ({ comment, is_empty, is_loading, className, photo, 
   );
 
   return (
-    <CommentWrapper is_empty={is_empty} is_loading={is_loading} photo={photo} {...props}>
+    <CommentWrapper
+      is_empty={is_empty}
+      is_loading={is_loading}
+      photo={getURL(comment.user.photo)}
+      {...props}
+    >
       {comment.text && (
         <Group
           className={styles.text}
