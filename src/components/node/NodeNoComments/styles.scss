@@ -31,6 +31,8 @@
   text-transform: uppercase;
   font: $font_18_semibold;
   color: transparentize(white, 0.5);
+  flex: 0 0 $comment_height;
+
   @include outer_shadow();
 
   &:nth-child(2) {

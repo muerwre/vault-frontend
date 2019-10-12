@@ -49,12 +49,3 @@ const Cell: FC<IProps> = ({ node: { id, title, brief, type }, onSelect, is_text 
 };
 
 export { Cell };
-
-/*
-  {is_text && (
-    <div className={styles.text}>
-      <div className={styles.text_title}>{node.title}</div>
-      {TEXTS.LOREM_IPSUM}
-    </div>
-  )}
-*/
