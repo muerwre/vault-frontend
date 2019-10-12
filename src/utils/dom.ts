@@ -52,7 +52,11 @@ export const describeArc = (
   ].join(' ');
 };
 
-export const getURL = url => `${process.env.API_HOST}${url}`;
+export const getURL = url => {
+  return url
+    .replace('REMOTE_OLD://', process.env.REMOTE_OLD)
+    .replace('REMOTE_CURRENT://', process.env.REMOTE_CURRENT);
+};
 
 export const getImageSize = (image: string, size?: string): string =>
   `${process.env.API_HOST}${image}`.replace('{size}', size);
