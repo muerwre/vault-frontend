@@ -15,12 +15,13 @@
 
 .thumb {
   flex: 0 0 $comment_height;
-  background: transparentize(black, 0.9);
   border-radius: $panel_radius 0 0 $panel_radius;
+  background-color: transparentize(black, 0.9);
 }
 
 .thumb_image {
   height: $comment_height;
-  background: transparentize(white, 0.97);
+  background: transparentize(white, 0.97) no-repeat 50% 50%;
   border-radius: $panel_radius 0 0 $panel_radius;
+  background-size: cover;
 }

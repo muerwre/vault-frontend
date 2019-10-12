@@ -43,7 +43,7 @@ const Comment: FC<IProps> = ({ comment, is_empty, is_loading, className, photo, 
         <div className={styles.images}>
           {groupped.image.map(file => (
             <div key={file.id}>
-              <img src={getURL(file.url)} alt={file.name} />
+              <img src={getURL(file)} alt={file.name} />
             </div>
           ))}
         </div>
@@ -55,7 +55,7 @@ const Comment: FC<IProps> = ({ comment, is_empty, is_loading, className, photo, 
             <div
               key={file.id}
               onClick={() => {
-                Player.set(getURL(file.url));
+                Player.set(getURL(file));
                 Player.load();
                 Player.play();
               }}

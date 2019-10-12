@@ -17,9 +17,12 @@ import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { IState } from '~/redux/store';
 import { getFileType } from '~/utils/uploader';
+import { selectUser } from '~/redux/auth/selectors';
+import { getURL } from '~/utils/dom';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
+  user: selectUser(state),
   uploads: selectUploads(state),
 });
 
@@ -37,6 +40,7 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const CommentFormUnconnected: FC<IProps> = ({
   node: { comment_data, is_sending_comment },
   uploads: { statuses, files },
+  user: { photo },
   id,
   nodePostComment,
   nodeSetCommentData,
@@ -116,7 +120,7 @@ const CommentFormUnconnected: FC<IProps> = ({
   const comment = comment_data[id];
 
   return (
-    <CommentWrapper>
+    <CommentWrapper photo={getURL(photo)}>
       <form onSubmit={onSubmit}>
         <div className={styles.input}>
           <Textarea

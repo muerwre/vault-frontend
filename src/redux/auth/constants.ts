@@ -35,6 +35,7 @@ export const EMPTY_USER: IUser = {
   name: null,
   username: null,
   photo: null,
+  cover: null,
   is_activated: false,
   is_user: false,
 };

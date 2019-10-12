@@ -1,3 +1,5 @@
+import { IFile } from '~/redux/types';
+
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
     return document.defaultView.getComputedStyle(oElm, '').getPropertyValue(strCssRule);
@@ -52,8 +54,10 @@ export const describeArc = (
   ].join(' ');
 };
 
-export const getURL = url => {
-  return url
+export const getURL = (file: IFile) => {
+  if (!file || !file.url) return null;
+
+  return file.url
     .replace('REMOTE_OLD://', process.env.REMOTE_OLD)
     .replace('REMOTE_CURRENT://', process.env.REMOTE_CURRENT);
 };
