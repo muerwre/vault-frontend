@@ -1,22 +1,14 @@
 import React, { FC } from 'react';
 import * as styles from './styles.scss';
 
-import classNames = require('classnames');
+import classNames from 'classnames';
 
 type IProps = React.HTMLAttributes<HTMLDivElement> & {
   seamless?: boolean;
-}
+};
 
-const Card: FC<IProps> = ({
-  className,
-  children,
-  seamless,
-  ...props
-}) => (
-  <div
-    className={classNames(styles.card, className, { seamless })}
-    {...props}
-  >
+const Card: FC<IProps> = ({ className, children, seamless, ...props }) => (
+  <div className={classNames(styles.card, className, { seamless })} {...props}>
     {children}
   </div>
 );

@@ -4,7 +4,7 @@
   display: flex;
   position: relative;
   box-shadow: none;
-  // box-shadow: $comment_shadow;
+  min-width: 0;
 
   &:global(.is_empty) {
     opacity: 0.5;
@@ -18,6 +18,7 @@
 
 .text {
   flex: 1;
+  min-width: 0;
 }
 
 .thumb {

@@ -25,6 +25,10 @@ const Sprites: FC<{}> = () => (
       <path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z" />
     </g>
 
+    <g id="pause">
+      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" strokeWidth="0" />
+    </g>
+
     <g id="plus" stroke="none">
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />

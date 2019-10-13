@@ -1,6 +1,4 @@
-import React, {
-  FC, HTMLAttributes, ReactChild, ReactChildren
-} from 'react';
+import React, { FC, HTMLAttributes } from 'react';
 import * as styles from './styles.scss';
 
 import classNames = require('classnames');
@@ -8,14 +6,9 @@ import classNames = require('classnames');
 type IProps = HTMLAttributes<HTMLDivElement> & {
   children: any;
   size: number;
-}
+};
 
-const CellGrid: FC<IProps> = ({
-  children,
-  size,
-  className,
-  ...props
-}) => (
+const CellGrid: FC<IProps> = ({ children, size, className, ...props }) => (
   <div
     className={classNames(styles.grid, className)}
     style={{ gridTemplateColumns: `repeat(auto-fit, minmax(${size}px, 1fr))` }}

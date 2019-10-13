@@ -1,0 +1,101 @@
+.wrap {
+  display: flex;
+  flex-direction: row;
+
+  &:global(.playing) {
+    .progress {
+      opacity: 1;
+      pointer-events: all;
+      touch-action: auto;
+    }
+
+    .title {
+      top: 15px;
+      opacity: 1;
+      font-size: 12px;
+      padding-right: 140px;
+    }
+  }
+}
+
+.playpause {
+  flex: 0 0 $comment_height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  svg {
+    width: 32px;
+    height: 32px;
+    fill: transparentize($color: white, $amount: 0.5);
+    stroke: transparentize($color: white, $amount: 0.5);
+    transition: fill 250ms, stroke 250ms;
+  }
+
+  &:hover {
+    svg {
+      fill: white;
+      stroke: white;
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0 $gap;
+  position: relative;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0.2;
+  pointer-events: none;
+  touch-action: none;
+  padding: 0 10px;
+  box-sizing: border-box;
+  height: 100%;
+  top: 0;
+  text-align: left;
+  transition: all 0.5s;
+}
+
+.progress {
+  height: 20px;
+  position: relative;
+  opacity: 0;
+  pointer-events: none;
+  touch-action: none;
+  transition: opacity 0.5s;
+  left: 0;
+
+  &::after {
+    content: ' ';
+    position: absolute;
+    height: 10px;
+    border-radius: 5px;
+    background: transparentize(white, 0.95);
+    width: 100%;
+    top: 5px;
+    left: 0;
+  }
+}
+
+.bar {
+  background: linear-gradient(270deg, $green, $wisegreen);
+  position: absolute;
+  height: 10px;
+  left: 0;
+  top: 5px;
+  border-radius: 5px;
+  min-width: 10px;
+}

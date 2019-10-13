@@ -5,6 +5,9 @@ import * as PLAYER_ACTIONS from '~/redux/player/actions';
 import { IFile } from '~/redux/types';
 import { PLAYER_STATES } from '~/redux/player/constants';
 import { Player } from '~/utils/player';
+import classNames from 'classnames';
+import * as styles from './styles.scss';
+import { Icon } from '~/components/input/Icon';
 
 const mapStateToProps = state => ({
   player: selectPlayer(state),
@@ -61,8 +64,16 @@ const AudioPlayerUnconnected = ({
   }, [file, current, setPlaying, onProgress]);
 
   return (
-    <div onClick={onPlay}>
-      - {file.url} - {progress} - {playing && 'playing'}
+    <div onClick={onPlay} className={classNames(styles.wrap, { playing })}>
+      <div className={styles.playpause}>
+        {playing && status === PLAYER_STATES.PLAYING ? <Icon icon="pause" /> : <Icon icon="play" />}
+      </div>
+      <div className={styles.content}>
+        <div className={styles.progress}>
+          <div className={styles.bar} style={{ width: `${progress}%` }} />
+        </div>
+        <div className={styles.title}>{file.url}</div>
+      </div>
     </div>
   );
 };
