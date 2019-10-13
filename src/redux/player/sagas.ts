@@ -19,7 +19,6 @@ function pauseSaga() {
 
 function seekSaga({ seek }: ReturnType<typeof playerSeek>) {
   Player.jumpToPercent(seek * 100);
-  console.log(seek * 100);
 }
 
 export default function* playerSaga() {

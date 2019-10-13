@@ -75,8 +75,6 @@ const AudioPlayerUnconnected = ({
     };
   }, [file, current, setPlaying, onProgress]);
 
-  console.log({ progress });
-
   return (
     <div onClick={onPlay} className={classNames(styles.wrap, { playing })}>
       <div className={styles.playpause}>
