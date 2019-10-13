@@ -72,7 +72,7 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   // todo: load comments
   const {
     data: { comments },
-  } = yield call(getNodeComments, { id });
+  } = yield call(reqWrapper, getNodeComments, { id });
 
   yield put(nodeSetComments(comments || []));
 
