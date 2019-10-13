@@ -21,7 +21,6 @@ const PlayerBarUnconnected: FC<IProps> = ({ status }) => {
 
   return (
     <div className={styles.place}>
-      <div className={styles.seeker}>S</div>
       <div className={styles.wrap}>
         <div className={styles.status}>
           <div className={styles.playpause}>

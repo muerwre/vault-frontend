@@ -1,7 +1,7 @@
 .wrap {
   position: fixed;
   transform: translateZ(0);
-  bottom: 0px;
+  bottom: $gap;
   pointer-events: none;
   touch-action: none;
   height: 54px;
