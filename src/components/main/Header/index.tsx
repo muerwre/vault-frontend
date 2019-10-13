@@ -1,9 +1,8 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { push as historyPush } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import { Logo } from '~/components/main/Logo';
-import { Player } from '~/utils/player';
 
 import * as style from './style.scss';
 import { Filler } from '~/components/containers/Filler';
@@ -11,8 +10,11 @@ import { selectUser } from '~/redux/auth/selectors';
 import { Group } from '~/components/containers/Group';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { DIALOGS } from '~/redux/modal/constants';
+import { pick } from 'ramda';
 
-const mapStateToProps = selectUser;
+const mapStateToProps = state => ({
+  user: pick(['username', 'is_user'])(selectUser(state)),
+});
 
 const mapDispatchToProps = {
   push: historyPush,
@@ -21,13 +23,9 @@ const mapDispatchToProps = {
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
+const HeaderUnconnected: FC<IProps> = ({ user: { username, is_user }, showDialog }) => {
   const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
   const onOpenEditor = useCallback(() => showDialog(DIALOGS.EDITOR), [showDialog]);
-
-  useEffect(() => {
-    console.log({ Player });
-  }, []);
 
   return (
     <div className={style.container}>

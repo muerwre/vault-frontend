@@ -8,8 +8,7 @@ import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';
 import reduce from 'ramda/es/reduce';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
-import { Player } from '~/utils/player';
-import classNames from 'classnames';
+import { AudioPlayer } from '~/components/media/AudioPlayer';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
@@ -65,16 +64,7 @@ const Comment: FC<IProps> = ({ comment, is_empty, is_same, is_loading, className
       {groupped.audio && (
         <div className={styles.audios}>
           {groupped.audio.map(file => (
-            <div
-              key={file.id}
-              onClick={() => {
-                Player.set(getURL(file));
-                Player.load();
-                Player.play();
-              }}
-            >
-              {file.name}
-            </div>
+            <AudioPlayer key={file.id} file={file} />
           ))}
         </div>
       )}

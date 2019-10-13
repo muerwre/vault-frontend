@@ -1,3 +1,7 @@
+import { store } from '~/redux/store';
+import { playerSetStatus } from '~/redux/player/actions';
+import { PLAYER_STATES } from '~/redux/player/constants';
+
 type PlayerEventType = keyof HTMLMediaElementEventMap;
 
 type PlayerEventListener = (
@@ -38,7 +42,7 @@ export class PlayerClass {
     this.element.addEventListener(type, callback);
   };
 
-  public off = (type: PlayerEventType, callback: PlayerEventListener) => {
+  public off = (type: string, callback) => {
     this.element.removeEventListener(type, callback);
   };
 
@@ -48,6 +52,10 @@ export class PlayerClass {
 
   public play = () => {
     this.element.play();
+  };
+
+  public pause = () => {
+    this.element.pause();
   };
 
   public getDuration = () => {
@@ -65,6 +73,9 @@ export class PlayerClass {
 
 const Player = new PlayerClass();
 
-Player.element.addEventListener('playprogress', ({ detail }: CustomEvent) => console.log(detail));
+// Player.element.addEventListener('playprogress', ({ detail }: CustomEvent) => console.log(detail));
+
+Player.on('play', () => store.dispatch(playerSetStatus(PLAYER_STATES.PLAYING)));
+Player.on('pause', () => store.dispatch(playerSetStatus(PLAYER_STATES.PAUSED)));
 
 export { Player };

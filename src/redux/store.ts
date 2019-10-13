@@ -19,6 +19,9 @@ import flowSaga from '~/redux/flow/sagas';
 import uploadReducer, { IUploadState } from '~/redux/uploads/reducer';
 import uploadSaga from '~/redux/uploads/sagas';
 
+import playerReducer, { IPlayerState } from '~/redux/player/reducer';
+import playerSaga from '~/redux/player/sagas';
+
 import { IAuthState } from '~/redux/auth/types';
 
 import modalReducer, { IModalState } from '~/redux/modal/reducer';
@@ -36,6 +39,7 @@ export interface IState {
   node: INodeState;
   uploads: IUploadState;
   flow: IFlowState;
+  player: IPlayerState;
 }
 
 export const sagaMiddleware = createSagaMiddleware();
@@ -54,6 +58,7 @@ export const store = createStore(
     node: nodeReducer,
     uploads: uploadReducer,
     flow: flowReducer,
+    player: playerReducer,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
@@ -63,6 +68,7 @@ export function configureStore(): { store: Store<IState>; persistor: Persistor }
   sagaMiddleware.run(nodeSaga);
   sagaMiddleware.run(uploadSaga);
   sagaMiddleware.run(flowSaga);
+  sagaMiddleware.run(playerSaga);
 
   const persistor = persistStore(store);
 
