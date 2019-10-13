@@ -13,7 +13,7 @@ export class PlayerClass {
   public constructor() {
     this.element.addEventListener('timeupdate', () => {
       const { duration: total, currentTime: current } = this.element;
-      const progress = (current / total) * 100;
+      const progress = parseFloat(((current / total) * 100).toFixed(2));
 
       this.current = current || 0;
       this.total = total || 0;
