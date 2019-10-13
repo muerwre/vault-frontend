@@ -1,4 +1,4 @@
-import React, { FC, createElement, useEffect, useCallback } from 'react';
+import React, { FC, createElement, useEffect, useCallback, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 
@@ -41,6 +41,10 @@ const NodeLayoutUnconnected: FC<IProps> = ({
   nodeLoadNode,
   nodeUpdateTags,
 }) => {
+  const [layout, setLayout] = useState({});
+
+  const updateLayout = useCallback(() => setLayout({}), []);
+
   useEffect(() => {
     if (is_loading) return;
     nodeLoadNode(parseInt(id, 10), null);
@@ -56,9 +60,9 @@ const NodeLayoutUnconnected: FC<IProps> = ({
 
   return (
     <Card className={styles.node} seamless>
-      {block && createElement(block, { node, is_loading })}
+      {block && createElement(block, { node, is_loading, updateLayout, layout })}
 
-      <NodePanel node={node} />
+      <NodePanel node={node} layout={layout} />
 
       <Group>
         <Padder>

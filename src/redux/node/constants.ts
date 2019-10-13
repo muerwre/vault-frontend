@@ -57,7 +57,10 @@ export const NODE_TYPES = {
   TEXT: 'text',
 };
 
-type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<{ node: INode; is_loading: boolean }>>;
+type INodeComponents = Record<
+  ValueOf<typeof NODE_TYPES>,
+  FC<{ node: INode; is_loading: boolean; layout: {}; updateLayout: () => void }>
+>;
 
 export const NODE_COMPONENTS: INodeComponents = {
   [NODE_TYPES.IMAGE]: NodeImageBlock,
