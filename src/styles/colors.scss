@@ -15,11 +15,11 @@ $green_gradient: linear-gradient(170deg, adjust_hue($wisegreen, 15deg) 0%, $wise
 $purple_gradient: linear-gradient(170deg, $red, $dark_blue);
 $cyan_gradient: linear-gradient(260deg, #3c75ff -50%, #7b2653 150%);
 
-$main_bg_color: #2b2c34;
+$main_bg_color: #2c2b2b;
 $main_text_color: white;
 
-$content_bg: darken($main_bg_color, 4%);
-$content_bg_secondary: darken($content_bg, 3%);
+$content_bg: darken($main_bg_color, 6%);
+$content_bg_secondary: darken($content_bg, 2%);
 
 $cell_bg: lighten($main_bg_color, 0%);
 $card_bg: lighten($main_bg_color, 0%);
@@ -35,7 +35,7 @@ $button_bg_color: $red_gradient;
 $comment_bg: lighten($content_bg, 2%);
 $panel_bg: transparent;
 $node_bg: darken($content_bg, 4%);
-$node_image_bg: darken($main_bg_color, 2%);
+$node_image_bg: darken($main_bg_color, 7%);
 $node_title_background: darken($main_bg_color, 8%);
 
 $editor_bg: $content_bg;
