@@ -15,6 +15,7 @@ import { Modal } from '~/containers/dialogs/Modal';
 import { selectModal } from '~/redux/modal/selectors';
 import { BlurWrapper } from '~/components/containers/BlurWrapper';
 import { NodeLayout } from './node/NodeLayout';
+import { BottomContainer } from '~/containers/main/BottomContainer';
 
 const mapStateToProps = selectModal;
 const mapDispatchToProps = {};
@@ -23,22 +24,26 @@ type IProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps> & {
 
 const Component: FC<IProps> = ({ is_shown }) => (
   <ConnectedRouter history={history}>
-    <BlurWrapper is_blurred={is_shown}>
-      <MainLayout>
-        <Modal />
-        <Sprites />
+    <div>
+      <BlurWrapper is_blurred={is_shown}>
+        <MainLayout>
+          <Modal />
+          <Sprites />
 
-        <Switch>
-          <Route exact path={URLS.BASE} component={FlowLayout} />
-          <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
-          <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
-          <Route path="/examples/horizontal" component={HorizontalExample} />
-          <Route path="/post:id" component={NodeLayout} />
+          <Switch>
+            <Route exact path={URLS.BASE} component={FlowLayout} />
+            <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
+            <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
+            <Route path="/examples/horizontal" component={HorizontalExample} />
+            <Route path="/post:id" component={NodeLayout} />
 
-          <Redirect to="/" />
-        </Switch>
-      </MainLayout>
-    </BlurWrapper>
+            <Redirect to="/" />
+          </Switch>
+        </MainLayout>
+      </BlurWrapper>
+
+      <BottomContainer />
+    </div>
   </ConnectedRouter>
 );
 
