@@ -5,10 +5,11 @@
 
   padding: $gap;
   font-weight: 300;
-  font: $font_16_regular;
+  font: $font_16_medium;
   min-height: $comment_height;
   box-sizing: border-box;
   position: relative;
+  color: #cccccc;
 
   b {
     font-weight: 600;

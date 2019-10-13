@@ -6,6 +6,7 @@ export const PLAYER_ACTIONS = {
 
   PLAY: `${prefix}PLAY`,
   PAUSE: `${prefix}PAUSE`,
+  SEEK: `${prefix}SEEK`,
 };
 
 export const PLAYER_STATES = {

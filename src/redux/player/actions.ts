@@ -18,3 +18,8 @@ export const playerPlay = () => ({
 export const playerPause = () => ({
   type: PLAYER_ACTIONS.PAUSE,
 });
+
+export const playerSeek = (seek: number) => ({
+  type: PLAYER_ACTIONS.SEEK,
+  seek,
+});

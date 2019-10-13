@@ -4,7 +4,7 @@ import { selectPlayer } from '~/redux/player/selectors';
 import * as PLAYER_ACTIONS from '~/redux/player/actions';
 import { IFile } from '~/redux/types';
 import { PLAYER_STATES } from '~/redux/player/constants';
-import { Player } from '~/utils/player';
+import { Player, IPlayerProgress } from '~/utils/player';
 import classNames from 'classnames';
 import * as styles from './styles.scss';
 import { Icon } from '~/components/input/Icon';
@@ -17,6 +17,7 @@ const mapDispatchToProps = {
   playerSetFile: PLAYER_ACTIONS.playerSetFile,
   playerPlay: PLAYER_ACTIONS.playerPlay,
   playerPause: PLAYER_ACTIONS.playerPause,
+  playerSeek: PLAYER_ACTIONS.playerSeek,
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
@@ -31,9 +32,10 @@ const AudioPlayerUnconnected = ({
   playerSetFile,
   playerPlay,
   playerPause,
+  playerSeek,
 }: Props) => {
   const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState<IPlayerProgress>({ progress: 0, current: 0, total: 0 });
 
   const onPlay = useCallback(() => {
     if (current && current.id === file.id) {
@@ -45,11 +47,21 @@ const AudioPlayerUnconnected = ({
   }, [file, current, status, playerPlay, playerPause, playerSetFile]);
 
   const onProgress = useCallback(
-    ({ detail }) => {
-      if (!detail || !detail.progress) return;
-      setProgress(detail.progress);
+    ({ detail }: { detail: IPlayerProgress }) => {
+      if (!detail || !detail.total) return;
+      setProgress(detail);
     },
     [setProgress]
+  );
+
+  const onSeek = useCallback(
+    event => {
+      event.stopPropagation();
+      const { clientX, target } = event;
+      const { left, width } = target.getBoundingClientRect();
+      playerSeek((clientX - left) / width);
+    },
+    [playerSeek]
   );
 
   useEffect(() => {
@@ -63,14 +75,16 @@ const AudioPlayerUnconnected = ({
     };
   }, [file, current, setPlaying, onProgress]);
 
+  console.log({ progress });
+
   return (
     <div onClick={onPlay} className={classNames(styles.wrap, { playing })}>
       <div className={styles.playpause}>
         {playing && status === PLAYER_STATES.PLAYING ? <Icon icon="pause" /> : <Icon icon="play" />}
       </div>
       <div className={styles.content}>
-        <div className={styles.progress}>
-          <div className={styles.bar} style={{ width: `${progress}%` }} />
+        <div className={styles.progress} onClick={onSeek}>
+          <div className={styles.bar} style={{ width: `${progress.progress}%` }} />
         </div>
         <div className={styles.title}>{file.url}</div>
       </div>

@@ -9,6 +9,12 @@ type PlayerEventListener = (
   event: HTMLMediaElementEventMap[keyof HTMLMediaElementEventMap]
 ) => void;
 
+export interface IPlayerProgress {
+  current: number;
+  total: number;
+  progress: number;
+}
+
 export class PlayerClass {
   public constructor() {
     this.element.addEventListener('timeupdate', () => {
