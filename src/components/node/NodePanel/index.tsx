@@ -1,30 +1,48 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import * as styles from './styles.scss';
-import { Group } from '~/components/containers/Group';
-import { Filler } from '~/components/containers/Filler';
-import {Icon} from "~/components/input/Icon";
+import { INode } from '~/redux/types';
+import { createPortal } from 'react-dom';
+import { NodePanelInner } from '~/components/node/NodePanelInner';
 
-interface IProps {}
+interface IProps {
+  node: INode;
+  layout: {};
+}
 
-const NodePanel: FC<IProps> = () => (
-  <div className={styles.wrap}>
-    <Group horizontal className={styles.panel}>
-      <Filler>
-        <div className={styles.title}>Node title</div>
-        <div className={styles.name}>~author</div>
-      </Filler>
-    </Group>
+const NodePanel: FC<IProps> = ({ node, layout }) => {
+  const [stack, setStack] = useState(false);
 
-    <div className={styles.buttons}>
-      <Icon icon="edit" size={24} />
+  const ref = useRef(null);
+  const getPlace = useCallback(() => {
+    if (!ref.current) return;
 
-      <div className={styles.sep} />
+    const { offsetTop } = ref.current;
+    const { height } = ref.current.getBoundingClientRect();
+    const { scrollY, innerHeight } = window;
 
-      <Icon icon="heart" size={24} />
+    setStack(offsetTop > scrollY + innerHeight - height);
+  }, [ref]);
+
+  useEffect(() => {
+    getPlace();
+    window.addEventListener('scroll', getPlace);
+    window.addEventListener('resize', getPlace);
+
+    return () => {
+      window.removeEventListener('scroll', getPlace);
+      window.removeEventListener('resize', getPlace);
+    };
+  }, [layout]);
+
+  return (
+    <div className={styles.place} ref={ref}>
+      {stack ? (
+        createPortal(<NodePanelInner node={node} stack />, document.body)
+      ) : (
+        <NodePanelInner node={node} />
+      )}
     </div>
-  </div>
-);
+  );
+};
 
 export { NodePanel };
-
-// <div className={styles.mark} />

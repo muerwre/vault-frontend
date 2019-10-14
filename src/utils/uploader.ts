@@ -3,7 +3,7 @@ import { eventChannel, END, EventChannel } from 'redux-saga';
 import { VALIDATORS } from '~/utils/validators';
 import { IResultWithStatus, IFile } from '~/redux/types';
 import { HTTP_RESPONSES } from './api';
-import { EMPTY_FILE } from '~/redux/uploads/constants';
+import { EMPTY_FILE, FILE_MIMES, UPLOAD_TYPES } from '~/redux/uploads/constants';
 
 export const IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
 
@@ -16,7 +16,7 @@ export function createUploader<T extends {}, R extends {}>(
 ] {
   let emit;
 
-  const chan = eventChannel((emitter) => {
+  const chan = eventChannel(emitter => {
     emit = emitter;
     return () => null;
   });
@@ -30,14 +30,16 @@ export function createUploader<T extends {}, R extends {}>(
   return [wrappedCallback, chan];
 }
 
-export const uploadGetThumb = async (file) => {
+export const uploadGetThumb = async file => {
   if (!file.type || !VALIDATORS.IS_IMAGE_MIME(file.type)) return '';
 
-  return await new Promise((resolve, reject) => {
+  const thumb = await new Promise(resolve => {
     const reader = new FileReader();
     reader.onloadend = () => resolve(reader.result || '');
     reader.readAsDataURL(file);
   });
+
+  return thumb;
 };
 
 export const fakeUploader = ({
@@ -49,7 +51,7 @@ export const fakeUploader = ({
   onProgress: (current: number, total: number) => void;
   mustSucceed: boolean;
 }): Promise<IResultWithStatus<IFile>> => {
-  const { url, error } = file;
+  const { error } = file;
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -69,4 +71,11 @@ export const fakeUploader = ({
       }
     }, 3000);
   });
+};
+
+export const getFileType = (file: File): keyof typeof UPLOAD_TYPES => {
+  return (
+    (file.type && Object.keys(FILE_MIMES).find(mime => FILE_MIMES[mime].includes(file.type))) ||
+    null
+  );
 };

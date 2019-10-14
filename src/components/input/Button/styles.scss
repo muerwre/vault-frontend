@@ -27,9 +27,11 @@
   stroke: white;
   user-select: none;
 
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+
+  position: relative;
 
   filter: grayscale(0);
 
@@ -37,6 +39,22 @@
   opacity: 0.8;
 
   @include outer_shadow();
+
+  input {
+    color: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    opacity: 0;
+  }
+
+  svg {
+    fill: white;
+    stroke: white;
+  }
 
   span {
     flex: 1;
@@ -89,14 +107,22 @@
 
   &:global(.disabled),
   &:global(.grey) {
-    opacity: 0.3;
-    background: lighten(black, 2%);
+    background: transparentize(white, 0.9);
+    // background: lighten(white, 0.5);
     // filter: grayscale(100%);
+  }
+
+  &:global(.disabled) {
+    opacity: 0.3;
   }
 
   &:global(.icon) {
     padding-left: 10px;
     padding-right: 10px;
+
+    svg {
+      margin: 0;
+    }
   }
 
   &:global(.is_loading) {
@@ -137,6 +163,15 @@
 .mini {
   height: 28px;
   border-radius: $radius / 2;
+}
+.small {
+  height: 32px;
+  // border-radius: $radius / 2;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 .normal {
   height: 38px;

@@ -1,5 +1,5 @@
 import { IFile, IUploadType } from '~/redux/types';
-import { IUploadState, IUploadStatus } from './reducer';
+import { IUploadStatus } from './reducer';
 
 const prefix = 'UPLOAD.';
 
@@ -59,4 +59,11 @@ export const UPLOAD_TYPES: Record<string, IUploadType> = {
   AUDIO: 'audio',
   VIDEO: 'video',
   OTHER: 'other',
+};
+
+export const FILE_MIMES = {
+  [UPLOAD_TYPES.VIDEO]: [],
+  [UPLOAD_TYPES.IMAGE]: ['image/jpeg', 'image/jpg', 'image/png'],
+  [UPLOAD_TYPES.AUDIO]: ['audio/mpeg3', 'audio/mpeg', 'audio/mp3'],
+  [UPLOAD_TYPES.OTHER]: [],
 };

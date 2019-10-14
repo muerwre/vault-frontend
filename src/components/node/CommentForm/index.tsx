@@ -5,7 +5,7 @@ import * as styles from './styles.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import assocPath from 'ramda/es/assocPath';
-import { InputHandler, IFileWithUUID, IFile, IComment } from '~/redux/types';
+import { InputHandler, IFileWithUUID } from '~/redux/types';
 import { connect } from 'react-redux';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
@@ -16,12 +16,15 @@ import uuid from 'uuid4';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { IState } from '~/redux/store';
-import pipe from 'ramda/es/pipe';
-import { ImageUpload } from '~/components/upload/ImageUpload';
-import { getImageSize } from '~/utils/dom';
+import { getFileType } from '~/utils/uploader';
+import { selectUser } from '~/redux/auth/selectors';
+import { getURL } from '~/utils/dom';
+import { ButtonGroup } from '~/components/input/ButtonGroup';
+import { AudioPlayer } from '~/components/media/AudioPlayer';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
+  user: selectUser(state),
   uploads: selectUploads(state),
 });
 
@@ -39,12 +42,12 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const CommentFormUnconnected: FC<IProps> = ({
   node: { comment_data, is_sending_comment },
   uploads: { statuses, files },
+  user: { photo },
   id,
   nodePostComment,
   nodeSetCommentData,
   uploadUploadFiles,
 }) => {
-  // const [data, setData] = useState<IComment>({ ...EMPTY_COMMENT });
   const onInputChange = useCallback(
     event => {
       event.preventDefault();
@@ -57,7 +60,7 @@ const CommentFormUnconnected: FC<IProps> = ({
           temp_id: uuid(),
           subject: UPLOAD_SUBJECTS.COMMENT,
           target: UPLOAD_TARGETS.COMMENTS,
-          type: UPLOAD_TYPES.IMAGE,
+          type: getFileType(file),
         })
       );
 
@@ -94,68 +97,79 @@ const CommentFormUnconnected: FC<IProps> = ({
     [onSubmit]
   );
 
-  const onFileAdd = useCallback(
-    (file: IFile, temp_id: string) => {
-      const comment = comment_data[id];
-      nodeSetCommentData(id, pipe(
-        assocPath(['files'], [...comment.files, file]),
-        assocPath(['temp_ids'], comment.temp_ids.filter(el => el !== temp_id))
-      )(comment) as IComment);
-    },
-    [nodeSetCommentData, comment_data, id]
-  );
-
   useEffect(() => {
-    Object.entries(statuses).forEach(([file_id, status]) => {
-      const comment = comment_data[id];
+    const temp_ids = (comment_data && comment_data[id] && comment_data[id].temp_ids) || [];
+    const added_files = temp_ids
+      .map(temp_uuid => statuses[temp_uuid] && statuses[temp_uuid].uuid)
+      .map(el => !!el && files[el])
+      .filter(el => !!el && !comment_data[id].files.some(file => file.id === el.id));
 
-      if (comment.temp_ids.includes(file_id) && !!status.uuid && files[status.uuid]) {
-        onFileAdd(files[status.uuid], file_id);
-      }
-    });
-  }, [statuses, comment_data, id, nodeSetCommentData, onFileAdd, files]);
+    const filtered_temps = temp_ids.filter(
+      temp_id =>
+        statuses[temp_id] &&
+        (!statuses[temp_id].uuid || !added_files.some(file => file.id === statuses[temp_id].uuid))
+    );
+
+    if (added_files.length) {
+      nodeSetCommentData(id, {
+        ...comment_data[id],
+        temp_ids: filtered_temps,
+        files: [...comment_data[id].files, ...added_files],
+      });
+    }
+  }, [statuses, files]);
+
+  const comment = comment_data[id];
 
   return (
-    <CommentWrapper>
-      <form onSubmit={onSubmit}>
+    <CommentWrapper photo={getURL(photo)}>
+      <form onSubmit={onSubmit} className={styles.wrap}>
         <div className={styles.input}>
           <Textarea
-            value={comment_data[id].text}
+            value={comment.text}
             handler={onInput}
             onKeyDown={onKeyDown}
             disabled={is_sending_comment}
+            minRows={2}
           />
         </div>
 
-        <div className={styles.uploads}>
-          {comment_data[id].files.map(file => (
-            <ImageUpload id={file.id} thumb={getImageSize(file.url)} key={file.id} />
-          ))}
-          {comment_data[id].temp_ids.map(
-            status =>
-              statuses[status] && (
-                <ImageUpload
-                  id={statuses[status].uuid}
-                  thumb={statuses[status].preview}
-                  key={status}
-                  progress={statuses[status].progress}
-                />
-              )
-          )}
-        </div>
-
         <Group horizontal className={styles.buttons}>
-          <input type="file" onInput={onInputChange} />
+          <ButtonGroup>
+            <Button iconLeft="image" size="small" grey iconOnly>
+              <input type="file" onInput={onInputChange} multiple accept="image/*" />
+            </Button>
+
+            <Button iconRight="enter" size="small" grey iconOnly>
+              <input type="file" onInput={onInputChange} multiple accept="audio/*" />
+            </Button>
+          </ButtonGroup>
 
           <Filler />
 
           {is_sending_comment && <LoaderCircle size={20} />}
 
-          <Button size="mini" grey iconRight="enter" disabled={is_sending_comment}>
+          <Button size="small" grey iconRight="enter" disabled={is_sending_comment}>
             Сказать
           </Button>
         </Group>
       </form>
+
+      {comment.temp_ids.map(
+        temp_id =>
+          statuses[temp_id] &&
+          statuses[temp_id].is_uploading && (
+            <div key={statuses[temp_id].temp_id}>{statuses[temp_id].progress}</div>
+          )
+      )}
+
+      {comment.files.map(file => {
+        if (file.type === UPLOAD_TYPES.AUDIO) {
+          return <AudioPlayer file={file} />;
+        }
+
+        return <div>file.name</div>;
+      })}
     </CommentWrapper>
   );
 };

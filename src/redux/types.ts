@@ -4,8 +4,15 @@ import { ERRORS } from '~/constants/errors';
 import { IUser } from './auth/types';
 
 export interface ITag {
+  id: number;
   title: string;
-  feature?: 'red' | 'blue' | 'green' | 'olive' | 'black';
+
+  data: Record<string, string>;
+  user: IUser;
+  nodes: INode[];
+
+  readonly created_at: string;
+  readonly updated_at: string;
 }
 
 export type IInputTextProps = DetailedHTMLProps<
@@ -64,6 +71,15 @@ export interface IFile {
 
   type: IUploadType;
   mime: string;
+  metadata?: {
+    id3title?: string;
+    id3artist?: string;
+    title?: string;
+
+    duration?: number;
+    width?: number;
+    height?: number;
+  };
 
   createdAt?: string;
   updatedAt?: string;
@@ -86,7 +102,7 @@ export interface IBlock {
 
 export interface INode {
   id?: number;
-  user_id: UUID;
+  user: Partial<IUser>;
 
   title: string;
   files: IFile[];
@@ -109,6 +125,8 @@ export interface INode {
       show_description: boolean;
     };
   };
+
+  tags: ITag[];
 
   createdAt?: string;
   updatedAt?: string;

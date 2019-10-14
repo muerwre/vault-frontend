@@ -1,4 +1,4 @@
-import { INode, IValidationErrors, IComment } from '../types';
+import { INode, IValidationErrors, IComment, ITag } from '../types';
 import { NODE_ACTIONS } from './constants';
 import { INodeState } from './reducer';
 
@@ -52,4 +52,15 @@ export const nodeSetCommentData = (id: number, comment: IComment) => ({
   id,
   comment,
   type: NODE_ACTIONS.SET_COMMENT_DATA,
+});
+
+export const nodeUpdateTags = (id: INode['id'], tags: string[]) => ({
+  type: NODE_ACTIONS.UPDATE_TAGS,
+  id,
+  tags,
+});
+
+export const nodeSetTags = (tags: ITag[]) => ({
+  type: NODE_ACTIONS.SET_TAGS,
+  tags,
 });

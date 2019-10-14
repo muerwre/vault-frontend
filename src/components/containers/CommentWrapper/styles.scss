@@ -1,26 +1,35 @@
 .wrap {
   background: $comment_bg;
-  min-height: 64px;
+  min-height: $comment_height;
   display: flex;
-  box-shadow: $comment_shadow;
+  position: relative;
+  box-shadow: none;
+  min-width: 0;
 
   &:global(.is_empty) {
     opacity: 0.5;
+  }
+
+  &:global(.is_same) {
+    margin: 0 !important;
+    border-radius: 0;
   }
 }
 
 .text {
   flex: 1;
+  min-width: 0;
 }
 
 .thumb {
-  flex: 0 0 64px;
-  background: transparentize(black, 0.9);
+  flex: 0 0 $comment_height;
   border-radius: $panel_radius 0 0 $panel_radius;
+  background-color: transparentize(black, 0.9);
 }
 
 .thumb_image {
-  height: 64px;
-  background: transparentize(white, 0.97);
+  height: $comment_height;
+  background: transparentize(white, 0.97) no-repeat 50% 50%;
   border-radius: $panel_radius 0 0 $panel_radius;
+  background-size: cover;
 }

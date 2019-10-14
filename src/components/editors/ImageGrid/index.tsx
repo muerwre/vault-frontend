@@ -1,6 +1,4 @@
-import React, {
- FC, useCallback, ChangeEventHandler, DragEventHandler,
-} from 'react';
+import React, { FC, useCallback, ChangeEventHandler, DragEventHandler } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import * as styles from './styles.scss';
 import { ImageUpload } from '~/components/upload/ImageUpload';
@@ -31,7 +29,7 @@ const SortableList = SortableContainer(
     <div className={styles.grid}>
       {items.map((file, index) => (
         <SortableItem key={file.id} index={index} collection={0}>
-          <ImageUpload id={file.id} thumb={getURL(file.url)} />
+          <ImageUpload id={file.id} thumb={getURL(file)} />
         </SortableItem>
       ))}
 
@@ -44,9 +42,7 @@ const SortableList = SortableContainer(
   )
 );
 
-const ImageGrid: FC<IProps> = ({
- items, locked, onFileMove, onUpload,
-}) => {
+const ImageGrid: FC<IProps> = ({ items, locked, onFileMove, onUpload }) => {
   const onMove = useCallback(({ oldIndex, newIndex }) => onFileMove(oldIndex, newIndex), [
     onFileMove,
   ]);

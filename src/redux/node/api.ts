@@ -1,6 +1,7 @@
 import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils/api';
 import { INode, IResultWithStatus, IComment } from '../types';
 import { API } from '~/constants/api';
+import { nodeUpdateTags } from './actions';
 
 export const postNode = ({
   access,
@@ -50,10 +51,24 @@ export const postNodeComment = ({
 
 export const getNodeComments = ({
   id,
+  access,
 }: {
   id: number;
+  access: string;
 }): Promise<IResultWithStatus<{ comment: Comment }>> =>
   api
-    .get(API.NODE.COMMENT(id))
+    .get(API.NODE.COMMENT(id), configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const updateNodeTags = ({
+  id,
+  tags,
+  access,
+}: ReturnType<typeof nodeUpdateTags> & { access: string }): Promise<
+  IResultWithStatus<{ node: INode }>
+> =>
+  api
+    .post(API.NODE.UPDATE_TAGS(id), { tags }, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);

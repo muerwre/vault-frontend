@@ -6,11 +6,12 @@
   align-items: center;
   justify-content: stretch;
   border-radius: ($tag_height / 2) 3px 3px ($tag_height / 2);
-  font: $font_12_semibold;
+  font: $font_14_semibold;
   align-self: flex-start;
   padding: 0 8px 0 0;
   box-shadow: $shadow_depth_2;
   margin: ($gap / 2) $gap ($gap / 2) 0;
+  position: relative;
 
   &:global(.is_hoverable) {
     cursor: pointer;
@@ -37,9 +38,35 @@
     background: transparentize(black, 0.7);
     box-shadow: none;
     color: transparentize(white, 0.6);
-    font: $font_12_medium;
+    font: $font_14_medium;
 
-    .hole::after { background: transparentize(white, 0.98); }
+    .hole::after {
+      background: transparentize(white, 0.98);
+    }
+  }
+
+  &:global(.input) {
+    color: transparent !important;
+    min-width: 100px;
+  }
+
+  input {
+    background: none;
+    border: none;
+    color: white;
+    outline: none;
+    display: inline-flex;
+    position: absolute;
+    font: inherit;
+
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    padding-left: 23px;
+    padding-right: 5px;
+    box-sizing: border-box;
   }
 }
 
@@ -50,6 +77,7 @@
   margin-right: 3px;
   align-items: center;
   justify-content: center;
+  flex: 0 0 22px;
 
   &::after {
     content: ' ';
@@ -63,4 +91,7 @@
 
 .title {
   white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

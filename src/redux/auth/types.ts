@@ -1,3 +1,5 @@
+import { IFile } from '../types';
+
 export interface IToken {
   access: string;
   refresh: string;
@@ -8,7 +10,8 @@ export interface IUser {
   username: string;
   email: string;
   role: string;
-  photo: string;
+  photo: IFile;
+  cover: IFile;
   name: string;
 
   is_activated: boolean;

@@ -1,3 +1,7 @@
+import { IFile } from '~/redux/types';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import { ru } from 'date-fns/locale';
+
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
     return document.defaultView.getComputedStyle(oElm, '').getPropertyValue(strCssRule);
@@ -52,10 +56,16 @@ export const describeArc = (
   ].join(' ');
 };
 
-export const getURL = url => `${process.env.API_HOST}${url}`;
+export const getURL = (file: Partial<IFile>) => {
+  if (!file || !file.url) return null;
 
-export const getImageSize = (image: string, size?: string): string =>
-  `${process.env.API_HOST}${image}`.replace('{size}', size);
+  return file.url
+    .replace('REMOTE_CURRENT://', process.env.REMOTE_CURRENT)
+    .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
+};
+
+export const getImageSize = (file: IFile, size?: string): string => getURL(file);
+// `${process.env.API_HOST}${image}`.replace('{size}', size);
 
 export const formatCommentText = (author, text: string) =>
   text
@@ -63,5 +73,10 @@ export const formatCommentText = (author, text: string) =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .split('\n')
-    .map((el, index) => (index === 0 ? `<p><b>${author}</b>: ${el}</p>` : `<p>${el}</p>`))
+    .map((el, index) =>
+      index === 0 ? `${author ? `<p><b>${author}</b>: ` : ''}${el}</p>` : `<p>${el}</p>`
+    )
     .join('');
+
+export const getPrettyDate = (date: string): string =>
+  formatDistanceToNow(new Date(date), { locale: ru, includeSeconds: true, addSuffix: true });

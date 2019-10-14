@@ -18,9 +18,11 @@ import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 interface IProps {
   is_loading: boolean;
   node: INode;
+  layout: {};
+  updateLayout: () => void;
 }
 
-const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
+const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => {
   const [is_animated, setIsAnimated] = useState(false);
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(320);
@@ -38,6 +40,8 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
     setLoaded,
     loaded,
   ]);
+
+  useEffect(() => updateLayout(), [loaded]);
 
   useEffect(() => {
     if (!refs || !refs.current[current] || !loaded[current]) return setHeight(320);
@@ -78,7 +82,7 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading }) => {
             >
               <img
                 className={styles.image}
-                src={getImageSize(file.url, 'node')}
+                src={getImageSize(file, 'node')}
                 alt=""
                 key={file.id}
                 onLoad={onImageLoad(index)}

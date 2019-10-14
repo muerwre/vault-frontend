@@ -10,8 +10,15 @@ import { selectUser } from '~/redux/auth/selectors';
 import { Group } from '~/components/containers/Group';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { DIALOGS } from '~/redux/modal/constants';
+import { pick } from 'ramda';
+import { Icon } from '~/components/input/Icon';
+import { url } from 'inspector';
+import { getURL } from '~/utils/dom';
+import path from 'ramda/es/path';
 
-const mapStateToProps = selectUser;
+const mapStateToProps = state => ({
+  user: pick(['username', 'is_user', 'photo'])(selectUser(state)),
+});
 
 const mapDispatchToProps = {
   push: historyPush,
@@ -20,7 +27,7 @@ const mapDispatchToProps = {
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
+const HeaderUnconnected: FC<IProps> = ({ user: { username, is_user, photo }, showDialog }) => {
   const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
   const onOpenEditor = useCallback(() => showDialog(DIALOGS.EDITOR), [showDialog]);
 
@@ -31,17 +38,16 @@ const HeaderUnconnected: FC<IProps> = ({ username, is_user, showDialog }) => {
       <Filler />
 
       <div className={style.plugs}>
-        <Link to="/">flow</Link>
-        <Link to="/examples/image">image</Link>
         <div onClick={onOpenEditor}>editor</div>
+        <Link to="/">flow</Link>
       </div>
-
-      <Filler />
 
       {is_user && (
         <Group horizontal className={style.user_button}>
           <div>{username}</div>
-          <div className={style.user_avatar} />
+          <div className={style.user_avatar} style={{ backgroundImage: `url('${getURL(photo)}')` }}>
+            {(!photo || !photo.id) && <Icon icon="profile" />}
+          </div>
         </Group>
       )}
 

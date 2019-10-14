@@ -8,8 +8,9 @@ export const AUTH_USER_ACTIONS = {
 };
 
 export const USER_ERRORS = {
+  UNAUTHORIZED: 'Вы не авторизованы',
   INVALID_CREDENTIALS: 'Неверное имя пользователя или пароль. Очень жаль.',
-  EMPTY_CREDENTIALS: 'Давайте введем логин и пароль. Это обязательно.'
+  EMPTY_CREDENTIALS: 'Давайте введем логин и пароль. Это обязательно.',
 };
 
 export const USER_STATUSES = {
@@ -34,6 +35,7 @@ export const EMPTY_USER: IUser = {
   name: null,
   username: null,
   photo: null,
+  cover: null,
   is_activated: false,
   is_user: false,
 };

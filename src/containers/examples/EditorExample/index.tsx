@@ -19,9 +19,7 @@ const EditorExample: FC<IProps> = () => (
   <Card className={styles.wrap} seamless>
     <Group horizontal className={styles.group} seamless>
       <div className={styles.editor}>
-        <Panel
-          className={classNames(styles.editor_panel, styles.editor_image_panel)}
-        >
+        <Panel className={classNames(styles.editor_panel, styles.editor_image_panel)}>
           <Scroll>
             <CellGrid className={styles.editor_image_container} size={200}>
               <div className={styles.editor_image} />
@@ -48,11 +46,11 @@ const EditorExample: FC<IProps> = () => (
 
             <Tags
               tags={[
-                { title: 'Избранный', feature: 'red' },
-                { title: 'Плейлист', feature: 'green' },
+                { title: 'Избранный' },
+                { title: 'Плейлист' },
                 { title: 'Просто' },
-                { title: '+ фото', feature: 'black' },
-                { title: '+ с музыкой', feature: 'black' }
+                { title: '+ фото' },
+                { title: '+ с музыкой' },
               ]}
             />
           </Group>

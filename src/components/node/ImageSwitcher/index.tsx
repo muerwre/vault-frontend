@@ -11,18 +11,22 @@ interface IProps {
   onChange: (current: number) => void;
 }
 
-const ImageSwitcher: FC<IProps> = ({ total, current, onChange, loaded }) => (
-  <div className={styles.wrap}>
-    <div className={styles.switcher}>
-      {range(0, total).map(item => (
-        <div
-          className={classNames({ is_active: item === current, is_loaded: loaded[item] })}
-          key={item}
-          onClick={() => onChange(item)}
-        />
-      ))}
+const ImageSwitcher: FC<IProps> = ({ total, current, onChange, loaded }) => {
+  if (total <= 1) return null;
+
+  return (
+    <div className={styles.wrap}>
+      <div className={styles.switcher}>
+        {range(0, total).map(item => (
+          <div
+            className={classNames({ is_active: item === current, is_loaded: loaded[item] })}
+            key={item}
+            onClick={() => onChange(item)}
+          />
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export { ImageSwitcher };

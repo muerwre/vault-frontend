@@ -8,7 +8,7 @@ type IButtonProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 > & {
-  size?: 'mini' | 'normal' | 'big' | 'giant' | 'micro';
+  size?: 'mini' | 'normal' | 'big' | 'giant' | 'micro' | 'small';
   iconLeft?: IIcon;
   iconRight?: IIcon;
   seamless?: boolean;
@@ -19,6 +19,7 @@ type IButtonProps = DetailedHTMLProps<
   non_submitting?: boolean;
   is_loading?: boolean;
   stretchy?: boolean;
+  iconOnly?: boolean;
 };
 
 export const Button: FC<IButtonProps> = ({
@@ -36,6 +37,7 @@ export const Button: FC<IButtonProps> = ({
   title,
   stretchy,
   disabled,
+  iconOnly,
   ...props
 }) =>
   createElement(
@@ -49,7 +51,7 @@ export const Button: FC<IButtonProps> = ({
         disabled,
         is_loading,
         stretchy,
-        icon: (iconLeft || iconRight) && !title && !children,
+        icon: ((iconLeft || iconRight) && !title && !children) || iconOnly,
         has_icon_left: !!iconLeft,
         has_icon_right: !!iconRight,
       }),
@@ -57,7 +59,7 @@ export const Button: FC<IButtonProps> = ({
     },
     [
       iconLeft && <Icon icon={iconLeft} size={20} key={0} />,
-      title ? <span key={1}>{title}</span> : (children && <span key={1}>{children}</span>) || null,
+      title ? <span>{title}</span> : children || null,
       iconRight && <Icon icon={iconRight} size={20} key={2} />,
     ]
   );

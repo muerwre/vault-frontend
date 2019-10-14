@@ -25,6 +25,10 @@ const Sprites: FC<{}> = () => (
       <path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z" />
     </g>
 
+    <g id="pause">
+      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" strokeWidth="0" />
+    </g>
+
     <g id="plus" stroke="none">
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
@@ -78,6 +82,21 @@ const Sprites: FC<{}> = () => (
     <g id="enter" stroke="none">
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M11 9l1.42 1.42L8.83 14H18V4h2v12H8.83l3.59 3.58L11 21l-6-6 6-6z" />
+    </g>
+
+    <g id="photo" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+    </g>
+
+    <g id="image" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z" />
+    </g>
+
+    <g id="profile" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
     </g>
   </svg>
 );

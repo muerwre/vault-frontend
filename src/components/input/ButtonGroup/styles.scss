@@ -1,0 +1,21 @@
+.wrap {
+  display: flex;
+  flex-direction: row;
+
+  & > * {
+    border-radius: 0;
+    box-shadow: transparentize($color: #000000, $amount: 0.1) 1px 0;
+
+    &:last-child {
+      border-radius: 0 $input_radius $input_radius 0;
+
+      &.small {
+        border-radius: 0 3px 3px 0;
+      }
+    }
+
+    &:first-child {
+      border-radius: $input_radius 0 0 $input_radius;
+    }
+  }
+}

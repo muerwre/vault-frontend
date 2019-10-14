@@ -1,0 +1,30 @@
+.wrap {
+  position: fixed;
+  transform: translateZ(0);
+  bottom: $gap;
+  pointer-events: none;
+  touch-action: none;
+  height: 54px;
+  display: flex;
+  z-index: 10;
+  width: 100%;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $gap;
+  box-sizing: border-box;
+}
+
+.content {
+  position: relative;
+  flex: 0 1 $content_width;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  & > div {
+    pointer-events: all;
+    touch-action: all;
+  }
+}

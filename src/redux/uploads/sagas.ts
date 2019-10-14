@@ -1,8 +1,6 @@
-import {
- takeEvery, all, spawn, call, put, take, fork, race,
-} from 'redux-saga/effects';
+import { takeEvery, all, spawn, call, put, take, fork, race } from 'redux-saga/effects';
 import { postUploadFile } from './api';
-import { UPLOAD_ACTIONS } from '~/redux/uploads/constants';
+import { UPLOAD_ACTIONS, FILE_MIMES } from '~/redux/uploads/constants';
 import {
   uploadUploadFiles,
   uploadSetStatus,
@@ -13,7 +11,6 @@ import {
 import { reqWrapper } from '../auth/sagas';
 import { createUploader, uploadGetThumb } from '~/utils/uploader';
 import { HTTP_RESPONSES } from '~/utils/api';
-import { VALIDATORS } from '~/utils/validators';
 import { IFileWithUUID, IFile, IUploadProgressHandler } from '../types';
 
 function* uploadCall({
@@ -49,9 +46,7 @@ function* uploadCancelWorker(id) {
   return true;
 }
 
-function* uploadWorker({
- file, temp_id, target, type,
-}: IFileWithUUID) {
+function* uploadWorker({ file, temp_id, target, type }: IFileWithUUID) {
   const [promise, chan] = createUploader<Partial<IFileWithUUID>, Partial<IFileWithUUID>>(
     uploadCall,
     { temp_id, target, type }
@@ -69,10 +64,8 @@ function* uploadWorker({
   return result;
 }
 
-function* uploadFile({
- file, temp_id, type, target,
-}: IFileWithUUID) {
-  if (!file.type || !VALIDATORS.IS_IMAGE_MIME(file.type)) {
+function* uploadFile({ file, temp_id, type, target }: IFileWithUUID) {
+  if (!file.type || !file.type || !FILE_MIMES[type].includes(file.type)) {
     return { error: 'File_Not_Image', status: HTTP_RESPONSES.BAD_REQUEST, data: {} };
   }
 
@@ -103,13 +96,13 @@ function* uploadFile({
     // add here CANCEL_UPLOADS worker, that will watch for subject
     // cancel_editing: take(UPLOAD_ACTIONS.CANCEL_EDITING),
     // save_inventory: take(INVENTORY_ACTIONS.SAVE_INVENTORY),
-  }) as any;
+  });
 
   if (cancel || cancel_editing) {
     return yield put(uploadDropStatus(temp_id));
   }
 
-  const { data, error }: { data: IFile & { detail: any }; error: string } = result;
+  const { data, error }: { data: IFile & { detail: string }; error: string } = result;
 
   if (error) {
     return yield put(
@@ -137,6 +130,6 @@ function* uploadFiles({ files }: ReturnType<typeof uploadUploadFiles>) {
   yield all(files.map(file => spawn(uploadFile, file)));
 }
 
-export default function* () {
+export default function*() {
   yield takeEvery(UPLOAD_ACTIONS.UPLOAD_FILES, uploadFiles);
 }

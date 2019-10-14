@@ -11,9 +11,7 @@ interface IProps {
   is_uploading?: boolean;
 }
 
-const ImageUpload: FC<IProps> = ({
- thumb, id, progress, is_uploading,
-}) => (
+const ImageUpload: FC<IProps> = ({ thumb, progress, is_uploading }) => (
   <div className={styles.wrap}>
     <div className={classNames(styles.thumb_wrap, { is_uploading })}>
       {thumb && <div className={styles.thumb} style={{ backgroundImage: `url("${thumb}")` }} />}

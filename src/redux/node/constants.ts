@@ -16,6 +16,9 @@ export const NODE_ACTIONS = {
 
   POST_COMMENT: `${prefix}POST_COMMENT`,
   SET_COMMENTS: `${prefix}SET_COMMENTS`,
+
+  UPDATE_TAGS: `${prefix}UPDATE_TAGS`,
+  SET_TAGS: `${prefix}SET_TAGS`,
 };
 
 export const EMPTY_BLOCK: IBlock = {
@@ -28,7 +31,7 @@ export const EMPTY_BLOCK: IBlock = {
 export const EMPTY_NODE: INode = {
   id: null,
 
-  user_id: null,
+  user: null,
 
   title: '',
   files: [],
@@ -37,6 +40,7 @@ export const EMPTY_NODE: INode = {
   type: null,
 
   blocks: [],
+  tags: [],
 
   options: {
     flow: {
@@ -53,7 +57,10 @@ export const NODE_TYPES = {
   TEXT: 'text',
 };
 
-type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<{ node: INode; is_loading: boolean }>>;
+type INodeComponents = Record<
+  ValueOf<typeof NODE_TYPES>,
+  FC<{ node: INode; is_loading: boolean; layout: {}; updateLayout: () => void }>
+>;
 
 export const NODE_COMPONENTS: INodeComponents = {
   [NODE_TYPES.IMAGE]: NodeImageBlock,

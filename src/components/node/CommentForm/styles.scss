@@ -1,11 +1,15 @@
 .wrap {
   display: flex;
   flex-direction: column;
+
+  textarea {
+    min-height: 62px !important;
+  }
 }
 
 .input {
   flex: 1;
-  padding: $gap / 2;
+  padding: ($gap / 2) ($gap / 2 + 1px);
 }
 
 .buttons {
@@ -14,12 +18,7 @@
   background: transparentize(black, 0.8);
   padding: $gap / 2;
   border-radius: 0 0 $radius $radius;
-
-  svg {
-    fill: transparentize(white, 0.9);
-  }
-
-  @include outer_shadow();
+  flex-wrap: wrap;
 }
 
 .uploads {

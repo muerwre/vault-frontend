@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: flex-end;
   font-weight: 500;
-  height: 80px;
+  height: 120px;
 }
 
 .spacer {
@@ -47,11 +47,11 @@
     }
 
     &:last-child {
-      padding-right: 0;
+      // padding-right: 0;
 
-      &::after {
-        display: none;
-      }
+      // &::after {
+      // display: none;
+      // }
     }
   }
 }
@@ -65,16 +65,31 @@
 .user_button {
   align-items: center;
   border-radius: $input_radius;
-  font: $font_16_medium;
+  font: $font_16_semibold;
   text-transform: uppercase;
   flex: 0 !important;
-  opacity: 0.3;
   cursor: pointer;
+  margin-left: $gap;
 }
 
 .user_avatar {
-  width: 20px;
-  height: 20px;
+  @include outer_shadow();
+
+  width: 32px;
+  height: 32px;
   background: white;
   border-radius: $radius;
+  margin-left: ($gap + 2px) !important;
+  background: 50% 50% no-repeat $wisegreen;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+
+  svg {
+    fill: #222222;
+    stroke: #222222;
+    width: 24px;
+    height: 24px;
+  }
 }

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { SidePane } from '~/components/main/SidePane';
 import * as styles from './styles.scss';
 import { Header } from '~/components/main/Header';
 
