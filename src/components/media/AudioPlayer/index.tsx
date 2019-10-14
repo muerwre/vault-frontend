@@ -75,6 +75,10 @@ const AudioPlayerUnconnected = ({
     };
   }, [file, current, setPlaying, onProgress]);
 
+  const title =
+    file.metadata &&
+    [file.metadata.id3artist, file.metadata.id3title].filter(el => !!el).join(' - ');
+
   return (
     <div onClick={onPlay} className={classNames(styles.wrap, { playing })}>
       <div className={styles.playpause}>
@@ -84,7 +88,7 @@ const AudioPlayerUnconnected = ({
         <div className={styles.progress} onClick={onSeek}>
           <div className={styles.bar} style={{ width: `${progress.progress}%` }} />
         </div>
-        <div className={styles.title}>{file.url}</div>
+        <div className={styles.title}>{title || 'Unknown'}</div>
       </div>
     </div>
   );

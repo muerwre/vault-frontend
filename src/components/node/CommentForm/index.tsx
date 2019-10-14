@@ -11,7 +11,7 @@ import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { Group } from '~/components/containers/Group';
-import { UPLOAD_SUBJECTS, UPLOAD_TARGETS } from '~/redux/uploads/constants';
+import { UPLOAD_SUBJECTS, UPLOAD_TARGETS, UPLOAD_TYPES } from '~/redux/uploads/constants';
 import uuid from 'uuid4';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
@@ -20,6 +20,7 @@ import { getFileType } from '~/utils/uploader';
 import { selectUser } from '~/redux/auth/selectors';
 import { getURL } from '~/utils/dom';
 import { ButtonGroup } from '~/components/input/ButtonGroup';
+import { AudioPlayer } from '~/components/media/AudioPlayer';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -162,7 +163,13 @@ const CommentFormUnconnected: FC<IProps> = ({
           )
       )}
 
-      {comment.files.map(file => file.name && <div key={file.id}>{file.name}</div>)}
+      {comment.files.map(file => {
+        if (file.type === UPLOAD_TYPES.AUDIO) {
+          return <AudioPlayer file={file} />;
+        }
+
+        return <div>file.name</div>;
+      })}
     </CommentWrapper>
   );
 };

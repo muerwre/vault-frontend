@@ -71,6 +71,13 @@ export interface IFile {
 
   type: IUploadType;
   mime: string;
+  metadata?: {
+    id3title?: string;
+    id3artist?: string;
+    duration?: number;
+    width?: number;
+    height?: number;
+  };
 
   createdAt?: string;
   updatedAt?: string;
