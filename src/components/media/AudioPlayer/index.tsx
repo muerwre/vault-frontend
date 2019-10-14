@@ -77,7 +77,8 @@ const AudioPlayerUnconnected = ({
 
   const title =
     file.metadata &&
-    [file.metadata.id3artist, file.metadata.id3title].filter(el => !!el).join(' - ');
+    (file.metadata.title ||
+      [file.metadata.id3artist, file.metadata.id3title].filter(el => !!el).join(' - '));
 
   return (
     <div onClick={onPlay} className={classNames(styles.wrap, { playing })}>

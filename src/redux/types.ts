@@ -74,6 +74,8 @@ export interface IFile {
   metadata?: {
     id3title?: string;
     id3artist?: string;
+    title?: string;
+
     duration?: number;
     width?: number;
     height?: number;
