@@ -77,7 +77,9 @@ export const formatCommentText = (author, text: string) =>
     .replace(/:\|--\|/gim, '://')
     .split('\n')
     .map((el, index) =>
-      index === 0 ? `${author ? `<p><b>${author}</b>: ` : ''}${el}</p>` : `<p>${el}</p>`
+      index === 0
+        ? `${author ? `<p><b class="comment-author">${author}: </b>` : ''}${el}</p>`
+        : `<p>${el}</p>`
     )
     .join('');
 // .replace(/\/\*(\*(?!\/)|[^*])*\*\//igm, '');

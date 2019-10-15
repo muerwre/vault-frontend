@@ -23,6 +23,13 @@
 .text {
   flex: 1;
   min-width: 0;
+
+  @include tablet {
+    :global(.comment-author) {
+      display: none !important;
+      color: red;
+    }
+  }
 }
 
 .thumb {
