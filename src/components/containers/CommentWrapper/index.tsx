@@ -3,21 +3,26 @@ import classNames from 'classnames';
 
 import * as styles from './styles.scss';
 import { Card } from '../Card';
+import { IUser } from '~/redux/auth/types';
+import { getURL } from '~/utils/dom';
+import path from 'ramda/es/path';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
-  photo?: string;
+  // photo?: string;
+  user: IUser;
   is_empty?: boolean;
   is_loading?: boolean;
   is_same?: boolean;
 };
 
 const CommentWrapper: FC<IProps> = ({
-  photo,
+  // photo,
   children,
   is_empty,
   is_loading,
   className,
   is_same,
+  user,
   ...props
 }) => (
   <Card
@@ -26,9 +31,11 @@ const CommentWrapper: FC<IProps> = ({
     {...props}
   >
     <div className={styles.thumb}>
-      {!is_same && photo && (
-        <div className={styles.thumb_image} style={{ backgroundImage: `url("${photo}")` }} />
-      )}
+      <div
+        className={styles.thumb_image}
+        style={{ backgroundImage: `url("${getURL(path(['photo'], user))}")` }}
+      />
+      <div className={styles.thumb_user}>~{path(['username'], user)}</div>
     </div>
 
     <div className={styles.text}>{children}</div>

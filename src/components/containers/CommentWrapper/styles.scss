@@ -14,6 +14,10 @@
     margin: 0 !important;
     border-radius: 0;
   }
+
+  @include tablet {
+    flex-direction: column;
+  }
 }
 
 .text {
@@ -25,6 +29,17 @@
   flex: 0 0 $comment_height;
   border-radius: $panel_radius 0 0 $panel_radius;
   background-color: transparentize(black, 0.9);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  @include tablet {
+    flex-direction: row;
+    flex: 0 0 40px;
+    padding: 8px;
+    box-shadow: inset rgba(255, 255, 255, 0.05) 1px 1px, inset rgba(0, 0, 0, 0.1) -1px -1px;
+    border-radius: $panel_radius $panel_radius 0 0;
+  }
 }
 
 .thumb_image {
@@ -32,4 +47,25 @@
   background: transparentize(white, 0.97) no-repeat 50% 50%;
   border-radius: $panel_radius 0 0 $panel_radius;
   background-size: cover;
+  flex: 0 0 $comment_height;
+
+  @include tablet {
+    height: 32px;
+    flex: 0 0 32px;
+    border-radius: $panel_radius;
+  }
+}
+
+.thumb_user {
+  display: none;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  padding: 0 $gap;
+  font: $font_14_medium;
+
+  @include tablet {
+    display: flex;
+  }
 }

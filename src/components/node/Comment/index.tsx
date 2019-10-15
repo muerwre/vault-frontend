@@ -25,7 +25,7 @@ const Comment: FC<IProps> = ({
       className={className}
       is_empty={is_empty}
       is_loading={is_loading}
-      photo={getURL(comment_group.user.photo)}
+      user={comment_group.user}
       is_same={is_same}
       {...props}
     >

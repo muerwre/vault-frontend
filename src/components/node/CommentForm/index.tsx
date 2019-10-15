@@ -42,7 +42,7 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const CommentFormUnconnected: FC<IProps> = ({
   node: { comment_data, is_sending_comment },
   uploads: { statuses, files },
-  user: { photo },
+  user,
   id,
   nodePostComment,
   nodeSetCommentData,
@@ -122,7 +122,7 @@ const CommentFormUnconnected: FC<IProps> = ({
   const comment = comment_data[id];
 
   return (
-    <CommentWrapper photo={getURL(photo)}>
+    <CommentWrapper user={user}>
       <form onSubmit={onSubmit} className={styles.wrap}>
         <div className={styles.input}>
           <Textarea
