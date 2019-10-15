@@ -14,7 +14,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  playerSetFile: PLAYER_ACTIONS.playerSetFile,
+  playerSetFileAndPlay: PLAYER_ACTIONS.playerSetFileAndPlay,
   playerPlay: PLAYER_ACTIONS.playerPlay,
   playerPause: PLAYER_ACTIONS.playerPause,
   playerSeek: PLAYER_ACTIONS.playerSeek,
@@ -29,7 +29,7 @@ const AudioPlayerUnconnected = ({
   file,
   player: { file: current, status },
 
-  playerSetFile,
+  playerSetFileAndPlay,
   playerPlay,
   playerPause,
   playerSeek,
@@ -43,8 +43,8 @@ const AudioPlayerUnconnected = ({
       return playerPlay();
     }
 
-    playerSetFile(file);
-  }, [file, current, status, playerPlay, playerPause, playerSetFile]);
+    playerSetFileAndPlay(file);
+  }, [file, current, status, playerPlay, playerPause, playerSetFileAndPlay]);
 
   const onProgress = useCallback(
     ({ detail }: { detail: IPlayerProgress }) => {

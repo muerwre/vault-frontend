@@ -1,5 +1,5 @@
 import { store } from '~/redux/store';
-import { playerSetStatus } from '~/redux/player/actions';
+import { playerSetStatus, playerStopped } from '~/redux/player/actions';
 import { PLAYER_STATES } from '~/redux/player/constants';
 
 type PlayerEventType = keyof HTMLMediaElementEventMap;
@@ -64,6 +64,11 @@ export class PlayerClass {
     this.element.pause();
   };
 
+  public stop = () => {
+    this.element.src = '';
+    this.element.dispatchEvent(new CustomEvent('stop'));
+  };
+
   public getDuration = () => {
     return this.element.currentTime;
   };
@@ -83,5 +88,7 @@ const Player = new PlayerClass();
 
 Player.on('play', () => store.dispatch(playerSetStatus(PLAYER_STATES.PLAYING)));
 Player.on('pause', () => store.dispatch(playerSetStatus(PLAYER_STATES.PAUSED)));
+Player.on('stop', () => store.dispatch(playerStopped()));
+Player.on('error', () => store.dispatch(playerStopped()));
 
 export { Player };

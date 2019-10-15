@@ -8,12 +8,15 @@ import pick from 'ramda/es/pick';
 import { selectPlayer } from '~/redux/player/selectors';
 import * as PLAYER_ACTIONS from '~/redux/player/actions';
 import { IPlayerProgress, Player } from '~/utils/player';
+import path from 'ramda/es/path';
+import { IFile } from '~/redux/types';
 
 const mapStateToProps = state => pick(['status', 'file'], selectPlayer(state));
 const mapDispatchToProps = {
   playerPlay: PLAYER_ACTIONS.playerPlay,
   playerPause: PLAYER_ACTIONS.playerPause,
   playerSeek: PLAYER_ACTIONS.playerSeek,
+  playerStop: PLAYER_ACTIONS.playerStop,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
@@ -23,6 +26,7 @@ const PlayerBarUnconnected: FC<IProps> = ({
   playerPlay,
   playerPause,
   playerSeek,
+  playerStop,
   file,
 }) => {
   const [progress, setProgress] = useState<IPlayerProgress>({ progress: 0, current: 0, total: 0 });
@@ -60,10 +64,10 @@ const PlayerBarUnconnected: FC<IProps> = ({
 
   if (status === PLAYER_STATES.UNSET) return null;
 
+  const metadata: IFile['metadata'] = path(['metadata'], file);
   const title =
-    file.metadata &&
-    (file.metadata.title ||
-      [file.metadata.id3artist, file.metadata.id3title].filter(el => !!el).join(' - '));
+    metadata &&
+    (metadata.title || [metadata.id3artist, metadata.id3title].filter(el => !!el).join(' - '));
 
   return (
     <div className={styles.place}>
@@ -81,7 +85,7 @@ const PlayerBarUnconnected: FC<IProps> = ({
             </div>
           </div>
 
-          <div className={styles.close}>
+          <div className={styles.close} onClick={playerStop}>
             <Icon icon="close" />
           </div>
         </div>
