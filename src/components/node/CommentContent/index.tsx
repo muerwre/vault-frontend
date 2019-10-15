@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { IComment, IFile } from '~/redux/types';
 import path from 'ramda/es/path';
-import { formatCommentText, getURL } from '~/utils/dom';
+import { formatCommentText, getURL, getPrettyDate } from '~/utils/dom';
 import { Group } from '~/components/containers/Group';
 import * as styles from './styles.scss';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
@@ -36,6 +36,8 @@ const CommentContent: FC<IProps> = ({ comment }) => {
               __html: formatCommentText(path(['user', 'username'], comment), comment.text),
             }}
           />
+
+          <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
         </div>
       )}
 
@@ -48,6 +50,8 @@ const CommentContent: FC<IProps> = ({ comment }) => {
               </div>
             ))}
           </div>
+
+          <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
         </div>
       )}
 
@@ -56,6 +60,8 @@ const CommentContent: FC<IProps> = ({ comment }) => {
           {groupped.audio.map(file => (
             <div className={classnames(styles.block, styles.audio_block)} key={file.id}>
               <AudioPlayer file={file} />
+
+              <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
             </div>
           ))}
         </>
@@ -71,7 +77,6 @@ export { CommentContent };
         
       )}
 
-      <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
 
 
 

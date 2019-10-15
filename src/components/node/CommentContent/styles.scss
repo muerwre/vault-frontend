@@ -6,6 +6,9 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  position: relative;
+  padding-bottom: 10px;
+  box-sizing: border-box;
 
   &:first-child {
     border-top-right-radius: $radius;
@@ -41,7 +44,7 @@
   right: 0;
   font: $font_12_regular;
   color: transparentize($color: white, $amount: 0.8);
-  padding: 2px 4px;
+  padding: 4px 6px 4px 4px;
   border-radius: 0 0 $radius 0;
 }
 
