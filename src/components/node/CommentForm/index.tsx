@@ -134,6 +134,22 @@ const CommentFormUnconnected: FC<IProps> = ({
           />
         </div>
 
+        {comment.temp_ids.map(
+          temp_id =>
+            statuses[temp_id] &&
+            statuses[temp_id].is_uploading && (
+              <div key={statuses[temp_id].temp_id}>{statuses[temp_id].progress}</div>
+            )
+        )}
+
+        {comment.files.map(file => {
+          if (file.type === UPLOAD_TYPES.AUDIO) {
+            return <AudioPlayer file={file} />;
+          }
+
+          return <div>file.name</div>;
+        })}
+
         <Group horizontal className={styles.buttons}>
           <ButtonGroup>
             <Button iconLeft="image" size="small" grey iconOnly>
@@ -154,22 +170,6 @@ const CommentFormUnconnected: FC<IProps> = ({
           </Button>
         </Group>
       </form>
-
-      {comment.temp_ids.map(
-        temp_id =>
-          statuses[temp_id] &&
-          statuses[temp_id].is_uploading && (
-            <div key={statuses[temp_id].temp_id}>{statuses[temp_id].progress}</div>
-          )
-      )}
-
-      {comment.files.map(file => {
-        if (file.type === UPLOAD_TYPES.AUDIO) {
-          return <AudioPlayer file={file} />;
-        }
-
-        return <div>file.name</div>;
-      })}
     </CommentWrapper>
   );
 };

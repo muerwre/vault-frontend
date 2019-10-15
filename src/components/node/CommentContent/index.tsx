@@ -42,7 +42,7 @@ const CommentContent: FC<IProps> = ({ comment }) => {
       )}
 
       {groupped.image && groupped.image.length > 0 && (
-        <div className={styles.block}>
+        <div className={classnames(styles.block, styles.block_image)}>
           <div className={styles.images}>
             {groupped.image.map(file => (
               <div key={file.id}>
@@ -58,7 +58,7 @@ const CommentContent: FC<IProps> = ({ comment }) => {
       {groupped.audio && groupped.audio.length > 0 && (
         <>
           {groupped.audio.map(file => (
-            <div className={classnames(styles.block, styles.audio_block)} key={file.id}>
+            <div className={classnames(styles.block, styles.block_audio)} key={file.id}>
               <AudioPlayer file={file} />
 
               <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>

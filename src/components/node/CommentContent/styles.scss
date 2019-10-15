@@ -22,6 +22,17 @@
 .block_audio {
   align-items: center;
   justify-content: center;
+  padding-bottom: 0 !important;
+}
+
+.block_image {
+  padding-bottom: 0 !important;
+
+  .date {
+    background: transparentize($color: $content_bg, $amount: 0.2);
+    border-radius: $radius 0 $radius 0;
+    color: transparentize(white, 0.2);
+  }
 }
 
 .text {
@@ -44,7 +55,7 @@
   right: 0;
   font: $font_12_regular;
   color: transparentize($color: white, $amount: 0.8);
-  padding: 4px 6px 4px 4px;
+  padding: 4px 6px 4px 6px;
   border-radius: 0 0 $radius 0;
 }
 
