@@ -56,6 +56,7 @@ const NodeLayoutUnconnected: FC<IProps> = ({
     },
     [node, nodeUpdateTags]
   );
+
   const block = node && node.type && NODE_COMPONENTS[node.type] && NODE_COMPONENTS[node.type];
 
   return (

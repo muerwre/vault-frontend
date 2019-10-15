@@ -86,10 +86,11 @@ const AudioPlayerUnconnected = ({
         {playing && status === PLAYER_STATES.PLAYING ? <Icon icon="pause" /> : <Icon icon="play" />}
       </div>
       <div className={styles.content}>
+        <div className={styles.title}>{title || 'Unknown'}</div>
+
         <div className={styles.progress} onClick={onSeek}>
           <div className={styles.bar} style={{ width: `${progress.progress}%` }} />
         </div>
-        <div className={styles.title}>{title || 'Unknown'}</div>
       </div>
     </div>
   );
