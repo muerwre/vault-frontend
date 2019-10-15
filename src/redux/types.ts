@@ -133,6 +133,7 @@ export interface INode {
 }
 
 export interface IComment {
+  id: number;
   text: string;
   temp_ids?: string[];
   files: IFile[];
@@ -141,6 +142,12 @@ export interface IComment {
 
   created_at?: string;
   update_at?: string;
+}
+
+export interface ICommentGroup {
+  user: IUser;
+  comments: IComment[];
+  ids: IComment['id'][];
 }
 
 export type IUploadProgressHandler = (progress: ProgressEvent) => void;

@@ -72,11 +72,15 @@ export const formatCommentText = (author, text: string) =>
     .replace(/(\n{2,})/gi, '\n')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
+    .replace(/:\/\//gim, ':|--|')
+    .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
+    .replace(/:\|--\|/gim, '://')
     .split('\n')
     .map((el, index) =>
       index === 0 ? `${author ? `<p><b>${author}</b>: ` : ''}${el}</p>` : `<p>${el}</p>`
     )
     .join('');
+// .replace(/\/\*(\*(?!\/)|[^*])*\*\//igm, '');
 
 export const getPrettyDate = (date: string): string =>
   formatDistanceToNow(new Date(date), { locale: ru, includeSeconds: true, addSuffix: true });

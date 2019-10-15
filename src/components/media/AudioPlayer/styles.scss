@@ -1,6 +1,11 @@
 .wrap {
   display: flex;
   flex-direction: row;
+  height: $comment_height;
+  position: relative;
+  align-items: center;
+  justify-content: stretch;
+  flex: 1;
 
   &:global(.playing) {
     .progress {

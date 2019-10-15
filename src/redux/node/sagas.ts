@@ -100,7 +100,7 @@ function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
   if (current_node && current_node.id === current.id) {
     // if user still browsing that node
     const { comments } = yield select(selectNode);
-    yield put(nodeSetComments([comment, ...comments]));
+    yield put(nodeSetComments([...comments, comment]));
     yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
   }
 }

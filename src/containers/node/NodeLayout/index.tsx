@@ -68,13 +68,13 @@ const NodeLayoutUnconnected: FC<IProps> = ({
         <Padder>
           <Group horizontal className={styles.content}>
             <Group className={styles.comments}>
-              {is_user && <CommentForm id={0} />}
-
               {is_loading_comments || !comments.length ? (
                 <NodeNoComments is_loading={is_loading_comments} />
               ) : (
                 <NodeComments comments={comments} />
               )}
+
+              {is_user && <CommentForm id={0} />}
             </Group>
 
             <div className={styles.panel}>

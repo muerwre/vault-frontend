@@ -76,6 +76,10 @@ body {
   height: 40px;
 }
 
+:global(.grey) {
+  color: #555555;
+}
+
 :global(h2) {
   font: $font_24_bold;
 }
