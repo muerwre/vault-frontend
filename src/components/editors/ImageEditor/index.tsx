@@ -1,10 +1,12 @@
-import React, { FC, ChangeEventHandler, DragEventHandler } from 'react';
+import React, { FC, ChangeEventHandler, DragEventHandler, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { INode } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
 import { IUploadStatus } from '~/redux/uploads/reducer';
+import { moveArrItem } from '~/utils/fn';
+import assocPath from 'ramda/es/assocPath';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -21,19 +23,9 @@ type IProps = ReturnType<typeof mapStateToProps> &
     onInputChange: ChangeEventHandler<HTMLInputElement>;
   };
 
-const ImageEditorUnconnected: FC<IProps> = ({
-  data,
-  onFileMove,
-  onInputChange,
-  pending_files,
-}) => (
-  <ImageGrid
-    onFileMove={onFileMove}
-    items={data.files}
-    locked={pending_files}
-    onUpload={onInputChange}
-  />
-);
+const ImageEditorUnconnected: FC<IProps> = ({ data, setData, pending_files }) => {
+  return <ImageGrid data={data} setData={setData} locked={pending_files} />;
+};
 
 const ImageEditor = connect(
   mapStateToProps,

@@ -14,12 +14,8 @@ import * as styles from './styles.scss';
 import { selectNode } from '~/redux/node/selectors';
 import { ImageEditor } from '~/components/editors/ImageEditor';
 import { EditorPanel } from '~/components/editors/EditorPanel';
-import { moveArrItem } from '~/utils/fn';
-import { IFile, IFileWithUUID } from '~/redux/types';
-import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
-import { UPLOAD_TARGETS, UPLOAD_TYPES, UPLOAD_SUBJECTS } from '~/redux/uploads/constants';
 
 const mapStateToProps = state => {
   const { editor } = selectNode(state);
@@ -29,100 +25,14 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
   nodeSave: NODE_ACTIONS.nodeSave,
 };
 
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const EditorDialogUnconnected: FC<IProps> = ({
-  onRequestClose,
-  editor,
-  files,
-  statuses,
-
-  uploadUploadFiles,
-  nodeSave,
-}) => {
+const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, statuses, nodeSave }) => {
   const [data, setData] = useState(editor);
-  const eventPreventer = useCallback(event => event.preventDefault(), []);
   const [temp, setTemp] = useState([]);
-
-  const onUpload = useCallback(
-    (uploads: File[]) => {
-      const items: IFileWithUUID[] = Array.from(uploads).map(
-        (file: File): IFileWithUUID => ({
-          file,
-          temp_id: uuid(),
-          subject: UPLOAD_SUBJECTS.EDITOR,
-          target: UPLOAD_TARGETS.NODES,
-          type: UPLOAD_TYPES.IMAGE,
-        })
-      );
-
-      const temps = items.map(file => file.temp_id);
-
-      setTemp([...temp, ...temps]);
-      uploadUploadFiles(items);
-    },
-    [setTemp, uploadUploadFiles, temp]
-  );
-
-  const onFileMove = useCallback(
-    (old_index: number, new_index: number) => {
-      setData(assocPath(['files'], moveArrItem(old_index, new_index, data.files), data));
-    },
-    [data, setData]
-  );
-
-  const onFileAdd = useCallback(
-    (file: IFile) => {
-      setData(assocPath(['files'], append(file, data.files), data));
-    },
-    [data, setData]
-  );
-
-  const onDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault();
-
-      if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length)
-        return;
-
-      onUpload(Array.from(event.dataTransfer.files));
-    },
-    [onUpload]
-  );
-
-  const onInputChange = useCallback(
-    event => {
-      event.preventDefault();
-
-      if (!event.target.files || !event.target.files.length) return;
-
-      onUpload(Array.from(event.target.files));
-    },
-    [onUpload]
-  );
-
-  useEffect(() => {
-    window.addEventListener('dragover', eventPreventer, false);
-    window.addEventListener('drop', eventPreventer, false);
-
-    return () => {
-      window.removeEventListener('dragover', eventPreventer, false);
-      window.removeEventListener('drop', eventPreventer, false);
-    };
-  }, [eventPreventer]);
-
-  useEffect(() => {
-    Object.entries(statuses).forEach(([id, status]) => {
-      if (temp.includes(id) && !!status.uuid && files[status.uuid]) {
-        onFileAdd(files[status.uuid]);
-        setTemp(temp.filter(el => el !== id));
-      }
-    });
-  }, [statuses, files, temp, onFileAdd]);
 
   const setTitle = useCallback(
     title => {
@@ -141,7 +51,7 @@ const EditorDialogUnconnected: FC<IProps> = ({
 
   const buttons = (
     <Padder style={{ position: 'relative' }}>
-      <EditorPanel data={data} setData={setData} onUpload={onInputChange} />
+      <EditorPanel data={data} setData={setData} temp={temp} setTemp={setTemp} />
 
       <Group horizontal>
         <InputText title="Название" value={data.title} handler={setTitle} autoFocus />
@@ -156,14 +66,11 @@ const EditorDialogUnconnected: FC<IProps> = ({
   return (
     <form onSubmit={onSubmit} className={styles.form}>
       <ScrollDialog buttons={buttons} width={860} onClose={onRequestClose}>
-        <div className={styles.editor} onDrop={onDrop}>
+        <div className={styles.editor}>
           <ImageEditor
             data={data}
             pending_files={temp.filter(id => !!statuses[id]).map(id => statuses[id])}
             setData={setData}
-            onUpload={onInputChange}
-            onFileMove={onFileMove}
-            onInputChange={onInputChange}
           />
         </div>
       </ScrollDialog>

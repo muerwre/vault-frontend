@@ -1,16 +1,19 @@
-import React, { FC, useCallback, ChangeEventHandler, DragEventHandler } from 'react';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import React, { FC, useCallback } from 'react';
+import { SortableContainer, SortableElement, SortEvent, SortEnd } from 'react-sortable-hoc';
 import * as styles from './styles.scss';
 import { ImageUpload } from '~/components/upload/ImageUpload';
-import { IFile } from '~/redux/types';
+import { IFile, INode } from '~/redux/types';
 import { IUploadStatus } from '~/redux/uploads/reducer';
 import { getURL } from '~/utils/dom';
+import assocPath from 'ramda/es/assocPath';
+import { moveArrItem } from '~/utils/fn';
 
 interface IProps {
-  items: IFile[];
+  data: INode;
+  setData: (val: INode) => void;
   locked: IUploadStatus[];
-  onFileMove: (o: number, n: number) => void;
-  onUpload?: ChangeEventHandler<HTMLInputElement>;
+  // items: IFile[];
+  // onFileMove: (o: number, n: number) => void;
 }
 
 const SortableItem = SortableElement(({ children }) => (
@@ -18,14 +21,7 @@ const SortableItem = SortableElement(({ children }) => (
 ));
 
 const SortableList = SortableContainer(
-  ({
-    items,
-    locked,
-  }: {
-    items: IFile[];
-    locked: IUploadStatus[];
-    onUpload: ChangeEventHandler<HTMLInputElement>;
-  }) => (
+  ({ items, locked }: { items: IFile[]; locked: IUploadStatus[] }) => (
     <div className={styles.grid}>
       {items.map((file, index) => (
         <SortableItem key={file.id} index={index} collection={0}>
@@ -42,18 +38,20 @@ const SortableList = SortableContainer(
   )
 );
 
-const ImageGrid: FC<IProps> = ({ items, locked, onFileMove, onUpload }) => {
-  const onMove = useCallback(({ oldIndex, newIndex }) => onFileMove(oldIndex, newIndex), [
-    onFileMove,
-  ]);
+const ImageGrid: FC<IProps> = ({ data, setData, locked }) => {
+  const onMove = useCallback(
+    ({ oldIndex, newIndex }: SortEnd) => {
+      setData(assocPath(['files'], moveArrItem(oldIndex, newIndex, data.files), data));
+    },
+    [data, setData]
+  );
 
   return (
     <SortableList
       onSortEnd={onMove}
       axis="xy"
-      items={items}
+      items={data.files}
       locked={locked}
-      onUpload={onUpload}
       pressDelay={window.innerWidth < 768 ? 200 : 0}
       helperClass={styles.helper}
     />
