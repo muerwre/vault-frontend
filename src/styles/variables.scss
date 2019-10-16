@@ -6,6 +6,7 @@ $content_width: $cell * 4 + $grid_line * 3;
 $gap: 10px;
 $spc: $gap * 2;
 $comment_height: 72px;
+$bar_height: 64px;
 
 $radius: 8px;
 $cell_radius: $radius;
@@ -67,7 +68,7 @@ $input_shadow_error: inset $red 0 0 0 1px;
 $input_shadow_filled: $input_shadow;
 
 @mixin outer_shadow() {
-  box-shadow: inset transparentize(white, 0.95) 0 1px, transparentize(black, 0.8) 0 3px;
+  box-shadow: inset transparentize(white, 0.95) 1px 1px, transparentize(black, 0.8) -1px -1px;
 }
 
 @mixin inner_shadow() {

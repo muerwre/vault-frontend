@@ -6,6 +6,10 @@
   box-sizing: border-box;
   align-items: center;
   justify-content: flex-start;
+
+  @include tablet {
+    padding: 0;
+  }
 }
 
 .content {

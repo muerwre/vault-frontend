@@ -12,9 +12,7 @@ import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { DIALOGS } from '~/redux/modal/constants';
 import { pick } from 'ramda';
 import { Icon } from '~/components/input/Icon';
-import { url } from 'inspector';
 import { getURL } from '~/utils/dom';
-import path from 'ramda/es/path';
 
 const mapStateToProps = state => ({
   user: pick(['username', 'is_user', 'photo'])(selectUser(state)),
@@ -29,7 +27,6 @@ type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
 
 const HeaderUnconnected: FC<IProps> = ({ user: { username, is_user, photo }, showDialog }) => {
   const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
-  const onOpenEditor = useCallback(() => showDialog(DIALOGS.EDITOR), [showDialog]);
 
   return (
     <div className={style.container}>
@@ -38,7 +35,6 @@ const HeaderUnconnected: FC<IProps> = ({ user: { username, is_user, photo }, sho
       <Filler />
 
       <div className={style.plugs}>
-        <div onClick={onOpenEditor}>editor</div>
         <Link to="/">flow</Link>
       </div>
 
