@@ -17,11 +17,11 @@ interface IProps {
   locked: IUploadStatus[];
 }
 
-const SortableItem = SortableElement(({ children }) => (
+const SortableImageGridItem = SortableElement(({ children }) => (
   <div className={styles.item}>{children}</div>
 ));
 
-const SortableList = SortableContainer(
+const SortableImageGrid = SortableContainer(
   ({
     items,
     locked,
@@ -35,15 +35,15 @@ const SortableList = SortableContainer(
       {items
         .filter(file => file && file.id)
         .map((file, index) => (
-          <SortableItem key={file.id} index={index} collection={0}>
+          <SortableImageGridItem key={file.id} index={index} collection={0}>
             <ImageUpload id={file.id} thumb={getURL(file)} onDrop={onDrop} />
-          </SortableItem>
+          </SortableImageGridItem>
         ))}
 
       {locked.map((item, index) => (
-        <SortableItem key={item.temp_id} index={index} collection={1} disabled>
+        <SortableImageGridItem key={item.temp_id} index={index} collection={1} disabled>
           <ImageUpload thumb={item.preview} progress={item.progress} is_uploading />
-        </SortableItem>
+        </SortableImageGridItem>
       ))}
     </div>
   )
@@ -67,7 +67,7 @@ const ImageGrid: FC<IProps> = ({ data, setData, locked }) => {
   );
 
   return (
-    <SortableList
+    <SortableImageGrid
       onDrop={onDrop}
       onSortEnd={onMove}
       axis="xy"
