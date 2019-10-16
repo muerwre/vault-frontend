@@ -1,6 +1,6 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { INode } from '~/redux/types';
+import { INode, IFile } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
@@ -24,7 +24,9 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) =
     statuses,
   ]);
 
-  return <ImageGrid data={data} setData={setData} locked={pending_files} />;
+  const setFiles = useCallback((files: IFile[]) => setData({ ...data, files }), [data, setData]);
+
+  return <ImageGrid files={data.files} setFiles={setFiles} locked={pending_files} />;
 };
 
 const ImageEditor = connect(

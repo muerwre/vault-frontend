@@ -9,26 +9,24 @@ import reject from 'ramda/es/reject';
 import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 
 interface IProps {
-  data: INode;
-  setData: (val: INode) => void;
+  files: IFile[];
+  setFiles: (val: IFile[]) => void;
   locked: IUploadStatus[];
 }
 
-const ImageGrid: FC<IProps> = ({ data, setData, locked }) => {
+const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
   const onMove = useCallback(
     ({ oldIndex, newIndex }: SortEnd) => {
-      setData(assocPath(['files'], moveArrItem(oldIndex, newIndex, data.files), data));
+      setFiles(moveArrItem(oldIndex, newIndex, files) as IFile[]);
     },
-    [data, setData]
+    [setFiles, files]
   );
 
   const onDrop = useCallback(
-    (file_id: IFile['id']) => {
-      setData(
-        assocPath(['files'], reject(el => !el || !el.id || el.id === file_id, data.files), data)
-      );
+    (remove_id: IFile['id']) => {
+      setFiles(files.filter(file => file.id === remove_id));
     },
-    [setData, data]
+    [setFiles, files]
   );
 
   return (
@@ -36,7 +34,7 @@ const ImageGrid: FC<IProps> = ({ data, setData, locked }) => {
       onDrop={onDrop}
       onSortEnd={onMove}
       axis="xy"
-      items={data.files}
+      items={files}
       locked={locked}
       pressDelay={window.innerWidth < 768 ? 200 : 0}
       helperClass={styles.helper}
