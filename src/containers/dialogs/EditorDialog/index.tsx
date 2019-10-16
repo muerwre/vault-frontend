@@ -67,11 +67,7 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, statuses,
     <form onSubmit={onSubmit} className={styles.form}>
       <ScrollDialog buttons={buttons} width={860} onClose={onRequestClose}>
         <div className={styles.editor}>
-          <ImageEditor
-            data={data}
-            pending_files={temp.filter(id => !!statuses[id]).map(id => statuses[id])}
-            setData={setData}
-          />
+          <ImageEditor data={data} setData={setData} temp={temp} setTemp={setTemp} />
         </div>
       </ScrollDialog>
     </form>

@@ -1,9 +1,4 @@
-import React, {
-  FC,
-  ChangeEvent,
-  useCallback,
-  useState, useEffect,
-} from 'react';
+import React, { FC, ChangeEvent, useCallback, useState, useEffect } from 'react';
 import classNames from 'classnames';
 import * as styles from '~/styles/inputs.scss';
 import { Icon } from '~/components/input/Icon';
@@ -28,7 +23,7 @@ const InputText: FC<IInputTextProps> = ({
 
   const onInput = useCallback(
     ({ target }: ChangeEvent<HTMLInputElement>) => handler(target.value),
-    [handler],
+    [handler]
   );
 
   const onFocus = useCallback(() => setFocused(true), []);
@@ -39,18 +34,15 @@ const InputText: FC<IInputTextProps> = ({
   }, [inner_ref, onRef]);
 
   return (
-    <div className={classNames(
-      styles.input_text_wrapper,
-      wrapperClassName,
-      {
+    <div
+      className={classNames(styles.input_text_wrapper, wrapperClassName, {
         [styles.required]: required,
         [styles.focused]: focused,
         [styles.has_status]: !!status || !!error,
         [styles.has_value]: !!value,
         [styles.has_error]: !!error,
         [styles.has_loader]: is_loading,
-      },
-    )}
+      })}
     >
       <div className={styles.input}>
         <input
@@ -79,12 +71,16 @@ const InputText: FC<IInputTextProps> = ({
           <LoaderCircle size={20} />
         </div>
       </div>
-      {
-        title && <div className={styles.title}><span>{title}</span></div>
-      }
-      {
-        error && <div className={styles.error}><span>{error}</span></div>
-      }
+      {title && (
+        <div className={styles.title}>
+          <span>{title}</span>
+        </div>
+      )}
+      {error && (
+        <div className={styles.error}>
+          <span>{error}</span>
+        </div>
+      )}
     </div>
   );
 };

@@ -14,12 +14,7 @@ interface IProps {
   onScrollStop?: MouseEventHandler;
 }
 
-export const Scroll = ({
-  children,
-  className = '',
-  onRef = null,
-  ...props
-}: IProps) => {
+const Scroll = ({ children, className = '', onRef = null, ...props }: IProps) => {
   const [ref, setRef] = useState(null);
 
   useEffect(() => {
@@ -43,3 +38,5 @@ export const Scroll = ({
     </Scrollbars>
   );
 };
+
+export { Scroll };

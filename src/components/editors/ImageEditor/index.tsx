@@ -1,12 +1,10 @@
-import React, { FC, ChangeEventHandler, DragEventHandler, useCallback } from 'react';
+import React, { FC, ChangeEventHandler, DragEventHandler, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { INode } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
 import { IUploadStatus } from '~/redux/uploads/reducer';
-import { moveArrItem } from '~/utils/fn';
-import assocPath from 'ramda/es/assocPath';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -16,14 +14,17 @@ const mapDispatchToProps = {
 type IProps = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & {
     data: INode;
-    pending_files: IUploadStatus[];
-
     setData: (val: INode) => void;
-    onFileMove: (from: number, to: number) => void;
-    onInputChange: ChangeEventHandler<HTMLInputElement>;
+    temp: string[];
+    setTemp: (val: string[]) => void;
   };
 
-const ImageEditorUnconnected: FC<IProps> = ({ data, setData, pending_files }) => {
+const ImageEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) => {
+  const pending_files = useMemo(() => temp.filter(id => !!statuses[id]).map(id => statuses[id]), [
+    temp,
+    statuses,
+  ]);
+
   return <ImageGrid data={data} setData={setData} locked={pending_files} />;
 };
 

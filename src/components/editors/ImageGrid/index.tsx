@@ -12,8 +12,6 @@ interface IProps {
   data: INode;
   setData: (val: INode) => void;
   locked: IUploadStatus[];
-  // items: IFile[];
-  // onFileMove: (o: number, n: number) => void;
 }
 
 const SortableItem = SortableElement(({ children }) => (
