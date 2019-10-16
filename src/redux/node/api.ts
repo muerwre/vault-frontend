@@ -14,6 +14,7 @@ export const postNode = ({
     .post(API.NODE.SAVE, { node }, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
+// .then(console.log);
 
 export const getNodes = ({
   skip = 0,

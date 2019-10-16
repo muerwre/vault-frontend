@@ -43,7 +43,7 @@ const setTags = (state: INodeState, { tags }: ReturnType<typeof nodeSetTags>) =>
   assocPath(['current', 'tags'], tags, state);
 
 export const NODE_HANDLERS = {
-  [NODE_ACTIONS.SAVE]: setSaveErrors,
+  [NODE_ACTIONS.SET_SAVE_ERRORS]: setSaveErrors,
   [NODE_ACTIONS.SET_LOADING]: setLoading,
   [NODE_ACTIONS.SET_LOADING_COMMENTS]: setLoadingComments,
   [NODE_ACTIONS.SET_CURRENT]: setCurrent,

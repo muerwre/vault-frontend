@@ -1,8 +1,5 @@
-import React, { FC, useState, useCallback, useEffect, FormEvent } from 'react';
+import React, { FC, useState, useCallback, FormEvent, useEffect } from 'react';
 import { connect } from 'react-redux';
-import assocPath from 'ramda/es/assocPath';
-import append from 'ramda/es/append';
-import uuid from 'uuid4';
 import { ScrollDialog } from '../ScrollDialog';
 import { IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
@@ -16,21 +13,29 @@ import { ImageEditor } from '~/components/editors/ImageEditor';
 import { EditorPanel } from '~/components/editors/EditorPanel';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
+import { ERROR_LITERAL } from '~/constants/errors';
 
 const mapStateToProps = state => {
-  const { editor } = selectNode(state);
+  const { editor, errors } = selectNode(state);
   const { statuses, files } = selectUploads(state);
 
-  return { editor, statuses, files };
+  return { editor, statuses, files, errors };
 };
 
 const mapDispatchToProps = {
   nodeSave: NODE_ACTIONS.nodeSave,
+  nodeSetSaveErrors: NODE_ACTIONS.nodeSetSaveErrors,
 };
 
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, statuses, nodeSave }) => {
+const EditorDialogUnconnected: FC<IProps> = ({
+  onRequestClose,
+  editor,
+  errors,
+  nodeSave,
+  nodeSetSaveErrors,
+}) => {
   const [data, setData] = useState(editor);
   const [temp, setTemp] = useState([]);
 
@@ -49,6 +54,11 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, statuses,
     [data, nodeSave]
   );
 
+  useEffect(() => {
+    if (!Object.keys(errors).length) return;
+    nodeSetSaveErrors({});
+  }, [data]);
+
   const buttons = (
     <Padder style={{ position: 'relative' }}>
       <EditorPanel data={data} setData={setData} temp={temp} setTemp={setTemp} />
@@ -63,9 +73,16 @@ const EditorDialogUnconnected: FC<IProps> = ({ onRequestClose, editor, statuses,
 
   useCloseOnEscape(onRequestClose);
 
+  const error = errors && Object.values(errors)[0];
+
   return (
     <form onSubmit={onSubmit} className={styles.form}>
-      <ScrollDialog buttons={buttons} width={860} onClose={onRequestClose}>
+      <ScrollDialog
+        buttons={buttons}
+        width={860}
+        error={error && ERROR_LITERAL[error]}
+        onClose={onRequestClose}
+      >
         <div className={styles.editor}>
           <ImageEditor data={data} setData={setData} temp={temp} setTemp={setTemp} />
         </div>
