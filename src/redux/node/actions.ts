@@ -1,5 +1,5 @@
 import { INode, IValidationErrors, IComment, ITag } from '../types';
-import { NODE_ACTIONS } from './constants';
+import { NODE_ACTIONS, NODE_TYPES } from './constants';
 import { INodeState } from './reducer';
 
 export const nodeSave = (node: INode) => ({
@@ -63,4 +63,19 @@ export const nodeUpdateTags = (id: INode['id'], tags: string[]) => ({
 export const nodeSetTags = (tags: ITag[]) => ({
   type: NODE_ACTIONS.SET_TAGS,
   tags,
+});
+
+export const nodeCreate = (node_type: INode['type']) => ({
+  type: NODE_ACTIONS.CREATE,
+  node_type,
+});
+
+export const nodeEdit = (id: INode['id']) => ({
+  type: NODE_ACTIONS.CREATE,
+  id,
+});
+
+export const nodeSetEditor = (editor: INode) => ({
+  type: NODE_ACTIONS.SET_EDITOR,
+  editor,
 });

@@ -9,8 +9,8 @@ export interface IModalState {
 }
 
 const INITIAL_STATE: IModalState = {
-  is_shown: true,
-  dialog: DIALOGS.EDITOR_IMAGE,
+  is_shown: false,
+  dialog: DIALOGS.EDITOR_TEXT,
 };
 
 export default createReducer(INITIAL_STATE, MODAL_HANDLERS);

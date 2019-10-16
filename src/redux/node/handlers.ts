@@ -9,6 +9,7 @@ import {
   nodeSetComments,
   nodeSetCommentData,
   nodeSetTags,
+  nodeSetEditor,
 } from './actions';
 import { INodeState } from './reducer';
 
@@ -42,6 +43,9 @@ const setCommentData = (
 const setTags = (state: INodeState, { tags }: ReturnType<typeof nodeSetTags>) =>
   assocPath(['current', 'tags'], tags, state);
 
+const setEditor = (state: INodeState, { editor }: ReturnType<typeof nodeSetEditor>) =>
+  assocPath(['current', 'editor'], editor, state);
+
 export const NODE_HANDLERS = {
   [NODE_ACTIONS.SET_SAVE_ERRORS]: setSaveErrors,
   [NODE_ACTIONS.SET_LOADING]: setLoading,
@@ -51,4 +55,5 @@ export const NODE_HANDLERS = {
   [NODE_ACTIONS.SET_COMMENTS]: setComments,
   [NODE_ACTIONS.SET_COMMENT_DATA]: setCommentData,
   [NODE_ACTIONS.SET_TAGS]: setTags,
+  [NODE_ACTIONS.SET_EDITOR]: setEditor,
 };

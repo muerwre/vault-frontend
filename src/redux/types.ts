@@ -2,6 +2,7 @@ import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 import { IUser } from './auth/types';
+import { string } from 'prop-types';
 
 export interface ITag {
   id: number;
@@ -93,12 +94,17 @@ export interface IFileWithUUID {
   type: string;
 }
 
-export interface IBlock {
-  type: 'image' | 'text' | 'media' | 'youtube' | 'video';
-  files: UUID[];
-  content: string;
-  embeds: string[];
+export interface IBlockText {
+  type: 'text';
+  text: string;
 }
+
+export interface IBlockEmbed {
+  type: 'embed';
+  url: string;
+}
+
+export type IBlock = IBlockText | IBlockEmbed;
 
 export interface INode {
   id?: number;

@@ -2,11 +2,16 @@ import { FC } from 'react';
 import { IBlock, INode, ValueOf, IComment } from '../types';
 import { NodeImageBlock } from '~/components/node/NodeImageBlock';
 import { ImageEditor } from '~/components/editors/ImageEditor';
+import { TextEditor } from '~/components/editors/TextEditor';
+import { DIALOGS } from '../modal/constants';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
   SAVE: `${prefix}SAVE`,
   LOAD_NODE: `${prefix}LOAD_NODE`,
+
+  EDIT: `${prefix}EDIT`,
+  CREATE: `${prefix}CREATE`,
 
   SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,
   SET_LOADING: `${prefix}SET_LOADING`,
@@ -14,19 +19,13 @@ export const NODE_ACTIONS = {
   SET_SENDING_COMMENT: `${prefix}SET_SENDING_COMMENT`,
   SET_CURRENT: `${prefix}SET_CURRENT`,
   SET_COMMENT_DATA: `${prefix}SET_COMMENT_DATA`,
+  SET_EDITOR: `${prefix}SET_EDITOR`,
 
   POST_COMMENT: `${prefix}POST_COMMENT`,
   SET_COMMENTS: `${prefix}SET_COMMENTS`,
 
   UPDATE_TAGS: `${prefix}UPDATE_TAGS`,
   SET_TAGS: `${prefix}SET_TAGS`,
-};
-
-export const EMPTY_BLOCK: IBlock = {
-  type: null,
-  files: [],
-  content: null,
-  embeds: [],
 };
 
 export const EMPTY_NODE: INode = {
@@ -78,6 +77,16 @@ export const EMPTY_COMMENT: IComment = {
 
 export const NODE_EDITORS = {
   [NODE_TYPES.IMAGE]: ImageEditor,
+  [NODE_TYPES.TEXT]: TextEditor,
 };
 
 export const MAX_NODE_FILES = 16;
+
+export const NODE_EDITOR_DATA: Record<
+  typeof NODE_TYPES[keyof typeof NODE_TYPES],
+  Partial<INode>
+> = {
+  [NODE_TYPES.TEXT]: {
+    blocks: [{ text: '', type: 'text' }],
+  },
+};

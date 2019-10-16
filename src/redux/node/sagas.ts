@@ -1,7 +1,7 @@
 import { takeLatest, call, put, select, delay } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
-import { NODE_ACTIONS, EMPTY_NODE, EMPTY_COMMENT } from './constants';
+import { NODE_ACTIONS, EMPTY_NODE, EMPTY_COMMENT, NODE_EDITOR_DATA } from './constants';
 import {
   nodeSave,
   nodeSetSaveErrors,
@@ -15,16 +15,19 @@ import {
   nodeSetCommentData,
   nodeUpdateTags,
   nodeSetTags,
+  nodeCreate,
+  nodeSetEditor,
 } from './actions';
 import { postNode, getNode, postNodeComment, getNodeComments, updateNodeTags } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
-import { modalSetShown } from '../modal/actions';
+import { modalSetShown, modalShowDialog } from '../modal/actions';
 import { selectFlowNodes } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
 import { IResultWithStatus, INode } from '../types';
+import { NODE_EDITOR_DIALOGS } from '../modal/constants';
 
 function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   yield put(nodeSetSaveErrors({}));
@@ -118,9 +121,17 @@ function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
   yield put(nodeSetTags(node.tags));
 }
 
+function* onCreateSaga({ node_type: type }: ReturnType<typeof nodeCreate>) {
+  if (!NODE_EDITOR_DIALOGS[type]) return;
+
+  yield put(nodeSetEditor({ ...EMPTY_NODE, ...(NODE_EDITOR_DATA[type] || {}), type }));
+  yield put(modalShowDialog(NODE_EDITOR_DIALOGS[type]));
+}
+
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
   yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
+  yield takeLatest(NODE_ACTIONS.CREATE, onCreateSaga);
 }
