@@ -57,3 +57,29 @@
 .helper {
   opacity: 0.3;
 }
+
+.drop {
+  width: 24px;
+  height: 24px;
+  background: #222222;
+  position: absolute;
+  right: $gap;
+  top: $gap;
+  border-radius: 12px;
+  z-index: 2;
+  transition: background-color 250ms, opacity 0.25s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    opacity: 1;
+    background-color: $red;
+  }
+}

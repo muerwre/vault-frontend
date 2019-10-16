@@ -29,6 +29,8 @@ const ModalUnconnected: FC<IProps> = ({
 
   if (!dialog || !DIALOG_CONTENT[dialog] || !is_shown) return null;
 
+  console.log({ onRequestClose });
+
   return ReactDOM.createPortal(
     <div className={styles.fixed}>
       <div className={styles.overlay} onClick={onRequestClose} />
@@ -38,18 +40,18 @@ const ModalUnconnected: FC<IProps> = ({
             {React.createElement(DIALOG_CONTENT[dialog], {
               onRequestClose,
               onDialogChange: modalShowDialog,
-            } as IDialogProps)}
+            })}
           </div>
         </div>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 };
 
 const Modal = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ModalUnconnected);
 
 export { ModalUnconnected, Modal };

@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, FormEvent, useEffect } from 'react';
+import React, { FC, useState, useCallback, FormEvent, useEffect, createElement } from 'react';
 import { connect } from 'react-redux';
 import { ScrollDialog } from '../ScrollDialog';
 import { IDialogProps } from '~/redux/modal/constants';
@@ -9,11 +9,11 @@ import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
 import * as styles from './styles.scss';
 import { selectNode } from '~/redux/node/selectors';
-import { ImageEditor } from '~/components/editors/ImageEditor';
 import { EditorPanel } from '~/components/editors/EditorPanel';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ERROR_LITERAL } from '~/constants/errors';
+import { NODE_EDITORS } from '~/redux/node/constants';
 
 const mapStateToProps = state => {
   const { editor, errors } = selectNode(state);
@@ -27,14 +27,19 @@ const mapDispatchToProps = {
   nodeSetSaveErrors: NODE_ACTIONS.nodeSetSaveErrors,
 };
 
-type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
+type IProps = IDialogProps &
+  ReturnType<typeof mapStateToProps> &
+  typeof mapDispatchToProps & {
+    type: typeof NODE_EDITORS[keyof typeof NODE_EDITORS];
+  };
 
 const EditorDialogUnconnected: FC<IProps> = ({
-  onRequestClose,
   editor,
   errors,
   nodeSave,
   nodeSetSaveErrors,
+  onRequestClose,
+  type,
 }) => {
   const [data, setData] = useState(editor);
   const [temp, setTemp] = useState([]);
@@ -53,6 +58,10 @@ const EditorDialogUnconnected: FC<IProps> = ({
     },
     [data, nodeSave]
   );
+
+  useEffect(() => {
+    if (!NODE_EDITORS[type] && onRequestClose) onRequestClose();
+  }, [type]);
 
   useEffect(() => {
     if (!Object.keys(errors).length) return;
@@ -75,6 +84,8 @@ const EditorDialogUnconnected: FC<IProps> = ({
 
   const error = errors && Object.values(errors)[0];
 
+  if (!NODE_EDITORS[type]) return null;
+
   return (
     <form onSubmit={onSubmit} className={styles.form}>
       <ScrollDialog
@@ -84,7 +95,12 @@ const EditorDialogUnconnected: FC<IProps> = ({
         onClose={onRequestClose}
       >
         <div className={styles.editor}>
-          <ImageEditor data={data} setData={setData} temp={temp} setTemp={setTemp} />
+          {createElement(NODE_EDITORS[type], {
+            data,
+            setData,
+            temp,
+            setTemp,
+          })}
         </div>
       </ScrollDialog>
     </form>

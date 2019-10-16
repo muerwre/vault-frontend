@@ -58,7 +58,7 @@ export type UUID = string;
 export type IUploadType = 'image' | 'text' | 'audio' | 'video' | 'other';
 
 export interface IFile {
-  id?: UUID;
+  id?: number;
   temp_id?: UUID;
   user_id?: UUID;
   node_id?: UUID;

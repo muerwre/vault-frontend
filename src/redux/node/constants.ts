@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { IBlock, INode, ValueOf, IComment } from '../types';
 import { NodeImageBlock } from '~/components/node/NodeImageBlock';
+import { ImageEditor } from '~/components/editors/ImageEditor';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -74,3 +75,9 @@ export const EMPTY_COMMENT: IComment = {
   is_private: false,
   user: null,
 };
+
+export const NODE_EDITORS = {
+  [NODE_TYPES.IMAGE]: ImageEditor,
+};
+
+export const MAX_NODE_FILES = 16;

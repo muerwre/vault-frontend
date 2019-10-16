@@ -7,6 +7,9 @@ import { IUploadStatus } from '~/redux/uploads/reducer';
 import { getURL } from '~/utils/dom';
 import assocPath from 'ramda/es/assocPath';
 import { moveArrItem } from '~/utils/fn';
+import omit from 'ramda/es/omit';
+import remove from 'ramda/es/remove';
+import reject from 'ramda/es/reject';
 
 interface IProps {
   data: INode;
@@ -19,13 +22,23 @@ const SortableItem = SortableElement(({ children }) => (
 ));
 
 const SortableList = SortableContainer(
-  ({ items, locked }: { items: IFile[]; locked: IUploadStatus[] }) => (
+  ({
+    items,
+    locked,
+    onDrop,
+  }: {
+    items: IFile[];
+    locked: IUploadStatus[];
+    onDrop: (file_id: IFile['id']) => void;
+  }) => (
     <div className={styles.grid}>
-      {items.map((file, index) => (
-        <SortableItem key={file.id} index={index} collection={0}>
-          <ImageUpload id={file.id} thumb={getURL(file)} />
-        </SortableItem>
-      ))}
+      {items
+        .filter(file => file && file.id)
+        .map((file, index) => (
+          <SortableItem key={file.id} index={index} collection={0}>
+            <ImageUpload id={file.id} thumb={getURL(file)} onDrop={onDrop} />
+          </SortableItem>
+        ))}
 
       {locked.map((item, index) => (
         <SortableItem key={item.temp_id} index={index} collection={1} disabled>
@@ -44,8 +57,18 @@ const ImageGrid: FC<IProps> = ({ data, setData, locked }) => {
     [data, setData]
   );
 
+  const onDrop = useCallback(
+    (file_id: IFile['id']) => {
+      setData(
+        assocPath(['files'], reject(el => !el || !el.id || el.id === file_id, data.files), data)
+      );
+    },
+    [setData, data]
+  );
+
   return (
     <SortableList
+      onDrop={onDrop}
       onSortEnd={onMove}
       axis="xy"
       items={data.files}
