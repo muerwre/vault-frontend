@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { IBlock, INode, ValueOf, IComment } from '../types';
-import { NodeImageBlock } from '~/components/node/NodeImageBlock';
+import { NodeImageSlideBlock } from '~/components/node/NodeImageSlideBlock';
 import { ImageEditor } from '~/components/editors/ImageEditor';
 import { TextEditor } from '~/components/editors/TextEditor';
 import { DIALOGS } from '../modal/constants';
@@ -63,7 +63,7 @@ type INodeComponents = Record<
 >;
 
 export const NODE_COMPONENTS: INodeComponents = {
-  [NODE_TYPES.IMAGE]: NodeImageBlock,
+  [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
 };
 
 export const EMPTY_COMMENT: IComment = {
