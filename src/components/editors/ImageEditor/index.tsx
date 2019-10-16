@@ -1,10 +1,9 @@
-import React, { FC, ChangeEventHandler, DragEventHandler, useCallback, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { INode } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
-import { IUploadStatus } from '~/redux/uploads/reducer';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {

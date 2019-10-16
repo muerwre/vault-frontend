@@ -22,7 +22,7 @@ type IButtonProps = DetailedHTMLProps<
   iconOnly?: boolean;
 };
 
-export const Button: FC<IButtonProps> = ({
+const Button: FC<IButtonProps> = ({
   className = '',
   size = 'normal',
   iconLeft,
@@ -63,3 +63,5 @@ export const Button: FC<IButtonProps> = ({
       iconRight && <Icon icon={iconRight} size={20} key={2} />,
     ]
   );
+
+export { Button };

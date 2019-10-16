@@ -8,7 +8,7 @@
     }
   }
 
-  @include tablet {
+  @media (max-width: $content_width + ($bar_height + $gap) * 2) {
     position: relative;
     right: 0;
     margin-left: $gap;
