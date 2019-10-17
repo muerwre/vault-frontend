@@ -67,10 +67,8 @@ export const getURL = (file: Partial<IFile>) => {
 export const getImageSize = (file: IFile, size?: string): string => getURL(file);
 // `${process.env.API_HOST}${image}`.replace('{size}', size);
 
-export const formatCommentText = (author, text: string) => {
-  if (!text) return '';
-
-  return text
+export const formatText = (text: string): string =>
+  text
     .replace(/(\n{2,})/gi, '\n')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -78,15 +76,21 @@ export const formatCommentText = (author, text: string) => {
     .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
     .replace(/:\|--\|/gim, '://')
     .split('\n')
-    .map((el, index) =>
-      index === 0
-        ? `${author ? `<p><b class="comment-author">${author}: </b>` : ''}${el}</p>`
-        : `<p>${el}</p>`
-    )
+    .map(el => `<p>${el}</p>`)
+    // .map((el, index) =>
+    //   index === 0
+    //     ? `${author ? `<p><b class="comment-author">${author}: </b>` : ''}${el}</p>`
+    //     : `<p>${el}</p>`
+    // )
     .join('');
-};
 
-// .replace(/\/\*(\*(?!\/)|[^*])*\*\//igm, '');
+export const formatCommentText = (author: string, text: string): string =>
+  text
+    ? formatText(text).replace(
+        /^<p>/,
+        author ? `<p><b class="comment-author">${author}: </b></p>` : '<p>'
+      )
+    : '';
 
 export const getPrettyDate = (date: string): string =>
   formatDistanceToNow(new Date(date), { locale: ru, includeSeconds: true, addSuffix: true });
