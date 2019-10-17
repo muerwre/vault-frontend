@@ -4,6 +4,7 @@ export const ERRORS = {
   EMPTY_RESPONSE: 'Empty_Response',
   NO_COMMENTS: 'No_Comments',
   FILES_REQUIRED: 'Files_Required',
+  TEXT_REQUIRED: 'Text_Required',
 };
 
 export const ERROR_LITERAL = {
@@ -12,4 +13,5 @@ export const ERROR_LITERAL = {
   [ERRORS.NO_COMMENTS]: 'Комментариев пока нет',
   [ERRORS.EMPTY_RESPONSE]: 'Пустой ответ сервера',
   [ERRORS.FILES_REQUIRED]: 'Добавьте файлы',
+  [ERRORS.TEXT_REQUIRED]: 'Нужно немного текста',
 };

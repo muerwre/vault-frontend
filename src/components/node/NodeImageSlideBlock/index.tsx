@@ -1,15 +1,4 @@
-import React, {
-  FC,
-  useMemo,
-  useState,
-  useEffect,
-  RefObject,
-  LegacyRef,
-  useRef,
-  useCallback,
-  MouseEventHandler,
-  TouchEventHandler,
-} from 'react';
+import React, { FC, useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { ImageSwitcher } from '../ImageSwitcher';
 import * as styles from './styles.scss';
 import { INode } from '~/redux/types';

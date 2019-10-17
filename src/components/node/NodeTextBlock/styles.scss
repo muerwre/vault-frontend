@@ -1,0 +1,11 @@
+.text {
+  @include outer_shadow();
+
+  background: $content_bg;
+  padding: $gap;
+  border-radius: $radius;
+
+  p {
+    margin: $gap / 2 0;
+  }
+}

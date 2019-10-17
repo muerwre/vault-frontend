@@ -19,8 +19,6 @@ const mapStateToProps = state => {
   const { editor, errors } = selectNode(state);
   const { statuses, files } = selectUploads(state);
 
-  console.log('mss', { editor });
-
   return { editor, statuses, files, errors };
 };
 
@@ -57,12 +55,10 @@ const EditorDialogUnconnected: FC<IProps> = ({
 
   const onSubmit = useCallback(
     (event: FormEvent) => {
-      console.log({ data, editor });
       event.preventDefault();
-      return;
       nodeSave(data);
     },
-    [data, nodeSave, editor]
+    [data, nodeSave]
   );
 
   useEffect(() => {

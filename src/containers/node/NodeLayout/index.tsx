@@ -13,7 +13,7 @@ import { NodeRelated } from '~/components/node/NodeRelated';
 import * as styles from './styles.scss';
 import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
-import { NODE_COMPONENTS } from '~/redux/node/constants';
+import { NODE_COMPONENTS, NODE_INLINES } from '~/redux/node/constants';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { CommentForm } from '~/components/node/CommentForm';
 import { selectUser } from '~/redux/auth/selectors';
@@ -57,7 +57,8 @@ const NodeLayoutUnconnected: FC<IProps> = ({
     [node, nodeUpdateTags]
   );
 
-  const block = node && node.type && NODE_COMPONENTS[node.type] && NODE_COMPONENTS[node.type];
+  const block = node && node.type && NODE_COMPONENTS[node.type];
+  const inline_block = node && node.type && NODE_INLINES[node.type];
 
   return (
     <Card className={styles.node} seamless>
@@ -69,6 +70,12 @@ const NodeLayoutUnconnected: FC<IProps> = ({
         <Padder>
           <Group horizontal className={styles.content}>
             <Group className={styles.comments}>
+              {inline_block && (
+                <div className={styles.inline_block}>
+                  {createElement(inline_block, { node, is_loading, updateLayout, layout })}
+                </div>
+              )}
+
               {is_loading_comments || !comments.length ? (
                 <NodeNoComments is_loading={is_loading_comments} />
               ) : (
