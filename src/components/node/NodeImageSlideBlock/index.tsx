@@ -35,7 +35,8 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   const [initial_x, setInitialX] = useState(0);
   const [offset, setOffset] = useState(0);
   const [is_dragging, setIsDragging] = useState(false);
-  const slide = useRef();
+  const slide = useRef<HTMLDivElement>();
+  const wrap = useRef<HTMLDivElement>();
 
   const images = useMemo(
     () =>
@@ -46,11 +47,14 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   // console.log({ heights });
 
   const updateSizes = useCallback(() => {
-    const values = Object.keys(refs.current).map(key => {
+    const values = Object.keys(refs.current).reduce((obj, key) => {
       const ref = refs.current[key];
       if (!ref || !ref.getBoundingClientRect) return 0;
-      return ref.getBoundingClientRect().height;
-    });
+      return { ...obj, [key]: ref.getBoundingClientRect().height };
+    }, {});
+
+    setHeights(values);
+    console.log({ values });
   }, [refs]);
 
   const setRef = useCallback(
@@ -80,38 +84,58 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     // setHeight(element_height);
   }, [refs, current, loaded]);
 
+  useEffect(() => {
+    if (!wrap || !wrap.current) return;
+
+    const { width } = wrap.current.getBoundingClientRect();
+    const selected = Math.abs(-offset / width);
+    const prev = heights[Math.floor(selected)] || 320;
+    const next = heights[Math.ceil(selected)] || 320;
+    const now = prev - (prev - next) * (selected % 1);
+
+    setHeight(now);
+    console.log({ offset, prev, next, now, selected });
+  }, [offset, heights]);
   // useEffect(() => {
   // const timer = setTimeout(() => setIsAnimated(true), 250);
   //
   // return () => clearTimeout(timer);
   // }, []);
 
-  const stopDragging = useCallback(() => {
-    window.removeEventListener('mouseup', stopDragging);
-    setIsDragging(false);
-  }, [setIsDragging]);
-
-  const startDragging: MouseEventHandler<HTMLDivElement> = useCallback(
-    event => {
-      window.addEventListener('mouseup', stopDragging);
-      setIsDragging(true);
-      setInitialX(event.clientX);
-      setInitialOffset(offset);
-    },
-    [setIsDragging, stopDragging, setInitialX, offset, setInitialOffset]
-  );
-
   const onDrag = useCallback(
     event => {
       if (!is_dragging) return;
-
       setOffset(initial_offset + event.clientX - initial_x);
     },
     [is_dragging, initial_x, setOffset, initial_offset]
   );
 
+  const stopDragging = useCallback(() => {
+    window.removeEventListener('mouseup', stopDragging);
+    setIsDragging(false);
+  }, [setIsDragging, onDrag]);
+
+  const startDragging: MouseEventHandler<HTMLDivElement> = useCallback(
+    event => {
+      setIsDragging(true);
+      setInitialX(event.clientX);
+      setInitialOffset(offset);
+
+      window.addEventListener('mouseup', stopDragging);
+    },
+    [setIsDragging, stopDragging, setInitialX, offset, setInitialOffset, onDrag]
+  );
+
+  useEffect(() => {
+    window.addEventListener('mousemove', onDrag);
+
+    return () => {
+      window.removeEventListener('mousemove', onDrag);
+    };
+  }, [onDrag]);
+
   return (
-    <div className={classNames(styles.wrap, { is_loading, is_animated })}>
+    <div className={classNames(styles.wrap, { is_loading, is_animated })} ref={wrap}>
       <div
         className={styles.image_container}
         style={{
@@ -120,7 +144,6 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
           width: `${images.length * 100}%`,
         }}
         onMouseDown={startDragging}
-        onMouseMove={onDrag}
         ref={slide}
       >
         {(is_loading || !loaded[0] || !images.length) && <div className={styles.placeholder} />}
