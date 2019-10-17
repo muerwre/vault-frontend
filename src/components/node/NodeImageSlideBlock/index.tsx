@@ -8,6 +8,7 @@ import React, {
   useRef,
   useCallback,
   MouseEventHandler,
+  TouchEventHandler,
 } from 'react';
 import { ImageSwitcher } from '../ImageSwitcher';
 import * as styles from './styles.scss';
@@ -22,6 +23,8 @@ interface IProps {
   layout: {};
   updateLayout: () => void;
 }
+
+const getX = event => (event.touches ? event.touches[0].clientX : event.clientX);
 
 const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => {
   const [is_animated, setIsAnimated] = useState(false);
@@ -54,7 +57,6 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     }, {});
 
     setHeights(values);
-    console.log({ values });
   }, [refs]);
 
   const setRef = useCallback(
@@ -104,54 +106,74 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
 
   const onDrag = useCallback(
     event => {
-      if (!is_dragging || !slide.current || !wrap.current) return;
+      if (
+        !is_dragging ||
+        !slide.current ||
+        !wrap.current ||
+        (event.touches && event.clientY > event.clientX)
+      )
+        return;
 
       const { width: slide_width } = slide.current.getBoundingClientRect();
       const { width: wrap_width } = wrap.current.getBoundingClientRect();
 
-      console.log(wrap_width - slide_width, initial_offset + event.clientX - initial_x);
-
       setOffset(
-        Math.min(Math.max(initial_offset + event.clientX - initial_x, wrap_width - slide_width), 0)
+        Math.min(Math.max(initial_offset + getX(event) - initial_x, wrap_width - slide_width), 0)
       );
     },
     [is_dragging, initial_x, setOffset, initial_offset]
   );
 
   const stopDragging = useCallback(() => {
-    window.removeEventListener('mouseup', stopDragging);
-    setIsDragging(false);
-  }, [setIsDragging, onDrag]);
+    if (!is_dragging) return;
 
-  const startDragging: MouseEventHandler<HTMLDivElement> = useCallback(
+    const { width: wrap_width } = wrap.current.getBoundingClientRect();
+
+    setIsDragging(false);
+    setOffset(Math.round(offset / wrap_width) * wrap_width);
+  }, [setIsDragging, offset, setOffset, is_dragging, wrap]);
+
+  const startDragging = useCallback(
     event => {
       setIsDragging(true);
-      setInitialX(event.clientX);
+      setInitialX(getX(event));
       setInitialOffset(offset);
-
-      window.addEventListener('mouseup', stopDragging);
     },
-    [setIsDragging, stopDragging, setInitialX, offset, setInitialOffset, onDrag]
+    [setIsDragging, setInitialX, offset, setInitialOffset]
   );
 
   useEffect(() => {
+    window.addEventListener('resize', updateSizes);
+
     window.addEventListener('mousemove', onDrag);
+    window.addEventListener('touchmove', onDrag);
+
+    window.addEventListener('mouseup', stopDragging);
+    window.addEventListener('touchend', stopDragging);
 
     return () => {
+      window.removeEventListener('resize', updateSizes);
+
       window.removeEventListener('mousemove', onDrag);
+      window.removeEventListener('touchmove', onDrag);
+
+      window.removeEventListener('mouseup', stopDragging);
+      window.removeEventListener('touchend', stopDragging);
     };
-  }, [onDrag]);
+  }, [onDrag, stopDragging]);
 
   return (
     <div className={classNames(styles.wrap, { is_loading, is_animated })} ref={wrap}>
       <div
         className={styles.image_container}
         style={{
+          transition: is_dragging ? 'none' : 'transform 500ms',
           height,
           transform: `translate(${offset}px, 0)`,
           width: `${images.length * 100}%`,
         }}
         onMouseDown={startDragging}
+        onTouchStart={startDragging}
         ref={slide}
       >
         {(is_loading || !loaded[0] || !images.length) && <div className={styles.placeholder} />}
