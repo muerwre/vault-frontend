@@ -2,10 +2,10 @@
   @include outer_shadow();
 
   background: $content_bg;
-  padding: $gap;
+  padding: $gap * 4;
   border-radius: $radius;
 
   p {
-    margin: $gap / 2 0;
+    margin: $gap 0;
   }
 }

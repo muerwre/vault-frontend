@@ -67,8 +67,10 @@ export const getURL = (file: Partial<IFile>) => {
 export const getImageSize = (file: IFile, size?: string): string => getURL(file);
 // `${process.env.API_HOST}${image}`.replace('{size}', size);
 
-export const formatCommentText = (author, text: string) =>
-  text
+export const formatCommentText = (author, text: string) => {
+  if (!text) return '';
+
+  return text
     .replace(/(\n{2,})/gi, '\n')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -82,6 +84,8 @@ export const formatCommentText = (author, text: string) =>
         : `<p>${el}</p>`
     )
     .join('');
+};
+
 // .replace(/\/\*(\*(?!\/)|[^*])*\*\//igm, '');
 
 export const getPrettyDate = (date: string): string =>
