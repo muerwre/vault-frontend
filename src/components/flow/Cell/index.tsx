@@ -1,23 +1,18 @@
 import React, { FC, useState, useCallback } from 'react';
 import { INode } from '~/redux/types';
-import { URLS } from '~/constants/urls';
-import { getImageSize, getURL } from '~/utils/dom';
-import classNames = require('classnames');
+import { getURL } from '~/utils/dom';
+import classNames from 'classnames';
 
 import * as styles from './styles.scss';
+import path from 'ramda/es/path';
 
 interface IProps {
   node: INode;
-  // height?: number;
-  // width?: number;
-  // title?: string;
-  // is_hero?: boolean;
-  // is_stamp?: boolean;
   onSelect: (id: INode['id'], type: INode['type']) => void;
   is_text?: boolean;
 }
 
-const Cell: FC<IProps> = ({ node: { id, title, brief, type }, onSelect, is_text = false }) => {
+const Cell: FC<IProps> = ({ node: { id, title, brief, type, blocks }, onSelect }) => {
   const [is_loaded, setIsLoaded] = useState(false);
 
   const onImageLoad = useCallback(() => {
@@ -26,12 +21,17 @@ const Cell: FC<IProps> = ({ node: { id, title, brief, type }, onSelect, is_text 
 
   const onClick = useCallback(() => onSelect(id, type), [onSelect, id]);
 
+  const text = path([0, 'text'], blocks);
+
   return (
     <div
       className={classNames(styles.cell, 'vert-1', 'hor-1', { is_text: false })}
       onClick={onClick}
     >
-      <div className={styles.face}>{title && <div className={styles.title}>{title}</div>}</div>
+      <div className={styles.face}>
+        {title && <div className={styles.title}>{title}</div>}
+        {text && <div className={styles.text}>{text}</div>}
+      </div>
 
       {brief && brief.thumbnail && (
         <div
@@ -49,3 +49,10 @@ const Cell: FC<IProps> = ({ node: { id, title, brief, type }, onSelect, is_text 
 };
 
 export { Cell };
+
+/*
+  {type === NODE_TYPES.TEXT && (
+    <div className={styles.text}>{path(['blocks', 0, 'text'], blocks)}</div>
+  )}
+  }
+*/

@@ -68,21 +68,23 @@ export const getImageSize = (file: IFile, size?: string): string => getURL(file)
 // `${process.env.API_HOST}${image}`.replace('{size}', size);
 
 export const formatText = (text: string): string =>
-  text
-    .replace(/(\n{2,})/gi, '\n')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/:\/\//gim, ':|--|')
-    .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
-    .replace(/:\|--\|/gim, '://')
-    .split('\n')
-    .map(el => `<p>${el}</p>`)
-    // .map((el, index) =>
-    //   index === 0
-    //     ? `${author ? `<p><b class="comment-author">${author}: </b>` : ''}${el}</p>`
-    //     : `<p>${el}</p>`
-    // )
-    .join('');
+  !text
+    ? ''
+    : text
+        .replace(/(\n{2,})/gi, '\n')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/:\/\//gim, ':|--|')
+        .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
+        .replace(/:\|--\|/gim, '://')
+        .split('\n')
+        .map(el => `<p>${el}</p>`)
+        // .map((el, index) =>
+        //   index === 0
+        //     ? `${author ? `<p><b class="comment-author">${author}: </b>` : ''}${el}</p>`
+        //     : `<p>${el}</p>`
+        // )
+        .join('');
 
 export const formatCommentText = (author: string, text: string): string =>
   text
