@@ -1,6 +1,7 @@
 import { IFile } from '~/redux/types';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import { ru } from 'date-fns/locale';
+import Axios from 'axios';
 
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -90,9 +91,15 @@ export const formatCommentText = (author: string, text: string): string =>
   text
     ? formatText(text).replace(
         /^<p>/,
-        author ? `<p><b class="comment-author">${author}: </b></p>` : '<p>'
+        author ? `<p><b class="comment-author">${author}: </b>` : '<p>'
       )
     : '';
 
 export const getPrettyDate = (date: string): string =>
   formatDistanceToNow(new Date(date), { locale: ru, includeSeconds: true, addSuffix: true });
+
+export const getYoutubeTitle = async (id: string) => {
+  Axios.get(`http://youtube.com/get_video_info?video_id=${id}`).then(console.log);
+};
+
+(<any>window).getYoutubeTitle = getYoutubeTitle;
