@@ -27,7 +27,7 @@ interface IProps {
 const getX = event => (event.touches ? event.touches[0].clientX : event.clientX);
 
 const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => {
-  const [is_animated, setIsAnimated] = useState(false);
+  // const [is_animated, setIsAnimated] = useState(false);
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(320);
   const [loaded, setLoaded] = useState<Record<number, boolean>>({});
@@ -72,19 +72,9 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   ]);
 
   // update outside hooks
-  useEffect(() => updateLayout(), [loaded]);
+  useEffect(() => updateLayout(), [loaded, height]);
 
-  useEffect(() => {
-    updateSizes();
-    //
-    // if (!refs || !refs.current[current] || !loaded[current]) return setHeight(320);
-    //
-    // const el = refs.current[current];
-    //
-    // const element_height = el.getBoundingClientRect && el.getBoundingClientRect().height;
-    //
-    // setHeight(element_height);
-  }, [refs, current, loaded]);
+  useEffect(() => updateSizes(), [refs, current, loaded]);
 
   useEffect(() => {
     if (!wrap || !wrap.current) return;
@@ -95,14 +85,10 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     const next = Math.max(heights[Math.ceil(selected)] || 320, 320);
     const now = prev - (prev - next) * (selected % 1);
 
+    if (current !== Math.round(selected)) setCurrent(Math.round(selected));
+
     setHeight(now);
   }, [offset, heights]);
-
-  // useEffect(() => {
-  // const timer = setTimeout(() => setIsAnimated(true), 250);
-  //
-  // return () => clearTimeout(timer);
-  // }, []);
 
   const onDrag = useCallback(
     event => {
@@ -162,8 +148,23 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     };
   }, [onDrag, stopDragging]);
 
+  const changeCurrent = useCallback(
+    (item: number) => {
+      const { width } = wrap.current.getBoundingClientRect();
+      setOffset(-1 * item * width);
+    },
+    [wrap]
+  );
+
   return (
-    <div className={classNames(styles.wrap, { is_loading, is_animated })} ref={wrap}>
+    <div className={classNames(styles.wrap, { is_loading })} ref={wrap}>
+      <ImageSwitcher
+        total={images.length}
+        current={current}
+        onChange={changeCurrent}
+        loaded={loaded}
+      />
+
       <div
         className={styles.image_container}
         style={{

@@ -3,16 +3,7 @@
   position: relative;
   min-width: 0;
   width: 100%;
-
-  &:global(.is_animated) {
-    .image_container {
-      transition: height 0.5s;
-    }
-
-    .image_wrap {
-      transition: opacity 0.5s;
-    }
-  }
+  transition: height 0.25s;
 }
 
 .image_container {
