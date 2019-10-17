@@ -17,11 +17,16 @@ type IProps = typeof mapDispatchToProps & {};
 
 const SubmitBarUnconnected: FC<IProps> = ({ nodeCreate }) => {
   const onOpenImageEditor = useCallback(() => nodeCreate(NODE_TYPES.IMAGE), [nodeCreate]);
+  const onOpenTextEditor = useCallback(() => nodeCreate(NODE_TYPES.TEXT), [nodeCreate]);
 
   return (
     <div className={styles.wrap}>
       <div className={styles.panel}>
         <div onClick={onOpenImageEditor}>
+          <Icon icon="image" />
+        </div>
+
+        <div onClick={onOpenTextEditor}>
           <Icon icon="image" />
         </div>
       </div>

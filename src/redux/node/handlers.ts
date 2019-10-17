@@ -44,7 +44,7 @@ const setTags = (state: INodeState, { tags }: ReturnType<typeof nodeSetTags>) =>
   assocPath(['current', 'tags'], tags, state);
 
 const setEditor = (state: INodeState, { editor }: ReturnType<typeof nodeSetEditor>) =>
-  assocPath(['current', 'editor'], editor, state);
+  assocPath(['editor'], editor, state);
 
 export const NODE_HANDLERS = {
   [NODE_ACTIONS.SET_SAVE_ERRORS]: setSaveErrors,

@@ -13,11 +13,13 @@ import { EditorPanel } from '~/components/editors/EditorPanel';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ERROR_LITERAL } from '~/constants/errors';
-import { NODE_EDITORS } from '~/redux/node/constants';
+import { NODE_EDITORS, EMPTY_NODE } from '~/redux/node/constants';
 
 const mapStateToProps = state => {
   const { editor, errors } = selectNode(state);
   const { statuses, files } = selectUploads(state);
+
+  console.log('mss', { editor });
 
   return { editor, statuses, files, errors };
 };
@@ -41,8 +43,10 @@ const EditorDialogUnconnected: FC<IProps> = ({
   onRequestClose,
   type,
 }) => {
-  const [data, setData] = useState(editor);
+  const [data, setData] = useState(EMPTY_NODE);
   const [temp, setTemp] = useState([]);
+
+  useEffect(() => setData(editor), [editor]);
 
   const setTitle = useCallback(
     title => {
@@ -53,10 +57,12 @@ const EditorDialogUnconnected: FC<IProps> = ({
 
   const onSubmit = useCallback(
     (event: FormEvent) => {
+      console.log({ data, editor });
       event.preventDefault();
+      return;
       nodeSave(data);
     },
-    [data, nodeSave]
+    [data, nodeSave, editor]
   );
 
   useEffect(() => {
