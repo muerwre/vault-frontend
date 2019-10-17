@@ -89,13 +89,13 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
 
     const { width } = wrap.current.getBoundingClientRect();
     const selected = Math.abs(-offset / width);
-    const prev = heights[Math.floor(selected)] || 320;
-    const next = heights[Math.ceil(selected)] || 320;
+    const prev = Math.max(heights[Math.floor(selected)] || 320, 320);
+    const next = Math.max(heights[Math.ceil(selected)] || 320, 320);
     const now = prev - (prev - next) * (selected % 1);
 
     setHeight(now);
-    console.log({ offset, prev, next, now, selected });
   }, [offset, heights]);
+
   // useEffect(() => {
   // const timer = setTimeout(() => setIsAnimated(true), 250);
   //
@@ -104,8 +104,16 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
 
   const onDrag = useCallback(
     event => {
-      if (!is_dragging) return;
-      setOffset(initial_offset + event.clientX - initial_x);
+      if (!is_dragging || !slide.current || !wrap.current) return;
+
+      const { width: slide_width } = slide.current.getBoundingClientRect();
+      const { width: wrap_width } = wrap.current.getBoundingClientRect();
+
+      console.log(wrap_width - slide_width, initial_offset + event.clientX - initial_x);
+
+      setOffset(
+        Math.min(Math.max(initial_offset + event.clientX - initial_x, wrap_width - slide_width), 0)
+      );
     },
     [is_dragging, initial_x, setOffset, initial_offset]
   );
