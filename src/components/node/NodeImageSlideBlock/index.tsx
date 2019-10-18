@@ -17,7 +17,6 @@ interface IProps {
 const getX = event => (event.touches ? event.touches[0].clientX : event.clientX);
 
 const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => {
-  // const [is_animated, setIsAnimated] = useState(false);
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(320);
   const [max_height, setMaxHeight] = useState(960);
