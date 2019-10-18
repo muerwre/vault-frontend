@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import * as styles from './styles.scss';
 import { Icon } from '~/components/input/Icon';
 import { IFileWithUUID, INode, IFile } from '~/redux/types';
@@ -9,7 +9,7 @@ import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { connect } from 'react-redux';
-import { MAX_NODE_FILES } from '~/redux/node/constants';
+import { NODE_SETTINGS } from '~/redux/node/constants';
 
 const mapStateToProps = state => {
   const { statuses, files } = selectUploads(state);
@@ -43,9 +43,9 @@ const EditorUploadButtonUnconnected: FC<IProps> = ({
   const onUpload = useCallback(
     (uploads: File[]) => {
       const current = temp.length + data.files.length;
-      const limit = MAX_NODE_FILES - current;
+      const limit = NODE_SETTINGS.MAX_FILES - current;
 
-      if (current >= MAX_NODE_FILES) return;
+      if (current >= NODE_SETTINGS.MAX_FILES) return;
 
       const items: IFileWithUUID[] = Array.from(uploads).map(
         (file: File): IFileWithUUID => ({

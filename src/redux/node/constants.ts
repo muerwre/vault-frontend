@@ -84,8 +84,6 @@ export const NODE_EDITORS = {
   [NODE_TYPES.TEXT]: TextEditor,
 };
 
-export const MAX_NODE_FILES = 16;
-
 export const NODE_EDITOR_DATA: Record<
   typeof NODE_TYPES[keyof typeof NODE_TYPES],
   Partial<INode>
@@ -93,4 +91,9 @@ export const NODE_EDITOR_DATA: Record<
   [NODE_TYPES.TEXT]: {
     blocks: [{ text: '', type: 'text' }],
   },
+};
+
+export const NODE_SETTINGS = {
+  MAX_FILES: 16,
+  MAX_IMAGE_ASPECT: 1.2,
 };

@@ -5,6 +5,7 @@ import { INode } from '~/redux/types';
 import classNames from 'classnames';
 import { getImageSize } from '~/utils/dom';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
+import { NODE_SETTINGS } from '~/redux/node/constants';
 
 interface IProps {
   is_loading: boolean;
@@ -19,6 +20,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   // const [is_animated, setIsAnimated] = useState(false);
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(320);
+  const [max_height, setMaxHeight] = useState(960);
   const [loaded, setLoaded] = useState<Record<number, boolean>>({});
   const refs = useRef<Record<number, HTMLDivElement>>({});
   const [heights, setHeights] = useState({});
@@ -36,12 +38,12 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     [node]
   );
 
-  // console.log({ heights });
-
   const updateSizes = useCallback(() => {
     const values = Object.keys(refs.current).reduce((obj, key) => {
       const ref = refs.current[key];
+
       if (!ref || !ref.getBoundingClientRect) return 0;
+
       return { ...obj, [key]: ref.getBoundingClientRect().height };
     }, {});
 
@@ -62,7 +64,6 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
 
   // update outside hooks
   useEffect(() => updateLayout(), [loaded, height]);
-
   useEffect(() => updateSizes(), [refs, current, loaded]);
 
   useEffect(() => {
@@ -77,7 +78,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     if (current !== Math.round(selected)) setCurrent(Math.round(selected));
 
     setHeight(now);
-  }, [offset, heights]);
+  }, [offset, heights, max_height]);
 
   const onDrag = useCallback(
     event => {
@@ -99,14 +100,24 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     [is_dragging, initial_x, setOffset, initial_offset]
   );
 
+  const normalizeOffset = useCallback(() => {
+    const { width: wrap_width } = wrap.current.getBoundingClientRect();
+    setOffset(Math.round(offset / wrap_width) * wrap_width);
+  }, [wrap, offset]);
+
+  const updateMaxHeight = useCallback(() => {
+    if (!wrap.current) return;
+    const { width } = wrap.current.getBoundingClientRect();
+    setMaxHeight(width * NODE_SETTINGS.MAX_IMAGE_ASPECT);
+    normalizeOffset();
+  }, [wrap, setMaxHeight, normalizeOffset]);
+
   const stopDragging = useCallback(() => {
     if (!is_dragging) return;
 
-    const { width: wrap_width } = wrap.current.getBoundingClientRect();
-
+    normalizeOffset();
     setIsDragging(false);
-    setOffset(Math.round(offset / wrap_width) * wrap_width);
-  }, [setIsDragging, offset, setOffset, is_dragging, wrap]);
+  }, [setIsDragging, is_dragging, normalizeOffset]);
 
   const startDragging = useCallback(
     event => {
@@ -117,8 +128,11 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     [setIsDragging, setInitialX, offset, setInitialOffset]
   );
 
+  useEffect(() => updateMaxHeight(), []);
+
   useEffect(() => {
     window.addEventListener('resize', updateSizes);
+    window.addEventListener('resize', updateMaxHeight);
 
     window.addEventListener('mousemove', onDrag);
     window.addEventListener('touchmove', onDrag);
@@ -128,6 +142,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
 
     return () => {
       window.removeEventListener('resize', updateSizes);
+      window.removeEventListener('resize', updateMaxHeight);
 
       window.removeEventListener('mousemove', onDrag);
       window.removeEventListener('touchmove', onDrag);
@@ -135,7 +150,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
       window.removeEventListener('mouseup', stopDragging);
       window.removeEventListener('touchend', stopDragging);
     };
-  }, [onDrag, stopDragging]);
+  }, [onDrag, stopDragging, updateMaxHeight, updateSizes]);
 
   const changeCurrent = useCallback(
     (item: number) => {
@@ -182,6 +197,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
               alt=""
               key={file.id}
               onLoad={onImageLoad(index)}
+              style={{ maxHeight: max_height }}
             />
           </div>
         ))}
