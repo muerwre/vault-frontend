@@ -8,11 +8,27 @@ $cols: $content_width / $cell;
 .grid_test {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax($cell, 1fr));
-  grid-template-rows: $cell;
+  grid-template-rows: 40vh $cell;
   grid-auto-rows: $cell;
   grid-auto-flow: row dense;
   grid-column-gap: $grid_line;
   grid-row-gap: $grid_line;
+
+  @media (max-width: $cell * 5) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: $cell * 4) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: $cell * 3) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: $cell * 2) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .pad_last {

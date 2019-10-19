@@ -106,11 +106,18 @@ $input_shadow_filled: $input_shadow;
 }
 
 @mixin phone {
-  @content;
+  @media (max-width: 320px) {
+    @content;
+  }
 }
 
 @mixin tablet {
   @media (max-width: 599px) {
+    @content;
+  }
+}
+@mixin desktop {
+  @media (max-width: $content_width) {
     @content;
   }
 }
