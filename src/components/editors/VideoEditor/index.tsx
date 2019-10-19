@@ -3,6 +3,7 @@ import { INode } from '~/redux/types';
 import * as styles from './styles.scss';
 import path from 'ramda/es/path';
 import { InputText } from '~/components/input/InputText';
+import classnames from 'classnames';
 
 interface IProps {
   data: INode;
@@ -29,7 +30,7 @@ const VideoEditor: FC<IProps> = ({ data, setData }) => {
   return (
     <div className={styles.preview} style={{ backgroundImage: preview && `url("${preview}")` }}>
       <div className={styles.input_wrap}>
-        <div className={styles.input}>
+        <div className={classnames(styles.input, { active: !!preview })}>
           <InputText value={url} handler={setUrl} placeholder="Адрес видео" />
         </div>
       </div>

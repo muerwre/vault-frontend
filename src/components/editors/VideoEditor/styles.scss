@@ -1,6 +1,7 @@
 .preview {
   padding-top: 56.25%;
   position: relative;
+  border-radius: $radius;
   // background: darken($color: $content_bg, $amount: 2%);
 }
 
@@ -19,12 +20,16 @@
   // @include outer_shadow();
 
   flex: 1 0 50%;
-  padding: $gap * 2 $gap $gap * 2 $gap;
-  // border-radius: $radius;
+  padding: $gap * 2;
+  border-radius: $radius;
   background: $content_bg;
-  // margin: 20px;
+  margin: 20px;
 
   input {
     text-align: center;
+  }
+
+  &:global(.active) {
+    background: $red;
   }
 }

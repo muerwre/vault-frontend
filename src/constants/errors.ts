@@ -5,6 +5,7 @@ export const ERRORS = {
   NO_COMMENTS: 'No_Comments',
   FILES_REQUIRED: 'Files_Required',
   TEXT_REQUIRED: 'Text_Required',
+  UNKNOWN_NODE_TYPE: 'Unknown_Node_Type',
 };
 
 export const ERROR_LITERAL = {
@@ -14,4 +15,5 @@ export const ERROR_LITERAL = {
   [ERRORS.EMPTY_RESPONSE]: 'Пустой ответ сервера',
   [ERRORS.FILES_REQUIRED]: 'Добавьте файлы',
   [ERRORS.TEXT_REQUIRED]: 'Нужно немного текста',
+  [ERRORS.UNKNOWN_NODE_TYPE]: 'Неизвестный тип поста',
 };
