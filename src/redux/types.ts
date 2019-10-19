@@ -100,7 +100,7 @@ export interface IBlockText {
 }
 
 export interface IBlockEmbed {
-  type: 'embed';
+  type: 'video';
   url: string;
 }
 

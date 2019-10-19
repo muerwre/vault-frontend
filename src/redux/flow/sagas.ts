@@ -13,13 +13,11 @@ function* onGetFlow() {
   }: IResultWithStatus<{ nodes: INode[] }> = yield call(getNodes, {});
 
   if (!nodes || !nodes.length) {
-    // todo: set error empty response
+    yield put(flowSetNodes([]));
+    return;
   }
 
-  // todo: write nodes
   yield put(flowSetNodes(nodes));
-
-  // console.log('flow', { nodes, error });
 }
 
 export default function* nodeSaga() {

@@ -18,6 +18,7 @@ type IProps = typeof mapDispatchToProps & {};
 const SubmitBarUnconnected: FC<IProps> = ({ nodeCreate }) => {
   const onOpenImageEditor = useCallback(() => nodeCreate(NODE_TYPES.IMAGE), [nodeCreate]);
   const onOpenTextEditor = useCallback(() => nodeCreate(NODE_TYPES.TEXT), [nodeCreate]);
+  const onOpenVideoEditor = useCallback(() => nodeCreate(NODE_TYPES.VIDEO), [nodeCreate]);
 
   return (
     <div className={styles.wrap}>
@@ -27,7 +28,11 @@ const SubmitBarUnconnected: FC<IProps> = ({ nodeCreate }) => {
         </div>
 
         <div onClick={onOpenTextEditor}>
-          <Icon icon="image" />
+          <Icon icon="text" />
+        </div>
+
+        <div onClick={onOpenVideoEditor}>
+          <Icon icon="video" />
         </div>
       </div>
 
