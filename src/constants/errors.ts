@@ -6,6 +6,7 @@ export const ERRORS = {
   FILES_REQUIRED: 'Files_Required',
   TEXT_REQUIRED: 'Text_Required',
   UNKNOWN_NODE_TYPE: 'Unknown_Node_Type',
+  URL_INVALID: 'Url_Invalid',
 };
 
 export const ERROR_LITERAL = {
@@ -16,4 +17,5 @@ export const ERROR_LITERAL = {
   [ERRORS.FILES_REQUIRED]: 'Добавьте файлы',
   [ERRORS.TEXT_REQUIRED]: 'Нужно немного текста',
   [ERRORS.UNKNOWN_NODE_TYPE]: 'Неизвестный тип поста',
+  [ERRORS.URL_INVALID]: 'Неизвестный адрес',
 };

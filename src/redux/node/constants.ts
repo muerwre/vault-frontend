@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { INode, ValueOf, IComment } from '../types';
 import { NodeImageSlideBlock } from '~/components/node/NodeImageSlideBlock';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
+import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';
 import { ImageEditor } from '~/components/editors/ImageEditor';
 import { TextEditor } from '~/components/editors/TextEditor';
 import { VideoEditor } from '~/components/editors/VideoEditor';
@@ -66,6 +67,7 @@ type INodeComponents = Record<
 
 export const NODE_COMPONENTS: INodeComponents = {
   [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
+  [NODE_TYPES.VIDEO]: NodeVideoBlock,
 };
 
 export const NODE_INLINES: INodeComponents = {
