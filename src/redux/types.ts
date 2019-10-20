@@ -117,13 +117,8 @@ export interface INode {
   type: string;
 
   blocks: IBlock[];
-
-  brief?: {
-    thumbnail?: string;
-    description?: string;
-    owner?: string;
-    comments?: number;
-  };
+  thumbnail?: string;
+  description?: string;
 
   options: {
     flow: {

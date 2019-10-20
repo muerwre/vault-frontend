@@ -12,7 +12,7 @@ interface IProps {
   is_text?: boolean;
 }
 
-const Cell: FC<IProps> = ({ node: { id, title, brief, type, blocks }, onSelect }) => {
+const Cell: FC<IProps> = ({ node: { id, title, thumbnail, type, blocks }, onSelect }) => {
   const [is_loaded, setIsLoaded] = useState(false);
 
   const onImageLoad = useCallback(() => {
@@ -33,15 +33,15 @@ const Cell: FC<IProps> = ({ node: { id, title, brief, type, blocks }, onSelect }
         {text && <div className={styles.text}>{text}</div>}
       </div>
 
-      {brief && brief.thumbnail && (
+      {thumbnail && (
         <div
           className={styles.thumbnail}
           style={{
-            backgroundImage: `url("${getURL({ url: brief.thumbnail })}")`,
+            backgroundImage: `url("${getURL({ url: thumbnail })}")`,
             opacity: is_loaded ? 1 : 0,
           }}
         >
-          <img src={getURL({ url: brief.thumbnail })} onLoad={onImageLoad} alt="" />
+          <img src={getURL({ url: thumbnail })} onLoad={onImageLoad} alt="" />
         </div>
       )}
     </div>
