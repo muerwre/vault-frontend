@@ -122,7 +122,7 @@ export interface INode {
 
   options: {
     flow: {
-      display: 'single' | 'double' | 'quadro';
+      display: 'single' | 'vertical' | 'horizontal' | 'quadro';
       show_description: boolean;
     };
   };
