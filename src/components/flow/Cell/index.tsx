@@ -49,10 +49,3 @@ const Cell: FC<IProps> = ({ node: { id, title, thumbnail, type, blocks }, onSele
 };
 
 export { Cell };
-
-/*
-  {type === NODE_TYPES.TEXT && (
-    <div className={styles.text}>{path(['blocks', 0, 'text'], blocks)}</div>
-  )}
-  }
-*/
