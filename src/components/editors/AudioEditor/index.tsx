@@ -3,8 +3,10 @@ import { INode } from '~/redux/types';
 import { connect } from 'react-redux';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { ImageGrid } from '../ImageGrid';
+import { AudioGrid } from '../AudioGrid';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
+import * as styles from './styles.scss';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -25,14 +27,25 @@ const AudioEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) =
     [data.files]
   );
 
-  const pending_images = useMemo(() => temp.filter(id => !!statuses[id]).map(id => statuses[id]), [
-    temp,
-    statuses,
-  ]);
+  const pending_images = useMemo(
+    () =>
+      temp
+        .filter(id => !!statuses[id] && statuses[id].type === UPLOAD_TYPES.IMAGE)
+        .map(id => statuses[id]),
+    [temp, statuses]
+  );
 
   const audios = useMemo(
     () => data.files.filter(file => file && file.type === UPLOAD_TYPES.AUDIO),
     [data.files]
+  );
+
+  const pending_audios = useMemo(
+    () =>
+      temp
+        .filter(id => !!statuses[id] && statuses[id].type === UPLOAD_TYPES.AUDIO)
+        .map(id => statuses[id]),
+    [temp, statuses]
   );
 
   const setImages = useCallback(files => setData({ ...data, files: [...files, ...audios] }), [
@@ -41,7 +54,18 @@ const AudioEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) =
     audios,
   ]);
 
-  return <ImageGrid files={images} setFiles={setImages} locked={pending_images} />;
+  const setAudios = useCallback(files => setData({ ...data, files: [...files, ...images] }), [
+    setData,
+    data,
+    images,
+  ]);
+
+  return (
+    <div className={styles.wrap}>
+      <ImageGrid files={images} setFiles={setImages} locked={pending_images} />
+      <AudioGrid files={audios} setFiles={setAudios} locked={pending_audios} />
+    </div>
+  );
 };
 
 const AudioEditor = connect(

@@ -4,7 +4,8 @@
   display: grid;
   grid-column-gap: $gap;
   grid-row-gap: $gap;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: auto;
+  grid-template-rows: $comment_height;
 
   @media (max-width: 600px) {
     grid-template-columns: repeat(auto-fill, minmax(30vw, 1fr));

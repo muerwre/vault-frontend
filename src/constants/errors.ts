@@ -7,6 +7,7 @@ export const ERRORS = {
   TEXT_REQUIRED: 'Text_Required',
   UNKNOWN_NODE_TYPE: 'Unknown_Node_Type',
   URL_INVALID: 'Url_Invalid',
+  FILES_AUDIO_REQUIRED: 'Files_Audio_Required',
 };
 
 export const ERROR_LITERAL = {
@@ -18,4 +19,5 @@ export const ERROR_LITERAL = {
   [ERRORS.TEXT_REQUIRED]: 'Нужно немного текста',
   [ERRORS.UNKNOWN_NODE_TYPE]: 'Неизвестный тип поста',
   [ERRORS.URL_INVALID]: 'Неизвестный адрес',
+  [ERRORS.FILES_AUDIO_REQUIRED]: 'Нужна хотя бы одна песня',
 };

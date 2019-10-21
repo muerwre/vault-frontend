@@ -12,6 +12,7 @@ export interface IUploadStatus {
   thumbnail_url: string;
   progress: number;
   temp_id: UUID;
+  name: string;
 }
 
 export interface IUploadState {
