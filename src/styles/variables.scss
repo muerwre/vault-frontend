@@ -61,7 +61,7 @@ $shadow_depth_2: transparentize(black, 0.8) 0 2px, inset transparentize(white, 0
 $comment_shadow: $shadow_depth_2;
 $node_shadow: transparentize(black, 0.8) 0 2px, transparentize(black, 0.8) 0 2px 4px;
 
-$tag_height: 22px;
+$tag_height: 26px;
 
 $input_shadow: inset transparentize(white, 0.9) 0 0 0 1px;
 $input_shadow_error: inset $red 0 0 0 1px;
