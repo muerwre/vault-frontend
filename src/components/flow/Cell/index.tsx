@@ -28,6 +28,8 @@ const Cell: FC<IProps> = ({ node: { id, title, thumbnail, type, blocks }, onSele
       className={classNames(styles.cell, 'vert-1', 'hor-1', { is_text: false })}
       onClick={onClick}
     >
+      <div className={styles.menu}>MENU</div>
+
       <div className={styles.face}>
         {title && <div className={styles.title}>{title}</div>}
         {text && <div className={styles.text}>{text}</div>}
