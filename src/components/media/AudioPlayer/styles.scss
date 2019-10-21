@@ -98,7 +98,8 @@
 }
 
 .bar {
-  background: linear-gradient(270deg, $green, $wisegreen);
+  // background: linear-gradient(270deg, $green, $wisegreen);
+  background: $main_gradient;
   position: absolute;
   height: 10px;
   left: 0;

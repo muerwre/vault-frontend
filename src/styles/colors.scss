@@ -11,9 +11,16 @@ $wisegreen: #007962;
 
 $red_gradient: linear-gradient(165deg, $orange -50%, $red 150%);
 $blue_gradient: linear-gradient(170deg, $green, $dark_blue);
-$green_gradient: linear-gradient(170deg, adjust_hue($wisegreen, 15deg) 0%, $wisegreen 100%);
+$green_gradient: linear-gradient(
+  170deg,
+  lighten(adjust_hue($wisegreen, 15deg), 10%) 0%,
+  $wisegreen 100%
+);
 $purple_gradient: linear-gradient(170deg, $red, $dark_blue);
 $cyan_gradient: linear-gradient(260deg, #3c75ff -50%, #7b2653 150%);
+
+$red_gradient_alt: linear-gradient(270deg, #d2004c, #ff4545);
+$purple_gradient_alt: linear-gradient(90deg, #442294, #ff4545);
 
 $main_gradient: $green_gradient;
 
