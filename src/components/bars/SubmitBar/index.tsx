@@ -19,6 +19,7 @@ const SubmitBarUnconnected: FC<IProps> = ({ nodeCreate }) => {
   const onOpenImageEditor = useCallback(() => nodeCreate(NODE_TYPES.IMAGE), [nodeCreate]);
   const onOpenTextEditor = useCallback(() => nodeCreate(NODE_TYPES.TEXT), [nodeCreate]);
   const onOpenVideoEditor = useCallback(() => nodeCreate(NODE_TYPES.VIDEO), [nodeCreate]);
+  const onOpenAudioEditor = useCallback(() => nodeCreate(NODE_TYPES.AUDIO), [nodeCreate]);
 
   return (
     <div className={styles.wrap}>
@@ -33,6 +34,10 @@ const SubmitBarUnconnected: FC<IProps> = ({ nodeCreate }) => {
 
         <div onClick={onOpenVideoEditor}>
           <Icon icon="video" />
+        </div>
+
+        <div onClick={onOpenAudioEditor}>
+          <Icon icon="audio" />
         </div>
       </div>
 

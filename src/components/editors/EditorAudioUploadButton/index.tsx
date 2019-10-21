@@ -10,16 +10,16 @@ interface IProps {
   setTemp: (val: string[]) => void;
 }
 
-const EditorImageUploadButton: FC<IProps> = ({ data, setData, temp, setTemp }) => (
+const EditorAudioUploadButton: FC<IProps> = ({ data, setData, temp, setTemp }) => (
   <EditorUploadButton
     data={data}
     setData={setData}
     temp={temp}
     setTemp={setTemp}
-    accept="image/*"
-    icon="image"
-    type={UPLOAD_TYPES.IMAGE}
+    accept="audio/*"
+    icon="audio"
+    type={UPLOAD_TYPES.AUDIO}
   />
 );
 
-export { EditorImageUploadButton };
+export { EditorAudioUploadButton };

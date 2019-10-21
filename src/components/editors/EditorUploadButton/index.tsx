@@ -30,6 +30,7 @@ type IProps = ReturnType<typeof mapStateToProps> &
 
     accept?: string;
     icon?: string;
+    type?: typeof UPLOAD_TYPES[keyof typeof UPLOAD_TYPES];
   };
 
 const EditorUploadButtonUnconnected: FC<IProps> = ({
@@ -42,6 +43,7 @@ const EditorUploadButtonUnconnected: FC<IProps> = ({
   uploadUploadFiles,
   accept = 'image/*',
   icon = 'plus',
+  type = UPLOAD_TYPES.IMAGE,
 }) => {
   const eventPreventer = useCallback(event => event.preventDefault(), []);
 
@@ -52,13 +54,15 @@ const EditorUploadButtonUnconnected: FC<IProps> = ({
 
       if (current >= NODE_SETTINGS.MAX_FILES) return;
 
+      console.log({ type });
+
       const items: IFileWithUUID[] = Array.from(uploads).map(
         (file: File): IFileWithUUID => ({
           file,
           temp_id: uuid(),
           subject: UPLOAD_SUBJECTS.EDITOR,
           target: UPLOAD_TARGETS.NODES,
-          type: UPLOAD_TYPES.IMAGE,
+          type,
         })
       );
 
@@ -67,7 +71,7 @@ const EditorUploadButtonUnconnected: FC<IProps> = ({
       setTemp([...temp, ...temps]);
       uploadUploadFiles(items);
     },
-    [setTemp, uploadUploadFiles, temp, data]
+    [setTemp, uploadUploadFiles, temp, data, type]
   );
 
   const onFileAdd = useCallback(

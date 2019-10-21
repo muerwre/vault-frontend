@@ -108,9 +108,12 @@ const Sprites: FC<{}> = () => (
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
     </g>
+
+    <g id="audio" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z" />
+    </g>
   </svg>
 );
 
 export { Sprites };
-
-// <path d="M0 0H8V8H-8V-8Z" fillRule="evenodd" />
