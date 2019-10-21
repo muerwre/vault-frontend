@@ -7,6 +7,7 @@ import { ImageEditor } from '~/components/editors/ImageEditor';
 import { TextEditor } from '~/components/editors/TextEditor';
 import { VideoEditor } from '~/components/editors/VideoEditor';
 import { UPLOAD_TYPES } from '../uploads/constants';
+import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadButton';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -89,8 +90,8 @@ export const NODE_EDITORS = {
   [NODE_TYPES.VIDEO]: VideoEditor,
 };
 
-export const NODE_UPLOAD_TYPES = {
-  [NODE_TYPES.IMAGE]: [UPLOAD_TYPES.IMAGE],
+export const NODE_PANEL_COMPONENTS = {
+  [NODE_TYPES.IMAGE]: [EditorImageUploadButton],
 };
 
 export const NODE_EDITOR_DATA: Record<

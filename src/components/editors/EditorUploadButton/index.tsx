@@ -27,6 +27,9 @@ type IProps = ReturnType<typeof mapStateToProps> &
     setData: (val: INode) => void;
     temp: string[];
     setTemp: (val: string[]) => void;
+
+    accept?: string;
+    icon?: string;
   };
 
 const EditorUploadButtonUnconnected: FC<IProps> = ({
@@ -37,6 +40,8 @@ const EditorUploadButtonUnconnected: FC<IProps> = ({
   statuses,
   files,
   uploadUploadFiles,
+  accept = 'image/*',
+  icon = 'plus',
 }) => {
   const eventPreventer = useCallback(event => event.preventDefault(), []);
 
@@ -116,10 +121,10 @@ const EditorUploadButtonUnconnected: FC<IProps> = ({
 
   return (
     <div className={styles.wrap}>
-      <input type="file" onChange={onInputChange} accept="image/*" multiple />
+      <input type="file" onChange={onInputChange} accept={accept} multiple />
 
       <div className={styles.icon}>
-        <Icon size={32} icon="plus" />
+        <Icon size={32} icon={icon} />
       </div>
     </div>
   );

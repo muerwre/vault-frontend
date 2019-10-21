@@ -1,8 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, createElement } from 'react';
 import * as styles from './styles.scss';
 import { INode } from '~/redux/types';
-import { EditorUploadButton } from '~/components/editors/EditorUploadButton';
-import { NODE_UPLOAD_TYPES } from '~/redux/node/constants';
+import { NODE_PANEL_COMPONENTS } from '~/redux/node/constants';
 
 interface IProps {
   data: INode;
@@ -13,9 +12,10 @@ interface IProps {
 
 const EditorPanel: FC<IProps> = ({ data, setData, temp, setTemp }) => (
   <div className={styles.panel}>
-    {data.type && NODE_UPLOAD_TYPES[data.type] && (
-      <EditorUploadButton data={data} setData={setData} temp={temp} setTemp={setTemp} />
-    )}
+    {NODE_PANEL_COMPONENTS[data.type] &&
+      NODE_PANEL_COMPONENTS[data.type].map((el, key) =>
+        createElement(el, { key, data, setData, temp, setTemp })
+      )}
   </div>
 );
 

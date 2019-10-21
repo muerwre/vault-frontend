@@ -29,8 +29,6 @@ const ModalUnconnected: FC<IProps> = ({
 
   if (!dialog || !DIALOG_CONTENT[dialog] || !is_shown) return null;
 
-  console.log({ onRequestClose });
-
   return ReactDOM.createPortal(
     <div className={styles.fixed}>
       <div className={styles.overlay} onClick={onRequestClose} />

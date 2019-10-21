@@ -17,14 +17,14 @@ interface IProps {
 const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
   const onMove = useCallback(
     ({ oldIndex, newIndex }: SortEnd) => {
-      setFiles(moveArrItem(oldIndex, newIndex, files) as IFile[]);
+      setFiles(moveArrItem(oldIndex, newIndex, files.filter(file => !!file)) as IFile[]);
     },
     [setFiles, files]
   );
 
   const onDrop = useCallback(
     (remove_id: IFile['id']) => {
-      setFiles(files.filter(file => file.id === remove_id));
+      setFiles(files.filter(file => file && file.id !== remove_id));
     },
     [setFiles, files]
   );
