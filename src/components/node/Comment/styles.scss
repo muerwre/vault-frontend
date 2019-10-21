@@ -1,2 +1,11 @@
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .wrap {
+  animation: appear 1s;
 }
