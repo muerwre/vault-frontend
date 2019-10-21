@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { INode, ValueOf, IComment } from '../types';
 import { NodeImageSlideBlock } from '~/components/node/NodeImageSlideBlock';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
+import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';
 import { ImageEditor } from '~/components/editors/ImageEditor';
 import { TextEditor } from '~/components/editors/TextEditor';
@@ -74,6 +75,7 @@ export const NODE_COMPONENTS: INodeComponents = {
 
 export const NODE_INLINES: INodeComponents = {
   [NODE_TYPES.TEXT]: NodeTextBlock,
+  [NODE_TYPES.AUDIO]: NodeAudioBlock,
 };
 
 export const EMPTY_COMMENT: IComment = {
