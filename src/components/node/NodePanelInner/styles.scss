@@ -27,6 +27,7 @@
   padding: $gap;
   background: $node_bg;
   height: 72px;
+  @include outer_shadow();
 }
 
 .title {
