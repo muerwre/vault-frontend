@@ -46,7 +46,7 @@ $button_bg_color: $red_gradient;
 $comment_bg: lighten($content_bg, 2%);
 $panel_bg: transparent;
 $node_bg: darken($content_bg, 2%);
-$node_image_bg: darken($main_bg_color, 7%);
+$node_image_bg: darken($main_bg_color, 4%);
 $node_title_background: darken($main_bg_color, 8%);
 
 $editor_bg: $content_bg;

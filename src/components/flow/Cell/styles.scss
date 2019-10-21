@@ -111,6 +111,8 @@
 }
 
 .face {
+  @include outer_shadow();
+
   box-sizing: border-box;
   position: absolute;
   top: 0;
