@@ -11,6 +11,7 @@ import { VideoEditor } from '~/components/editors/VideoEditor';
 import { AudioEditor } from '~/components/editors/AudioEditor';
 import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadButton';
 import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadButton';
+import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -98,7 +99,7 @@ export const NODE_EDITORS = {
 };
 
 export const NODE_PANEL_COMPONENTS = {
-  [NODE_TYPES.IMAGE]: [EditorImageUploadButton],
+  [NODE_TYPES.IMAGE]: [EditorImageUploadButton, EditorUploadCoverButton],
   [NODE_TYPES.AUDIO]: [EditorAudioUploadButton, EditorImageUploadButton],
 };
 

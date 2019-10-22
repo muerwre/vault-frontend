@@ -54,8 +54,6 @@ const EditorUploadButtonUnconnected: FC<IProps> = ({
 
       if (current >= NODE_SETTINGS.MAX_FILES) return;
 
-      console.log({ type });
-
       const items: IFileWithUUID[] = Array.from(uploads).map(
         (file: File): IFileWithUUID => ({
           file,
