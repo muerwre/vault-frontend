@@ -17,6 +17,7 @@ import {
   nodeSetTags,
   nodeCreate,
   nodeSetEditor,
+  nodeEdit,
 } from './actions';
 import { postNode, getNode, postNodeComment, getNodeComments, updateNodeTags } from './api';
 import { reqWrapper } from '../auth/sagas';
@@ -27,7 +28,7 @@ import { selectFlowNodes } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
 import { IResultWithStatus, INode } from '../types';
-import { NODE_EDITOR_DIALOGS } from '../modal/constants';
+import { NODE_EDITOR_DIALOGS, DIALOGS } from '../modal/constants';
 
 function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   yield put(nodeSetSaveErrors({}));
@@ -128,10 +129,26 @@ function* onCreateSaga({ node_type: type }: ReturnType<typeof nodeCreate>) {
   yield put(modalShowDialog(NODE_EDITOR_DIALOGS[type]));
 }
 
+function* onEditSaga({ id }: ReturnType<typeof nodeEdit>) {
+  yield put(modalShowDialog(DIALOGS.LOADING));
+
+  const {
+    data: { node },
+    error,
+  } = yield call(reqWrapper, getNode, { id });
+
+  if (error || !node || !node.type || !NODE_EDITOR_DIALOGS[node.type])
+    return yield put(modalSetShown(false));
+
+  yield put(nodeSetEditor(node));
+  yield put(modalShowDialog(NODE_EDITOR_DIALOGS[node.type]));
+}
+
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
   yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
   yield takeLatest(NODE_ACTIONS.CREATE, onCreateSaga);
+  yield takeLatest(NODE_ACTIONS.EDIT, onEditSaga);
 }

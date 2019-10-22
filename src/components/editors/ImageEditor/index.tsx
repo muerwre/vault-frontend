@@ -4,6 +4,7 @@ import { INode, IFile } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
+import * as styles from './styles.scss';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -26,7 +27,11 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) =
 
   const setFiles = useCallback((files: IFile[]) => setData({ ...data, files }), [data, setData]);
 
-  return <ImageGrid files={data.files} setFiles={setFiles} locked={pending_files} />;
+  return (
+    <div className={styles.wrap}>
+      <ImageGrid files={data.files} setFiles={setFiles} locked={pending_files} />
+    </div>
+  );
 };
 
 const ImageEditor = connect(

@@ -1,5 +1,6 @@
 import { ValueOf } from '~/redux/types';
 import { LoginDialog } from '~/containers/dialogs/LoginDialog';
+import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
 import { EditorDialogImage } from '~/containers/editors/EditorDialogImage';
 import { EditorDialogText } from '~/containers/editors/EditorDialogText';
 import { EditorDialogVideo } from '~/containers/editors/EditorDialogVideo';
@@ -18,6 +19,7 @@ export const DIALOGS = {
   EDITOR_VIDEO: 'EDITOR_VIDEO',
   EDITOR_AUDIO: 'EDITOR_AUDIO',
   LOGIN: 'LOGIN',
+  LOADING: 'LOADING',
 };
 
 export const DIALOG_CONTENT = {
@@ -26,6 +28,7 @@ export const DIALOG_CONTENT = {
   [DIALOGS.EDITOR_VIDEO]: EditorDialogVideo,
   [DIALOGS.EDITOR_AUDIO]: EditorDialogAudio,
   [DIALOGS.LOGIN]: LoginDialog,
+  [DIALOGS.LOADING]: LoadingDialog,
 };
 
 export const NODE_EDITOR_DIALOGS = {
