@@ -46,7 +46,18 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   }
 
   const nodes = yield select(selectFlowNodes);
-  yield put(flowSetNodes([result, ...nodes]));
+  const updated_flow_nodes = node.id
+    ? nodes.map(item => (item.id === result.id ? result : item))
+    : [result, ...nodes];
+
+  yield put(flowSetNodes(updated_flow_nodes));
+
+  const { current } = yield select(selectNode);
+
+  if (node.id && current.id === result.id) {
+    yield put(nodeSetCurrent(result));
+  }
+
   return yield put(modalSetShown(false));
 }
 

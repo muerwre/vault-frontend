@@ -8,6 +8,7 @@ export const ERRORS = {
   UNKNOWN_NODE_TYPE: 'Unknown_Node_Type',
   URL_INVALID: 'Url_Invalid',
   FILES_AUDIO_REQUIRED: 'Files_Audio_Required',
+  NOT_ENOUGH_RIGHTS: 'Not_Enough_Rights',
 };
 
 export const ERROR_LITERAL = {
@@ -20,4 +21,5 @@ export const ERROR_LITERAL = {
   [ERRORS.UNKNOWN_NODE_TYPE]: 'Неизвестный тип поста',
   [ERRORS.URL_INVALID]: 'Неизвестный адрес',
   [ERRORS.FILES_AUDIO_REQUIRED]: 'Нужна хотя бы одна песня',
+  [ERRORS.NOT_ENOUGH_RIGHTS]: 'У вас недостаточно прав',
 };
