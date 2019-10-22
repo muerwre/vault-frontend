@@ -119,6 +119,7 @@ export interface INode {
   blocks: IBlock[];
   thumbnail?: string;
   description?: string;
+  is_liked?: boolean;
 
   options: {
     flow: {

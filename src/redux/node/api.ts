@@ -28,11 +28,13 @@ export const getNodes = ({
 
 export const getNode = ({
   id,
+  access,
 }: {
   id: string | number;
+  access: string;
 }): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
   api
-    .get(API.NODE.GET_NODE(id))
+    .get(API.NODE.GET_NODE(id), configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 

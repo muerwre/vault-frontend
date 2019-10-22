@@ -73,7 +73,7 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
 
   const {
     data: { node, error },
-  } = yield call(getNode, { id });
+  } = yield call(reqWrapper, getNode, { id });
 
   yield put(nodeSetLoading(false));
 
