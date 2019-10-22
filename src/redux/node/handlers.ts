@@ -10,6 +10,7 @@ import {
   nodeSetCommentData,
   nodeSetTags,
   nodeSetEditor,
+  nodeSetCoverImage,
 } from './actions';
 import { INodeState } from './reducer';
 
@@ -46,6 +47,11 @@ const setTags = (state: INodeState, { tags }: ReturnType<typeof nodeSetTags>) =>
 const setEditor = (state: INodeState, { editor }: ReturnType<typeof nodeSetEditor>) =>
   assocPath(['editor'], editor, state);
 
+const setCoverImage = (
+  state: INodeState,
+  { current_cover_image }: ReturnType<typeof nodeSetCoverImage>
+) => assocPath(['current_cover_image'], current_cover_image, state);
+
 export const NODE_HANDLERS = {
   [NODE_ACTIONS.SET_SAVE_ERRORS]: setSaveErrors,
   [NODE_ACTIONS.SET_LOADING]: setLoading,
@@ -56,4 +62,5 @@ export const NODE_HANDLERS = {
   [NODE_ACTIONS.SET_COMMENT_DATA]: setCommentData,
   [NODE_ACTIONS.SET_TAGS]: setTags,
   [NODE_ACTIONS.SET_EDITOR]: setEditor,
+  [NODE_ACTIONS.SET_COVER_IMAGE]: setCoverImage,
 };

@@ -26,6 +26,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
   nodeUpdateTags: NODE_ACTIONS.nodeUpdateTags,
+  nodeSetCoverImage: NODE_ACTIONS.nodeSetCoverImage,
   nodeEdit: NODE_ACTIONS.nodeEdit,
   nodeLike: NODE_ACTIONS.nodeLike,
 };
@@ -38,13 +39,14 @@ const NodeLayoutUnconnected: FC<IProps> = ({
   match: {
     params: { id },
   },
-  node: { is_loading, is_loading_comments, comments = [], current: node },
+  node: { is_loading, is_loading_comments, comments = [], current: node, current_cover_image },
   user,
-  user: { is_user, role },
+  user: { is_user },
   nodeLoadNode,
   nodeUpdateTags,
   nodeEdit,
   nodeLike,
+  nodeSetCoverImage,
 }) => {
   const [layout, setLayout] = useState({});
 
@@ -70,6 +72,12 @@ const NodeLayoutUnconnected: FC<IProps> = ({
 
   const onEdit = useCallback(() => nodeEdit(node.id), [nodeEdit, node]);
   const onLike = useCallback(() => nodeLike(node.id), [nodeLike, node]);
+
+  useEffect(() => {
+    if (!node.cover) return;
+    nodeSetCoverImage(node.cover);
+    return () => nodeSetCoverImage(null);
+  }, [nodeSetCoverImage, node.cover]);
 
   return (
     <Card className={styles.node} seamless>

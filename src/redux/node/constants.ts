@@ -35,6 +35,7 @@ export const NODE_ACTIONS = {
 
   UPDATE_TAGS: `${prefix}UPDATE_TAGS`,
   SET_TAGS: `${prefix}SET_TAGS`,
+  SET_COVER_IMAGE: `${prefix}SET_COVER_IMAGE`,
 };
 
 export const EMPTY_NODE: INode = {
@@ -99,8 +100,10 @@ export const NODE_EDITORS = {
 };
 
 export const NODE_PANEL_COMPONENTS = {
+  [NODE_TYPES.TEXT]: [EditorUploadCoverButton],
+  [NODE_TYPES.VIDEO]: [EditorUploadCoverButton],
   [NODE_TYPES.IMAGE]: [EditorImageUploadButton, EditorUploadCoverButton],
-  [NODE_TYPES.AUDIO]: [EditorAudioUploadButton, EditorImageUploadButton],
+  [NODE_TYPES.AUDIO]: [EditorAudioUploadButton, EditorImageUploadButton, EditorUploadCoverButton],
 };
 
 export const NODE_EDITOR_DATA: Record<

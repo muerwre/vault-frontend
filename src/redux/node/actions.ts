@@ -1,4 +1,4 @@
-import { INode, IValidationErrors, IComment, ITag } from '../types';
+import { INode, IValidationErrors, IComment, ITag, IFile } from '../types';
 import { NODE_ACTIONS, NODE_TYPES } from './constants';
 import { INodeState } from './reducer';
 
@@ -83,4 +83,9 @@ export const nodeLike = (id: INode['id']) => ({
 export const nodeSetEditor = (editor: INode) => ({
   type: NODE_ACTIONS.SET_EDITOR,
   editor,
+});
+
+export const nodeSetCoverImage = (current_cover_image: IFile) => ({
+  type: NODE_ACTIONS.SET_COVER_IMAGE,
+  current_cover_image,
 });
