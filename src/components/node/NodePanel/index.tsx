@@ -7,9 +7,14 @@ import { NodePanelInner } from '~/components/node/NodePanelInner';
 interface IProps {
   node: INode;
   layout: {};
+
+  can_edit: boolean;
+  can_like: boolean;
+  onEdit: () => void;
+  onLike: () => void;
 }
 
-const NodePanel: FC<IProps> = ({ node, layout }) => {
+const NodePanel: FC<IProps> = ({ node, layout, can_edit, can_like, onEdit, onLike }) => {
   const [stack, setStack] = useState(false);
 
   const ref = useRef(null);
@@ -37,9 +42,25 @@ const NodePanel: FC<IProps> = ({ node, layout }) => {
   return (
     <div className={styles.place} ref={ref}>
       {stack ? (
-        createPortal(<NodePanelInner node={node} stack />, document.body)
+        createPortal(
+          <NodePanelInner
+            node={node}
+            stack
+            onEdit={onEdit}
+            onLike={onLike}
+            can_edit={can_edit}
+            can_like={can_like}
+          />,
+          document.body
+        )
       ) : (
-        <NodePanelInner node={node} />
+        <NodePanelInner
+          node={node}
+          onEdit={onEdit}
+          onLike={onLike}
+          can_edit={can_edit}
+          can_like={can_like}
+        />
       )}
     </div>
   );

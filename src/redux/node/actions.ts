@@ -71,7 +71,12 @@ export const nodeCreate = (node_type: INode['type']) => ({
 });
 
 export const nodeEdit = (id: INode['id']) => ({
-  type: NODE_ACTIONS.CREATE,
+  type: NODE_ACTIONS.EDIT,
+  id,
+});
+
+export const nodeLike = (id: INode['id']) => ({
+  type: NODE_ACTIONS.LIKE,
   id,
 });
 

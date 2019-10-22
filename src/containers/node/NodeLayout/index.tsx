@@ -1,7 +1,7 @@
-import React, { FC, createElement, useEffect, useCallback, useState } from 'react';
+import React, { FC, createElement, useEffect, useCallback, useState, useMemo } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
-
+import { canEditNode, canLikeNode } from '~/utils/node';
 import { selectNode } from '~/redux/node/selectors';
 import { Card } from '~/components/containers/Card';
 
@@ -26,6 +26,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
   nodeUpdateTags: NODE_ACTIONS.nodeUpdateTags,
+  nodeEdit: NODE_ACTIONS.nodeEdit,
+  nodeLike: NODE_ACTIONS.nodeLike,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -37,9 +39,12 @@ const NodeLayoutUnconnected: FC<IProps> = ({
     params: { id },
   },
   node: { is_loading, is_loading_comments, comments = [], current: node },
-  user: { is_user },
+  user,
+  user: { is_user, role },
   nodeLoadNode,
   nodeUpdateTags,
+  nodeEdit,
+  nodeLike,
 }) => {
   const [layout, setLayout] = useState({});
 
@@ -57,14 +62,27 @@ const NodeLayoutUnconnected: FC<IProps> = ({
     [node, nodeUpdateTags]
   );
 
+  const can_edit = useMemo(() => canEditNode(node, user), [node, user]);
+  const can_like = useMemo(() => canLikeNode(node, user), [node, user]);
+
   const block = node && node.type && NODE_COMPONENTS[node.type];
   const inline_block = node && node.type && NODE_INLINES[node.type];
+
+  const onEdit = useCallback(() => nodeEdit(node.id), [nodeEdit, node]);
+  const onLike = useCallback(() => nodeLike(node.id), [nodeLike, node]);
 
   return (
     <Card className={styles.node} seamless>
       {block && createElement(block, { node, is_loading, updateLayout, layout })}
 
-      <NodePanel node={node} layout={layout} />
+      <NodePanel
+        node={node}
+        layout={layout}
+        can_edit={can_edit}
+        can_like={can_like}
+        onEdit={onEdit}
+        onLike={onLike}
+      />
 
       <Group>
         <Padder>

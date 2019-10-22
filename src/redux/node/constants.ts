@@ -18,6 +18,7 @@ export const NODE_ACTIONS = {
   LOAD_NODE: `${prefix}LOAD_NODE`,
 
   EDIT: `${prefix}EDIT`,
+  LIKE: `${prefix}LIKE`,
   CREATE: `${prefix}CREATE`,
 
   SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,
