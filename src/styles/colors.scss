@@ -1,5 +1,5 @@
 // $red: #ff3344;
-$red: #ff6553;
+$red: #ff3344;
 $yellow: #ffd60f;
 $dark_blue: #3c75ff;
 $blue: #3ca1ff;
@@ -10,7 +10,7 @@ $orange: #ff7549;
 $grass: #41800d;
 $wisegreen: #007962;
 
-$red_gradient: linear-gradient(165deg, $red, #ea057c 100%);
+$red_gradient: linear-gradient(165deg, $orange -50%, $red 150%);
 $blue_gradient: linear-gradient(170deg, $green, $dark_blue);
 $green_gradient: linear-gradient(
   170deg,
