@@ -106,7 +106,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     const shift = (initial_offset - offset) / wrap_width; // percent / 100
     const diff = initial_offset - (shift > 0 ? Math.ceil(shift) : Math.floor(shift)) * wrap_width;
     const new_offset =
-      Math.abs(shift) > 0.33
+      Math.abs(shift) > 0.25
         ? Math.min(Math.max(diff, wrap_width - slide_width), 0) // next or prev slide
         : Math.round(offset / wrap_width) * wrap_width; // back to this one
 
