@@ -1,0 +1,32 @@
+.wrap {
+  @include outer_shadow();
+  padding-bottom: 33vh;
+  position: relative;
+  border-radius: $radius $radius 0 0;
+
+  &::after {
+    border-radius: $radius $radius 0 0;
+    content: ' ADD PATTERN HERE ';
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.slide {
+  @include outer_shadow();
+
+  border-radius: $radius $radius 0 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: no-repeat 50% 30%;
+  background-size: cover;
+  z-index: 1;
+}

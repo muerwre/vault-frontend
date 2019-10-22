@@ -4,6 +4,7 @@ import { NodeImageSlideBlock } from '~/components/node/NodeImageSlideBlock';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';
+import { NodeAudioImageBlock } from '~/components/node/NodeAudioImageBlock';
 import { ImageEditor } from '~/components/editors/ImageEditor';
 import { TextEditor } from '~/components/editors/TextEditor';
 import { VideoEditor } from '~/components/editors/VideoEditor';
@@ -71,6 +72,7 @@ type INodeComponents = Record<
 export const NODE_COMPONENTS: INodeComponents = {
   [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
   [NODE_TYPES.VIDEO]: NodeVideoBlock,
+  [NODE_TYPES.AUDIO]: NodeAudioImageBlock,
 };
 
 export const NODE_INLINES: INodeComponents = {
