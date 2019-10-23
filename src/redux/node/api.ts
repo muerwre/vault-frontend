@@ -75,3 +75,14 @@ export const updateNodeTags = ({
     .post(API.NODE.UPDATE_TAGS(id), { tags }, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
+
+export const postNodeLike = ({
+  id,
+  access,
+}: ReturnType<typeof nodeUpdateTags> & { access: string }): Promise<
+  IResultWithStatus<{ is_liked: INode['is_liked'] }>
+> =>
+  api
+    .post(API.NODE.POST_LIKE(id), {}, configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);

@@ -18,8 +18,16 @@ import {
   nodeCreate,
   nodeSetEditor,
   nodeEdit,
+  nodeLike,
 } from './actions';
-import { postNode, getNode, postNodeComment, getNodeComments, updateNodeTags } from './api';
+import {
+  postNode,
+  getNode,
+  postNodeComment,
+  getNodeComments,
+  updateNodeTags,
+  postNodeLike,
+} from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
@@ -29,6 +37,23 @@ import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
 import { IResultWithStatus, INode } from '../types';
 import { NODE_EDITOR_DIALOGS, DIALOGS } from '../modal/constants';
+import { INodeState } from './reducer';
+import { IFlowState } from '../flow/reducer';
+
+function* updateNodeEverythere(node) {
+  const {
+    current: { id },
+  }: INodeState = yield select(selectNode);
+  const flow_nodes: IFlowState['nodes'] = yield select(selectFlowNodes);
+
+  if (id === node.id) {
+    yield put(nodeSetCurrent(node));
+  }
+
+  yield put(
+    flowSetNodes(flow_nodes.map(flow_node => (flow_node.id === node.id ? node : flow_node)))
+  );
+}
 
 function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   yield put(nodeSetSaveErrors({}));
@@ -153,6 +178,23 @@ function* onEditSaga({ id }: ReturnType<typeof nodeEdit>) {
 
   yield put(nodeSetEditor(node));
   yield put(modalShowDialog(NODE_EDITOR_DIALOGS[node.type]));
+
+  return true;
+}
+
+function* onLikeSaga({ id }: ReturnType<typeof nodeLike>) {
+  const {
+    current,
+    current: { is_liked },
+  } = yield select(selectNode);
+
+  yield call(updateNodeEverythere, { ...current, is_liked: !is_liked });
+
+  const { data, error } = yield call(reqWrapper, postNodeLike, { id });
+
+  if (!error || data.is_liked === !is_liked) return; // ok and matches
+
+  yield call(updateNodeEverythere, { ...current, is_liked });
 }
 
 export default function* nodeSaga() {
@@ -162,4 +204,5 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
   yield takeLatest(NODE_ACTIONS.CREATE, onCreateSaga);
   yield takeLatest(NODE_ACTIONS.EDIT, onEditSaga);
+  yield takeLatest(NODE_ACTIONS.LIKE, onLikeSaga);
 }

@@ -135,7 +135,7 @@
   }
 
   60% {
-    transform: scale(1.25);
+    transform: scale(1.4);
   }
 
   75% {
@@ -143,7 +143,7 @@
   }
 
   90% {
-    transform: scale(1.25);
+    transform: scale(1.4);
   }
 
   100% {
@@ -154,6 +154,12 @@
 .like {
   transition: fill, stroke 0.25s;
   will-change: transform;
+
+  &:global(.is_liked) {
+    svg {
+      fill: $red;
+    }
+  }
 
   &:hover {
     fill: $red;
