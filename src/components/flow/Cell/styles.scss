@@ -92,6 +92,17 @@
     grid-row-end: span 2;
   }
 
+  @media (max-width: $cell * 2) {
+    :global(.vertical),
+    :global(.quadro) {
+      grid-row-end: span 1;
+    }
+
+    :global(.horizontal),
+    :global(.quadro) {
+      grid-column-end: span 1;
+    }
+  }
   .is_text {
     background: none;
     padding: 10px;
@@ -159,6 +170,11 @@
     .menu_content {
       opacity: 1;
     }
+  }
+
+  @media (max-width: $cell * 2) {
+    right: 0;
+    top: 0;
   }
 }
 
