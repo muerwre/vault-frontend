@@ -43,6 +43,10 @@
     z-index: 1;
     border-radius: 0 0 $radius $radius;
   }
+
+  @media (max-width: $cell * 2 + $grid_line) {
+    display: none;
+  }
 }
 
 .title,
@@ -130,57 +134,59 @@
   pointer-events: none;
   touch-action: none;
 
-  .vertical > &,
-  .horizontal > &,
-  .quadro > & {
-    box-sizing: border-box;
-    background: none;
-    box-shadow: none;
-    padding: $gap / 2;
+  @media (min-width: $cell * 2 + $grid_line) {
+    .vertical > &,
+    .horizontal > &,
+    .quadro > & {
+      box-sizing: border-box;
+      background: none;
+      box-shadow: none;
+      padding: $gap / 2;
 
-    &::after {
-      display: none;
+      &::after {
+        display: none;
+      }
+
+      .face_content {
+        padding: $gap;
+        background: rgba(25, 25, 25, 0.8);
+        border-radius: $radius;
+        overflow: hidden;
+      }
+
+      .text::after {
+        display: none;
+      }
     }
 
-    .face_content {
-      padding: $gap;
-      background: rgba(25, 25, 25, 0.8);
-      border-radius: $radius;
-      overflow: hidden;
+    .vertical > & {
+      top: auto;
+      bottom: 0;
+      max-height: 50%;
+      max-width: 100%;
+      height: auto;
+      width: auto;
     }
 
-    .text::after {
-      display: none;
+    .horizontal > & {
+      top: auto;
+      left: 0;
+      max-height: 100%;
+      max-width: 50%;
+      height: auto;
+      width: auto;
+      bottom: 0;
     }
-  }
 
-  .vertical > & {
-    top: auto;
-    bottom: 0;
-    max-height: 50%;
-    max-width: 100%;
-    height: auto;
-    width: auto;
-  }
-
-  .horizontal > & {
-    top: auto;
-    left: 0;
-    max-height: 100%;
-    max-width: 50%;
-    height: auto;
-    width: auto;
-    bottom: 0;
-  }
-
-  .quadro > & {
-    top: auto;
-    max-height: 70%;
-    max-width: 50%;
-    height: auto;
-    width: auto;
-    bottom: 0;
-    left: 0;
+    .quadro > & {
+      top: auto;
+      max-height: 70%;
+      max-width: 50%;
+      height: auto;
+      width: auto;
+      bottom: 0;
+      left: 0;
+    }
   }
 }
 
@@ -209,7 +215,7 @@
     }
   }
 
-  @media (max-width: $cell * 2) {
+  @media (max-width: $cell * 2 + $grid_line) {
     right: 0;
     top: 0;
   }
