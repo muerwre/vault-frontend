@@ -137,15 +137,57 @@
 .menu {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  background: $content_bg;
+  right: 0;
+  height: 100%;
+  width: 80px;
   z-index: 4;
   border-radius: $radius;
   opacity: 0;
   pointer-events: none;
   touch-action: none;
   transition: opacity 0.5s;
-  display: none;
+  box-sizing: border-box;
+  // display: none;
+  padding: $gap;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.menu_content {
+  flex: 1;
+  // height: 100%;
+  background: $red_gradient;
+  padding: 60px $gap $gap $gap;
+  border-radius: $radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+
+  & > * {
+    margin-top: $gap;
+    opacity: 0.5;
+    transition: opacity 0.25s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  svg {
+    fill: #222222;
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.menu_sep {
+  width: 20px;
+  height: 2px;
+  flex: 0 0 4px;
+  background-color: #222222;
+  opacity: 0.2;
+  border-radius: 2px;
 }

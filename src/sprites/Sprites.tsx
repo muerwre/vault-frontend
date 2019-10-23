@@ -2,23 +2,39 @@ import React, { FC } from 'react';
 
 const Sprites: FC<{}> = () => (
   <svg width={0} height={0} viewBox="0 0 24 24">
+    <defs>
+      <pattern
+        id="pattern_stripes"
+        patternUnits="userSpaceOnUse"
+        width="4"
+        height="4"
+        patternTransform="rotate(45)"
+      >
+        <line x1="0" y="0" x2="0" y2="4" stroke="#222222" strokeWidth="3" />
+      </pattern>
+    </defs>
+
     <g id="cell-single" stroke="none" transform="translate(2 2)">
-      <path d="M0,0 L9,0 L9,9 L0,9 L0,0 Z" />
+      <path d="M0,0 L9,0 L9,9 L0,9 L0,0 Z" fill="url(#pattern_stripes)" />
       <path d="M11,0 L20,0 L20,9 L11,9 L11,0 Z M12,1 L12,8 L19,8 L19,1 L12,1 Z" />
       <path d="M11,11 L20,11 L20,20 L11,20 L11,11 Z M12,12 L12,19 L19,19 L19,12 L12,12 Z" />
       <path d="M0,11 L9,11 L9,20 L0,20 L0,11 Z M1,12 L1,19 L8,19 L8,12 L1,12 Z" />
     </g>
 
-    <g id="cell-double-h" stroke="none">
-      <path d="M0,0 L20,0 L20,9 L0,9 L0,0 Z M1,1 L1,8 L19,8 L19,1 L1,1 Z" />
+    <g id="cell-double-h" stroke="none" transform="translate(2 2)">
+      <path d="M0,0 L19,0 L19,9 L0,9 L0,0 Z" fill="url(#pattern_stripes)" />
       <path d="M11,11 L20,11 L20,20 L11,20 L11,11 Z M12,12 L12,19 L19,19 L19,12 L12,12 Z" />
       <path d="M0,11 L9,11 L9,20 L0,20 L0,11 Z M1,12 L1,19 L8,19 L8,12 L1,12 Z" />
     </g>
 
-    <g id="cell-double-v" stroke="none">
-      <path d="M0,0 L20,0 L20,9 L0,9 L0,0 Z M1,1 L1,8 L19,8 L19,1 L1,1 Z" />
+    <g id="cell-double-v" stroke="none" transform="translate(2 2)">
+      <path d="M0,0 L9,0 L9,19 L0,19 L0,0 Z" fill="url(#pattern_stripes)" />
+      <path d="M11,0 L20,0 L20,9 L11,9 L11,0 Z M12,1 L12,8 L19,8 L19,1 L12,1 Z" />
       <path d="M11,11 L20,11 L20,20 L11,20 L11,11 Z M12,12 L12,19 L19,19 L19,12 L12,12 Z" />
-      <path d="M0,11 L9,11 L9,20 L0,20 L0,11 Z M1,12 L1,19 L8,19 L8,12 L1,12 Z" />
+    </g>
+
+    <g id="cell-quadro" stroke="none" transform="translate(2 2)">
+      <path d="M0,0 L19,0 L19,19 L0,19 L0,0 Z" fill="url(#pattern_stripes)" />
     </g>
 
     <g id="play">
