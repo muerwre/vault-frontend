@@ -120,6 +120,7 @@ export interface INode {
   thumbnail?: string;
   description?: string;
   is_liked?: boolean;
+  is_heroic?: boolean;
 
   options: {
     flow: {
