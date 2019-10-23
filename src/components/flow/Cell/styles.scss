@@ -251,6 +251,8 @@
   justify-content: center;
   display: flex;
   flex-direction: column;
+  transition: opacity 0.5s;
+  will-change: opacity;
 
   & > * {
     margin-top: $gap;
