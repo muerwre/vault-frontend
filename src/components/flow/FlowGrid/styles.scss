@@ -16,18 +16,24 @@ $cols: $content_width / $cell;
 
   @media (max-width: $cell * 5) {
     grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 25vw;
   }
 
   @media (max-width: $cell * 4) {
     grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 33vw;
   }
 
   @media (max-width: $cell * 3) {
     grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 50vw;
   }
 
   @media (max-width: $cell * 2) {
     grid-template-columns: repeat(1, 1fr);
+    grid-auto-rows: 75vw;
+    grid-column-gap: $gap;
+    grid-row-gap: $gap;
   }
 }
 
