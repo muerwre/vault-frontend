@@ -65,6 +65,10 @@ const Cell: FC<IProps> = ({
     >
       {can_edit && (
         <div className={styles.menu}>
+          <div className={styles.menu_button}>
+            <Icon icon="dots-vertical" />
+          </div>
+
           <div className={styles.menu_content}>
             <Icon icon="cell-single" onClick={toggleViewDescription} />
             <div className={styles.menu_sep} />
