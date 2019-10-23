@@ -27,6 +27,7 @@ import {
   getNodeComments,
   updateNodeTags,
   postNodeLike,
+  postNodeStar,
 } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes } from '../flow/actions';
@@ -197,6 +198,21 @@ function* onLikeSaga({ id }: ReturnType<typeof nodeLike>) {
   yield call(updateNodeEverythere, { ...current, is_liked });
 }
 
+function* onStarSaga({ id }: ReturnType<typeof nodeLike>) {
+  const {
+    current,
+    current: { is_heroic },
+  } = yield select(selectNode);
+
+  yield call(updateNodeEverythere, { ...current, is_heroic: !is_heroic });
+
+  const { data, error } = yield call(reqWrapper, postNodeStar, { id });
+
+  if (!error || data.is_heroic === !is_heroic) return; // ok and matches
+
+  yield call(updateNodeEverythere, { ...current, is_heroic });
+}
+
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
@@ -205,4 +221,5 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.CREATE, onCreateSaga);
   yield takeLatest(NODE_ACTIONS.EDIT, onEditSaga);
   yield takeLatest(NODE_ACTIONS.LIKE, onLikeSaga);
+  yield takeLatest(NODE_ACTIONS.STAR, onStarSaga);
 }

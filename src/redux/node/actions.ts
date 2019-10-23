@@ -80,6 +80,11 @@ export const nodeLike = (id: INode['id']) => ({
   id,
 });
 
+export const nodeStar = (id: INode['id']) => ({
+  type: NODE_ACTIONS.STAR,
+  id,
+});
+
 export const nodeSetEditor = (editor: INode) => ({
   type: NODE_ACTIONS.SET_EDITOR,
   editor,

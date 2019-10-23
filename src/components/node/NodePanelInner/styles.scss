@@ -166,3 +166,18 @@
     animation: pulse 0.75s infinite;
   }
 }
+
+.star {
+  transition: fill, stroke 0.25s;
+  will-change: transform;
+
+  &:global(.is_heroic) {
+    svg {
+      fill: $orange;
+    }
+  }
+
+  &:hover {
+    fill: $orange;
+  }
+}

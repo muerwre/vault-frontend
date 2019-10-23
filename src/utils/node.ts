@@ -9,3 +9,6 @@ export const canEditNode = (node: Partial<INode>, user: Partial<IUser>): boolean
 
 export const canLikeNode = (node: Partial<INode>, user: Partial<IUser>): boolean =>
   path(['role'], user) && path(['role'], user) !== USER_ROLES.GUEST;
+
+export const canStarNode = (node: Partial<INode>, user: Partial<IUser>): boolean =>
+  path(['role'], user) && path(['role'], user) === USER_ROLES.ADMIN;

@@ -1,7 +1,7 @@
 import React, { FC, createElement, useEffect, useCallback, useState, useMemo, memo } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
-import { canEditNode, canLikeNode } from '~/utils/node';
+import { canEditNode, canLikeNode, canStarNode } from '~/utils/node';
 import { selectNode } from '~/redux/node/selectors';
 import { Card } from '~/components/containers/Card';
 
@@ -17,6 +17,7 @@ import { NODE_COMPONENTS, NODE_INLINES } from '~/redux/node/constants';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { CommentForm } from '~/components/node/CommentForm';
 import { selectUser } from '~/redux/auth/selectors';
+import pick from 'ramda/es/pick';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -29,6 +30,7 @@ const mapDispatchToProps = {
   nodeSetCoverImage: NODE_ACTIONS.nodeSetCoverImage,
   nodeEdit: NODE_ACTIONS.nodeEdit,
   nodeLike: NODE_ACTIONS.nodeLike,
+  nodeStar: NODE_ACTIONS.nodeStar,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -40,13 +42,14 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     match: {
       params: { id },
     },
-    node: { is_loading, is_loading_comments, comments = [], current: node, current_cover_image },
+    node: { is_loading, is_loading_comments, comments = [], current: node },
     user,
     user: { is_user },
     nodeLoadNode,
     nodeUpdateTags,
     nodeEdit,
     nodeLike,
+    nodeStar,
     nodeSetCoverImage,
   }) => {
     const [layout, setLayout] = useState({});
@@ -67,12 +70,14 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
 
     const can_edit = useMemo(() => canEditNode(node, user), [node, user]);
     const can_like = useMemo(() => canLikeNode(node, user), [node, user]);
+    const can_star = useMemo(() => canStarNode(node, user), [node, user]);
 
     const block = node && node.type && NODE_COMPONENTS[node.type];
     const inline_block = node && node.type && NODE_INLINES[node.type];
 
     const onEdit = useCallback(() => nodeEdit(node.id), [nodeEdit, node]);
     const onLike = useCallback(() => nodeLike(node.id), [nodeLike, node]);
+    const onStar = useCallback(() => nodeStar(node.id), [nodeStar, node]);
 
     useEffect(() => {
       if (!node.cover) return;
@@ -85,12 +90,14 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
         {block && createElement(block, { node, is_loading, updateLayout, layout })}
 
         <NodePanel
-          node={node}
+          node={pick(['title', 'user', 'is_liked', 'is_heroic'], node)}
           layout={layout}
           can_edit={can_edit}
           can_like={can_like}
+          can_star={can_star}
           onEdit={onEdit}
           onLike={onLike}
+          onStar={onStar}
         />
 
         <Group>

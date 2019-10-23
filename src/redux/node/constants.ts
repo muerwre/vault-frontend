@@ -21,6 +21,7 @@ export const NODE_ACTIONS = {
 
   EDIT: `${prefix}EDIT`,
   LIKE: `${prefix}LIKE`,
+  STAR: `${prefix}STAR`,
   CREATE: `${prefix}CREATE`,
 
   SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,

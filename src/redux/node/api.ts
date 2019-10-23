@@ -1,7 +1,7 @@
 import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils/api';
 import { INode, IResultWithStatus, IComment } from '../types';
 import { API } from '~/constants/api';
-import { nodeUpdateTags } from './actions';
+import { nodeUpdateTags, nodeLike, nodeStar } from './actions';
 
 export const postNode = ({
   access,
@@ -79,10 +79,21 @@ export const updateNodeTags = ({
 export const postNodeLike = ({
   id,
   access,
-}: ReturnType<typeof nodeUpdateTags> & { access: string }): Promise<
+}: ReturnType<typeof nodeLike> & { access: string }): Promise<
   IResultWithStatus<{ is_liked: INode['is_liked'] }>
 > =>
   api
     .post(API.NODE.POST_LIKE(id), {}, configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const postNodeStar = ({
+  id,
+  access,
+}: ReturnType<typeof nodeStar> & { access: string }): Promise<
+  IResultWithStatus<{ is_liked: INode['is_liked'] }>
+> =>
+  api
+    .post(API.NODE.POST_STAR(id), {}, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);

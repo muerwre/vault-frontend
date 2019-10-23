@@ -3,67 +3,77 @@ import * as styles from './styles.scss';
 import { INode } from '~/redux/types';
 import { createPortal } from 'react-dom';
 import { NodePanelInner } from '~/components/node/NodePanelInner';
+import pick from 'ramda/es/pick';
 
 interface IProps {
-  node: INode;
+  node: Partial<INode>;
   layout: {};
 
   can_edit: boolean;
   can_like: boolean;
+  can_star: boolean;
+
   onEdit: () => void;
   onLike: () => void;
+  onStar: () => void;
 }
 
-const NodePanel: FC<IProps> = memo(({ node, layout, can_edit, can_like, onEdit, onLike }) => {
-  const [stack, setStack] = useState(false);
+const NodePanel: FC<IProps> = memo(
+  ({ node, layout, can_edit, can_like, can_star, onEdit, onLike, onStar }) => {
+    const [stack, setStack] = useState(false);
 
-  const ref = useRef(null);
-  const getPlace = useCallback(() => {
-    if (!ref.current) return;
+    const ref = useRef(null);
+    const getPlace = useCallback(() => {
+      if (!ref.current) return;
 
-    const { offsetTop } = ref.current;
-    const { height } = ref.current.getBoundingClientRect();
-    const { scrollY, innerHeight } = window;
+      const { offsetTop } = ref.current;
+      const { height } = ref.current.getBoundingClientRect();
+      const { scrollY, innerHeight } = window;
 
-    setStack(offsetTop > scrollY + innerHeight - height);
-  }, [ref]);
+      setStack(offsetTop > scrollY + innerHeight - height);
+    }, [ref]);
 
-  useEffect(() => {
-    getPlace();
-    window.addEventListener('scroll', getPlace);
-    window.addEventListener('resize', getPlace);
+    useEffect(() => {
+      getPlace();
+      window.addEventListener('scroll', getPlace);
+      window.addEventListener('resize', getPlace);
 
-    return () => {
-      window.removeEventListener('scroll', getPlace);
-      window.removeEventListener('resize', getPlace);
-    };
-  }, [layout]);
+      return () => {
+        window.removeEventListener('scroll', getPlace);
+        window.removeEventListener('resize', getPlace);
+      };
+    }, [layout]);
 
-  return (
-    <div className={styles.place} ref={ref}>
-      {stack ? (
-        createPortal(
+    return (
+      <div className={styles.place} ref={ref}>
+        {stack ? (
+          createPortal(
+            <NodePanelInner
+              node={node}
+              stack
+              onEdit={onEdit}
+              onLike={onLike}
+              onStar={onStar}
+              can_edit={can_edit}
+              can_like={can_like}
+              can_star={can_star}
+            />,
+            document.body
+          )
+        ) : (
           <NodePanelInner
             node={node}
-            stack
             onEdit={onEdit}
             onLike={onLike}
+            onStar={onStar}
             can_edit={can_edit}
             can_like={can_like}
-          />,
-          document.body
-        )
-      ) : (
-        <NodePanelInner
-          node={node}
-          onEdit={onEdit}
-          onLike={onLike}
-          can_edit={can_edit}
-          can_like={can_like}
-        />
-      )}
-    </div>
-  );
-});
+            can_star={can_star}
+          />
+        )}
+      </div>
+    );
+  }
+);
 
 export { NodePanel };

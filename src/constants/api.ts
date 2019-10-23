@@ -15,5 +15,6 @@ export const API = {
     COMMENT: (id: INode['id']) => `/node/${id}/comment`,
     UPDATE_TAGS: (id: INode['id']) => `/node/${id}/tags`,
     POST_LIKE: (id: INode['id']) => `/node/${id}/like`,
+    POST_STAR: (id: INode['id']) => `/node/${id}/heroic`,
   },
 };

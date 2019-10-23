@@ -7,20 +7,24 @@ import { INode } from '~/redux/types';
 import classNames from 'classnames';
 
 interface IProps {
-  node: INode;
+  node: Partial<INode>;
   stack?: boolean;
 
   can_edit: boolean;
   can_like: boolean;
+  can_star: boolean;
   onEdit: () => void;
   onLike: () => void;
+  onStar: () => void;
 }
 
 const NodePanelInner: FC<IProps> = ({
-  node: { title, user, is_liked },
+  node: { title, user, is_liked, is_heroic },
   stack,
+  can_star,
   can_edit,
   can_like,
+  onStar,
   onEdit,
   onLike,
 }) => {
@@ -35,6 +39,15 @@ const NodePanelInner: FC<IProps> = ({
         </Group>
 
         <div className={styles.buttons}>
+          {can_star && (
+            <div className={classNames(styles.star, { is_heroic })}>
+              {is_heroic ? (
+                <Icon icon="star_full" size={24} onClick={onStar} />
+              ) : (
+                <Icon icon="star" size={24} onClick={onStar} />
+              )}
+            </div>
+          )}
           {can_edit && (
             <div>
               <Icon icon="edit" size={24} onClick={onEdit} />
