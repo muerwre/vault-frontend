@@ -138,22 +138,18 @@
 
 .menu {
   position: absolute;
-  top: 0;
-  right: 0;
-  // height: 100%;
-  // width: 80px;
+  top: -$gap;
+  right: -$gap;
   z-index: 4;
   border-radius: $radius;
-  // opacity: 0;
   pointer-events: none;
   touch-action: none;
   transition: opacity 0.5s;
   box-sizing: border-box;
-  // display: none;
-  // padding: $gap;
   display: flex;
   align-items: stretch;
   justify-content: center;
+  padding: $gap;
 
   &:hover {
     opacity: 1;

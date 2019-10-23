@@ -4,7 +4,6 @@ import { getURL } from '~/utils/dom';
 import classNames from 'classnames';
 
 import * as styles from './styles.scss';
-import path from 'ramda/es/path';
 import { Icon } from '~/components/input/Icon';
 import { flowSetCellView } from '~/redux/flow/actions';
 
@@ -18,7 +17,7 @@ interface IProps {
 }
 
 const Cell: FC<IProps> = ({
-  node: { id, title, thumbnail, type, blocks, flow },
+  node: { id, title, thumbnail, type, flow, description },
   can_edit,
   onSelect,
   onChangeCellView,
@@ -29,12 +28,12 @@ const Cell: FC<IProps> = ({
     setIsLoaded(true);
   }, [setIsLoaded]);
 
-  const onClick = useCallback(() => onSelect(id, type), [onSelect, id]);
+  const onClick = useCallback(() => onSelect(id, type), [onSelect, id, type]);
 
-  const text = path([0, 'text'], blocks);
+  const text = (((flow && !!flow.show_description) || type === 'text') && description) || null;
 
   const toggleViewDescription = useCallback(() => {
-    const show_description = flow && !flow.show_description;
+    const show_description = !(flow && flow.show_description);
     const display = (flow && flow.display) || 'single';
     onChangeCellView(id, { show_description, display });
   }, [id, flow, onChangeCellView]);
@@ -70,7 +69,7 @@ const Cell: FC<IProps> = ({
           </div>
 
           <div className={styles.menu_content}>
-            <Icon icon="cell-single" onClick={toggleViewDescription} />
+            <Icon icon="text" onClick={toggleViewDescription} />
             <div className={styles.menu_sep} />
             <Icon icon="cell-single" onClick={setViewSingle} />
             <Icon icon="cell-double-h" onClick={setViewHorizontal} />
