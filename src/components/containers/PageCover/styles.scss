@@ -17,6 +17,7 @@
   width: 100%;
   height: 100%;
   animation: fadeIn 2s;
+  will-change: transform, opacity;
 
   &::after {
     content: ' ';

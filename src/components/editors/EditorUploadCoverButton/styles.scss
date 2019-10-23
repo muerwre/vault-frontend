@@ -50,6 +50,7 @@
   border-radius: ($upload_button_height / 2) !important;
   background: 50% 50% no-repeat;
   background-size: cover;
+  will-change: transform;
   display: flex;
   align-items: center;
   flex-direction: row;

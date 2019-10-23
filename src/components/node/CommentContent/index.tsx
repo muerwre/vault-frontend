@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, memo } from 'react';
 import { IComment, IFile } from '~/redux/types';
 import path from 'ramda/es/path';
 import { formatCommentText, getURL, getPrettyDate } from '~/utils/dom';
@@ -15,7 +15,7 @@ interface IProps {
   comment: IComment;
 }
 
-const CommentContent: FC<IProps> = ({ comment }) => {
+const CommentContent: FC<IProps> = memo(({ comment }) => {
   const groupped = useMemo<Record<keyof typeof UPLOAD_TYPES, IFile[]>>(
     () =>
       reduce(
@@ -68,7 +68,7 @@ const CommentContent: FC<IProps> = ({ comment }) => {
       )}
     </>
   );
-};
+});
 
 export { CommentContent };
 

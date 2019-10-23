@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import * as styles from './styles.scss';
 import { createPortal } from 'react-dom';
 import { selectNode } from '~/redux/node/selectors';
@@ -10,7 +10,7 @@ const mapStateToProps = state => pick(['current_cover_image'], selectNode(state)
 
 type IProps = ReturnType<typeof mapStateToProps> & {};
 
-const PageCoverUnconnected: FC<IProps> = ({ current_cover_image }) =>
+const PageCoverUnconnected: FC<IProps> = memo(({ current_cover_image }) =>
   current_cover_image
     ? createPortal(
         <div
@@ -19,7 +19,8 @@ const PageCoverUnconnected: FC<IProps> = ({ current_cover_image }) =>
         />,
         document.body
       )
-    : null;
+    : null
+);
 
 const PageCover = connect(mapStateToProps)(PageCoverUnconnected);
 export { PageCover };

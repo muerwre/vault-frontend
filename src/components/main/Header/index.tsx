@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, memo } from 'react';
 import { connect } from 'react-redux';
 import { push as historyPush } from 'connected-react-router';
 import { Link } from 'react-router-dom';
@@ -25,7 +25,7 @@ const mapDispatchToProps = {
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const HeaderUnconnected: FC<IProps> = ({ user: { username, is_user, photo }, showDialog }) => {
+const HeaderUnconnected: FC<IProps> = memo(({ user: { username, is_user, photo }, showDialog }) => {
   const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
 
   return (
@@ -54,7 +54,7 @@ const HeaderUnconnected: FC<IProps> = ({ user: { username, is_user, photo }, sho
       )}
     </div>
   );
-};
+});
 
 const Header = connect(
   mapStateToProps,

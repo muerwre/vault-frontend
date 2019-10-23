@@ -55,6 +55,7 @@
   border-radius: $panel_radius 0 0 $panel_radius;
   background-size: cover;
   flex: 0 0 $comment_height;
+  will-change: transform;
 
   @include tablet {
     height: 32px;
