@@ -1,15 +1,15 @@
 @import 'colors';
 
 $cell: 280px;
-$grid_line: 4px;
-$content_width: $cell * 5 + $grid_line * 4;
 $gap: 10px;
+$grid_line: 8px;
+$content_width: $cell * 5 + $grid_line * 4;
 $spc: $gap * 2;
 $comment_height: 72px;
 $bar_height: 64px;
 
 $radius: 8px;
-$cell_radius: $radius;
+$cell_radius: 3px;
 $panel_radius: $radius;
 $input_radius: $radius;
 
