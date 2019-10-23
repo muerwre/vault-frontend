@@ -54,11 +54,9 @@ export const EMPTY_NODE: INode = {
   blocks: [],
   tags: [],
 
-  options: {
-    flow: {
-      display: 'single',
-      show_description: false,
-    },
+  flow: {
+    display: 'single',
+    show_description: false,
   },
 };
 
