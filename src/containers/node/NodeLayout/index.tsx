@@ -1,4 +1,4 @@
-import React, { FC, createElement, useEffect, useCallback, useState, useMemo } from 'react';
+import React, { FC, createElement, useEffect, useCallback, useState, useMemo, memo } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import { canEditNode, canLikeNode } from '~/utils/node';
@@ -35,97 +35,99 @@ type IProps = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps &
   RouteComponentProps<{ id: string }> & {};
 
-const NodeLayoutUnconnected: FC<IProps> = ({
-  match: {
-    params: { id },
-  },
-  node: { is_loading, is_loading_comments, comments = [], current: node, current_cover_image },
-  user,
-  user: { is_user },
-  nodeLoadNode,
-  nodeUpdateTags,
-  nodeEdit,
-  nodeLike,
-  nodeSetCoverImage,
-}) => {
-  const [layout, setLayout] = useState({});
-
-  const updateLayout = useCallback(() => setLayout({}), []);
-
-  useEffect(() => {
-    if (is_loading) return;
-    nodeLoadNode(parseInt(id, 10), null);
-  }, [nodeLoadNode, id]);
-
-  const onTagsChange = useCallback(
-    (tags: string[]) => {
-      nodeUpdateTags(node.id, tags);
+const NodeLayoutUnconnected: FC<IProps> = memo(
+  ({
+    match: {
+      params: { id },
     },
-    [node, nodeUpdateTags]
-  );
+    node: { is_loading, is_loading_comments, comments = [], current: node, current_cover_image },
+    user,
+    user: { is_user },
+    nodeLoadNode,
+    nodeUpdateTags,
+    nodeEdit,
+    nodeLike,
+    nodeSetCoverImage,
+  }) => {
+    const [layout, setLayout] = useState({});
 
-  const can_edit = useMemo(() => canEditNode(node, user), [node, user]);
-  const can_like = useMemo(() => canLikeNode(node, user), [node, user]);
+    const updateLayout = useCallback(() => setLayout({}), []);
 
-  const block = node && node.type && NODE_COMPONENTS[node.type];
-  const inline_block = node && node.type && NODE_INLINES[node.type];
+    useEffect(() => {
+      if (is_loading) return;
+      nodeLoadNode(parseInt(id, 10), null);
+    }, [nodeLoadNode, id]);
 
-  const onEdit = useCallback(() => nodeEdit(node.id), [nodeEdit, node]);
-  const onLike = useCallback(() => nodeLike(node.id), [nodeLike, node]);
+    const onTagsChange = useCallback(
+      (tags: string[]) => {
+        nodeUpdateTags(node.id, tags);
+      },
+      [node, nodeUpdateTags]
+    );
 
-  useEffect(() => {
-    if (!node.cover) return;
-    nodeSetCoverImage(node.cover);
-    return () => nodeSetCoverImage(null);
-  }, [nodeSetCoverImage, node.cover]);
+    const can_edit = useMemo(() => canEditNode(node, user), [node, user]);
+    const can_like = useMemo(() => canLikeNode(node, user), [node, user]);
 
-  return (
-    <Card className={styles.node} seamless>
-      {block && createElement(block, { node, is_loading, updateLayout, layout })}
+    const block = node && node.type && NODE_COMPONENTS[node.type];
+    const inline_block = node && node.type && NODE_INLINES[node.type];
 
-      <NodePanel
-        node={node}
-        layout={layout}
-        can_edit={can_edit}
-        can_like={can_like}
-        onEdit={onEdit}
-        onLike={onLike}
-      />
+    const onEdit = useCallback(() => nodeEdit(node.id), [nodeEdit, node]);
+    const onLike = useCallback(() => nodeLike(node.id), [nodeLike, node]);
 
-      <Group>
-        <Padder>
-          <Group horizontal className={styles.content}>
-            <Group className={styles.comments}>
-              {inline_block && (
-                <div className={styles.inline_block}>
-                  {createElement(inline_block, { node, is_loading, updateLayout, layout })}
-                </div>
-              )}
+    useEffect(() => {
+      if (!node.cover) return;
+      nodeSetCoverImage(node.cover);
+      return () => nodeSetCoverImage(null);
+    }, [nodeSetCoverImage, node.cover]);
 
-              {is_loading_comments || !comments.length ? (
-                <NodeNoComments is_loading={is_loading_comments} />
-              ) : (
-                <NodeComments comments={comments} />
-              )}
+    return (
+      <Card className={styles.node} seamless>
+        {block && createElement(block, { node, is_loading, updateLayout, layout })}
 
-              {is_user && <CommentForm id={0} />}
-            </Group>
+        <NodePanel
+          node={node}
+          layout={layout}
+          can_edit={can_edit}
+          can_like={can_like}
+          onEdit={onEdit}
+          onLike={onLike}
+        />
 
-            <div className={styles.panel}>
-              <Group style={{ flex: 1, minWidth: 0 }}>
-                <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
+        <Group>
+          <Padder>
+            <Group horizontal className={styles.content}>
+              <Group className={styles.comments}>
+                {inline_block && (
+                  <div className={styles.inline_block}>
+                    {createElement(inline_block, { node, is_loading, updateLayout, layout })}
+                  </div>
+                )}
 
-                <NodeRelated title="First album" />
+                {is_loading_comments || !comments.length ? (
+                  <NodeNoComments is_loading={is_loading_comments} />
+                ) : (
+                  <NodeComments comments={comments} />
+                )}
 
-                <NodeRelated title="Second album" />
+                {is_user && <CommentForm id={0} />}
               </Group>
-            </div>
-          </Group>
-        </Padder>
-      </Group>
-    </Card>
-  );
-};
+
+              <div className={styles.panel}>
+                <Group style={{ flex: 1, minWidth: 0 }}>
+                  <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
+
+                  <NodeRelated title="First album" />
+
+                  <NodeRelated title="Second album" />
+                </Group>
+              </div>
+            </Group>
+          </Padder>
+        </Group>
+      </Card>
+    );
+  }
+);
 
 const NodeLayout = connect(
   mapStateToProps,

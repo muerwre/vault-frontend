@@ -104,6 +104,7 @@
     "sass-loader": "^7.3.1",
     "sass-resources-loader": "^2.0.0",
     "scrypt": "^6.0.3",
+    "sticky-sidebar": "^3.3.1",
     "throttle-debounce": "^2.1.0",
     "tslint": "^5.20.0",
     "tslint-config-airbnb": "^5.11.2",

@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, memo } from 'react';
 import { Comment } from '../Comment';
 import { Filler } from '~/components/containers/Filler';
 
@@ -10,7 +10,7 @@ interface IProps {
   comments?: IComment[];
 }
 
-const NodeComments: FC<IProps> = ({ comments }) => {
+const NodeComments: FC<IProps> = memo(({ comments }) => {
   const groupped: ICommentGroup[] = useMemo(() => comments.reduce(groupCommentsByUser, []), [
     comments,
   ]);
@@ -24,6 +24,6 @@ const NodeComments: FC<IProps> = ({ comments }) => {
       <Filler />
     </div>
   );
-};
+});
 
 export { NodeComments };

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState, memo } from 'react';
 import * as styles from './styles.scss';
 import { INode } from '~/redux/types';
 import { createPortal } from 'react-dom';
@@ -14,7 +14,7 @@ interface IProps {
   onLike: () => void;
 }
 
-const NodePanel: FC<IProps> = ({ node, layout, can_edit, can_like, onEdit, onLike }) => {
+const NodePanel: FC<IProps> = memo(({ node, layout, can_edit, can_like, onEdit, onLike }) => {
   const [stack, setStack] = useState(false);
 
   const ref = useRef(null);
@@ -64,6 +64,6 @@ const NodePanel: FC<IProps> = ({ node, layout, can_edit, can_like, onEdit, onLik
       )}
     </div>
   );
-};
+});
 
 export { NodePanel };
