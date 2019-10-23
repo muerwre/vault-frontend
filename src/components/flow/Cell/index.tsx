@@ -39,22 +39,22 @@ const Cell: FC<IProps> = ({
   }, [id, flow, onChangeCellView]);
 
   const setViewSingle = useCallback(() => {
-    const show_description = flow && !!flow.show_description;
+    const show_description = (flow && !!flow.show_description) || false;
     onChangeCellView(id, { show_description, display: 'single' });
   }, [id, flow, onChangeCellView]);
 
   const setViewHorizontal = useCallback(() => {
-    const show_description = flow && !!flow.show_description;
+    const show_description = (flow && !!flow.show_description) || false;
     onChangeCellView(id, { show_description, display: 'horizontal' });
   }, [id, flow, onChangeCellView]);
 
   const setViewVertical = useCallback(() => {
-    const show_description = flow && !!flow.show_description;
+    const show_description = (flow && !!flow.show_description) || false;
     onChangeCellView(id, { show_description, display: 'vertical' });
   }, [id, flow, onChangeCellView]);
 
   const setViewQuadro = useCallback(() => {
-    const show_description = flow && !!flow.show_description;
+    const show_description = (flow && !!flow.show_description) || false;
     onChangeCellView(id, { show_description, display: 'quadro' });
   }, [id, flow, onChangeCellView]);
 

@@ -17,4 +17,5 @@
     "editor.formatOnSave": true,
     "editor.formatOnSaveTimeout": 750,
   },
+  "typescript.tsdk": "node_modules/typescript/lib",
 }
