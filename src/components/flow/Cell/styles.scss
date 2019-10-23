@@ -91,6 +91,16 @@
     grid-column-end: span 2;
   }
 
+  :global(.horizontal),
+  :global(.quadro) {
+    grid-column-end: span 2;
+  }
+
+  :global(.vertical),
+  :global(.quadro) {
+    grid-row-end: span 2;
+  }
+
   .is_text {
     background: none;
     padding: 10px;

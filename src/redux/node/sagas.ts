@@ -41,7 +41,7 @@ import { NODE_EDITOR_DIALOGS, DIALOGS } from '../modal/constants';
 import { INodeState } from './reducer';
 import { IFlowState } from '../flow/reducer';
 
-function* updateNodeEverythere(node) {
+export function* updateNodeEverywhere(node) {
   const {
     current: { id },
   }: INodeState = yield select(selectNode);
@@ -189,13 +189,13 @@ function* onLikeSaga({ id }: ReturnType<typeof nodeLike>) {
     current: { is_liked },
   } = yield select(selectNode);
 
-  yield call(updateNodeEverythere, { ...current, is_liked: !is_liked });
+  yield call(updateNodeEverywhere, { ...current, is_liked: !is_liked });
 
   const { data, error } = yield call(reqWrapper, postNodeLike, { id });
 
   if (!error || data.is_liked === !is_liked) return; // ok and matches
 
-  yield call(updateNodeEverythere, { ...current, is_liked });
+  yield call(updateNodeEverywhere, { ...current, is_liked });
 }
 
 function* onStarSaga({ id }: ReturnType<typeof nodeLike>) {
@@ -204,13 +204,13 @@ function* onStarSaga({ id }: ReturnType<typeof nodeLike>) {
     current: { is_heroic },
   } = yield select(selectNode);
 
-  yield call(updateNodeEverythere, { ...current, is_heroic: !is_heroic });
+  yield call(updateNodeEverywhere, { ...current, is_heroic: !is_heroic });
 
   const { data, error } = yield call(reqWrapper, postNodeStar, { id });
 
   if (!error || data.is_heroic === !is_heroic) return; // ok and matches
 
-  yield call(updateNodeEverythere, { ...current, is_heroic });
+  yield call(updateNodeEverywhere, { ...current, is_heroic });
 }
 
 export default function* nodeSaga() {

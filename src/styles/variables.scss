@@ -1,8 +1,8 @@
 @import 'colors';
 
-$cell: 320px;
+$cell: 280px;
 $grid_line: 4px;
-$content_width: $cell * 4 + $grid_line * 3;
+$content_width: $cell * 5 + $grid_line * 4;
 $gap: 10px;
 $spc: $gap * 2;
 $comment_height: 72px;

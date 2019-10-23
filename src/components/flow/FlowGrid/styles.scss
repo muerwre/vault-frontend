@@ -14,9 +14,15 @@ $cols: $content_width / $cell;
   grid-column-gap: $grid_line;
   grid-row-gap: $grid_line;
 
+  @media (max-width: $cell * 6) {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 40vh 20vw;
+    grid-auto-rows: 20vw;
+  }
+
   @media (max-width: $cell * 5) {
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 25vw $cell;
+    grid-template-rows: 40vh 25vw;
     grid-auto-rows: 25vw;
   }
 
