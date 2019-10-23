@@ -124,3 +124,39 @@
 
 .sep {
 }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1);
+  }
+
+  60% {
+    transform: scale(1.25);
+  }
+
+  75% {
+    transform: scale(1);
+  }
+
+  90% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.like {
+  transition: fill, stroke 0.25s;
+  will-change: transform;
+
+  &:hover {
+    fill: $red;
+    animation: pulse 0.75s infinite;
+  }
+}

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import * as styles from './styles.scss';
 import { Group } from '~/components/containers/Group';
 import { Filler } from '~/components/containers/Filler';
@@ -17,7 +17,7 @@ interface IProps {
 }
 
 const NodePanelInner: FC<IProps> = ({
-  node: { title, user },
+  node: { title, user, is_liked },
   stack,
   can_edit,
   can_like,
@@ -41,8 +41,12 @@ const NodePanelInner: FC<IProps> = ({
             </div>
           )}
           {can_like && (
-            <div>
-              <Icon icon="heart" size={24} onClick={onLike} />
+            <div className={classNames(styles.like, { is_liked })}>
+              {is_liked ? (
+                <Icon icon="heart_full" size={24} onClick={onLike} />
+              ) : (
+                <Icon icon="heart" size={24} onClick={onLike} />
+              )}
             </div>
           )}
         </div>

@@ -16,6 +16,7 @@
   position: relative;
   overflow: hidden;
   user-select: none;
+  will-change: transform, height;
 
   .image {
     max-height: 960px;
