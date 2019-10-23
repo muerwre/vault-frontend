@@ -60,7 +60,9 @@ const Cell: FC<IProps> = ({
 
   return (
     <div
-      className={classNames(styles.cell, (flow && flow.display) || 'single', { is_text: false })}
+      className={classNames(styles.cell, styles[(flow && flow.display) || 'single'], {
+        [styles.is_text]: false,
+      })}
     >
       {can_edit && (
         <div className={styles.menu}>
@@ -79,9 +81,11 @@ const Cell: FC<IProps> = ({
         </div>
       )}
 
-      <div className={styles.face} onClick={onClick}>
-        {title && <div className={styles.title}>{title}</div>}
-        {text && <div className={styles.text}>{text}</div>}
+      <div className={classNames(styles.face, { [styles.has_text]: text })}>
+        <div className={styles.face_content}>
+          {title && <div className={styles.title}>{title}</div>}
+          {text && <div className={styles.text}>{text}</div>}
+        </div>
       </div>
 
       {thumbnail && (
@@ -91,6 +95,7 @@ const Cell: FC<IProps> = ({
             backgroundImage: `url("${getURL({ url: thumbnail })}")`,
             opacity: is_loaded ? 1 : 0,
           }}
+          onClick={onClick}
         >
           <img src={getURL({ url: thumbnail })} onLoad={onImageLoad} alt="" />
         </div>

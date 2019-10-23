@@ -9,13 +9,13 @@
   cursor: pointer;
   color: white;
 
-  &:global(.is_hero) {
+  .is_hero {
     .title {
       font: $font_hero_title;
     }
   }
 
-  &:global(.is_text) {
+  .is_text {
     .title {
       display: none;
     }
@@ -26,7 +26,7 @@
 
 .text {
   font: $font_18_regular;
-  line-height: 23px;
+  line-height: 22px;
   margin-top: $gap;
   letter-spacing: 0.5px;
 
@@ -65,49 +65,30 @@
   margin-bottom: $gap / 2;
 }
 
-:global {
-  .vert-1 {
+.horizontal,
+.quadro {
+  grid-column-end: span 2;
+}
+
+.vertical,
+.quadro {
+  grid-row-end: span 2;
+}
+
+@media (max-width: $cell * 2) {
+  .horizontal,
+  .quadro,
+  .vertical,
+  .quadro {
     grid-row-end: span 1;
-  }
-
-  .vert-2 {
-    grid-row-end: span 2;
-  }
-
-  .hor-1 {
     grid-column-end: span 1;
   }
+}
 
-  .hor-2 {
-    grid-column-end: span 2;
-  }
-
-  :global(.horizontal),
-  :global(.quadro) {
-    grid-column-end: span 2;
-  }
-
-  :global(.vertical),
-  :global(.quadro) {
-    grid-row-end: span 2;
-  }
-
-  @media (max-width: $cell * 2) {
-    :global(.vertical),
-    :global(.quadro) {
-      grid-row-end: span 1;
-    }
-
-    :global(.horizontal),
-    :global(.quadro) {
-      grid-column-end: span 1;
-    }
-  }
-  .is_text {
-    background: none;
-    padding: 10px;
-    box-shadow: inset #444 0 0 0 1px;
-  }
+.is_text {
+  background: none;
+  padding: 10px;
+  box-shadow: inset #444 0 0 0 1px;
 }
 
 .thumbnail {
@@ -134,6 +115,7 @@
 .face {
   @include outer_shadow();
 
+  display: flex;
   overflow: hidden;
   box-sizing: border-box;
   position: absolute;
@@ -145,6 +127,61 @@
   z-index: 2;
   border-radius: $cell_radius;
   padding: $gap;
+  pointer-events: none;
+  touch-action: none;
+
+  .vertical > &,
+  .horizontal > &,
+  .quadro > & {
+    box-sizing: border-box;
+    background: none;
+    box-shadow: none;
+    padding: $gap / 2;
+
+    &::after {
+      display: none;
+    }
+
+    .face_content {
+      padding: $gap;
+      background: rgba(25, 25, 25, 0.8);
+      border-radius: $radius;
+      overflow: hidden;
+    }
+
+    .text::after {
+      display: none;
+    }
+  }
+
+  .vertical > & {
+    top: auto;
+    bottom: 0;
+    max-height: 50%;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+  }
+
+  .horizontal > & {
+    top: auto;
+    max-height: 50%;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    bottom: 0;
+  }
+
+  .quadro > & {
+    top: auto;
+    left: auto;
+    max-height: 70%;
+    max-width: 50%;
+    height: auto;
+    width: auto;
+    bottom: 0;
+    right: 0;
+  }
 }
 
 .menu {
