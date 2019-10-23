@@ -122,11 +122,9 @@ export interface INode {
   is_liked?: boolean;
   is_heroic?: boolean;
 
-  options: {
-    flow: {
-      display: 'single' | 'vertical' | 'horizontal' | 'quadro';
-      show_description: boolean;
-    };
+  flow: {
+    display: 'single' | 'vertical' | 'horizontal' | 'quadro';
+    show_description: boolean;
   };
 
   tags: ITag[];
