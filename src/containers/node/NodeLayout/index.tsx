@@ -126,7 +126,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                   {related &&
                     related.albums &&
                     Object.keys(related.albums).map(album => (
-                      <NodeRelated title={album} items={related.albums[album]} />
+                      <NodeRelated title={album} items={related.albums[album]} key={album} />
                     ))}
 
                   {related && related.similar && related.similar.length > 0 && (
