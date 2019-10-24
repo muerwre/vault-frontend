@@ -46,7 +46,7 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
   }, [loaded, current, setCurrent, timer]);
 
   useEffect(() => {
-    timer.current = setTimeout(onNext, 3000);
+    timer.current = setTimeout(onNext, 5000);
 
     return () => clearTimeout(timer.current);
   }, [current]);
@@ -61,7 +61,7 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
 
   const stopSliding = useCallback(() => {
     clearTimeout(timer.current);
-    timer.current = setTimeout(onNext, 3000);
+    timer.current = setTimeout(onNext, 5000);
   }, [timer, onNext]);
 
   const onClick = useCallback(() => {
