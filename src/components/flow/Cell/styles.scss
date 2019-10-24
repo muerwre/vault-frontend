@@ -135,13 +135,13 @@
   touch-action: none;
 
   @media (min-width: $cell * 2 + $grid_line) {
-    .vertical > &,
-    .horizontal > &,
-    .quadro > & {
+    .vertical > &.has_text,
+    .horizontal > &.has_text,
+    .quadro > &.has_text {
       box-sizing: border-box;
       background: none;
       box-shadow: none;
-      padding: $gap / 2;
+      padding: $grid_line;
 
       &::after {
         display: none;
@@ -159,30 +159,30 @@
       }
     }
 
-    .vertical > & {
+    .vertical > &.has_text {
       top: auto;
       bottom: 0;
-      max-height: 50%;
+      height: 50%;
       max-width: 100%;
-      height: auto;
+      // height: auto;
       width: auto;
     }
 
-    .horizontal > & {
+    .horizontal > &.has_text {
       top: auto;
       left: 0;
-      max-height: 100%;
+      height: 100%;
       max-width: 50%;
-      height: auto;
+      // height: auto;
       width: auto;
       bottom: 0;
     }
 
-    .quadro > & {
+    .quadro > &.has_text {
       top: auto;
-      max-height: 70%;
+      height: 50%;
       max-width: 50%;
-      height: auto;
+      // height: auto;
       width: auto;
       bottom: 0;
       left: 0;

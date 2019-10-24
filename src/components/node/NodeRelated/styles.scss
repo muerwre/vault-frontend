@@ -19,7 +19,7 @@
 }
 
 .item {
-  background: darken($content_bg, 2%) 50% 50% no-repeat;
+  background: lighten($content_bg, 2%) 50% 50% no-repeat;
   background-size: cover;
   padding-bottom: 100%;
   border-radius: $cell_radius;
