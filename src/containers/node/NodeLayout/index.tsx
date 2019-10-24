@@ -129,7 +129,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                       <NodeRelated title={album} items={related.albums[album]} />
                     ))}
 
-                  {related && related.similar && (
+                  {related && related.similar && related.similar.length > 0 && (
                     <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
                   )}
                 </Group>
