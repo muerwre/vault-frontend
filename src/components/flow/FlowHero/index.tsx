@@ -7,14 +7,13 @@ import { getURL } from '~/utils/dom';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { URLS } from '~/constants/urls';
 import { Icon } from '~/components/input/Icon';
-import { Filler } from '~/components/containers/Filler';
 
 type IProps = RouteComponentProps & {
   heroes: IFlowState['heroes'];
 };
 
 const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
-  const [limit, setLimit] = useState(Math.max(heroes.length, 10));
+  const [limit, setLimit] = useState(Math.min(heroes.length, 6));
   const [current, setCurrent] = useState(0);
   const [loaded, setLoaded] = useState([]);
   const timer = useRef(null);
@@ -30,6 +29,11 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
 
     setCurrent(index > loaded.length - 2 ? loaded[0] : loaded[index + 1]);
   }, [loaded, current, setCurrent, timer]);
+
+  const onNextPress = useCallback(() => {
+    setLimit(Math.min(heroes.length, limit + 1));
+    onNext();
+  }, [onNext, heroes, limit, setLimit]);
 
   const onPrevious = useCallback(() => {
     clearTimeout(timer.current);
@@ -52,19 +56,23 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
   }, [loaded]);
 
   useEffect(() => {
-    setLimit(Math.max(heroes.length, limit));
+    setLimit(limit > 0 ? Math.min(heroes.length, limit) : heroes.length);
   }, [heroes, limit]);
 
   const stopSliding = useCallback(() => {
     clearTimeout(timer.current);
     timer.current = setTimeout(onNext, 3000);
-  }, [timer]);
+  }, [timer, onNext]);
 
   const onClick = useCallback(() => {
     if (!current) return;
 
     history.push(URLS.NODE_URL(current));
   }, [current]);
+
+  useEffect(() => {
+    console.log({ limit });
+  }, [limit]);
 
   return (
     <div className={styles.wrap} onMouseOver={stopSliding} onFocus={stopSliding}>
@@ -77,7 +85,7 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
           <div className={styles.button} onClick={onPrevious}>
             <Icon icon="left" />
           </div>
-          <div className={styles.button} onClick={onNext}>
+          <div className={styles.button} onClick={onNextPress}>
             <Icon icon="right" />
           </div>
         </div>
