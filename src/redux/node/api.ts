@@ -2,6 +2,7 @@ import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils
 import { INode, IResultWithStatus, IComment } from '../types';
 import { API } from '~/constants/api';
 import { nodeUpdateTags, nodeLike, nodeStar } from './actions';
+import { INodeState } from './reducer';
 
 export const postNode = ({
   access,
@@ -58,9 +59,21 @@ export const getNodeComments = ({
 }: {
   id: number;
   access: string;
-}): Promise<IResultWithStatus<{ comment: Comment }>> =>
+}): Promise<IResultWithStatus<{ comments: Comment[] }>> =>
   api
     .get(API.NODE.COMMENT(id), configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const getNodeRelated = ({
+  id,
+  access,
+}: {
+  id: number;
+  access: string;
+}): Promise<IResultWithStatus<{ related: INodeState['related'] }>> =>
+  api
+    .get(API.NODE.RELATED(id), configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 

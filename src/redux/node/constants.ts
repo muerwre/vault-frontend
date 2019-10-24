@@ -34,6 +34,7 @@ export const NODE_ACTIONS = {
 
   POST_COMMENT: `${prefix}POST_COMMENT`,
   SET_COMMENTS: `${prefix}SET_COMMENTS`,
+  SET_RELATED: `${prefix}SET_RELATED`,
 
   UPDATE_TAGS: `${prefix}UPDATE_TAGS`,
   SET_TAGS: `${prefix}SET_TAGS`,

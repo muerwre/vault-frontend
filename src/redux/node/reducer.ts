@@ -7,6 +7,10 @@ export type INodeState = Readonly<{
   editor: INode;
   current: INode;
   comments: IComment[];
+  related: {
+    albums: Record<string, Partial<INode[]>>;
+    similar: Partial<INode[]>;
+  };
   comment_data: Record<number, IComment>;
   current_cover_image: IFile;
 
@@ -28,6 +32,7 @@ const INITIAL_STATE: INodeState = {
   current: { ...EMPTY_NODE },
   comment_data: { 0: { ...EMPTY_COMMENT } },
   comments: [],
+  related: null,
   current_cover_image: null,
 
   is_loading: false,

@@ -13,6 +13,7 @@ export const API = {
     GET_NODE: (id: number | string) => `/node/${id}`,
 
     COMMENT: (id: INode['id']) => `/node/${id}/comment`,
+    RELATED: (id: INode['id']) => `/node/${id}/related`,
     UPDATE_TAGS: (id: INode['id']) => `/node/${id}/tags`,
     POST_LIKE: (id: INode['id']) => `/node/${id}/like`,
     POST_STAR: (id: INode['id']) => `/node/${id}/heroic`,

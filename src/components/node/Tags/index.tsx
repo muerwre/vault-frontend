@@ -12,6 +12,7 @@ import { TagField } from '~/components/containers/TagField';
 import { ITag } from '~/redux/types';
 import { Tag } from '~/components/node/Tag';
 import uniq from 'ramda/es/uniq';
+import assocPath from 'ramda/es/assocPath';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   tags: Partial<ITag>[];
@@ -65,9 +66,14 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
   );
 
   const onSubmit = useCallback(() => {
-    if (!data.length) return;
-    onTagsChange(uniq([...tags, ...data]).map(tag => tag.title));
-  }, [tags, data, onTagsChange]);
+    const title = input && input.trim();
+    const items = title ? [...data, { title }] : data;
+
+    if (!items.length) return;
+    setData(items);
+    setInput('');
+    onTagsChange(uniq([...tags, ...items]).map(tag => tag.title));
+  }, [tags, data, onTagsChange, input, setInput]);
 
   useEffect(() => {
     setData(data.filter(({ title }) => !tags.some(tag => tag.title.trim() === title.trim())));

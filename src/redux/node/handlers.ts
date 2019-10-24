@@ -11,6 +11,7 @@ import {
   nodeSetTags,
   nodeSetEditor,
   nodeSetCoverImage,
+  nodeSetRelated,
 } from './actions';
 import { INodeState } from './reducer';
 
@@ -36,6 +37,9 @@ const setSendingComment = (
 const setComments = (state: INodeState, { comments }: ReturnType<typeof nodeSetComments>) =>
   assocPath(['comments'], comments, state);
 
+const setRelated = (state: INodeState, { related }: ReturnType<typeof nodeSetRelated>) =>
+  assocPath(['related'], related, state);
+
 const setCommentData = (
   state: INodeState,
   { id, comment }: ReturnType<typeof nodeSetCommentData>
@@ -59,6 +63,7 @@ export const NODE_HANDLERS = {
   [NODE_ACTIONS.SET_CURRENT]: setCurrent,
   [NODE_ACTIONS.SET_SENDING_COMMENT]: setSendingComment,
   [NODE_ACTIONS.SET_COMMENTS]: setComments,
+  [NODE_ACTIONS.SET_RELATED]: setRelated,
   [NODE_ACTIONS.SET_COMMENT_DATA]: setCommentData,
   [NODE_ACTIONS.SET_TAGS]: setTags,
   [NODE_ACTIONS.SET_EDITOR]: setEditor,

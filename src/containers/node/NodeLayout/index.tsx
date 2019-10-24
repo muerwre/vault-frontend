@@ -42,7 +42,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     match: {
       params: { id },
     },
-    node: { is_loading, is_loading_comments, comments = [], current: node },
+    node: { is_loading, is_loading_comments, comments = [], current: node, related },
     user,
     user: { is_user },
     nodeLoadNode,
@@ -123,9 +123,9 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                 <Group style={{ flex: 1, minWidth: 0 }}>
                   <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
 
-                  <NodeRelated title="First album" />
-
-                  <NodeRelated title="Second album" />
+                  {related && related.similar && (
+                    <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
+                  )}
                 </Group>
               </div>
             </Group>

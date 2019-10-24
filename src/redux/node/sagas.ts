@@ -1,4 +1,4 @@
-import { takeLatest, call, put, select, delay } from 'redux-saga/effects';
+import { takeLatest, call, put, select, delay, all } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
 import { NODE_ACTIONS, EMPTY_NODE, EMPTY_COMMENT, NODE_EDITOR_DATA } from './constants';
@@ -19,6 +19,7 @@ import {
   nodeSetEditor,
   nodeEdit,
   nodeLike,
+  nodeSetRelated,
 } from './actions';
 import {
   postNode,
@@ -28,6 +29,7 @@ import {
   updateNodeTags,
   postNodeLike,
   postNodeStar,
+  getNodeRelated,
 } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes } from '../flow/actions';
@@ -112,11 +114,19 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
 
   // todo: load comments
   const {
-    data: { comments },
-  } = yield call(reqWrapper, getNodeComments, { id });
+    comments: {
+      data: { comments },
+    },
+    related: {
+      data: { related },
+    },
+  } = yield all({
+    comments: call(reqWrapper, getNodeComments, { id }),
+    related: call(reqWrapper, getNodeRelated, { id }),
+  });
 
   yield put(nodeSetComments(comments || []));
-
+  yield put(nodeSetRelated(related || []));
   yield put(nodeSetLoadingComments(false));
 
   return;

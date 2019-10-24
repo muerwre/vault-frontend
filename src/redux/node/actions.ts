@@ -48,6 +48,11 @@ export const nodeSetComments = (comments: IComment[]) => ({
   type: NODE_ACTIONS.SET_COMMENTS,
 });
 
+export const nodeSetRelated = (related: INodeState['related']) => ({
+  related,
+  type: NODE_ACTIONS.SET_RELATED,
+});
+
 export const nodeSetCommentData = (id: number, comment: IComment) => ({
   id,
   comment,
