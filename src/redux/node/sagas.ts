@@ -94,6 +94,7 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetLoadingComments(true));
   yield put(nodeSetSaveErrors({}));
   yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
+  yield put(nodeSetRelated(null));
 
   if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
 
