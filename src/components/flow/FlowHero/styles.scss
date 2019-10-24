@@ -1,11 +1,11 @@
-@keyframes rise {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(0, -10%);
-  }
-}
+// @keyframes rise {
+//   0% {
+//     transform: translate(0, 0);
+//   }
+//   100% {
+//     transform: translate(0, -10%);
+//   }
+// }
 
 .wrap {
   width: 100%;
@@ -23,14 +23,14 @@
   width: 100%;
   height: 150%;
   display: none;
-  transition: opacity 2s;
+  transition: opacity 2s, transform linear 5s 2s;
   background: 50% 50% no-repeat;
   background-size: cover;
   border-radius: $cell_radius;
   z-index: 2;
   opacity: 0;
   cursor: pointer;
-  transform: translate(0, -10%);
+  transform: translate(0, 0);
 
   &::after {
     content: ' ';
@@ -58,7 +58,9 @@
     opacity: 1;
     z-index: 3;
     will-change: transform;
-    animation: rise 5s forwards;
+    // animation: rise 5s forwards;
+    transform: translate(0, -10%);
+    transition: opacity 2s, transform linear 5s;
   }
 }
 
