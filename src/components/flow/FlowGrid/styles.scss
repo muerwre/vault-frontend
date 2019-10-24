@@ -8,7 +8,7 @@ $cols: $content_width / $cell;
 .grid_test {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax($cell, 1fr));
-  grid-template-rows: 40vh $cell;
+  grid-template-rows: 50vh $cell;
   grid-auto-rows: $cell;
   grid-auto-flow: row dense;
   grid-column-gap: $grid_line;
@@ -20,7 +20,7 @@ $cols: $content_width / $cell;
 
   @media (max-width: $cell * 6) {
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: 40vh 20vw;
+    grid-template-rows: 50vh 20vw;
     grid-auto-rows: 20vw;
   }
 

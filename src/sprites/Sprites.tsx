@@ -149,6 +149,16 @@ const Sprites: FC<{}> = () => (
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M16 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
     </g>
+
+    <g id="left" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+    </g>
+
+    <g id="right" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+    </g>
   </svg>
 );
 

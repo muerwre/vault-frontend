@@ -2,14 +2,14 @@
 
 $cell: 280px;
 $gap: 10px;
-$grid_line: 8px;
+$grid_line: 5px;
 $content_width: $cell * 5 + $grid_line * 4;
 $spc: $gap * 2;
 $comment_height: 72px;
 $bar_height: 64px;
 
 $radius: 8px;
-$cell_radius: 3px;
+$cell_radius: $radius;
 $panel_radius: $radius;
 $input_radius: $radius;
 
@@ -55,7 +55,7 @@ $font_8_regular: $regular 8px $font;
 $font_8_semibold: $semibold 8px $font;
 
 $font_cell_title: $bold 30px $font;
-$font_hero_title: $font_48_semibold;
+$font_hero_title: $bold 40px $font;
 
 $shadow_depth_1: transparentize(black, 0.8) 0 1px, inset transparentize(white, 0.98) 0 1px;
 $shadow_depth_2: transparentize(black, 0.8) 0 2px, inset transparentize(white, 0.98) 0 1px;
