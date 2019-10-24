@@ -123,6 +123,12 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                 <Group style={{ flex: 1, minWidth: 0 }}>
                   <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
 
+                  {related &&
+                    related.albums &&
+                    Object.keys(related.albums).map(album => (
+                      <NodeRelated title={album} items={related.albums[album]} />
+                    ))}
+
                   {related && related.similar && (
                     <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
                   )}
