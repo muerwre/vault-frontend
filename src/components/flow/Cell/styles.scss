@@ -166,6 +166,7 @@
       max-width: 100%;
       // height: auto;
       width: auto;
+      padding: ($grid_line / 2) $grid_line $grid_line $grid_line;
     }
 
     .horizontal > &.has_text {
@@ -176,9 +177,11 @@
       // height: auto;
       width: auto;
       bottom: 0;
+      padding: $grid_line ($grid_line / 2) $grid_line $grid_line;
     }
 
     .quadro > &.has_text {
+      padding: ($grid_line / 2) ($grid_line / 2) $grid_line $grid_line;
       top: auto;
       height: 50%;
       max-width: 50%;
