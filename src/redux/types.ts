@@ -2,6 +2,7 @@ import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 import { IUser } from './auth/types';
+import { string } from 'prop-types';
 
 export interface ITag {
   id: number;
@@ -58,7 +59,7 @@ export type UUID = string;
 export type IUploadType = 'image' | 'text' | 'audio' | 'video' | 'other';
 
 export interface IFile {
-  id?: UUID;
+  id?: number;
   temp_id?: UUID;
   user_id?: UUID;
   node_id?: UUID;
@@ -93,12 +94,17 @@ export interface IFileWithUUID {
   type: string;
 }
 
-export interface IBlock {
-  type: 'image' | 'text' | 'media' | 'youtube' | 'video';
-  files: UUID[];
-  content: string;
-  embeds: string[];
+export interface IBlockText {
+  type: 'text';
+  text: string;
 }
+
+export interface IBlockEmbed {
+  type: 'video';
+  url: string;
+}
+
+export type IBlock = IBlockText | IBlockEmbed;
 
 export interface INode {
   id?: number;
@@ -111,19 +117,14 @@ export interface INode {
   type: string;
 
   blocks: IBlock[];
+  thumbnail?: string;
+  description?: string;
+  is_liked?: boolean;
+  is_heroic?: boolean;
 
-  brief?: {
-    thumbnail?: string;
-    description?: string;
-    owner?: string;
-    comments?: number;
-  };
-
-  options: {
-    flow: {
-      display: 'single' | 'double' | 'quadro';
-      show_description: boolean;
-    };
+  flow: {
+    display: 'single' | 'vertical' | 'horizontal' | 'quadro';
+    show_description: boolean;
   };
 
   tags: ITag[];
@@ -133,6 +134,7 @@ export interface INode {
 }
 
 export interface IComment {
+  id: number;
   text: string;
   temp_ids?: string[];
   files: IFile[];
@@ -141,6 +143,12 @@ export interface IComment {
 
   created_at?: string;
   update_at?: string;
+}
+
+export interface ICommentGroup {
+  user: IUser;
+  comments: IComment[];
+  ids: IComment['id'][];
 }
 
 export type IUploadProgressHandler = (progress: ProgressEvent) => void;

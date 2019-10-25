@@ -7,19 +7,16 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
   grid-auto-rows: auto;
   grid-column-gap: $gap;
   grid-row-gap: $gap;
-}
 
-.item {
-  background: darken($content_bg, 2%);
-  padding-bottom: 100%;
-  border-radius: $cell_radius;
+  @include tablet {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
-
 .title {
   font: $font_14_semibold;
   text-transform: uppercase;

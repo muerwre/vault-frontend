@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { ButtonHTMLAttributes, DetailedHTMLProps, FC, createElement } from 'react';
+import React, { ButtonHTMLAttributes, DetailedHTMLProps, FC, createElement, memo } from 'react';
 import * as styles from './styles.scss';
 import { Icon } from '~/components/input/Icon';
 import { IIcon } from '~/redux/types';
@@ -22,44 +22,48 @@ type IButtonProps = DetailedHTMLProps<
   iconOnly?: boolean;
 };
 
-export const Button: FC<IButtonProps> = ({
-  className = '',
-  size = 'normal',
-  iconLeft,
-  iconRight,
-  children,
-  seamless = false,
-  transparent = false,
-  non_submitting = false,
-  red = false,
-  grey = false,
-  is_loading,
-  title,
-  stretchy,
-  disabled,
-  iconOnly,
-  ...props
-}) =>
-  createElement(
-    seamless || non_submitting ? 'div' : 'button',
-    {
-      className: classnames(styles.button, className, styles[size], {
-        red,
-        grey,
-        seamless,
-        transparent,
-        disabled,
-        is_loading,
-        stretchy,
-        icon: ((iconLeft || iconRight) && !title && !children) || iconOnly,
-        has_icon_left: !!iconLeft,
-        has_icon_right: !!iconRight,
-      }),
-      ...props,
-    },
-    [
-      iconLeft && <Icon icon={iconLeft} size={20} key={0} />,
-      title ? <span>{title}</span> : children || null,
-      iconRight && <Icon icon={iconRight} size={20} key={2} />,
-    ]
-  );
+const Button: FC<IButtonProps> = memo(
+  ({
+    className = '',
+    size = 'normal',
+    iconLeft,
+    iconRight,
+    children,
+    seamless = false,
+    transparent = false,
+    non_submitting = false,
+    red = false,
+    grey = false,
+    is_loading,
+    title,
+    stretchy,
+    disabled,
+    iconOnly,
+    ...props
+  }) =>
+    createElement(
+      seamless || non_submitting ? 'div' : 'button',
+      {
+        className: classnames(styles.button, className, styles[size], {
+          red,
+          grey,
+          seamless,
+          transparent,
+          disabled,
+          is_loading,
+          stretchy,
+          icon: ((iconLeft || iconRight) && !title && !children) || iconOnly,
+          has_icon_left: !!iconLeft,
+          has_icon_right: !!iconRight,
+        }),
+        ...props,
+      },
+      [
+        iconLeft && <Icon icon={iconLeft} size={20} key={0} />,
+        title ? <span>{title}</span> : children || null,
+        iconRight && <Icon icon={iconRight} size={20} key={2} />,
+      ]
+    )
+);
+
+export { Button };

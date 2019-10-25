@@ -3,15 +3,35 @@ import { connect } from 'react-redux';
 import { FlowGrid } from '~/components/flow/FlowGrid';
 import { selectFlow } from '~/redux/flow/selectors';
 import * as NODE_ACTIONS from '~/redux/node/actions';
+import * as FLOW_ACTIONS from '~/redux/flow/actions';
+import pick from 'ramda/es/pick';
+import { selectUser } from '~/redux/auth/selectors';
 
-const mapStateToProps = selectFlow;
+const mapStateToProps = state => ({
+  flow: pick(['nodes', 'heroes'], selectFlow(state)),
+  user: pick(['role', 'id'], selectUser(state)),
+});
 
-const mapDispatchToProps = { nodeLoadNode: NODE_ACTIONS.nodeLoadNode };
+const mapDispatchToProps = {
+  nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
+  flowSetCellView: FLOW_ACTIONS.flowSetCellView,
+};
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const FlowLayoutUnconnected: FC<IProps> = ({ nodes, nodeLoadNode }) => (
-  <FlowGrid nodes={nodes} onSelect={nodeLoadNode} />
+const FlowLayoutUnconnected: FC<IProps> = ({
+  flow: { nodes, heroes },
+  user,
+  nodeLoadNode,
+  flowSetCellView,
+}) => (
+  <FlowGrid
+    nodes={nodes}
+    heroes={heroes}
+    onSelect={nodeLoadNode}
+    user={user}
+    onChangeCellView={flowSetCellView}
+  />
 );
 
 const FlowLayout = connect(

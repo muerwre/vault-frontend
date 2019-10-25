@@ -78,8 +78,10 @@ function* uploadFile({ file, temp_id, type, target }: IFileWithUUID) {
       {
         preview,
         is_uploading: true,
-        type: file.type,
+        // type: file.type,
         temp_id,
+        type,
+        name: file.name,
       }
     )
   );
@@ -106,7 +108,7 @@ function* uploadFile({ file, temp_id, type, target }: IFileWithUUID) {
 
   if (error) {
     return yield put(
-      uploadSetStatus(temp_id, { is_uploading: false, error: data.detail || error })
+      uploadSetStatus(temp_id, { is_uploading: false, error: data.detail || error, type })
     );
   }
 
@@ -116,8 +118,10 @@ function* uploadFile({ file, temp_id, type, target }: IFileWithUUID) {
       error: null,
       uuid: data.id,
       url: data.full_path,
+      type,
       thumbnail_url: data.full_path,
       progress: 1,
+      name: file.name,
     })
   );
 

@@ -1,5 +1,5 @@
-import { INode, IValidationErrors, IComment, ITag } from '../types';
-import { NODE_ACTIONS } from './constants';
+import { INode, IValidationErrors, IComment, ITag, IFile } from '../types';
+import { NODE_ACTIONS, NODE_TYPES } from './constants';
 import { INodeState } from './reducer';
 
 export const nodeSave = (node: INode) => ({
@@ -48,6 +48,11 @@ export const nodeSetComments = (comments: IComment[]) => ({
   type: NODE_ACTIONS.SET_COMMENTS,
 });
 
+export const nodeSetRelated = (related: INodeState['related']) => ({
+  related,
+  type: NODE_ACTIONS.SET_RELATED,
+});
+
 export const nodeSetCommentData = (id: number, comment: IComment) => ({
   id,
   comment,
@@ -63,4 +68,34 @@ export const nodeUpdateTags = (id: INode['id'], tags: string[]) => ({
 export const nodeSetTags = (tags: ITag[]) => ({
   type: NODE_ACTIONS.SET_TAGS,
   tags,
+});
+
+export const nodeCreate = (node_type: INode['type']) => ({
+  type: NODE_ACTIONS.CREATE,
+  node_type,
+});
+
+export const nodeEdit = (id: INode['id']) => ({
+  type: NODE_ACTIONS.EDIT,
+  id,
+});
+
+export const nodeLike = (id: INode['id']) => ({
+  type: NODE_ACTIONS.LIKE,
+  id,
+});
+
+export const nodeStar = (id: INode['id']) => ({
+  type: NODE_ACTIONS.STAR,
+  id,
+});
+
+export const nodeSetEditor = (editor: INode) => ({
+  type: NODE_ACTIONS.SET_EDITOR,
+  editor,
+});
+
+export const nodeSetCoverImage = (current_cover_image: IFile) => ({
+  type: NODE_ACTIONS.SET_COVER_IMAGE,
+  current_cover_image,
 });

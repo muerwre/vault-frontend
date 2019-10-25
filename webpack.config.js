@@ -11,7 +11,7 @@ const htmlPlugin = new HtmlWebPackPlugin({
   filename: './index.html',
   title: 'VAULT',
   hash: false,
-  // favicon: 'src/sprites/favicon.png',
+  favicon: 'src/sprites/favicon.ico',
 });
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -22,7 +22,7 @@ const resolve = {
     'react-dom': '@hot-loader/react-dom',
     '~': join(__dirname, 'src'),
   },
-  extensions: ['*', '.ts', '.tsx', '.js', '.jsx', '.json', '.scss']
+  extensions: ['*', '.ts', '.tsx', '.js', '.jsx', '.json', '.scss'],
 };
 
 /* Configuration */
@@ -45,10 +45,7 @@ module.exports = () => {
       rules: [
         {
           test: /\.css$/,
-          use: [
-            { loader: 'style-loader' },
-            { loader: 'css-loader' }
-          ],
+          use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
         },
         {
           test: /\.less$/,
@@ -62,11 +59,11 @@ module.exports = () => {
                 modules: true,
                 sourceMap: true,
                 importLoaders: 2,
-                localIdentName: '[folder]__[local]__[hash:base64:5]'
-              }
+                localIdentName: '[folder]__[local]__[hash:base64:5]',
+              },
             },
-            { loader: 'less-loader' }
-          ]
+            { loader: 'less-loader' },
+          ],
         },
         {
           test: /\.scss$/,
@@ -79,16 +76,16 @@ module.exports = () => {
                 modules: true,
                 sourceMap: true,
                 importLoaders: 2,
-                localIdentName: '[folder]__[local]__[hash:base64:5]'
-              }
+                localIdentName: '[folder]__[local]__[hash:base64:5]',
+              },
             },
             { loader: 'resolve-url-loader' },
             {
               loader: 'sass-loader',
               options: {
                 sourceMap: true,
-                sourceMapContents: false
-              }
+                sourceMapContents: false,
+              },
             },
             {
               loader: 'sass-resources-loader',
@@ -96,14 +93,14 @@ module.exports = () => {
                 resources: ['src/styles/variables.scss'],
               },
             },
-          ]
+          ],
         },
         {
           test: /\.(ts|tsx|js|jsx)$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader'
-          }
+            loader: 'babel-loader',
+          },
         },
         { test: /\.(ts|tsx)?$/, loader: 'awesome-typescript-loader' },
         {
@@ -113,17 +110,17 @@ module.exports = () => {
             options: {
               name: '[name].[ext]',
               // outputPath: '/font'
-            }
-          }
+            },
+          },
         },
         {
           test: /\.(png|svg)$/,
           use: {
             loader: 'file-loader',
-            options: {}
-          }
-        }
-      ]
+            options: {},
+          },
+        },
+      ],
     },
     devtool,
     resolve,
@@ -151,18 +148,18 @@ module.exports = () => {
             minChunks: 2,
             minSize: 0,
             reuseExistingChunk: true,
-          }
-        }
+          },
+        },
       },
       minimizer: [
         new UglifyJsPlugin({
           cache: true,
           parallel: true,
-          sourceMap: true // set to true if you want JS source maps
+          sourceMap: true, // set to true if you want JS source maps
         }),
-        new OptimizeCSSAssetsPlugin({})
+        new OptimizeCSSAssetsPlugin({}),
       ],
-      occurrenceOrder: true // To keep filename consistent between different modes (for example building only)
+      occurrenceOrder: true, // To keep filename consistent between different modes (for example building only)
     },
     devServer: {
       historyApiFallback: true,
@@ -171,7 +168,6 @@ module.exports = () => {
       contentBase: 'dist',
       publicPath: '/',
       hot: true,
-    }
+    },
   };
 };
-

@@ -42,7 +42,7 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const CommentFormUnconnected: FC<IProps> = ({
   node: { comment_data, is_sending_comment },
   uploads: { statuses, files },
-  user: { photo },
+  user,
   id,
   nodePostComment,
   nodeSetCommentData,
@@ -122,7 +122,7 @@ const CommentFormUnconnected: FC<IProps> = ({
   const comment = comment_data[id];
 
   return (
-    <CommentWrapper photo={getURL(photo)}>
+    <CommentWrapper user={user}>
       <form onSubmit={onSubmit} className={styles.wrap}>
         <div className={styles.input}>
           <Textarea
@@ -133,6 +133,22 @@ const CommentFormUnconnected: FC<IProps> = ({
             minRows={2}
           />
         </div>
+
+        {comment.temp_ids.map(
+          temp_id =>
+            statuses[temp_id] &&
+            statuses[temp_id].is_uploading && (
+              <div key={statuses[temp_id].temp_id}>{statuses[temp_id].progress}</div>
+            )
+        )}
+
+        {comment.files.map(file => {
+          if (file.type === UPLOAD_TYPES.AUDIO) {
+            return <AudioPlayer file={file} />;
+          }
+
+          return <div>file.name</div>;
+        })}
 
         <Group horizontal className={styles.buttons}>
           <ButtonGroup>
@@ -154,22 +170,6 @@ const CommentFormUnconnected: FC<IProps> = ({
           </Button>
         </Group>
       </form>
-
-      {comment.temp_ids.map(
-        temp_id =>
-          statuses[temp_id] &&
-          statuses[temp_id].is_uploading && (
-            <div key={statuses[temp_id].temp_id}>{statuses[temp_id].progress}</div>
-          )
-      )}
-
-      {comment.files.map(file => {
-        if (file.type === UPLOAD_TYPES.AUDIO) {
-          return <AudioPlayer file={file} />;
-        }
-
-        return <div>file.name</div>;
-      })}
     </CommentWrapper>
   );
 };

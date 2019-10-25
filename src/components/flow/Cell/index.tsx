@@ -1,47 +1,103 @@
-import React, { FC, useState, useCallback } from 'react';
+import React, { FC, useState, useCallback, useEffect } from 'react';
 import { INode } from '~/redux/types';
-import { URLS } from '~/constants/urls';
-import { getImageSize, getURL } from '~/utils/dom';
-import classNames = require('classnames');
+import { getURL } from '~/utils/dom';
+import classNames from 'classnames';
 
 import * as styles from './styles.scss';
+import { Icon } from '~/components/input/Icon';
+import { flowSetCellView } from '~/redux/flow/actions';
 
 interface IProps {
   node: INode;
-  // height?: number;
-  // width?: number;
-  // title?: string;
-  // is_hero?: boolean;
-  // is_stamp?: boolean;
-  onSelect: (id: INode['id'], type: INode['type']) => void;
   is_text?: boolean;
+  can_edit?: boolean;
+
+  onSelect: (id: INode['id'], type: INode['type']) => void;
+  onChangeCellView: typeof flowSetCellView;
 }
 
-const Cell: FC<IProps> = ({ node: { id, title, brief, type }, onSelect, is_text = false }) => {
+const Cell: FC<IProps> = ({
+  node: { id, title, thumbnail, type, flow, description },
+  can_edit,
+  onSelect,
+  onChangeCellView,
+}) => {
   const [is_loaded, setIsLoaded] = useState(false);
 
   const onImageLoad = useCallback(() => {
     setIsLoaded(true);
   }, [setIsLoaded]);
 
-  const onClick = useCallback(() => onSelect(id, type), [onSelect, id]);
+  const onClick = useCallback(() => onSelect(id, type), [onSelect, id, type]);
+
+  const text = (((flow && !!flow.show_description) || type === 'text') && description) || null;
+
+  const toggleViewDescription = useCallback(() => {
+    const show_description = !(flow && flow.show_description);
+    const display = (flow && flow.display) || 'single';
+    onChangeCellView(id, { show_description, display });
+  }, [id, flow, onChangeCellView]);
+
+  const setViewSingle = useCallback(() => {
+    const show_description = (flow && !!flow.show_description) || false;
+    onChangeCellView(id, { show_description, display: 'single' });
+  }, [id, flow, onChangeCellView]);
+
+  const setViewHorizontal = useCallback(() => {
+    const show_description = (flow && !!flow.show_description) || false;
+    onChangeCellView(id, { show_description, display: 'horizontal' });
+  }, [id, flow, onChangeCellView]);
+
+  const setViewVertical = useCallback(() => {
+    const show_description = (flow && !!flow.show_description) || false;
+    onChangeCellView(id, { show_description, display: 'vertical' });
+  }, [id, flow, onChangeCellView]);
+
+  const setViewQuadro = useCallback(() => {
+    const show_description = (flow && !!flow.show_description) || false;
+    onChangeCellView(id, { show_description, display: 'quadro' });
+  }, [id, flow, onChangeCellView]);
 
   return (
     <div
-      className={classNames(styles.cell, 'vert-1', 'hor-1', { is_text: false })}
-      onClick={onClick}
+      className={classNames(styles.cell, styles[(flow && flow.display) || 'single'], {
+        [styles.is_text]: false,
+      })}
     >
-      <div className={styles.face}>{title && <div className={styles.title}>{title}</div>}</div>
+      {can_edit && (
+        <div className={styles.menu}>
+          <div className={styles.menu_button}>
+            <Icon icon="dots-vertical" />
+          </div>
 
-      {brief && brief.thumbnail && (
+          <div className={styles.menu_content}>
+            <Icon icon="text" onClick={toggleViewDescription} />
+            <div className={styles.menu_sep} />
+            <Icon icon="cell-single" onClick={setViewSingle} />
+            <Icon icon="cell-double-h" onClick={setViewHorizontal} />
+            <Icon icon="cell-double-v" onClick={setViewVertical} />
+            <Icon icon="cell-quadro" onClick={setViewQuadro} />
+          </div>
+        </div>
+      )}
+
+      <div className={classNames(styles.face, { [styles.has_text]: text })}>
+        <div className={styles.face_content}>
+          {title && <div className={styles.title}>{title}</div>}
+          {text && <div className={styles.text}>{text}</div>}
+        </div>
+      </div>
+
+      {thumbnail && (
         <div
           className={styles.thumbnail}
           style={{
-            backgroundImage: `url("${getURL({ url: brief.thumbnail })}")`,
+            backgroundImage: `url("${getURL({ url: thumbnail })}")`,
             opacity: is_loaded ? 1 : 0,
           }}
+          onClick={onClick}
         >
-          <img src={getURL({ url: brief.thumbnail })} onLoad={onImageLoad} alt="" />
+          <img src={getURL({ url: thumbnail })} onLoad={onImageLoad} alt="" />
         </div>
       )}
     </div>

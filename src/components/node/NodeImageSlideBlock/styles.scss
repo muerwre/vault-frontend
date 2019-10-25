@@ -1,0 +1,49 @@
+.wrap {
+  overflow: hidden;
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  transition: height 0.25s;
+  border-radius: $radius $radius 0 0;
+}
+
+.image_container {
+  background: $node_image_bg;
+  border-radius: $panel_radius 0 0 $panel_radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  will-change: transform, height;
+
+  .image {
+    max-height: 960px;
+    max-width: 100%;
+    opacity: 1;
+    border-radius: $radius $radius 0 0;
+  }
+}
+
+.image_wrap {
+  width: 100%;
+  // top: 0;
+  // left: 0;
+  // opacity: 0;
+  pointer-events: none;
+  touch-action: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:global(.is_active) {
+    opacity: 1;
+  }
+}
+
+.placeholder {
+  background: red;
+  height: 320px;
+}

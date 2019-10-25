@@ -1,6 +1,11 @@
 .wrap {
   display: flex;
   flex-direction: row;
+  height: $comment_height;
+  position: relative;
+  align-items: center;
+  justify-content: stretch;
+  flex: 1;
 
   &:global(.playing) {
     .progress {
@@ -93,7 +98,8 @@
 }
 
 .bar {
-  background: linear-gradient(270deg, $green, $wisegreen);
+  // background: linear-gradient(270deg, $green, $wisegreen);
+  background: $main_gradient;
   position: absolute;
   height: 10px;
   left: 0;

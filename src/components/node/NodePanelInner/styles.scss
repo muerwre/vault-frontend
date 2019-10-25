@@ -27,6 +27,7 @@
   padding: $gap;
   background: $node_bg;
   height: 72px;
+  @include outer_shadow();
 }
 
 .title {
@@ -65,22 +66,43 @@
 
   & > * {
     margin: 0 $gap;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      fill: darken(white, 50%);
+      transition: fill 0.25s;
+    }
+
+    &:hover {
+      svg {
+        fill: $red;
+      }
+    }
+
+    &::after {
+      content: ' ';
+      flex: 0 0 6px;
+      height: $gap;
+      width: 6px;
+      border-radius: 4px;
+      background: transparentize(black, 0.7);
+      margin-left: $gap * 2;
+    }
 
     &:first-child {
       margin-left: 0;
     }
+
     &:last-child {
       margin-right: 0;
+      &::after {
+        display: none;
+      }
     }
   }
-  //height: 54px;
-  //border-radius: $radius $radius 0 0;
-  //background: linear-gradient(176deg, #f42a00, #5c1085);
-  //position: absolute;
-  //bottom: 0;
-  //right: 10px;
-  //width: 270px;
-  //display: flex;
 }
 
 .mark {
@@ -94,16 +116,68 @@
     right: 4px;
     width: 24px;
     height: 52px;
-    background: $green_gradient;
+    background: $main_gradient;
     box-shadow: transparentize(black, 0.8) 4px 2px;
     border-radius: 2px;
   }
 }
 
 .sep {
-  flex: 0 0 6px;
-  height: 6px;
-  width: 6px;
-  border-radius: 4px;
-  background: transparentize(black, 0.7);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1);
+  }
+
+  60% {
+    transform: scale(1.4);
+  }
+
+  75% {
+    transform: scale(1);
+  }
+
+  90% {
+    transform: scale(1.4);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.like {
+  transition: fill, stroke 0.25s;
+  will-change: transform;
+
+  &:global(.is_liked) {
+    svg {
+      fill: $red;
+    }
+  }
+
+  &:hover {
+    fill: $red;
+    animation: pulse 0.75s infinite;
+  }
+}
+
+.star {
+  transition: fill, stroke 0.25s;
+  will-change: transform;
+
+  &:global(.is_heroic) {
+    svg {
+      fill: $orange;
+    }
+  }
+
+  &:hover {
+    fill: $orange;
+  }
 }

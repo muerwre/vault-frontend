@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, memo } from 'react';
 import { connect } from 'react-redux';
 import { push as historyPush } from 'connected-react-router';
 import { Link } from 'react-router-dom';
@@ -12,9 +12,7 @@ import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { DIALOGS } from '~/redux/modal/constants';
 import { pick } from 'ramda';
 import { Icon } from '~/components/input/Icon';
-import { url } from 'inspector';
 import { getURL } from '~/utils/dom';
-import path from 'ramda/es/path';
 
 const mapStateToProps = state => ({
   user: pick(['username', 'is_user', 'photo'])(selectUser(state)),
@@ -27,9 +25,8 @@ const mapDispatchToProps = {
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const HeaderUnconnected: FC<IProps> = ({ user: { username, is_user, photo }, showDialog }) => {
+const HeaderUnconnected: FC<IProps> = memo(({ user: { username, is_user, photo }, showDialog }) => {
   const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
-  const onOpenEditor = useCallback(() => showDialog(DIALOGS.EDITOR), [showDialog]);
 
   return (
     <div className={style.container}>
@@ -38,7 +35,6 @@ const HeaderUnconnected: FC<IProps> = ({ user: { username, is_user, photo }, sho
       <Filler />
 
       <div className={style.plugs}>
-        <div onClick={onOpenEditor}>editor</div>
         <Link to="/">flow</Link>
       </div>
 
@@ -58,7 +54,7 @@ const HeaderUnconnected: FC<IProps> = ({ user: { username, is_user, photo }, sho
       )}
     </div>
   );
-};
+});
 
 const Header = connect(
   mapStateToProps,

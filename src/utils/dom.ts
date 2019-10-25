@@ -1,6 +1,7 @@
 import { IFile } from '~/redux/types';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import { ru } from 'date-fns/locale';
+import Axios from 'axios';
 
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -67,16 +68,38 @@ export const getURL = (file: Partial<IFile>) => {
 export const getImageSize = (file: IFile, size?: string): string => getURL(file);
 // `${process.env.API_HOST}${image}`.replace('{size}', size);
 
-export const formatCommentText = (author, text: string) =>
+export const formatText = (text: string): string =>
+  !text
+    ? ''
+    : text
+        .replace(/(\n{2,})/gi, '\n')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/:\/\//gim, ':|--|')
+        .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
+        .replace(/:\|--\|/gim, '://')
+        .split('\n')
+        .map(el => `<p>${el}</p>`)
+        // .map((el, index) =>
+        //   index === 0
+        //     ? `${author ? `<p><b class="comment-author">${author}: </b>` : ''}${el}</p>`
+        //     : `<p>${el}</p>`
+        // )
+        .join('');
+
+export const formatCommentText = (author: string, text: string): string =>
   text
-    .replace(/(\n{2,})/gi, '\n')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .split('\n')
-    .map((el, index) =>
-      index === 0 ? `${author ? `<p><b>${author}</b>: ` : ''}${el}</p>` : `<p>${el}</p>`
-    )
-    .join('');
+    ? formatText(text).replace(
+        /^<p>/,
+        author ? `<p><b class="comment-author">${author}: </b>` : '<p>'
+      )
+    : '';
 
 export const getPrettyDate = (date: string): string =>
   formatDistanceToNow(new Date(date), { locale: ru, includeSeconds: true, addSuffix: true });
+
+export const getYoutubeTitle = async (id: string) => {
+  Axios.get(`http://youtube.com/get_video_info?video_id=${id}`).then(console.log);
+};
+
+(<any>window).getYoutubeTitle = getYoutubeTitle;

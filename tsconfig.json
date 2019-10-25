@@ -18,6 +18,6 @@
       "~/*": ["src/*"]
     }
   },
-  "include": ["./src/index.tsx", "./custom.d.ts"],
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./custom.d.ts"],
   "exclude": ["./__tests__/**/*"]
 }

@@ -38,6 +38,7 @@ export const EMPTY_UPLOAD_STATUS: IUploadStatus = {
   thumbnail_url: null,
   type: null,
   temp_id: null,
+  name: null,
 };
 
 // for targeted cancellation

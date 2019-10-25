@@ -1,8 +1,5 @@
-import React, { FC, useState, useCallback, useEffect, FormEvent } from 'react';
+import React, { FC, useState, useCallback, FormEvent, useEffect, createElement } from 'react';
 import { connect } from 'react-redux';
-import assocPath from 'ramda/es/assocPath';
-import append from 'ramda/es/append';
-import uuid from 'uuid4';
 import { ScrollDialog } from '../ScrollDialog';
 import { IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
@@ -12,117 +9,42 @@ import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
 import * as styles from './styles.scss';
 import { selectNode } from '~/redux/node/selectors';
-import { ImageEditor } from '~/components/editors/ImageEditor';
 import { EditorPanel } from '~/components/editors/EditorPanel';
-import { moveArrItem } from '~/utils/fn';
-import { IFile, IFileWithUUID } from '~/redux/types';
-import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
-import { UPLOAD_TARGETS, UPLOAD_TYPES, UPLOAD_SUBJECTS } from '~/redux/uploads/constants';
+import { ERROR_LITERAL } from '~/constants/errors';
+import { NODE_EDITORS, EMPTY_NODE } from '~/redux/node/constants';
 
 const mapStateToProps = state => {
-  const { editor } = selectNode(state);
+  const { editor, errors } = selectNode(state);
   const { statuses, files } = selectUploads(state);
 
-  return { editor, statuses, files };
+  return { editor, statuses, files, errors };
 };
 
 const mapDispatchToProps = {
-  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
   nodeSave: NODE_ACTIONS.nodeSave,
+  nodeSetSaveErrors: NODE_ACTIONS.nodeSetSaveErrors,
 };
 
-type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
+type IProps = IDialogProps &
+  ReturnType<typeof mapStateToProps> &
+  typeof mapDispatchToProps & {
+    type: typeof NODE_EDITORS[keyof typeof NODE_EDITORS];
+  };
 
 const EditorDialogUnconnected: FC<IProps> = ({
-  onRequestClose,
   editor,
-  files,
-  statuses,
-
-  uploadUploadFiles,
+  errors,
   nodeSave,
+  nodeSetSaveErrors,
+  onRequestClose,
+  type,
 }) => {
-  const [data, setData] = useState(editor);
-  const eventPreventer = useCallback(event => event.preventDefault(), []);
+  const [data, setData] = useState(EMPTY_NODE);
   const [temp, setTemp] = useState([]);
 
-  const onUpload = useCallback(
-    (uploads: File[]) => {
-      const items: IFileWithUUID[] = Array.from(uploads).map(
-        (file: File): IFileWithUUID => ({
-          file,
-          temp_id: uuid(),
-          subject: UPLOAD_SUBJECTS.EDITOR,
-          target: UPLOAD_TARGETS.NODES,
-          type: UPLOAD_TYPES.IMAGE,
-        })
-      );
-
-      const temps = items.map(file => file.temp_id);
-
-      setTemp([...temp, ...temps]);
-      uploadUploadFiles(items);
-    },
-    [setTemp, uploadUploadFiles, temp]
-  );
-
-  const onFileMove = useCallback(
-    (old_index: number, new_index: number) => {
-      setData(assocPath(['files'], moveArrItem(old_index, new_index, data.files), data));
-    },
-    [data, setData]
-  );
-
-  const onFileAdd = useCallback(
-    (file: IFile) => {
-      setData(assocPath(['files'], append(file, data.files), data));
-    },
-    [data, setData]
-  );
-
-  const onDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault();
-
-      if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length)
-        return;
-
-      onUpload(Array.from(event.dataTransfer.files));
-    },
-    [onUpload]
-  );
-
-  const onInputChange = useCallback(
-    event => {
-      event.preventDefault();
-
-      if (!event.target.files || !event.target.files.length) return;
-
-      onUpload(Array.from(event.target.files));
-    },
-    [onUpload]
-  );
-
-  useEffect(() => {
-    window.addEventListener('dragover', eventPreventer, false);
-    window.addEventListener('drop', eventPreventer, false);
-
-    return () => {
-      window.removeEventListener('dragover', eventPreventer, false);
-      window.removeEventListener('drop', eventPreventer, false);
-    };
-  }, [eventPreventer]);
-
-  useEffect(() => {
-    Object.entries(statuses).forEach(([id, status]) => {
-      if (temp.includes(id) && !!status.uuid && files[status.uuid]) {
-        onFileAdd(files[status.uuid]);
-        setTemp(temp.filter(el => el !== id));
-      }
-    });
-  }, [statuses, files, temp, onFileAdd]);
+  useEffect(() => setData(editor), [editor]);
 
   const setTitle = useCallback(
     title => {
@@ -139,9 +61,18 @@ const EditorDialogUnconnected: FC<IProps> = ({
     [data, nodeSave]
   );
 
+  useEffect(() => {
+    if (!NODE_EDITORS[type] && onRequestClose) onRequestClose();
+  }, [type]);
+
+  useEffect(() => {
+    if (!Object.keys(errors).length) return;
+    nodeSetSaveErrors({});
+  }, [data]);
+
   const buttons = (
     <Padder style={{ position: 'relative' }}>
-      <EditorPanel data={data} setData={setData} onUpload={onInputChange} />
+      <EditorPanel data={data} setData={setData} temp={temp} setTemp={setTemp} />
 
       <Group horizontal>
         <InputText title="Название" value={data.title} handler={setTitle} autoFocus />
@@ -153,18 +84,25 @@ const EditorDialogUnconnected: FC<IProps> = ({
 
   useCloseOnEscape(onRequestClose);
 
+  const error = errors && Object.values(errors)[0];
+
+  if (!NODE_EDITORS[type]) return null;
+
   return (
     <form onSubmit={onSubmit} className={styles.form}>
-      <ScrollDialog buttons={buttons} width={860} onClose={onRequestClose}>
-        <div className={styles.editor} onDrop={onDrop}>
-          <ImageEditor
-            data={data}
-            pending_files={temp.filter(id => !!statuses[id]).map(id => statuses[id])}
-            setData={setData}
-            onUpload={onInputChange}
-            onFileMove={onFileMove}
-            onInputChange={onInputChange}
-          />
+      <ScrollDialog
+        buttons={buttons}
+        width={860}
+        error={error && ERROR_LITERAL[error]}
+        onClose={onRequestClose}
+      >
+        <div className={styles.editor}>
+          {createElement(NODE_EDITORS[type], {
+            data,
+            setData,
+            temp,
+            setTemp,
+          })}
         </div>
       </ScrollDialog>
     </form>

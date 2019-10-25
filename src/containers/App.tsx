@@ -14,18 +14,22 @@ import { URLS } from '~/constants/urls';
 import { Modal } from '~/containers/dialogs/Modal';
 import { selectModal } from '~/redux/modal/selectors';
 import { BlurWrapper } from '~/components/containers/BlurWrapper';
+import { PageCover } from '~/components/containers/PageCover';
 import { NodeLayout } from './node/NodeLayout';
 import { BottomContainer } from '~/containers/main/BottomContainer';
 
-const mapStateToProps = selectModal;
+const mapStateToProps = state => ({
+  modal: selectModal(state),
+});
 const mapDispatchToProps = {};
 
 type IProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps> & {};
 
-const Component: FC<IProps> = ({ is_shown }) => (
+const Component: FC<IProps> = ({ modal: { is_shown } }) => (
   <ConnectedRouter history={history}>
     <div>
       <BlurWrapper is_blurred={is_shown}>
+        <PageCover />
         <MainLayout>
           <Modal />
           <Sprites />

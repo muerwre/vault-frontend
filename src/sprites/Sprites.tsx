@@ -2,23 +2,39 @@ import React, { FC } from 'react';
 
 const Sprites: FC<{}> = () => (
   <svg width={0} height={0} viewBox="0 0 24 24">
+    <defs>
+      <pattern
+        id="pattern_stripes"
+        patternUnits="userSpaceOnUse"
+        width="4"
+        height="4"
+        patternTransform="rotate(45)"
+      >
+        <line x1="0" y="0" x2="0" y2="4" stroke="#222222" strokeWidth="3" />
+      </pattern>
+    </defs>
+
     <g id="cell-single" stroke="none" transform="translate(2 2)">
-      <path d="M0,0 L9,0 L9,9 L0,9 L0,0 Z" />
+      <path d="M0,0 L9,0 L9,9 L0,9 L0,0 Z" fill="url(#pattern_stripes)" />
       <path d="M11,0 L20,0 L20,9 L11,9 L11,0 Z M12,1 L12,8 L19,8 L19,1 L12,1 Z" />
       <path d="M11,11 L20,11 L20,20 L11,20 L11,11 Z M12,12 L12,19 L19,19 L19,12 L12,12 Z" />
       <path d="M0,11 L9,11 L9,20 L0,20 L0,11 Z M1,12 L1,19 L8,19 L8,12 L1,12 Z" />
     </g>
 
-    <g id="cell-double-h" stroke="none">
-      <path d="M0,0 L20,0 L20,9 L0,9 L0,0 Z M1,1 L1,8 L19,8 L19,1 L1,1 Z" />
+    <g id="cell-double-h" stroke="none" transform="translate(2 2)">
+      <path d="M0,0 L19,0 L19,9 L0,9 L0,0 Z" fill="url(#pattern_stripes)" />
       <path d="M11,11 L20,11 L20,20 L11,20 L11,11 Z M12,12 L12,19 L19,19 L19,12 L12,12 Z" />
       <path d="M0,11 L9,11 L9,20 L0,20 L0,11 Z M1,12 L1,19 L8,19 L8,12 L1,12 Z" />
     </g>
 
-    <g id="cell-double-v" stroke="none">
-      <path d="M0,0 L20,0 L20,9 L0,9 L0,0 Z M1,1 L1,8 L19,8 L19,1 L1,1 Z" />
+    <g id="cell-double-v" stroke="none" transform="translate(2 2)">
+      <path d="M0,0 L9,0 L9,19 L0,19 L0,0 Z" fill="url(#pattern_stripes)" />
+      <path d="M11,0 L20,0 L20,9 L11,9 L11,0 Z M12,1 L12,8 L19,8 L19,1 L12,1 Z" />
       <path d="M11,11 L20,11 L20,20 L11,20 L11,11 Z M12,12 L12,19 L19,19 L19,12 L12,12 Z" />
-      <path d="M0,11 L9,11 L9,20 L0,20 L0,11 Z M1,12 L1,19 L8,19 L8,12 L1,12 Z" />
+    </g>
+
+    <g id="cell-quadro" stroke="none" transform="translate(2 2)">
+      <path d="M0,0 L19,0 L19,19 L0,19 L0,0 Z" fill="url(#pattern_stripes)" />
     </g>
 
     <g id="play">
@@ -44,9 +60,24 @@ const Sprites: FC<{}> = () => (
       <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
     </g>
 
+    <g id="star" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z" />
+    </g>
+
+    <g id="star_full" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+    </g>
+
     <g id="heart" stroke="none">
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z" />
+    </g>
+
+    <g id="heart_full" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
     </g>
 
     <g id="edit" stroke="none">
@@ -98,9 +129,37 @@ const Sprites: FC<{}> = () => (
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
     </g>
+
+    <g id="text" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z" />
+    </g>
+
+    <g id="video" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
+    </g>
+
+    <g id="audio" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z" />
+    </g>
+
+    <g id="dots-vertical" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M16 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+    </g>
+
+    <g id="left" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+    </g>
+
+    <g id="right" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+    </g>
   </svg>
 );
 
 export { Sprites };
-
-// <path d="M0 0H8V8H-8V-8Z" fillRule="evenodd" />

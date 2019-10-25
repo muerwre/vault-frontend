@@ -1,0 +1,80 @@
+@import 'flexbin/flexbin.scss';
+
+.block {
+  @include outer_shadow();
+  min-height: $comment_height;
+  // box-shadow: inset rgba(255, 255, 255, 0.05) 1px 1px, inset rgba(0, 0, 0, 0.1) -1px -1px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+
+  &:first-child {
+    border-top-right-radius: $radius;
+  }
+
+  &:last-child {
+    border-bottom-right-radius: $radius;
+  }
+}
+
+.block_audio {
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 0 !important;
+}
+
+.block_image {
+  padding-bottom: 0 !important;
+
+  .date {
+    background: transparentize($color: $content_bg, $amount: 0.2);
+    border-radius: $radius 0 $radius 0;
+    color: transparentize(white, 0.2);
+  }
+}
+
+.text {
+  padding: $gap;
+  font-weight: 300;
+  font: $font_16_medium;
+  line-height: 20px;
+  box-sizing: border-box;
+  position: relative;
+  color: #cccccc;
+
+  b {
+    font-weight: 600;
+  }
+}
+
+.date {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font: $font_12_regular;
+  color: transparentize($color: white, $amount: 0.8);
+  padding: 4px 6px 4px 6px;
+  border-radius: 0 0 $radius 0;
+}
+
+.images {
+  @include flexbin(240px, 5px);
+
+  img {
+    border-radius: $radius;
+  }
+}
+
+.audios {
+  & > div {
+    height: $comment_height;
+    border-radius: $radius;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+}

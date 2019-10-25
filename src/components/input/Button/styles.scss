@@ -108,6 +108,7 @@
   &:global(.disabled),
   &:global(.grey) {
     background: transparentize(white, 0.9);
+    color: white;
     // background: lighten(white, 0.5);
     // filter: grayscale(100%);
   }

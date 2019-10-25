@@ -1,10 +1,10 @@
-import React, { FC, ChangeEventHandler, DragEventHandler } from 'react';
+import React, { FC, useMemo, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { INode } from '~/redux/types';
+import { INode, IFile } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
-import { IUploadStatus } from '~/redux/uploads/reducer';
+import * as styles from './styles.scss';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -14,26 +14,25 @@ const mapDispatchToProps = {
 type IProps = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & {
     data: INode;
-    pending_files: IUploadStatus[];
-
     setData: (val: INode) => void;
-    onFileMove: (from: number, to: number) => void;
-    onInputChange: ChangeEventHandler<HTMLInputElement>;
+    temp: string[];
+    setTemp: (val: string[]) => void;
   };
 
-const ImageEditorUnconnected: FC<IProps> = ({
-  data,
-  onFileMove,
-  onInputChange,
-  pending_files,
-}) => (
-  <ImageGrid
-    onFileMove={onFileMove}
-    items={data.files}
-    locked={pending_files}
-    onUpload={onInputChange}
-  />
-);
+const ImageEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) => {
+  const pending_files = useMemo(() => temp.filter(id => !!statuses[id]).map(id => statuses[id]), [
+    temp,
+    statuses,
+  ]);
+
+  const setFiles = useCallback((files: IFile[]) => setData({ ...data, files }), [data, setData]);
+
+  return (
+    <div className={styles.wrap}>
+      <ImageGrid files={data.files} setFiles={setFiles} locked={pending_files} />
+    </div>
+  );
+};
 
 const ImageEditor = connect(
   mapStateToProps,

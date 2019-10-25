@@ -6,12 +6,13 @@ export interface IUploadStatus {
   is_uploading: boolean;
   error: string;
   preview: string;
-  uuid: UUID;
+  uuid: IFile['id'];
   url: string;
   type: string;
   thumbnail_url: string;
   progress: number;
   temp_id: UUID;
+  name: string;
 }
 
 export interface IUploadState {

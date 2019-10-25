@@ -7,7 +7,8 @@ html {
 body {
   background: darken($main_bg_color, 12%);
   min-height: 100vh;
-  background: url('http://vault48.org/pixmaps/texture.jpg');
+  // background: url('http://vault48.org/pixmaps/texture.jpg');
+  background: url('../../src/sprites/noise.png') $main_bg_color;
   color: $main_text_color;
   font: $font_16_regular;
   -webkit-font-smoothing: antialiased;
@@ -18,12 +19,14 @@ body {
   &::before {
     content: '';
     position: absolute;
-    height: 400px;
+    height: 600px;
     width: 100%;
     top: 0;
     left: 0;
     z-index: -1;
-    background: url('http://vault48.org/pixmaps/texture_alt.jpg');
+    // background: url('http://vault48.org/pixmaps/texture_alt.jpg');
+    background: url('../../src/sprites/noise_top.png') 0% 0%;
+    background-size: 600px 600px;
     pointer-events: none;
   }
 }
@@ -74,6 +77,10 @@ body {
 
 :global(.footer) {
   height: 40px;
+}
+
+:global(.grey) {
+  color: #555555;
 }
 
 :global(h2) {

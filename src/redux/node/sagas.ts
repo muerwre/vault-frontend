@@ -1,7 +1,7 @@
-import { takeLatest, call, put, select, delay } from 'redux-saga/effects';
+import { takeLatest, call, put, select, delay, all } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
-import { NODE_ACTIONS, EMPTY_NODE, EMPTY_COMMENT } from './constants';
+import { NODE_ACTIONS, EMPTY_NODE, EMPTY_COMMENT, NODE_EDITOR_DATA } from './constants';
 import {
   nodeSave,
   nodeSetSaveErrors,
@@ -15,16 +15,48 @@ import {
   nodeSetCommentData,
   nodeUpdateTags,
   nodeSetTags,
+  nodeCreate,
+  nodeSetEditor,
+  nodeEdit,
+  nodeLike,
+  nodeSetRelated,
 } from './actions';
-import { postNode, getNode, postNodeComment, getNodeComments, updateNodeTags } from './api';
+import {
+  postNode,
+  getNode,
+  postNodeComment,
+  getNodeComments,
+  updateNodeTags,
+  postNodeLike,
+  postNodeStar,
+  getNodeRelated,
+} from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
-import { modalSetShown } from '../modal/actions';
+import { modalSetShown, modalShowDialog } from '../modal/actions';
 import { selectFlowNodes } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
 import { IResultWithStatus, INode } from '../types';
+import { NODE_EDITOR_DIALOGS, DIALOGS } from '../modal/constants';
+import { INodeState } from './reducer';
+import { IFlowState } from '../flow/reducer';
+
+export function* updateNodeEverywhere(node) {
+  const {
+    current: { id },
+  }: INodeState = yield select(selectNode);
+  const flow_nodes: IFlowState['nodes'] = yield select(selectFlowNodes);
+
+  if (id === node.id) {
+    yield put(nodeSetCurrent(node));
+  }
+
+  yield put(
+    flowSetNodes(flow_nodes.map(flow_node => (flow_node.id === node.id ? node : flow_node)))
+  );
+}
 
 function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   yield put(nodeSetSaveErrors({}));
@@ -42,7 +74,18 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   }
 
   const nodes = yield select(selectFlowNodes);
-  yield put(flowSetNodes([result, ...nodes]));
+  const updated_flow_nodes = node.id
+    ? nodes.map(item => (item.id === result.id ? result : item))
+    : [result, ...nodes];
+
+  yield put(flowSetNodes(updated_flow_nodes));
+
+  const { current } = yield select(selectNode);
+
+  if (node.id && current.id === result.id) {
+    yield put(nodeSetCurrent(result));
+  }
+
   return yield put(modalSetShown(false));
 }
 
@@ -51,6 +94,7 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetLoadingComments(true));
   yield put(nodeSetSaveErrors({}));
   yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
+  yield put(nodeSetRelated(null));
 
   if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
 
@@ -58,7 +102,7 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
 
   const {
     data: { node, error },
-  } = yield call(getNode, { id });
+  } = yield call(reqWrapper, getNode, { id });
 
   yield put(nodeSetLoading(false));
 
@@ -71,11 +115,19 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
 
   // todo: load comments
   const {
-    data: { comments },
-  } = yield call(reqWrapper, getNodeComments, { id });
+    comments: {
+      data: { comments },
+    },
+    related: {
+      data: { related },
+    },
+  } = yield all({
+    comments: call(reqWrapper, getNodeComments, { id }),
+    related: call(reqWrapper, getNodeRelated, { id }),
+  });
 
   yield put(nodeSetComments(comments || []));
-
+  yield put(nodeSetRelated(related || []));
   yield put(nodeSetLoadingComments(false));
 
   return;
@@ -100,7 +152,7 @@ function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
   if (current_node && current_node.id === current.id) {
     // if user still browsing that node
     const { comments } = yield select(selectNode);
-    yield put(nodeSetComments([comment, ...comments]));
+    yield put(nodeSetComments([...comments, comment]));
     yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
   }
 }
@@ -118,9 +170,67 @@ function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
   yield put(nodeSetTags(node.tags));
 }
 
+function* onCreateSaga({ node_type: type }: ReturnType<typeof nodeCreate>) {
+  if (!NODE_EDITOR_DIALOGS[type]) return;
+
+  yield put(nodeSetEditor({ ...EMPTY_NODE, ...(NODE_EDITOR_DATA[type] || {}), type }));
+  yield put(modalShowDialog(NODE_EDITOR_DIALOGS[type]));
+}
+
+function* onEditSaga({ id }: ReturnType<typeof nodeEdit>) {
+  yield put(modalShowDialog(DIALOGS.LOADING));
+
+  const {
+    data: { node },
+    error,
+  } = yield call(reqWrapper, getNode, { id });
+
+  if (error || !node || !node.type || !NODE_EDITOR_DIALOGS[node.type])
+    return yield put(modalSetShown(false));
+
+  yield put(nodeSetEditor(node));
+  yield put(modalShowDialog(NODE_EDITOR_DIALOGS[node.type]));
+
+  return true;
+}
+
+function* onLikeSaga({ id }: ReturnType<typeof nodeLike>) {
+  const {
+    current,
+    current: { is_liked },
+  } = yield select(selectNode);
+
+  yield call(updateNodeEverywhere, { ...current, is_liked: !is_liked });
+
+  const { data, error } = yield call(reqWrapper, postNodeLike, { id });
+
+  if (!error || data.is_liked === !is_liked) return; // ok and matches
+
+  yield call(updateNodeEverywhere, { ...current, is_liked });
+}
+
+function* onStarSaga({ id }: ReturnType<typeof nodeLike>) {
+  const {
+    current,
+    current: { is_heroic },
+  } = yield select(selectNode);
+
+  yield call(updateNodeEverywhere, { ...current, is_heroic: !is_heroic });
+
+  const { data, error } = yield call(reqWrapper, postNodeStar, { id });
+
+  if (!error || data.is_heroic === !is_heroic) return; // ok and matches
+
+  yield call(updateNodeEverywhere, { ...current, is_heroic });
+}
+
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
   yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
+  yield takeLatest(NODE_ACTIONS.CREATE, onCreateSaga);
+  yield takeLatest(NODE_ACTIONS.EDIT, onEditSaga);
+  yield takeLatest(NODE_ACTIONS.LIKE, onLikeSaga);
+  yield takeLatest(NODE_ACTIONS.STAR, onStarSaga);
 }

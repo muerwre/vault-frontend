@@ -1,17 +1,21 @@
-import React, { FC, ChangeEventHandler } from 'react';
+import React, { FC, createElement } from 'react';
 import * as styles from './styles.scss';
 import { INode } from '~/redux/types';
-import { EditorUploadButton } from '~/components/editors/EditorUploadButton';
+import { NODE_PANEL_COMPONENTS } from '~/redux/node/constants';
 
 interface IProps {
   data: INode;
   setData: (val: INode) => void;
-  onUpload: ChangeEventHandler<HTMLInputElement>;
+  temp: string[];
+  setTemp: (val: string[]) => void;
 }
 
-const EditorPanel: FC<IProps> = ({ onUpload }) => (
+const EditorPanel: FC<IProps> = ({ data, setData, temp, setTemp }) => (
   <div className={styles.panel}>
-    <EditorUploadButton onUpload={onUpload} />
+    {NODE_PANEL_COMPONENTS[data.type] &&
+      NODE_PANEL_COMPONENTS[data.type].map((el, key) =>
+        createElement(el, { key, data, setData, temp, setTemp })
+      )}
   </div>
 );
 

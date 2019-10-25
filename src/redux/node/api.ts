@@ -1,7 +1,8 @@
 import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils/api';
 import { INode, IResultWithStatus, IComment } from '../types';
 import { API } from '~/constants/api';
-import { nodeUpdateTags } from './actions';
+import { nodeUpdateTags, nodeLike, nodeStar } from './actions';
+import { INodeState } from './reducer';
 
 export const postNode = ({
   access,
@@ -14,6 +15,7 @@ export const postNode = ({
     .post(API.NODE.SAVE, { node }, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
+// .then(console.log);
 
 export const getNodes = ({
   skip = 0,
@@ -27,11 +29,13 @@ export const getNodes = ({
 
 export const getNode = ({
   id,
+  access,
 }: {
   id: string | number;
+  access: string;
 }): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
   api
-    .get(API.NODE.GET_NODE(id))
+    .get(API.NODE.GET_NODE(id), configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 
@@ -55,9 +59,21 @@ export const getNodeComments = ({
 }: {
   id: number;
   access: string;
-}): Promise<IResultWithStatus<{ comment: Comment }>> =>
+}): Promise<IResultWithStatus<{ comments: Comment[] }>> =>
   api
     .get(API.NODE.COMMENT(id), configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const getNodeRelated = ({
+  id,
+  access,
+}: {
+  id: number;
+  access: string;
+}): Promise<IResultWithStatus<{ related: INodeState['related'] }>> =>
+  api
+    .get(API.NODE.RELATED(id), configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 
@@ -70,5 +86,27 @@ export const updateNodeTags = ({
 > =>
   api
     .post(API.NODE.UPDATE_TAGS(id), { tags }, configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const postNodeLike = ({
+  id,
+  access,
+}: ReturnType<typeof nodeLike> & { access: string }): Promise<
+  IResultWithStatus<{ is_liked: INode['is_liked'] }>
+> =>
+  api
+    .post(API.NODE.POST_LIKE(id), {}, configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const postNodeStar = ({
+  id,
+  access,
+}: ReturnType<typeof nodeStar> & { access: string }): Promise<
+  IResultWithStatus<{ is_liked: INode['is_liked'] }>
+> =>
+  api
+    .post(API.NODE.POST_STAR(id), {}, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);

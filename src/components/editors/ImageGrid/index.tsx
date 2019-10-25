@@ -1,59 +1,39 @@
-import React, { FC, useCallback, ChangeEventHandler, DragEventHandler } from 'react';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import React, { FC, useCallback } from 'react';
+import { SortEnd } from 'react-sortable-hoc';
 import * as styles from './styles.scss';
-import { ImageUpload } from '~/components/upload/ImageUpload';
 import { IFile } from '~/redux/types';
 import { IUploadStatus } from '~/redux/uploads/reducer';
-import { getURL } from '~/utils/dom';
+import { moveArrItem } from '~/utils/fn';
+import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 
 interface IProps {
-  items: IFile[];
+  files: IFile[];
+  setFiles: (val: IFile[]) => void;
   locked: IUploadStatus[];
-  onFileMove: (o: number, n: number) => void;
-  onUpload?: ChangeEventHandler<HTMLInputElement>;
 }
 
-const SortableItem = SortableElement(({ children }) => (
-  <div className={styles.item}>{children}</div>
-));
+const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
+  const onMove = useCallback(
+    ({ oldIndex, newIndex }: SortEnd) => {
+      setFiles(moveArrItem(oldIndex, newIndex, files.filter(file => !!file)) as IFile[]);
+    },
+    [setFiles, files]
+  );
 
-const SortableList = SortableContainer(
-  ({
-    items,
-    locked,
-  }: {
-    items: IFile[];
-    locked: IUploadStatus[];
-    onUpload: ChangeEventHandler<HTMLInputElement>;
-  }) => (
-    <div className={styles.grid}>
-      {items.map((file, index) => (
-        <SortableItem key={file.id} index={index} collection={0}>
-          <ImageUpload id={file.id} thumb={getURL(file)} />
-        </SortableItem>
-      ))}
-
-      {locked.map((item, index) => (
-        <SortableItem key={item.temp_id} index={index} collection={1} disabled>
-          <ImageUpload thumb={item.preview} progress={item.progress} is_uploading />
-        </SortableItem>
-      ))}
-    </div>
-  )
-);
-
-const ImageGrid: FC<IProps> = ({ items, locked, onFileMove, onUpload }) => {
-  const onMove = useCallback(({ oldIndex, newIndex }) => onFileMove(oldIndex, newIndex), [
-    onFileMove,
-  ]);
+  const onDrop = useCallback(
+    (remove_id: IFile['id']) => {
+      setFiles(files.filter(file => file && file.id !== remove_id));
+    },
+    [setFiles, files]
+  );
 
   return (
-    <SortableList
+    <SortableImageGrid
+      onDrop={onDrop}
       onSortEnd={onMove}
       axis="xy"
-      items={items}
+      items={files}
       locked={locked}
-      onUpload={onUpload}
       pressDelay={window.innerWidth < 768 ? 200 : 0}
       helperClass={styles.helper}
     />

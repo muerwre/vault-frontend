@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import * as styles from './styles.scss';
 import { Group } from '~/components/containers/Group';
 import { Filler } from '~/components/containers/Filler';
@@ -7,27 +7,61 @@ import { INode } from '~/redux/types';
 import classNames from 'classnames';
 
 interface IProps {
-  node: INode;
+  node: Partial<INode>;
   stack?: boolean;
+
+  can_edit: boolean;
+  can_like: boolean;
+  can_star: boolean;
+  onEdit: () => void;
+  onLike: () => void;
+  onStar: () => void;
 }
 
-const NodePanelInner: FC<IProps> = ({ node: { title, user }, stack }) => {
+const NodePanelInner: FC<IProps> = ({
+  node: { title, user, is_liked, is_heroic },
+  stack,
+  can_star,
+  can_edit,
+  can_like,
+  onStar,
+  onEdit,
+  onLike,
+}) => {
   return (
     <div className={classNames(styles.wrap, { stack })}>
       <div className={styles.content}>
         <Group horizontal className={styles.panel}>
           <Filler>
             <div className={styles.title}>{title || '...'}</div>
-            {user && user.username && <div className={styles.name}>~ {user.username}</div>}
+            {user && user.username && <div className={styles.name}>~{user.username}</div>}
           </Filler>
         </Group>
 
         <div className={styles.buttons}>
-          <Icon icon="edit" size={24} />
-
-          <div className={styles.sep} />
-
-          <Icon icon="heart" size={24} />
+          {can_star && (
+            <div className={classNames(styles.star, { is_heroic })}>
+              {is_heroic ? (
+                <Icon icon="star_full" size={24} onClick={onStar} />
+              ) : (
+                <Icon icon="star" size={24} onClick={onStar} />
+              )}
+            </div>
+          )}
+          {can_edit && (
+            <div>
+              <Icon icon="edit" size={24} onClick={onEdit} />
+            </div>
+          )}
+          {can_like && (
+            <div className={classNames(styles.like, { is_liked })}>
+              {is_liked ? (
+                <Icon icon="heart_full" size={24} onClick={onLike} />
+              ) : (
+                <Icon icon="heart" size={24} onClick={onLike} />
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

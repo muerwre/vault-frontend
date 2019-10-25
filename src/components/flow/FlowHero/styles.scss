@@ -1,0 +1,124 @@
+// @keyframes rise {
+//   0% {
+//     transform: translate(0, 0);
+//   }
+//   100% {
+//     transform: translate(0, -10%);
+//   }
+// }
+
+.wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: $content_bg;
+  border-radius: $cell_radius;
+  overflow: hidden;
+
+  &::after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('~/sprites/stripes.svg') rgba(0, 0, 0, 0.3);
+    z-index: 4;
+    pointer-events: none;
+    touch-action: none;
+  }
+}
+
+.hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 150%;
+  display: none;
+  transition: opacity 2s, transform linear 5s 2s;
+  background: 50% 50% no-repeat;
+  background-size: cover;
+  border-radius: $cell_radius;
+  z-index: 2;
+  opacity: 0;
+  cursor: pointer;
+  transform: translate(0, 0);
+
+  img {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    touch-action: none;
+  }
+
+  &.is_visible {
+    display: block;
+  }
+
+  &.is_active {
+    opacity: 1;
+    z-index: 3;
+    will-change: transform;
+    // animation: rise 5s forwards;
+    transform: translate(0, -10%);
+    transition: opacity 2s, transform linear 5s;
+  }
+}
+
+.info {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  padding: $gap;
+  box-sizing: border-box;
+  z-index: 5;
+  flex-direction: row;
+}
+
+.title_wrap {
+  flex: 1;
+  white-space: nowrap;
+  display: flex;
+  margin-right: $gap;
+  overflow: hidden;
+}
+
+.title {
+  flex: 0;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $gap;
+  border-radius: $radius;
+  font: $font_hero_title;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.7);
+  flex-direction: row;
+  width: 96px;
+  border-radius: $radius;
+
+  .button {
+    cursor: pointer;
+    flex: 0 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}

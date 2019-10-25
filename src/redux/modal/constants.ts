@@ -1,7 +1,11 @@
 import { ValueOf } from '~/redux/types';
-import { HorizontalExample } from '~/containers/examples/HorizontalExample';
-import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { LoginDialog } from '~/containers/dialogs/LoginDialog';
+import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
+import { EditorDialogImage } from '~/containers/editors/EditorDialogImage';
+import { EditorDialogText } from '~/containers/editors/EditorDialogText';
+import { EditorDialogVideo } from '~/containers/editors/EditorDialogVideo';
+import { EditorDialogAudio } from '~/containers/editors/EditorDialogAudio';
+import { NODE_TYPES } from '../node/constants';
 
 export const MODAL_ACTIONS = {
   SET_SHOWN: 'MODAL.SET_SHOWN',
@@ -10,13 +14,28 @@ export const MODAL_ACTIONS = {
 };
 
 export const DIALOGS = {
-  EDITOR: 'EDITOR',
+  EDITOR_IMAGE: 'EDITOR_IMAGE',
+  EDITOR_TEXT: 'EDITOR_TEXT',
+  EDITOR_VIDEO: 'EDITOR_VIDEO',
+  EDITOR_AUDIO: 'EDITOR_AUDIO',
   LOGIN: 'LOGIN',
+  LOADING: 'LOADING',
 };
 
 export const DIALOG_CONTENT = {
-  [DIALOGS.EDITOR]: EditorDialog,
+  [DIALOGS.EDITOR_IMAGE]: EditorDialogImage,
+  [DIALOGS.EDITOR_TEXT]: EditorDialogText,
+  [DIALOGS.EDITOR_VIDEO]: EditorDialogVideo,
+  [DIALOGS.EDITOR_AUDIO]: EditorDialogAudio,
   [DIALOGS.LOGIN]: LoginDialog,
+  [DIALOGS.LOADING]: LoadingDialog,
+};
+
+export const NODE_EDITOR_DIALOGS = {
+  [NODE_TYPES.IMAGE]: DIALOGS.EDITOR_IMAGE,
+  [NODE_TYPES.TEXT]: DIALOGS.EDITOR_TEXT,
+  [NODE_TYPES.VIDEO]: DIALOGS.EDITOR_VIDEO,
+  [NODE_TYPES.AUDIO]: DIALOGS.EDITOR_AUDIO,
 };
 
 export interface IDialogProps {

@@ -1,11 +1,12 @@
 @import 'colors';
 
-$cell: 320px;
-$grid_line: 4px;
-$content_width: $cell * 4 + $grid_line * 3;
+$cell: 280px;
 $gap: 10px;
+$grid_line: 5px;
+$content_width: $cell * 5 + $grid_line * 4;
 $spc: $gap * 2;
 $comment_height: 72px;
+$bar_height: 64px;
 
 $radius: 8px;
 $cell_radius: $radius;
@@ -24,6 +25,8 @@ $regular: 400;
 $medium: 500;
 $light: 300;
 $extra_light: 200;
+
+$upload_button_height: 52px;
 
 $font: Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
   'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
@@ -51,8 +54,8 @@ $font_10_semibold: $semibold 10px $font;
 $font_8_regular: $regular 8px $font;
 $font_8_semibold: $semibold 8px $font;
 
-$font_cell_title: $font_24_bold;
-$font_hero_title: $font_48_semibold;
+$font_cell_title: $bold 30px $font;
+$font_hero_title: $bold 40px $font;
 
 $shadow_depth_1: transparentize(black, 0.8) 0 1px, inset transparentize(white, 0.98) 0 1px;
 $shadow_depth_2: transparentize(black, 0.8) 0 2px, inset transparentize(white, 0.98) 0 1px;
@@ -60,14 +63,14 @@ $shadow_depth_2: transparentize(black, 0.8) 0 2px, inset transparentize(white, 0
 $comment_shadow: $shadow_depth_2;
 $node_shadow: transparentize(black, 0.8) 0 2px, transparentize(black, 0.8) 0 2px 4px;
 
-$tag_height: 22px;
+$tag_height: 26px;
 
 $input_shadow: inset transparentize(white, 0.9) 0 0 0 1px;
 $input_shadow_error: inset $red 0 0 0 1px;
 $input_shadow_filled: $input_shadow;
 
 @mixin outer_shadow() {
-  box-shadow: inset transparentize(white, 0.95) 0 1px, transparentize(black, 0.8) 0 3px;
+  box-shadow: inset transparentize(white, 0.95) 0 1px, transparentize(black, 0.8) -1px -1px;
 }
 
 @mixin inner_shadow() {
@@ -105,11 +108,18 @@ $input_shadow_filled: $input_shadow;
 }
 
 @mixin phone {
-  @content;
+  @media (max-width: 320px) {
+    @content;
+  }
 }
 
 @mixin tablet {
   @media (max-width: 599px) {
+    @content;
+  }
+}
+@mixin desktop {
+  @media (max-width: $content_width) {
     @content;
   }
 }

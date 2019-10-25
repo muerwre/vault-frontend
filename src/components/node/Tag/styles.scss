@@ -1,4 +1,6 @@
 .tag {
+  @include outer_shadow();
+
   height: $tag_height;
   background: $tag_bg;
   display: flex;
@@ -9,8 +11,8 @@
   font: $font_14_semibold;
   align-self: flex-start;
   padding: 0 8px 0 0;
-  box-shadow: $shadow_depth_2;
-  margin: ($gap / 2) $gap ($gap / 2) 0;
+  // box-shadow: $shadow_depth_2;
+  margin: 0 $gap $gap 0;
   position: relative;
 
   &:global(.is_hoverable) {
@@ -64,7 +66,7 @@
     top: 0;
     bottom: 0;
     width: 100%;
-    padding-left: 23px;
+    padding-left: $tag_height;
     padding-right: 5px;
     box-sizing: border-box;
   }
@@ -74,10 +76,10 @@
   width: $tag_height;
   height: $tag_height;
   display: flex;
-  margin-right: 3px;
+  // padding-right: 0px;
   align-items: center;
   justify-content: center;
-  flex: 0 0 22px;
+  flex: 0 0 $tag_height;
 
   &::after {
     content: ' ';

@@ -8,11 +8,47 @@ $cols: $content_width / $cell;
 .grid_test {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax($cell, 1fr));
-  grid-template-rows: $cell;
+  grid-template-rows: 50vh $cell;
   grid-auto-rows: $cell;
   grid-auto-flow: row dense;
   grid-column-gap: $grid_line;
   grid-row-gap: $grid_line;
+
+  @include tablet {
+    padding: 0 $gap;
+  }
+
+  @media (max-width: $cell * 6) {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 50vh 20vw;
+    grid-auto-rows: 20vw;
+  }
+
+  @media (max-width: $cell * 5) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 40vh 25vw;
+    grid-auto-rows: 25vw;
+  }
+
+  @media (max-width: $cell * 4) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 40vh 33vw;
+    grid-auto-rows: 33vw;
+  }
+
+  @media (max-width: $cell * 3) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 40vh 50vw;
+    grid-auto-rows: 50vw;
+  }
+
+  @media (max-width: $cell * 2) {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: 40vh 75vw;
+    grid-auto-rows: 75vw;
+    grid-column-gap: $gap;
+    grid-row-gap: $gap;
+  }
 }
 
 .pad_last {

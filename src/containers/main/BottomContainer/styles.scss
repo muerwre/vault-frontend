@@ -1,10 +1,10 @@
 .wrap {
   position: fixed;
   transform: translateZ(0);
-  bottom: $gap;
+  bottom: 0;
   pointer-events: none;
   touch-action: none;
-  height: 54px;
+  height: $bar_height;
   display: flex;
   z-index: 10;
   width: 100%;
@@ -18,7 +18,7 @@
 .content {
   position: relative;
   flex: 0 1 $content_width;
-  height: 48px;
+  height: $bar_height;
   display: flex;
   align-items: center;
   justify-content: flex-end;
