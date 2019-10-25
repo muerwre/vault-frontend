@@ -17,15 +17,6 @@
     grid-template-columns: repeat(6, 1fr);
   }
 }
-
-.item {
-  background: lighten($content_bg, 2%) 50% 50% no-repeat;
-  background-size: cover;
-  padding-bottom: 100%;
-  border-radius: $cell_radius;
-  cursor: pointer;
-}
-
 .title {
   font: $font_14_semibold;
   text-transform: uppercase;
