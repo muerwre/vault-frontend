@@ -12,6 +12,11 @@ export const flowSetHeroes = (heroes: IFlowState['heroes']) => ({
   type: FLOW_ACTIONS.SET_HEROES,
 });
 
+export const flowSetRecent = (recent: IFlowState['recent']) => ({
+  recent,
+  type: FLOW_ACTIONS.SET_RECENT,
+});
+
 export const flowSetCellView = (id: INode['id'], flow: INode['flow']) => ({
   type: FLOW_ACTIONS.SET_CELL_VIEW,
   id,

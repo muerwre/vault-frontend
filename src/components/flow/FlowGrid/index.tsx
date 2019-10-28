@@ -8,6 +8,7 @@ import { canEditNode } from '~/utils/node';
 import { IUser } from '~/redux/auth/types';
 import { flowSetCellView } from '~/redux/flow/actions';
 import { FlowHero } from '../FlowHero';
+import { FlowRecent } from '../FlowRecent';
 
 type IProps = Partial<IFlowState> & {
   user: Partial<IUser>;
@@ -15,13 +16,15 @@ type IProps = Partial<IFlowState> & {
   onChangeCellView: typeof flowSetCellView;
 };
 
-export const FlowGrid: FC<IProps> = ({ user, nodes, heroes, onSelect, onChangeCellView }) => (
+export const FlowGrid: FC<IProps> = ({ user, nodes, heroes, recent, onSelect, onChangeCellView }) => (
   <div>
     <div className={styles.grid_test}>
       <div className={styles.hero}>
         <FlowHero heroes={heroes} />
       </div>
-      <div className={styles.stamp}>STAMP</div>
+      <div className={styles.stamp}>
+        <FlowRecent />
+      </div>
 
       {nodes.map(node => (
         <Cell
