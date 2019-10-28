@@ -16,14 +16,21 @@ type IProps = Partial<IFlowState> & {
   onChangeCellView: typeof flowSetCellView;
 };
 
-export const FlowGrid: FC<IProps> = ({ user, nodes, heroes, recent, onSelect, onChangeCellView }) => (
+export const FlowGrid: FC<IProps> = ({
+  user,
+  nodes,
+  heroes,
+  recent,
+  onSelect,
+  onChangeCellView,
+}) => (
   <div>
     <div className={styles.grid_test}>
       <div className={styles.hero}>
         <FlowHero heroes={heroes} />
       </div>
       <div className={styles.stamp}>
-        <FlowRecent />
+        <FlowRecent recent={recent} />
       </div>
 
       {nodes.map(node => (
