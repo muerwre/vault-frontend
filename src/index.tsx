@@ -60,3 +60,21 @@ render(
   </Provider>,
   document.getElementById('app')
 );
+
+/*
+
+  - comment editing
+  - comment attach sorting and preview
+  - boris with comments
+  - profile modal
+  - profile editing
+  - social integration
+  - messages
+  - relocate files
+  - import videos
+  - import graffiti
+  - imagecaching at backend
+  
+  - notifications ?
+  - better node brief update
+*/
