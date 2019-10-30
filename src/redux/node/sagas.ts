@@ -32,10 +32,10 @@ import {
   getNodeRelated,
 } from './api';
 import { reqWrapper } from '../auth/sagas';
-import { flowSetNodes } from '../flow/actions';
+import { flowSetNodes, flowSetUpdated } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
 import { modalSetShown, modalShowDialog } from '../modal/actions';
-import { selectFlowNodes } from '../flow/selectors';
+import { selectFlowNodes, selectFlow } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
 import { IResultWithStatus, INode } from '../types';
@@ -129,6 +129,12 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetComments(comments || []));
   yield put(nodeSetRelated(related || []));
   yield put(nodeSetLoadingComments(false));
+
+  const { updated } = yield select(selectFlow);
+
+  if (updated.some(item => item.id === id)) {
+    yield put(flowSetUpdated(updated.filter(item => item.id !== id)));
+  }
 
   return;
 }
