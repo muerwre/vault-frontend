@@ -37,6 +37,11 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     [node]
   );
 
+  useEffect(() => {
+    setLoaded({});
+    refs.current = {};
+  }, [images]);
+
   const updateSizes = useCallback(() => {
     const values = Object.keys(refs.current).reduce((obj, key) => {
       const ref = refs.current[key];
@@ -53,7 +58,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     index => el => {
       refs.current[index] = el;
     },
-    [refs, heights, setHeights]
+    [refs, heights, setHeights, images]
   );
 
   const onImageLoad = useCallback(index => () => setLoaded({ ...loaded, [index]: true }), [
@@ -62,8 +67,8 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   ]);
 
   // update outside hooks
-  useEffect(() => updateLayout(), [loaded, height]);
-  useEffect(() => updateSizes(), [refs, current, loaded]);
+  useEffect(() => updateLayout(), [loaded, height, images]);
+  useEffect(() => updateSizes(), [refs, current, loaded, images]);
 
   useEffect(() => {
     if (!wrap || !wrap.current) return;
@@ -77,7 +82,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     if (current !== Math.round(selected)) setCurrent(Math.round(selected));
 
     setHeight(now);
-  }, [offset, heights, max_height]);
+  }, [offset, heights, max_height, images]);
 
   const onDrag = useCallback(
     event => {
@@ -136,7 +141,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     [setIsDragging, setInitialX, offset, setInitialOffset]
   );
 
-  useEffect(() => updateMaxHeight(), []);
+  useEffect(() => updateMaxHeight(), [images]);
 
   useEffect(() => {
     window.addEventListener('resize', updateSizes);

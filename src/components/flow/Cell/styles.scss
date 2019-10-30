@@ -59,6 +59,10 @@
 
   box-sizing: border-box;
   word-break: break-word;
+
+  @media (max-width: $cell * 2) {
+    font: $font_18_semibold;
+  }
 }
 
 .title {
@@ -221,6 +225,7 @@
   @media (max-width: $cell * 2 + $grid_line) {
     right: 0;
     top: 0;
+    display: none;
   }
 }
 
