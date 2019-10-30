@@ -129,8 +129,9 @@ export interface INode {
 
   tags: ITag[];
 
-  createdAt?: string;
-  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
+  commented_at?: string;
 }
 
 export interface IComment {

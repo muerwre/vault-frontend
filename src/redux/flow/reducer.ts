@@ -7,6 +7,7 @@ export type IFlowState = Readonly<{
   nodes: INode[];
   heroes: Partial<INode>[];
   recent: Partial<INode>[];
+  updated: Partial<INode>[];
   error: IError;
 }>;
 
@@ -14,6 +15,7 @@ const INITIAL_STATE: IFlowState = {
   nodes: [],
   heroes: [],
   recent: [],
+  updated: [],
   is_loading: false,
   error: null,
 };

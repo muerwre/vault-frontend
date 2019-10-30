@@ -21,6 +21,7 @@ export const FlowGrid: FC<IProps> = ({
   nodes,
   heroes,
   recent,
+  updated,
   onSelect,
   onChangeCellView,
 }) => (
@@ -30,7 +31,7 @@ export const FlowGrid: FC<IProps> = ({
         <FlowHero heroes={heroes} />
       </div>
       <div className={styles.stamp}>
-        <FlowRecent recent={recent} />
+        <FlowRecent recent={recent} updated={updated} />
       </div>
 
       {nodes.map(node => (

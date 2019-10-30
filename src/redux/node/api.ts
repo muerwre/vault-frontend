@@ -19,11 +19,13 @@ export const postNode = ({
 
 export const getNodes = ({
   skip = 0,
+  access,
 }: {
   skip?: number;
+  access: string;
 }): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
   api
-    .get(API.NODE.GET, { params: { skip } })
+    .get(API.NODE.GET, configWithToken(access, { params: { skip } }))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 

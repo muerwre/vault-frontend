@@ -8,7 +8,7 @@ import pick from 'ramda/es/pick';
 import { selectUser } from '~/redux/auth/selectors';
 
 const mapStateToProps = state => ({
-  flow: pick(['nodes', 'heroes', 'recent'], selectFlow(state)),
+  flow: pick(['nodes', 'heroes', 'recent', 'updated'], selectFlow(state)),
   user: pick(['role', 'id'], selectUser(state)),
 });
 
@@ -20,7 +20,7 @@ const mapDispatchToProps = {
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const FlowLayoutUnconnected: FC<IProps> = ({
-  flow: { nodes, heroes, recent },
+  flow: { nodes, heroes, recent, updated },
   user,
   nodeLoadNode,
   flowSetCellView,
@@ -29,6 +29,7 @@ const FlowLayoutUnconnected: FC<IProps> = ({
     nodes={nodes}
     heroes={heroes}
     recent={recent}
+    updated={updated}
     onSelect={nodeLoadNode}
     user={user}
     onChangeCellView={flowSetCellView}

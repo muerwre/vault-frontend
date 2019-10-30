@@ -17,6 +17,11 @@ export const flowSetRecent = (recent: IFlowState['recent']) => ({
   type: FLOW_ACTIONS.SET_RECENT,
 });
 
+export const flowSetUpdated = (updated: IFlowState['updated']) => ({
+  updated,
+  type: FLOW_ACTIONS.SET_UPDATED,
+});
+
 export const flowSetCellView = (id: INode['id'], flow: INode['flow']) => ({
   type: FLOW_ACTIONS.SET_CELL_VIEW,
   id,
