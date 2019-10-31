@@ -8,9 +8,14 @@ $stamp_color: $content_bg;
 
 .grid_test {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax($cell, 1fr));
-  grid-template-rows: 50vh $cell;
-  grid-auto-rows: $cell;
+  // grid-template-columns: repeat(auto-fit, minmax($cell, 1fr));
+  // grid-template-rows: 50vh $cell;
+  // grid-auto-rows: $cell;
+
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 50vh 20vw;
+  grid-auto-rows: 20vw;
+
   grid-auto-flow: row dense;
   grid-column-gap: $gap;
   grid-row-gap: $gap;
