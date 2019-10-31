@@ -74,7 +74,10 @@ render(
   - import videos
   - import graffiti
   - imagecaching at backend
-  
+  - password restore
+  - signup?
+  - text post can also has songs http://vault48.org/post5052
+
   - notifications ?
   - better node brief update
 */
