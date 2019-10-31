@@ -182,9 +182,9 @@
     .vertical > &.has_text {
       top: auto;
       bottom: 0;
-      height: 50%;
+      max-height: 50%;
       max-width: 100%;
-      // height: auto;
+      height: auto;
       width: auto;
       padding: ($grid_line / 2) $grid_line $grid_line $grid_line;
     }
@@ -203,9 +203,9 @@
     .quadro > &.has_text {
       padding: ($grid_line / 2) ($grid_line / 2) $grid_line $grid_line;
       top: auto;
-      height: 50%;
+      max-height: 50%;
       max-width: 50%;
-      // height: auto;
+      height: auto;
       width: auto;
       bottom: 0;
       left: 0;

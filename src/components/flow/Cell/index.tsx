@@ -29,8 +29,11 @@ const Cell: FC<IProps> = ({
   }, [setIsLoaded]);
 
   const onClick = useCallback(() => onSelect(id, type), [onSelect, id, type]);
+  const has_description = description && description.length > 160;
 
-  const text = (((flow && !!flow.show_description) || type === 'text') && description) || null;
+  const text =
+    (((flow && !!flow.show_description) || type === 'text') && has_description && description) ||
+    null;
 
   const toggleViewDescription = useCallback(() => {
     const show_description = !(flow && flow.show_description);
@@ -71,8 +74,12 @@ const Cell: FC<IProps> = ({
           </div>
 
           <div className={styles.menu_content}>
-            <Icon icon="text" onClick={toggleViewDescription} />
-            <div className={styles.menu_sep} />
+            {has_description && (
+              <>
+                <Icon icon="text" onClick={toggleViewDescription} />
+                <div className={styles.menu_sep} />
+              </>
+            )}
             <Icon icon="cell-single" onClick={setViewSingle} />
             <Icon icon="cell-double-h" onClick={setViewHorizontal} />
             <Icon icon="cell-double-v" onClick={setViewVertical} />
