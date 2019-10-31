@@ -1,6 +1,6 @@
 import React, { FC, useState, useCallback, useEffect } from 'react';
 import { INode } from '~/redux/types';
-import { getURL } from '~/utils/dom';
+import { getURL, formatCellText } from '~/utils/dom';
 import classNames from 'classnames';
 
 import * as styles from './styles.scss';
@@ -84,7 +84,12 @@ const Cell: FC<IProps> = ({
       <div className={classNames(styles.face, { [styles.has_text]: text })}>
         <div className={styles.face_content}>
           {title && <div className={styles.title}>{title}</div>}
-          {text && <div className={styles.text}>{text}</div>}
+          {text && (
+            <div
+              className={styles.text}
+              dangerouslySetInnerHTML={{ __html: formatCellText(text) }}
+            />
+          )}
         </div>
       </div>
 

@@ -95,6 +95,8 @@ export const formatCommentText = (author: string, text: string): string =>
       )
     : '';
 
+export const formatCellText = (text: string): string => formatText(text);
+
 export const getPrettyDate = (date: string): string =>
   formatDistanceToNow(new Date(date), { locale: ru, includeSeconds: true, addSuffix: true });
 

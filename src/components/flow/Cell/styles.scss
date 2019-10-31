@@ -28,7 +28,11 @@
   font: $font_18_regular;
   line-height: 22px;
   margin-top: $gap;
-  letter-spacing: 0.5px;
+  // letter-spacing: 0.5px;
+
+  p {
+    margin-bottom: $gap;
+  }
 
   &::after {
     content: ' ';
@@ -153,9 +157,21 @@
 
       .face_content {
         padding: $gap;
-        background: rgba(25, 25, 25, 0.8);
+        background: rgba(25, 25, 25, 0.9);
         border-radius: $radius;
         overflow: hidden;
+        position: relative;
+
+        &:after {
+          content: '';
+          background: linear-gradient(transparentize($content_bg, 1), $content_bg);
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 50px;
+          width: 100%;
+          border-radius: 0 0 $cell_radius $cell_radius;
+        }
       }
 
       .text::after {
