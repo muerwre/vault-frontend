@@ -24,11 +24,13 @@ type Props = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & {
     file: IFile;
     nonInteractive?: boolean;
+    onDrop?: (id: IFile['id']) => void;
   };
 
 const AudioPlayerUnconnected = memo(
   ({
     file,
+    onDrop,
     nonInteractive,
     player: { file: current, status },
     playerSetFileAndPlay,
@@ -72,6 +74,12 @@ const AudioPlayerUnconnected = memo(
       [playerSeek]
     );
 
+    const onDropClick = useCallback(() => {
+      if (!onDrop) return;
+
+      onDrop(file.id);
+    }, [file, onDrop]);
+
     useEffect(() => {
       const active = current && current.id === file.id;
       setPlaying(current && current.id === file.id);
@@ -90,6 +98,12 @@ const AudioPlayerUnconnected = memo(
 
     return (
       <div onClick={onPlay} className={classNames(styles.wrap, { playing })}>
+        {onDrop && (
+          <div className={styles.drop} onMouseDown={onDropClick}>
+            <Icon icon="close" />
+          </div>
+        )}
+
         <div className={styles.playpause}>
           {playing && status === PLAYER_STATES.PLAYING ? (
             <Icon icon="pause" />
@@ -97,6 +111,7 @@ const AudioPlayerUnconnected = memo(
             <Icon icon="play" />
           )}
         </div>
+
         <div className={styles.content}>
           <div className={styles.title}>{title || 'Unknown'}</div>
 

@@ -202,26 +202,30 @@ const CommentFormUnconnected: FC<IProps> = ({
 
         {(!!images.length || !!audios.length) && (
           <div className={styles.attaches}>
-            <SortableImageGrid
-              onDrop={onFileDrop}
-              onSortEnd={onImageMove}
-              axis="xy"
-              items={images}
-              locked={locked_images}
-              pressDelay={50}
-              helperClass={styles.helper}
-              size={120}
-            />
+            {!!images.length && (
+              <SortableImageGrid
+                onDrop={onFileDrop}
+                onSortEnd={onImageMove}
+                axis="xy"
+                items={images}
+                locked={locked_images}
+                pressDelay={50}
+                helperClass={styles.helper}
+                size={120}
+              />
+            )}
 
-            <SortableAudioGrid
-              items={audios}
-              onDrop={onFileDrop}
-              onSortEnd={onAudioMove}
-              axis="y"
-              locked={[]}
-              pressDelay={50}
-              helperClass={styles.helper}
-            />
+            {!!audios.length && (
+              <SortableAudioGrid
+                items={audios}
+                onDrop={onFileDrop}
+                onSortEnd={onAudioMove}
+                axis="y"
+                locked={[]}
+                pressDelay={50}
+                helperClass={styles.helper}
+              />
+            )}
           </div>
         )}
 
