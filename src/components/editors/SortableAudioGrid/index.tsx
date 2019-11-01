@@ -22,7 +22,7 @@ const SortableAudioGrid = SortableContainer(
         .filter(file => file && file.id)
         .map((file, index) => (
           <SortableImageGridItem key={file.id} index={index} collection={0}>
-            <AudioPlayer file={file} onDrop={onDrop} />
+            <AudioPlayer file={file} onDrop={onDrop} nonInteractive />
           </SortableImageGridItem>
         ))}
 

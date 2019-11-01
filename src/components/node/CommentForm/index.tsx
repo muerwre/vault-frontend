@@ -24,6 +24,7 @@ import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 import { moveArrItem } from '~/utils/fn';
 import { SortEnd } from 'react-sortable-hoc';
+import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -105,7 +106,7 @@ const CommentFormUnconnected: FC<IProps> = ({
     const added_files = temp_ids
       .map(temp_uuid => statuses[temp_uuid] && statuses[temp_uuid].uuid)
       .map(el => !!el && files[el])
-      .filter(el => !!el && !comment_data[id].files.some(file => file.id === el.id));
+      .filter(el => !!el && !comment_data[id].files.some(file => file && file.id === el.id));
 
     const filtered_temps = temp_ids.filter(
       temp_id =>
@@ -124,13 +125,23 @@ const CommentFormUnconnected: FC<IProps> = ({
 
   const comment = comment_data[id];
 
-  const images = useMemo(() => comment.files.filter(file => file.type === UPLOAD_TYPES.IMAGE), [
-    comment.files,
-  ]);
+  const images = useMemo(
+    () => comment.files.filter(file => file && file.type === UPLOAD_TYPES.IMAGE),
+    [comment.files]
+  );
 
-  const audios = useMemo(() => comment.files.filter(file => file.type === UPLOAD_TYPES.AUDIO), [
-    comment.files,
-  ]);
+  const locked_images = useMemo(
+    () =>
+      comment.temp_ids
+        .filter(temp => statuses[temp] && statuses[temp].type === UPLOAD_TYPES.IMAGE)
+        .map(temp_id => statuses[temp_id]),
+    [statuses, comment.temp_ids]
+  );
+
+  const audios = useMemo(
+    () => comment.files.filter(file => file && file.type === UPLOAD_TYPES.AUDIO),
+    [comment.files]
+  );
 
   const onFileDrop = useCallback(
     (file_id: IFile['id']) => {
@@ -159,6 +170,23 @@ const CommentFormUnconnected: FC<IProps> = ({
     [images, audios]
   );
 
+  const onAudioMove = useCallback(
+    ({ oldIndex, newIndex }: SortEnd) => {
+      nodeSetCommentData(
+        id,
+        assocPath(
+          ['files'],
+          [
+            ...images,
+            ...(moveArrItem(oldIndex, newIndex, audios.filter(file => !!file)) as IFile[]),
+          ],
+          comment_data[id]
+        )
+      );
+    },
+    [images, audios]
+  );
+
   return (
     <CommentWrapper user={user}>
       <form onSubmit={onSubmit} className={styles.wrap}>
@@ -179,15 +207,21 @@ const CommentFormUnconnected: FC<IProps> = ({
               onSortEnd={onImageMove}
               axis="xy"
               items={images}
-              locked={[]}
-              pressDelay={window.innerWidth < 768 ? 200 : 0}
+              locked={locked_images}
+              pressDelay={50}
               helperClass={styles.helper}
               size={120}
             />
 
-            {audios.map(file => (
-              <AudioPlayer file={file} key={file.id} />
-            ))}
+            <SortableAudioGrid
+              items={audios}
+              onDrop={onFileDrop}
+              onSortEnd={onAudioMove}
+              axis="y"
+              locked={[]}
+              pressDelay={50}
+              helperClass={styles.helper}
+            />
           </div>
         )}
 

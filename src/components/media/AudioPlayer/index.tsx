@@ -23,11 +23,13 @@ const mapDispatchToProps = {
 type Props = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & {
     file: IFile;
+    nonInteractive?: boolean;
   };
 
 const AudioPlayerUnconnected = memo(
   ({
     file,
+    nonInteractive,
     player: { file: current, status },
     playerSetFileAndPlay,
     playerPlay,
@@ -42,13 +44,15 @@ const AudioPlayerUnconnected = memo(
     });
 
     const onPlay = useCallback(() => {
+      if (nonInteractive) return;
+
       if (current && current.id === file.id) {
         if (status === PLAYER_STATES.PLAYING) return playerPause();
         return playerPlay();
       }
 
       playerSetFileAndPlay(file);
-    }, [file, current, status, playerPlay, playerPause, playerSetFileAndPlay]);
+    }, [file, current, status, playerPlay, playerPause, playerSetFileAndPlay, nonInteractive]);
 
     const onProgress = useCallback(
       ({ detail }: { detail: IPlayerProgress }) => {
