@@ -1,11 +1,11 @@
-import React, { FC, useCallback, KeyboardEventHandler, useEffect } from 'react';
+import React, { FC, useCallback, KeyboardEventHandler, useEffect, useMemo } from 'react';
 import { Textarea } from '~/components/input/Textarea';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import * as styles from './styles.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import assocPath from 'ramda/es/assocPath';
-import { InputHandler, IFileWithUUID } from '~/redux/types';
+import { InputHandler, IFileWithUUID, IFile } from '~/redux/types';
 import { connect } from 'react-redux';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
@@ -21,6 +21,9 @@ import { selectUser } from '~/redux/auth/selectors';
 import { getURL } from '~/utils/dom';
 import { ButtonGroup } from '~/components/input/ButtonGroup';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
+import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
+import { moveArrItem } from '~/utils/fn';
+import { SortEnd } from 'react-sortable-hoc';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -121,6 +124,41 @@ const CommentFormUnconnected: FC<IProps> = ({
 
   const comment = comment_data[id];
 
+  const images = useMemo(() => comment.files.filter(file => file.type === UPLOAD_TYPES.IMAGE), [
+    comment.files,
+  ]);
+
+  const audios = useMemo(() => comment.files.filter(file => file.type === UPLOAD_TYPES.AUDIO), [
+    comment.files,
+  ]);
+
+  const onFileDrop = useCallback(
+    (file_id: IFile['id']) => {
+      nodeSetCommentData(
+        id,
+        assocPath(['files'], comment.files.filter(file => file.id != file_id), comment_data[id])
+      );
+    },
+    [comment_data, id, nodeSetCommentData]
+  );
+
+  const onImageMove = useCallback(
+    ({ oldIndex, newIndex }: SortEnd) => {
+      nodeSetCommentData(
+        id,
+        assocPath(
+          ['files'],
+          [
+            ...audios,
+            ...(moveArrItem(oldIndex, newIndex, images.filter(file => !!file)) as IFile[]),
+          ],
+          comment_data[id]
+        )
+      );
+    },
+    [images, audios]
+  );
+
   return (
     <CommentWrapper user={user}>
       <form onSubmit={onSubmit} className={styles.wrap}>
@@ -134,21 +172,24 @@ const CommentFormUnconnected: FC<IProps> = ({
           />
         </div>
 
-        {comment.temp_ids.map(
-          temp_id =>
-            statuses[temp_id] &&
-            statuses[temp_id].is_uploading && (
-              <div key={statuses[temp_id].temp_id}>{statuses[temp_id].progress}</div>
-            )
+        {(!!images.length || !!audios.length) && (
+          <div className={styles.attaches}>
+            <SortableImageGrid
+              onDrop={onFileDrop}
+              onSortEnd={onImageMove}
+              axis="xy"
+              items={images}
+              locked={[]}
+              pressDelay={window.innerWidth < 768 ? 200 : 0}
+              helperClass={styles.helper}
+              size={120}
+            />
+
+            {audios.map(file => (
+              <AudioPlayer file={file} key={file.id} />
+            ))}
+          </div>
         )}
-
-        {comment.files.map(file => {
-          if (file.type === UPLOAD_TYPES.AUDIO) {
-            return <AudioPlayer file={file} />;
-          }
-
-          return <div>file.name</div>;
-        })}
 
         <Group horizontal className={styles.buttons}>
           <ButtonGroup>

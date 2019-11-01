@@ -30,7 +30,11 @@ const INITIAL_STATE: INodeState = {
     files: [],
   },
   current: { ...EMPTY_NODE },
-  comment_data: { 0: { ...EMPTY_COMMENT } },
+  comment_data: {
+    0: {
+      ...EMPTY_COMMENT,
+    },
+  },
   comments: [],
   related: null,
   current_cover_image: null,

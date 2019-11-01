@@ -8,11 +8,15 @@
 }
 
 .input {
+  @include outer_shadow();
+
   flex: 1;
   padding: ($gap / 2) ($gap / 2 + 1px);
 }
 
 .buttons {
+  @include outer_shadow();
+
   display: flex;
   flex-direction: row;
   background: transparentize(black, 0.8);
@@ -27,4 +31,11 @@
   grid-column-gap: $gap / 2;
   grid-row-gap: $gap / 2;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+}
+
+.attaches {
+  @include outer_shadow();
+
+  padding: $gap;
+  // background: darken($comment_bg, 2%);
 }

@@ -87,7 +87,63 @@ export const NODE_INLINES: INodeComponents = {
 export const EMPTY_COMMENT: IComment = {
   id: null,
   text: '',
-  files: [],
+  // files: [],
+  // temp_ids: [],
+  // is_private: false,
+  // user: null,
+
+  // id: null,
+  // text: '',
+  files: [
+    {
+      name: 'screenshot_2019-09-29_21-13-38_502253296-1572589001092.png',
+      path: 'uploads/2019/10/image/',
+      full_path:
+        'public/uploads/2019/10/image/screenshot_2019-09-29_21-13-38_502253296-1572589001092.png',
+      url:
+        'REMOTE_CURRENT://uploads/2019/10/image/screenshot_2019-09-29_21-13-38_502253296-1572589001092.png',
+      size: 994331,
+      type: 'image',
+      mime: 'image/png',
+      metadata: {
+        width: 1919,
+        height: 1079,
+      },
+      id: 8709,
+    },
+    {
+      name: 'screenshot_2019-09-29_19-05-41_148603009-1572589001080.png',
+      path: 'uploads/2019/10/image/',
+      full_path:
+        'public/uploads/2019/10/image/screenshot_2019-09-29_19-05-41_148603009-1572589001080.png',
+      url:
+        'REMOTE_CURRENT://uploads/2019/10/image/screenshot_2019-09-29_19-05-41_148603009-1572589001080.png',
+      size: 2145,
+      type: 'image',
+      mime: 'image/png',
+      metadata: {
+        width: 445,
+        height: 446,
+      },
+      id: 8708,
+    },
+    {
+      name: 'screenshot_2019-09-29_21-13-26_924738012-1572589001110.png',
+      path: 'uploads/2019/10/image/',
+      full_path:
+        'public/uploads/2019/10/image/screenshot_2019-09-29_21-13-26_924738012-1572589001110.png',
+      url:
+        'REMOTE_CURRENT://uploads/2019/10/image/screenshot_2019-09-29_21-13-26_924738012-1572589001110.png',
+      size: 881224,
+      type: 'image',
+      mime: 'image/png',
+      metadata: {
+        width: 1919,
+        height: 1079,
+      },
+      id: 8710,
+    },
+  ],
   temp_ids: [],
   is_private: false,
   user: null,

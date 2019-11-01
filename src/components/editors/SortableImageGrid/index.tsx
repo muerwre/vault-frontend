@@ -12,12 +12,17 @@ const SortableImageGrid = SortableContainer(
     items,
     locked,
     onDrop,
+    size = 200,
   }: {
     items: IFile[];
     locked: IUploadStatus[];
     onDrop: (file_id: IFile['id']) => void;
+    size?: number;
   }) => (
-    <div className={styles.grid}>
+    <div
+      className={styles.grid}
+      style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${size}px, 1fr))` }}
+    >
       {items
         .filter(file => file && file.id)
         .map((file, index) => (
