@@ -64,7 +64,6 @@ render(
 /*
 
   - comment editing
-  - comment attach sorting and preview
   - boris with comments
   - profile modal
   - profile editing
