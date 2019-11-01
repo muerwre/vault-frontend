@@ -62,7 +62,6 @@ render(
 );
 
 /*
-
   - comment editing
   - boris with comments
   - profile modal
