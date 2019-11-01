@@ -143,6 +143,41 @@ export const EMPTY_COMMENT: IComment = {
       },
       id: 8710,
     },
+    {
+      name:
+        'Advent_Chamber_Orchestra_-_05_-_Dvorak_-_Serenade_for_Strings_Op22_in_E_Major_larghetto-1572597841834.mp3',
+      path: 'uploads/2019/10/audio/',
+      full_path:
+        'public/uploads/2019/10/audio/Advent_Chamber_Orchestra_-_05_-_Dvorak_-_Serenade_for_Strings_Op22_in_E_Major_larghetto-1572597841834.mp3',
+      url:
+        'REMOTE_CURRENT://uploads/2019/10/audio/Advent_Chamber_Orchestra_-_05_-_Dvorak_-_Serenade_for_Strings_Op22_in_E_Major_larghetto-1572597841834.mp3',
+      size: 11155009,
+      type: 'audio',
+      mime: 'audio/mp3',
+      metadata: {
+        duration: 343.3795918367347,
+        id3title: 'Dvorak - Serenade for Strings Op22 in E Major larghetto',
+        id3artist: 'Advent Chamber Orchestra',
+      },
+      id: 8714,
+    },
+    {
+      name: '182a0d234aef882a58f240c5c0812bb2cad9506a875ca4c7c07d8f9f077ebb00-1572597841829.mp3',
+      path: 'uploads/2019/10/audio/',
+      full_path:
+        'public/uploads/2019/10/audio/182a0d234aef882a58f240c5c0812bb2cad9506a875ca4c7c07d8f9f077ebb00-1572597841829.mp3',
+      url:
+        'REMOTE_CURRENT://uploads/2019/10/audio/182a0d234aef882a58f240c5c0812bb2cad9506a875ca4c7c07d8f9f077ebb00-1572597841829.mp3',
+      size: 6038673,
+      type: 'audio',
+      mime: 'audio/mp3',
+      metadata: {
+        duration: 251.58530612244897,
+        id3title: null,
+        id3artist: null,
+      },
+      id: 8713,
+    },
   ],
   temp_ids: [],
   is_private: false,
