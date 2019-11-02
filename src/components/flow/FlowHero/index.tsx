@@ -70,10 +70,6 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
     history.push(URLS.NODE_URL(current));
   }, [current]);
 
-  useEffect(() => {
-    console.log({ limit });
-  }, [limit]);
-
   return (
     <div className={styles.wrap} onMouseOver={stopSliding} onFocus={stopSliding}>
       <div className={styles.info}>
