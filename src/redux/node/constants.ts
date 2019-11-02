@@ -87,13 +87,12 @@ export const NODE_INLINES: INodeComponents = {
 export const EMPTY_COMMENT: IComment = {
   id: null,
   text: '',
-  // files: [],
-  // temp_ids: [],
-  // is_private: false,
-  // user: null,
+  files: [],
+  temp_ids: [],
+  is_private: false,
+  user: null,
 
-  // id: null,
-  // text: '',
+  /*
   files: [
     {
       name: 'screenshot_2019-09-29_21-13-38_502253296-1572589001092.png',
@@ -179,9 +178,7 @@ export const EMPTY_COMMENT: IComment = {
       id: 8713,
     },
   ],
-  temp_ids: [],
-  is_private: false,
-  user: null,
+  */
 };
 
 export const NODE_EDITORS = {

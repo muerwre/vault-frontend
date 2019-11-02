@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { hot } from 'react-hot-loader';
 import { ConnectedRouter } from 'connected-react-router';
@@ -25,31 +25,33 @@ const mapDispatchToProps = {};
 
 type IProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps> & {};
 
-const Component: FC<IProps> = ({ modal: { is_shown } }) => (
-  <ConnectedRouter history={history}>
-    <div>
-      <BlurWrapper is_blurred={is_shown}>
-        <PageCover />
-        <MainLayout>
-          <Modal />
-          <Sprites />
+const Component: FC<IProps> = ({ modal: { is_shown } }) => {
+  return (
+    <ConnectedRouter history={history}>
+      <div>
+        <BlurWrapper is_blurred={is_shown}>
+          <PageCover />
+          <MainLayout>
+            <Modal />
+            <Sprites />
 
-          <Switch>
-            <Route exact path={URLS.BASE} component={FlowLayout} />
-            <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
-            <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
-            <Route path="/examples/horizontal" component={HorizontalExample} />
-            <Route path="/post:id" component={NodeLayout} />
+            <Switch>
+              <Route exact path={URLS.BASE} component={FlowLayout} />
+              <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
+              <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
+              <Route path="/examples/horizontal" component={HorizontalExample} />
+              <Route path="/post:id" component={NodeLayout} />
 
-            <Redirect to="/" />
-          </Switch>
-        </MainLayout>
-      </BlurWrapper>
+              <Redirect to="/" />
+            </Switch>
+          </MainLayout>
+        </BlurWrapper>
 
-      <BottomContainer />
-    </div>
-  </ConnectedRouter>
-);
+        <BottomContainer />
+      </div>
+    </ConnectedRouter>
+  );
+};
 
 export default connect(
   mapStateToProps,

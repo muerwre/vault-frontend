@@ -4,6 +4,7 @@ export const API = {
   BASE: process.env.API_HOST,
   USER: {
     LOGIN: '/auth/login',
+    VKONTAKTE_LOGIN: `${process.env.API_HOST}/auth/vkontakte`,
     ME: '/auth/', //
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
   },

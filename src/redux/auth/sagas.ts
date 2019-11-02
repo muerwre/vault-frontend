@@ -5,6 +5,7 @@ import {
   userSetLoginError,
   authSetUser,
   userSendLoginRequest,
+  gotPostMessage,
 } from '~/redux/auth/actions';
 import { apiUserLogin, apiAuthGetUser } from '~/redux/auth/api';
 import { modalSetShown } from '~/redux/modal/actions';
@@ -12,6 +13,7 @@ import { selectToken } from './selectors';
 import { IResultWithStatus } from '../types';
 import { IUser } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
+import path from 'ramda/es/path';
 
 export function* reqWrapper(requestAction, props = {}): ReturnType<typeof requestAction> {
   const access = yield select(selectToken);
@@ -68,9 +70,16 @@ function* checkUserSaga({ key }: RehydrateAction) {
   yield put(authSetUser({ ...user, is_user: true }));
 }
 
+function* gotPostMessageSaga({ message }: ReturnType<typeof gotPostMessage>) {
+  if (path(['data', 'type'], message) !== 'oauth_login') return;
+
+  console.log({ message });
+}
+
 function* authSaga() {
   yield takeLatest(REHYDRATE, checkUserSaga);
   yield takeLatest(AUTH_USER_ACTIONS.SEND_LOGIN_REQUEST, sendLoginRequestSaga);
+  yield takeLatest(AUTH_USER_ACTIONS.GOT_POST_MESSAGE, gotPostMessageSaga);
 }
 
 export default authSaga;

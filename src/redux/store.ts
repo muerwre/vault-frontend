@@ -25,6 +25,7 @@ import playerSaga from '~/redux/player/sagas';
 import { IAuthState } from '~/redux/auth/types';
 
 import modalReducer, { IModalState } from '~/redux/modal/reducer';
+import { gotPostMessage } from './auth/actions';
 
 const authPersistConfig: PersistConfig = {
   key: 'auth',
@@ -69,6 +70,8 @@ export function configureStore(): { store: Store<IState>; persistor: Persistor }
   sagaMiddleware.run(uploadSaga);
   sagaMiddleware.run(flowSaga);
   sagaMiddleware.run(playerSaga);
+
+  window.addEventListener('message', message => store.dispatch(gotPostMessage(message)));
 
   const persistor = persistStore(store);
 
