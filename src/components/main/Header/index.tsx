@@ -28,9 +28,6 @@ type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
 
 const HeaderUnconnected: FC<IProps> = memo(({ user: { username, is_user, photo }, showDialog }) => {
   const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
-  const onSocialLogin = useCallback(() => {
-    window.open(API.USER.VKONTAKTE_LOGIN, '', 'width=600,height=400');
-  }, []);
 
   return (
     <div className={style.container}>
@@ -40,7 +37,6 @@ const HeaderUnconnected: FC<IProps> = memo(({ user: { username, is_user, photo }
 
       <div className={style.plugs}>
         <Link to="/">flow</Link>
-        <a onClick={onSocialLogin}>SOCIAL</a>
       </div>
 
       {is_user && (

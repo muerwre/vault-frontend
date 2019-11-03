@@ -71,7 +71,11 @@ export function configureStore(): { store: Store<IState>; persistor: Persistor }
   sagaMiddleware.run(flowSaga);
   sagaMiddleware.run(playerSaga);
 
-  window.addEventListener('message', message => store.dispatch(gotPostMessage(message)));
+  window.addEventListener('message', message => {
+    if (!message || !message.data || message.data.type !== 'oauth_login' || !message.data.token)
+      return;
+    store.dispatch(gotPostMessage({ token: message.data.token }));
+  });
 
   const persistor = persistStore(store);
 

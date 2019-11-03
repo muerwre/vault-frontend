@@ -1,6 +1,4 @@
-import React, {
-  FC, FormEvent, useCallback, useEffect, useState
-} from 'react';
+import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { ScrollDialog } from '../ScrollDialog';
 import { IDialogProps } from '~/redux/modal/constants';
@@ -12,6 +10,7 @@ import { Padder } from '~/components/containers/Padder';
 import * as styles from './styles.scss';
 import { selectAuthLogin } from '~/redux/auth/selectors';
 import * as ACTIONS from '~/redux/auth/actions';
+import { API } from '~/constants/api';
 
 const mapStateToProps = selectAuthLogin;
 
@@ -23,15 +22,25 @@ const mapDispatchToProps = {
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
 
 const LoginDialogUnconnected: FC<IProps> = ({
-  onRequestClose, error, userSendLoginRequest, userSetLoginError
+  onRequestClose,
+  error,
+  userSendLoginRequest,
+  userSetLoginError,
 }) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
-  const onSubmit = useCallback((event: FormEvent) => {
-    event.preventDefault();
-    userSendLoginRequest({ username, password });
-  }, [userSendLoginRequest, username, password]);
+  const onSubmit = useCallback(
+    (event: FormEvent) => {
+      event.preventDefault();
+      userSendLoginRequest({ username, password });
+    },
+    [userSendLoginRequest, username, password]
+  );
+
+  const onSocialLogin = useCallback(() => {
+    window.open(API.USER.VKONTAKTE_LOGIN, '', 'width=600,height=400');
+  }, []);
 
   useEffect(() => {
     if (error) userSetLoginError(null);
@@ -40,7 +49,9 @@ const LoginDialogUnconnected: FC<IProps> = ({
   const buttons = (
     <Padder>
       <Group horizontal>
-        <Button title="ВОЙТИ" stretchy />
+        <Button iconLeft="key" stretchy>
+          <span>Войти</span>
+        </Button>
       </Group>
     </Padder>
   );
@@ -49,17 +60,20 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <ScrollDialog buttons={buttons} width={260} error={error} onClose={onRequestClose}>
+      <ScrollDialog width={260} error={error} onClose={onRequestClose} buttons={buttons}>
         <Padder>
           <div className={styles.wrap}>
             <Group>
               <h2>РЕШИТЕЛЬНО ВОЙТИ</h2>
 
-              <div />
-              <div />
-
               <InputText title="Логин" handler={setUserName} value={username} autoFocus />
               <InputText title="Пароль" handler={setPassword} value={password} />
+
+              <Group className={styles.buttons}>
+                <Button className={styles.vk} iconLeft="vk" type="button" onClick={onSocialLogin}>
+                  <span>Вконтакте</span>
+                </Button>
+              </Group>
             </Group>
           </div>
         </Padder>
@@ -68,6 +82,9 @@ const LoginDialogUnconnected: FC<IProps> = ({
   );
 };
 
-const LoginDialog = connect(mapStateToProps, mapDispatchToProps)(LoginDialogUnconnected);
+const LoginDialog = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginDialogUnconnected);
 
 export { LoginDialog };

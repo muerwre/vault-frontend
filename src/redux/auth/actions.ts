@@ -19,9 +19,9 @@ export const authSetToken = (token: IAuthState['token']) => ({
   token,
 });
 
-export const gotPostMessage = (message: MessageEvent) => ({
+export const gotPostMessage = ({ token }: { token: string }) => ({
   type: AUTH_USER_ACTIONS.GOT_POST_MESSAGE,
-  message,
+  token,
 });
 
 export const authSetUser = (profile: Partial<IUser>) => ({

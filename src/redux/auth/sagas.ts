@@ -14,6 +14,9 @@ import { IResultWithStatus } from '../types';
 import { IUser } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import path from 'ramda/es/path';
+import { selectModal } from '../modal/selectors';
+import { IModalState } from '../modal/reducer';
+import { DIALOGS } from '../modal/constants';
 
 export function* reqWrapper(requestAction, props = {}): ReturnType<typeof requestAction> {
   const access = yield select(selectToken);
@@ -48,9 +51,7 @@ function* sendLoginRequestSaga({ username, password }: ReturnType<typeof userSen
   yield put(modalSetShown(false));
 }
 
-function* checkUserSaga({ key }: RehydrateAction) {
-  if (key !== 'auth') return;
-
+function* refreshUser() {
   const {
     error,
     data: { user },
@@ -70,10 +71,18 @@ function* checkUserSaga({ key }: RehydrateAction) {
   yield put(authSetUser({ ...user, is_user: true }));
 }
 
-function* gotPostMessageSaga({ message }: ReturnType<typeof gotPostMessage>) {
-  if (path(['data', 'type'], message) !== 'oauth_login') return;
+function* checkUserSaga({ key }: RehydrateAction) {
+  if (key !== 'auth') return;
+  yield call(refreshUser);
+}
 
-  console.log({ message });
+function* gotPostMessageSaga({ token }: ReturnType<typeof gotPostMessage>) {
+  yield put(authSetToken(token));
+  yield call(refreshUser);
+
+  const { is_shown, dialog }: IModalState = yield select(selectModal);
+
+  if (is_shown && dialog === DIALOGS.LOGIN) yield put(modalSetShown(false));
 }
 
 function* authSaga() {

@@ -70,11 +70,16 @@
   flex: 0 !important;
   cursor: pointer;
   margin-left: $gap;
+  white-space: nowrap;
+  box-shadow: inset transparentize($content_bg, 0.8) 0 0 0 1px;
+  background: transparentize($content_bg, 0.1);
+  padding: 0 0 0 $gap;
 }
 
 .user_avatar {
   @include outer_shadow();
 
+  flex: 0 0 32px;
   width: 32px;
   height: 32px;
   background: white;
