@@ -62,11 +62,11 @@ render(
 );
 
 /*
+  - better dialogs: https://codepen.io/muemue/pen/abbEMMy
   - comment editing
   - boris with comments
   - profile modal
   - profile editing
-  - social integration
   - messages
   - relocate files
   - import videos
@@ -75,7 +75,13 @@ render(
   - password restore
   - signup?
   - text post can also has songs http://vault48.org/post5052
-
+  
   - notifications ?
   - better node brief update
+  
+  - social integration (assimilate)
+
+  Done:
+
+  - social integration (login, signup)
 */
