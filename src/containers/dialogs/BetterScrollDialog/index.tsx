@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 // import { DialogPanel } from '~/components/panels/DialogPanel';
 import classNames from 'classnames';
-import { Scroll } from '~/components/containers/Scroll';
+import Scroll from 'react-scrollbars-custom';
 import * as styles from './styles.scss';
 import { enableBodyScroll, disableBodyScroll } from 'body-scroll-lock';
 import { Icon } from '~/components/input/Icon';
