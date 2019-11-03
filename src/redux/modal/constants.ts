@@ -6,6 +6,7 @@ import { EditorDialogText } from '~/containers/editors/EditorDialogText';
 import { EditorDialogVideo } from '~/containers/editors/EditorDialogVideo';
 import { EditorDialogAudio } from '~/containers/editors/EditorDialogAudio';
 import { NODE_TYPES } from '../node/constants';
+import { TestDialog } from '~/containers/dialogs/TestDialog';
 
 export const MODAL_ACTIONS = {
   SET_SHOWN: 'MODAL.SET_SHOWN',
@@ -20,6 +21,7 @@ export const DIALOGS = {
   EDITOR_AUDIO: 'EDITOR_AUDIO',
   LOGIN: 'LOGIN',
   LOADING: 'LOADING',
+  TEST: 'TEST',
 };
 
 export const DIALOG_CONTENT = {
@@ -29,6 +31,7 @@ export const DIALOG_CONTENT = {
   [DIALOGS.EDITOR_AUDIO]: EditorDialogAudio,
   [DIALOGS.LOGIN]: LoginDialog,
   [DIALOGS.LOADING]: LoadingDialog,
+  [DIALOGS.TEST]: TestDialog,
 };
 
 export const NODE_EDITOR_DIALOGS = {

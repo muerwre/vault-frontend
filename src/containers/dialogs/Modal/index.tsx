@@ -33,14 +33,10 @@ const ModalUnconnected: FC<IProps> = ({
     <div className={styles.fixed}>
       <div className={styles.overlay} onClick={onRequestClose} />
       <div className={styles.content}>
-        <div className={styles.content_scroller}>
-          <div className={styles.content_padder}>
-            {React.createElement(DIALOG_CONTENT[dialog], {
-              onRequestClose,
-              onDialogChange: modalShowDialog,
-            })}
-          </div>
-        </div>
+        {React.createElement(DIALOG_CONTENT[dialog], {
+          onRequestClose,
+          onDialogChange: modalShowDialog,
+        })}
       </div>
     </div>,
     document.body
@@ -53,3 +49,12 @@ const Modal = connect(
 )(ModalUnconnected);
 
 export { ModalUnconnected, Modal };
+
+/*
+
+  <div className={styles.content_scroller}>
+    <div className={styles.content_padder}>
+    </div>
+  </div>
+
+*/

@@ -11,6 +11,7 @@ import * as styles from './styles.scss';
 import { selectAuthLogin } from '~/redux/auth/selectors';
 import * as ACTIONS from '~/redux/auth/actions';
 import { API } from '~/constants/api';
+import { BetterScrollDialog } from '../BetterScrollDialog';
 
 const mapStateToProps = selectAuthLogin;
 
@@ -47,20 +48,18 @@ const LoginDialogUnconnected: FC<IProps> = ({
   }, [username, password]);
 
   const buttons = (
-    <Padder>
-      <Group horizontal>
-        <Button iconLeft="key" stretchy>
-          <span>Войти</span>
-        </Button>
-      </Group>
-    </Padder>
+    <Group horizontal className={styles.footer}>
+      <Button stretchy>
+        <span>Войти</span>
+      </Button>
+    </Group>
   );
 
   useCloseOnEscape(onRequestClose);
 
   return (
     <form onSubmit={onSubmit}>
-      <ScrollDialog width={260} error={error} onClose={onRequestClose} buttons={buttons}>
+      <BetterScrollDialog width={260} error={error} onClose={onRequestClose} footer={buttons}>
         <Padder>
           <div className={styles.wrap}>
             <Group>
@@ -77,7 +76,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
             </Group>
           </div>
         </Padder>
-      </ScrollDialog>
+      </BetterScrollDialog>
     </form>
   );
 };

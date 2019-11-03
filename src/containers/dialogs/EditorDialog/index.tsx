@@ -14,6 +14,7 @@ import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { NODE_EDITORS, EMPTY_NODE } from '~/redux/node/constants';
+import { BetterScrollDialog } from '../BetterScrollDialog';
 
 const mapStateToProps = state => {
   const { editor, errors } = selectNode(state);
@@ -90,8 +91,8 @@ const EditorDialogUnconnected: FC<IProps> = ({
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
-      <ScrollDialog
-        buttons={buttons}
+      <BetterScrollDialog
+        footer={buttons}
         width={860}
         error={error && ERROR_LITERAL[error]}
         onClose={onRequestClose}
@@ -104,7 +105,7 @@ const EditorDialogUnconnected: FC<IProps> = ({
             setTemp,
           })}
         </div>
-      </ScrollDialog>
+      </BetterScrollDialog>
     </form>
   );
 };

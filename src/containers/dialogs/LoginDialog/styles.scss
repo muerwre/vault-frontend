@@ -1,14 +1,17 @@
-$vk_color: darken(desaturate($blue, 70%), 20%);
+$vk_color: darken(desaturate($blue, 100%), 30%);
 
 .wrap {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 20px;
-  margin: auto;
+  padding: $gap;
+
+  button {
+    text-align: left;
+  }
 
   h2 {
-    margin-bottom: $gap * 3 !important;
+    margin: $gap 0 $gap * 4 !important;
   }
 }
 
@@ -20,8 +23,8 @@ $vk_color: darken(desaturate($blue, 70%), 20%);
   svg {
     fill: $vk_color;
     margin-right: $gap;
-    width: 24px;
-    height: 24px;
+    // width: 24px;
+    // height: 24px;
   }
 }
 
@@ -29,4 +32,12 @@ $vk_color: darken(desaturate($blue, 70%), 20%);
   margin: $gap * 2 0 0 0 !important;
   padding: $gap * 2 0 0 0;
   border-top: 1px solid black;
+}
+
+.footer {
+  padding: $gap;
+
+  button {
+    // text-align: left;
+  }
 }

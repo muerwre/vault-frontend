@@ -1,0 +1,84 @@
+.wrap {
+  width: 100vw;
+  height: 100vh;
+  background: transparentize(darken($content_bg, 4%), 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: column;
+  min-width: $cell;
+  max-width: 400px;
+  max-height: 100%;
+  width: 100%;
+  position: relative;
+
+  & > div:nth-child(2) {
+    border-top-left-radius: $dialog_radius;
+    border-top-right-radius: $dialog_radius;
+  }
+
+  & > div:last-child {
+    border-bottom-left-radius: $dialog_radius;
+    border-bottom-right-radius: $dialog_radius;
+  }
+}
+
+.header,
+.footer {
+  @include outer_shadow();
+
+  padding: 10px;
+  background: darken($content_bg, 2%);
+}
+
+.body {
+  @include outer_shadow();
+
+  overflow: auto;
+  flex: 1;
+  background: $content_bg;
+}
+
+@keyframes appear {
+  0% {
+    top: -48px;
+  }
+  100% {
+    top: -58px;
+  }
+}
+
+.close {
+  background: darken($content_bg, 2%);
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  top: -58px;
+  right: 50%;
+  transform: translate(50%, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  cursor: pointer;
+  transition: transform 0.25s, background-color 0.25s;
+  animation: appear 0.5s forwards;
+
+  &:hover {
+    background-color: $red;
+    transform: translate(50%, -5px);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
