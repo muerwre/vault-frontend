@@ -85,8 +85,14 @@ function* gotPostMessageSaga({ token }: ReturnType<typeof gotPostMessage>) {
   if (is_shown && dialog === DIALOGS.LOGIN) yield put(modalSetShown(false));
 }
 
+function* logoutSaga() {
+  yield put(authSetToken(null));
+  yield put(authSetUser({ ...EMPTY_USER }));
+}
+
 function* authSaga() {
   yield takeLatest(REHYDRATE, checkUserSaga);
+  yield takeLatest(AUTH_USER_ACTIONS.LOGOUT, logoutSaga);
   yield takeLatest(AUTH_USER_ACTIONS.SEND_LOGIN_REQUEST, sendLoginRequestSaga);
   yield takeLatest(AUTH_USER_ACTIONS.GOT_POST_MESSAGE, gotPostMessageSaga);
 }

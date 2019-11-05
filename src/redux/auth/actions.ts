@@ -28,3 +28,7 @@ export const authSetUser = (profile: Partial<IUser>) => ({
   type: AUTH_USER_ACTIONS.SET_USER,
   profile,
 });
+
+export const authLogout = () => ({
+  type: AUTH_USER_ACTIONS.LOGOUT,
+});

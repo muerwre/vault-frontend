@@ -1,0 +1,68 @@
+.wrap {
+  position: relative;
+  z-index: 2;
+
+  &:hover .menu {
+    display: flex;
+  }
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  padding: $gap;
+  background: $content_bg;
+  border-radius: 0 0 $radius $radius;
+  display: none;
+  z-index: 1;
+  background: $content_bg;
+  min-width: 100%;
+
+  & > div {
+    padding: $gap $gap * 2;
+    cursor: pointer;
+    opacity: 0.5;
+  }
+
+  &:hover > div {
+    opacity: 1;
+  }
+}
+
+.user_button {
+  align-items: center;
+  border-radius: $input_radius;
+  font: $font_16_semibold;
+  text-transform: uppercase;
+  flex: 0 !important;
+  cursor: pointer;
+  margin-left: $gap;
+  white-space: nowrap;
+  box-shadow: inset transparentize($content_bg, 0.8) 0 0 0 1px;
+  background: transparentize($content_bg, 0.1);
+  padding: 0 0 0 $gap;
+}
+
+.user_avatar {
+  @include outer_shadow();
+
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  background: white;
+  border-radius: $radius;
+  margin-left: ($gap + 2px) !important;
+  background: 50% 50% no-repeat $wisegreen;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+
+  svg {
+    fill: #222222;
+    stroke: #222222;
+    width: 24px;
+    height: 24px;
+  }
+}

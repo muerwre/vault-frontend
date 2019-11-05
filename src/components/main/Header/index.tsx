@@ -9,11 +9,10 @@ import { Filler } from '~/components/containers/Filler';
 import { selectUser } from '~/redux/auth/selectors';
 import { Group } from '~/components/containers/Group';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { DIALOGS } from '~/redux/modal/constants';
 import { pick } from 'ramda';
-import { Icon } from '~/components/input/Icon';
-import { getURL } from '~/utils/dom';
-import { API } from '~/constants/api';
+import { UserButton } from '../UserButton';
 
 const mapStateToProps = state => ({
   user: pick(['username', 'is_user', 'photo'])(selectUser(state)),
@@ -22,40 +21,36 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   push: historyPush,
   showDialog: MODAL_ACTIONS.modalShowDialog,
+  authLogout: AUTH_ACTIONS.authLogout,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const HeaderUnconnected: FC<IProps> = memo(({ user: { username, is_user, photo }, showDialog }) => {
-  const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
+const HeaderUnconnected: FC<IProps> = memo(
+  ({ user, user: { username, is_user, photo }, showDialog, authLogout }) => {
+    const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
 
-  return (
-    <div className={style.container}>
-      <Logo />
+    return (
+      <div className={style.container}>
+        <Logo />
 
-      <Filler />
+        <Filler />
 
-      <div className={style.plugs}>
-        <Link to="/">flow</Link>
+        <div className={style.plugs}>
+          <Link to="/">flow</Link>
+        </div>
+
+        {is_user && <UserButton user={user} onLogout={authLogout} />}
+
+        {!is_user && (
+          <Group horizontal className={style.user_button} onClick={onLogin}>
+            <div>ВДОХ</div>
+          </Group>
+        )}
       </div>
-
-      {is_user && (
-        <Group horizontal className={style.user_button}>
-          <div>{username}</div>
-          <div className={style.user_avatar} style={{ backgroundImage: `url('${getURL(photo)}')` }}>
-            {(!photo || !photo.id) && <Icon icon="profile" />}
-          </div>
-        </Group>
-      )}
-
-      {!is_user && (
-        <Group horizontal className={style.user_button} onClick={onLogin}>
-          <div>ВДОХ</div>
-        </Group>
-      )}
-    </div>
-  );
-});
+    );
+  }
+);
 
 const Header = connect(
   mapStateToProps,
