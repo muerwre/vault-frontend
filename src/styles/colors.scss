@@ -51,7 +51,7 @@ $node_title_background: darken($main_bg_color, 8%);
 
 $editor_bg: $content_bg;
 $editor_panel_bg: darken($editor_bg, 4%);
-
+$cell_shade: lighten($content_bg, 10%);
 $scroll_color: $red_gradient;
 $scroll_inactive_opacity: 0.5;
 

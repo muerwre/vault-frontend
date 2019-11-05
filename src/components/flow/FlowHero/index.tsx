@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, useEffect, useRef } from 'react';
+import React, { FC, useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { IFlowState } from '~/redux/flow/reducer';
 import classNames from 'classnames';
 
@@ -70,22 +70,34 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
     history.push(URLS.NODE_URL(current));
   }, [current]);
 
+  const title = useMemo(() => {
+    if (loaded.length === 0) return null;
+
+    const item = heroes.find(hero => hero.id === current);
+
+    if (!item || !item.title) return null;
+
+    return item.title;
+  }, [loaded, current, heroes]);
+
   return (
     <div className={styles.wrap} onMouseOver={stopSliding} onFocus={stopSliding}>
-      <div className={styles.info}>
-        <div className={styles.title_wrap}>
-          <div className={styles.title}>TITLE!</div>
-        </div>
+      {loaded && loaded.length > 0 && (
+        <div className={styles.info}>
+          <div className={styles.title_wrap}>
+            <div className={styles.title}>{title}</div>
+          </div>
 
-        <div className={styles.buttons}>
-          <div className={styles.button} onClick={onPrevious}>
-            <Icon icon="left" />
-          </div>
-          <div className={styles.button} onClick={onNextPress}>
-            <Icon icon="right" />
+          <div className={styles.buttons}>
+            <div className={styles.button} onClick={onPrevious}>
+              <Icon icon="left" />
+            </div>
+            <div className={styles.button} onClick={onNextPress}>
+              <Icon icon="right" />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {heroes.slice(0, limit).map(hero => (
         <div
