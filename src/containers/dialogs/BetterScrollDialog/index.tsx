@@ -1,15 +1,4 @@
-import React, {
-  FC,
-  MouseEventHandler,
-  ReactChild,
-  useCallback,
-  useEffect,
-  useState,
-  useRef,
-} from 'react';
-// import { DialogPanel } from '~/components/panels/DialogPanel';
-import classNames from 'classnames';
-import Scroll from 'react-scrollbars-custom';
+import React, { FC, MouseEventHandler, useEffect, useRef } from 'react';
 import * as styles from './styles.scss';
 import { enableBodyScroll, disableBodyScroll } from 'body-scroll-lock';
 import { Icon } from '~/components/input/Icon';
