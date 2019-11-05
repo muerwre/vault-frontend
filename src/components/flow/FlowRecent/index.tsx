@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import * as styles from './styles.scss';
 import { IFlowState } from '~/redux/flow/reducer';
-import { getURL } from '~/utils/dom';
+import { getURL, getPrettyDate } from '~/utils/dom';
 import { Link } from 'react-router-dom';
 import { URLS } from '~/constants/urls';
 import classNames from 'classnames';
@@ -23,7 +23,7 @@ const FlowRecent: FC<IProps> = ({ recent, updated }) => (
 
           <div className={styles.info}>
             <div className={styles.title}>{node.title}</div>
-            <div className={styles.comment}>{node.created_at}</div>
+            <div className={styles.comment}>{getPrettyDate(node.created_at)}</div>
           </div>
         </Link>
       ))}
@@ -37,7 +37,7 @@ const FlowRecent: FC<IProps> = ({ recent, updated }) => (
           />
           <div className={styles.info}>
             <div className={styles.title}>{node.title}</div>
-            <div className={styles.comment}>{node.created_at}</div>
+            <div className={styles.comment}>{getPrettyDate(node.created_at)}</div>
           </div>
         </Link>
       ))}

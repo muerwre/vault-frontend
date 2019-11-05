@@ -80,11 +80,6 @@ export const formatText = (text: string): string =>
         .replace(/:\|--\|/gim, '://')
         .split('\n')
         .map(el => `<p>${el}</p>`)
-        // .map((el, index) =>
-        //   index === 0
-        //     ? `${author ? `<p><b class="comment-author">${author}: </b>` : ''}${el}</p>`
-        //     : `<p>${el}</p>`
-        // )
         .join('');
 
 export const formatCommentText = (author: string, text: string): string =>
