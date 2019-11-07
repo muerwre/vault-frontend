@@ -63,7 +63,7 @@ export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof 
 
   if (size) {
     return file.url
-      .replace('REMOTE_CURRENT://', `${process.env.REMOTE_CURRENT}/cache/${size}/`)
+      .replace('REMOTE_CURRENT://', `${process.env.REMOTE_CURRENT}cache/${size}/`)
       .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
   }
 
@@ -71,9 +71,6 @@ export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof 
     .replace('REMOTE_CURRENT://', process.env.REMOTE_CURRENT)
     .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
 };
-
-// export const getImageSize = (file: IFile, size?: string): string => getURL(file);
-// `${process.env.API_HOST}${image}`.replace('{size}', size);
 
 export const formatText = (text: string): string =>
   !text
