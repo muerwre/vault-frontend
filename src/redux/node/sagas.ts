@@ -99,7 +99,6 @@ function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
 function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetLoading(true));
   yield put(nodeSetLoadingComments(true));
-  // yield put(nodeSetSaveErrors({}));
   yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
   yield put(nodeSetRelated(null));
 
