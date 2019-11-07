@@ -1,0 +1,27 @@
+.wrap {
+  @include outer_shadow();
+
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  background: $content_bg;
+  border-radius: $radius;
+}
+
+.content {
+  flex: 2;
+  padding: $gap * 4;
+}
+
+.image {
+  flex: 1 1;
+  background: red;
+  display: flex;
+  border-radius: 0 $radius $radius 0;
+}
+
+.sign {
+  font: $font_24_semibold;
+  font-size: 72px;
+}

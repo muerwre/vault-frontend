@@ -18,6 +18,7 @@ import { PageCover } from '~/components/containers/PageCover';
 import { NodeLayout } from './node/NodeLayout';
 import { BottomContainer } from '~/containers/main/BottomContainer';
 import { BorisLayout } from './node/BorisLayout';
+import { ErrorNotFound } from './pages/ErrorNotFound';
 
 const mapStateToProps = state => ({
   modal: selectModal(state),
@@ -40,9 +41,9 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
               <Route exact path={URLS.BASE} component={FlowLayout} />
               <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
               <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
-              <Route path="/examples/horizontal" component={HorizontalExample} />
-              <Route path="/post:id" component={NodeLayout} />
-              <Route path="/boris" component={BorisLayout} />
+              <Route path={URLS.NODE_URL(':id')} component={NodeLayout} />
+              <Route path={URLS.BORIS} component={BorisLayout} />
+              <Route path={URLS.ERRORS.NOT_FOUND} component={ErrorNotFound} />
 
               <Redirect to="/" />
             </Switch>

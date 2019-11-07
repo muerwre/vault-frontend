@@ -1,11 +1,16 @@
 export const URLS = {
   BASE: '/',
+  BORIS: '/boris',
   AUTH: {
     LOGIN: '/auth/login',
   },
   EXAMPLES: {
     EDITOR: '/examples/edit',
     IMAGE: '/examples/image',
+  },
+  ERRORS: {
+    NOT_FOUND: '/lost',
+    BACKEND_DOWN: '/oopsie',
   },
   NODE_URL: (id: number | string) => `/post${id}`,
 };
