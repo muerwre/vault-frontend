@@ -110,7 +110,7 @@ const Cell: FC<IProps> = ({
           }}
           onClick={onClick}
         >
-          <img src={getURL({ url: thumbnail }, PRESETS.cover)} onLoad={onImageLoad} alt="" />
+          <img src={getURL({ url: thumbnail })} onLoad={onImageLoad} alt="" />
         </div>
       )}
     </div>
