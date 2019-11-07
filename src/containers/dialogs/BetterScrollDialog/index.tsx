@@ -29,7 +29,7 @@ const BetterScrollDialog: FC<IProps> = ({
   const ref = useRef(null);
 
   useEffect(() => {
-    disableBodyScroll(ref.current);
+    disableBodyScroll(ref.current, { reserveScrollBarGap: true });
 
     return () => enableBodyScroll(ref.current);
   }, [ref]);

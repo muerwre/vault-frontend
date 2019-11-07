@@ -11,8 +11,8 @@
   background: $node_image_bg;
   border-radius: $panel_radius 0 0 $panel_radius;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   position: relative;
   overflow: hidden;
   user-select: none;
