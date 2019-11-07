@@ -38,7 +38,7 @@ const Cell: FC<IProps> = ({
     if (visibility !== is_visible) setIsVisible(visibility);
   }, [ref, is_visible, setIsVisible]);
 
-  const checkIfVisibleDebounced = useCallback(debounce(200 + Math.random() * 200, checkIfVisible), [
+  const checkIfVisibleDebounced = useCallback(debounce(Math.random() * 200, checkIfVisible), [
     checkIfVisible,
   ]);
 
