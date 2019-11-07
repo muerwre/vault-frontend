@@ -17,7 +17,7 @@ import { IFlowState } from './reducer';
 
 function* onGetFlow() {
   const {
-    data: { nodes = null, heroes = null, recent = [], updated = [] },
+    data: { nodes = [], heroes = [], recent = [], updated = [] },
   }: IResultWithStatus<{
     nodes: IFlowState['nodes'];
     heroes: IFlowState['heroes'];
@@ -25,13 +25,13 @@ function* onGetFlow() {
     updated: IFlowState['updated'];
   }> = yield call(reqWrapper, getNodes, {});
 
-  if (!nodes || !nodes.length) {
-    yield put(flowSetNodes([]));
-    yield put(flowSetHeroes([]));
-    yield put(flowSetRecent([]));
-    yield put(flowSetUpdated([]));
-    return;
-  }
+  // if (!nodes || !nodes.length) {
+  // yield put(flowSetNodes([]));
+  // yield put(flowSetHeroes([]));
+  // yield put(flowSetRecent([]));
+  // yield put(flowSetUpdated([]));
+  // return;
+  // }
 
   yield put(flowSetNodes(nodes));
   yield put(flowSetHeroes(heroes));

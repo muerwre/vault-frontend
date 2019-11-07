@@ -124,6 +124,15 @@
   }
 }
 
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .face {
   @include outer_shadow();
 
@@ -141,6 +150,7 @@
   padding: $gap;
   pointer-events: none;
   touch-action: none;
+  animation: appear 1s forwards;
 
   @media (min-width: $cell * 2 + $grid_line) {
     .vertical > &.has_text,
