@@ -62,8 +62,9 @@ render(
 );
 
 /*
-  --> boris with comments
-
+  - boris with comments (layout)
+  
+  - backend: exclude node covers on import
   - profile modal
   - profile editing
   - messages
@@ -79,10 +80,11 @@ render(
   
   - social integration (assimilate)
   - comment editing
-
+  
   Done:
   - better dialogs: https://codepen.io/muemue/pen/abbEMMy
   - imagecaching at backend
   - social integration (login, signup)
-
+  - boris with comments (import)
+  
 */
