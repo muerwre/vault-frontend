@@ -107,14 +107,16 @@ function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
     data: { node, error },
   } = yield call(reqWrapper, getNode, { id });
 
-  yield put(nodeSetLoading(false));
-
   if (error) {
-    return yield put(nodeSetSaveErrors({ error }));
+    yield put(nodeSetSaveErrors({ error }));
+    yield put(nodeSetLoading(false));
+    return;
   }
 
   yield put(nodeSetSaveErrors({}));
   yield put(nodeSetCurrent(node));
+
+  yield put(nodeSetLoading(false));
 
   const {
     comments: {

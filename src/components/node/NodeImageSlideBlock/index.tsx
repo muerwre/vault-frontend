@@ -76,7 +76,13 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     if (!wrap || !wrap.current) return;
 
     const { width } = wrap.current.getBoundingClientRect();
+
     const selected = Math.abs(-offset / width);
+
+    if (is_loading) {
+      return setHeight((width * 9) / 16);
+    }
+
     const prev = Math.max(heights[Math.floor(selected)] || 320, 320);
     const next = Math.max(heights[Math.ceil(selected)] || 320, 320);
     const now = prev - (prev - next) * (selected % 1);
@@ -84,7 +90,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     if (current !== Math.round(selected)) setCurrent(Math.round(selected));
 
     setHeight(now);
-  }, [offset, heights, max_height, images]);
+  }, [wrap, offset, heights, max_height, images, is_loading]);
 
   const onDrag = useCallback(
     event => {
@@ -107,6 +113,8 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   );
 
   const normalizeOffset = useCallback(() => {
+    if (!slide.current || !wrap.current) return;
+
     const { width: wrap_width } = wrap.current.getBoundingClientRect();
     const { width: slide_width } = slide.current.getBoundingClientRect();
 
@@ -175,18 +183,16 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     [wrap]
   );
 
-  if (is_loading) {
-    return (
-      <div className={styles.placeholder}>
-        <div>
-          <LoaderCircle size={96} />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={classNames(styles.wrap, { is_loading })} ref={wrap}>
+      {is_loading && (
+        <div className={styles.placeholder}>
+          <div>
+            <LoaderCircle size={96} />
+          </div>
+        </div>
+      )}
+
       <ImageSwitcher
         total={images.length}
         current={current}
@@ -197,7 +203,6 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
       <div
         className={styles.image_container}
         style={{
-          transition: is_dragging ? 'none' : 'transform 500ms',
           height,
           transform: `translate(${offset}px, 0)`,
           width: `${images.length * 100}%`,
@@ -206,24 +211,25 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
         onTouchStart={startDragging}
         ref={slide}
       >
-        {images.map((file, index) => (
-          <div
-            className={classNames(styles.image_wrap, {
-              is_active: index === current && loaded[index],
-            })}
-            ref={setRef(index)}
-            key={file.id}
-          >
-            <img
-              className={styles.image}
-              src={getURL(file, PRESETS['1400'])}
-              alt=""
+        {!is_loading &&
+          images.map((file, index) => (
+            <div
+              className={classNames(styles.image_wrap, {
+                is_active: index === current && loaded[index],
+              })}
+              ref={setRef(index)}
               key={file.id}
-              onLoad={onImageLoad(index)}
-              style={{ maxHeight: max_height }}
-            />
-          </div>
-        ))}
+            >
+              <img
+                className={styles.image}
+                src={getURL(file, PRESETS['1400'])}
+                alt=""
+                key={file.id}
+                onLoad={onImageLoad(index)}
+                style={{ maxHeight: max_height }}
+              />
+            </div>
+          ))}
       </div>
     </div>
   );
