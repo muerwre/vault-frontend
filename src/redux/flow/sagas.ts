@@ -37,6 +37,8 @@ function* onGetFlow() {
   yield put(flowSetHeroes(heroes));
   yield put(flowSetRecent(recent));
   yield put(flowSetUpdated(updated));
+
+  document.getElementById('main_loader').style.display = 'none';
 }
 
 function* onSetCellView({ id, flow }: ReturnType<typeof flowSetCellView>) {
