@@ -17,6 +17,7 @@ import { BlurWrapper } from '~/components/containers/BlurWrapper';
 import { PageCover } from '~/components/containers/PageCover';
 import { NodeLayout } from './node/NodeLayout';
 import { BottomContainer } from '~/containers/main/BottomContainer';
+import { BorisLayout } from './node/BorisLayout';
 
 const mapStateToProps = state => ({
   modal: selectModal(state),
@@ -41,6 +42,7 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
               <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
               <Route path="/examples/horizontal" component={HorizontalExample} />
               <Route path="/post:id" component={NodeLayout} />
+              <Route path="/boris" component={BorisLayout} />
 
               <Redirect to="/" />
             </Switch>

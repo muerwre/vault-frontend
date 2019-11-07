@@ -18,6 +18,7 @@ const prefix = 'NODE.';
 export const NODE_ACTIONS = {
   SAVE: `${prefix}SAVE`,
   LOAD_NODE: `${prefix}LOAD_NODE`,
+  GOTO_NODE: `${prefix}GOTO_NODE`,
 
   EDIT: `${prefix}EDIT`,
   LIKE: `${prefix}LIKE`,

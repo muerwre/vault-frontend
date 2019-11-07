@@ -25,7 +25,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
+  nodeGotoNode: NODE_ACTIONS.nodeGotoNode,
   nodeUpdateTags: NODE_ACTIONS.nodeUpdateTags,
   nodeSetCoverImage: NODE_ACTIONS.nodeSetCoverImage,
   nodeEdit: NODE_ACTIONS.nodeEdit,
@@ -45,7 +45,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     node: { is_loading, is_loading_comments, comments = [], current: node, related },
     user,
     user: { is_user },
-    nodeLoadNode,
+    nodeGotoNode,
     nodeUpdateTags,
     nodeEdit,
     nodeLike,
@@ -58,8 +58,8 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
 
     useEffect(() => {
       if (is_loading) return;
-      nodeLoadNode(parseInt(id, 10), null);
-    }, [nodeLoadNode, id]);
+      nodeGotoNode(parseInt(id, 10), null);
+    }, [nodeGotoNode, id]);
 
     const onTagsChange = useCallback(
       (tags: string[]) => {

@@ -62,8 +62,8 @@ render(
 );
 
 /*
-  - comment editing
-  - boris with comments
+  --> boris with comments
+
   - profile modal
   - profile editing
   - messages
@@ -78,6 +78,7 @@ render(
   - better node brief update
   
   - social integration (assimilate)
+  - comment editing
 
   Done:
   - better dialogs: https://codepen.io/muemue/pen/abbEMMy

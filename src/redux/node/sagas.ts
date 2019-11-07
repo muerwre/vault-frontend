@@ -20,6 +20,7 @@ import {
   nodeEdit,
   nodeLike,
   nodeSetRelated,
+  nodeGotoNode,
 } from './actions';
 import {
   postNode,
@@ -89,16 +90,18 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   return yield put(modalSetShown(false));
 }
 
-function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
+function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
+  if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
+  yield put(nodeLoadNode(id));
+  yield put(push(URLS.NODE_URL(id)));
+}
+
+function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetLoading(true));
   yield put(nodeSetLoadingComments(true));
   yield put(nodeSetSaveErrors({}));
   yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
   yield put(nodeSetRelated(null));
-
-  if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
-
-  yield put(push(URLS.NODE_URL(id)));
 
   const {
     data: { node, error },
@@ -113,7 +116,6 @@ function* onNodeLoad({ id, node_type }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetSaveErrors({}));
   yield put(nodeSetCurrent(node));
 
-  // todo: load comments
   const {
     comments: {
       data: { comments },
@@ -232,6 +234,7 @@ function* onStarSaga({ id }: ReturnType<typeof nodeLike>) {
 
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
+  yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
   yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
