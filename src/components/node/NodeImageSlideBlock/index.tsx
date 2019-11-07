@@ -97,6 +97,10 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     } else {
       setHeightThrottled(now);
     }
+
+    // update layout after all manipulations
+    const timeout = setTimeout(() => updateLayout(), 500);
+    return () => clearTimeout(timeout);
   }, [is_dragging, wrap, offset, heights, max_height, images, is_loading]);
 
   const onDrag = useCallback(
