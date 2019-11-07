@@ -7,6 +7,7 @@ import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { NODE_SETTINGS } from '~/redux/node/constants';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
 
 interface IProps {
   is_loading: boolean;
@@ -174,6 +175,16 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     [wrap]
   );
 
+  if (is_loading) {
+    return (
+      <div className={styles.placeholder}>
+        <div>
+          <LoaderCircle size={96} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={classNames(styles.wrap, { is_loading })} ref={wrap}>
       <ImageSwitcher
@@ -195,8 +206,6 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
         onTouchStart={startDragging}
         ref={slide}
       >
-        {(is_loading || !loaded[0] || !images.length) && <div className={styles.placeholder} />}
-
         {images.map((file, index) => (
           <div
             className={classNames(styles.image_wrap, {

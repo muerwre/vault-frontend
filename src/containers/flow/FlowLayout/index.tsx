@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
+  nodeGotoNode: NODE_ACTIONS.nodeGotoNode,
   flowSetCellView: FLOW_ACTIONS.flowSetCellView,
 };
 
@@ -22,7 +22,7 @@ type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
 const FlowLayoutUnconnected: FC<IProps> = ({
   flow: { nodes, heroes, recent, updated },
   user,
-  nodeLoadNode,
+  nodeGotoNode,
   flowSetCellView,
 }) => (
   <FlowGrid
@@ -30,7 +30,7 @@ const FlowLayoutUnconnected: FC<IProps> = ({
     heroes={heroes}
     recent={recent}
     updated={updated}
-    onSelect={nodeLoadNode}
+    onSelect={nodeGotoNode}
     user={user}
     onChangeCellView={flowSetCellView}
   />
