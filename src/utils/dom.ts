@@ -81,6 +81,7 @@ export const formatText = (text: string): string =>
         .replace(/>/g, '&gt;')
         .replace(/:\/\//gim, ':|--|')
         .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
+        .replace(/(\/\*[\s\S]*?\*\/)/gim, '<span class="grey">$1</span>')
         .replace(/:\|--\|/gim, '://')
         .split('\n')
         .map(el => `<p>${el}</p>`)
