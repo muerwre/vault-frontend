@@ -2,6 +2,7 @@ import { IFile } from '~/redux/types';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import { ru } from 'date-fns/locale';
 import Axios from 'axios';
+import { PRESETS } from '~/constants/urls';
 
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -57,8 +58,14 @@ export const describeArc = (
   ].join(' ');
 };
 
-export const getURL = (file: Partial<IFile>) => {
+export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof PRESETS]) => {
   if (!file || !file.url) return null;
+
+  if (size) {
+    return file.url
+      .replace('REMOTE_CURRENT://', `${process.env.REMOTE_CURRENT}/cache/${size}/`)
+      .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
+  }
 
   return file.url
     .replace('REMOTE_CURRENT://', process.env.REMOTE_CURRENT)

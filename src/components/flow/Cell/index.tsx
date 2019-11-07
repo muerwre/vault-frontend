@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import * as styles from './styles.scss';
 import { Icon } from '~/components/input/Icon';
 import { flowSetCellView } from '~/redux/flow/actions';
+import { PRESETS } from '~/constants/urls';
 
 interface IProps {
   node: INode;
@@ -104,7 +105,7 @@ const Cell: FC<IProps> = ({
         <div
           className={styles.thumbnail}
           style={{
-            backgroundImage: `url("${getURL({ url: thumbnail })}")`,
+            backgroundImage: `url("${getURL({ url: thumbnail }, PRESETS.cover)}")`,
             opacity: is_loaded ? 1 : 0,
           }}
           onClick={onClick}

@@ -84,9 +84,7 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
     <div className={styles.wrap} onMouseOver={stopSliding} onFocus={stopSliding}>
       {loaded && loaded.length > 0 && (
         <div className={styles.info}>
-          <div className={styles.title_wrap}>
-            <div className={styles.title}>{title}</div>
-          </div>
+          <div className={styles.title_wrap}>{title}</div>
 
           <div className={styles.buttons}>
             <div className={styles.button} onClick={onPrevious}>

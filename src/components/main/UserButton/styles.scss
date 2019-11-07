@@ -18,11 +18,14 @@
   z-index: 1;
   background: $content_bg;
   min-width: 100%;
+  box-sizing: border-box;
 
   & > div {
     padding: $gap $gap * 2;
     cursor: pointer;
     opacity: 0.5;
+    box-sizing: border-box;
+    transition: opacity 0.25s;
   }
 
   &:hover > div {
@@ -41,7 +44,7 @@
   white-space: nowrap;
   box-shadow: inset transparentize($content_bg, 0.8) 0 0 0 1px;
   background: transparentize($content_bg, 0.1);
-  padding: 0 0 0 $gap;
+  padding: 0;
 }
 
 .user_avatar {

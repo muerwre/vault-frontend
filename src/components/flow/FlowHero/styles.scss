@@ -102,6 +102,9 @@
   display: flex;
   margin-right: $gap;
   overflow: hidden;
+  font: $font_hero_title;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
 }
 
 .title {
