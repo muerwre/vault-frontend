@@ -72,7 +72,7 @@ export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof 
     .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
 };
 
-export const getImageSize = (file: IFile, size?: string): string => getURL(file);
+// export const getImageSize = (file: IFile, size?: string): string => getURL(file);
 // `${process.env.API_HOST}${image}`.replace('{size}', size);
 
 export const formatText = (text: string): string =>

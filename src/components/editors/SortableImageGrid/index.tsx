@@ -6,6 +6,7 @@ import { SortableImageGridItem } from '~/components/editors/SortableImageGridIte
 import { IFile } from '~/redux/types';
 import { IUploadStatus } from '~/redux/uploads/reducer';
 import { getURL } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
 
 const SortableImageGrid = SortableContainer(
   ({
@@ -27,7 +28,7 @@ const SortableImageGrid = SortableContainer(
         .filter(file => file && file.id)
         .map((file, index) => (
           <SortableImageGridItem key={file.id} index={index} collection={0}>
-            <ImageUpload id={file.id} thumb={getURL(file)} onDrop={onDrop} />
+            <ImageUpload id={file.id} thumb={getURL(file, PRESETS.cover)} onDrop={onDrop} />
           </SortableImageGridItem>
         ))}
 

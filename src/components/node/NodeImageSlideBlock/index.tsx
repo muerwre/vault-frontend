@@ -3,9 +3,10 @@ import { ImageSwitcher } from '../ImageSwitcher';
 import * as styles from './styles.scss';
 import { INode } from '~/redux/types';
 import classNames from 'classnames';
-import { getImageSize } from '~/utils/dom';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { NODE_SETTINGS } from '~/redux/node/constants';
+import { getURL } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
 
 interface IProps {
   is_loading: boolean;
@@ -206,7 +207,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
           >
             <img
               className={styles.image}
-              src={getImageSize(file, 'node')}
+              src={getURL(file, PRESETS['1400'])}
               alt=""
               key={file.id}
               onLoad={onImageLoad(index)}

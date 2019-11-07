@@ -62,7 +62,6 @@ render(
 );
 
 /*
-  - better dialogs: https://codepen.io/muemue/pen/abbEMMy
   - comment editing
   - boris with comments
   - profile modal
@@ -71,7 +70,6 @@ render(
   - relocate files
   - import videos
   - import graffiti
-  - imagecaching at backend
   - password restore
   - signup?
   - text post can also has songs http://vault48.org/post5052
@@ -82,6 +80,8 @@ render(
   - social integration (assimilate)
 
   Done:
-
+  - better dialogs: https://codepen.io/muemue/pen/abbEMMy
+  - imagecaching at backend
   - social integration (login, signup)
+
 */

@@ -4,6 +4,7 @@ import * as styles from './styles.scss';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import path from 'ramda/es/path';
 import { getURL } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
 
 interface IProps {
   node: INode;
@@ -19,7 +20,7 @@ const NodeAudioImageBlock: FC<IProps> = ({ node }) => {
     <div className={styles.wrap}>
       <div
         className={styles.slide}
-        style={{ backgroundImage: `url("${getURL(path([0], images))}")` }}
+        style={{ backgroundImage: `url("${getURL(path([0], images), PRESETS.hero)}")` }}
       />
     </div>
   );

@@ -4,6 +4,7 @@ import styles from './styles.scss';
 import { getURL } from '~/utils/dom';
 import { Icon } from '~/components/input/Icon';
 import { IUser } from '~/redux/auth/types';
+import { PRESETS } from '~/constants/urls';
 
 interface IProps {
   user: Partial<IUser>;
@@ -14,7 +15,10 @@ const UserButton: FC<IProps> = ({ user: { username, photo }, onLogout }) => (
   <div className={styles.wrap}>
     <Group horizontal className={styles.user_button}>
       <div>{username}</div>
-      <div className={styles.user_avatar} style={{ backgroundImage: `url('${getURL(photo)}')` }}>
+      <div
+        className={styles.user_avatar}
+        style={{ backgroundImage: `url('${getURL(photo, PRESETS.avatar)}')` }}
+      >
         {(!photo || !photo.id) && <Icon icon="profile" />}
       </div>
     </Group>

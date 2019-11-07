@@ -19,4 +19,5 @@ export const PRESETS = {
   placeholder: 'placeholder',
   cover: 'cover',
   hero: 'hero',
+  avatar: 'avatar',
 };

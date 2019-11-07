@@ -3,7 +3,7 @@ import * as styles from './styles.scss';
 import { IFlowState } from '~/redux/flow/reducer';
 import { getURL, getPrettyDate } from '~/utils/dom';
 import { Link } from 'react-router-dom';
-import { URLS } from '~/constants/urls';
+import { URLS, PRESETS } from '~/constants/urls';
 import classNames from 'classnames';
 
 interface IProps {
@@ -18,7 +18,7 @@ const FlowRecent: FC<IProps> = ({ recent, updated }) => (
         <Link key={node.id} className={styles.item} to={URLS.NODE_URL(node.id)}>
           <div
             className={classNames(styles.thumb, styles.new)}
-            style={{ backgroundImage: `url("${getURL({ url: node.thumbnail })}")` }}
+            style={{ backgroundImage: `url("${getURL({ url: node.thumbnail }, PRESETS.avatar)}")` }}
           />
 
           <div className={styles.info}>
@@ -33,7 +33,7 @@ const FlowRecent: FC<IProps> = ({ recent, updated }) => (
         <Link key={node.id} className={styles.item} to={URLS.NODE_URL(node.id)}>
           <div
             className={styles.thumb}
-            style={{ backgroundImage: `url("${getURL({ url: node.thumbnail })}")` }}
+            style={{ backgroundImage: `url("${getURL({ url: node.thumbnail }, PRESETS.avatar)}")` }}
           />
           <div className={styles.info}>
             <div className={styles.title}>{node.title}</div>

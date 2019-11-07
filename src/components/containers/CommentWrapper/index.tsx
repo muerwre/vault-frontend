@@ -6,6 +6,7 @@ import { Card } from '../Card';
 import { IUser } from '~/redux/auth/types';
 import { getURL } from '~/utils/dom';
 import path from 'ramda/es/path';
+import { PRESETS } from '~/constants/urls';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   // photo?: string;
@@ -33,7 +34,7 @@ const CommentWrapper: FC<IProps> = ({
     <div className={styles.thumb}>
       <div
         className={styles.thumb_image}
-        style={{ backgroundImage: `url("${getURL(path(['photo'], user))}")` }}
+        style={{ backgroundImage: `url("${getURL(path(['photo'], user), PRESETS.avatar)}")` }}
       />
       <div className={styles.thumb_user}>~{path(['username'], user)}</div>
     </div>

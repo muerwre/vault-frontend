@@ -9,6 +9,7 @@ import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { getURL } from '~/utils/dom';
 import { Icon } from '~/components/input/Icon';
+import { PRESETS } from '~/constants/urls';
 
 const mapStateToProps = state => {
   const { statuses, files } = selectUploads(state);
@@ -78,7 +79,7 @@ const EditorUploadCoverButtonUnconnected: FC<IProps> = ({
     setData({ ...data, cover: null });
   }, [setData, data]);
 
-  const background = data.cover ? getURL(data.cover) : null;
+  const background = data.cover ? getURL(data.cover, PRESETS['300']) : null;
   const status = cover_temp && path([cover_temp], statuses);
   const preview = status && path(['preview'], status);
 

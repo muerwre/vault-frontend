@@ -2,7 +2,7 @@ import React, { FC, memo, useCallback, useState } from 'react';
 import * as styles from './styles.scss';
 import classNames from 'classnames';
 import { INode } from '~/redux/types';
-import { URLS } from '~/constants/urls';
+import { URLS, PRESETS } from '~/constants/urls';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { getURL } from '~/utils/dom';
 
@@ -22,10 +22,14 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
     >
       <div
         className={styles.thumb}
-        style={{ backgroundImage: `url("${getURL({ url: item.thumbnail })}")` }}
+        style={{ backgroundImage: `url("${getURL({ url: item.thumbnail }, PRESETS.avatar)}")` }}
       />
 
-      <img src={getURL({ url: item.thumbnail })} alt="loader" onLoad={() => setIsLoaded(true)} />
+      <img
+        src={getURL({ url: item.thumbnail }, PRESETS.avatar)}
+        alt="loader"
+        onLoad={() => setIsLoaded(true)}
+      />
     </div>
   );
 });

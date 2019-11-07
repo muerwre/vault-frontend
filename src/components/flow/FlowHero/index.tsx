@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import * as styles from './styles.scss';
 import { getURL } from '~/utils/dom';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { URLS } from '~/constants/urls';
+import { URLS, PRESETS } from '~/constants/urls';
 import { Icon } from '~/components/input/Icon';
 
 type IProps = RouteComponentProps & {
@@ -103,12 +103,12 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
             [styles.is_visible]: loaded.includes(hero.id),
             [styles.is_active]: current === hero.id,
           })}
-          style={{ backgroundImage: `url("${getURL({ url: hero.thumbnail })}")` }}
+          style={{ backgroundImage: `url("${getURL({ url: hero.thumbnail }, PRESETS.hero)}")` }}
           key={hero.id}
           onClick={onClick}
         >
           <img
-            src={getURL({ url: hero.thumbnail })}
+            src={getURL({ url: hero.thumbnail }, PRESETS.hero)}
             alt={hero.thumbnail}
             onLoad={onLoad(hero.id)}
           />

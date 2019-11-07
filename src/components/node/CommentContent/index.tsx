@@ -10,6 +10,7 @@ import append from 'ramda/es/append';
 import reduce from 'ramda/es/reduce';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import classnames from 'classnames';
+import { PRESETS } from '~/constants/urls';
 
 interface IProps {
   comment: IComment;
@@ -46,7 +47,7 @@ const CommentContent: FC<IProps> = memo(({ comment }) => {
           <div className={styles.images}>
             {groupped.image.map(file => (
               <div key={file.id}>
-                <img src={getURL(file)} alt={file.name} />
+                <img src={getURL(file, PRESETS['300'])} alt={file.name} />
               </div>
             ))}
           </div>
