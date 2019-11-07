@@ -86,7 +86,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     }, [nodeSetCoverImage, node.cover]);
 
     return (
-      <Card className={styles.node} seamless>
+      <Card className={styles.node} seamless key={id}>
         {block && createElement(block, { node, is_loading, updateLayout, layout })}
 
         <NodePanel

@@ -77,11 +77,11 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
 
     const { width } = wrap.current.getBoundingClientRect();
 
+    if (is_loading) return setHeight((width * 9) / 16);
+
     const selected = Math.abs(-offset / width);
 
-    if (is_loading) {
-      return setHeight((width * 9) / 16);
-    }
+    if (!heights[Math.round(selected)]) return setHeight((width * 9) / 16);
 
     const prev = Math.max(heights[Math.floor(selected)] || 320, 320);
     const next = Math.max(heights[Math.ceil(selected)] || 320, 320);
