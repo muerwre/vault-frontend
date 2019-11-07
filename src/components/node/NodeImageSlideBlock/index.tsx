@@ -8,6 +8,7 @@ import { NODE_SETTINGS } from '~/redux/node/constants';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { throttle } from 'throttle-debounce';
 
 interface IProps {
   is_loading: boolean;
@@ -32,6 +33,8 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   const [is_dragging, setIsDragging] = useState(false);
   const slide = useRef<HTMLDivElement>();
   const wrap = useRef<HTMLDivElement>();
+
+  const setHeightThrottled = useCallback(throttle(100, setHeight), [setHeight]);
 
   const images = useMemo(
     () =>
@@ -89,8 +92,12 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
 
     if (current !== Math.round(selected)) setCurrent(Math.round(selected));
 
-    setHeight(now);
-  }, [wrap, offset, heights, max_height, images, is_loading]);
+    if (!is_dragging) {
+      setHeight(now);
+    } else {
+      setHeightThrottled(now);
+    }
+  }, [is_dragging, wrap, offset, heights, max_height, images, is_loading]);
 
   const onDrag = useCallback(
     event => {
