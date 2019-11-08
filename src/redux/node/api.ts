@@ -58,12 +58,14 @@ export const postNodeComment = ({
 export const getNodeComments = ({
   id,
   access,
+  order = 'ASC',
 }: {
   id: number;
   access: string;
+  order: 'ASC' | 'DESC';
 }): Promise<IResultWithStatus<{ comments: Comment[] }>> =>
   api
-    .get(API.NODE.COMMENT(id), configWithToken(access))
+    .get(API.NODE.COMMENT(id), configWithToken(access, { params: { order } }))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 

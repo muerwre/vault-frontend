@@ -4,6 +4,12 @@ import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
 import { selectUser } from '~/redux/auth/selectors';
 import { connect } from 'react-redux';
+import { NodeComments } from '~/components/node/NodeComments';
+import styles from './styles.scss';
+import { CommentForm } from '~/components/node/CommentForm';
+import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
+import { GodRays } from '~/components/main/GodRays';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -27,14 +33,26 @@ const id = 696;
 
 const BorisLayoutUnconnected: FC<IProps> = ({
   node: { is_loading, is_loading_comments, comments = [], current: node, related },
+  user: { is_user },
   nodeLoadNode,
 }) => {
   useEffect(() => {
     if (is_loading) return;
-    nodeLoadNode(id);
+    nodeLoadNode(id, 'DESC');
   }, [nodeLoadNode, id]);
 
-  return <div>{comments.length}</div>;
+  return (
+    <div className={styles.wrap}>
+      <div className={styles.cover} />
+      <div className={styles.column} />
+
+      <Group className={styles.container}>
+        {is_user && <CommentForm id={0} />}
+
+        <NodeComments comments={comments} />
+      </Group>
+    </div>
+  );
 };
 
 const BorisLayout = connect(

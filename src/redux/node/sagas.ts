@@ -96,7 +96,7 @@ function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
   yield put(push(URLS.NODE_URL(id)));
 }
 
-function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
+function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetLoading(true));
   yield put(nodeSetLoadingComments(true));
   yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
@@ -123,7 +123,7 @@ function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
       data: { related },
     },
   } = yield all({
-    comments: call(reqWrapper, getNodeComments, { id }),
+    comments: call(reqWrapper, getNodeComments, { id, order }),
     related: call(reqWrapper, getNodeRelated, { id }),
   });
 

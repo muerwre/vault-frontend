@@ -18,8 +18,9 @@ export const nodeGotoNode = (id: number, node_type: INode['type']) => ({
   type: NODE_ACTIONS.GOTO_NODE,
 });
 
-export const nodeLoadNode = (id: number) => ({
+export const nodeLoadNode = (id: number, order?: 'ASC' | 'DESC') => ({
   id,
+  order,
   type: NODE_ACTIONS.LOAD_NODE,
 });
 
