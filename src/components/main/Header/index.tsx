@@ -37,6 +37,7 @@ const HeaderUnconnected: FC<IProps> = memo(
         <Filler />
 
         <div className={style.plugs}>
+          <Link to="/boris">((( boris )))</Link>
           <Link to="/">flow</Link>
         </div>
 

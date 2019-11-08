@@ -2,11 +2,10 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: column;
 }
 
-.container {
-  margin-top: 33vh;
+.content {
   flex: 3;
   z-index: 2;
   padding: $gap;
@@ -19,20 +18,19 @@
   background: $content_bg;
   position: relative;
   z-index: 2;
-  margin-top: 33vh;
   margin-right: $gap;
   border-radius: $radius;
   padding: $gap * 2;
 }
 
-.content {
-  padding: $gap;
-  text-align: center;
-  font: $font_24_bold;
-  text-transform: uppercase;
-  position: relative;
-  display: none;
-}
+// .content {
+//   padding: $gap;
+//   text-align: center;
+//   font: $font_24_bold;
+//   text-transform: uppercase;
+//   position: relative;
+//   display: none;
+// }
 
 .cover {
   position: fixed;
@@ -43,7 +41,8 @@
   height: 100vh;
   overflow: hidden;
   // background: linear-gradient($red, transparentize($red, 1));
-  background: 50% 0% no-repeat/cover url('~/sprites/illustrate.svg');
+  background: 50% 0% no-repeat/cover url('~/sprites/boris_bg.svg');
+  // display: none;
 }
 
 .header {
@@ -74,4 +73,37 @@
 .line {
   grid-column: 1/3;
   height: $gap * 4;
+}
+
+.container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.image {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  img {
+    width: 90%;
+  }
+}
+
+.caption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  font: $font_48_bold;
+  flex-direction: column;
+  padding-bottom: $gap * 2;
 }
