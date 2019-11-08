@@ -47,7 +47,7 @@ $stamp_color: $content_bg;
 
   @media (max-width: $cell * 2) {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 40vh 75vw;
+    grid-template-rows: 40vh 50vw;
     grid-auto-rows: 50vw;
     grid-column-gap: $gap;
     grid-row-gap: $gap;
@@ -101,4 +101,8 @@ $stamp_color: $content_bg;
     width: 100%;
     background: linear-gradient(transparentize($stamp_color, 1), $stamp_color 90%);
   }
+
+  // @media (max-width: $cell * 2) {
+  // grid-row-end: span 3;
+  // }
 }
