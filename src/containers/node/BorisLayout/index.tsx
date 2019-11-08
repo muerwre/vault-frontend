@@ -44,7 +44,27 @@ const BorisLayoutUnconnected: FC<IProps> = ({
   return (
     <div className={styles.wrap}>
       <div className={styles.cover} />
-      <div className={styles.column} />
+      <div className={styles.column}>
+        <div className={styles.daygrid}>
+          <div className={styles.label}>Убежищу сегодня:</div>
+          <div className={styles.day}>10</div>
+          <div>лет</div>
+          <div className={styles.day}>2</div>
+          <div>месяца</div>
+
+          <div className={styles.line} />
+
+          <div className={styles.label}>Мы собрали:</div>
+          <div className={styles.day}>2374</div>
+          <div>поста</div>
+          <div className={styles.day}>14765</div>
+          <div>комментариев</div>
+          <div className={styles.day}>4260</div>
+          <div>файла</div>
+          <div className={styles.day}>54</div>
+          <div>жителя</div>
+        </div>
+      </div>
 
       <Group className={styles.container}>
         {is_user && <CommentForm id={0} />}

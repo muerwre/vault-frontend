@@ -17,12 +17,12 @@
 .column {
   flex: 1;
   background: $content_bg;
-  height: 400px;
   position: relative;
   z-index: 2;
   margin-top: 33vh;
   margin-right: $gap;
   border-radius: $radius;
+  padding: $gap * 2;
 }
 
 .content {
@@ -44,4 +44,34 @@
   overflow: hidden;
   // background: linear-gradient($red, transparentize($red, 1));
   background: 50% 0% no-repeat/cover url('~/sprites/illustrate.svg');
+}
+
+.header {
+  font-size: 2em;
+}
+
+.daygrid {
+  display: grid;
+  grid-template-columns: 1fr 100%;
+  column-gap: $gap;
+  align-items: center;
+}
+
+.day {
+  font-size: 2em;
+  font-weight: 600;
+  text-align: right;
+}
+
+.label {
+  font: $font_14_regular;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  opacity: 0.5;
+  grid-column: 1/3;
+}
+
+.line {
+  grid-column: 1/3;
+  height: $gap * 4;
 }
