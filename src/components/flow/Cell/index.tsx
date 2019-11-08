@@ -47,6 +47,11 @@ const Cell: FC<IProps> = ({
   }, []);
 
   useEffect(() => {
+    // recalc visibility of other elements
+    window.dispatchEvent(new CustomEvent('scroll'));
+  }, [flow]);
+
+  useEffect(() => {
     window.addEventListener('scroll', checkIfVisibleDebounced);
 
     return () => window.removeEventListener('scroll', checkIfVisibleDebounced);
