@@ -23,7 +23,7 @@ const ProfileInfo: FC<IProps> = ({ user, is_loading = false }) => (
 
       <div className={styles.field}>
         <div className={styles.name}>
-          {is_loading ? <Placeholder width="80%" /> : user.username}
+          {is_loading ? <Placeholder width="80%" /> : user.fullname || user.username}
         </div>
 
         <div className={styles.description}>

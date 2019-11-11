@@ -45,6 +45,7 @@ export const EMPTY_USER: IUser = {
   is_activated: false,
   is_user: false,
   last_seen: null,
+  fullname: null,
 };
 
 export interface IApiUser {

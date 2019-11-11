@@ -14,6 +14,7 @@ export interface IUser {
   cover: IFile;
   name: string;
   last_seen: string;
+  fullname: string;
 
   is_activated: boolean;
   is_user: boolean;
