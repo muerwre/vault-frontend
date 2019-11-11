@@ -16,7 +16,8 @@
    version="1.1"
    id="svg1459"
    inkscape:version="0.92.4 5da689c313, 2019-01-14"
-   sodipodi:docname="boris_robot.svg">
+   sodipodi:docname="boris_robot.svg"
+   enable-background="new">
   <defs
      id="defs1453">
     <filter
@@ -649,6 +650,16 @@
        y1="43.408844"
        x2="203.95857"
        y2="43.128212" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1145">
+      <feBlend
+         inkscape:collect="always"
+         mode="hue"
+         in2="BackgroundImage"
+         id="feBlend1147" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -657,11 +668,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="603.46092"
-     inkscape:cy="101.82245"
+     inkscape:zoom="0.5"
+     inkscape:cx="325.27991"
+     inkscape:cy="133.56075"
      inkscape:document-units="px"
-     inkscape:current-layer="g3583"
+     inkscape:current-layer="layer4"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -1262,6 +1273,51 @@
          rx="11.641666"
          ry="12.170834"
          transform="matrix(0.34414504,0,0,0.34414504,190.67534,95.320527)" />
+      <ellipse
+         transform="matrix(0.40004177,0,0,0.40004177,29.514115,1.3943065)"
+         ry="12.170834"
+         rx="11.641666"
+         cy="85.862556"
+         cx="321.73331"
+         id="ellipse1009"
+         style="opacity:0.80869565;fill:#d7f4d7;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3699)" />
+      <ellipse
+         transform="matrix(0.14855089,0,0,0.14855089,154.42336,47.556404)"
+         ry="12.170834"
+         rx="11.641666"
+         cy="85.862556"
+         cx="321.73331"
+         id="ellipse1011"
+         style="opacity:0.306;fill:#d7f4d7;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3699)" />
+      <ellipse
+         style="opacity:0.80869565;fill:#d7f4d7;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3699)"
+         id="ellipse1013"
+         cx="321.73331"
+         cy="85.862556"
+         rx="11.641666"
+         ry="12.170834"
+         transform="matrix(0.08767551,0,0,0.08767551,114.66672,65.634513)" />
+      <ellipse
+         style="opacity:0.80869565;fill:#d7f4d7;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3699)"
+         id="ellipse1015"
+         cx="321.73331"
+         cy="85.862556"
+         rx="11.641666"
+         ry="12.170834"
+         transform="matrix(0.08767551,0,0,0.08767551,220.50012,28.592844)" />
+      <ellipse
+         style="opacity:0.80869565;fill:#bdedbd;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3699)"
+         id="ellipse1017"
+         cx="321.73331"
+         cy="85.862556"
+         rx="11.641666"
+         ry="12.170834"
+         transform="matrix(0.0687365,0,0,0.0687365,247.76011,67.260665)" />
     </g>
   </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="red"
+     style="filter:url(#filter1145)" />
 </svg>
