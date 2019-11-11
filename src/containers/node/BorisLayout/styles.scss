@@ -21,16 +21,8 @@
   margin-right: $gap;
   border-radius: $radius;
   padding: $gap * 2;
+  display: none;
 }
-
-// .content {
-//   padding: $gap;
-//   text-align: center;
-//   font: $font_24_bold;
-//   text-transform: uppercase;
-//   position: relative;
-//   display: none;
-// }
 
 .cover {
   position: fixed;
@@ -40,9 +32,7 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  // background: linear-gradient($red, transparentize($red, 1));
   background: 50% 0% no-repeat/cover url('~/sprites/boris_bg.svg');
-  // display: none;
 }
 
 .header {
@@ -80,6 +70,12 @@
   align-items: flex-start;
   justify-content: center;
   flex-direction: row;
+  width: 80%;
+  margin: auto;
+
+  @include tablet {
+    width: 100%;
+  }
 }
 
 .image {
@@ -90,7 +86,16 @@
   justify-content: flex-end;
 
   img {
-    width: 90%;
+    // width: 90%;
+  }
+
+  @include tablet {
+    height: 100px;
+    width: 100%;
+
+    img {
+      display: none;
+    }
   }
 }
 
@@ -104,6 +109,18 @@
   align-items: flex-start;
   justify-content: flex-end;
   font: $font_48_bold;
+  font-size: 72px;
+  line-height: 0.95em;
   flex-direction: column;
   padding-bottom: $gap * 2;
+  padding: 0 10% $gap * 2;
+
+  @include tablet {
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+
+    padding: $gap;
+    font-size: 48px;
+  }
 }

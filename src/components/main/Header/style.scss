@@ -27,6 +27,7 @@
     transition: color 0.25s;
     text-decoration: none;
     color: white;
+    white-space: nowrap;
 
     &:hover {
       color: $red;
