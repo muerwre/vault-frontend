@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { hot } from 'react-hot-loader';
 import { ConnectedRouter } from 'connected-react-router';
@@ -8,7 +8,6 @@ import { FlowLayout } from '~/containers/flow/FlowLayout';
 import { MainLayout } from '~/containers/main/MainLayout';
 import { ImageExample } from '~/containers/examples/ImageExample';
 import { EditorExample } from '~/containers/examples/EditorExample';
-import { HorizontalExample } from '~/containers/examples/HorizontalExample';
 import { Sprites } from '~/sprites/Sprites';
 import { URLS } from '~/constants/urls';
 import { Modal } from '~/containers/dialogs/Modal';
@@ -19,6 +18,7 @@ import { NodeLayout } from './node/NodeLayout';
 import { BottomContainer } from '~/containers/main/BottomContainer';
 import { BorisLayout } from './node/BorisLayout';
 import { ErrorNotFound } from './pages/ErrorNotFound';
+import { ProfileLayout } from './profile/ProfileLayout';
 
 const mapStateToProps = state => ({
   modal: selectModal(state),

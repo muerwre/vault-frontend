@@ -1,19 +1,20 @@
-import { call, put, takeLatest, select } from 'redux-saga/effects';
+import { call, put, takeLatest, select, delay } from 'redux-saga/effects';
 import { AUTH_USER_ACTIONS, EMPTY_USER, USER_ERRORS } from '~/redux/auth/constants';
 import {
   authSetToken,
   userSetLoginError,
   authSetUser,
   userSendLoginRequest,
-  gotPostMessage,
+  gotAuthPostMessage,
+  authOpenProfile,
+  authSetProfile,
 } from '~/redux/auth/actions';
-import { apiUserLogin, apiAuthGetUser } from '~/redux/auth/api';
-import { modalSetShown } from '~/redux/modal/actions';
+import { apiUserLogin, apiAuthGetUser, apiAuthGetUserProfile } from '~/redux/auth/api';
+import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
 import { selectToken } from './selectors';
 import { IResultWithStatus } from '../types';
 import { IUser } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
-import path from 'ramda/es/path';
 import { selectModal } from '../modal/selectors';
 import { IModalState } from '../modal/reducer';
 import { DIALOGS } from '../modal/constants';
@@ -76,7 +77,7 @@ function* checkUserSaga({ key }: RehydrateAction) {
   yield call(refreshUser);
 }
 
-function* gotPostMessageSaga({ token }: ReturnType<typeof gotPostMessage>) {
+function* gotPostMessageSaga({ token }: ReturnType<typeof gotAuthPostMessage>) {
   yield put(authSetToken(token));
   yield call(refreshUser);
 
@@ -90,11 +91,29 @@ function* logoutSaga() {
   yield put(authSetUser({ ...EMPTY_USER }));
 }
 
+function* openProfile({ username }: ReturnType<typeof authOpenProfile>) {
+  yield put(modalShowDialog(DIALOGS.PROFILE));
+  yield put(authSetProfile({ is_loading: true }));
+
+  const {
+    error,
+    data: { user },
+  } = yield call(reqWrapper, apiAuthGetUserProfile, { username });
+
+  if (error || !user) {
+    return yield put(modalSetShown(false));
+  }
+
+  yield put(authSetProfile({ is_loading: false }));
+  console.log({ username, user });
+}
+
 function* authSaga() {
   yield takeLatest(REHYDRATE, checkUserSaga);
   yield takeLatest(AUTH_USER_ACTIONS.LOGOUT, logoutSaga);
   yield takeLatest(AUTH_USER_ACTIONS.SEND_LOGIN_REQUEST, sendLoginRequestSaga);
-  yield takeLatest(AUTH_USER_ACTIONS.GOT_POST_MESSAGE, gotPostMessageSaga);
+  yield takeLatest(AUTH_USER_ACTIONS.GOT_AUTH_POST_MESSAGE, gotPostMessageSaga);
+  yield takeLatest(AUTH_USER_ACTIONS.OPEN_PROFILE, openProfile);
 }
 
 export default authSaga;

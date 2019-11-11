@@ -9,6 +9,7 @@ import styles from './styles.scss';
 import { CommentForm } from '~/components/node/CommentForm';
 import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
+import { NodeNoComments } from '~/components/node/NodeNoComments';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -78,7 +79,11 @@ const BorisLayoutUnconnected: FC<IProps> = ({
         <Group className={styles.content}>
           {is_user && <CommentForm id={0} />}
 
-          <NodeComments comments={comments} />
+          {is_loading_comments ? (
+            <NodeNoComments is_loading />
+          ) : (
+            <NodeComments comments={comments} />
+          )}
         </Group>
       </div>
     </div>

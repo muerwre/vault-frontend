@@ -79,6 +79,10 @@ export const formatText = (text: string): string =>
         .replace(/(\n{2,})/gi, '\n')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
+        .replace(
+          /~([\wа-яА-Я\-]+)/giu,
+          '<span class="username" onClick="window.postMessage({ type: \'username\', username: \'$1\'});">~$1</span>'
+        )
         .replace(/:\/\//gim, ':|--|')
         .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
         .replace(/(\/\*[\s\S]*?\*\/)/gim, '<span class="grey">$1</span>')

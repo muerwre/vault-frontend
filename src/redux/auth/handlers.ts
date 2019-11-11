@@ -14,23 +14,32 @@ const setLoginError: ActionHandler<typeof ActionCreators.userSetLoginError> = (
   login: {
     ...state.login,
     error,
-  }
+  },
 });
 
 const setUser: ActionHandler<typeof ActionCreators.authSetUser> = (state, { profile }) => ({
   ...state,
   user: {
     ...state.user,
-    ...profile
-  }
+    ...profile,
+  },
 });
 
 const setToken: ActionHandler<typeof ActionCreators.authSetToken> = (state, { token }) => ({
-  ...state, token,
+  ...state,
+  token,
 });
 
+const setProfile: ActionHandler<typeof ActionCreators.authSetProfile> = (state, { profile }) => ({
+  ...state,
+  profile: {
+    ...state.profile,
+    ...profile,
+  },
+});
 export const AUTH_USER_HANDLERS = {
   [AUTH_USER_ACTIONS.SET_LOGIN_ERROR]: setLoginError,
   [AUTH_USER_ACTIONS.SET_USER]: setUser,
   [AUTH_USER_ACTIONS.SET_TOKEN]: setToken,
+  [AUTH_USER_ACTIONS.SET_PROFILE]: setProfile,
 };

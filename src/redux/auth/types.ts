@@ -26,4 +26,9 @@ export type IAuthState = Readonly<{
     error: string;
     is_loading: boolean;
   };
+
+  profile: {
+    is_loading: boolean;
+    user: IUser;
+  };
 }>;

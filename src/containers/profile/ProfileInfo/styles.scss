@@ -1,0 +1,28 @@
+.wrap {
+  justify-content: flex-start;
+  align-items: flex-start !important;
+  // min-height: 64px;
+  padding: $gap;
+  box-sizing: border-box;
+}
+
+.avatar {
+  @include outer_shadow();
+
+  border-radius: $radius;
+  width: 140px;
+  height: 140px;
+  background: $content_bg;
+  position: absolute;
+  top: -60px;
+  left: $gap;
+}
+
+.field {
+  padding-left: 140px;
+  flex: 1;
+}
+
+.name {
+  font: $font_24_bold;
+}

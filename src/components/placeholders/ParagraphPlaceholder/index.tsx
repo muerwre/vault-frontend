@@ -3,24 +3,24 @@ import { Placeholder } from '~/components/placeholders/Placeholder';
 import * as styles from './styles.scss';
 import { Group } from '~/components/containers/Group';
 
-const ParagraphPlaceholder = ({ }) => (
+const ParagraphPlaceholder = ({}) => (
   <Group>
     <div className={styles.para}>
-      <Placeholder width={120} />
-      <Placeholder width={60} />
-      <Placeholder width={30} />
-      <Placeholder width={70} />
-      <Placeholder width={160} />
-      <Placeholder width={30} />
+      <Placeholder width="120px" />
+      <Placeholder width="60px" />
+      <Placeholder width="30px" />
+      <Placeholder width="70px" />
+      <Placeholder width="160px" />
+      <Placeholder width="30px" />
     </div>
 
     <div className={styles.para}>
-      <Placeholder width={40} />
-      <Placeholder width={30} />
-      <Placeholder width={120} />
-      <Placeholder width={70} />
-      <Placeholder width={160} />
-      <Placeholder width={30} />
+      <Placeholder width="40px" />
+      <Placeholder width="30px" />
+      <Placeholder width="120px" />
+      <Placeholder width="70px" />
+      <Placeholder width="160px" />
+      <Placeholder width="30px" />
     </div>
   </Group>
 );

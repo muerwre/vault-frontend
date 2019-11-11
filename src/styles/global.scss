@@ -87,6 +87,15 @@ body {
   font: $font_24_bold;
 }
 
+:global(.username) {
+  background: transparentize($color: #000000, $amount: 0.8);
+  padding: 2px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: $wisegreen;
+  font-weight: bold;
+}
+
 ::-webkit-scrollbar {
   width: 18px;
   height: 18px;
@@ -116,14 +125,6 @@ body {
   border: 0px none #ffffff;
   border-radius: 50px;
 }
-
-// ::-webkit-scrollbar-track:hover {
-// background: #666666;
-// }
-//
-// ::-webkit-scrollbar-track:active {
-// background: #333333;
-// }
 
 ::-webkit-scrollbar-corner {
   background: transparent;

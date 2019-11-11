@@ -19,8 +19,8 @@ export const authSetToken = (token: IAuthState['token']) => ({
   token,
 });
 
-export const gotPostMessage = ({ token }: { token: string }) => ({
-  type: AUTH_USER_ACTIONS.GOT_POST_MESSAGE,
+export const gotAuthPostMessage = ({ token }: { token: string }) => ({
+  type: AUTH_USER_ACTIONS.GOT_AUTH_POST_MESSAGE,
   token,
 });
 
@@ -31,4 +31,14 @@ export const authSetUser = (profile: Partial<IUser>) => ({
 
 export const authLogout = () => ({
   type: AUTH_USER_ACTIONS.LOGOUT,
+});
+
+export const authOpenProfile = (username: string) => ({
+  type: AUTH_USER_ACTIONS.OPEN_PROFILE,
+  username,
+});
+
+export const authSetProfile = (profile: Partial<IAuthState['profile']>) => ({
+  type: AUTH_USER_ACTIONS.SET_PROFILE,
+  profile,
 });

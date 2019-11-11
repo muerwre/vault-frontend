@@ -22,3 +22,12 @@ export const apiAuthGetUser = ({ access }): Promise<IResultWithStatus<{ user: IU
     .get(API.USER.ME, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
+
+export const apiAuthGetUserProfile = ({
+  access,
+  username,
+}): Promise<IResultWithStatus<{ user: IUser }>> =>
+  api
+    .get(API.USER.PROFILE(username), configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);

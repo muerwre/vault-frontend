@@ -10,9 +10,15 @@ const HANDLERS = {
 const INITIAL_STATE: IAuthState = {
   token: null,
   user: { ...EMPTY_USER },
+
   login: {
     error: null,
     is_loading: false,
+  },
+
+  profile: {
+    is_loading: true,
+    user: null,
   },
 };
 

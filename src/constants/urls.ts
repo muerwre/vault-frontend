@@ -13,6 +13,7 @@ export const URLS = {
     BACKEND_DOWN: '/oopsie',
   },
   NODE_URL: (id: number | string) => `/post${id}`,
+  PROFILE: (username: string) => `/~${username}`,
 };
 
 export const PRESETS = {

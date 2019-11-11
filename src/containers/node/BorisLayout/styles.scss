@@ -11,6 +11,7 @@
   padding: $gap;
   background: $content_bg;
   border-radius: $radius;
+  flex: 0 1 $limited_width;
 }
 
 .column {
@@ -70,12 +71,13 @@
   align-items: flex-start;
   justify-content: center;
   flex-direction: row;
-  width: 80%;
-  margin: auto;
+  flex: 0 1 $limited_width;
+  width: 100%;
+  // margin: auto;
 
-  @include tablet {
-    width: 100%;
-  }
+  // @include tablet {
+  // width: 100%;
+  // }
 }
 
 .image {
@@ -101,9 +103,10 @@
 
 .caption {
   position: absolute;
-  left: 0;
+  left: 50%;
   bottom: 0;
-  width: 50%;
+  width: 100%;
+  max-width: $limited_width;
   height: 100%;
   display: flex;
   align-items: flex-start;
@@ -114,6 +117,7 @@
   flex-direction: column;
   padding-bottom: $gap * 2;
   padding: 0 10% $gap * 2;
+  transform: translate(-50%, 0);
 
   @include tablet {
     align-items: flex-start;
