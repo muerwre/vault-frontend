@@ -10,12 +10,13 @@ import { Link } from 'react-router-dom';
 interface IProps {
   user: Partial<IUser>;
   onLogout: () => void;
+  onProfileClick: () => void;
 }
 
-const UserButton: FC<IProps> = ({ user: { username, photo }, onLogout }) => (
+const UserButton: FC<IProps> = ({ user: { username, photo }, onProfileClick, onLogout }) => (
   <div className={styles.wrap}>
     <Group horizontal className={styles.user_button}>
-      <Link to={`/~${username}`}>{username}</Link>
+      <div onClick={onProfileClick}>{username}</div>
 
       <div
         className={styles.user_avatar}

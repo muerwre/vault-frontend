@@ -104,8 +104,7 @@ function* openProfile({ username }: ReturnType<typeof authOpenProfile>) {
     return yield put(modalSetShown(false));
   }
 
-  yield put(authSetProfile({ is_loading: false }));
-  console.log({ username, user });
+  yield put(authSetProfile({ is_loading: false, user }));
 }
 
 function* authSaga() {

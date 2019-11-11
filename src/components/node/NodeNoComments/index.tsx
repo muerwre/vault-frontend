@@ -7,7 +7,7 @@ import { ERRORS } from '~/constants/errors';
 import { t } from '~/utils/trans';
 
 interface IProps {
-  is_loading: boolean;
+  is_loading?: boolean;
 }
 
 const NodeNoComments: FC<IProps> = ({ is_loading = false }) => (

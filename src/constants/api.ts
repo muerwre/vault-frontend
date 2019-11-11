@@ -7,7 +7,7 @@ export const API = {
     VKONTAKTE_LOGIN: `${process.env.API_HOST}/auth/vkontakte`,
     ME: '/auth/',
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
-    PROFILE: (username: string) => `/user/${username}`,
+    PROFILE: (username: string) => `/auth/user/${username}`,
   },
   NODE: {
     SAVE: '/node/',

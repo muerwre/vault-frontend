@@ -13,6 +13,7 @@ export interface IUser {
   photo: IFile;
   cover: IFile;
   name: string;
+  last_seen: string;
 
   is_activated: boolean;
   is_user: boolean;

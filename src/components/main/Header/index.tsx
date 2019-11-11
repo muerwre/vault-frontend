@@ -22,13 +22,15 @@ const mapDispatchToProps = {
   push: historyPush,
   showDialog: MODAL_ACTIONS.modalShowDialog,
   authLogout: AUTH_ACTIONS.authLogout,
+  authOpenProfile: AUTH_ACTIONS.authOpenProfile,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const HeaderUnconnected: FC<IProps> = memo(
-  ({ user, user: { username, is_user, photo }, showDialog, authLogout }) => {
+  ({ user, user: { username, is_user }, showDialog, authLogout, authOpenProfile }) => {
     const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
+    const onProfileClick = useCallback(() => authOpenProfile(username), [authOpenProfile, user]);
 
     return (
       <div className={style.container}>
@@ -41,7 +43,9 @@ const HeaderUnconnected: FC<IProps> = memo(
           <Link to="/">flow</Link>
         </div>
 
-        {is_user && <UserButton user={user} onLogout={authLogout} />}
+        {is_user && (
+          <UserButton user={user} onLogout={authLogout} onProfileClick={onProfileClick} />
+        )}
 
         {!is_user && (
           <Group horizontal className={style.user_button} onClick={onLogin}>
