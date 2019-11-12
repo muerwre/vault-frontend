@@ -9,15 +9,17 @@ import {
   authOpenProfile,
   authSetProfile,
   authGetMessages,
+  authSendMessage,
 } from '~/redux/auth/actions';
 import {
   apiUserLogin,
   apiAuthGetUser,
   apiAuthGetUserProfile,
   apiAuthGetUserMessages,
+  apiAuthSendMessage,
 } from '~/redux/auth/api';
 import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
-import { selectToken } from './selectors';
+import { selectToken, selectAuthProfile } from './selectors';
 import { IResultWithStatus } from '../types';
 import { IUser } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
@@ -128,12 +130,50 @@ function* getMessages({ username }: ReturnType<typeof authGetMessages>) {
     return yield put(
       authSetProfile({
         is_loading_messages: false,
-        messages_errors: { network: ERRORS.EMPTY_RESPONSE },
+        messages_error: ERRORS.EMPTY_RESPONSE,
       })
     );
   }
 
   yield put(authSetProfile({ is_loading_messages: false, messages }));
+}
+
+function* sendMessage({ message, onSuccess }: ReturnType<typeof authSendMessage>) {
+  const {
+    user: { username },
+  } = yield select(selectAuthProfile);
+
+  if (!username) return;
+
+  yield put(authSetProfile({ is_sending_messages: true, messages_error: null }));
+
+  const { error, data } = yield call(reqWrapper, apiAuthSendMessage, { username, message });
+
+  console.log({ error, data });
+
+  if (error || !data.message) {
+    return yield put(
+      authSetProfile({
+        is_sending_messages: false,
+        messages_error: error || ERRORS.EMPTY_RESPONSE,
+      })
+    );
+  }
+
+  const { user, messages } = yield select(selectAuthProfile);
+
+  if (user.username !== username) {
+    return yield put(authSetProfile({ is_sending_messages: false }));
+  }
+
+  yield put(
+    authSetProfile({
+      is_sending_messages: false,
+      messages: [message, ...messages],
+    })
+  );
+
+  onSuccess();
 }
 
 function* authSaga() {
@@ -143,6 +183,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.GOT_AUTH_POST_MESSAGE, gotPostMessageSaga);
   yield takeLatest(AUTH_USER_ACTIONS.OPEN_PROFILE, openProfile);
   yield takeLatest(AUTH_USER_ACTIONS.GET_MESSAGES, getMessages);
+  yield takeLatest(AUTH_USER_ACTIONS.SEND_MESSAGE, sendMessage);
 }
 
 export default authSaga;

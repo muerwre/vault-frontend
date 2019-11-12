@@ -39,13 +39,14 @@
 .footer {
   @include outer_shadow();
 
-  padding: 10px;
+  // padding: 10px;
   background: darken($content_bg, 2%);
 }
 
 .body {
   @include outer_shadow();
 
+  position: relative;
   overflow: auto;
   flex: 1;
   background: $content_bg;
@@ -85,4 +86,14 @@
     width: 24px;
     height: 24px;
   }
+}
+
+.error {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  pointer-events: none;
+  background: linear-gradient($red, transparentize($red, 1));
 }

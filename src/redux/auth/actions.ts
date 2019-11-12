@@ -1,5 +1,6 @@
 import { AUTH_USER_ACTIONS } from '~/redux/auth/constants';
 import { IAuthState, IUser } from '~/redux/auth/types';
+import { IMessage } from '../types';
 
 export const userSendLoginRequest = ({
   username,
@@ -46,4 +47,10 @@ export const authSetProfile = (profile: Partial<IAuthState['profile']>) => ({
 export const authGetMessages = (username: string) => ({
   type: AUTH_USER_ACTIONS.GET_MESSAGES,
   username,
+});
+
+export const authSendMessage = (message: Partial<IMessage>, onSuccess) => ({
+  type: AUTH_USER_ACTIONS.SEND_MESSAGE,
+  message,
+  onSuccess,
 });

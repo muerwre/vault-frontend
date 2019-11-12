@@ -6,7 +6,6 @@ import React, {
   useLayoutEffect,
   useRef,
   useState,
-  HTMLAttributes,
   TextareaHTMLAttributes,
 } from 'react';
 import { getStyle } from '~/utils/dom';
@@ -26,6 +25,7 @@ type IProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   required?: boolean;
   status?: 'error' | 'success' | '';
   title?: string;
+  seamless?: boolean;
 };
 
 const Textarea = memo<IProps>(
@@ -39,6 +39,7 @@ const Textarea = memo<IProps>(
     required = false,
     title = '',
     status = '',
+    seamless,
     ...props
   }) => {
     const [rows, setRows] = useState(minRows || 1);
@@ -85,11 +86,12 @@ const Textarea = memo<IProps>(
 
     return (
       <div
-        className={classNames(styles.input_text_wrapper, {
+        className={classNames(styles.input_text_wrapper, styles.textarea_wrapper, {
           [styles.required]: required,
           [styles.focused]: focused,
           [styles.has_status]: !!status,
           [styles.has_value]: !!value,
+          [styles.seamless]: !!seamless,
         })}
       >
         <div className={styles.input}>

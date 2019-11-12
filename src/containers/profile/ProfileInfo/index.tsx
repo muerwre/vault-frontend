@@ -5,19 +5,32 @@ import { Group } from '~/components/containers/Group';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { getURL, getPrettyDate } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
+import { ProfileTabs } from '../ProfileTabs';
+import { MessageForm } from '~/components/profile/MessageForm';
 
 interface IProps {
   user?: IUser;
+  tab: string;
+
   is_loading?: boolean;
+  is_own?: boolean;
+
+  setTab?: (tab: string) => void;
 }
 
-const ProfileInfo: FC<IProps> = ({ user, is_loading = false }) => (
-  <Group>
+const TAB_HEADERS = {
+  messages: <MessageForm is_sending_message={false} />,
+};
+
+const ProfileInfo: FC<IProps> = ({ user, tab, is_loading, is_own, setTab }) => (
+  <div>
     <Group className={styles.wrap} horizontal>
       <div
         className={styles.avatar}
         style={{
-          backgroundImage: `url("${user && getURL(user.photo, PRESETS.avatar)}")`,
+          backgroundImage: is_loading
+            ? null
+            : `url("${user && getURL(user.photo, PRESETS.avatar)}")`,
         }}
       />
 
@@ -31,7 +44,11 @@ const ProfileInfo: FC<IProps> = ({ user, is_loading = false }) => (
         </div>
       </div>
     </Group>
-  </Group>
+
+    <ProfileTabs tab={tab} is_own={is_own} setTab={setTab} />
+
+    {TAB_HEADERS[tab] || null}
+  </div>
 );
 
 export { ProfileInfo };

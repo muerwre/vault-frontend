@@ -32,6 +32,25 @@
     padding: 0 18px;
   }
 
+  &.seamless {
+    background: none;
+    box-shadow: none;
+  }
+
+  &.textarea_wrapper {
+    &::before {
+      display: none;
+    }
+
+    .input {
+      padding: 0;
+
+      textarea {
+        padding: $gap;
+      }
+    }
+  }
+
   &:hover {
     opacity: 1;
   }

@@ -22,8 +22,6 @@ const BetterScrollDialog: FC<IProps> = ({
   footer,
   width = 600,
   error,
-  onOverlayClick,
-  onRefCapture,
   onClose,
 }) => {
   const ref = useRef(null);
@@ -43,7 +41,12 @@ const BetterScrollDialog: FC<IProps> = ({
           </div>
         )}
         {header && <div className={styles.header}>{header}</div>}
-        <div className={styles.body}>{children}</div>
+
+        <div className={styles.body}>
+          {children}
+          {error && <div className={styles.error}>{error}</div>}
+        </div>
+
         {footer && <div className={styles.header}>{footer}</div>}
       </div>
     </div>

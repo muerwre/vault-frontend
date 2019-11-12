@@ -1,0 +1,80 @@
+$incoming_color: transparentize($wisegreen, 0.7);
+$outgoing_color: $comment_bg;
+
+.message {
+  align-items: flex-end !important;
+  display: flex;
+  flex-direction: row;
+  padding: 0 0 0 42px;
+  position: relative;
+
+  .avatar {
+    // margin: 0 0 0 10px;
+  }
+
+  &::before {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 20px 0 0 20px;
+    border-color: transparent transparent transparent $comment_bg;
+    bottom: 0;
+    right: 24px;
+  }
+
+  &.incoming {
+    flex-direction: row-reverse;
+    padding: 0 40px 0 0;
+
+    .text {
+      background: $incoming_color;
+      border-radius: $radius $radius $radius 0;
+    }
+
+    .stamp {
+      left: auto;
+      right: 42px;
+    }
+
+    &::before {
+      content: '';
+      border-width: 0 0 16px 16px;
+      border-color: transparent transparent $incoming_color transparent;
+      left: 24px;
+      right: auto;
+      z-index: 1;
+    }
+  }
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border-radius: $radius;
+
+  background: 50% 50% no-repeat/cover;
+  // display: none;
+}
+
+.text {
+  padding: $gap $gap $gap * 2 $gap;
+  background: $outgoing_color;
+  word-wrap: break-word;
+  word-break: break-word;
+  width: 90%;
+  border-radius: $radius $radius 0 $radius;
+}
+
+.stamp {
+  position: absolute;
+  opacity: 0.5;
+  // background: transparentize($color: #000000, $amount: 0.9);
+  font: $font_10_regular;
+  bottom: 0;
+  left: 42px;
+  padding: 2px $gap;
+  border-radius: $radius;
+}

@@ -35,8 +35,18 @@ export const apiAuthGetUserProfile = ({
 export const apiAuthGetUserMessages = ({
   access,
   username,
-}): Promise<IResultWithStatus<{ messages: IMessage }>> =>
+}): Promise<IResultWithStatus<{ messages: IMessage[] }>> =>
   api
     .get(API.USER.MESSAGES(username), configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const apiAuthSendMessage = ({
+  access,
+  username,
+  message,
+}): Promise<IResultWithStatus<{ message: IMessage }>> =>
+  api
+    .post(API.USER.MESSAGE_SEND(username), { message }, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);

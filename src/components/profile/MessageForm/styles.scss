@@ -1,0 +1,37 @@
+.wrap {
+  @include outer_shadow();
+  padding: $gap;
+  background: $content_bg;
+  position: relative;
+
+  textarea {
+    // margin-bottom: 40px;
+  }
+}
+
+.content {
+  @include inner_shadow();
+  background: $input_bg_color;
+  border-radius: $input_radius;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  padding: 0 $gap / 2 $gap / 2 $gap / 2;
+}
+
+.error {
+  position: absolute;
+  top: 100%;
+  padding: 10px;
+  left: 5%;
+  width: 90%;
+  background: linear-gradient($red, transparentize($red, 0.1));
+  z-index: 1;
+  box-sizing: border-box;
+  text-align: center;
+  border-radius: 0 0 $radius $radius;
+}

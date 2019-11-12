@@ -36,9 +36,7 @@ const ProfileLayoutUnconnected: FC<IProps> = ({ history, nodeSetCoverImage }) =>
 
   return (
     <Group className={styles.wrap} horizontal>
-      <div className={styles.column}>
-        <ProfileInfo user={user} />
-      </div>
+      <div className={styles.column} />
 
       <Grid className={styles.content}>
         <div className={styles.comments}>

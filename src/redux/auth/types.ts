@@ -32,8 +32,10 @@ export type IAuthState = Readonly<{
   profile: {
     is_loading: boolean;
     is_loading_messages: boolean;
+    is_sending_messages: boolean;
+
     user: IUser;
     messages: IMessage[];
-    messages_errors: Record<string, string>;
+    messages_error: string;
   };
 }>;

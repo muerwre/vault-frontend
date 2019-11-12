@@ -1,18 +1,24 @@
 import React, { FC, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { selectAuthProfile } from '~/redux/auth/selectors';
-import { NodeNoComments } from '~/components/node/NodeNoComments';
+import { selectAuthProfile, selectAuth, selectAuthUser } from '~/redux/auth/selectors';
 import styles from './styles.scss';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
+import { Message } from '~/components/profile/Message';
+import { Group } from '~/components/containers/Group';
+import pick from 'ramda/es/pick';
 
-const mapStateToProps = state => ({ profile: selectAuthProfile(state) });
+const mapStateToProps = state => ({
+  profile: selectAuthProfile(state),
+  user: pick(['id'], selectAuthUser(state)),
+});
+
 const mapDispatchToProps = {
   authGetMessages: AUTH_ACTIONS.authGetMessages,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const ProfileMessagesUnconnected: FC<IProps> = ({ profile, authGetMessages }) => {
+const ProfileMessagesUnconnected: FC<IProps> = ({ profile, user: { id }, authGetMessages }) => {
   useEffect(() => {
     if (profile.is_loading || !profile.user || !profile.user.username) return;
 
@@ -20,11 +26,19 @@ const ProfileMessagesUnconnected: FC<IProps> = ({ profile, authGetMessages }) =>
   }, [profile.user]);
 
   return (
-    <div className={styles.messages}>
-      {profile.messages.map(message => (
-        <div key={message.id}>{message.text}</div>
-      ))}
-    </div>
+    <Group className={styles.messages}>
+      {profile.messages
+        .filter(message => !!message.text)
+        .map((
+          message // TODO: show files / memo
+        ) => (
+          <Message message={message} incoming={id !== message.from.id} key={message.id} />
+        ))}
+
+      {!profile.is_loading_messages && profile.messages.length > 0 && (
+        <div className={styles.placeholder}>Когда-нибудь здесь будут еще сообщения</div>
+      )}
+    </Group>
   );
 };
 
