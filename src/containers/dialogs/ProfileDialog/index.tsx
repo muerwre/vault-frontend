@@ -17,7 +17,7 @@ const mapDispatchToProps = {};
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & {};
 
 const ProfileDialogUnconnected: FC<IProps> = ({ onRequestClose, is_loading, user }) => {
-  const [tab, setTab] = useState('messages');
+  const [tab, setTab] = useState('profile');
 
   return (
     <BetterScrollDialog
