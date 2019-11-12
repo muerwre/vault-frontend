@@ -116,8 +116,9 @@
   line-height: 0.95em;
   flex-direction: column;
   padding-bottom: $gap * 2;
-  padding: 0 10% $gap * 2;
+  padding: 0 0 $gap * 2;
   transform: translate(-50%, 0);
+  box-sizing: border-box;
 
   @include tablet {
     align-items: flex-start;

@@ -84,7 +84,7 @@ function* refreshUser() {
 function* checkUserSaga({ key }: RehydrateAction) {
   if (key !== 'auth') return;
   yield call(refreshUser);
-  yield put(authOpenProfile('gvorcek'));
+  // yield put(authOpenProfile('gvorcek'));
 }
 
 function* gotPostMessageSaga({ token }: ReturnType<typeof gotAuthPostMessage>) {

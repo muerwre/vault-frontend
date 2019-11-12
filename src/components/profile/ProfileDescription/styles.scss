@@ -1,4 +1,8 @@
 .content {
+  padding: $gap * 2;
+  min-height: 200px;
+  display: flex;
+  box-sizing: border-box;
 }
 
 .placeholder {

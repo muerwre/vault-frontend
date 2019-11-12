@@ -47,7 +47,11 @@ export const sagaMiddleware = createSagaMiddleware();
 export const history = createBrowserHistory();
 
 history.listen(({ pathname }) => {
+  console.log({ pathname });
+
   if (pathname.match(/~([\wа-яА-Я]+)/)) {
+    console.log('hi!', pathname.match(/~([\wа-яА-Я]+)/));
+
     const [, username] = pathname.match(/~([\wа-яА-Я]+)/);
     window.postMessage({ type: 'username', username }, '*');
   }

@@ -17,7 +17,12 @@ const ProfileDescriptionUnconnected: FC<IProps> = ({ profile: { user, is_loading
 
   return (
     <div className={styles.wrap}>
-      {user.description && <div className={styles.content}>{formatText(user.description)}</div>}
+      {user.description && (
+        <div
+          className={styles.content}
+          dangerouslySetInnerHTML={{ __html: formatText(user.description) }}
+        />
+      )}
       {!user.description && (
         <div className={styles.placeholder}>
           {user.fullname || user.username} пока ничего не рассказал о себе
