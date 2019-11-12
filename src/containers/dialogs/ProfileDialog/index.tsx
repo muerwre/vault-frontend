@@ -5,9 +5,10 @@ import { IDialogProps } from '~/redux/types';
 import { connect } from 'react-redux';
 import { selectAuthProfile } from '~/redux/auth/selectors';
 import { ProfileMessages } from '~/containers/profile/ProfileMessages';
+import { ProfileDescription } from '~/components/profile/ProfileDescription';
 
 const TAB_CONTENT = {
-  profile: <div>PROFILE</div>,
+  profile: <ProfileDescription />,
   messages: <ProfileMessages />,
 };
 const mapStateToProps = selectAuthProfile;

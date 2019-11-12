@@ -15,6 +15,7 @@ export interface IUser {
   name: string;
   last_seen: string;
   fullname: string;
+  description: string;
 
   is_activated: boolean;
   is_user: boolean;

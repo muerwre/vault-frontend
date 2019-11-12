@@ -2,10 +2,8 @@
   @include outer_shadow();
   padding: $gap;
   background: $content_bg;
-  // position: relative;
 
   textarea {
-    // margin-bottom: 40px;
     padding-bottom: 0 !important;
   }
 }

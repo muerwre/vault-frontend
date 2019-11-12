@@ -26,6 +26,15 @@ const ProfileMessagesUnconnected: FC<IProps> = ({ profile, user: { id }, authGet
     authGetMessages(profile.user.username);
   }, [profile.user]);
 
+  useEffect(() => {
+    if (profile.is_loading || !profile.user || !profile.user.username || profile.messages_error)
+      return;
+
+    const timer = setTimeout(() => authGetMessages(profile.user.username), 20000);
+
+    return () => clearTimeout(timer);
+  }, [profile.user, profile.messages]);
+
   if (!profile.messages.length || profile.is_loading)
     return <NodeNoComments is_loading={profile.is_loading_messages || profile.is_loading} />;
 

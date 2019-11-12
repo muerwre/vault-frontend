@@ -1,0 +1,14 @@
+.content {
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 33vh;
+  padding: 40px;
+  box-sizing: border-box;
+  color: transparentize($color: white, $amount: 0.8);
+  text-transform: uppercase;
+  font: $font_16_semibold;
+}
