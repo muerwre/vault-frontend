@@ -18,7 +18,10 @@ const INITIAL_STATE: IAuthState = {
 
   profile: {
     is_loading: true,
+    is_loading_messages: true,
     user: null,
+    messages: [],
+    messages_errors: {},
   },
 };
 

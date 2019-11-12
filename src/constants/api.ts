@@ -3,11 +3,12 @@ import { INode } from '~/redux/types';
 export const API = {
   BASE: process.env.API_HOST,
   USER: {
-    LOGIN: '/auth/login',
-    VKONTAKTE_LOGIN: `${process.env.API_HOST}/auth/vkontakte`,
-    ME: '/auth/',
+    LOGIN: '/user/login',
+    VKONTAKTE_LOGIN: `${process.env.API_HOST}/user/vkontakte`,
+    ME: '/user/',
+    PROFILE: (username: string) => `/user/${username}/profile`,
+    MESSAGES: (username: string) => `/user/${username}/messages`,
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
-    PROFILE: (username: string) => `/auth/user/${username}`,
   },
   NODE: {
     SAVE: '/node/',

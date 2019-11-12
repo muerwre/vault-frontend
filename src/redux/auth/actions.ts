@@ -42,3 +42,8 @@ export const authSetProfile = (profile: Partial<IAuthState['profile']>) => ({
   type: AUTH_USER_ACTIONS.SET_PROFILE,
   profile,
 });
+
+export const authGetMessages = (username: string) => ({
+  type: AUTH_USER_ACTIONS.GET_MESSAGES,
+  username,
+});

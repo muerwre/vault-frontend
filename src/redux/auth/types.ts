@@ -1,4 +1,4 @@
-import { IFile } from '../types';
+import { IFile, IMessage } from '../types';
 
 export interface IToken {
   access: string;
@@ -31,6 +31,9 @@ export type IAuthState = Readonly<{
 
   profile: {
     is_loading: boolean;
+    is_loading_messages: boolean;
     user: IUser;
+    messages: IMessage[];
+    messages_errors: Record<string, string>;
   };
 }>;

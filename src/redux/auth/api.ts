@@ -1,6 +1,6 @@
 import { api, errorMiddleware, resultMiddleware, configWithToken } from '~/utils/api';
 import { API } from '~/constants/api';
-import { IResultWithStatus } from '~/redux/types';
+import { IResultWithStatus, IMessage } from '~/redux/types';
 import { userLoginTransform } from '~/redux/auth/transforms';
 import { IUser } from './types';
 
@@ -29,5 +29,14 @@ export const apiAuthGetUserProfile = ({
 }): Promise<IResultWithStatus<{ user: IUser }>> =>
   api
     .get(API.USER.PROFILE(username), configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const apiAuthGetUserMessages = ({
+  access,
+  username,
+}): Promise<IResultWithStatus<{ messages: IMessage }>> =>
+  api
+    .get(API.USER.MESSAGES(username), configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);

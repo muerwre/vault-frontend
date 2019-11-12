@@ -146,6 +146,11 @@ export interface IComment {
   update_at?: string;
 }
 
+export type IMessage = Omit<IComment, 'user' | 'node'> & {
+  from: IUser;
+  to: IUser;
+};
+
 export interface ICommentGroup {
   user: IUser;
   comments: IComment[];
