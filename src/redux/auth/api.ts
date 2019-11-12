@@ -50,3 +50,12 @@ export const apiAuthSendMessage = ({
     .post(API.USER.MESSAGE_SEND(username), { message }, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
+
+export const apiAuthGetUpdates = ({
+  access,
+  exclude_dialogs,
+}): Promise<IResultWithStatus<{ message: IMessage }>> =>
+  api
+    .get(API.USER.GET_UPDATES, configWithToken(access, { params: { exclude_dialogs } }))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);

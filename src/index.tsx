@@ -19,6 +19,7 @@ render(
 );
 
 /*
+
 - backend: exclude node covers on import
 - profile modal
 - profile editing
@@ -29,6 +30,8 @@ render(
 - password restore
 - signup?
 - text post can also has songs http://vault48.org/post5052
+- fulltext search: https://github.com/typeorm/typeorm/issues/3191
+- zoom: https://manuelstofer.github.io/pinchzoom/
 
 - notifications ?
 - better node brief update

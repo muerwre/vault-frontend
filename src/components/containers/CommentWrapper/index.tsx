@@ -35,6 +35,7 @@ const CommentWrapper: FC<IProps> = ({
       <div
         className={styles.thumb_image}
         style={{ backgroundImage: `url("${getURL(path(['photo'], user), PRESETS.avatar)}")` }}
+        onClick={() => window.postMessage({ type: 'username', username: user.username }, '*')}
       />
       <div className={styles.thumb_user}>~{path(['username'], user)}</div>
     </div>

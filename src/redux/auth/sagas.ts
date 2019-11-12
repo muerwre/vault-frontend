@@ -1,5 +1,5 @@
 import { call, put, takeLatest, select, delay } from 'redux-saga/effects';
-import { AUTH_USER_ACTIONS, EMPTY_USER, USER_ERRORS } from '~/redux/auth/constants';
+import { AUTH_USER_ACTIONS, EMPTY_USER, USER_ERRORS, USER_ROLES } from '~/redux/auth/constants';
 import {
   authSetToken,
   userSetLoginError,
@@ -17,11 +17,12 @@ import {
   apiAuthGetUserProfile,
   apiAuthGetUserMessages,
   apiAuthSendMessage,
+  apiAuthGetUpdates,
 } from '~/redux/auth/api';
 import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
-import { selectToken, selectAuthProfile } from './selectors';
+import { selectToken, selectAuthProfile, selectAuthUser } from './selectors';
 import { IResultWithStatus } from '../types';
-import { IUser } from './types';
+import { IUser, IAuthState } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { selectModal } from '../modal/selectors';
 import { IModalState } from '../modal/reducer';
@@ -189,6 +190,29 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof authSendMessage>
   onSuccess();
 }
 
+function* getUpdates() {
+  const user = yield select(selectAuthUser);
+
+  if (!user || !user.is_user || user.role === USER_ROLES.GUEST || !user.id) return;
+
+  const modal: IModalState = yield select(selectModal);
+  const profile: IAuthState['profile'] = yield select(selectAuthProfile);
+
+  const exclude_dialogs =
+    modal.is_shown && modal.dialog === DIALOGS.PROFILE && profile.user.id ? profile.user.id : null;
+
+  const { error, data } = yield call(reqWrapper, apiAuthGetUpdates, { exclude_dialogs });
+
+  if (error || !data) return;
+}
+
+function* startPollingSaga() {
+  while (true) {
+    yield call(getUpdates);
+    yield delay(30000);
+  }
+}
+
 function* authSaga() {
   yield takeLatest(REHYDRATE, checkUserSaga);
   yield takeLatest(AUTH_USER_ACTIONS.LOGOUT, logoutSaga);
@@ -197,6 +221,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.OPEN_PROFILE, openProfile);
   yield takeLatest(AUTH_USER_ACTIONS.GET_MESSAGES, getMessages);
   yield takeLatest(AUTH_USER_ACTIONS.SEND_MESSAGE, sendMessage);
+  yield takeLatest(REHYDRATE, startPollingSaga);
 }
 
 export default authSaga;

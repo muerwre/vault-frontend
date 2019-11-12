@@ -11,6 +11,10 @@ const INITIAL_STATE: IAuthState = {
   token: null,
   user: { ...EMPTY_USER },
 
+  updates: {
+    messages: [],
+  },
+
   login: {
     error: null,
     is_loading: false,

@@ -25,6 +25,10 @@ export type IAuthState = Readonly<{
   user: IUser;
   token: string;
 
+  updates: {
+    messages: IMessage[];
+  };
+
   login: {
     error: string;
     is_loading: boolean;

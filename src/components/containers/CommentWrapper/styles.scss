@@ -56,6 +56,7 @@
   background-size: cover;
   flex: 0 0 $comment_height;
   will-change: transform;
+  cursor: pointer;
 
   @include tablet {
     height: 32px;

@@ -9,6 +9,8 @@ export const API = {
     PROFILE: (username: string) => `/user/${username}/profile`,
     MESSAGES: (username: string) => `/user/${username}/messages`,
     MESSAGE_SEND: (username: string) => `/user/${username}/messages`,
+    GET_UPDATES: '/user/updates',
+
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
   },
   NODE: {
