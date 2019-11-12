@@ -114,19 +114,32 @@ function* openProfile({ username }: ReturnType<typeof authOpenProfile>) {
     return yield put(modalSetShown(false));
   }
 
-  yield put(authSetProfile({ is_loading: false, user }));
+  yield put(authSetProfile({ is_loading: false, user, messages: [] }));
 }
 
 function* getMessages({ username }: ReturnType<typeof authGetMessages>) {
-  yield put(modalShowDialog(DIALOGS.PROFILE));
-  yield put(authSetProfile({ is_loading_messages: true }));
+  // yield put(modalShowDialog(DIALOGS.PROFILE));
+  const { messages } = yield select(selectAuthProfile);
+
+  yield put(
+    authSetProfile({
+      is_loading_messages: true,
+      messages:
+        messages &&
+        messages.length > 0 &&
+        (messages[0].to.username === username || messages[0].from.username === username)
+          ? messages
+          : [],
+    })
+  );
 
   const {
     error,
-    data: { messages },
+    data,
+    // data: { messages },
   } = yield call(reqWrapper, apiAuthGetUserMessages, { username });
 
-  if (error || !messages) {
+  if (error || !data.messages) {
     return yield put(
       authSetProfile({
         is_loading_messages: false,
@@ -135,7 +148,7 @@ function* getMessages({ username }: ReturnType<typeof authGetMessages>) {
     );
   }
 
-  yield put(authSetProfile({ is_loading_messages: false, messages }));
+  yield put(authSetProfile({ is_loading_messages: false, messages: data.messages }));
 }
 
 function* sendMessage({ message, onSuccess }: ReturnType<typeof authSendMessage>) {
@@ -169,7 +182,7 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof authSendMessage>
   yield put(
     authSetProfile({
       is_sending_messages: false,
-      messages: [message, ...messages],
+      messages: [data.message, ...messages],
     })
   );
 

@@ -2,10 +2,11 @@
   @include outer_shadow();
   padding: $gap;
   background: $content_bg;
-  position: relative;
+  // position: relative;
 
   textarea {
     // margin-bottom: 40px;
+    padding-bottom: 0 !important;
   }
 }
 
@@ -21,6 +22,12 @@
   justify-content: center;
   flex-direction: row;
   padding: 0 $gap / 2 $gap / 2 $gap / 2;
+
+  :global(.loader-circle) {
+    svg {
+      fill: $wisegreen;
+    }
+  }
 }
 
 .error {
@@ -34,4 +41,20 @@
   box-sizing: border-box;
   text-align: center;
   border-radius: 0 0 $radius $radius;
+}
+
+.loader {
+  position: absolute;
+  right: 50%;
+  bottom: 0;
+  z-index: 2;
+  padding: $gap;
+  text-transform: uppercase;
+  background: $wisegreen;
+  border-radius: $radius;
+  transform: translate(50%, -10px);
+
+  svg {
+    fill: white;
+  }
 }

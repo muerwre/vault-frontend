@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback } from 'react';
+import React, { FC, useState, useCallback, KeyboardEventHandler } from 'react';
 import styles from './styles.scss';
 import { Textarea } from '~/components/input/Textarea';
 import { Filler } from '~/components/containers/Filler';
@@ -21,7 +21,7 @@ const mapDispatchToProps = {
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const MessageFormUnconnected: FC<IProps> = ({
-  profile: { is_sending_messages, messages_error },
+  profile: { is_sending_messages, is_loading_messages, messages_error },
   authSendMessage,
 }) => {
   const [text, setText] = useState('');
@@ -34,14 +34,35 @@ const MessageFormUnconnected: FC<IProps> = ({
     authSendMessage({ text }, onSuccess);
   }, [authSendMessage, text, onSuccess]);
 
+  const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
+    ({ ctrlKey, key }) => {
+      if (!!ctrlKey && key === 'Enter') onSubmit();
+    },
+    [onSubmit]
+  );
+
   return (
     <div className={styles.wrap}>
       {messages_error && <div className={styles.error}>{ERROR_LITERAL[messages_error]}</div>}
-
+      {is_loading_messages && !messages_error && (
+        <Group className={styles.loader} horizontal>
+          <LoaderCircle size={20} />
+          <div>Обновляем</div>
+        </Group>
+      )}
       <Group className={styles.content}>
-        <Textarea value={text} handler={setText} minRows={1} maxRows={4} seamless />
+        <Textarea
+          value={text}
+          handler={setText}
+          minRows={1}
+          maxRows={4}
+          seamless
+          onKeyDown={onKeyDown}
+          disabled={is_sending_messages}
+          autoFocus
+        />
 
-        <div className={styles.buttons}>
+        <Group className={styles.buttons} horizontal>
           <Filler />
 
           {is_sending_messages && <LoaderCircle size={20} />}
@@ -55,7 +76,7 @@ const MessageFormUnconnected: FC<IProps> = ({
           >
             Сказать
           </Button>
-        </div>
+        </Group>
       </Group>
     </div>
   );

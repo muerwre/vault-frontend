@@ -6,6 +6,7 @@ import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { Message } from '~/components/profile/Message';
 import { Group } from '~/components/containers/Group';
 import pick from 'ramda/es/pick';
+import { NodeNoComments } from '~/components/node/NodeNoComments';
 
 const mapStateToProps = state => ({
   profile: selectAuthProfile(state),
@@ -24,6 +25,9 @@ const ProfileMessagesUnconnected: FC<IProps> = ({ profile, user: { id }, authGet
 
     authGetMessages(profile.user.username);
   }, [profile.user]);
+
+  if (!profile.messages.length || profile.is_loading)
+    return <NodeNoComments is_loading={profile.is_loading_messages || profile.is_loading} />;
 
   return (
     <Group className={styles.messages}>
