@@ -9,7 +9,7 @@ interface IProps {
   cover: IUser['cover'];
 }
 
-const ProfileBackdrop: FC<IProps> = ({ cover }) => {
+const CoverBackdrop: FC<IProps> = ({ cover }) => {
   const [is_loaded, setIsLoaded] = useState(false);
 
   const onLoad = useCallback(() => setIsLoaded(true), [setIsLoaded]);
@@ -32,4 +32,4 @@ const ProfileBackdrop: FC<IProps> = ({ cover }) => {
   );
 };
 
-export { ProfileBackdrop };
+export { CoverBackdrop };

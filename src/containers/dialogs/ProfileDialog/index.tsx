@@ -9,7 +9,7 @@ import { ProfileDescription } from '~/components/profile/ProfileDescription';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IAuthState } from '~/redux/auth/types';
 import pick from 'ramda/es/pick';
-import { ProfileBackdrop } from '~/components/profile/ProfileBackdrop';
+import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 
 const TAB_CONTENT = {
   profile: <ProfileDescription />,
@@ -49,7 +49,7 @@ const ProfileDialogUnconnected: FC<IProps> = ({
           setTab={setTab}
         />
       }
-      backdrop={<ProfileBackdrop cover={user && user.cover} />}
+      backdrop={<CoverBackdrop cover={user && user.cover} />}
       onClose={onRequestClose}
     >
       {TAB_CONTENT[tab] || null}

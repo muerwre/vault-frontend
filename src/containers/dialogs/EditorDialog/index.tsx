@@ -15,6 +15,7 @@ import { selectUploads } from '~/redux/uploads/selectors';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { NODE_EDITORS, EMPTY_NODE } from '~/redux/node/constants';
 import { BetterScrollDialog } from '../BetterScrollDialog';
+import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 
 const mapStateToProps = state => {
   const { editor, errors } = selectNode(state);
@@ -93,6 +94,7 @@ const EditorDialogUnconnected: FC<IProps> = ({
     <form onSubmit={onSubmit} className={styles.form}>
       <BetterScrollDialog
         footer={buttons}
+        backdrop={<CoverBackdrop cover={data.cover} />}
         width={860}
         error={error && ERROR_LITERAL[error]}
         onClose={onRequestClose}
