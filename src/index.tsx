@@ -21,9 +21,7 @@ render(
 /*
 
 - backend: exclude node covers on import
-- profile modal
 - profile editing
-- messages
 - relocate files
 - import videos
 - import graffiti
@@ -33,13 +31,16 @@ render(
 - fulltext search: https://github.com/typeorm/typeorm/issues/3191
 - zoom: https://manuelstofer.github.io/pinchzoom/
 
-- notifications ?
+- notifications (node, comment)
 - better node brief update
 
 - social integration (assimilate)
 - comment editing
 
 Done:
+- notifications (messages)
+- profile modal
+- messages
 - better dialogs: https://codepen.io/muemue/pen/abbEMMy
 - imagecaching at backend
 - social integration (login, signup)
