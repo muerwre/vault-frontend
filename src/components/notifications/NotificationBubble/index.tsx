@@ -20,6 +20,7 @@ const NotificationBubble: FC<IProps> = ({ notifications }) => {
           .map(notification =>
             createElement(NOTIFICATION_RENDERERS[notification.type], {
               notification,
+              onClick: console.log,
               key: notification.content.id,
             })
           )}

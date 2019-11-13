@@ -171,18 +171,19 @@ export const NOTIFICATION_TYPES = {
 export type IMessageNotification = {
   type: typeof NOTIFICATION_TYPES['message'];
   content: Partial<IMessage>;
+  created_at: string;
 };
 
 export type ICommentNotification = {
   type: typeof NOTIFICATION_TYPES['comment'];
   content: Partial<IComment>;
+  created_at: string;
 };
 
 export type INodeNotification = {
   type: typeof NOTIFICATION_TYPES['node'];
   content: Partial<INode>;
-};
-
-export type INotification = (IMessageNotification | ICommentNotification) & {
   created_at: string;
 };
+
+export type INotification = IMessageNotification | ICommentNotification;

@@ -40,9 +40,11 @@ const HeaderUnconnected: FC<IProps> = memo(
 
         <Filler />
 
-        <div className={style.plugs}>
-          <Notifications />
-        </div>
+        {is_user && (
+          <div className={style.plugs}>
+            <Notifications />
+          </div>
+        )}
 
         {is_user && (
           <UserButton user={user} onLogout={authLogout} onProfileClick={onProfileClick} />
