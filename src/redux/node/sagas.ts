@@ -94,13 +94,13 @@ function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
   if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
   yield put(nodeLoadNode(id));
   yield put(push(URLS.NODE_URL(id)));
+  yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
+  yield put(nodeSetRelated(null));
 }
 
 function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
   yield put(nodeSetLoading(true));
   yield put(nodeSetLoadingComments(true));
-  yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
-  yield put(nodeSetRelated(null));
 
   const {
     data: { node, error },
