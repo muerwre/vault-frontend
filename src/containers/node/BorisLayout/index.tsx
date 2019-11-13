@@ -10,6 +10,7 @@ import { CommentForm } from '~/components/node/CommentForm';
 import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
+import { getRandomPhrase } from '~/constants/phrases';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -36,6 +37,8 @@ const BorisLayoutUnconnected: FC<IProps> = ({
   user: { is_user },
   nodeLoadNode,
 }) => {
+  const title = getRandomPhrase('BORIS_TITLE');
+
   useEffect(() => {
     if (is_loading) return;
     nodeLoadNode(id, 'DESC');
@@ -47,8 +50,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
 
       <div className={styles.image}>
         <div className={styles.caption}>
-          <div>СНОВА</div>
-          <div>ВМЕСТЕ</div>
+          <div className={styles.caption_text}>{title}</div>
         </div>
         <img src={boris} />
       </div>

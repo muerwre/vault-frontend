@@ -87,6 +87,10 @@ $notification_color: darken($content_bg, 2%);
   flex-direction: column;
   text-transform: uppercase;
   font: $font_16_semibold;
+  box-sizing: border-box;
+  padding: 80px;
+  text-align: center;
+  line-height: 1.6em;
 
   svg {
     width: 120px;

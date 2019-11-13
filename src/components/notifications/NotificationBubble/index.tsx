@@ -3,6 +3,7 @@ import { INotification, NOTIFICATION_TYPES } from '~/redux/types';
 import styles from './styles.scss';
 import { NotificationMessage } from '../NotificationMessage';
 import { Icon } from '~/components/input/Icon';
+import { getRandomPhrase } from '~/constants/phrases';
 
 interface IProps {
   notifications: INotification[];
@@ -14,13 +15,15 @@ const NOTIFICATION_RENDERERS = {
 };
 
 const NotificationBubble: FC<IProps> = ({ notifications, onClick }) => {
+  const placeholder = getRandomPhrase('NOTHING_HERE');
+
   return (
     <div className={styles.wrap}>
       <div className={styles.list}>
         {notifications.length === 0 && (
           <div className={styles.placeholder}>
             <Icon icon="bell_ring" />
-            <div>НЕТ УВЕДОМЛЕНИЙ</div>
+            <div>{placeholder}</div>
           </div>
         )}
         {notifications.length > 0 &&

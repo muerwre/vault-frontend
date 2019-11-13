@@ -5,6 +5,7 @@ import styles from './styles.scss';
 import { connect } from 'react-redux';
 import { selectAuthProfile } from '~/redux/auth/selectors';
 import { ProfileLoader } from '~/containers/profile/ProfileLoader';
+import { Group } from '~/components/containers/Group';
 
 const mapStateToProps = state => ({
   profile: selectAuthProfile(state),
@@ -18,7 +19,7 @@ const ProfileDescriptionUnconnected: FC<IProps> = ({ profile: { user, is_loading
   return (
     <div className={styles.wrap}>
       {user.description && (
-        <div
+        <Group
           className={styles.content}
           dangerouslySetInnerHTML={{ __html: formatText(user.description) }}
         />

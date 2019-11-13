@@ -60,3 +60,9 @@ export const apiAuthGetUpdates = ({
     .get(API.USER.GET_UPDATES, configWithToken(access, { params: { exclude_dialogs, last } }))
     .then(resultMiddleware)
     .catch(errorMiddleware);
+
+export const apiUpdateUser = ({ access, user }): Promise<IResultWithStatus<{ user: IUser }>> =>
+  api
+    .patch(API.USER.ME, { user }, configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
