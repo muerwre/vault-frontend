@@ -34,9 +34,14 @@ export const authLogout = () => ({
   type: AUTH_USER_ACTIONS.LOGOUT,
 });
 
-export const authOpenProfile = (username: string) => ({
+export const authLoggedIn = () => ({
+  type: AUTH_USER_ACTIONS.LOGGED_IN,
+});
+
+export const authOpenProfile = (username: string, tab?: IAuthState['profile']['tab']) => ({
   type: AUTH_USER_ACTIONS.OPEN_PROFILE,
   username,
+  tab,
 });
 
 export const authSetProfile = (profile: Partial<IAuthState['profile']>) => ({

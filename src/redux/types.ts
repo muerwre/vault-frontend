@@ -2,7 +2,6 @@ import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 import { IUser } from './auth/types';
-import { string } from 'prop-types';
 
 export interface ITag {
   id: number;

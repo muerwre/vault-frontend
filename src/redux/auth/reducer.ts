@@ -22,6 +22,7 @@ const INITIAL_STATE: IAuthState = {
   },
 
   profile: {
+    tab: 'profile',
     is_loading: true,
     is_loading_messages: true,
     is_sending_messages: false,

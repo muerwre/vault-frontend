@@ -11,6 +11,7 @@ import {
   authGetMessages,
   authSendMessage,
   authSetUpdates,
+  authLoggedIn,
 } from '~/redux/auth/actions';
 import {
   apiUserLogin,
@@ -22,7 +23,7 @@ import {
 } from '~/redux/auth/api';
 import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
 import { selectToken, selectAuthProfile, selectAuthUser, selectAuthUpdates } from './selectors';
-import { IResultWithStatus, INotification } from '../types';
+import { IResultWithStatus, INotification, IMessageNotification } from '../types';
 import { IUser, IAuthState } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { selectModal } from '../modal/selectors';
@@ -60,6 +61,7 @@ function* sendLoginRequestSaga({ username, password }: ReturnType<typeof userSen
 
   yield put(authSetToken(token));
   yield put(authSetUser({ ...user, is_user: true }));
+  yield put(authLoggedIn());
   yield put(modalSetShown(false));
 }
 
@@ -101,11 +103,17 @@ function* gotPostMessageSaga({ token }: ReturnType<typeof gotAuthPostMessage>) {
 function* logoutSaga() {
   yield put(authSetToken(null));
   yield put(authSetUser({ ...EMPTY_USER }));
+  yield put(
+    authSetUpdates({
+      last: null,
+      notifications: [],
+    })
+  );
 }
 
-function* openProfile({ username }: ReturnType<typeof authOpenProfile>) {
+function* openProfile({ username, tab = 'profile' }: ReturnType<typeof authOpenProfile>) {
   yield put(modalShowDialog(DIALOGS.PROFILE));
-  yield put(authSetProfile({ is_loading: true }));
+  yield put(authSetProfile({ is_loading: true, tab }));
 
   const {
     error,
@@ -151,6 +159,19 @@ function* getMessages({ username }: ReturnType<typeof authGetMessages>) {
   }
 
   yield put(authSetProfile({ is_loading_messages: false, messages: data.messages }));
+
+  const { notifications } = yield select(selectAuthUpdates);
+
+  // clear viewed message from notifcation list
+  const filtered = notifications.filter(
+    notification =>
+      notification.type !== 'message' ||
+      (notification as IMessageNotification).content.from.username !== username
+  );
+
+  if (filtered.length !== notifications.length) {
+    yield put(authSetUpdates({ notifications: filtered }));
+  }
 }
 
 function* sendMessage({ message, onSuccess }: ReturnType<typeof authSendMessage>) {
@@ -235,7 +256,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.OPEN_PROFILE, openProfile);
   yield takeLatest(AUTH_USER_ACTIONS.GET_MESSAGES, getMessages);
   yield takeLatest(AUTH_USER_ACTIONS.SEND_MESSAGE, sendMessage);
-  yield takeLatest(REHYDRATE, startPollingSaga);
+  yield takeLatest([REHYDRATE, AUTH_USER_ACTIONS.LOGGED_IN], startPollingSaga);
 }
 
 export default authSaga;
