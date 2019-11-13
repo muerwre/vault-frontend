@@ -7,6 +7,7 @@ interface IProps {
   children: React.ReactChild;
   header?: JSX.Element;
   footer?: JSX.Element;
+  backdrop?: JSX.Element;
   size?: 'medium' | 'big';
   width?: number;
   error?: string;
@@ -20,6 +21,7 @@ const BetterScrollDialog: FC<IProps> = ({
   children,
   header,
   footer,
+  backdrop,
   width = 600,
   error,
   onClose,
@@ -34,6 +36,8 @@ const BetterScrollDialog: FC<IProps> = ({
 
   return (
     <div className={styles.wrap} ref={ref}>
+      {backdrop && <div className={styles.backdrop}>{backdrop}</div>}
+
       <div className={styles.container} style={{ maxWidth: width }}>
         {onClose && (
           <div className={styles.close} onClick={onClose}>
