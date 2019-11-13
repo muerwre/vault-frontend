@@ -13,6 +13,7 @@ import {
   authSetUpdates,
   authLoggedIn,
   authSetLastSeenMessages,
+  authPatchUser,
 } from '~/redux/auth/actions';
 import {
   apiUserLogin,
@@ -90,7 +91,7 @@ function* refreshUser() {
 function* checkUserSaga({ key }: RehydrateAction) {
   if (key !== 'auth') return;
   yield call(refreshUser);
-  // yield put(authOpenProfile('gvorcek'));
+  yield put(authOpenProfile('gvorcek', 'settings'));
 }
 
 function* gotPostMessageSaga({ token }: ReturnType<typeof gotAuthPostMessage>) {
@@ -256,6 +257,17 @@ function* setLastSeenMessages({ last_seen_messages }: ReturnType<typeof authSetL
   yield call(reqWrapper, apiUpdateUser, { user: { last_seen_messages } });
 }
 
+function* patchUser({ user }: ReturnType<typeof authPatchUser>) {
+  const { error, data } = yield call(reqWrapper, apiUpdateUser, { user });
+
+  if (error || !data.user || data.errors) {
+    return yield put(authSetProfile({ patch_errors: data.errors }));
+  }
+
+  yield put(authSetUser(data.user));
+  yield put(authSetProfile({ user: { ...data.user }, tab: 'profile' }));
+}
+
 function* authSaga() {
   yield takeLatest(REHYDRATE, checkUserSaga);
   yield takeLatest([REHYDRATE, AUTH_USER_ACTIONS.LOGGED_IN], startPollingSaga);
@@ -267,6 +279,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.GET_MESSAGES, getMessages);
   yield takeLatest(AUTH_USER_ACTIONS.SEND_MESSAGE, sendMessage);
   yield takeLatest(AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES, setLastSeenMessages);
+  yield takeLatest(AUTH_USER_ACTIONS.PATCH_USER, patchUser);
 }
 
 export default authSaga;

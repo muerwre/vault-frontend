@@ -46,5 +46,7 @@ export type IAuthState = Readonly<{
     user: IUser;
     messages: IMessage[];
     messages_error: string;
+
+    patch_errors: Record<string, string>;
   };
 }>;

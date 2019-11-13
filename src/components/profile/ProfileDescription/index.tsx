@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { IUser } from '~/redux/auth/types';
 import { formatText } from '~/utils/dom';
 import styles from './styles.scss';
 import { connect } from 'react-redux';

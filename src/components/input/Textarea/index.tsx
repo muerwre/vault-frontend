@@ -30,7 +30,6 @@ type IProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
 
 const Textarea = memo<IProps>(
   ({
-    value,
     placeholder,
     className,
     minRows = 3,
@@ -40,6 +39,7 @@ const Textarea = memo<IProps>(
     title = '',
     status = '',
     seamless,
+    value,
     ...props
   }) => {
     const [rows, setRows] = useState(minRows || 1);
@@ -97,7 +97,7 @@ const Textarea = memo<IProps>(
         <div className={styles.input}>
           <textarea
             rows={rows}
-            value={value}
+            value={value || ''}
             placeholder={placeholder}
             className={classNames(styles.textarea, className)}
             onChange={onInput}

@@ -10,10 +10,12 @@ import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IAuthState } from '~/redux/auth/types';
 import pick from 'ramda/es/pick';
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
+import { ProfileSettings } from '~/components/profile/ProfileSettings';
 
 const TAB_CONTENT = {
   profile: <ProfileDescription />,
   messages: <ProfileMessages />,
+  settings: <ProfileSettings />,
 };
 
 const mapStateToProps = state => ({

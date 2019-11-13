@@ -71,3 +71,8 @@ export const authSetLastSeenMessages = (
   type: AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES,
   last_seen_messages,
 });
+
+export const authPatchUser = (user: Partial<IUser>) => ({
+  type: AUTH_USER_ACTIONS.PATCH_USER,
+  user,
+});

@@ -29,6 +29,7 @@ const INITIAL_STATE: IAuthState = {
     user: null,
     messages: [],
     messages_error: null,
+    patch_errors: {},
   },
 };
 

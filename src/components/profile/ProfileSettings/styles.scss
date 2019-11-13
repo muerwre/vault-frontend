@@ -1,0 +1,14 @@
+.wrap {
+  padding: $gap;
+}
+
+.pad {
+  padding: $gap;
+  box-shadow: transparentize($color: $red, $amount: 0.5) 0 0 0 2px;
+  border-radius: $radius;
+}
+
+.small {
+  font: $font_12_regular;
+  padding: 0 $gap $gap;
+}
