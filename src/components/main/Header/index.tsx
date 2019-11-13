@@ -15,6 +15,7 @@ import { pick } from 'ramda';
 import { UserButton } from '../UserButton';
 import { Icon } from '~/components/input/Icon';
 import { Notifications } from '../Notifications';
+import { URLS } from '~/constants/urls';
 
 const mapStateToProps = state => ({
   user: pick(['username', 'is_user', 'photo'])(selectUser(state)),
@@ -42,7 +43,17 @@ const HeaderUnconnected: FC<IProps> = memo(
 
         {is_user && (
           <div className={style.plugs}>
-            <Notifications />
+            <Link className={style.item} to={URLS.BASE}>
+              FLOW
+            </Link>
+
+            <Link className={style.item} to={URLS.BORIS}>
+              BORIS
+            </Link>
+
+            <div className={style.item}>
+              <Notifications />
+            </div>
           </div>
         )}
 

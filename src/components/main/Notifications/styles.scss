@@ -20,6 +20,9 @@
   fill: white;
   position: relative;
   outline: none;
+  color: white;
+  word-wrap: initial;
+  white-space: initial;
 
   &.active {
     .icon {

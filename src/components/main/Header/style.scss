@@ -17,18 +17,6 @@
   text-transform: uppercase;
   align-items: center;
 
-  &::after {
-    content: ' ';
-    margin-left: $spc;
-    background: white;
-    width: 4px;
-    height: $gap;
-    display: block;
-    opacity: 0.2;
-    border-radius: 4px;
-    margin-right: 10px;
-  }
-
   & > a.item,
   & > div.item {
     font: $font_16_medium;
@@ -48,6 +36,17 @@
 
     &:first-child {
       padding-left: $spc + $gap;
+    }
+
+    &::after {
+      content: ' ';
+      margin-left: $spc;
+      background: white;
+      width: 4px;
+      height: $gap;
+      display: block;
+      opacity: 0.2;
+      border-radius: 4px;
     }
 
     &:last-child {
