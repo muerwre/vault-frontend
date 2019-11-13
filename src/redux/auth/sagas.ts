@@ -10,6 +10,7 @@ import {
   authSetProfile,
   authGetMessages,
   authSendMessage,
+  authSetUpdates,
 } from '~/redux/auth/actions';
 import {
   apiUserLogin,
@@ -20,8 +21,8 @@ import {
   apiAuthGetUpdates,
 } from '~/redux/auth/api';
 import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
-import { selectToken, selectAuthProfile, selectAuthUser } from './selectors';
-import { IResultWithStatus } from '../types';
+import { selectToken, selectAuthProfile, selectAuthUser, selectAuthUpdates } from './selectors';
+import { IResultWithStatus, INotification } from '../types';
 import { IUser, IAuthState } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { selectModal } from '../modal/selectors';
@@ -197,19 +198,32 @@ function* getUpdates() {
 
   const modal: IModalState = yield select(selectModal);
   const profile: IAuthState['profile'] = yield select(selectAuthProfile);
-
+  const { last }: IAuthState['updates'] = yield select(selectAuthUpdates);
   const exclude_dialogs =
     modal.is_shown && modal.dialog === DIALOGS.PROFILE && profile.user.id ? profile.user.id : null;
 
-  const { error, data } = yield call(reqWrapper, apiAuthGetUpdates, { exclude_dialogs });
+  const { error, data }: IResultWithStatus<{ notifications: INotification[] }> = yield call(
+    reqWrapper,
+    apiAuthGetUpdates,
+    { exclude_dialogs, last }
+  );
 
-  if (error || !data) return;
+  if (error || !data || !data.notifications || !data.notifications.length) return;
+
+  const { notifications } = data;
+
+  yield put(
+    authSetUpdates({
+      last: notifications[0].created_at,
+      notifications,
+    })
+  );
 }
 
 function* startPollingSaga() {
   while (true) {
     yield call(getUpdates);
-    yield delay(30000);
+    yield delay(60000);
   }
 }
 

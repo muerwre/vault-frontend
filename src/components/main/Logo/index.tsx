@@ -1,8 +1,9 @@
-import * as React from 'react';
-import * as styles from './style.scss';
+import React from 'react';
+import styles from './style.scss';
+import { Link } from 'react-router-dom';
 
 export const Logo = () => (
-  <div className={styles.logo}>
+  <Link className={styles.logo} to="/">
     VAULT
-  </div>
+  </Link>
 );

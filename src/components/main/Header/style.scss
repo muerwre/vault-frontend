@@ -14,11 +14,24 @@
 .plugs {
   display: flex;
   user-select: none;
-  font: $font_16_medium;
   text-transform: uppercase;
+  align-items: center;
 
-  > a,
-  > div {
+  &::after {
+    content: ' ';
+    margin-left: $spc;
+    background: white;
+    width: 4px;
+    height: $gap;
+    display: block;
+    opacity: 0.2;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+
+  & > a.item,
+  & > div.item {
+    font: $font_16_medium;
     display: flex;
     align-items: center;
     position: relative;
@@ -31,17 +44,6 @@
 
     &:hover {
       color: $red;
-    }
-
-    &::after {
-      content: ' ';
-      margin-left: $spc;
-      background: white;
-      width: 4px;
-      height: $gap;
-      display: block;
-      opacity: 0.2;
-      border-radius: 4px;
     }
 
     &:first-child {

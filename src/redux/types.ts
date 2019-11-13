@@ -161,3 +161,28 @@ export type IUploadProgressHandler = (progress: ProgressEvent) => void;
 export type IError = ValueOf<typeof ERRORS>;
 export type IValidationErrors = Record<string, IError>;
 export type InputHandler<T = string> = (val: T) => void;
+
+export const NOTIFICATION_TYPES = {
+  message: 'message',
+  comment: 'comment',
+  node: 'node',
+};
+
+export type IMessageNotification = {
+  type: typeof NOTIFICATION_TYPES['message'];
+  content: Partial<IMessage>;
+};
+
+export type ICommentNotification = {
+  type: typeof NOTIFICATION_TYPES['comment'];
+  content: Partial<IComment>;
+};
+
+export type INodeNotification = {
+  type: typeof NOTIFICATION_TYPES['node'];
+  content: Partial<INode>;
+};
+
+export type INotification = (IMessageNotification | ICommentNotification) & {
+  created_at: string;
+};

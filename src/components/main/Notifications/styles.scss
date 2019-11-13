@@ -1,0 +1,38 @@
+@keyframes ring {
+  0% {
+    transform: rotate(-10deg);
+  }
+
+  20% {
+    transform: rotate(10deg);
+  }
+
+  40% {
+    transform: rotate(-10deg);
+  }
+
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.wrap {
+  fill: white;
+  position: relative;
+  outline: none;
+
+  &.is_new {
+    .icon {
+      animation: ring 1s infinite alternate;
+
+      svg {
+        fill: $red;
+      }
+    }
+  }
+}
+
+.icon {
+  outline: none;
+  cursor: pointer;
+}

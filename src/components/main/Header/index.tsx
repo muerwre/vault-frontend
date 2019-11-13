@@ -13,6 +13,8 @@ import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { DIALOGS } from '~/redux/modal/constants';
 import { pick } from 'ramda';
 import { UserButton } from '../UserButton';
+import { Icon } from '~/components/input/Icon';
+import { Notifications } from '../Notifications';
 
 const mapStateToProps = state => ({
   user: pick(['username', 'is_user', 'photo'])(selectUser(state)),
@@ -39,8 +41,7 @@ const HeaderUnconnected: FC<IProps> = memo(
         <Filler />
 
         <div className={style.plugs}>
-          <Link to="/boris">((( boris )))</Link>
-          <Link to="/">flow</Link>
+          <Notifications />
         </div>
 
         {is_user && (

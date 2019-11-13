@@ -54,3 +54,15 @@ export const authSendMessage = (message: Partial<IMessage>, onSuccess) => ({
   message,
   onSuccess,
 });
+
+export const authSetUpdates = (updates: Partial<IAuthState['updates']>) => ({
+  type: AUTH_USER_ACTIONS.SET_UPDATES,
+  updates,
+});
+
+export const authSetLastSeenMessages = (
+  last_seen_messages: IAuthState['user']['last_seen_messages']
+) => ({
+  type: AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES,
+  last_seen_messages,
+});

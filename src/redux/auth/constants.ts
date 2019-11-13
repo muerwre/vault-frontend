@@ -13,6 +13,9 @@ export const AUTH_USER_ACTIONS = {
   SET_PROFILE: 'SET_PROFILE',
   GET_MESSAGES: 'GET_MESSAGES',
   SEND_MESSAGE: 'SEND_MESSAGE',
+
+  SET_UPDATES: 'SET_UPDATES',
+  SET_LAST_SEEN_MESSAGES: 'SET_LAST_SEEN_MESSAGES',
 };
 
 export const USER_ERRORS = {
@@ -46,9 +49,11 @@ export const EMPTY_USER: IUser = {
   cover: null,
   is_activated: false,
   is_user: false,
-  last_seen: null,
   fullname: null,
   description: null,
+
+  last_seen: null,
+  last_seen_messages: null,
 };
 
 export interface IApiUser {

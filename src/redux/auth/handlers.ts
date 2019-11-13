@@ -37,9 +37,31 @@ const setProfile: ActionHandler<typeof ActionCreators.authSetProfile> = (state, 
     ...profile,
   },
 });
+
+const setUpdates: ActionHandler<typeof ActionCreators.authSetUpdates> = (state, { updates }) => ({
+  ...state,
+  updates: {
+    ...state.updates,
+    ...updates,
+  },
+});
+
+const setLastSeenMessages: ActionHandler<typeof ActionCreators.authSetLastSeenMessages> = (
+  state,
+  { last_seen_messages }
+) => ({
+  ...state,
+  user: {
+    ...state.user,
+    last_seen_messages,
+  },
+});
+
 export const AUTH_USER_HANDLERS = {
   [AUTH_USER_ACTIONS.SET_LOGIN_ERROR]: setLoginError,
   [AUTH_USER_ACTIONS.SET_USER]: setUser,
   [AUTH_USER_ACTIONS.SET_TOKEN]: setToken,
   [AUTH_USER_ACTIONS.SET_PROFILE]: setProfile,
+  [AUTH_USER_ACTIONS.SET_UPDATES]: setUpdates,
+  [AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES]: setLastSeenMessages,
 };

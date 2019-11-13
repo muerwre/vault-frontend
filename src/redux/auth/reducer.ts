@@ -12,7 +12,8 @@ const INITIAL_STATE: IAuthState = {
   user: { ...EMPTY_USER },
 
   updates: {
-    messages: [],
+    last: null,
+    notifications: [],
   },
 
   login: {

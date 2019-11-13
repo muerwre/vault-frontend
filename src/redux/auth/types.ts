@@ -1,4 +1,4 @@
-import { IFile, IMessage } from '../types';
+import { IFile, IMessage, INotification } from '../types';
 
 export interface IToken {
   access: string;
@@ -13,9 +13,11 @@ export interface IUser {
   photo: IFile;
   cover: IFile;
   name: string;
-  last_seen: string;
   fullname: string;
   description: string;
+
+  last_seen: string;
+  last_seen_messages: string;
 
   is_activated: boolean;
   is_user: boolean;
@@ -26,7 +28,8 @@ export type IAuthState = Readonly<{
   token: string;
 
   updates: {
-    messages: IMessage[];
+    last: string;
+    notifications: INotification[];
   };
 
   login: {
