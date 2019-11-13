@@ -56,9 +56,9 @@ const NotificationsUnconnected: FC<IProps> = ({
   const hideList = useCallback(() => setVisible(false), [setVisible]);
 
   useEffect(() => {
-    if (!visible || !has_new) return;
-    authSetLastSeenMessages(new Date().toISOString());
-  }, [visible]);
+    if (!visible || !has_new || !last) return;
+    authSetLastSeenMessages(last);
+  }, [visible, last]);
 
   return (
     <div

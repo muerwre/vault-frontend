@@ -228,7 +228,7 @@ function* getUpdates() {
   const { error, data }: IResultWithStatus<{ notifications: INotification[] }> = yield call(
     reqWrapper,
     apiAuthGetUpdates,
-    { exclude_dialogs, last }
+    { exclude_dialogs, last: last || user.last_seen_messages }
   );
 
   if (error || !data || !data.notifications || !data.notifications.length) return;
@@ -246,16 +246,14 @@ function* getUpdates() {
 function* startPollingSaga() {
   while (true) {
     yield call(getUpdates);
-    yield delay(60000);
+    yield delay(10000);
   }
 }
 
 function* setLastSeenMessages({ last_seen_messages }: ReturnType<typeof authSetLastSeenMessages>) {
   if (!Date.parse(last_seen_messages)) return;
 
-  const { data, error } = yield call(reqWrapper, apiUpdateUser, { user: { last_seen_messages } });
-
-  console.log({ data, error });
+  yield call(reqWrapper, apiUpdateUser, { user: { last_seen_messages } });
 }
 
 function* authSaga() {
