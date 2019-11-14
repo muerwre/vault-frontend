@@ -26,6 +26,7 @@ render(
 - fix: user receives his own notifications :-(
 - fix: text nodes should not have 'no comments yet badge
 - fix: node related and albums should exclude node itself
+- fix: select node and edit it. All images will be not loaded
 
 - import videos
 - import graffiti
