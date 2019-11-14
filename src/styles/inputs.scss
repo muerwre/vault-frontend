@@ -13,8 +13,12 @@
   background: $input_bg_color;
 
   &::before {
-    content: ' ';
-    background: linear-gradient(270deg, $input_bg_color $gap, transparentize($input_bg_color, 1));
+    content: " ";
+    background: linear-gradient(
+      270deg,
+      $input_bg_color $gap,
+      transparentize($input_bg_color, 1)
+    );
     position: absolute;
     width: $gap * 2;
     height: $input_height;
@@ -94,7 +98,7 @@
 
   &.required {
     &::after {
-      content: ' ';
+      content: " ";
       width: 5px;
       height: 5px;
       border-radius: 3px;
@@ -129,7 +133,7 @@
     }
 
     .title {
-      padding-right: 40px;
+      // padding-right: 40px;
     }
 
     &.focused {
@@ -259,11 +263,11 @@
   .title {
     font: $font;
     position: absolute;
-    left: 0;
-    width: 100%;
+    left: 6px;
+    // width: 100%;
     top: 12px;
     bottom: auto;
-    padding: 0 16px;
+    padding: 0 4px;
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
@@ -273,6 +277,7 @@
     touch-action: none;
     color: transparentize(white, 0.3);
     text-transform: capitalize;
+    background: $input_bg_color;
 
     span {
       font: $font;
