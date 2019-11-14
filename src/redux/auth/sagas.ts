@@ -1,5 +1,10 @@
-import { call, put, takeLatest, select, delay } from 'redux-saga/effects';
-import { AUTH_USER_ACTIONS, EMPTY_USER, USER_ERRORS, USER_ROLES } from '~/redux/auth/constants';
+import { call, put, takeLatest, select, delay } from "redux-saga/effects";
+import {
+  AUTH_USER_ACTIONS,
+  EMPTY_USER,
+  USER_ERRORS,
+  USER_ROLES
+} from "~/redux/auth/constants";
 import {
   authSetToken,
   userSetLoginError,
@@ -13,8 +18,8 @@ import {
   authSetUpdates,
   authLoggedIn,
   authSetLastSeenMessages,
-  authPatchUser,
-} from '~/redux/auth/actions';
+  authPatchUser
+} from "~/redux/auth/actions";
 import {
   apiUserLogin,
   apiAuthGetUser,
@@ -22,19 +27,31 @@ import {
   apiAuthGetUserMessages,
   apiAuthSendMessage,
   apiAuthGetUpdates,
-  apiUpdateUser,
-} from '~/redux/auth/api';
-import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
-import { selectToken, selectAuthProfile, selectAuthUser, selectAuthUpdates } from './selectors';
-import { IResultWithStatus, INotification, IMessageNotification } from '../types';
-import { IUser, IAuthState } from './types';
-import { REHYDRATE, RehydrateAction } from 'redux-persist';
-import { selectModal } from '../modal/selectors';
-import { IModalState } from '../modal/reducer';
-import { DIALOGS } from '../modal/constants';
-import { ERRORS } from '~/constants/errors';
+  apiUpdateUser
+} from "~/redux/auth/api";
+import { modalSetShown, modalShowDialog } from "~/redux/modal/actions";
+import {
+  selectToken,
+  selectAuthProfile,
+  selectAuthUser,
+  selectAuthUpdates
+} from "./selectors";
+import {
+  IResultWithStatus,
+  INotification,
+  IMessageNotification
+} from "../types";
+import { IUser, IAuthState } from "./types";
+import { REHYDRATE, RehydrateAction } from "redux-persist";
+import { selectModal } from "../modal/selectors";
+import { IModalState } from "../modal/reducer";
+import { DIALOGS } from "../modal/constants";
+import { ERRORS } from "~/constants/errors";
 
-export function* reqWrapper(requestAction, props = {}): ReturnType<typeof requestAction> {
+export function* reqWrapper(
+  requestAction,
+  props = {}
+): ReturnType<typeof requestAction> {
   const access = yield select(selectToken);
 
   const result = yield call(requestAction, { access, ...props });
@@ -46,16 +63,22 @@ export function* reqWrapper(requestAction, props = {}): ReturnType<typeof reques
   return result;
 }
 
-function* sendLoginRequestSaga({ username, password }: ReturnType<typeof userSendLoginRequest>) {
+function* sendLoginRequestSaga({
+  username,
+  password
+}: ReturnType<typeof userSendLoginRequest>) {
   if (!username || !password) return;
 
   const {
     error,
-    data: { token, user },
-  }: IResultWithStatus<{ token: string; user: IUser }> = yield call(apiUserLogin, {
-    username,
-    password,
-  });
+    data: { token, user }
+  }: IResultWithStatus<{ token: string; user: IUser }> = yield call(
+    apiUserLogin,
+    {
+      username,
+      password
+    }
+  );
 
   if (error) {
     yield put(userSetLoginError(error));
@@ -71,14 +94,17 @@ function* sendLoginRequestSaga({ username, password }: ReturnType<typeof userSen
 function* refreshUser() {
   const {
     error,
-    data: { user },
-  }: IResultWithStatus<{ user: IUser }> = yield call(reqWrapper, apiAuthGetUser);
+    data: { user }
+  }: IResultWithStatus<{ user: IUser }> = yield call(
+    reqWrapper,
+    apiAuthGetUser
+  );
 
   if (error) {
     yield put(
       authSetUser({
         ...EMPTY_USER,
-        is_user: false,
+        is_user: false
       })
     );
 
@@ -89,9 +115,9 @@ function* refreshUser() {
 }
 
 function* checkUserSaga({ key }: RehydrateAction) {
-  if (key !== 'auth') return;
+  if (key !== "auth") return;
   yield call(refreshUser);
-  yield put(authOpenProfile('gvorcek', 'settings'));
+  yield put(authOpenProfile("gvorcek", "settings"));
 }
 
 function* gotPostMessageSaga({ token }: ReturnType<typeof gotAuthPostMessage>) {
@@ -109,18 +135,21 @@ function* logoutSaga() {
   yield put(
     authSetUpdates({
       last: null,
-      notifications: [],
+      notifications: []
     })
   );
 }
 
-function* openProfile({ username, tab = 'profile' }: ReturnType<typeof authOpenProfile>) {
+function* openProfile({
+  username,
+  tab = "profile"
+}: ReturnType<typeof authOpenProfile>) {
   yield put(modalShowDialog(DIALOGS.PROFILE));
   yield put(authSetProfile({ is_loading: true, tab }));
 
   const {
     error,
-    data: { user },
+    data: { user }
   } = yield call(reqWrapper, apiAuthGetUserProfile, { username });
 
   if (error || !user) {
@@ -140,15 +169,16 @@ function* getMessages({ username }: ReturnType<typeof authGetMessages>) {
       messages:
         messages &&
         messages.length > 0 &&
-        (messages[0].to.username === username || messages[0].from.username === username)
+        (messages[0].to.username === username ||
+          messages[0].from.username === username)
           ? messages
-          : [],
+          : []
     })
   );
 
   const {
     error,
-    data,
+    data
     // data: { messages },
   } = yield call(reqWrapper, apiAuthGetUserMessages, { username });
 
@@ -156,19 +186,21 @@ function* getMessages({ username }: ReturnType<typeof authGetMessages>) {
     return yield put(
       authSetProfile({
         is_loading_messages: false,
-        messages_error: ERRORS.EMPTY_RESPONSE,
+        messages_error: ERRORS.EMPTY_RESPONSE
       })
     );
   }
 
-  yield put(authSetProfile({ is_loading_messages: false, messages: data.messages }));
+  yield put(
+    authSetProfile({ is_loading_messages: false, messages: data.messages })
+  );
 
   const { notifications } = yield select(selectAuthUpdates);
 
   // clear viewed message from notifcation list
   const filtered = notifications.filter(
     notification =>
-      notification.type !== 'message' ||
+      notification.type !== "message" ||
       (notification as IMessageNotification).content.from.username !== username
   );
 
@@ -177,16 +209,24 @@ function* getMessages({ username }: ReturnType<typeof authGetMessages>) {
   }
 }
 
-function* sendMessage({ message, onSuccess }: ReturnType<typeof authSendMessage>) {
+function* sendMessage({
+  message,
+  onSuccess
+}: ReturnType<typeof authSendMessage>) {
   const {
-    user: { username },
+    user: { username }
   } = yield select(selectAuthProfile);
 
   if (!username) return;
 
-  yield put(authSetProfile({ is_sending_messages: true, messages_error: null }));
+  yield put(
+    authSetProfile({ is_sending_messages: true, messages_error: null })
+  );
 
-  const { error, data } = yield call(reqWrapper, apiAuthSendMessage, { username, message });
+  const { error, data } = yield call(reqWrapper, apiAuthSendMessage, {
+    username,
+    message
+  });
 
   console.log({ error, data });
 
@@ -194,7 +234,7 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof authSendMessage>
     return yield put(
       authSetProfile({
         is_sending_messages: false,
-        messages_error: error || ERRORS.EMPTY_RESPONSE,
+        messages_error: error || ERRORS.EMPTY_RESPONSE
       })
     );
   }
@@ -208,7 +248,7 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof authSendMessage>
   yield put(
     authSetProfile({
       is_sending_messages: false,
-      messages: [data.message, ...messages],
+      messages: [data.message, ...messages]
     })
   );
 
@@ -218,28 +258,35 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof authSendMessage>
 function* getUpdates() {
   const user = yield select(selectAuthUser);
 
-  if (!user || !user.is_user || user.role === USER_ROLES.GUEST || !user.id) return;
+  if (!user || !user.is_user || user.role === USER_ROLES.GUEST || !user.id)
+    return;
 
   const modal: IModalState = yield select(selectModal);
-  const profile: IAuthState['profile'] = yield select(selectAuthProfile);
-  const { last }: IAuthState['updates'] = yield select(selectAuthUpdates);
+  const profile: IAuthState["profile"] = yield select(selectAuthProfile);
+  const { last }: IAuthState["updates"] = yield select(selectAuthUpdates);
   const exclude_dialogs =
-    modal.is_shown && modal.dialog === DIALOGS.PROFILE && profile.user.id ? profile.user.id : null;
+    modal.is_shown && modal.dialog === DIALOGS.PROFILE && profile.user.id
+      ? profile.user.id
+      : null;
 
-  const { error, data }: IResultWithStatus<{ notifications: INotification[] }> = yield call(
+  const {
+    error,
+    data
+  }: IResultWithStatus<{ notifications: INotification[] }> = yield call(
     reqWrapper,
     apiAuthGetUpdates,
     { exclude_dialogs, last: last || user.last_seen_messages }
   );
 
-  if (error || !data || !data.notifications || !data.notifications.length) return;
+  if (error || !data || !data.notifications || !data.notifications.length)
+    return;
 
   const { notifications } = data;
 
   yield put(
     authSetUpdates({
       last: notifications[0].created_at,
-      notifications,
+      notifications
     })
   );
 }
@@ -251,13 +298,17 @@ function* startPollingSaga() {
   }
 }
 
-function* setLastSeenMessages({ last_seen_messages }: ReturnType<typeof authSetLastSeenMessages>) {
+function* setLastSeenMessages({
+  last_seen_messages
+}: ReturnType<typeof authSetLastSeenMessages>) {
   if (!Date.parse(last_seen_messages)) return;
 
   yield call(reqWrapper, apiUpdateUser, { user: { last_seen_messages } });
 }
 
 function* patchUser({ user }: ReturnType<typeof authPatchUser>) {
+  const me = yield select(selectAuthUser);
+
   const { error, data } = yield call(reqWrapper, apiUpdateUser, { user });
 
   if (error || !data.user || data.errors) {
@@ -265,7 +316,7 @@ function* patchUser({ user }: ReturnType<typeof authPatchUser>) {
   }
 
   yield put(authSetUser(data.user));
-  yield put(authSetProfile({ user: { ...data.user }, tab: 'profile' }));
+  yield put(authSetProfile({ user: { ...me, ...data.user }, tab: "profile" }));
 }
 
 function* authSaga() {
@@ -278,7 +329,10 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.OPEN_PROFILE, openProfile);
   yield takeLatest(AUTH_USER_ACTIONS.GET_MESSAGES, getMessages);
   yield takeLatest(AUTH_USER_ACTIONS.SEND_MESSAGE, sendMessage);
-  yield takeLatest(AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES, setLastSeenMessages);
+  yield takeLatest(
+    AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES,
+    setLastSeenMessages
+  );
   yield takeLatest(AUTH_USER_ACTIONS.PATCH_USER, patchUser);
 }
 
