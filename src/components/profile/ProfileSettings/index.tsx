@@ -19,7 +19,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  authPatchUser: AUTH_ACTIONS.authPatchUser
+  authPatchUser: AUTH_ACTIONS.authPatchUser,
+  authSetProfile: AUTH_ACTIONS.authSetProfile
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -27,8 +28,9 @@ type IProps = ReturnType<typeof mapStateToProps> &
 
 const ProfileSettingsUnconnected: FC<IProps> = ({
   user,
+  profile: { patch_errors },
   authPatchUser,
-  profile: { patch_errors }
+  authSetProfile
 }) => {
   const [password, setPassword] = useState("");
   const [new_password, setNewPassword] = useState("");
@@ -44,6 +46,7 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
     data,
     setData
   ]);
+
   const setUsername = useCallback(username => setData({ ...data, username }), [
     data,
     setData
@@ -67,6 +70,10 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
     },
     [data, password, new_password, authPatchUser]
   );
+
+  useEffect(() => {
+    authSetProfile({ patch_errors: {} });
+  }, [password, new_password, data]);
 
   return (
     <form className={styles.wrap} onSubmit={onSubmit}>
