@@ -20,7 +20,6 @@ render(
 
 /*
 
-- backend: exclude node covers on import
 - relocate files
 - import videos
 - import graffiti
@@ -38,6 +37,7 @@ render(
 - fulltext https://github.com/typeorm/typeorm/issues/3191
 
 Done:
+- backend: exclude node covers on import
 - profile editing
 - notifications (messages)
 - profile modal
