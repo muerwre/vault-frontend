@@ -1,29 +1,29 @@
 export const URLS = {
-  BASE: '/',
-  BORIS: '/boris',
+  BASE: "/",
+  BORIS: "/boris",
   AUTH: {
-    LOGIN: '/auth/login',
+    LOGIN: "/auth/login"
   },
   EXAMPLES: {
-    EDITOR: '/examples/edit',
-    IMAGE: '/examples/image',
+    EDITOR: "/examples/edit",
+    IMAGE: "/examples/image"
   },
   ERRORS: {
-    NOT_FOUND: '/lost',
-    BACKEND_DOWN: '/oopsie',
+    NOT_FOUND: "/lost",
+    BACKEND_DOWN: "/oopsie"
   },
   NODE_URL: (id: number | string) => `/post${id}`,
-  PROFILE: (username: string) => `/~${username}`,
+  PROFILE: (username: string) => `/~${username}`
 };
 
 export const PRESETS = {
-  '1400': '1400',
-  '900': '900',
-  '600': '600',
-  '300': '300',
-  '100': '100',
-  placeholder: 'placeholder',
-  cover: 'cover',
-  hero: 'hero',
-  avatar: 'avatar',
+  "1600": "1600",
+  "900": "900",
+  "600": "600",
+  "300": "300",
+  "100": "100",
+  placeholder: "placeholder",
+  cover: "cover",
+  hero: "hero",
+  avatar: "avatar"
 };
