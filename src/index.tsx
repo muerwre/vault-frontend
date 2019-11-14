@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { configureStore } from '~/redux/store';
-import App from '~/containers/App';
+import * as React from "react";
+import { render } from "react-dom";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { configureStore } from "~/redux/store";
+import App from "~/containers/App";
 
-require('./styles/main.scss');
+require("./styles/main.scss");
 
 const { store, persistor } = configureStore();
 
@@ -15,13 +15,12 @@ render(
       <App />
     </PersistGate>
   </Provider>,
-  document.getElementById('app')
+  document.getElementById("app")
 );
 
 /*
 
 - backend: exclude node covers on import
-- profile editing
 - relocate files
 - import videos
 - import graffiti
@@ -36,8 +35,10 @@ render(
 
 - social integration (assimilate)
 - comment editing
+- fulltext https://github.com/typeorm/typeorm/issues/3191
 
 Done:
+- profile editing
 - notifications (messages)
 - profile modal
 - messages
@@ -46,5 +47,5 @@ Done:
 - social integration (login, signup)
 - boris with comments (import)
 - boris with comments (layout) 
-  
-  */
+
+*/
