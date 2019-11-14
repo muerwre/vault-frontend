@@ -20,7 +20,13 @@ render(
 
 /*
 
-- relocate files
+- fix: boris should not show "loading comments" if there's any comments loaded
+- fix: text nodes cell not clickable
+- fix: text nodes cell has no preview
+- fix: user receives his own notifications :-(
+- fix: text nodes should not have 'no comments yet badge
+- fix: node related and albums should exclude node itself
+
 - import videos
 - import graffiti
 - password restore
@@ -37,6 +43,7 @@ render(
 - fulltext https://github.com/typeorm/typeorm/issues/3191
 
 Done:
+- relocate files
 - backend: exclude node covers on import
 - profile editing
 - notifications (messages)
