@@ -4,7 +4,7 @@ $vk_color: darken(desaturate($blue, 100%), 30%);
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: $gap;
+  padding: $gap $gap 30px $gap;
 
   button {
     text-align: left;

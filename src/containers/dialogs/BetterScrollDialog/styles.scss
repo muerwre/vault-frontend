@@ -95,7 +95,11 @@
   width: 100%;
   height: 40px;
   pointer-events: none;
-  background: linear-gradient($red, transparentize($red, 1));
+  background: linear-gradient(0deg, $red 50%, transparentize($red, 1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 $radius $radius;
 }
 
 .backdrop {
