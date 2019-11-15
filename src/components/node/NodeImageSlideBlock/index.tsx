@@ -228,12 +228,14 @@ const NodeImageSlideBlock: FC<IProps> = ({
         </div>
       )}
 
-      <ImageSwitcher
-        total={images.length}
-        current={current}
-        onChange={changeCurrent}
-        loaded={loaded}
-      />
+      {!is_loading && (
+        <ImageSwitcher
+          total={images.length}
+          current={current}
+          onChange={changeCurrent}
+          loaded={loaded}
+        />
+      )}
 
       <div
         className={styles.image_container}
@@ -253,7 +255,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
                 is_active: index === current && loaded[index]
               })}
               ref={setRef(index)}
-              key={file.id}
+              key={node.updated_at + file.id}
             >
               <img
                 className={styles.image}

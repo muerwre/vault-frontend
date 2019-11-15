@@ -36,3 +36,15 @@
 .text {
   margin: 0 $gap;
 }
+
+.placeholder {
+  .text {
+    opacity: 1;
+  }
+
+  .grid {
+    div {
+      background: $placeholder_bg;
+    }
+  }
+}

@@ -1,9 +1,16 @@
-import React, { FC, useCallback, useEffect, useRef, useState, memo } from 'react';
-import * as styles from './styles.scss';
-import { INode } from '~/redux/types';
-import { createPortal } from 'react-dom';
-import { NodePanelInner } from '~/components/node/NodePanelInner';
-import pick from 'ramda/es/pick';
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  memo
+} from "react";
+import * as styles from "./styles.scss";
+import { INode } from "~/redux/types";
+import { createPortal } from "react-dom";
+import { NodePanelInner } from "~/components/node/NodePanelInner";
+import pick from "ramda/es/pick";
 
 interface IProps {
   node: Partial<INode>;
@@ -13,13 +20,25 @@ interface IProps {
   can_like: boolean;
   can_star: boolean;
 
+  is_loading?: boolean;
+
   onEdit: () => void;
   onLike: () => void;
   onStar: () => void;
 }
 
 const NodePanel: FC<IProps> = memo(
-  ({ node, layout, can_edit, can_like, can_star, onEdit, onLike, onStar }) => {
+  ({
+    node,
+    layout,
+    can_edit,
+    can_like,
+    can_star,
+    is_loading,
+    onEdit,
+    onLike,
+    onStar
+  }) => {
     const [stack, setStack] = useState(false);
 
     const ref = useRef(null);
@@ -35,12 +54,12 @@ const NodePanel: FC<IProps> = memo(
 
     useEffect(() => {
       getPlace();
-      window.addEventListener('scroll', getPlace);
-      window.addEventListener('resize', getPlace);
+      window.addEventListener("scroll", getPlace);
+      window.addEventListener("resize", getPlace);
 
       return () => {
-        window.removeEventListener('scroll', getPlace);
-        window.removeEventListener('resize', getPlace);
+        window.removeEventListener("scroll", getPlace);
+        window.removeEventListener("resize", getPlace);
       };
     }, [layout]);
 
@@ -57,6 +76,7 @@ const NodePanel: FC<IProps> = memo(
               can_edit={can_edit}
               can_like={can_like}
               can_star={can_star}
+              is_loading={is_loading}
             />,
             document.body
           )
@@ -69,6 +89,7 @@ const NodePanel: FC<IProps> = memo(
             can_edit={can_edit}
             can_like={can_like}
             can_star={can_star}
+            is_loading={is_loading}
           />
         )}
       </div>

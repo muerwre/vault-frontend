@@ -1,27 +1,36 @@
-import React, { FC, createElement, useEffect, useCallback, useState, useMemo, memo } from 'react';
-import { RouteComponentProps } from 'react-router';
-import { connect } from 'react-redux';
-import { canEditNode, canLikeNode, canStarNode } from '~/utils/node';
-import { selectNode } from '~/redux/node/selectors';
-import { Card } from '~/components/containers/Card';
+import React, {
+  FC,
+  createElement,
+  useEffect,
+  useCallback,
+  useState,
+  useMemo,
+  memo
+} from "react";
+import { RouteComponentProps } from "react-router";
+import { connect } from "react-redux";
+import { canEditNode, canLikeNode, canStarNode } from "~/utils/node";
+import { selectNode } from "~/redux/node/selectors";
+import { Card } from "~/components/containers/Card";
 
-import { NodePanel } from '~/components/node/NodePanel';
-import { Group } from '~/components/containers/Group';
-import { Padder } from '~/components/containers/Padder';
-import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { NodeRelated } from '~/components/node/NodeRelated';
-import * as styles from './styles.scss';
-import { NodeComments } from '~/components/node/NodeComments';
-import { NodeTags } from '~/components/node/NodeTags';
-import { NODE_COMPONENTS, NODE_INLINES } from '~/redux/node/constants';
-import * as NODE_ACTIONS from '~/redux/node/actions';
-import { CommentForm } from '~/components/node/CommentForm';
-import { selectUser } from '~/redux/auth/selectors';
-import pick from 'ramda/es/pick';
+import { NodePanel } from "~/components/node/NodePanel";
+import { Group } from "~/components/containers/Group";
+import { Padder } from "~/components/containers/Padder";
+import { NodeNoComments } from "~/components/node/NodeNoComments";
+import { NodeRelated } from "~/components/node/NodeRelated";
+import * as styles from "./styles.scss";
+import { NodeComments } from "~/components/node/NodeComments";
+import { NodeTags } from "~/components/node/NodeTags";
+import { NODE_COMPONENTS, NODE_INLINES } from "~/redux/node/constants";
+import * as NODE_ACTIONS from "~/redux/node/actions";
+import { CommentForm } from "~/components/node/CommentForm";
+import { selectUser } from "~/redux/auth/selectors";
+import pick from "ramda/es/pick";
+import { NodeRelatedPlaceholder } from "~/components/node/NodeRelated/placeholder";
 
 const mapStateToProps = state => ({
   node: selectNode(state),
-  user: selectUser(state),
+  user: selectUser(state)
 });
 
 const mapDispatchToProps = {
@@ -30,7 +39,7 @@ const mapDispatchToProps = {
   nodeSetCoverImage: NODE_ACTIONS.nodeSetCoverImage,
   nodeEdit: NODE_ACTIONS.nodeEdit,
   nodeLike: NODE_ACTIONS.nodeLike,
-  nodeStar: NODE_ACTIONS.nodeStar,
+  nodeStar: NODE_ACTIONS.nodeStar
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -40,9 +49,15 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const NodeLayoutUnconnected: FC<IProps> = memo(
   ({
     match: {
-      params: { id },
+      params: { id }
     },
-    node: { is_loading, is_loading_comments, comments = [], current: node, related },
+    node: {
+      is_loading,
+      is_loading_comments,
+      comments = [],
+      current: node,
+      related
+    },
     user,
     user: { is_user },
     nodeGotoNode,
@@ -50,8 +65,10 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     nodeEdit,
     nodeLike,
     nodeStar,
-    nodeSetCoverImage,
+    nodeSetCoverImage
   }) => {
+    // const is_loading = true;
+
     const [layout, setLayout] = useState({});
 
     const updateLayout = useCallback(() => setLayout({}), []);
@@ -86,11 +103,12 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     }, [nodeSetCoverImage, node.cover]);
 
     return (
-      <Card className={styles.node} seamless key={id}>
-        {block && createElement(block, { node, is_loading, updateLayout, layout })}
+      <Card className={styles.node} seamless>
+        {block &&
+          createElement(block, { node, is_loading, updateLayout, layout })}
 
         <NodePanel
-          node={pick(['title', 'user', 'is_liked', 'is_heroic'], node)}
+          node={pick(["title", "user", "is_liked", "is_heroic"], node)}
           layout={layout}
           can_edit={can_edit}
           can_like={can_like}
@@ -98,6 +116,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
           onEdit={onEdit}
           onLike={onLike}
           onStar={onStar}
+          is_loading={is_loading}
         />
 
         <Group>
@@ -106,32 +125,57 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
               <Group className={styles.comments}>
                 {inline_block && (
                   <div className={styles.inline_block}>
-                    {createElement(inline_block, { node, is_loading, updateLayout, layout })}
+                    {createElement(inline_block, {
+                      node,
+                      is_loading,
+                      updateLayout,
+                      layout
+                    })}
                   </div>
                 )}
 
-                {is_loading_comments || !comments.length ? (
-                  <NodeNoComments is_loading={is_loading_comments} />
+                {is_loading ||
+                is_loading_comments ||
+                (!comments.length && !inline_block) ? (
+                  <NodeNoComments
+                    is_loading={is_loading_comments || is_loading}
+                  />
                 ) : (
                   <NodeComments comments={comments} />
                 )}
 
-                {is_user && <CommentForm id={0} />}
+                {is_user && !is_loading && <CommentForm id={0} />}
               </Group>
 
               <div className={styles.panel}>
                 <Group style={{ flex: 1, minWidth: 0 }}>
-                  <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
+                  {!is_loading && (
+                    <NodeTags
+                      is_editable={is_user}
+                      tags={node.tags}
+                      onChange={onTagsChange}
+                    />
+                  )}
 
-                  {related &&
+                  {is_loading && <NodeRelatedPlaceholder />}
+
+                  {!is_loading &&
+                    related &&
                     related.albums &&
                     Object.keys(related.albums).map(album => (
-                      <NodeRelated title={album} items={related.albums[album]} key={album} />
+                      <NodeRelated
+                        title={album}
+                        items={related.albums[album]}
+                        key={album}
+                      />
                     ))}
 
-                  {related && related.similar && related.similar.length > 0 && (
-                    <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
-                  )}
+                  {!is_loading &&
+                    related &&
+                    related.similar &&
+                    related.similar.length > 0 && (
+                      <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
+                    )}
                 </Group>
               </div>
             </Group>

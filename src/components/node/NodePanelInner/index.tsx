@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
-import * as styles from './styles.scss';
-import { Group } from '~/components/containers/Group';
-import { Filler } from '~/components/containers/Filler';
-import { Icon } from '~/components/input/Icon';
-import { INode } from '~/redux/types';
-import classNames from 'classnames';
+import React, { FC } from "react";
+import * as styles from "./styles.scss";
+import { Group } from "~/components/containers/Group";
+import { Filler } from "~/components/containers/Filler";
+import { Icon } from "~/components/input/Icon";
+import { INode } from "~/redux/types";
+import classNames from "classnames";
+import { Placeholder } from "~/components/placeholders/Placeholder";
 
 interface IProps {
   node: Partial<INode>;
@@ -13,6 +14,9 @@ interface IProps {
   can_edit: boolean;
   can_like: boolean;
   can_star: boolean;
+
+  is_loading: boolean;
+
   onEdit: () => void;
   onLike: () => void;
   onStar: () => void;
@@ -21,20 +25,34 @@ interface IProps {
 const NodePanelInner: FC<IProps> = ({
   node: { title, user, is_liked, is_heroic },
   stack,
+
   can_star,
   can_edit,
   can_like,
+
+  is_loading,
+
   onStar,
   onEdit,
-  onLike,
+  onLike
 }) => {
   return (
     <div className={classNames(styles.wrap, { stack })}>
       <div className={styles.content}>
         <Group horizontal className={styles.panel}>
           <Filler>
-            <div className={styles.title}>{title || '...'}</div>
-            {user && user.username && <div className={styles.name}>~{user.username}</div>}
+            <div className={styles.title}>
+              {is_loading ? <Placeholder width="40%" /> : title || "..."}
+            </div>
+            {user && user.username && (
+              <div className={styles.name}>
+                {is_loading ? (
+                  <Placeholder width="100px" />
+                ) : (
+                  `~${user.username}`
+                )}
+              </div>
+            )}
           </Filler>
         </Group>
 
