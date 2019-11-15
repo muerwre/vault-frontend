@@ -104,7 +104,6 @@ const Cell: FC<IProps> = ({
         styles.cell,
         styles[(flow && flow.display) || "single"]
       )}
-      onClick={onClick}
       ref={ref}
     >
       {is_visible && (
@@ -128,7 +127,7 @@ const Cell: FC<IProps> = ({
             </div>
           )}
 
-          <div className={classNames(styles.face)}>
+          <div className={classNames(styles.face)} onClick={onClick}>
             <div className={styles.face_content}>
               {title && !text && <div className={styles.title}>{title}</div>}
 
