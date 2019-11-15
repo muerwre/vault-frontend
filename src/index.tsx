@@ -20,7 +20,6 @@ render(
 
 /*
 
-- fix: boris should not show "loading comments" if there's any comments loaded
 - fix: text nodes cell not clickable
 - fix: text nodes cell has no preview
 - fix: user receives his own notifications :-(
