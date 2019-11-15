@@ -28,15 +28,22 @@
 .text {
   font: $font_18_regular;
   line-height: 22px;
-  margin-top: $gap;
+  // margin-top: $gap;
   // letter-spacing: 0.5px;
+  background: transparentize($color: $content_bg, $amount: 0.3)
+    url("~/sprites/stripes.svg");
+  padding: $gap;
+  box-sizing: border-box;
+  border-radius: $radius;
+  overflow: hidden;
+  position: relative;
 
   p {
     margin-bottom: $gap;
   }
 
   &::after {
-    content: ' ';
+    content: " ";
     position: absolute;
     bottom: 0;
     left: 0;
@@ -44,7 +51,10 @@
     height: 160px;
     pointer-events: none;
     touch-action: none;
-    background: linear-gradient(transparentize($content_bg, 1), $content_bg 95%);
+    background: linear-gradient(
+      transparentize($content_bg, 1),
+      $content_bg 95%
+    );
     z-index: 1;
     border-radius: 0 0 $radius $radius;
   }
@@ -71,6 +81,7 @@
 }
 
 .title {
+  padding: $gap / 2;
   // max-height: 3.3em;
 }
 
@@ -81,11 +92,25 @@
 .horizontal,
 .quadro {
   grid-column-end: span 2;
+
+  .text {
+    width: 50%;
+    height: 100%;
+  }
 }
 
 .vertical,
 .quadro {
   grid-row-end: span 2;
+
+  .text {
+    width: 100%;
+    height: 50%;
+  }
+
+  .face_content {
+    align-items: flex-end;
+  }
 }
 
 @media (max-width: $cell * 2) {
@@ -145,10 +170,14 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient($content_bg, transparentize($content_bg, 1));
+  background: linear-gradient(
+    5deg,
+    transparentize($content_bg, 0),
+    transparentize($content_bg, 1)
+  );
   z-index: 2;
   border-radius: $cell_radius;
-  padding: $gap;
+  padding: $gap / 2;
   pointer-events: none;
   touch-action: none;
   animation: appear 1s forwards;
@@ -174,8 +203,11 @@
         position: relative;
 
         &:after {
-          content: '';
-          background: linear-gradient(transparentize($content_bg, 1), $content_bg);
+          content: "";
+          background: linear-gradient(
+            transparentize($content_bg, 1),
+            $content_bg
+          );
           position: absolute;
           bottom: 0;
           left: 0;
@@ -261,17 +293,30 @@
   touch-action: auto;
   position: absolute;
   z-index: 4;
-  width: 32px + $gap * 2;
-  height: 32px + $gap * 2;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.2;
+  opacity: 0.9;
+  right: $gap;
 
-  svg {
-    fill: white;
-    width: 30px;
-    height: 30px;
+  &::after {
+    @include inner_shadow();
+
+    content: " ";
+    width: 20px;
+    height: 20px;
+    background: $content_bg;
+    border-radius: 100%;
+    transform: scale(0.5);
+    transition: transform 0.25s;
+  }
+
+  &:hover {
+    &::after {
+      transform: scale(1);
+    }
   }
 }
 
@@ -313,4 +358,10 @@
   background-color: #222222;
   opacity: 0.2;
   border-radius: 2px;
+}
+
+.face_content {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
 }

@@ -1,20 +1,20 @@
-import React, { FC, useState, useCallback, useEffect, useRef } from 'react';
-import { INode } from '~/redux/types';
-import { getURL, formatCellText } from '~/utils/dom';
-import classNames from 'classnames';
+import React, { FC, useState, useCallback, useEffect, useRef } from "react";
+import { INode } from "~/redux/types";
+import { getURL, formatCellText } from "~/utils/dom";
+import classNames from "classnames";
 
-import * as styles from './styles.scss';
-import { Icon } from '~/components/input/Icon';
-import { flowSetCellView } from '~/redux/flow/actions';
-import { PRESETS } from '~/constants/urls';
-import { debounce } from 'throttle-debounce';
+import * as styles from "./styles.scss";
+import { Icon } from "~/components/input/Icon";
+import { flowSetCellView } from "~/redux/flow/actions";
+import { PRESETS } from "~/constants/urls";
+import { debounce } from "throttle-debounce";
 
 interface IProps {
   node: INode;
   is_text?: boolean;
   can_edit?: boolean;
 
-  onSelect: (id: INode['id'], type: INode['type']) => void;
+  onSelect: (id: INode["id"], type: INode["type"]) => void;
   onChangeCellView: typeof flowSetCellView;
 }
 
@@ -22,7 +22,7 @@ const Cell: FC<IProps> = ({
   node: { id, title, thumbnail, type, flow, description },
   can_edit,
   onSelect,
-  onChangeCellView,
+  onChangeCellView
 }) => {
   const ref = useRef(null);
   const [is_loaded, setIsLoaded] = useState(false);
@@ -33,14 +33,16 @@ const Cell: FC<IProps> = ({
 
     const { top, height } = ref.current.getBoundingClientRect();
 
-    const visibility = top + height > -window.innerHeight && top < window.innerHeight * 2;
+    const visibility =
+      top + height > -window.innerHeight && top < window.innerHeight * 2;
 
     if (visibility !== is_visible) setIsVisible(visibility);
   }, [ref, is_visible, setIsVisible]);
 
-  const checkIfVisibleDebounced = useCallback(debounce(Math.random() * 200, checkIfVisible), [
-    checkIfVisible,
-  ]);
+  const checkIfVisibleDebounced = useCallback(
+    debounce(Math.random() * 200, checkIfVisible),
+    [checkIfVisible]
+  );
 
   useEffect(() => {
     checkIfVisible();
@@ -48,13 +50,13 @@ const Cell: FC<IProps> = ({
 
   useEffect(() => {
     // recalc visibility of other elements
-    window.dispatchEvent(new CustomEvent('scroll'));
+    window.dispatchEvent(new CustomEvent("scroll"));
   }, [flow]);
 
   useEffect(() => {
-    window.addEventListener('scroll', checkIfVisibleDebounced);
+    window.addEventListener("scroll", checkIfVisibleDebounced);
 
-    return () => window.removeEventListener('scroll', checkIfVisibleDebounced);
+    return () => window.removeEventListener("scroll", checkIfVisibleDebounced);
   }, [checkIfVisibleDebounced]);
 
   const onImageLoad = useCallback(() => {
@@ -65,49 +67,51 @@ const Cell: FC<IProps> = ({
   const has_description = description && description.length > 160;
 
   const text =
-    (((flow && !!flow.show_description) || type === 'text') && has_description && description) ||
+    (((flow && !!flow.show_description) || type === "text") &&
+      has_description &&
+      description) ||
     null;
 
   const toggleViewDescription = useCallback(() => {
     const show_description = !(flow && flow.show_description);
-    const display = (flow && flow.display) || 'single';
+    const display = (flow && flow.display) || "single";
     onChangeCellView(id, { show_description, display });
   }, [id, flow, onChangeCellView]);
 
   const setViewSingle = useCallback(() => {
     const show_description = (flow && !!flow.show_description) || false;
-    onChangeCellView(id, { show_description, display: 'single' });
+    onChangeCellView(id, { show_description, display: "single" });
   }, [id, flow, onChangeCellView]);
 
   const setViewHorizontal = useCallback(() => {
     const show_description = (flow && !!flow.show_description) || false;
-    onChangeCellView(id, { show_description, display: 'horizontal' });
+    onChangeCellView(id, { show_description, display: "horizontal" });
   }, [id, flow, onChangeCellView]);
 
   const setViewVertical = useCallback(() => {
     const show_description = (flow && !!flow.show_description) || false;
-    onChangeCellView(id, { show_description, display: 'vertical' });
+    onChangeCellView(id, { show_description, display: "vertical" });
   }, [id, flow, onChangeCellView]);
 
   const setViewQuadro = useCallback(() => {
     const show_description = (flow && !!flow.show_description) || false;
-    onChangeCellView(id, { show_description, display: 'quadro' });
+    onChangeCellView(id, { show_description, display: "quadro" });
   }, [id, flow, onChangeCellView]);
 
   return (
     <div
-      className={classNames(styles.cell, styles[(flow && flow.display) || 'single'], {
-        [styles.is_text]: false,
-      })}
+      className={classNames(
+        styles.cell,
+        styles[(flow && flow.display) || "single"]
+      )}
+      onClick={onClick}
       ref={ref}
     >
       {is_visible && (
         <>
           {can_edit && (
             <div className={styles.menu}>
-              <div className={styles.menu_button}>
-                <Icon icon="dots-vertical" />
-              </div>
+              <div className={styles.menu_button} />
 
               <div className={styles.menu_content}>
                 {has_description && (
@@ -124,14 +128,28 @@ const Cell: FC<IProps> = ({
             </div>
           )}
 
-          <div className={classNames(styles.face, { [styles.has_text]: text })}>
+          <div className={classNames(styles.face)}>
             <div className={styles.face_content}>
-              {title && <div className={styles.title}>{title}</div>}
-              {text && (
-                <div
-                  className={styles.text}
-                  dangerouslySetInnerHTML={{ __html: formatCellText(text) }}
-                />
+              {title && !text && <div className={styles.title}>{title}</div>}
+
+              {!!text && !!thumbnail && (
+                <div className={styles.text}>
+                  {title && <div className={styles.text_title}>{title}</div>}
+
+                  <div
+                    dangerouslySetInnerHTML={{ __html: formatCellText(text) }}
+                  />
+                </div>
+              )}
+
+              {!!text && !thumbnail && (
+                <div className={styles.text_only}>
+                  {title && <div className={styles.text_title}>{title}</div>}
+
+                  <div
+                    dangerouslySetInnerHTML={{ __html: formatCellText(text) }}
+                  />
+                </div>
               )}
             </div>
           </div>
@@ -140,12 +158,18 @@ const Cell: FC<IProps> = ({
             <div
               className={styles.thumbnail}
               style={{
-                backgroundImage: `url("${getURL({ url: thumbnail }, PRESETS.cover)}")`,
-                opacity: is_loaded ? 1 : 0,
+                backgroundImage: `url("${getURL(
+                  { url: thumbnail },
+                  PRESETS.cover
+                )}")`,
+                opacity: is_loaded ? 1 : 0
               }}
-              onClick={onClick}
             >
-              <img src={getURL({ url: thumbnail })} onLoad={onImageLoad} alt="" />
+              <img
+                src={getURL({ url: thumbnail })}
+                onLoad={onImageLoad}
+                alt=""
+              />
             </div>
           )}
         </>
