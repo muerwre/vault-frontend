@@ -22,10 +22,7 @@ render(
 
 - fix: text nodes cell not clickable
 - fix: text nodes cell has no preview
-- fix: user receives his own notifications :-(
 - fix: text nodes should not have 'no comments yet badge
-- fix: node related and albums should exclude node itself
-- fix: select node and edit it. All images will be not loaded
 
 - import videos
 - import graffiti
@@ -54,5 +51,8 @@ Done:
 - social integration (login, signup)
 - boris with comments (import)
 - boris with comments (layout) 
+- fix: user receives his own notifications :-(
+- fix: node related and albums should exclude node itself
+- fix: select node and edit it. All images will be not loaded
 
 */
