@@ -20,9 +20,7 @@ render(
 
 /*
 
-- fix: text nodes cell not clickable
 - fix: text nodes cell has no preview
-- fix: text nodes should not have 'no comments yet badge
 
 - import videos
 - import graffiti
@@ -54,5 +52,7 @@ Done:
 - fix: user receives his own notifications :-(
 - fix: node related and albums should exclude node itself
 - fix: select node and edit it. All images will be not loaded
+- fix: text nodes cell not clickable
+- fix: text nodes should not have 'no comments yet badge
 
 */

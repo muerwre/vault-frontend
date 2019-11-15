@@ -181,8 +181,8 @@
   z-index: 2;
   border-radius: $cell_radius;
   padding: $gap / 2;
-  pointer-events: none;
-  touch-action: none;
+  // pointer-events: none;
+  // touch-action: none;
   animation: appear 1s forwards;
 
   @media (min-width: $cell * 2 + $grid_line) {
