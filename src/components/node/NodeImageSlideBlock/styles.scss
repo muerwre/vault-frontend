@@ -5,6 +5,12 @@
   width: 100%;
   transition: height 0.25s;
   border-radius: $radius $radius 0 0;
+
+  .is_loading {
+    .placeholder {
+      opacity: 1;
+    }
+  }
 }
 
 .image_container {
@@ -58,7 +64,17 @@
   align-items: center;
   justify-content: center;
   background: $content_bg;
-  z-index: 1;
+  z-index: 0;
+  pointer-events: none;
+  touch-action: none;
+  transition: opacity 0.25s;
+  z-index: 2;
+  opacity: 0;
+
+  &.is_loading {
+    opacity: 1;
+  }
+
   svg {
     opacity: 0.025;
     fill: white;

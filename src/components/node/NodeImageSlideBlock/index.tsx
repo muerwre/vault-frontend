@@ -219,14 +219,19 @@ const NodeImageSlideBlock: FC<IProps> = ({
   );
 
   return (
-    <div className={classNames(styles.wrap, { is_loading })} ref={wrap}>
-      {is_loading && (
-        <div className={styles.placeholder}>
-          <div>
-            <LoaderCircle size={96} />
-          </div>
+    <div
+      className={classNames(styles.wrap, { [styles.is_loading]: is_loading })}
+      ref={wrap}
+    >
+      <div
+        className={classNames(styles.placeholder, {
+          [styles.is_loading]: is_loading || !loaded[current]
+        })}
+      >
+        <div>
+          <LoaderCircle size={96} />
         </div>
-      )}
+      </div>
 
       {!is_loading && (
         <ImageSwitcher
