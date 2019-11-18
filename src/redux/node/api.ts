@@ -1,12 +1,17 @@
-import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils/api';
-import { INode, IResultWithStatus, IComment } from '../types';
-import { API } from '~/constants/api';
-import { nodeUpdateTags, nodeLike, nodeStar } from './actions';
-import { INodeState } from './reducer';
+import {
+  api,
+  configWithToken,
+  resultMiddleware,
+  errorMiddleware
+} from "~/utils/api";
+import { INode, IResultWithStatus, IComment } from "../types";
+import { API } from "~/constants/api";
+import { nodeUpdateTags, nodeLike, nodeStar } from "./actions";
+import { INodeState } from "./reducer";
 
 export const postNode = ({
   access,
-  node,
+  node
 }: {
   access: string;
   node: INode;
@@ -18,20 +23,20 @@ export const postNode = ({
 // .then(console.log);
 
 export const getNodes = ({
-  skip = 0,
-  access,
+  from = null,
+  access
 }: {
-  skip?: number;
+  from?: string;
   access: string;
 }): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
   api
-    .get(API.NODE.GET, configWithToken(access, { params: { skip } }))
+    .get(API.NODE.GET, configWithToken(access, { params: { from } }))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 
 export const getNode = ({
   id,
-  access,
+  access
 }: {
   id: string | number;
   access: string;
@@ -44,7 +49,7 @@ export const getNode = ({
 export const postNodeComment = ({
   id,
   data,
-  access,
+  access
 }: {
   access: string;
   id: number;
@@ -58,11 +63,11 @@ export const postNodeComment = ({
 export const getNodeComments = ({
   id,
   access,
-  order = 'ASC',
+  order = "ASC"
 }: {
   id: number;
   access: string;
-  order: 'ASC' | 'DESC';
+  order: "ASC" | "DESC";
 }): Promise<IResultWithStatus<{ comments: Comment[] }>> =>
   api
     .get(API.NODE.COMMENT(id), configWithToken(access, { params: { order } }))
@@ -71,11 +76,11 @@ export const getNodeComments = ({
 
 export const getNodeRelated = ({
   id,
-  access,
+  access
 }: {
   id: number;
   access: string;
-}): Promise<IResultWithStatus<{ related: INodeState['related'] }>> =>
+}): Promise<IResultWithStatus<{ related: INodeState["related"] }>> =>
   api
     .get(API.NODE.RELATED(id), configWithToken(access))
     .then(resultMiddleware)
@@ -84,7 +89,7 @@ export const getNodeRelated = ({
 export const updateNodeTags = ({
   id,
   tags,
-  access,
+  access
 }: ReturnType<typeof nodeUpdateTags> & { access: string }): Promise<
   IResultWithStatus<{ node: INode }>
 > =>
@@ -95,9 +100,9 @@ export const updateNodeTags = ({
 
 export const postNodeLike = ({
   id,
-  access,
+  access
 }: ReturnType<typeof nodeLike> & { access: string }): Promise<
-  IResultWithStatus<{ is_liked: INode['is_liked'] }>
+  IResultWithStatus<{ is_liked: INode["is_liked"] }>
 > =>
   api
     .post(API.NODE.POST_LIKE(id), {}, configWithToken(access))
@@ -106,9 +111,9 @@ export const postNodeLike = ({
 
 export const postNodeStar = ({
   id,
-  access,
+  access
 }: ReturnType<typeof nodeStar> & { access: string }): Promise<
-  IResultWithStatus<{ is_liked: INode['is_liked'] }>
+  IResultWithStatus<{ is_liked: INode["is_liked"] }>
 > =>
   api
     .post(API.NODE.POST_STAR(id), {}, configWithToken(access))

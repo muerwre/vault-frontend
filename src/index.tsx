@@ -21,11 +21,10 @@ render(
 /*
 
   [Stage 0]:
-- fix: text nodes cell has no preview (actually, that's a problem of brief)
-
+- check if email is registered at social login
+- friendship
 - password restore
 - signup?
-- better node brief update
 - flow updates
 - flow infinite scroll
 - avatar upload
@@ -43,6 +42,8 @@ render(
 - comment editing
 
 Done:
+- better node brief update
+- fix: text nodes cell has no preview (actually, that's a problem of brief)
 - relocate files
 - backend: exclude node covers on import
 - profile editing
@@ -59,5 +60,4 @@ Done:
 - fix: select node and edit it. All images will be not loaded
 - fix: text nodes cell not clickable
 - fix: text nodes should not have 'no comments yet badge
-
 */

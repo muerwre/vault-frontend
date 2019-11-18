@@ -9,6 +9,7 @@ import { flowSetCellView } from "~/redux/flow/actions";
 import { PRESETS } from "~/constants/urls";
 import { debounce } from "throttle-debounce";
 import { NODE_TYPES } from "~/redux/node/constants";
+import { Group } from "~/components/containers/Group";
 
 interface IProps {
   node: INode;
@@ -135,7 +136,7 @@ const Cell: FC<IProps> = ({
                 <div className={styles.text}>
                   {title && <div className={styles.text_title}>{title}</div>}
 
-                  <div
+                  <Group
                     dangerouslySetInnerHTML={{ __html: formatCellText(text) }}
                   />
                 </div>
@@ -145,7 +146,7 @@ const Cell: FC<IProps> = ({
                 <div className={styles.text_only}>
                   {title && <div className={styles.text_title}>{title}</div>}
 
-                  <div
+                  <Group
                     dangerouslySetInnerHTML={{ __html: formatCellText(text) }}
                   />
                 </div>
