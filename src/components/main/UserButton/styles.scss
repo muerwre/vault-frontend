@@ -15,16 +15,17 @@
   border-radius: $radius;
   display: none;
   z-index: 1;
-  min-width: 100%;
+  // min-width: 100%;
   box-sizing: border-box;
   // transform: translate(0, $gap);
   padding: $gap;
 
   & > div {
-    background: transparentize($content_bg, 0.2) url('~/sprites/stripes.svg');
+    // background: transparentize($content_bg, 0.1) url("~/sprites/stripes.svg");
+    background: $content_bg;
     padding: $gap $gap * 2;
     cursor: pointer;
-    opacity: 0.5;
+    // opacity: 0.5;
     box-sizing: border-box;
     transition: opacity 0.25s;
     width: 100%;

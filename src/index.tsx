@@ -20,22 +20,26 @@ render(
 
 /*
 
-- fix: text nodes cell has no preview
-
-- import videos
-- import graffiti
+  [Stage 0]:
+- fix: text nodes cell has no preview (actually, that's a problem of brief)
 - password restore
 - signup?
+- better node brief update
+- flow updates
+- flow infinite scroll
+- avatar upload
+
+  [stage 1]
+- import videos
+- import graffiti
 - text post can also has songs http://vault48.org/post5052
 - fulltext search: https://github.com/typeorm/typeorm/issues/3191
 - zoom: https://manuelstofer.github.io/pinchzoom/
 
 - notifications (node, comment)
-- better node brief update
 
 - social integration (assimilate)
 - comment editing
-- fulltext https://github.com/typeorm/typeorm/issues/3191
 
 Done:
 - relocate files

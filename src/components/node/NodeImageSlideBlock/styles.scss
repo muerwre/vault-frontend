@@ -14,7 +14,7 @@
 }
 
 .image_container {
-  background: $node_image_bg;
+  // background: $node_image_bg;
   border-radius: $panel_radius 0 0 $panel_radius;
   display: flex;
   align-items: flex-start;
@@ -30,7 +30,8 @@
   }
 
   .image {
-    max-height: 960px;
+    // max-height: 960px;
+    max-height: 100vh !important;
     max-width: 100%;
     opacity: 1;
     border-radius: $radius $radius 0 0;
