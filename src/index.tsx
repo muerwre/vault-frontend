@@ -25,8 +25,6 @@ render(
 - friendship
 - password restore
 - signup?
-- flow updates
-- flow infinite scroll
 - avatar upload
 
   [stage 1]
@@ -42,6 +40,8 @@ render(
 - comment editing
 
 Done:
+- flow updates
+- flow infinite scroll
 - better node brief update
 - fix: text nodes cell has no preview (actually, that's a problem of brief)
 - relocate files

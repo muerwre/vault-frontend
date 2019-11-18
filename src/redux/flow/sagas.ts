@@ -8,7 +8,7 @@ import {
 } from "redux-saga/effects";
 import { REHYDRATE } from "redux-persist";
 import { FLOW_ACTIONS } from "./constants";
-import { getNodes, getNodeDiff } from "../node/api";
+import { getNodeDiff } from "../node/api";
 import {
   flowSetNodes,
   flowSetCellView,
@@ -17,12 +17,16 @@ import {
   flowSetUpdated,
   flowSetFlow
 } from "./actions";
-import { IResultWithStatus } from "../types";
+import { IResultWithStatus, INode } from "../types";
 import { selectFlowNodes } from "./selectors";
 import { reqWrapper } from "../auth/sagas";
 import { postCellView } from "./api";
 import { IFlowState } from "./reducer";
 import uniq from "ramda/es/uniq";
+
+function hideLoader() {
+  document.getElementById("main_loader").style.display = "none";
+}
 
 function* onGetFlow() {
   const {
@@ -31,25 +35,61 @@ function* onGetFlow() {
 
   if (!_persist.rehydrated) return;
 
+  const stored: IFlowState["nodes"] = yield select(selectFlowNodes);
+
+  if (stored.length) {
+    hideLoader();
+  }
+
+  const start =
+    (stored && stored[0] && stored[0].created_at) || new Date().toISOString();
+
+  const end =
+    (stored &&
+      stored[stored.length - 1] &&
+      stored[stored.length - 1].created_at) ||
+    new Date().toISOString();
+
   yield put(flowSetFlow({ is_loading: true }));
 
   const {
-    data: { nodes = [], heroes = [], recent = [], updated = [], mode }
+    data: {
+      before = [],
+      after = [],
+      heroes = [],
+      recent = [],
+      updated = [],
+      valid = null
+    }
   }: IResultWithStatus<{
-    nodes: IFlowState["nodes"];
+    before: IFlowState["nodes"];
+    after: IFlowState["nodes"];
     heroes: IFlowState["heroes"];
     recent: IFlowState["recent"];
     updated: IFlowState["updated"];
-    mode: string;
-  }> = yield call(reqWrapper, getNodes, {});
+    valid: INode["id"][];
+  }> = yield call(reqWrapper, getNodeDiff, {
+    start,
+    end,
+    with_heroes: true,
+    with_updated: true,
+    with_recent: true,
+    with_valid: true
+  });
 
-  yield put(flowSetFlow({ is_loading: false, nodes }));
+  const result = uniq([
+    ...(before || []),
+    ...(valid ? stored.filter(node => valid.includes(node.id)) : stored),
+    ...(after || [])
+  ]);
+
+  yield put(flowSetFlow({ is_loading: false, nodes: result }));
 
   if (heroes.length) yield put(flowSetHeroes(heroes));
   if (recent.length) yield put(flowSetRecent(recent));
   if (updated.length) yield put(flowSetUpdated(updated));
 
-  document.getElementById("main_loader").style.display = "none";
+  if (!stored.length) hideLoader();
 }
 
 function* onSetCellView({ id, flow }: ReturnType<typeof flowSetCellView>) {
@@ -69,17 +109,33 @@ function* getMore() {
   const end =
     nodes && nodes[nodes.length - 1] && nodes[nodes.length - 1].created_at;
 
-  const { error, data } = yield call(reqWrapper, getNodeDiff, { start, end });
+  const { error, data } = yield call(reqWrapper, getNodeDiff, {
+    start,
+    end,
+    with_heroes: false,
+    with_updated: true,
+    with_recent: true,
+    with_valid: true
+  });
 
   if (error || !data) return;
 
   const result = uniq([
     ...(data.before || []),
-    ...nodes,
+    ...(data.valid
+      ? nodes.filter(node => data.valid.includes(node.id))
+      : nodes),
     ...(data.after || [])
   ]);
 
-  yield put(flowSetFlow({ is_loading: false, nodes: result }));
+  yield put(
+    flowSetFlow({
+      is_loading: false,
+      nodes: result,
+      ...(data.recent ? { recent: data.recent } : {}),
+      ...(data.updated ? { updated: data.updated } : {})
+    })
+  );
 
   yield delay(1000);
 }

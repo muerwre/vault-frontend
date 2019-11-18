@@ -38,17 +38,35 @@ export const getNodeDiff = ({
   start = null,
   end = null,
   take,
+  with_heroes,
+  with_updated,
+  with_recent,
+  with_valid,
   access
 }: {
   start?: string;
   end?: string;
   take?: number;
   access: string;
+  with_heroes: boolean;
+  with_updated: boolean;
+  with_recent: boolean;
+  with_valid: boolean;
 }): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
   api
     .get(
       API.NODE.GET_DIFF,
-      configWithToken(access, { params: { start, end, take } })
+      configWithToken(access, {
+        params: {
+          start,
+          end,
+          take,
+          with_heroes,
+          with_updated,
+          with_recent,
+          with_valid
+        }
+      })
     )
     .then(resultMiddleware)
     .catch(errorMiddleware);

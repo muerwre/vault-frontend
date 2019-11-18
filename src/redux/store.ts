@@ -45,7 +45,7 @@ const authPersistConfig: PersistConfig = {
 
 const flowPersistConfig: PersistConfig = {
   key: "flow",
-  whitelist: ["nodes"],
+  whitelist: ["nodes", "heroes", "recent", "updated"],
   storage
 };
 
