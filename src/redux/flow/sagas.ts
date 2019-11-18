@@ -8,7 +8,7 @@ import {
 } from "redux-saga/effects";
 import { REHYDRATE } from "redux-persist";
 import { FLOW_ACTIONS } from "./constants";
-import { getNodes } from "../node/api";
+import { getNodes, getNodeDiff } from "../node/api";
 import {
   flowSetNodes,
   flowSetCellView,
@@ -22,6 +22,8 @@ import { selectFlowNodes } from "./selectors";
 import { reqWrapper } from "../auth/sagas";
 import { postCellView } from "./api";
 import { IFlowState } from "./reducer";
+import uniqBy from "ramda/es/uniqBy";
+import uniq from "ramda/es/uniq";
 
 function* onGetFlow() {
   yield put(flowSetFlow({ is_loading: true }));
@@ -57,18 +59,24 @@ function* onSetCellView({ id, flow }: ReturnType<typeof flowSetCellView>) {
 function* getMore() {
   yield put(flowSetFlow({ is_loading: true }));
   const nodes: IFlowState["nodes"] = yield select(selectFlowNodes);
-  const from =
+
+  const start = nodes && nodes[0] && nodes[0].created_at;
+  const end =
     nodes && nodes[nodes.length - 1] && nodes[nodes.length - 1].created_at;
 
-  const { error, data } = yield call(reqWrapper, getNodes, { from });
+  const { error, data } = yield call(reqWrapper, getNodeDiff, { start, end });
 
-  if (error || !data || !data.nodes) return;
+  if (error || !data) return;
 
-  yield put(
-    flowSetFlow({ is_loading: false, nodes: [...nodes, ...data.nodes] })
-  );
+  const result = uniq([
+    ...(data.before || []),
+    ...nodes,
+    ...(data.after || [])
+  ]);
 
-  yield delay(data.nodes.length > 0 ? 2000 : 30000);
+  yield put(flowSetFlow({ is_loading: false, nodes: result }));
+
+  yield delay(1000);
 }
 
 export default function* nodeSaga() {

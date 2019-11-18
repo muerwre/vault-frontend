@@ -34,6 +34,25 @@ export const getNodes = ({
     .then(resultMiddleware)
     .catch(errorMiddleware);
 
+export const getNodeDiff = ({
+  start = null,
+  end = null,
+  take,
+  access
+}: {
+  start?: string;
+  end?: string;
+  take?: number;
+  access: string;
+}): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
+  api
+    .get(
+      API.NODE.GET_DIFF,
+      configWithToken(access, { params: { start, end, take } })
+    )
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
 export const getNode = ({
   id,
   access

@@ -43,6 +43,12 @@ const authPersistConfig: PersistConfig = {
   storage
 };
 
+const flowPersistConfig: PersistConfig = {
+  key: "flow",
+  whitelist: ["nodes"],
+  storage
+};
+
 export interface IState {
   auth: IAuthState;
   modal: IModalState;
@@ -76,7 +82,7 @@ export const store = createStore(
     router: connectRouter(history),
     node: nodeReducer,
     uploads: uploadReducer,
-    flow: flowReducer,
+    flow: persistReducer(flowPersistConfig, flowReducer),
     player: playerReducer
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
