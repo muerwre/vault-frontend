@@ -22,10 +22,15 @@ import { selectFlowNodes } from "./selectors";
 import { reqWrapper } from "../auth/sagas";
 import { postCellView } from "./api";
 import { IFlowState } from "./reducer";
-import uniqBy from "ramda/es/uniqBy";
 import uniq from "ramda/es/uniq";
 
 function* onGetFlow() {
+  const {
+    flow: { _persist }
+  } = yield select();
+
+  if (!_persist.rehydrated) return;
+
   yield put(flowSetFlow({ is_loading: true }));
 
   const {
