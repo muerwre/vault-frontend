@@ -8,7 +8,7 @@
   position: relative;
   cursor: pointer;
   color: white;
-  background: 50% 50% no-repeat/cover;
+  background: 50% 50% no-repeat/cover $content_bg;
 
   .is_hero {
     .title {
@@ -185,78 +185,78 @@
   // touch-action: none;
   animation: appear 1s forwards;
 
-  @media (min-width: $cell * 2 + $grid_line) {
-    .vertical > &.has_text,
-    .horizontal > &.has_text,
-    .quadro > &.has_text {
-      box-sizing: border-box;
-      background: none;
-      box-shadow: none;
-      padding: $grid_line;
+  // @media (min-width: $cell * 2 + $grid_line) {
+  //   .vertical > &.has_text,
+  //   .horizontal > &.has_text,
+  //   .quadro > &.has_text {
+  //     box-sizing: border-box;
+  //     background: none;
+  //     box-shadow: none;
+  //     padding: $grid_line;
 
-      &::after {
-        display: none;
-      }
+  //     &::after {
+  //       display: none;
+  //     }
 
-      .face_content {
-        padding: $gap;
-        background: rgba(25, 25, 25, 0.9);
-        border-radius: $radius;
-        overflow: hidden;
-        position: relative;
+  //     .face_content {
+  //       padding: $gap;
+  //       background: rgba(25, 25, 25, 0.9);
+  //       border-radius: $radius;
+  //       overflow: hidden;
+  //       position: relative;
 
-        &:after {
-          content: "";
-          background: linear-gradient(
-            transparentize($content_bg, 1),
-            $content_bg
-          );
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          height: 50px;
-          width: 100%;
-          border-radius: 0 0 $cell_radius $cell_radius;
-        }
-      }
+  //       &:after {
+  //         content: "";
+  //         background: linear-gradient(
+  //           transparentize($content_bg, 1),
+  //           $content_bg
+  //         );
+  //         position: absolute;
+  //         bottom: 0;
+  //         left: 0;
+  //         height: 50px;
+  //         width: 100%;
+  //         border-radius: 0 0 $cell_radius $cell_radius;
+  //       }
+  //     }
 
-      .text::after {
-        display: none;
-      }
-    }
+  //     .text::after {
+  //       display: none;
+  //     }
+  //   }
 
-    .vertical > &.has_text {
-      top: auto;
-      bottom: 0;
-      max-height: 50%;
-      max-width: 100%;
-      height: auto;
-      width: auto;
-      padding: ($grid_line / 2) $grid_line $grid_line $grid_line;
-    }
+  //   .vertical > &.has_text {
+  //     top: auto;
+  //     bottom: 0;
+  //     max-height: 50%;
+  //     max-width: 100%;
+  //     height: auto;
+  //     width: auto;
+  //     padding: ($grid_line / 2) $grid_line $grid_line $grid_line;
+  //   }
 
-    .horizontal > &.has_text {
-      top: auto;
-      left: 0;
-      height: 100%;
-      max-width: 50%;
-      // height: auto;
-      width: auto;
-      bottom: 0;
-      padding: $grid_line ($grid_line / 2) $grid_line $grid_line;
-    }
+  //   .horizontal > &.has_text {
+  //     top: auto;
+  //     left: 0;
+  //     height: 100%;
+  //     max-width: 50%;
+  //     // height: auto;
+  //     width: auto;
+  //     bottom: 0;
+  //     padding: $grid_line ($grid_line / 2) $grid_line $grid_line;
+  //   }
 
-    .quadro > &.has_text {
-      padding: ($grid_line / 2) ($grid_line / 2) $grid_line $grid_line;
-      top: auto;
-      max-height: 50%;
-      max-width: 50%;
-      height: auto;
-      width: auto;
-      bottom: 0;
-      left: 0;
-    }
-  }
+  //   .quadro > &.has_text {
+  //     padding: ($grid_line / 2) ($grid_line / 2) $grid_line $grid_line;
+  //     top: auto;
+  //     max-height: 50%;
+  //     max-width: 50%;
+  //     height: auto;
+  //     width: auto;
+  //     bottom: 0;
+  //     left: 0;
+  //   }
+  // }
 }
 
 .menu {
@@ -367,4 +367,31 @@
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
+  width: 100%;
+}
+
+.text_only {
+  width: 100%;
+  height: 100%;
+  padding: $gap / 2;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+
+  &::after {
+    content: " ";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 160px;
+    pointer-events: none;
+    touch-action: none;
+    background: linear-gradient(
+      transparentize($content_bg, 1),
+      $content_bg 95%
+    );
+    z-index: 1;
+    border-radius: 0 0 $radius $radius;
+  }
 }

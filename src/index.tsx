@@ -22,6 +22,7 @@ render(
 
   [Stage 0]:
 - fix: text nodes cell has no preview (actually, that's a problem of brief)
+
 - password restore
 - signup?
 - better node brief update

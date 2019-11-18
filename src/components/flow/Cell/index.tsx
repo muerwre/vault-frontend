@@ -8,6 +8,7 @@ import { Icon } from "~/components/input/Icon";
 import { flowSetCellView } from "~/redux/flow/actions";
 import { PRESETS } from "~/constants/urls";
 import { debounce } from "throttle-debounce";
+import { NODE_TYPES } from "~/redux/node/constants";
 
 interface IProps {
   node: INode;
@@ -64,12 +65,11 @@ const Cell: FC<IProps> = ({
   }, [setIsLoaded]);
 
   const onClick = useCallback(() => onSelect(id, type), [onSelect, id, type]);
-  const has_description = description && description.length > 160;
+  const has_description = description && description.length > 32;
 
   const text =
-    (((flow && !!flow.show_description) || type === "text") &&
-      has_description &&
-      description) ||
+    (type === NODE_TYPES.TEXT && description) ||
+    (flow && flow.show_description && has_description && description) ||
     null;
 
   const toggleViewDescription = useCallback(() => {
