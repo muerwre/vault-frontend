@@ -1,12 +1,17 @@
-import { api, errorMiddleware, resultMiddleware, configWithToken } from '~/utils/api';
-import { API } from '~/constants/api';
-import { IResultWithStatus, IMessage } from '~/redux/types';
-import { userLoginTransform } from '~/redux/auth/transforms';
-import { IUser } from './types';
+import {
+  api,
+  errorMiddleware,
+  resultMiddleware,
+  configWithToken
+} from "~/utils/api";
+import { API } from "~/constants/api";
+import { IResultWithStatus, IMessage } from "~/redux/types";
+import { userLoginTransform } from "~/redux/auth/transforms";
+import { IUser } from "./types";
 
 export const apiUserLogin = ({
   username,
-  password,
+  password
 }: {
   username: string;
   password: string;
@@ -17,7 +22,9 @@ export const apiUserLogin = ({
     .catch(errorMiddleware)
     .then(userLoginTransform);
 
-export const apiAuthGetUser = ({ access }): Promise<IResultWithStatus<{ user: IUser }>> =>
+export const apiAuthGetUser = ({
+  access
+}): Promise<IResultWithStatus<{ user: IUser }>> =>
   api
     .get(API.USER.ME, configWithToken(access))
     .then(resultMiddleware)
@@ -25,7 +32,7 @@ export const apiAuthGetUser = ({ access }): Promise<IResultWithStatus<{ user: IU
 
 export const apiAuthGetUserProfile = ({
   access,
-  username,
+  username
 }): Promise<IResultWithStatus<{ user: IUser }>> =>
   api
     .get(API.USER.PROFILE(username), configWithToken(access))
@@ -34,7 +41,7 @@ export const apiAuthGetUserProfile = ({
 
 export const apiAuthGetUserMessages = ({
   access,
-  username,
+  username
 }): Promise<IResultWithStatus<{ messages: IMessage[] }>> =>
   api
     .get(API.USER.MESSAGES(username), configWithToken(access))
@@ -44,7 +51,7 @@ export const apiAuthGetUserMessages = ({
 export const apiAuthSendMessage = ({
   access,
   username,
-  message,
+  message
 }): Promise<IResultWithStatus<{ message: IMessage }>> =>
   api
     .post(API.USER.MESSAGE_SEND(username), { message }, configWithToken(access))
@@ -54,14 +61,20 @@ export const apiAuthSendMessage = ({
 export const apiAuthGetUpdates = ({
   access,
   exclude_dialogs,
-  last,
+  last
 }): Promise<IResultWithStatus<{ message: IMessage }>> =>
   api
-    .get(API.USER.GET_UPDATES, configWithToken(access, { params: { exclude_dialogs, last } }))
+    .get(
+      API.USER.GET_UPDATES,
+      configWithToken(access, { params: { exclude_dialogs, last } })
+    )
     .then(resultMiddleware)
     .catch(errorMiddleware);
 
-export const apiUpdateUser = ({ access, user }): Promise<IResultWithStatus<{ user: IUser }>> =>
+export const apiUpdateUser = ({
+  access,
+  user
+}): Promise<IResultWithStatus<{ user: IUser }>> =>
   api
     .patch(API.USER.ME, { user }, configWithToken(access))
     .then(resultMiddleware)

@@ -1,4 +1,11 @@
-import { call, put, takeLatest, select, delay } from "redux-saga/effects";
+import {
+  call,
+  put,
+  takeEvery,
+  takeLatest,
+  select,
+  delay
+} from "redux-saga/effects";
 import {
   AUTH_USER_ACTIONS,
   EMPTY_USER,
@@ -92,26 +99,32 @@ function* sendLoginRequestSaga({
 }
 
 function* refreshUser() {
-  const {
-    error,
-    data: { user }
-  }: IResultWithStatus<{ user: IUser }> = yield call(
-    reqWrapper,
-    apiAuthGetUser
-  );
-
-  if (error) {
-    yield put(
-      authSetUser({
-        ...EMPTY_USER,
-        is_user: false
-      })
+  try {
+    const {
+      error,
+      data: { user }
+    }: IResultWithStatus<{ user: IUser }> = yield call(
+      reqWrapper,
+      apiAuthGetUser
     );
 
-    return;
-  }
+    if (error) {
+      yield put(
+        authSetUser({
+          ...EMPTY_USER,
+          is_user: false
+        })
+      );
 
-  yield put(authSetUser({ ...user, is_user: true }));
+      return;
+    }
+
+    yield put(authSetUser({ ...user, is_user: true }));
+  } catch (e) {
+    console.log("erro", e);
+  } finally {
+    console.log("ended");
+  }
 }
 
 function* checkUserSaga({ key }: RehydrateAction) {
@@ -315,12 +328,14 @@ function* patchUser({ user }: ReturnType<typeof authPatchUser>) {
     return yield put(authSetProfile({ patch_errors: data.errors }));
   }
 
-  yield put(authSetUser(data.user));
+  console.log({ me, data });
+
+  yield put(authSetUser({ ...me, ...data.user }));
   yield put(authSetProfile({ user: { ...me, ...data.user }, tab: "profile" }));
 }
 
 function* authSaga() {
-  yield takeLatest(REHYDRATE, checkUserSaga);
+  yield takeEvery(REHYDRATE, checkUserSaga);
   yield takeLatest([REHYDRATE, AUTH_USER_ACTIONS.LOGGED_IN], startPollingSaga);
 
   yield takeLatest(AUTH_USER_ACTIONS.LOGOUT, logoutSaga);
