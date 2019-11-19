@@ -15,9 +15,7 @@
   border-radius: $radius;
   display: none;
   z-index: 1;
-  // min-width: 100%;
   box-sizing: border-box;
-  // transform: translate(0, $gap);
   padding: $gap;
 
   &::after {
@@ -66,8 +64,6 @@
   cursor: pointer;
   margin-left: $gap;
   white-space: nowrap;
-  // box-shadow: inset transparentize($content_bg, 0.8) 0 0 0 1px;
-  // background: transparentize($content_bg, 0.1);
   padding: 0;
 }
 

@@ -63,11 +63,8 @@ $stamp_color: $content_bg;
   grid-row-end: span 1;
   grid-column-start: 1;
   grid-column-end: -1;
-  // gridRow: "1 / 2",
-  // gridColumn: "1 / -1",
   background: darken($content_bg, 2%);
   border-radius: $radius;
-  // height: 33vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,16 +90,17 @@ $stamp_color: $content_bg;
   position: relative;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     height: 60px;
     width: 100%;
-    background: linear-gradient(transparentize($stamp_color, 1), $stamp_color 90%);
+    background: linear-gradient(
+      transparentize($stamp_color, 1),
+      $stamp_color 90%
+    );
+    pointer-events: none;
+    touch-action: none;
   }
-
-  // @media (max-width: $cell * 2) {
-  // grid-row-end: span 3;
-  // }
 }
