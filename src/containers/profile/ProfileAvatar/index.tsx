@@ -16,6 +16,7 @@ import {
 import path from "ramda/es/path";
 import * as UPLOAD_ACTIONS from "~/redux/uploads/actions";
 import * as AUTH_ACTIONS from "~/redux/auth/actions";
+import { Icon } from "~/components/input/Icon";
 
 const mapStateToProps = state => ({
   user: pick(["id"], selectAuthUser(state)),
@@ -94,6 +95,11 @@ const ProfileAvatarUnconnected: FC<IProps> = ({
       }}
     >
       {can_edit && <input type="file" onInput={onInputChange} />}
+      {can_edit && (
+        <div className={styles.can_edit}>
+          <Icon icon="photo_add" />
+        </div>
+      )}
     </div>
   );
 };

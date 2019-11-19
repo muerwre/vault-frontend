@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 
 const Sprites: FC<{}> = () => (
   <svg width={0} height={0} viewBox="0 0 24 24">
@@ -185,6 +185,11 @@ const Sprites: FC<{}> = () => (
     <g id="message" stroke="none">
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z" />
+    </g>
+
+    <g id="photo_add" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z" />
     </g>
   </svg>
 );
