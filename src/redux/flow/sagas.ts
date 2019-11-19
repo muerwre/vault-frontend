@@ -41,14 +41,14 @@ function* onGetFlow() {
     hideLoader();
   }
 
-  const start =
-    (stored && stored[0] && stored[0].created_at) || new Date().toISOString();
-
-  const end =
-    (stored &&
-      stored[stored.length - 1] &&
-      stored[stored.length - 1].created_at) ||
-    new Date().toISOString();
+  // const start =
+  // (stored && stored[0] && stored[0].created_at) || new Date().toISOString();
+  //
+  // const end =
+  // (stored &&
+  // stored[stored.length - 1] &&
+  // stored[stored.length - 1].created_at) ||
+  // new Date().toISOString();
 
   yield put(flowSetFlow({ is_loading: true }));
 
@@ -69,17 +69,17 @@ function* onGetFlow() {
     updated: IFlowState["updated"];
     valid: INode["id"][];
   }> = yield call(reqWrapper, getNodeDiff, {
-    start,
-    end,
+    start: new Date().toISOString(),
+    end: new Date().toISOString(),
     with_heroes: true,
     with_updated: true,
     with_recent: true,
-    with_valid: true
+    with_valid: false
   });
 
   const result = uniq([
     ...(before || []),
-    ...(valid ? stored.filter(node => valid.includes(node.id)) : stored),
+    // ...(valid ? stored.filter(node => valid.includes(node.id)) : stored),
     ...(after || [])
   ]);
 
