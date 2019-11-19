@@ -25,7 +25,6 @@ render(
 - friendship
 - password restore
 - signup?
-- avatar upload
 
   [stage 1]
 - import videos
@@ -40,6 +39,7 @@ render(
 - comment editing
 
 Done:
+- avatar upload
 - flow updates
 - flow infinite scroll
 - better node brief update
