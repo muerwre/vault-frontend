@@ -25,6 +25,7 @@ render(
 - friendship
 - password restore
 - signup?
+- cover change
 
   [stage 1]
 - import videos

@@ -20,12 +20,23 @@
   // transform: translate(0, $gap);
   padding: $gap;
 
+  &::after {
+    content: " ";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 16px 16px;
+    border-color: transparent transparent $content_bg transparent;
+    position: absolute;
+    right: 0;
+    top: -4px;
+    transform: translate(-20px, 0);
+  }
+
   & > div {
-    // background: transparentize($content_bg, 0.1) url("~/sprites/stripes.svg");
     background: $content_bg;
     padding: $gap $gap * 2;
     cursor: pointer;
-    // opacity: 0.5;
     box-sizing: border-box;
     transition: opacity 0.25s;
     width: 100%;
