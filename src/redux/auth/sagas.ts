@@ -99,32 +99,26 @@ function* sendLoginRequestSaga({
 }
 
 function* refreshUser() {
-  try {
-    const {
-      error,
-      data: { user }
-    }: IResultWithStatus<{ user: IUser }> = yield call(
-      reqWrapper,
-      apiAuthGetUser
+  const {
+    error,
+    data: { user }
+  }: IResultWithStatus<{ user: IUser }> = yield call(
+    reqWrapper,
+    apiAuthGetUser
+  );
+
+  if (error) {
+    yield put(
+      authSetUser({
+        ...EMPTY_USER,
+        is_user: false
+      })
     );
 
-    if (error) {
-      yield put(
-        authSetUser({
-          ...EMPTY_USER,
-          is_user: false
-        })
-      );
-
-      return;
-    }
-
-    yield put(authSetUser({ ...user, is_user: true }));
-  } catch (e) {
-    console.log("erro", e);
-  } finally {
-    console.log("ended");
+    return;
   }
+
+  yield put(authSetUser({ ...user, is_user: true }));
 }
 
 function* checkUserSaga({ key }: RehydrateAction) {
@@ -327,8 +321,6 @@ function* patchUser({ user }: ReturnType<typeof authPatchUser>) {
   if (error || !data.user || data.errors) {
     return yield put(authSetProfile({ patch_errors: data.errors }));
   }
-
-  console.log({ me, data });
 
   yield put(authSetUser({ ...me, ...data.user }));
   yield put(authSetProfile({ user: { ...me, ...data.user }, tab: "profile" }));
