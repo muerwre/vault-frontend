@@ -294,7 +294,7 @@ function* getUpdates() {
 function* startPollingSaga() {
   while (true) {
     yield call(getUpdates);
-    yield delay(10000);
+    yield delay(60000);
   }
 }
 
