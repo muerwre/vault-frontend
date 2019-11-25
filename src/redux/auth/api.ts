@@ -78,3 +78,9 @@ export const apiCheckRestoreCode = ({ code }): Promise<IResultWithStatus<{}>> =>
     .get(API.USER.REQUEST_CODE(code))
     .then(resultMiddleware)
     .catch(errorMiddleware);
+
+export const apiRestoreCode = ({ code, password }): Promise<IResultWithStatus<{}>> =>
+  api
+    .post(API.USER.REQUEST_CODE(code), { password })
+    .then(resultMiddleware)
+    .catch(errorMiddleware);

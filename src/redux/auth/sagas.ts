@@ -17,6 +17,7 @@ import {
   authShowRestoreModal,
   authSetRestore,
   authRequestRestoreCode,
+  authRestorePassword,
 } from '~/redux/auth/actions';
 import {
   apiUserLogin,
@@ -28,9 +29,16 @@ import {
   apiUpdateUser,
   apiRequestRestoreCode,
   apiCheckRestoreCode,
+  apiRestoreCode,
 } from '~/redux/auth/api';
 import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
-import { selectToken, selectAuthProfile, selectAuthUser, selectAuthUpdates } from './selectors';
+import {
+  selectToken,
+  selectAuthProfile,
+  selectAuthUser,
+  selectAuthUpdates,
+  selectAuthRestore,
+} from './selectors';
 import { IResultWithStatus, INotification, IMessageNotification } from '../types';
 import { IUser, IAuthState } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
@@ -293,12 +301,7 @@ function* requestRestoreCode({ field }: ReturnType<typeof authRequestRestoreCode
 
 function* showRestoreModal({ code }: ReturnType<typeof authShowRestoreModal>) {
   if (!code && !code.length) {
-    return yield put(
-      authSetRestore({
-        error: ERRORS.CODE_IS_INVALID,
-        is_loading: false,
-      })
-    );
+    return yield put(authSetRestore({ error: ERRORS.CODE_IS_INVALID, is_loading: false }));
   }
 
   yield put(authSetRestore({ user: null, is_loading: true }));
@@ -306,13 +309,41 @@ function* showRestoreModal({ code }: ReturnType<typeof authShowRestoreModal>) {
   const { error, data } = yield call(apiCheckRestoreCode, { code });
 
   if (data.error || error || !data.user) {
+    yield put(
+      authSetRestore({ is_loading: false, error: data.error || error || ERRORS.CODE_IS_INVALID })
+    );
+
+    return yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
+  }
+
+  yield put(authSetRestore({ user: data.user, code, is_loading: false }));
+  yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
+}
+
+function* restorePassword({ password }: ReturnType<typeof authRestorePassword>) {
+  if (!password) return;
+
+  yield put(authSetRestore({ is_loading: true }));
+  const { code } = yield select(selectAuthRestore);
+
+  if (!code) {
+    return yield put(authSetRestore({ error: ERRORS.CODE_IS_INVALID, is_loading: false }));
+  }
+
+  const { error, data } = yield call(apiRestoreCode, { code, password });
+
+  if (data.error || error || !data.user || !data.token) {
     return yield put(
       authSetRestore({ is_loading: false, error: data.error || error || ERRORS.CODE_IS_INVALID })
     );
   }
 
-  yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
-  yield put(authSetRestore({ user: data.user, is_loading: false }));
+  yield put(authSetToken(data.token));
+  yield put(authSetUser(data.user));
+
+  yield put(authSetRestore({ is_loading: false, is_succesfull: true, error: null }));
+
+  yield call(refreshUser);
 }
 
 function* authSaga() {
@@ -327,8 +358,9 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.SEND_MESSAGE, sendMessage);
   yield takeLatest(AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES, setLastSeenMessages);
   yield takeLatest(AUTH_USER_ACTIONS.PATCH_USER, patchUser);
-  yield takeLatest(AUTH_USER_ACTIONS.SHOW_RESTORE_MODAL, showRestoreModal);
   yield takeLatest(AUTH_USER_ACTIONS.REQUEST_RESTORE_CODE, requestRestoreCode);
+  yield takeLatest(AUTH_USER_ACTIONS.SHOW_RESTORE_MODAL, showRestoreModal);
+  yield takeLatest(AUTH_USER_ACTIONS.RESTORE_PASSWORD, restorePassword);
 }
 
 export default authSaga;

@@ -18,7 +18,7 @@ const mapStateToProps = state => ({
   restore: selectAuthRestore(state),
 });
 
-const mapDispatchToProps = pick(['authRequestRestoreCode', 'authSetRestore'], AUTH_ACTIONS);
+const mapDispatchToProps = pick(['authRestorePassword', 'authSetRestore'], AUTH_ACTIONS);
 
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
@@ -26,7 +26,7 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
   restore: { error, is_loading, is_succesfull, user },
   authSetRestore,
   onRequestClose,
-  authRequestRestoreCode,
+  authRestorePassword,
 }) => {
   const [password, setPassword] = useState('');
   const [password_again, setPasswordAgain] = useState('');
@@ -41,11 +41,10 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
       event.preventDefault();
 
       if (doesnt_match) return;
-      // if (!field) return;
-      //
-      // authRequestRestoreCode(field);
+
+      authRestorePassword(password);
     },
-    [doesnt_match]
+    [doesnt_match, authRestorePassword]
   );
 
   useEffect(() => {
@@ -69,7 +68,8 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
         <Group className={styles.shade}>
           <Icon icon="check" size={64} />
 
-          <div>Отлично, добро пожаловать домой!</div>
+          <div>Пароль обновлен</div>
+          <div>Добро пожаловать домой, ~{user.username}!</div>
 
           <div />
 

@@ -91,3 +91,8 @@ export const authShowRestoreModal = (code: string) => ({
   type: AUTH_USER_ACTIONS.SHOW_RESTORE_MODAL,
   code,
 });
+
+export const authRestorePassword = (password: string) => ({
+  type: AUTH_USER_ACTIONS.RESTORE_PASSWORD,
+  password,
+});
