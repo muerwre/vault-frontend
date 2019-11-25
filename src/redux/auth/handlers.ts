@@ -1,6 +1,7 @@
 import { AUTH_USER_ACTIONS } from '~/redux/auth/constants';
 import * as ActionCreators from '~/redux/auth/actions';
 import { IAuthState } from '~/redux/auth/types';
+import { Action } from 'history';
 
 interface ActionHandler<T> {
   (state: IAuthState, payload: T extends (...args: any[]) => infer R ? R : any): IAuthState;
@@ -57,6 +58,14 @@ const setLastSeenMessages: ActionHandler<typeof ActionCreators.authSetLastSeenMe
   },
 });
 
+const setRestore: ActionHandler<typeof ActionCreators.authSetRestore> = (state, { restore }) => ({
+  ...state,
+  restore: {
+    ...state.restore,
+    ...restore,
+  },
+});
+
 export const AUTH_USER_HANDLERS = {
   [AUTH_USER_ACTIONS.SET_LOGIN_ERROR]: setLoginError,
   [AUTH_USER_ACTIONS.SET_USER]: setUser,
@@ -64,4 +73,5 @@ export const AUTH_USER_HANDLERS = {
   [AUTH_USER_ACTIONS.SET_PROFILE]: setProfile,
   [AUTH_USER_ACTIONS.SET_UPDATES]: setUpdates,
   [AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES]: setLastSeenMessages,
+  [AUTH_USER_ACTIONS.SET_RESTORE]: setRestore,
 };

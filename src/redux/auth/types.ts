@@ -49,4 +49,11 @@ export type IAuthState = Readonly<{
 
     patch_errors: Record<string, string>;
   };
+
+  restore: {
+    code: string;
+    is_loading: boolean;
+    is_succesfull: boolean;
+    errors: Record<string, string>;
+  };
 }>;

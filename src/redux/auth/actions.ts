@@ -76,3 +76,13 @@ export const authPatchUser = (user: Partial<IUser>) => ({
   type: AUTH_USER_ACTIONS.PATCH_USER,
   user,
 });
+
+export const authSetRestore = (restore: Partial<IAuthState['restore']>) => ({
+  type: AUTH_USER_ACTIONS.SET_RESTORE,
+  restore,
+});
+
+export const authRestorePassword = (code: string) => ({
+  type: AUTH_USER_ACTIONS.RESTORE_PASSWORD,
+  code,
+});

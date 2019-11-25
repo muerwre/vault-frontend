@@ -1,53 +1,44 @@
-import {
-  createStore,
-  applyMiddleware,
-  combineReducers,
-  compose,
-  Store
-} from "redux";
+import { createStore, applyMiddleware, combineReducers, compose, Store } from 'redux';
 
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import createSagaMiddleware from "redux-saga";
-import {
-  connectRouter,
-  RouterState,
-  routerMiddleware
-} from "connected-react-router";
-import { createBrowserHistory } from "history";
-import { PersistConfig, Persistor } from "redux-persist/es/types";
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import createSagaMiddleware from 'redux-saga';
+import { connectRouter, RouterState, routerMiddleware } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
+import { PersistConfig, Persistor } from 'redux-persist/es/types';
 
-import authReducer from "~/redux/auth/reducer";
-import authSaga from "~/redux/auth/sagas";
+import authReducer from '~/redux/auth/reducer';
+import authSaga from '~/redux/auth/sagas';
 
-import nodeReducer, { INodeState } from "~/redux/node/reducer";
-import nodeSaga from "~/redux/node/sagas";
+import nodeReducer, { INodeState } from '~/redux/node/reducer';
+import nodeSaga from '~/redux/node/sagas';
 
-import flowReducer, { IFlowState } from "~/redux/flow/reducer";
-import flowSaga from "~/redux/flow/sagas";
+import flowReducer, { IFlowState } from '~/redux/flow/reducer';
+import flowSaga from '~/redux/flow/sagas';
 
-import uploadReducer, { IUploadState } from "~/redux/uploads/reducer";
-import uploadSaga from "~/redux/uploads/sagas";
+import uploadReducer, { IUploadState } from '~/redux/uploads/reducer';
+import uploadSaga from '~/redux/uploads/sagas';
 
-import playerReducer, { IPlayerState } from "~/redux/player/reducer";
-import playerSaga from "~/redux/player/sagas";
+import playerReducer, { IPlayerState } from '~/redux/player/reducer';
+import playerSaga from '~/redux/player/sagas';
 
-import { IAuthState } from "~/redux/auth/types";
+import { IAuthState } from '~/redux/auth/types';
 
-import modalReducer, { IModalState } from "~/redux/modal/reducer";
-import { gotAuthPostMessage, authOpenProfile } from "./auth/actions";
+import modalReducer, { IModalState } from '~/redux/modal/reducer';
+import { gotAuthPostMessage, authOpenProfile } from './auth/actions';
+import { modalSaga } from './modal/sagas';
 
 const authPersistConfig: PersistConfig = {
-  key: "auth",
-  whitelist: ["token", "user", "updates"],
-  storage
+  key: 'auth',
+  whitelist: ['token', 'user', 'updates'],
+  storage,
 };
 
 const flowPersistConfig: PersistConfig = {
-  key: "flow",
-  whitelist: ["nodes", "recent", "updated"],
+  key: 'flow',
+  whitelist: ['nodes', 'recent', 'updated'],
   // whitelist: [],
-  storage
+  storage,
 };
 
 export interface IState {
@@ -63,16 +54,19 @@ export interface IState {
 export const sagaMiddleware = createSagaMiddleware();
 export const history = createBrowserHistory();
 
-history.listen(({ pathname }) => {
-  if (pathname.match(/~([\wа-яА-Я]+)/)) {
-    const [, username] = pathname.match(/~([\wа-яА-Я]+)/);
-    window.postMessage({ type: "username", username }, "*");
-  }
-});
+// history.
+// history.listen(({ pathname }) => {
+//   if (pathname.match(/~([\wа-яА-Я]+)/)) {
+//     const [, username] = pathname.match(/~([\wа-яА-Я]+)/);
+//     window.postMessage({ type: 'username', username }, '*');
+//   }
+
+//   console.log({ pathname });
+//   // if (pathname.match)
+// });
 
 const composeEnhancers =
-  typeof window === "object" &&
-  (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  typeof window === 'object' && (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
@@ -84,7 +78,7 @@ export const store = createStore(
     node: nodeReducer,
     uploads: uploadReducer,
     flow: persistReducer(flowPersistConfig, flowReducer),
-    player: playerReducer
+    player: playerReducer,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
@@ -98,22 +92,13 @@ export function configureStore(): {
   sagaMiddleware.run(uploadSaga);
   sagaMiddleware.run(flowSaga);
   sagaMiddleware.run(playerSaga);
+  sagaMiddleware.run(modalSaga);
 
-  window.addEventListener("message", message => {
-    if (
-      message &&
-      message.data &&
-      message.data.type === "oauth_login" &&
-      message.data.token
-    )
+  window.addEventListener('message', message => {
+    if (message && message.data && message.data.type === 'oauth_login' && message.data.token)
       return store.dispatch(gotAuthPostMessage({ token: message.data.token }));
 
-    if (
-      message &&
-      message.data &&
-      message.data.type === "username" &&
-      message.data.username
-    )
+    if (message && message.data && message.data.type === 'username' && message.data.username)
       return store.dispatch(authOpenProfile(message.data.username));
   });
 

@@ -44,6 +44,7 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
               <Route path={URLS.NODE_URL(':id')} component={NodeLayout} />
               <Route path={URLS.BORIS} component={BorisLayout} />
               <Route path={URLS.ERRORS.NOT_FOUND} component={ErrorNotFound} />
+              <Route path="/restore/:code" component={ErrorNotFound} />
 
               <Redirect to="/" />
             </Switch>

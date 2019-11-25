@@ -31,6 +31,13 @@ const INITIAL_STATE: IAuthState = {
     messages_error: null,
     patch_errors: {},
   },
+
+  restore: {
+    code: '',
+    is_loading: false,
+    is_succesfull: false,
+    errors: {},
+  },
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);
