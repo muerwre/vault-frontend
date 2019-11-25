@@ -37,7 +37,7 @@ const INITIAL_STATE: IAuthState = {
     user: null,
     is_loading: false,
     is_succesfull: false,
-    errors: {},
+    error: null,
   },
 };
 

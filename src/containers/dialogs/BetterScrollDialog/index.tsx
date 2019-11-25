@@ -1,7 +1,8 @@
-import React, { FC, MouseEventHandler, useEffect, useRef } from 'react';
+import React, { FC, MouseEventHandler, useEffect, useRef, ReactElement } from 'react';
 import * as styles from './styles.scss';
 import { enableBodyScroll, disableBodyScroll } from 'body-scroll-lock';
 import { Icon } from '~/components/input/Icon';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
 
 interface IProps {
   children: React.ReactChild;
@@ -11,6 +12,8 @@ interface IProps {
   size?: 'medium' | 'big';
   width?: number;
   error?: string;
+  is_loading?: boolean;
+  overlay?: ReactElement;
 
   onOverlayClick?: MouseEventHandler<HTMLDivElement>;
   onRefCapture?: (ref: any) => void;
@@ -25,6 +28,8 @@ const BetterScrollDialog: FC<IProps> = ({
   width = 600,
   error,
   onClose,
+  is_loading,
+  overlay = null,
 }) => {
   const ref = useRef(null);
 
@@ -51,7 +56,15 @@ const BetterScrollDialog: FC<IProps> = ({
           {error && <div className={styles.error}>{error}</div>}
         </div>
 
-        {footer && <div className={styles.header}>{footer}</div>}
+        {!!is_loading && (
+          <div className={styles.shade}>
+            <LoaderCircle size={48} />
+          </div>
+        )}
+
+        {overlay}
+
+        {footer && <div className={styles.footer}>{footer}</div>}
       </div>
     </div>
   );

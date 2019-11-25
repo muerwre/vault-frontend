@@ -9,6 +9,7 @@ type IButtonProps = DetailedHTMLProps<
   HTMLButtonElement
 > & {
   size?: 'mini' | 'normal' | 'big' | 'giant' | 'micro' | 'small';
+  color?: 'primary' | 'secondary' | 'outline' | 'link';
   iconLeft?: IIcon;
   iconRight?: IIcon;
   seamless?: boolean;
@@ -25,6 +26,7 @@ type IButtonProps = DetailedHTMLProps<
 const Button: FC<IButtonProps> = memo(
   ({
     className = '',
+    color = 'primary',
     size = 'normal',
     iconLeft,
     iconRight,
@@ -44,7 +46,7 @@ const Button: FC<IButtonProps> = memo(
     createElement(
       seamless || non_submitting ? 'div' : 'button',
       {
-        className: classnames(styles.button, className, styles[size], {
+        className: classnames(styles.button, className, styles[size], styles[color], {
           red,
           grey,
           seamless,

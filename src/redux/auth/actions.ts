@@ -77,6 +77,11 @@ export const authPatchUser = (user: Partial<IUser>) => ({
   user,
 });
 
+export const authRequestRestoreCode = (field: string) => ({
+  type: AUTH_USER_ACTIONS.REQUEST_RESTORE_CODE,
+  field,
+});
+
 export const authSetRestore = (restore: Partial<IAuthState['restore']>) => ({
   type: AUTH_USER_ACTIONS.SET_RESTORE,
   restore,

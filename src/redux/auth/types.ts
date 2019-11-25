@@ -55,6 +55,6 @@ export type IAuthState = Readonly<{
     user: Pick<IUser, 'username' | 'photo'>;
     is_loading: boolean;
     is_succesfull: boolean;
-    errors: Record<string, string>;
+    error: string;
   };
 }>;

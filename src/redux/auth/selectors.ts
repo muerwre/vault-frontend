@@ -1,9 +1,10 @@
 import { IState } from '~/redux/store';
 
-export const selectAuth = (state: IState): IState['auth'] => state.auth;
-export const selectUser = (state: IState): IState['auth']['user'] => state.auth.user;
-export const selectToken = (state: IState): IState['auth']['token'] => state.auth.token;
-export const selectAuthLogin = (state: IState): IState['auth']['login'] => state.auth.login;
-export const selectAuthProfile = (state: IState): IState['auth']['profile'] => state.auth.profile;
-export const selectAuthUser = (state: IState): IState['auth']['user'] => state.auth.user;
-export const selectAuthUpdates = (state: IState): IState['auth']['updates'] => state.auth.updates;
+export const selectAuth = (state: IState) => state.auth;
+export const selectUser = (state: IState) => state.auth.user;
+export const selectToken = (state: IState) => state.auth.token;
+export const selectAuthLogin = (state: IState) => state.auth.login;
+export const selectAuthProfile = (state: IState) => state.auth.profile;
+export const selectAuthUser = (state: IState) => state.auth.user;
+export const selectAuthUpdates = (state: IState) => state.auth.updates;
+export const selectAuthRestore = (state: IState) => state.auth.restore;

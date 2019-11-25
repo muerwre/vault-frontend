@@ -67,12 +67,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
   const buttons = useMemo(
     () => (
       <Group className={styles.footer}>
-        <Button
-          className={styles.secondary_button}
-          iconLeft="vk"
-          type="button"
-          onClick={onSocialLogin}
-        >
+        <Button color="outline" iconLeft="vk" type="button" onClick={onSocialLogin}>
           <span>Вконтакте</span>
         </Button>
 
@@ -88,7 +83,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <BetterScrollDialog width={260} error={error} onClose={onRequestClose} footer={buttons}>
+      <BetterScrollDialog width={300} error={error} onClose={onRequestClose} footer={buttons}>
         <Padder>
           <div className={styles.wrap}>
             <Group>
@@ -98,7 +93,12 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
               <InputText title="Пароль" handler={setPassword} value={password} type="password" />
 
-              <Button className={styles.forgot_button} type="button" onClick={onRestoreRequest}>
+              <Button
+                color="link"
+                type="button"
+                onClick={onRestoreRequest}
+                className={styles.forgot_button}
+              >
                 Вспомнить пароль
               </Button>
             </Group>
