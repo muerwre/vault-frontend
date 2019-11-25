@@ -2,7 +2,17 @@
   filter: blur(0);
   transition: filter 0.25s;
   will-change: filter;
-  // max-height: 100vh;
-  // width: 100vw;
-  // overflow: visible auto;
+  padding-top: 100px + $gap;
+
+  @include tablet {
+    padding-top: 64px + $gap;
+  }
+
+  &.is_blurred {
+    filter: blur(15px);
+
+    @include can_backdrop {
+      filter: blur(0);
+    }
+  }
 }

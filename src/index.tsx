@@ -23,7 +23,6 @@ render(
   [Stage 0]:
   - check if email is registered at social login
   - friendship
-  - password restore
   - signup?
   - cover change
   - sticky header
@@ -47,6 +46,7 @@ render(
 - comment editing
 
 Done:
+- password restore
 - avatar upload
 - flow updates
 - flow infinite scroll

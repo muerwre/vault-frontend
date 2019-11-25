@@ -1,4 +1,4 @@
-import React, { FC, useCallback, memo } from 'react';
+import React, { FC, useCallback, memo, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { push as historyPush } from 'connected-react-router';
 import { Link } from 'react-router-dom';
@@ -13,9 +13,10 @@ import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { DIALOGS } from '~/redux/modal/constants';
 import { pick } from 'ramda';
 import { UserButton } from '../UserButton';
-import { Icon } from '~/components/input/Icon';
 import { Notifications } from '../Notifications';
 import { URLS } from '~/constants/urls';
+import { createPortal } from 'react-dom';
+import classNames from 'classnames';
 
 const mapStateToProps = state => ({
   user: pick(['username', 'is_user', 'photo'])(selectUser(state)),
@@ -32,41 +33,61 @@ type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
 
 const HeaderUnconnected: FC<IProps> = memo(
   ({ user, user: { username, is_user }, showDialog, authLogout, authOpenProfile }) => {
+    const [is_scrolled, setIsScrolled] = useState(false);
+
     const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
     const onProfileClick = useCallback(() => authOpenProfile(username), [authOpenProfile, user]);
 
-    return (
-      <div className={style.container}>
-        <Logo />
+    const onScroll = useCallback(() => {
+      const active = window.scrollY > 64;
 
-        <Filler />
+      if (active !== is_scrolled) setIsScrolled(active);
+    }, [is_scrolled, setIsScrolled]);
 
-        {is_user && (
-          <div className={style.plugs}>
-            <Link className={style.item} to={URLS.BASE}>
-              FLOW
-            </Link>
+    useEffect(() => {
+      onScroll();
+    }, []);
 
-            <Link className={style.item} to={URLS.BORIS}>
-              BORIS
-            </Link>
+    useEffect(() => {
+      window.addEventListener('scroll', onScroll);
+      return () => window.removeEventListener('scroll', onScroll);
+    }, [onScroll]);
 
-            <div className={style.item}>
-              <Notifications />
+    return createPortal(
+      <div className={classNames(style.wrap, { [style.is_scrolled]: is_scrolled })}>
+        <div className={style.container}>
+          <Logo />
+
+          <Filler />
+
+          {is_user && (
+            <div className={style.plugs}>
+              <Link className={style.item} to={URLS.BASE}>
+                FLOW
+              </Link>
+
+              <Link className={style.item} to={URLS.BORIS}>
+                BORIS
+              </Link>
+
+              <div className={style.item}>
+                <Notifications />
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {is_user && (
-          <UserButton user={user} onLogout={authLogout} onProfileClick={onProfileClick} />
-        )}
+          {is_user && (
+            <UserButton user={user} onLogout={authLogout} onProfileClick={onProfileClick} />
+          )}
 
-        {!is_user && (
-          <Group horizontal className={style.user_button} onClick={onLogin}>
-            <div>ВДОХ</div>
-          </Group>
-        )}
-      </div>
+          {!is_user && (
+            <Group horizontal className={style.user_button} onClick={onLogin}>
+              <div>ВДОХ</div>
+            </Group>
+          )}
+        </div>
+      </div>,
+      document.body
     );
   }
 );
