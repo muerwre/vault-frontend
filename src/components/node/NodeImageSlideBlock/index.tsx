@@ -1,21 +1,14 @@
-import React, {
-  FC,
-  useMemo,
-  useState,
-  useEffect,
-  useRef,
-  useCallback
-} from "react";
-import { ImageSwitcher } from "../ImageSwitcher";
-import * as styles from "./styles.scss";
-import { INode } from "~/redux/types";
-import classNames from "classnames";
-import { UPLOAD_TYPES } from "~/redux/uploads/constants";
-import { NODE_SETTINGS } from "~/redux/node/constants";
-import { getURL } from "~/utils/dom";
-import { PRESETS } from "~/constants/urls";
-import { LoaderCircle } from "~/components/input/LoaderCircle";
-import { throttle } from "throttle-debounce";
+import React, { FC, useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import { ImageSwitcher } from '../ImageSwitcher';
+import * as styles from './styles.scss';
+import { INode } from '~/redux/types';
+import classNames from 'classnames';
+import { UPLOAD_TYPES } from '~/redux/uploads/constants';
+import { NODE_SETTINGS } from '~/redux/node/constants';
+import { getURL } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { throttle } from 'throttle-debounce';
 
 interface IProps {
   is_loading: boolean;
@@ -24,14 +17,9 @@ interface IProps {
   updateLayout: () => void;
 }
 
-const getX = event =>
-  event.touches ? event.touches[0].clientX : event.clientX;
+const getX = event => (event.touches ? event.touches[0].clientX : event.clientX);
 
-const NodeImageSlideBlock: FC<IProps> = ({
-  node,
-  is_loading,
-  updateLayout
-}) => {
+const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => {
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(320);
   const [max_height, setMaxHeight] = useState(960);
@@ -50,10 +38,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
 
   const images = useMemo(
     () =>
-      (node &&
-        node.files &&
-        node.files.filter(({ type }) => type === UPLOAD_TYPES.IMAGE)) ||
-      [],
+      (node && node.files && node.files.filter(({ type }) => type === UPLOAD_TYPES.IMAGE)) || [],
     [node]
   );
 
@@ -81,26 +66,34 @@ const NodeImageSlideBlock: FC<IProps> = ({
     [refs, heights, setHeights, images]
   );
 
-  const onImageLoad = useCallback(
-    index => () => setLoaded({ ...loaded, [index]: true }),
-    [setLoaded, loaded]
-  );
+  const onImageLoad = useCallback(index => () => setLoaded({ ...loaded, [index]: true }), [
+    setLoaded,
+    loaded,
+  ]);
 
   // update outside hooks
   useEffect(() => updateLayout(), [loaded, height, images]);
   useEffect(() => updateSizes(), [refs, current, loaded, images]);
 
   useEffect(() => {
-    if (!wrap || !wrap.current) return;
+    const timeout = setTimeout(updateLayout, 300);
+
+    if (!wrap || !wrap.current) return () => clearTimeout(timeout);
 
     const { width } = wrap.current.getBoundingClientRect();
     const fallback = (width * 9) / 16;
 
-    if (is_loading) return setHeight(fallback);
+    if (is_loading) {
+      setHeight(fallback);
+      return () => clearTimeout(timeout);
+    }
 
     const selected = Math.abs(-offset / width);
 
-    if (!heights[Math.round(selected)]) return setHeight(fallback);
+    if (!heights[Math.round(selected)]) {
+      setHeight(fallback);
+      return () => clearTimeout(timeout);
+    }
 
     const prev = Math.max(heights[Math.floor(selected)] || fallback, fallback);
     const next = Math.max(heights[Math.ceil(selected)] || fallback, fallback);
@@ -115,9 +108,8 @@ const NodeImageSlideBlock: FC<IProps> = ({
     }
 
     // update layout after all manipulations
-    const timeout = setTimeout(() => updateLayout(), 500);
     return () => clearTimeout(timeout);
-  }, [is_dragging, wrap, offset, heights, max_height, images, is_loading]);
+  }, [is_dragging, wrap, offset, heights, max_height, images, is_loading, updateLayout]);
 
   const onDrag = useCallback(
     event => {
@@ -133,13 +125,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
       const { width: wrap_width } = wrap.current.getBoundingClientRect();
 
       setOffset(
-        Math.min(
-          Math.max(
-            initial_offset + getX(event) - initial_x,
-            wrap_width - slide_width
-          ),
-          0
-        )
+        Math.min(Math.max(initial_offset + getX(event) - initial_x, wrap_width - slide_width), 0)
       );
     },
     [is_dragging, initial_x, setOffset, initial_offset]
@@ -152,9 +138,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
     const { width: slide_width } = slide.current.getBoundingClientRect();
 
     const shift = (initial_offset - offset) / wrap_width; // percent / 100
-    const diff =
-      initial_offset -
-      (shift > 0 ? Math.ceil(shift) : Math.floor(shift)) * wrap_width;
+    const diff = initial_offset - (shift > 0 ? Math.ceil(shift) : Math.floor(shift)) * wrap_width;
     const new_offset =
       Math.abs(shift) > 0.25
         ? Math.min(Math.max(diff, wrap_width - slide_width), 0) // next or prev slide
@@ -189,24 +173,24 @@ const NodeImageSlideBlock: FC<IProps> = ({
   useEffect(() => updateMaxHeight(), [images]);
 
   useEffect(() => {
-    window.addEventListener("resize", updateSizes);
-    window.addEventListener("resize", updateMaxHeight);
+    window.addEventListener('resize', updateSizes);
+    window.addEventListener('resize', updateMaxHeight);
 
-    window.addEventListener("mousemove", onDrag);
-    window.addEventListener("touchmove", onDrag);
+    window.addEventListener('mousemove', onDrag);
+    window.addEventListener('touchmove', onDrag);
 
-    window.addEventListener("mouseup", stopDragging);
-    window.addEventListener("touchend", stopDragging);
+    window.addEventListener('mouseup', stopDragging);
+    window.addEventListener('touchend', stopDragging);
 
     return () => {
-      window.removeEventListener("resize", updateSizes);
-      window.removeEventListener("resize", updateMaxHeight);
+      window.removeEventListener('resize', updateSizes);
+      window.removeEventListener('resize', updateMaxHeight);
 
-      window.removeEventListener("mousemove", onDrag);
-      window.removeEventListener("touchmove", onDrag);
+      window.removeEventListener('mousemove', onDrag);
+      window.removeEventListener('touchmove', onDrag);
 
-      window.removeEventListener("mouseup", stopDragging);
-      window.removeEventListener("touchend", stopDragging);
+      window.removeEventListener('mouseup', stopDragging);
+      window.removeEventListener('touchend', stopDragging);
     };
   }, [onDrag, stopDragging, updateMaxHeight, updateSizes]);
 
@@ -219,13 +203,10 @@ const NodeImageSlideBlock: FC<IProps> = ({
   );
 
   return (
-    <div
-      className={classNames(styles.wrap, { [styles.is_loading]: is_loading })}
-      ref={wrap}
-    >
+    <div className={classNames(styles.wrap, { [styles.is_loading]: is_loading })} ref={wrap}>
       <div
         className={classNames(styles.placeholder, {
-          [styles.is_loading]: is_loading || !loaded[current]
+          [styles.is_loading]: is_loading || !loaded[current],
         })}
       >
         <div>
@@ -247,7 +228,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
         style={{
           height,
           transform: `translate(${offset}px, 0)`,
-          width: `${images.length * 100}%`
+          width: `${images.length * 100}%`,
         }}
         onMouseDown={startDragging}
         onTouchStart={startDragging}
@@ -257,14 +238,14 @@ const NodeImageSlideBlock: FC<IProps> = ({
           images.map((file, index) => (
             <div
               className={classNames(styles.image_wrap, {
-                is_active: index === current && loaded[index]
+                is_active: index === current && loaded[index],
               })}
               ref={setRef(index)}
               key={node.updated_at + file.id}
             >
               <img
                 className={styles.image}
-                src={getURL(file, PRESETS["1600"])}
+                src={getURL(file, PRESETS['1600'])}
                 alt=""
                 key={file.id}
                 onLoad={onImageLoad(index)}
