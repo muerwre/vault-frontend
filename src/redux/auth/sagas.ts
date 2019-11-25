@@ -283,8 +283,6 @@ function* requestRestoreCode({ field }: ReturnType<typeof authRequestRestoreCode
   yield put(authSetRestore({ error: null, is_loading: true }));
   const { error, data } = yield call(apiRequestRestoreCode, { field });
 
-  console.log(data);
-
   if (data.error || error) {
     return yield put(authSetRestore({ is_loading: false, error: data.error || error }));
   }
@@ -301,7 +299,6 @@ function* restorePassword({ code }: ReturnType<typeof authRestorePassword>) {
       })
     );
   }
-  console.log({ code });
 }
 
 function* authSaga() {
