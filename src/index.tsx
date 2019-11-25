@@ -27,6 +27,9 @@ render(
 - password restore
 - signup?
 - cover change
+- sticky header
+- mobile header
+- profile cover upload
 
   [stage 1]
 - import videos
