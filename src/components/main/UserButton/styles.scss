@@ -19,7 +19,7 @@
   padding: $gap;
 
   &::after {
-    content: " ";
+    content: ' ';
     width: 0;
     height: 0;
     border-style: solid;
@@ -87,5 +87,15 @@
     stroke: #222222;
     width: 24px;
     height: 24px;
+  }
+
+  @include tablet {
+    margin-left: 0 !important;
+  }
+}
+
+.username {
+  @include tablet {
+    display: none;
   }
 }

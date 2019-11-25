@@ -16,7 +16,9 @@ interface IProps {
 const UserButton: FC<IProps> = ({ user: { username, photo }, onProfileClick, onLogout }) => (
   <div className={styles.wrap}>
     <Group horizontal className={styles.user_button}>
-      <div onClick={onProfileClick}>{username}</div>
+      <div className={styles.username} onClick={onProfileClick}>
+        {username}
+      </div>
 
       <div
         className={styles.user_avatar}

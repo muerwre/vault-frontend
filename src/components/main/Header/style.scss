@@ -13,6 +13,7 @@
 
   @include tablet {
     height: 64px;
+    padding: 0 $gap;
   }
 
   &.is_scrolled {
