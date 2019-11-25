@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import * as styles from './styles.scss';
 import { IState } from '~/redux/store';
 import * as ACTIONS from '~/redux/modal/actions';
-import { DIALOG_CONTENT } from '~/redux/modal/constants';
+import { DIALOG_CONTENT } from '~/constants/dialogs';
 
 const mapStateToProps = ({ modal }: IState) => ({ ...modal });
 const mapDispatchToProps = {

@@ -1,4 +1,5 @@
-$vk_color: darken(desaturate($blue, 100%), 30%);
+$secondary_color: darken(desaturate($blue, 100%), 30%);
+$vk_color: $secondary_color;
 
 .wrap {
   display: flex;
@@ -15,7 +16,7 @@ $vk_color: darken(desaturate($blue, 100%), 30%);
   }
 }
 
-.vk {
+.secondary_button {
   background: $content_bg;
   box-shadow: inset $vk_color 0 0 0 2px;
   color: $vk_color;
@@ -23,9 +24,13 @@ $vk_color: darken(desaturate($blue, 100%), 30%);
   svg {
     fill: $vk_color;
     margin-right: $gap;
-    // width: 24px;
-    // height: 24px;
   }
+}
+
+.forgot_button {
+  background: $content_bg;
+  box-shadow: none;
+  color: $secondary_color;
 }
 
 .buttons {
@@ -39,5 +44,14 @@ $vk_color: darken(desaturate($blue, 100%), 30%);
 
   button {
     // text-align: left;
+  }
+}
+
+.links {
+  font: $font_14_regular;
+  text-align: center;
+
+  a {
+    color: lighten($content_bg, 40%);
   }
 }

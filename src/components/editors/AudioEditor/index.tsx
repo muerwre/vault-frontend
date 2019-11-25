@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { ImageGrid } from '../ImageGrid';
 import { AudioGrid } from '../AudioGrid';
-import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
+
+import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import * as styles from './styles.scss';
 
 const mapStateToProps = selectUploads;

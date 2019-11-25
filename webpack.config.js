@@ -5,6 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { join } = require('path');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 const htmlPlugin = new HtmlWebPackPlugin({
   template: './src/index.html',
@@ -37,6 +38,13 @@ module.exports = () => {
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
       chunkFilename: '[id].[contenthash].css',
+    }),
+    new CircularDependencyPlugin({
+      // exclude: /node_modules/,
+      include: /LoginDialog/,
+      failOnError: true,
+      allowAsyncCycles: false,
+      cwd: process.cwd(),
     }),
   ];
 

@@ -40,7 +40,8 @@ import { selectFlowNodes, selectFlow } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
 import { IResultWithStatus, INode } from '../types';
-import { NODE_EDITOR_DIALOGS, DIALOGS } from '../modal/constants';
+import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
+import { DIALOGS } from '~/redux/modal/constants';
 import { INodeState } from './reducer';
 import { IFlowState } from '../flow/reducer';
 

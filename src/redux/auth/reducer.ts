@@ -34,6 +34,7 @@ const INITIAL_STATE: IAuthState = {
 
   restore: {
     code: '',
+    user: null,
     is_loading: false,
     is_succesfull: false,
     errors: {},

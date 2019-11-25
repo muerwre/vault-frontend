@@ -1,37 +1,43 @@
-import React, { FC, FormEvent, useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { ScrollDialog } from "../ScrollDialog";
-import { IDialogProps } from "~/redux/modal/constants";
-import { useCloseOnEscape } from "~/utils/hooks";
-import { Group } from "~/components/containers/Group";
-import { InputText } from "~/components/input/InputText";
-import { Button } from "~/components/input/Button";
-import { Padder } from "~/components/containers/Padder";
-import * as styles from "./styles.scss";
-import { selectAuthLogin } from "~/redux/auth/selectors";
-import * as ACTIONS from "~/redux/auth/actions";
-import { API } from "~/constants/api";
-import { BetterScrollDialog } from "../BetterScrollDialog";
+import React, { FC, FormEvent, useCallback, useEffect, useState, useMemo } from 'react';
+import { connect } from 'react-redux';
+import { IDialogProps } from '~/redux/modal/constants';
+import { DIALOGS } from '~/redux/modal/constants';
+import { useCloseOnEscape } from '~/utils/hooks';
+import { Group } from '~/components/containers/Group';
+import { InputText } from '~/components/input/InputText';
+import { Button } from '~/components/input/Button';
+import { Padder } from '~/components/containers/Padder';
+import { selectAuthLogin } from '~/redux/auth/selectors';
+import { API } from '~/constants/api';
+import { BetterScrollDialog } from '../BetterScrollDialog';
+
+import * as styles from './styles.scss';
+import * as ACTIONS from '~/redux/auth/actions';
+import * as MODAL_ACTIONS from '~/redux/modal/actions';
 
 const mapStateToProps = selectAuthLogin;
 
 const mapDispatchToProps = {
   userSendLoginRequest: ACTIONS.userSendLoginRequest,
-  userSetLoginError: ACTIONS.userSetLoginError
+  userSetLoginError: ACTIONS.userSetLoginError,
+  modalShowDialog: MODAL_ACTIONS.modalShowDialog,
 };
 
-type IProps = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps &
-  IDialogProps & {};
+type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
+
+console.log('initial', MODAL_ACTIONS);
 
 const LoginDialogUnconnected: FC<IProps> = ({
   onRequestClose,
   error,
   userSendLoginRequest,
-  userSetLoginError
+  userSetLoginError,
+  modalShowDialog,
 }) => {
-  const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  console.log({ modalShowDialog, MODAL_ACTIONS });
+
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
 
   const onSubmit = useCallback(
     (event: FormEvent) => {
@@ -41,61 +47,60 @@ const LoginDialogUnconnected: FC<IProps> = ({
     [userSendLoginRequest, username, password]
   );
 
+  const onRestoreRequest = useCallback(
+    event => {
+      console.log('a', { MODAL_ACTIONS, modalShowDialog, userSetLoginError });
+      event.preventDefault();
+      modalShowDialog(DIALOGS.RESTORE_REQUEST);
+    },
+    [modalShowDialog, userSetLoginError]
+  );
+
   const onSocialLogin = useCallback(() => {
-    window.open(API.USER.VKONTAKTE_LOGIN, "", "width=600,height=400");
+    window.open(API.USER.VKONTAKTE_LOGIN, '', 'width=600,height=400');
   }, []);
 
   useEffect(() => {
     if (error) userSetLoginError(null);
   }, [username, password]);
 
-  const buttons = (
-    <Group horizontal className={styles.footer}>
-      <Button stretchy>
-        <span>Войти</span>
-      </Button>
-    </Group>
+  const buttons = useMemo(
+    () => (
+      <Group className={styles.footer}>
+        <Button
+          className={styles.secondary_button}
+          iconLeft="vk"
+          type="button"
+          onClick={onSocialLogin}
+        >
+          <span>Вконтакте</span>
+        </Button>
+
+        <Button>
+          <span>Войти</span>
+        </Button>
+      </Group>
+    ),
+    [onSocialLogin]
   );
 
   useCloseOnEscape(onRequestClose);
 
   return (
     <form onSubmit={onSubmit}>
-      <BetterScrollDialog
-        width={260}
-        error={error}
-        onClose={onRequestClose}
-        footer={buttons}
-      >
+      <BetterScrollDialog width={260} error={error} onClose={onRequestClose} footer={buttons}>
         <Padder>
           <div className={styles.wrap}>
             <Group>
               <h2>РЕШИТЕЛЬНО ВОЙТИ</h2>
 
-              <InputText
-                title="Логин"
-                handler={setUserName}
-                value={username}
-                autoFocus
-              />
+              <InputText title="Логин" handler={setUserName} value={username} autoFocus />
 
-              <InputText
-                title="Пароль"
-                handler={setPassword}
-                value={password}
-                type="password"
-              />
+              <InputText title="Пароль" handler={setPassword} value={password} type="password" />
 
-              <Group className={styles.buttons}>
-                <Button
-                  className={styles.vk}
-                  iconLeft="vk"
-                  type="button"
-                  onClick={onSocialLogin}
-                >
-                  <span>Вконтакте</span>
-                </Button>
-              </Group>
+              <Button className={styles.forgot_button} type="button" onClick={onRestoreRequest}>
+                Вспомнить пароль
+              </Button>
             </Group>
           </div>
         </Padder>

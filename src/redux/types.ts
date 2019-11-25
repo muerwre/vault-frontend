@@ -1,7 +1,7 @@
-import { DetailedHTMLProps, InputHTMLAttributes } from "react";
-import { DIALOGS } from "~/redux/modal/constants";
-import { ERRORS } from "~/constants/errors";
-import { IUser } from "./auth/types";
+import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import { DIALOGS } from '~/redux/modal/constants';
+import { ERRORS } from '~/constants/errors';
+import { IUser } from './auth/types';
 
 export interface ITag {
   id: number;
@@ -55,7 +55,7 @@ export interface IResultWithStatus<T> {
 
 export type UUID = string;
 
-export type IUploadType = "image" | "text" | "audio" | "video" | "other";
+export type IUploadType = 'image' | 'text' | 'audio' | 'video' | 'other';
 
 export interface IFile {
   id?: number;
@@ -96,12 +96,12 @@ export interface IFileWithUUID {
 }
 
 export interface IBlockText {
-  type: "text";
+  type: 'text';
   text: string;
 }
 
 export interface IBlockEmbed {
-  type: "video";
+  type: 'video';
   url: string;
 }
 
@@ -124,7 +124,7 @@ export interface INode {
   is_heroic?: boolean;
 
   flow: {
-    display: "single" | "vertical" | "horizontal" | "quadro";
+    display: 'single' | 'vertical' | 'horizontal' | 'quadro';
     show_description: boolean;
   };
 
@@ -147,7 +147,7 @@ export interface IComment {
   update_at?: string;
 }
 
-export type IMessage = Omit<IComment, "user" | "node"> & {
+export type IMessage = Omit<IComment, 'user' | 'node'> & {
   from: IUser;
   to: IUser;
 };
@@ -155,7 +155,7 @@ export type IMessage = Omit<IComment, "user" | "node"> & {
 export interface ICommentGroup {
   user: IUser;
   comments: IComment[];
-  ids: IComment["id"][];
+  ids: IComment['id'][];
 }
 
 export type IUploadProgressHandler = (progress: ProgressEvent) => void;
@@ -164,25 +164,25 @@ export type IValidationErrors = Record<string, IError>;
 export type InputHandler<T = string> = (val: T) => void;
 
 export const NOTIFICATION_TYPES = {
-  message: "message",
-  comment: "comment",
-  node: "node"
+  message: 'message',
+  comment: 'comment',
+  node: 'node',
 };
 
 export type IMessageNotification = {
-  type: typeof NOTIFICATION_TYPES["message"];
+  type: typeof NOTIFICATION_TYPES['message'];
   content: Partial<IMessage>;
   created_at: string;
 };
 
 export type ICommentNotification = {
-  type: typeof NOTIFICATION_TYPES["comment"];
+  type: typeof NOTIFICATION_TYPES['comment'];
   content: Partial<IComment>;
   created_at: string;
 };
 
 export type INodeNotification = {
-  type: typeof NOTIFICATION_TYPES["node"];
+  type: typeof NOTIFICATION_TYPES['node'];
   content: Partial<INode>;
   created_at: string;
 };
