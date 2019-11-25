@@ -39,7 +39,7 @@ const HeaderUnconnected: FC<IProps> = memo(
     const onProfileClick = useCallback(() => authOpenProfile(username), [authOpenProfile, user]);
 
     const onScroll = useCallback(() => {
-      const active = window.scrollY > 64;
+      const active = window.scrollY > 32;
 
       if (active !== is_scrolled) setIsScrolled(active);
     }, [is_scrolled, setIsScrolled]);
