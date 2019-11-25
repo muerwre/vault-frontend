@@ -87,7 +87,7 @@ export const authSetRestore = (restore: Partial<IAuthState['restore']>) => ({
   restore,
 });
 
-export const authRestorePassword = (code: string) => ({
-  type: AUTH_USER_ACTIONS.RESTORE_PASSWORD,
+export const authShowRestoreModal = (code: string) => ({
+  type: AUTH_USER_ACTIONS.SHOW_RESTORE_MODAL,
   code,
 });

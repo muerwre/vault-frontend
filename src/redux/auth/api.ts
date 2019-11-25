@@ -72,3 +72,9 @@ export const apiRequestRestoreCode = ({ field }): Promise<IResultWithStatus<{}>>
     .post(API.USER.REQUEST_CODE(), { field })
     .then(resultMiddleware)
     .catch(errorMiddleware);
+
+export const apiCheckRestoreCode = ({ code }): Promise<IResultWithStatus<{}>> =>
+  api
+    .get(API.USER.REQUEST_CODE(code))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);

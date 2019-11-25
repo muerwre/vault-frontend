@@ -21,15 +21,18 @@ render(
 /*
 
   [Stage 0]:
-- illustrate restoreRequestDialog
-- check if email is registered at social login
-- friendship
-- password restore
-- signup?
-- cover change
-- sticky header
-- mobile header
-- profile cover upload
+  - check if email is registered at social login
+  - friendship
+  - password restore
+  - signup?
+  - cover change
+  - sticky header
+  - mobile header
+  - profile cover upload
+  
+  - illustrate restoreRequestDialog
+  - illustrate 404
+  - illustrate login
 
   [stage 1]
 - import videos

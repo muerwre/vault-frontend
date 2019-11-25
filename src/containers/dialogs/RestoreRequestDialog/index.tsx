@@ -10,9 +10,9 @@ import styles from './styles.scss';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import pick from 'ramda/es/pick';
 import { selectAuthRestore } from '~/redux/auth/selectors';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { Icon } from '~/components/input/Icon';
+import { useCloseOnEscape } from '~/utils/hooks';
 
 const mapStateToProps = state => ({
   restore: selectAuthRestore(state),
@@ -28,7 +28,7 @@ const RestoreRequestDialogUnconnected: FC<IProps> = ({
   onRequestClose,
   authRequestRestoreCode,
 }) => {
-  const [field, setField] = useState();
+  const [field, setField] = useState('');
 
   const onSubmit = useCallback(
     event => {
@@ -75,6 +75,8 @@ const RestoreRequestDialogUnconnected: FC<IProps> = ({
       ) : null,
     [is_succesfull]
   );
+
+  useCloseOnEscape(onRequestClose);
 
   return (
     <form onSubmit={onSubmit}>

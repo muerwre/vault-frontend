@@ -8,6 +8,7 @@ import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
 import { TestDialog } from '~/containers/dialogs/TestDialog';
 import { ProfileDialog } from '~/containers/dialogs/ProfileDialog';
 import { RestoreRequestDialog } from '~/containers/dialogs/RestoreRequestDialog';
+import { RestorePasswordDialog } from '~/containers/dialogs/RestorePasswordDialog';
 import { DIALOGS } from '~/redux/modal/constants';
 
 export const DIALOG_CONTENT = {
@@ -20,6 +21,7 @@ export const DIALOG_CONTENT = {
   [DIALOGS.TEST]: TestDialog,
   [DIALOGS.PROFILE]: ProfileDialog,
   [DIALOGS.RESTORE_REQUEST]: RestoreRequestDialog,
+  [DIALOGS.RESTORE_PASSWORD]: RestorePasswordDialog,
 };
 
 export const NODE_EDITOR_DIALOGS = {

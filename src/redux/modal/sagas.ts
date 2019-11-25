@@ -1,6 +1,6 @@
 import { takeEvery, put } from 'redux-saga/effects';
 import { LocationChangeAction, LOCATION_CHANGE } from 'connected-react-router';
-import { authOpenProfile, authRestorePassword } from '../auth/actions';
+import { authOpenProfile, authShowRestoreModal } from '../auth/actions';
 
 function* onPathChange({
   payload: {
@@ -14,7 +14,7 @@ function* onPathChange({
 
   if (pathname.match(/^\/restore\/([\w\-]+)/)) {
     const [, code] = pathname.match(/^\/restore\/([\w\-]+)/);
-    return yield put(authRestorePassword(code));
+    return yield put(authShowRestoreModal(code));
   }
 }
 

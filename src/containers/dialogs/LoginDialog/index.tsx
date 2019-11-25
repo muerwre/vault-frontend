@@ -25,8 +25,6 @@ const mapDispatchToProps = {
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
 
-console.log('initial', MODAL_ACTIONS);
-
 const LoginDialogUnconnected: FC<IProps> = ({
   onRequestClose,
   error,

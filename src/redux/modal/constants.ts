@@ -1,14 +1,4 @@
 import { ValueOf } from '~/redux/types';
-import { LoginDialog } from '~/containers/dialogs/LoginDialog';
-import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
-import { EditorDialogImage } from '~/containers/editors/EditorDialogImage';
-import { EditorDialogText } from '~/containers/editors/EditorDialogText';
-import { EditorDialogVideo } from '~/containers/editors/EditorDialogVideo';
-import { EditorDialogAudio } from '~/containers/editors/EditorDialogAudio';
-import { NODE_TYPES } from '../node/constants';
-import { TestDialog } from '~/containers/dialogs/TestDialog';
-import { ProfileDialog } from '~/containers/dialogs/ProfileDialog';
-import { RestoreRequestDialog } from '~/containers/dialogs/RestoreRequestDialog';
 
 export const DIALOGS = {
   EDITOR_IMAGE: 'EDITOR_IMAGE',
@@ -19,6 +9,7 @@ export const DIALOGS = {
   LOADING: 'LOADING',
   PROFILE: 'PROFILE',
   RESTORE_REQUEST: 'RESTORE_REQUEST',
+  RESTORE_PASSWORD: 'RESTORE_PASSWORD',
   TEST: 'TEST',
 };
 

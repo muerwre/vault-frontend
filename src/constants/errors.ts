@@ -15,6 +15,7 @@ export const ERRORS = {
   USER_EXIST: 'User_Exist',
   INCORRECT_PASSWORD: 'Incorrect_Password',
   CODE_IS_INVALID: 'Code_Is_Invalid',
+  DOESNT_MATCH: 'Doesnt_Match',
 };
 
 export const ERROR_LITERAL = {
@@ -34,4 +35,5 @@ export const ERROR_LITERAL = {
   [ERRORS.USER_EXIST]: 'Такой пользователь уже существует',
   [ERRORS.INCORRECT_PASSWORD]: 'Неправильный пароль',
   [ERRORS.CODE_IS_INVALID]: 'Код не существует или устарел',
+  [ERRORS.DOESNT_MATCH]: 'Пароли не совпадают',
 };

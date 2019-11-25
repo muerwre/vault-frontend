@@ -14,7 +14,7 @@ import {
   authLoggedIn,
   authSetLastSeenMessages,
   authPatchUser,
-  authRestorePassword,
+  authShowRestoreModal,
   authSetRestore,
   authRequestRestoreCode,
 } from '~/redux/auth/actions';
@@ -27,6 +27,7 @@ import {
   apiAuthGetUpdates,
   apiUpdateUser,
   apiRequestRestoreCode,
+  apiCheckRestoreCode,
 } from '~/redux/auth/api';
 import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
 import { selectToken, selectAuthProfile, selectAuthUser, selectAuthUpdates } from './selectors';
@@ -290,7 +291,7 @@ function* requestRestoreCode({ field }: ReturnType<typeof authRequestRestoreCode
   yield put(authSetRestore({ is_loading: false, is_succesfull: true }));
 }
 
-function* restorePassword({ code }: ReturnType<typeof authRestorePassword>) {
+function* showRestoreModal({ code }: ReturnType<typeof authShowRestoreModal>) {
   if (!code && !code.length) {
     return yield put(
       authSetRestore({
@@ -299,6 +300,19 @@ function* restorePassword({ code }: ReturnType<typeof authRestorePassword>) {
       })
     );
   }
+
+  yield put(authSetRestore({ user: null, is_loading: true }));
+
+  const { error, data } = yield call(apiCheckRestoreCode, { code });
+
+  if (data.error || error || !data.user) {
+    return yield put(
+      authSetRestore({ is_loading: false, error: data.error || error || ERRORS.CODE_IS_INVALID })
+    );
+  }
+
+  yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
+  yield put(authSetRestore({ user: data.user, is_loading: false }));
 }
 
 function* authSaga() {
@@ -313,7 +327,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.SEND_MESSAGE, sendMessage);
   yield takeLatest(AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES, setLastSeenMessages);
   yield takeLatest(AUTH_USER_ACTIONS.PATCH_USER, patchUser);
-  yield takeLatest(AUTH_USER_ACTIONS.RESTORE_PASSWORD, restorePassword);
+  yield takeLatest(AUTH_USER_ACTIONS.SHOW_RESTORE_MODAL, showRestoreModal);
   yield takeLatest(AUTH_USER_ACTIONS.REQUEST_RESTORE_CODE, requestRestoreCode);
 }
 

@@ -1,0 +1,160 @@
+import React, { FC, useState, useMemo, useCallback, useEffect } from 'react';
+import { IDialogProps } from '~/redux/types';
+import { connect } from 'react-redux';
+import { BetterScrollDialog } from '../BetterScrollDialog';
+import { Group } from '~/components/containers/Group';
+import { InputText } from '~/components/input/InputText';
+import { Button } from '~/components/input/Button';
+import styles from './styles.scss';
+
+import * as AUTH_ACTIONS from '~/redux/auth/actions';
+import pick from 'ramda/es/pick';
+import { selectAuthRestore } from '~/redux/auth/selectors';
+import { ERROR_LITERAL, ERRORS } from '~/constants/errors';
+import { Icon } from '~/components/input/Icon';
+import { useCloseOnEscape } from '~/utils/hooks';
+
+const mapStateToProps = state => ({
+  restore: selectAuthRestore(state),
+});
+
+const mapDispatchToProps = pick(['authRequestRestoreCode', 'authSetRestore'], AUTH_ACTIONS);
+
+type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
+
+const RestorePasswordDialogUnconnected: FC<IProps> = ({
+  restore: { error, is_loading, is_succesfull, user },
+  authSetRestore,
+  onRequestClose,
+  authRequestRestoreCode,
+}) => {
+  const [password, setPassword] = useState('');
+  const [password_again, setPasswordAgain] = useState('');
+
+  const doesnt_match = useMemo(
+    () => !password || !password_again || password.trim() !== password_again.trim(),
+    [password_again, password]
+  );
+
+  const onSubmit = useCallback(
+    event => {
+      event.preventDefault();
+
+      if (doesnt_match) return;
+      // if (!field) return;
+      //
+      // authRequestRestoreCode(field);
+    },
+    [doesnt_match]
+  );
+
+  useEffect(() => {
+    if (error || is_succesfull) {
+      authSetRestore({ error: null, is_succesfull: false });
+    }
+  }, [password, password_again]);
+
+  const buttons = useMemo(
+    () => (
+      <Group className={styles.buttons}>
+        <Button color={doesnt_match ? 'outline' : 'primary'}>Восстановить</Button>
+      </Group>
+    ),
+    [doesnt_match]
+  );
+
+  const overlay = useMemo(
+    () =>
+      is_succesfull ? (
+        <Group className={styles.shade}>
+          <Icon icon="check" size={64} />
+
+          <div>Отлично, добро пожаловать домой!</div>
+
+          <div />
+
+          <Button color="secondary" onClick={onRequestClose}>
+            Ура!
+          </Button>
+        </Group>
+      ) : null,
+    [is_succesfull]
+  );
+
+  const not_ready = useMemo(() => (is_loading && !user ? <div className={styles.shade} /> : null), [
+    is_loading,
+    user,
+  ]);
+
+  const invalid_code = useMemo(
+    () =>
+      !is_loading && !user ? (
+        <Group className={styles.error_shade}>
+          <Icon icon="close" size={64} />
+
+          <div>{ERROR_LITERAL[error || ERRORS.CODE_IS_INVALID]}</div>
+
+          <div className={styles.spacer} />
+
+          <Button color="primary" onClick={onRequestClose}>
+            Очень жаль
+          </Button>
+        </Group>
+      ) : null,
+    [is_loading, user, error]
+  );
+
+  useCloseOnEscape(onRequestClose);
+
+  return (
+    <form onSubmit={onSubmit}>
+      <BetterScrollDialog
+        footer={buttons}
+        width={300}
+        onClose={onRequestClose}
+        is_loading={is_loading}
+        error={error && ERROR_LITERAL[error]}
+        overlay={overlay || not_ready || invalid_code}
+      >
+        <div className={styles.wrap}>
+          <Group>
+            <div className={styles.header}>
+              Пришло время сменить пароль{user && user.username && `, ~${user.username}`}
+            </div>
+
+            <InputText
+              title="Новый пароль"
+              value={password}
+              handler={setPassword}
+              autoFocus
+              type="password"
+            />
+
+            <InputText
+              title="Ещё раз"
+              type="password"
+              value={password_again}
+              handler={setPasswordAgain}
+              error={password_again && doesnt_match && ERROR_LITERAL[ERRORS.DOESNT_MATCH]}
+            />
+
+            <Group className={styles.text}>
+              <p>Новый пароль должен быть не короче 6 символов.</p>
+              <p>
+                Вряд ли кто-нибудь будет пытаться нас взломать, но сложный пароль всегда лучше
+                простого.
+              </p>
+            </Group>
+          </Group>
+        </div>
+      </BetterScrollDialog>
+    </form>
+  );
+};
+
+const RestorePasswordDialog = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RestorePasswordDialogUnconnected);
+
+export { RestorePasswordDialog };
