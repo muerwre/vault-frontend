@@ -103,12 +103,14 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
             [styles.is_visible]: loaded.includes(hero.id),
             [styles.is_active]: current === hero.id,
           })}
-          style={{ backgroundImage: `url("${getURL({ url: hero.thumbnail }, PRESETS.hero)}")` }}
+          style={{
+            backgroundImage: `url("${getURL({ url: hero.thumbnail }, PRESETS.small_hero)}")`,
+          }}
           key={hero.id}
           onClick={onClick}
         >
           <img
-            src={getURL({ url: hero.thumbnail }, PRESETS.hero)}
+            src={getURL({ url: hero.thumbnail }, PRESETS.small_hero)}
             alt={hero.thumbnail}
             onLoad={onLoad(hero.id)}
           />

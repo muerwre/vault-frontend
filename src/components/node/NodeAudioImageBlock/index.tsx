@@ -20,7 +20,7 @@ const NodeAudioImageBlock: FC<IProps> = ({ node }) => {
     <div className={styles.wrap}>
       <div
         className={styles.slide}
-        style={{ backgroundImage: `url("${getURL(path([0], images), PRESETS.hero)}")` }}
+        style={{ backgroundImage: `url("${getURL(path([0], images), PRESETS.small_hero)}")` }}
       />
     </div>
   );
