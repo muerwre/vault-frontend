@@ -78,7 +78,7 @@ export const formatText = (text: string): string =>
     ? ''
     : text
         .replace(
-          /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-]+)/gim,
+          /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-\&\=]+)/gim,
           '\n$1\n'
         )
         .replace(/\n{1,}/gim, '\n')
