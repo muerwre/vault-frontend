@@ -1,23 +1,20 @@
-import { IFile } from "~/redux/types";
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { ru } from "date-fns/locale";
-import Axios from "axios";
-import { PRESETS } from "~/constants/urls";
+import { IFile, ValueOf } from '~/redux/types';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import { ru } from 'date-fns/locale';
+import Axios from 'axios';
+import { PRESETS } from '~/constants/urls';
+import { ICommentBlock, COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES } from '~/constants/comment';
 
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
-    return document.defaultView
-      .getComputedStyle(oElm, "")
-      .getPropertyValue(strCssRule);
+    return document.defaultView.getComputedStyle(oElm, '').getPropertyValue(strCssRule);
   }
 
   if (oElm.currentStyle) {
-    return oElm.currentStyle[
-      strCssRule.replace(/-(\w)/g, (strMatch, p1) => p1.toUpperCase())
-    ];
+    return oElm.currentStyle[strCssRule.replace(/-(\w)/g, (strMatch, p1) => p1.toUpperCase())];
   }
 
-  return "";
+  return '';
 };
 
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
@@ -25,7 +22,7 @@ function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
 
   return {
     x: centerX + radius * Math.cos(angleInRadians),
-    y: centerY + radius * Math.sin(angleInRadians)
+    y: centerY + radius * Math.sin(angleInRadians),
   };
 }
 
@@ -42,10 +39,10 @@ export const describeArc = (
   const largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
 
   return [
-    "M",
+    'M',
     start.x,
     start.y,
-    "A",
+    'A',
     radius,
     radius,
     0,
@@ -53,62 +50,66 @@ export const describeArc = (
     0,
     end.x,
     end.y,
-    "L",
+    'L',
     x,
     y,
-    "L",
+    'L',
     start.x,
-    start.y
-  ].join(" ");
+    start.y,
+  ].join(' ');
 };
 
-export const getURL = (
-  file: Partial<IFile>,
-  size?: typeof PRESETS[keyof typeof PRESETS]
-) => {
+export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof PRESETS]) => {
   if (!file || !file.url) return null;
 
   if (size) {
     return file.url
-      .replace(
-        "REMOTE_CURRENT://",
-        `${process.env.REMOTE_CURRENT}cache/${size}/`
-      )
-      .replace("REMOTE_OLD://", process.env.REMOTE_OLD);
+      .replace('REMOTE_CURRENT://', `${process.env.REMOTE_CURRENT}cache/${size}/`)
+      .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
   }
 
   return file.url
-    .replace("REMOTE_CURRENT://", process.env.REMOTE_CURRENT)
-    .replace("REMOTE_OLD://", process.env.REMOTE_OLD);
+    .replace('REMOTE_CURRENT://', process.env.REMOTE_CURRENT)
+    .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
 };
 
 export const formatText = (text: string): string =>
   !text
-    ? ""
+    ? ''
     : text
-        .replace(/\n{1,}/gim, "\n")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
+        .replace(
+          /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-]+)/gim,
+          '\n$1\n'
+        )
+        .replace(/\n{1,}/gim, '\n')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
         .replace(
           /~([\wа-яА-Я\-]+)/giu,
-          "<span class=\"username\" onClick=\"window.postMessage({ type: 'username', username: '$1'});\">~$1</span>"
+          '<span class="username" onClick="window.postMessage({ type: \'username\', username: \'$1\'});">~$1</span>'
         )
-        .replace(/:\/\//gim, ":|--|")
+        .replace(/:\/\//gim, ':|--|')
         .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
         .replace(/(\/\*[\s\S]*?\*\/)/gim, '<span class="grey">$1</span>')
-        .replace(/:\|--\|/gim, "://")
-        .split("\n")
+        .replace(/:\|--\|/gim, '://')
+        .split('\n')
         .filter(el => el.trim().length)
-        .map(el => `<p>${el}</p>`)
-        .join("");
+        // .map(el => `<p>${el}</p>`)
+        .join('\n');
 
-export const formatCommentText = (author: string, text: string): string =>
-  text
-    ? formatText(text).replace(
-        /^<p>/,
-        author ? `<p><b class="comment-author">${author}: </b>` : "<p>"
-      )
-    : "";
+export const findBlockType = (line: string): ValueOf<typeof COMMENT_BLOCK_TYPES> => {
+  const match = Object.values(COMMENT_BLOCK_DETECTORS).find(detector => line.match(detector.test));
+  return (match && match.type) || COMMENT_BLOCK_TYPES.TEXT;
+};
+
+export const splitCommentByBlocks = (text: string): ICommentBlock[] =>
+  text.split('\n').map(line => ({
+    type: findBlockType(line),
+    content: line,
+  }));
+
+export const formatCommentText = (author: string, text: string): ICommentBlock[] =>
+  text ? splitCommentByBlocks(formatText(text)) : null;
 
 export const formatCellText = (text: string): string => formatText(text);
 
@@ -116,13 +117,11 @@ export const getPrettyDate = (date: string): string =>
   formatDistanceToNow(new Date(date), {
     locale: ru,
     includeSeconds: true,
-    addSuffix: true
+    addSuffix: true,
   });
 
 export const getYoutubeTitle = async (id: string) => {
-  Axios.get(`http://youtube.com/get_video_info?video_id=${id}`).then(
-    console.log
-  );
+  Axios.get(`http://youtube.com/get_video_info?video_id=${id}`).then(console.log);
 };
 
 (<any>window).getYoutubeTitle = getYoutubeTitle;

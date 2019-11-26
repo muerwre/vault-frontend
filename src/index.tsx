@@ -21,51 +21,55 @@ render(
 /*
 
   [Stage 0]:
+  - <...> format
+  - youtube embeds
+
   - check if email is registered at social login
   - friendship
-  - signup?
   - cover change
-  - sticky header
-  - mobile header
   - profile cover upload
-  
+  - user access time update
+
   - illustrate restoreRequestDialog
   - illustrate 404
-  - illustrate login
+  - illustrate login  
 
   [stage 1]
-- import videos
-- import graffiti
-- text post can also has songs http://vault48.org/post5052
-- fulltext search: https://github.com/typeorm/typeorm/issues/3191
-- zoom: https://manuelstofer.github.io/pinchzoom/
+  - signup?
+  - import videos
+  - import graffiti
+  - text post can also has songs http://vault48.org/post5052
+  - fulltext search: https://github.com/typeorm/typeorm/issues/3191
+  - zoom: https://manuelstofer.github.io/pinchzoom/
 
-- notifications (node, comment)
+  - notifications (node, comment)
 
-- social integration (assimilate)
-- comment editing
+  - social integration (assimilate)
+  - comment editing
 
-Done:
-- password restore
-- avatar upload
-- flow updates
-- flow infinite scroll
-- better node brief update
-- fix: text nodes cell has no preview (actually, that's a problem of brief)
-- relocate files
-- backend: exclude node covers on import
-- profile editing
-- notifications (messages)
-- profile modal
-- messages
-- better dialogs: https://codepen.io/muemue/pen/abbEMMy
-- imagecaching at backend
-- social integration (login, signup)
-- boris with comments (import)
-- boris with comments (layout) 
-- fix: user receives his own notifications :-(
-- fix: node related and albums should exclude node itself
-- fix: select node and edit it. All images will be not loaded
-- fix: text nodes cell not clickable
-- fix: text nodes should not have 'no comments yet badge
+  Done:
+  - mobile header
+  - sticky header
+  - password restore
+  - avatar upload
+  - flow updates
+  - flow infinite scroll
+  - better node brief update
+  - fix: text nodes cell has no preview (actually, that's a problem of brief)
+  - relocate files
+  - backend: exclude node covers on import
+  - profile editing
+  - notifications (messages)
+  - profile modal
+  - messages
+  - better dialogs: https://codepen.io/muemue/pen/abbEMMy
+  - imagecaching at backend
+  - social integration (login, signup)
+  - boris with comments (import)
+  - boris with comments (layout) 
+  - fix: user receives his own notifications :-(
+  - fix: node related and albums should exclude node itself
+  - fix: select node and edit it. All images will be not loaded
+  - fix: text nodes cell not clickable
+  - fix: text nodes should not have 'no comments yet badge
 */

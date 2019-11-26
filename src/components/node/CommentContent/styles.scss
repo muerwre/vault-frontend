@@ -10,6 +10,7 @@
   position: relative;
   padding-bottom: 10px;
   box-sizing: border-box;
+  flex-direction: column;
 
   &:first-child {
     border-top-right-radius: $radius;
@@ -33,21 +34,6 @@
     background: transparentize($color: $content_bg, $amount: 0.2);
     border-radius: $radius 0 $radius 0;
     color: transparentize(white, 0.2);
-  }
-}
-
-.text {
-  padding: $gap;
-  font-weight: 300;
-  font: $font_16_medium;
-  line-height: 20px;
-  box-sizing: border-box;
-  position: relative;
-  color: #cccccc;
-  word-break: break-word;
-
-  b {
-    font-weight: 600;
   }
 }
 

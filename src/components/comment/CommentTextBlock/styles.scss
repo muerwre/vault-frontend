@@ -1,0 +1,14 @@
+.text {
+  padding: $gap;
+  font-weight: 300;
+  font: $font_16_medium;
+  line-height: 20px;
+  box-sizing: border-box;
+  position: relative;
+  color: #cccccc;
+  word-break: break-word;
+
+  b {
+    font-weight: 600;
+  }
+}

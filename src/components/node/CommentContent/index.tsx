@@ -1,4 +1,4 @@
-import React, { FC, useMemo, memo } from 'react';
+import React, { FC, useMemo, memo, createElement } from 'react';
 import { IComment, IFile } from '~/redux/types';
 import path from 'ramda/es/path';
 import { formatCommentText, getURL, getPrettyDate } from '~/utils/dom';
@@ -11,6 +11,7 @@ import reduce from 'ramda/es/reduce';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import classnames from 'classnames';
 import { PRESETS } from '~/constants/urls';
+import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
 
 interface IProps {
   comment: IComment;
@@ -31,12 +32,11 @@ const CommentContent: FC<IProps> = memo(({ comment }) => {
     <>
       {comment.text && (
         <div className={styles.block}>
-          <Group
-            className={styles.text}
-            dangerouslySetInnerHTML={{
-              __html: formatCommentText(path(['user', 'username'], comment), comment.text),
-            }}
-          />
+          {formatCommentText(path(['user', 'username'], comment), comment.text).map(
+            (block, key) =>
+              COMMENT_BLOCK_RENDERERS[block.type] &&
+              createElement(COMMENT_BLOCK_RENDERERS[block.type], { block, key })
+          )}
 
           <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
         </div>
