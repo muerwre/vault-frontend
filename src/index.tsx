@@ -27,8 +27,8 @@ render(
   - profile cover upload
   - user access time update
 
-  - illustrate restoreRequestDialog
   - illustrate 404
+  - illustrate restoreRequestDialog
   - illustrate login  
 
   [stage 1]
