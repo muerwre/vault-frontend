@@ -21,9 +21,6 @@ render(
 /*
 
   [Stage 0]:
-  - <...> format
-  - youtube embeds
-
   - check if email is registered at social login
   - friendship
   - cover change
@@ -48,6 +45,8 @@ render(
   - comment editing
 
   Done:
+  - <...> format
+  - youtube embeds
   - mobile header
   - sticky header
   - password restore

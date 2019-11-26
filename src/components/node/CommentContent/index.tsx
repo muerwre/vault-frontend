@@ -31,7 +31,7 @@ const CommentContent: FC<IProps> = memo(({ comment }) => {
   return (
     <>
       {comment.text && (
-        <div className={styles.block}>
+        <Group className={styles.block}>
           {formatCommentText(path(['user', 'username'], comment), comment.text).map(
             (block, key) =>
               COMMENT_BLOCK_RENDERERS[block.type] &&
@@ -39,7 +39,7 @@ const CommentContent: FC<IProps> = memo(({ comment }) => {
           )}
 
           <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
-        </div>
+        </Group>
       )}
 
       {groupped.image && groupped.image.length > 0 && (

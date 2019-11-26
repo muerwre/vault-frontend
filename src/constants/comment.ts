@@ -1,4 +1,5 @@
 import { CommentTextBlock } from '~/components/comment/CommentTextBlock';
+import { CommentEmbedBlock } from '~/components/comment/CommentEmbedBlock';
 
 export const COMMENT_BLOCK_TYPES = {
   TEXT: 'TEXT',
@@ -29,5 +30,5 @@ export type ICommentBlock = {
 export const COMMENT_BLOCK_RENDERERS = {
   [COMMENT_BLOCK_TYPES.TEXT]: CommentTextBlock,
   [COMMENT_BLOCK_TYPES.MARK]: CommentTextBlock,
-  [COMMENT_BLOCK_TYPES.EMBED]: CommentTextBlock,
+  [COMMENT_BLOCK_TYPES.EMBED]: CommentEmbedBlock,
 };
