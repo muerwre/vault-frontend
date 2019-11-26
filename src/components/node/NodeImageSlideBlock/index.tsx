@@ -1,4 +1,12 @@
-import React, { FC, useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+  FC,
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from 'react';
 import { ImageSwitcher } from '../ImageSwitcher';
 import * as styles from './styles.scss';
 import { INode } from '~/redux/types';
@@ -108,7 +116,9 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     }
 
     // update layout after all manipulations
-    return () => clearTimeout(timeout);
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
   }, [is_dragging, wrap, offset, heights, max_height, images, is_loading, updateLayout]);
 
   const onDrag = useCallback(
@@ -157,8 +167,8 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   const stopDragging = useCallback(() => {
     if (!is_dragging) return;
 
-    normalizeOffset();
     setIsDragging(false);
+    normalizeOffset();
   }, [setIsDragging, is_dragging, normalizeOffset]);
 
   const startDragging = useCallback(
@@ -224,7 +234,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
       )}
 
       <div
-        className={styles.image_container}
+        className={classNames(styles.image_container, { [styles.is_dragging]: is_dragging })}
         style={{
           height,
           transform: `translate(${offset}px, 0)`,
