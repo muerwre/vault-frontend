@@ -24,7 +24,6 @@ render(
   - set file target on comment save, node save, profile upload
   - check if email is registered at social login
   - profile cover upload
-  - user access time update
   - delete comments
   - delete nodes
   
@@ -46,6 +45,7 @@ render(
   - comment editing
   
   Done:
+  - user access time update
   - import graffiti
   - <...> format
   - youtube embeds
