@@ -2,6 +2,7 @@ import { IFile, ValueOf } from '~/redux/types';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import isAfter from 'date-fns/isAfter';
 import differenceInMonths from 'date-fns/differenceInMonths';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
 import ru from 'date-fns/locale/ru';
 import Axios from 'axios';
 import { PRESETS } from '~/constants/urls';
@@ -128,7 +129,8 @@ export const getPrettyDate = (date: string): string => {
     return format(new Date(date), 'd MMMM yyyy', { locale: ru });
   }
 
-  return isAfter(new Date(date), new Date())
+  return isAfter(new Date(date), new Date()) ||
+    differenceInMinutes(new Date(), new Date(date)) <= 30
     ? 'Только что'
     : formatDistanceToNow(new Date(date), {
         locale: ru,
