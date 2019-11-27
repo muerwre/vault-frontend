@@ -1,9 +1,12 @@
 import { IFile, ValueOf } from '~/redux/types';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import { ru } from 'date-fns/locale';
+import isAfter from 'date-fns/isAfter';
+import differenceInMonths from 'date-fns/differenceInMonths';
+import ru from 'date-fns/locale/ru';
 import Axios from 'axios';
 import { PRESETS } from '~/constants/urls';
 import { ICommentBlock, COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES } from '~/constants/comment';
+import format from 'date-fns/format';
 
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -118,12 +121,19 @@ export const formatCommentText = (author: string, text: string): ICommentBlock[]
 
 export const formatCellText = (text: string): string => formatText(text);
 
-export const getPrettyDate = (date: string): string =>
-  formatDistanceToNow(new Date(date), {
-    locale: ru,
-    includeSeconds: true,
-    addSuffix: true,
-  });
+export const getPrettyDate = (date: string): string => {
+  if (differenceInMonths(new Date(), new Date(date)) >= 3) {
+    return format(new Date(date), 'd MMMM yyyy', { locale: ru });
+  }
+
+  return isAfter(new Date(date), new Date())
+    ? 'Только что'
+    : formatDistanceToNow(new Date(date), {
+        locale: ru,
+        includeSeconds: true,
+        addSuffix: true,
+      });
+};
 
 export const getYoutubeTitle = async (id: string) => {
   Axios.get(`http://youtube.com/get_video_info?video_id=${id}`).then(console.log);
