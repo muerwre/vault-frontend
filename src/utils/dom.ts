@@ -94,8 +94,13 @@ export const formatText = (text: string): string =>
         .replace(/:\|--\|/gim, '://')
         .split('\n')
         .filter(el => el.trim().length)
-        // .map(el => `<p>${el}</p>`)
         .join('\n');
+
+export const formatTextParagraphs = (text: string): string =>
+  text
+    .split('\n')
+    .map(str => `<p>${str}</p>`)
+    .join('\n');
 
 export const findBlockType = (line: string): ValueOf<typeof COMMENT_BLOCK_TYPES> => {
   const match = Object.values(COMMENT_BLOCK_DETECTORS).find(detector => line.match(detector.test));
