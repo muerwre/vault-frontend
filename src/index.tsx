@@ -23,17 +23,17 @@ render(
   [Stage 0]:
   - set file target on comment save, node save, profile upload
   - check if email is registered at social login
-  - friendship
   - profile cover upload
   - user access time update
   - delete comments
   - delete nodes
-
+  
   - illustrate 404
   - illustrate restoreRequestDialog
   - illustrate login  
-
+  
   [stage 1]
+  - friendship
   - signup?
   - import videos
   - text post can also has songs http://vault48.org/post5052
