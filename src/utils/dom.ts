@@ -146,5 +146,5 @@ export const getYoutubeThumb = (url: string) => {
       /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?/
     );
 
-  return match && match[1] ? `https://i.ytimg.com/vi/${match[1]}/hq720.jpg` : null;
+  return match && match[1] ? `https://i.ytimg.com/vi/${match[1]}/hqdefault.jpg` : null;
 };
