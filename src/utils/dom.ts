@@ -100,10 +100,12 @@ export const formatText = (text: string): string =>
         .join('\n');
 
 export const formatTextParagraphs = (text: string): string =>
-  text
-    .split('\n')
-    .map(str => `<p>${str}</p>`)
-    .join('\n');
+  (text &&
+    text
+      .split('\n')
+      .map(str => `<p>${str}</p>`)
+      .join('\n')) ||
+  null;
 
 export const findBlockType = (line: string): ValueOf<typeof COMMENT_BLOCK_TYPES> => {
   const match = Object.values(COMMENT_BLOCK_DETECTORS).find(detector => line.match(detector.test));

@@ -36,17 +36,17 @@ render(
   [stage 1]
   - signup?
   - import videos
-  - import graffiti
   - text post can also has songs http://vault48.org/post5052
   - fulltext search: https://github.com/typeorm/typeorm/issues/3191
   - zoom: https://manuelstofer.github.io/pinchzoom/
-
+  
   - notifications (node, comment)
-
+  
   - social integration (assimilate)
   - comment editing
-
+  
   Done:
+  - import graffiti
   - <...> format
   - youtube embeds
   - mobile header
