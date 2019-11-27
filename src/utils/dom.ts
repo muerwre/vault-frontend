@@ -101,7 +101,7 @@ export const formatText = (text: string): string =>
 
 export const formatTextParagraphs = (text: string): string =>
   (text &&
-    text
+    formatText(text)
       .split('\n')
       .map(str => `<p>${str}</p>`)
       .join('\n')) ||
