@@ -4,6 +4,7 @@ import * as styles from './styles.scss';
 import path from 'ramda/es/path';
 import { InputText } from '~/components/input/InputText';
 import classnames from 'classnames';
+import { getYoutubeThumb } from '~/utils/dom';
 
 interface IProps {
   data: INode;
@@ -17,15 +18,7 @@ const VideoEditor: FC<IProps> = ({ data, setData }) => {
   );
 
   const url = (path(['blocks', 0, 'url'], data) as string) || '';
-  const preview = useMemo(() => {
-    const match =
-      url &&
-      url.match(
-        /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?/
-      );
-
-    return match && match[1] ? `http://img.youtube.com/vi/${match[1]}/maxresdefault.jpg` : null;
-  }, [url]);
+  const preview = useMemo(() => getYoutubeThumb(url), [url]);
 
   return (
     <div className={styles.preview} style={{ backgroundImage: preview && `url("${preview}")` }}>

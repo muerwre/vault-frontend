@@ -139,4 +139,12 @@ export const getYoutubeTitle = async (id: string) => {
   Axios.get(`http://youtube.com/get_video_info?video_id=${id}`).then(console.log);
 };
 
-(<any>window).getYoutubeTitle = getYoutubeTitle;
+export const getYoutubeThumb = (url: string) => {
+  const match =
+    url &&
+    url.match(
+      /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?/
+    );
+
+  return match && match[1] ? `https://i.ytimg.com/vi/${match[1]}/hq720.jpg` : null;
+};
