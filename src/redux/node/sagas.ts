@@ -247,10 +247,9 @@ function* onLockSaga({ id, is_locked }: ReturnType<typeof nodeLock>) {
     deleted_at: is_locked ? new Date().toISOString() : null,
   });
 
-  const { data, error } = yield call(reqWrapper, postNodeLock, { id, is_locked });
+  const { error } = yield call(reqWrapper, postNodeLock, { id, is_locked });
 
-  if (error || !data.deleted_at)
-    return yield call(updateNodeEverywhere, { ...current, deleted_at }); // ok and matches
+  if (error) return yield call(updateNodeEverywhere, { ...current, deleted_at });
 }
 
 export default function* nodeSaga() {
