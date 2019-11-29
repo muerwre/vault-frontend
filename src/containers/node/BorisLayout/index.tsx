@@ -1,29 +1,25 @@
-import React, { FC, useEffect } from "react";
-import { RouteComponentProps } from "react-router";
-import * as NODE_ACTIONS from "~/redux/node/actions";
-import { selectNode } from "~/redux/node/selectors";
-import { selectUser } from "~/redux/auth/selectors";
-import { connect } from "react-redux";
-import { NodeComments } from "~/components/node/NodeComments";
-import styles from "./styles.scss";
-import { CommentForm } from "~/components/node/CommentForm";
-import { Group } from "~/components/containers/Group";
-import boris from "~/sprites/boris_robot.svg";
-import { NodeNoComments } from "~/components/node/NodeNoComments";
-import { getRandomPhrase } from "~/constants/phrases";
+import React, { FC, useEffect } from 'react';
+import { RouteComponentProps } from 'react-router';
+import * as NODE_ACTIONS from '~/redux/node/actions';
+import { selectNode } from '~/redux/node/selectors';
+import { selectUser } from '~/redux/auth/selectors';
+import { connect } from 'react-redux';
+import { NodeComments } from '~/components/node/NodeComments';
+import styles from './styles.scss';
+import { CommentForm } from '~/components/node/CommentForm';
+import { Group } from '~/components/containers/Group';
+import boris from '~/sprites/boris_robot.svg';
+import { NodeNoComments } from '~/components/node/NodeNoComments';
+import { getRandomPhrase } from '~/constants/phrases';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
-  user: selectUser(state)
+  user: selectUser(state),
 });
 
 const mapDispatchToProps = {
   nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
-  nodeUpdateTags: NODE_ACTIONS.nodeUpdateTags,
-  nodeSetCoverImage: NODE_ACTIONS.nodeSetCoverImage,
-  nodeEdit: NODE_ACTIONS.nodeEdit,
-  nodeLike: NODE_ACTIONS.nodeLike,
-  nodeStar: NODE_ACTIONS.nodeStar
+  nodeLockComment: NODE_ACTIONS.nodeLockComment,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -33,21 +29,17 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const id = 696;
 
 const BorisLayoutUnconnected: FC<IProps> = ({
-  node: {
-    is_loading,
-    is_loading_comments,
-    comments = [],
-    current: node,
-    related
-  },
+  node: { is_loading, is_loading_comments, comments = [] },
+  user,
   user: { is_user },
-  nodeLoadNode
+  nodeLoadNode,
+  nodeLockComment,
 }) => {
-  const title = getRandomPhrase("BORIS_TITLE");
+  const title = getRandomPhrase('BORIS_TITLE');
 
   useEffect(() => {
     if (is_loading) return;
-    nodeLoadNode(id, "DESC");
+    nodeLoadNode(id, 'DESC');
   }, [nodeLoadNode, id]);
 
   return (
@@ -90,7 +82,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
           {is_loading_comments && !comments.length ? (
             <NodeNoComments is_loading />
           ) : (
-            <NodeComments comments={comments} />
+            <NodeComments comments={comments} user={user} onDelete={nodeLockComment} />
           )}
         </Group>
       </div>

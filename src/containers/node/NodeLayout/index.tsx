@@ -20,6 +20,7 @@ import { selectUser } from '~/redux/auth/selectors';
 import pick from 'ramda/es/pick';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
+import { IComment } from '~/redux/types';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -34,6 +35,7 @@ const mapDispatchToProps = {
   nodeLike: NODE_ACTIONS.nodeLike,
   nodeStar: NODE_ACTIONS.nodeStar,
   nodeLock: NODE_ACTIONS.nodeLock,
+  nodeLockComment: NODE_ACTIONS.nodeLockComment,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -55,9 +57,8 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     nodeStar,
     nodeLock,
     nodeSetCoverImage,
+    nodeLockComment,
   }) => {
-    // const is_loading = true;
-
     const [layout, setLayout] = useState({});
 
     const updateLayout = useCallback(() => setLayout({}), []);
@@ -130,7 +131,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                   {is_loading || is_loading_comments || (!comments.length && !inline_block) ? (
                     <NodeNoComments is_loading={is_loading_comments || is_loading} />
                   ) : (
-                    <NodeComments comments={comments} />
+                    <NodeComments comments={comments} user={user} onDelete={nodeLockComment} />
                   )}
 
                   {is_user && !is_loading && <CommentForm id={0} />}

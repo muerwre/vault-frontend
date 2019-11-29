@@ -1,4 +1,4 @@
-import React, { FC, useMemo, memo, createElement } from 'react';
+import React, { FC, useMemo, memo, createElement, useCallback } from 'react';
 import { IComment, IFile } from '~/redux/types';
 import path from 'ramda/es/path';
 import { formatCommentText, getURL, getPrettyDate } from '~/utils/dom';
@@ -12,12 +12,15 @@ import { AudioPlayer } from '~/components/media/AudioPlayer';
 import classnames from 'classnames';
 import { PRESETS } from '~/constants/urls';
 import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
+import { Icon } from '~/components/input/Icon';
 
 interface IProps {
   comment: IComment;
+  can_edit: boolean;
+  onDelete: (id: IComment['id'], is_deteted: boolean) => void;
 }
 
-const CommentContent: FC<IProps> = memo(({ comment }) => {
+const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete }) => {
   const groupped = useMemo<Record<keyof typeof UPLOAD_TYPES, IFile[]>>(
     () =>
       reduce(
@@ -28,10 +31,27 @@ const CommentContent: FC<IProps> = memo(({ comment }) => {
     [comment]
   );
 
+  const onLockClick = useCallback(() => {
+    onDelete(comment.id, !comment.deleted_at);
+  }, [comment, onDelete]);
+
+  const lock = useMemo(
+    () =>
+      can_edit ? (
+        <div className={styles.lock}>
+          <div>
+            <Icon icon="close" />
+          </div>
+        </div>
+      ) : null,
+    [can_edit, comment]
+  );
+
   return (
-    <>
+    <div className={styles.wrap}>
       {comment.text && (
         <Group className={styles.block}>
+          {lock}
           {formatCommentText(path(['user', 'username'], comment), comment.text).map(
             (block, key) =>
               COMMENT_BLOCK_RENDERERS[block.type] &&
@@ -67,7 +87,7 @@ const CommentContent: FC<IProps> = memo(({ comment }) => {
           ))}
         </>
       )}
-    </>
+    </div>
   );
 });
 

@@ -102,6 +102,12 @@ export const nodeLock = (id: INode['id'], is_locked: boolean) => ({
   is_locked,
 });
 
+export const nodeLockComment = (id: IComment['id'], is_locked: boolean) => ({
+  type: NODE_ACTIONS.LOCK_COMMENT,
+  id,
+  is_locked,
+});
+
 export const nodeSetEditor = (editor: INode) => ({
   type: NODE_ACTIONS.SET_EDITOR,
   editor,

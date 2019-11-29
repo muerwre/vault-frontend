@@ -24,6 +24,7 @@ export const NODE_ACTIONS = {
   LIKE: `${prefix}LIKE`,
   STAR: `${prefix}STAR`,
   LOCK: `${prefix}LOCK`,
+  LOCK_COMMENT: `${prefix}LOCK_COMMENT`,
   CREATE: `${prefix}CREATE`,
 
   SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,

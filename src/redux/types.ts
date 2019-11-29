@@ -146,6 +146,7 @@ export interface IComment {
 
   created_at?: string;
   update_at?: string;
+  deleted_at?: string;
 }
 
 export type IMessage = Omit<IComment, 'user' | 'node'> & {

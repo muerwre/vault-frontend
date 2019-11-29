@@ -1,5 +1,51 @@
 @import 'flexbin/flexbin.scss';
 
+.wrap {
+  position: relative;
+}
+
+.lock {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius;
+  transform: translate(10px, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  touch-action: none;
+  transition: opacity 0.25s, transform 0.25s;
+  cursor: pointer;
+  background: $red;
+
+  & > div {
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  @include tablet {
+    right: 0;
+    border-radius: 0 0 0 $radius;
+    opacity: 1;
+    transform: translate(0, 0);
+    background: transparentize($red, $amount: 0.5);
+  }
+}
+
 .block {
   @include outer_shadow();
   min-height: $comment_height;
@@ -19,6 +65,15 @@
 
   &:last-child {
     border-bottom-right-radius: $radius;
+  }
+
+  &:hover {
+    .lock {
+      opacity: 1;
+      pointer-events: all;
+      touch-action: initial;
+      transform: translate(0, 0);
+    }
   }
 }
 
