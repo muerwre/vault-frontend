@@ -22,6 +22,7 @@ import {
   nodeSetRelated,
   nodeGotoNode,
   nodeLock,
+  nodeLockComment,
 } from './actions';
 import {
   postNode,
@@ -33,6 +34,7 @@ import {
   postNodeStar,
   getNodeRelated,
   postNodeLock,
+  postNodeLockComment,
 } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes, flowSetUpdated } from '../flow/actions';
@@ -256,6 +258,22 @@ function* onLockSaga({ id, is_locked }: ReturnType<typeof nodeLock>) {
   if (error) return yield call(updateNodeEverywhere, { ...current, deleted_at });
 }
 
+function* onLockCommentSaga({ id, is_locked }: ReturnType<typeof nodeLockComment>) {
+  const { current, comments } = yield select(selectNode);
+
+  yield put(
+    nodeSetComments(
+      comments.map(comment =>
+        comment.id === id
+          ? { ...comment, deleted_at: is_locked ? new Date().toISOString() : null }
+          : comment
+      )
+    )
+  );
+
+  yield call(reqWrapper, postNodeLockComment, { current: current.id, id, is_locked });
+}
+
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
   yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
@@ -267,4 +285,5 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.LIKE, onLikeSaga);
   yield takeLatest(NODE_ACTIONS.STAR, onStarSaga);
   yield takeLatest(NODE_ACTIONS.LOCK, onLockSaga);
+  yield takeLatest(NODE_ACTIONS.LOCK_COMMENT, onLockCommentSaga);
 }

@@ -25,14 +25,18 @@ const Comment: FC<IProps> = memo(
         {...props}
       >
         <div className={styles.wrap}>
-          {comment_group.comments.map(comment => (
-            <CommentContent
-              comment={comment}
-              key={comment.id}
-              can_edit={can_edit}
-              onDelete={onDelete}
-            />
-          ))}
+          {comment_group.comments.map(comment =>
+            comment.deleted_at ? (
+              <div key={comment.id}>deleted</div>
+            ) : (
+              <CommentContent
+                comment={comment}
+                key={comment.id}
+                can_edit={can_edit}
+                onDelete={onDelete}
+              />
+            )
+          )}
         </div>
       </CommentWrapper>
     );

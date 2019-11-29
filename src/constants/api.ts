@@ -1,4 +1,4 @@
-import { INode } from '~/redux/types';
+import { INode, IComment } from '~/redux/types';
 
 export const API = {
   BASE: process.env.API_HOST,
@@ -26,6 +26,8 @@ export const API = {
     POST_LIKE: (id: INode['id']) => `/node/${id}/like`,
     POST_STAR: (id: INode['id']) => `/node/${id}/heroic`,
     POST_LOCK: (id: INode['id']) => `/node/${id}/lock`,
+    POST_LOCK_COMMENT: (id: INode['id'], comment_id: IComment['id']) =>
+      `/node/${id}/comment/${comment_id}/lock`,
     SET_CELL_VIEW: (id: INode['id']) => `/node/${id}/cell-view`,
   },
 };

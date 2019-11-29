@@ -38,7 +38,7 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete }) => {
   const lock = useMemo(
     () =>
       can_edit ? (
-        <div className={styles.lock}>
+        <div className={styles.lock} onClick={onLockClick}>
           <div>
             <Icon icon="close" />
           </div>

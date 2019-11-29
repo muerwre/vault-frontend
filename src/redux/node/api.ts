@@ -1,7 +1,7 @@
 import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils/api';
 import { INode, IResultWithStatus, IComment } from '../types';
 import { API } from '~/constants/api';
-import { nodeUpdateTags, nodeLike, nodeStar, nodeLock } from './actions';
+import { nodeUpdateTags, nodeLike, nodeStar, nodeLock, nodeLockComment } from './actions';
 import { INodeState } from './reducer';
 
 export const postNode = ({
@@ -161,5 +161,18 @@ export const postNodeLock = ({
 > =>
   api
     .post(API.NODE.POST_LOCK(id), { is_locked }, configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const postNodeLockComment = ({
+  id,
+  is_locked,
+  current,
+  access,
+}: ReturnType<typeof nodeLockComment> & { access: string; current: INode['id'] }): Promise<
+  IResultWithStatus<{ deleted_at: INode['deleted_at'] }>
+> =>
+  api
+    .post(API.NODE.POST_LOCK_COMMENT(current, id), { is_locked }, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
