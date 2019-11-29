@@ -19,6 +19,7 @@ import { CommentForm } from '~/components/node/CommentForm';
 import { selectUser } from '~/redux/auth/selectors';
 import pick from 'ramda/es/pick';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
+import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -108,55 +109,59 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
           is_loading={is_loading}
         />
 
-        <Group>
-          <Padder>
-            <Group horizontal className={styles.content}>
-              <Group className={styles.comments}>
-                {inline_block && (
-                  <div className={styles.inline_block}>
-                    {createElement(inline_block, {
-                      node,
-                      is_loading,
-                      updateLayout,
-                      layout,
-                    })}
-                  </div>
-                )}
-
-                {is_loading || is_loading_comments || (!comments.length && !inline_block) ? (
-                  <NodeNoComments is_loading={is_loading_comments || is_loading} />
-                ) : (
-                  <NodeComments comments={comments} />
-                )}
-
-                {is_user && !is_loading && <CommentForm id={0} />}
-              </Group>
-
-              <div className={styles.panel}>
-                <Group style={{ flex: 1, minWidth: 0 }}>
-                  {!is_loading && (
-                    <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
+        {node.deleted_at ? (
+          <NodeDeletedBadge />
+        ) : (
+          <Group>
+            <Padder>
+              <Group horizontal className={styles.content}>
+                <Group className={styles.comments}>
+                  {inline_block && (
+                    <div className={styles.inline_block}>
+                      {createElement(inline_block, {
+                        node,
+                        is_loading,
+                        updateLayout,
+                        layout,
+                      })}
+                    </div>
                   )}
 
-                  {is_loading && <NodeRelatedPlaceholder />}
-
-                  {!is_loading &&
-                    related &&
-                    related.albums &&
-                    Object.keys(related.albums)
-                      .filter(album => related.albums[album].length > 0)
-                      .map(album => (
-                        <NodeRelated title={album} items={related.albums[album]} key={album} />
-                      ))}
-
-                  {!is_loading && related && related.similar && related.similar.length > 0 && (
-                    <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
+                  {is_loading || is_loading_comments || (!comments.length && !inline_block) ? (
+                    <NodeNoComments is_loading={is_loading_comments || is_loading} />
+                  ) : (
+                    <NodeComments comments={comments} />
                   )}
+
+                  {is_user && !is_loading && <CommentForm id={0} />}
                 </Group>
-              </div>
-            </Group>
-          </Padder>
-        </Group>
+
+                <div className={styles.panel}>
+                  <Group style={{ flex: 1, minWidth: 0 }}>
+                    {!is_loading && (
+                      <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
+                    )}
+
+                    {is_loading && <NodeRelatedPlaceholder />}
+
+                    {!is_loading &&
+                      related &&
+                      related.albums &&
+                      Object.keys(related.albums)
+                        .filter(album => related.albums[album].length > 0)
+                        .map(album => (
+                          <NodeRelated title={album} items={related.albums[album]} key={album} />
+                        ))}
+
+                    {!is_loading && related && related.similar && related.similar.length > 0 && (
+                      <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
+                    )}
+                  </Group>
+                </div>
+              </Group>
+            </Padder>
+          </Group>
+        )}
       </Card>
     );
   }
