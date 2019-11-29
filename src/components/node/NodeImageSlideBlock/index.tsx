@@ -47,7 +47,7 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   const images = useMemo(
     () =>
       (node && node.files && node.files.filter(({ type }) => type === UPLOAD_TYPES.IMAGE)) || [],
-    [node]
+    [node.files]
   );
 
   useEffect(() => {

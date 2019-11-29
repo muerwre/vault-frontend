@@ -1,11 +1,11 @@
-import React, { FC } from "react";
-import * as styles from "./styles.scss";
-import { Group } from "~/components/containers/Group";
-import { Filler } from "~/components/containers/Filler";
-import { Icon } from "~/components/input/Icon";
-import { INode } from "~/redux/types";
-import classNames from "classnames";
-import { Placeholder } from "~/components/placeholders/Placeholder";
+import React, { FC } from 'react';
+import * as styles from './styles.scss';
+import { Group } from '~/components/containers/Group';
+import { Filler } from '~/components/containers/Filler';
+import { Icon } from '~/components/input/Icon';
+import { INode } from '~/redux/types';
+import classNames from 'classnames';
+import { Placeholder } from '~/components/placeholders/Placeholder';
 
 interface IProps {
   node: Partial<INode>;
@@ -20,10 +20,11 @@ interface IProps {
   onEdit: () => void;
   onLike: () => void;
   onStar: () => void;
+  onLock: () => void;
 }
 
 const NodePanelInner: FC<IProps> = ({
-  node: { title, user, is_liked, is_heroic },
+  node: { title, user, is_liked, is_heroic, deleted_at },
   stack,
 
   can_star,
@@ -34,7 +35,8 @@ const NodePanelInner: FC<IProps> = ({
 
   onStar,
   onEdit,
-  onLike
+  onLike,
+  onLock,
 }) => {
   return (
     <div className={classNames(styles.wrap, { stack })}>
@@ -42,15 +44,11 @@ const NodePanelInner: FC<IProps> = ({
         <Group horizontal className={styles.panel}>
           <Filler>
             <div className={styles.title}>
-              {is_loading ? <Placeholder width="40%" /> : title || "..."}
+              {is_loading ? <Placeholder width="40%" /> : title || '...'}
             </div>
             {user && user.username && (
               <div className={styles.name}>
-                {is_loading ? (
-                  <Placeholder width="100px" />
-                ) : (
-                  `~${user.username}`
-                )}
+                {is_loading ? <Placeholder width="100px" /> : `~${user.username}`}
               </div>
             )}
           </Filler>
@@ -66,11 +64,19 @@ const NodePanelInner: FC<IProps> = ({
               )}
             </div>
           )}
+
           {can_edit && (
-            <div>
-              <Icon icon="edit" size={24} onClick={onEdit} />
-            </div>
+            <>
+              <div>
+                <Icon icon={deleted_at ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
+              </div>
+
+              <div>
+                <Icon icon="edit" size={24} onClick={onEdit} />
+              </div>
+            </>
           )}
+
           {can_like && (
             <div className={classNames(styles.like, { is_liked })}>
               {is_liked ? (
@@ -87,5 +93,3 @@ const NodePanelInner: FC<IProps> = ({
 };
 
 export { NodePanelInner };
-
-// <div className={styles.mark} />

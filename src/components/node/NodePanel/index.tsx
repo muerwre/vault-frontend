@@ -3,7 +3,6 @@ import * as styles from './styles.scss';
 import { INode } from '~/redux/types';
 import { createPortal } from 'react-dom';
 import { NodePanelInner } from '~/components/node/NodePanelInner';
-import pick from 'ramda/es/pick';
 
 interface IProps {
   node: Partial<INode>;
@@ -18,10 +17,11 @@ interface IProps {
   onEdit: () => void;
   onLike: () => void;
   onStar: () => void;
+  onLock: () => void;
 }
 
 const NodePanel: FC<IProps> = memo(
-  ({ node, layout, can_edit, can_like, can_star, is_loading, onEdit, onLike, onStar }) => {
+  ({ node, layout, can_edit, can_like, can_star, is_loading, onEdit, onLike, onStar, onLock }) => {
     const [stack, setStack] = useState(false);
 
     const ref = useRef(null);
@@ -51,14 +51,15 @@ const NodePanel: FC<IProps> = memo(
           createPortal(
             <NodePanelInner
               node={node}
-              stack
-              onEdit={onEdit}
-              onLike={onLike}
-              onStar={onStar}
               can_edit={can_edit}
               can_like={can_like}
               can_star={can_star}
+              onEdit={onEdit}
+              onLike={onLike}
+              onStar={onStar}
+              onLock={onLock}
               is_loading={is_loading}
+              stack
             />,
             document.body
           )
@@ -68,6 +69,7 @@ const NodePanel: FC<IProps> = memo(
             onEdit={onEdit}
             onLike={onLike}
             onStar={onStar}
+            onLock={onLock}
             can_edit={can_edit}
             can_like={can_like}
             can_star={can_star}

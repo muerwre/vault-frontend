@@ -19,7 +19,6 @@ render(
 );
 
 /*
-
   [Stage 0]:
   - set file target on comment save, node save, profile upload
   - check if email is registered at social login
@@ -28,10 +27,10 @@ render(
   - delete nodes
   
   - illustrate 404
-  - illustrate restoreRequestDialog
-  - illustrate login  
   
   [stage 1]
+  - illustrate login  
+  - illustrate restoreRequestDialog
   - friendship
   - signup?
   - import videos

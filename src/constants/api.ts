@@ -25,6 +25,7 @@ export const API = {
     UPDATE_TAGS: (id: INode['id']) => `/node/${id}/tags`,
     POST_LIKE: (id: INode['id']) => `/node/${id}/like`,
     POST_STAR: (id: INode['id']) => `/node/${id}/heroic`,
+    POST_LOCK: (id: INode['id']) => `/node/${id}/lock`,
     SET_CELL_VIEW: (id: INode['id']) => `/node/${id}/cell-view`,
   },
 };

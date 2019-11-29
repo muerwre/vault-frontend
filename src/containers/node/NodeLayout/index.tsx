@@ -32,6 +32,7 @@ const mapDispatchToProps = {
   nodeEdit: NODE_ACTIONS.nodeEdit,
   nodeLike: NODE_ACTIONS.nodeLike,
   nodeStar: NODE_ACTIONS.nodeStar,
+  nodeLock: NODE_ACTIONS.nodeLock,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -51,6 +52,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     nodeEdit,
     nodeLike,
     nodeStar,
+    nodeLock,
     nodeSetCoverImage,
   }) => {
     // const is_loading = true;
@@ -81,6 +83,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     const onEdit = useCallback(() => nodeEdit(node.id), [nodeEdit, node]);
     const onLike = useCallback(() => nodeLike(node.id), [nodeLike, node]);
     const onStar = useCallback(() => nodeStar(node.id), [nodeStar, node]);
+    const onLock = useCallback(() => nodeLock(node.id, !node.deleted_at), [nodeStar, node]);
 
     useEffect(() => {
       if (!node.cover) return;
@@ -93,7 +96,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
         {block && createElement(block, { node, is_loading, updateLayout, layout })}
 
         <NodePanel
-          node={pick(['title', 'user', 'is_liked', 'is_heroic'], node)}
+          node={pick(['title', 'user', 'is_liked', 'is_heroic', 'deleted_at'], node)}
           layout={layout}
           can_edit={can_edit}
           can_like={can_like}
@@ -101,6 +104,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
           onEdit={onEdit}
           onLike={onLike}
           onStar={onStar}
+          onLock={onLock}
           is_loading={is_loading}
         />
 

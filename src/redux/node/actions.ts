@@ -96,6 +96,12 @@ export const nodeStar = (id: INode['id']) => ({
   id,
 });
 
+export const nodeLock = (id: INode['id'], is_locked: boolean) => ({
+  type: NODE_ACTIONS.LOCK,
+  id,
+  is_locked,
+});
+
 export const nodeSetEditor = (editor: INode) => ({
   type: NODE_ACTIONS.SET_EDITOR,
   editor,

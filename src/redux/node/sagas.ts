@@ -21,6 +21,7 @@ import {
   nodeLike,
   nodeSetRelated,
   nodeGotoNode,
+  nodeLock,
 } from './actions';
 import {
   postNode,
@@ -31,6 +32,7 @@ import {
   postNodeLike,
   postNodeStar,
   getNodeRelated,
+  postNodeLock,
 } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes, flowSetUpdated } from '../flow/actions';
@@ -234,6 +236,23 @@ function* onStarSaga({ id }: ReturnType<typeof nodeLike>) {
   yield call(updateNodeEverywhere, { ...current, is_heroic });
 }
 
+function* onLockSaga({ id, is_locked }: ReturnType<typeof nodeLock>) {
+  const {
+    current,
+    current: { deleted_at },
+  } = yield select(selectNode);
+
+  yield call(updateNodeEverywhere, {
+    ...current,
+    deleted_at: is_locked ? new Date().toISOString() : null,
+  });
+
+  const { data, error } = yield call(reqWrapper, postNodeLock, { id, is_locked });
+
+  if (error || !data.deleted_at)
+    return yield call(updateNodeEverywhere, { ...current, deleted_at }); // ok and matches
+}
+
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
   yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
@@ -244,4 +263,5 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.EDIT, onEditSaga);
   yield takeLatest(NODE_ACTIONS.LIKE, onLikeSaga);
   yield takeLatest(NODE_ACTIONS.STAR, onStarSaga);
+  yield takeLatest(NODE_ACTIONS.LOCK, onLockSaga);
 }
