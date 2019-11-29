@@ -24,7 +24,6 @@ render(
   - check if email is registered at social login
   - profile cover upload
   - delete comments
-  - delete nodes
   
   - illustrate 404
   
@@ -44,6 +43,7 @@ render(
   - comment editing
   
   Done:
+  - delete nodes
   - user access time update
   - import graffiti
   - <...> format
