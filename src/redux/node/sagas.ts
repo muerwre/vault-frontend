@@ -58,7 +58,11 @@ export function* updateNodeEverywhere(node) {
   }
 
   yield put(
-    flowSetNodes(flow_nodes.map(flow_node => (flow_node.id === node.id ? node : flow_node)))
+    flowSetNodes(
+      flow_nodes
+        .map(flow_node => (flow_node.id === node.id ? node : flow_node))
+        .filter(flow_node => !flow_node.deleted_at)
+    )
   );
 }
 
