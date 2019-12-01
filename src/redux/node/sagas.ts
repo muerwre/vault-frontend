@@ -271,7 +271,7 @@ function* onLockCommentSaga({ id, is_locked }: ReturnType<typeof nodeLockComment
     )
   );
 
-  yield call(reqWrapper, postNodeLockComment, { current: current.id, id, is_locked });
+  yield call(reqWrapper, postNodeLockComment, { current: current.id, id, is_locked }); //
 }
 
 export default function* nodeSaga() {
