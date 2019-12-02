@@ -103,8 +103,10 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
       return () => clearTimeout(timeout);
     }
 
-    const prev = Math.max(heights[Math.floor(selected)] || fallback, fallback);
-    const next = Math.max(heights[Math.ceil(selected)] || fallback, fallback);
+    const minimal = Math.min(fallback, 120);
+
+    const prev = Math.max(heights[Math.floor(selected)] || fallback, minimal);
+    const next = Math.max(heights[Math.ceil(selected)] || fallback, minimal);
     const now = prev - (prev - next) * (selected % 1);
 
     if (current !== Math.round(selected)) setCurrent(Math.round(selected));
