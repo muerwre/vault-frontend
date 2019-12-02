@@ -13,14 +13,24 @@
   height: 100%;
   top: 0;
   left: 0;
-  padding-top: 120px;
+  padding-top: 25vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   box-sizing: border-box;
+  background: url('~/sprites/lost.svg') 50% 50% no-repeat/cover;
+  text-transform: uppercase;
+  text-align: center;
 
   h2 {
     text-transform: uppercase;
     margin-bottom: $gap;
+    font-size: 72px;
+  }
+
+  @include tablet {
+    h2 {
+      font-size: 48px;
+    }
   }
 }
