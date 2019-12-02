@@ -3,25 +3,24 @@
 
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
   background: $content_bg;
   border-radius: $radius;
-}
-
-.content {
-  flex: 2;
-  padding: $gap * 4;
-}
-
-.image {
-  flex: 1 1;
-  // background: red;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  padding-top: 120px;
   display: flex;
-  border-radius: 0 $radius $radius 0;
-}
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 
-.sign {
-  // font: $font_24_semibold;
-  // font-size: 72px;
+  h2 {
+    text-transform: uppercase;
+    margin-bottom: $gap;
+  }
 }

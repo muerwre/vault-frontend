@@ -3,6 +3,10 @@
   transition: filter 0.25s;
   will-change: filter;
   padding-top: 100px + $gap;
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  min-height: 100vh;
 
   @include tablet {
     padding-top: 72px + $gap;

@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
 import styles from './styles.scss';
+import { createPortal } from 'react-dom';
+import { GodRays } from '~/components/main/GodRays';
 
-interface IProps {}
-
-const ErrorNotFound: FC<IProps> = ({}) => (
-  <div className={styles.wrap}>
-    <div className={styles.content}>
-      <div className={styles.sign}>НЕ НАЙДЕН</div>
-      <div>Нам очень жаль.</div>
-    </div>
-    <div className={styles.image} />
-  </div>
-);
+const ErrorNotFound: FC<{}> = () =>
+  createPortal(
+    <div className={styles.wrap}>
+      <GodRays />
+      <h2 className={styles.sign}>Страница утеряна</h2>
+      <div>Нам очень жаль</div>
+    </div>,
+    document.body
+  );
 
 export { ErrorNotFound };

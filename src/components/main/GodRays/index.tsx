@@ -26,13 +26,11 @@ export class GodRays extends React.Component<IGodRaysProps> {
   };
 
   draw = () => {
-    if ((this.props.raised) || !this.canvas) {
+    if (this.props.raised || !this.canvas) {
       return setTimeout(() => window.requestAnimationFrame(this.draw), 1000);
     }
 
-    const {
-      width, height, rays, particles
-    } = this.state;
+    const { width, height, rays, particles } = this.state;
 
     const ctx = this.canvas.getContext('2d');
 
@@ -40,9 +38,7 @@ export class GodRays extends React.Component<IGodRaysProps> {
     ctx.clearRect(0, 0, width, height + 100); // clear canvas
     ctx.save();
 
-    rays.map(({
-      angle, iterator, weight, speed, pulsar, opacity
-    }, index) => {
+    rays.map(({ angle, iterator, weight, speed, pulsar, opacity }, index) => {
       const gradient = ctx.createLinearGradient(0, 0, 0, height * 1.3);
       gradient.addColorStop(0.2, `rgba(255, 60, 40, ${opacity * 0.1})`);
       gradient.addColorStop(1, 'rgba(255, 60, 40, 0)');
@@ -58,19 +54,19 @@ export class GodRays extends React.Component<IGodRaysProps> {
 
       ctx.beginPath();
       ctx.fillStyle = gradient;
-      ctx.moveTo(((width / 2) - (weight / 2)), -900);
-      ctx.lineTo(((width / 2) + (weight / 2)), -900);
-      ctx.lineTo(((width / 2) + (weight / 2 + 300)), height * 1.4);
-      ctx.lineTo(((width / 2) - (weight / 2 + 300)), height * 1.4);
+      ctx.moveTo(width / 2 - weight / 2, -900);
+      ctx.lineTo(width / 2 + weight / 2, -900);
+      ctx.lineTo(width / 2 + (weight / 2 + 300), height * 1.4);
+      ctx.lineTo(width / 2 - (weight / 2 + 300), height * 1.4);
       ctx.fill();
       ctx.closePath();
 
       ctx.beginPath();
       ctx.fillStyle = gradient2;
-      ctx.moveTo(((width / 2) - (weight / 6)), -900);
-      ctx.lineTo(((width / 2) + (weight / 6)), -900);
-      ctx.lineTo(((width / 2) + (weight / 6 + 50)), height * 1.4);
-      ctx.lineTo(((width / 2) - (weight / 6 + 250)), height * 1.4);
+      ctx.moveTo(width / 2 - weight / 6, -900);
+      ctx.lineTo(width / 2 + weight / 6, -900);
+      ctx.lineTo(width / 2 + (weight / 6 + 50), height * 1.4);
+      ctx.lineTo(width / 2 - (weight / 6 + 250), height * 1.4);
       ctx.fill();
       ctx.closePath();
 
@@ -114,16 +110,17 @@ export class GodRays extends React.Component<IGodRaysProps> {
     const { width, height } = this.state;
 
     return (
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: -1,
-        opacity: 1,
-        pointerEvents: 'none',
-      }}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          opacity: 1,
+          pointerEvents: 'none',
+        }}
       >
         <canvas
           width={width}
@@ -133,7 +130,9 @@ export class GodRays extends React.Component<IGodRaysProps> {
             position: 'relative',
             top: -100,
           }}
-          ref={(el) => { this.canvas = el; }}
+          ref={el => {
+            this.canvas = el;
+          }}
         />
       </div>
     );
