@@ -20,12 +20,10 @@ render(
 
 /*
   [Stage 0]:
-  - set file target on comment save, node save, profile upload
-  - check if email is registered at social login
-  
   - illustrate 404
   
   [stage 1]
+  - check if email is registered at social login
   - profile cover upload
   - illustrate login  
   - illustrate restoreRequestDialog
@@ -41,6 +39,7 @@ render(
   - comment editing
   
   Done:
+  - set file target on comment save, node save, profile upload  
   - delete comments
   - import videos (partially)
   - delete nodes
