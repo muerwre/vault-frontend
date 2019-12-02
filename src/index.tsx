@@ -22,17 +22,15 @@ render(
   [Stage 0]:
   - set file target on comment save, node save, profile upload
   - check if email is registered at social login
-  - profile cover upload
-  - delete comments
   
   - illustrate 404
   
   [stage 1]
+  - profile cover upload
   - illustrate login  
   - illustrate restoreRequestDialog
   - friendship
   - signup?
-  - import videos
   - text post can also has songs http://vault48.org/post5052
   - fulltext search: https://github.com/typeorm/typeorm/issues/3191
   - zoom: https://manuelstofer.github.io/pinchzoom/
@@ -43,6 +41,8 @@ render(
   - comment editing
   
   Done:
+  - delete comments
+  - import videos (partially)
   - delete nodes
   - user access time update
   - import graffiti
