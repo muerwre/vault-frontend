@@ -161,6 +161,10 @@
     }
   }
 
+  &.gray {
+    background: lighten($content_bg, 8%);
+  }
+
   &.link {
     background: transparent;
     color: white;

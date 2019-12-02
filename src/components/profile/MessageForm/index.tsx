@@ -69,7 +69,7 @@ const MessageFormUnconnected: FC<IProps> = ({
 
           <Button
             size="small"
-            grey
+            color="gray"
             iconRight="enter"
             disabled={is_sending_messages}
             onClick={onSubmit}

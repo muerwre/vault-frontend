@@ -9,14 +9,12 @@ type IButtonProps = DetailedHTMLProps<
   HTMLButtonElement
 > & {
   size?: 'mini' | 'normal' | 'big' | 'giant' | 'micro' | 'small';
-  color?: 'primary' | 'secondary' | 'outline' | 'link';
+  color?: 'primary' | 'secondary' | 'outline' | 'link' | 'gray';
   iconLeft?: IIcon;
   iconRight?: IIcon;
   seamless?: boolean;
   transparent?: boolean;
   title?: string;
-  red?: boolean;
-  grey?: boolean;
   non_submitting?: boolean;
   is_loading?: boolean;
   stretchy?: boolean;
@@ -34,8 +32,6 @@ const Button: FC<IButtonProps> = memo(
     seamless = false,
     transparent = false,
     non_submitting = false,
-    red = false,
-    grey = false,
     is_loading,
     title,
     stretchy,
@@ -47,8 +43,6 @@ const Button: FC<IButtonProps> = memo(
       seamless || non_submitting ? 'div' : 'button',
       {
         className: classnames(styles.button, className, styles[size], styles[color], {
-          red,
-          grey,
           seamless,
           transparent,
           disabled,

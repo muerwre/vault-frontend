@@ -231,11 +231,11 @@ const CommentFormUnconnected: FC<IProps> = ({
 
         <Group horizontal className={styles.buttons}>
           <ButtonGroup>
-            <Button iconLeft="image" size="small" grey iconOnly>
+            <Button iconLeft="image" size="small" color="gray" iconOnly>
               <input type="file" onInput={onInputChange} multiple accept="image/*" />
             </Button>
 
-            <Button iconRight="enter" size="small" grey iconOnly>
+            <Button iconRight="enter" size="small" color="gray" iconOnly>
               <input type="file" onInput={onInputChange} multiple accept="audio/*" />
             </Button>
           </ButtonGroup>
@@ -244,7 +244,7 @@ const CommentFormUnconnected: FC<IProps> = ({
 
           {is_sending_comment && <LoaderCircle size={20} />}
 
-          <Button size="small" grey iconRight="enter" disabled={is_sending_comment}>
+          <Button size="small" color="gray" iconRight="enter" disabled={is_sending_comment}>
             Сказать
           </Button>
         </Group>
