@@ -77,7 +77,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
         </div>
 
         <Group className={styles.content}>
-          {is_user && <CommentForm id={0} />}
+          {is_user && <CommentForm id={0} is_before />}
 
           {is_loading_comments && !comments.length ? (
             <NodeNoComments is_loading />

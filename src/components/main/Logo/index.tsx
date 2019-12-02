@@ -4,6 +4,6 @@ import { Link } from 'react-router-dom';
 
 export const Logo = () => (
   <Link className={styles.logo} to="/">
-    VAULT
+    УБЕЖИЩЕ
   </Link>
 );

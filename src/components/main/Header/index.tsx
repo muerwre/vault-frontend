@@ -63,11 +63,11 @@ const HeaderUnconnected: FC<IProps> = memo(
           {is_user && (
             <div className={style.plugs}>
               <Link className={style.item} to={URLS.BASE}>
-                FLOW
+                ФЛОУ
               </Link>
 
               <Link className={style.item} to={URLS.BORIS}>
-                BORIS
+                БОРИС
               </Link>
 
               <div className={style.item}>

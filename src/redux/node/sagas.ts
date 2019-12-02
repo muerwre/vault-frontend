@@ -151,7 +151,7 @@ function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
   return;
 }
 
-function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
+function* onPostComment({ id, is_before }: ReturnType<typeof nodePostComment>) {
   const { current, comment_data } = yield select(selectNode);
 
   yield put(nodeSetSendingComment(true));
@@ -170,8 +170,13 @@ function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
   if (current_node && current_node.id === current.id) {
     // if user still browsing that node
     const { comments } = yield select(selectNode);
-    yield put(nodeSetComments([...comments, comment]));
     yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
+
+    if (is_before) {
+      yield put(nodeSetComments([comment, ...comments]));
+    } else {
+      yield put(nodeSetComments([...comments, comment]));
+    }
   }
 }
 

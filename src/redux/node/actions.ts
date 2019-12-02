@@ -39,8 +39,9 @@ export const nodeSetCurrent = (current: INodeState['current']) => ({
   type: NODE_ACTIONS.SET_CURRENT,
 });
 
-export const nodePostComment = (id: number) => ({
+export const nodePostComment = (id: number, is_before: boolean) => ({
   id,
+  is_before,
   type: NODE_ACTIONS.POST_COMMENT,
 });
 

@@ -18,9 +18,7 @@ import { selectUploads } from '~/redux/uploads/selectors';
 import { IState } from '~/redux/store';
 import { getFileType } from '~/utils/uploader';
 import { selectUser } from '~/redux/auth/selectors';
-import { getURL } from '~/utils/dom';
 import { ButtonGroup } from '~/components/input/ButtonGroup';
-import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 import { moveArrItem } from '~/utils/fn';
 import { SortEnd } from 'react-sortable-hoc';
@@ -41,6 +39,7 @@ const mapDispatchToProps = {
 type IProps = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & {
     id: number;
+    is_before?: boolean;
   };
 
 const CommentFormUnconnected: FC<IProps> = ({
@@ -48,6 +47,7 @@ const CommentFormUnconnected: FC<IProps> = ({
   uploads: { statuses, files },
   user,
   id,
+  is_before = false,
   nodePostComment,
   nodeSetCommentData,
   uploadUploadFiles,
@@ -89,9 +89,9 @@ const CommentFormUnconnected: FC<IProps> = ({
   const onSubmit = useCallback(
     event => {
       if (event) event.preventDefault();
-      nodePostComment(id);
+      nodePostComment(id, is_before);
     },
-    [nodePostComment, id]
+    [nodePostComment, id, is_before]
   );
 
   const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
