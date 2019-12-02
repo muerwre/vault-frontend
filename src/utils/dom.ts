@@ -122,7 +122,7 @@ export const splitCommentByBlocks = (text: string): ICommentBlock[] =>
 export const formatCommentText = (author: string, text: string): ICommentBlock[] =>
   text ? splitCommentByBlocks(formatText(text)) : null;
 
-export const formatCellText = (text: string): string => formatText(text);
+export const formatCellText = (text: string): string => formatTextParagraphs(formatText(text));
 
 export const getPrettyDate = (date: string): string => {
   if (differenceInMonths(new Date(), new Date(date)) >= 3) {
