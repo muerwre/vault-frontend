@@ -100,7 +100,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
         {block && createElement(block, { node, is_loading, updateLayout, layout })}
 
         <NodePanel
-          node={pick(['title', 'user', 'is_liked', 'is_heroic', 'deleted_at'], node)}
+          node={pick(['title', 'user', 'is_liked', 'is_heroic', 'deleted_at', 'created_at'], node)}
           layout={layout}
           can_edit={can_edit}
           can_like={can_like}

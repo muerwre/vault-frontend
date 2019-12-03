@@ -6,6 +6,7 @@ import { Icon } from '~/components/input/Icon';
 import { INode } from '~/redux/types';
 import classNames from 'classnames';
 import { Placeholder } from '~/components/placeholders/Placeholder';
+import { getPrettyDate } from '~/utils/dom';
 
 interface IProps {
   node: Partial<INode>;
@@ -24,7 +25,7 @@ interface IProps {
 }
 
 const NodePanelInner: FC<IProps> = ({
-  node: { title, user, is_liked, is_heroic, deleted_at },
+  node: { title, user, is_liked, is_heroic, deleted_at, created_at },
   stack,
 
   can_star,
@@ -48,7 +49,11 @@ const NodePanelInner: FC<IProps> = ({
             </div>
             {user && user.username && (
               <div className={styles.name}>
-                {is_loading ? <Placeholder width="100px" /> : `~${user.username}`}
+                {is_loading ? (
+                  <Placeholder width="100px" />
+                ) : (
+                  `~${user.username}, ${getPrettyDate(created_at)}`
+                )}
               </div>
             )}
           </Filler>
