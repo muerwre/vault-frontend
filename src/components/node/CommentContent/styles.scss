@@ -57,7 +57,7 @@
   padding-bottom: 10px;
   box-sizing: border-box;
   flex-direction: column;
-  padding: $gap 0;
+  // padding: $gap 0;
 
   &:first-child {
     border-top-right-radius: $radius;
@@ -91,6 +91,10 @@
     border-radius: $radius 0 $radius 0;
     color: transparentize(white, 0.2);
   }
+}
+
+.block_text {
+  padding: $gap 0;
 }
 
 .date {

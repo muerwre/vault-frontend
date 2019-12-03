@@ -50,8 +50,9 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete }) => {
   return (
     <div className={styles.wrap}>
       {comment.text && (
-        <Group className={styles.block}>
+        <Group className={classnames(styles.block, styles.block_text)}>
           {lock}
+
           {formatCommentText(path(['user', 'username'], comment), comment.text).map(
             (block, key) =>
               COMMENT_BLOCK_RENDERERS[block.type] &&
@@ -64,6 +65,8 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete }) => {
 
       {groupped.image && groupped.image.length > 0 && (
         <div className={classnames(styles.block, styles.block_image)}>
+          {lock}
+
           <div className={styles.images}>
             {groupped.image.map(file => (
               <div key={file.id}>
