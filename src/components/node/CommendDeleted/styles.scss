@@ -11,3 +11,11 @@
     font: $font_14_semibold;
   }
 }
+
+.button {
+  color: $red !important;
+
+  svg {
+    fill: $red !important;
+  }
+}

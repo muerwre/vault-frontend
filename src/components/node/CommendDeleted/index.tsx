@@ -15,7 +15,13 @@ const CommendDeleted: FC<IProps> = ({ id, onDelete }) => {
   return (
     <div className={styles.wrap}>
       <div>Комментарий удалён</div>
-      <Button size="mini" onClick={onRestore} iconLeft="restore">
+      <Button
+        size="mini"
+        onClick={onRestore}
+        color="link"
+        iconLeft="restore"
+        className={styles.button}
+      >
         Восстановить
       </Button>
     </div>
