@@ -17,6 +17,8 @@
   z-index: 1;
   box-sizing: border-box;
   padding: $gap;
+  display: none;
+  flex-direction: column;
 
   &::after {
     content: ' ';
@@ -29,6 +31,7 @@
     right: 0;
     top: -4px;
     transform: translate(-20px, 0);
+    z-index: -1;
   }
 
   & > div {
@@ -38,6 +41,8 @@
     box-sizing: border-box;
     transition: opacity 0.25s;
     width: 100%;
+    padding-right: 40px;
+    transition: background-color 0.25s;
 
     &:first-child {
       border-top-left-radius: $radius;
@@ -47,6 +52,10 @@
     &:last-child {
       border-bottom-left-radius: $radius;
       border-bottom-right-radius: $radius;
+    }
+
+    &:hover {
+      background-color: $secondary;
     }
   }
 

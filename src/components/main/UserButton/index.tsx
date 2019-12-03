@@ -1,37 +1,51 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { Group } from '~/components/containers/Group';
 import styles from './styles.scss';
 import { getURL } from '~/utils/dom';
 import { Icon } from '~/components/input/Icon';
 import { IUser } from '~/redux/auth/types';
 import { PRESETS } from '~/constants/urls';
-import { Link } from 'react-router-dom';
+import { authOpenProfile } from '~/redux/auth/actions';
 
 interface IProps {
   user: Partial<IUser>;
   onLogout: () => void;
-  onProfileClick: () => void;
+  authOpenProfile: typeof authOpenProfile;
 }
 
-const UserButton: FC<IProps> = ({ user: { username, photo }, onProfileClick, onLogout }) => (
-  <div className={styles.wrap}>
-    <Group horizontal className={styles.user_button}>
-      <div className={styles.username} onClick={onProfileClick}>
-        {username}
-      </div>
+const UserButton: FC<IProps> = ({ user: { username, photo }, authOpenProfile, onLogout }) => {
+  const onProfileOpen = useCallback(() => {
+    authOpenProfile(username, 'profile');
+  }, [authOpenProfile, username]);
 
-      <div
-        className={styles.user_avatar}
-        style={{ backgroundImage: `url('${getURL(photo, PRESETS.avatar)}')` }}
-      >
-        {(!photo || !photo.id) && <Icon icon="profile" />}
-      </div>
-    </Group>
+  const onSettingsOpen = useCallback(() => {
+    authOpenProfile(username, 'settings');
+  }, [authOpenProfile, username]);
 
-    <div className={styles.menu}>
-      <div onClick={onLogout}>Выдох</div>
+  // const onMessagesOpen = useCallback(() => {
+  //   authOpenProfile(username, 'messages');
+  // }, [authOpenProfile, username]);
+
+  return (
+    <div className={styles.wrap}>
+      <Group horizontal className={styles.user_button}>
+        <div className={styles.username}>{username}</div>
+
+        <div
+          className={styles.user_avatar}
+          style={{ backgroundImage: `url('${getURL(photo, PRESETS.avatar)}')` }}
+        >
+          {(!photo || !photo.id) && <Icon icon="profile" />}
+        </div>
+      </Group>
+
+      <div className={styles.menu}>
+        <div onClick={onProfileOpen}>Профиль</div>
+        <div onClick={onSettingsOpen}>Настройки</div>
+        <div onClick={onLogout}>Выдох</div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export { UserButton };

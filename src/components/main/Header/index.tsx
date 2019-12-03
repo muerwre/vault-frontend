@@ -36,7 +36,7 @@ const HeaderUnconnected: FC<IProps> = memo(
     const [is_scrolled, setIsScrolled] = useState(false);
 
     const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
-    const onProfileClick = useCallback(() => authOpenProfile(username), [authOpenProfile, user]);
+    // const onProfileClick = useCallback(() => authOpenProfile(username), [authOpenProfile, user]);
 
     const onScroll = useCallback(() => {
       const active = window.scrollY > 32;
@@ -77,7 +77,7 @@ const HeaderUnconnected: FC<IProps> = memo(
           )}
 
           {is_user && (
-            <UserButton user={user} onLogout={authLogout} onProfileClick={onProfileClick} />
+            <UserButton user={user} onLogout={authLogout} authOpenProfile={authOpenProfile} />
           )}
 
           {!is_user && (
