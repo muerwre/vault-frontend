@@ -47,7 +47,7 @@ const NodePanel: FC<IProps> = memo(
 
     return (
       <div className={styles.place} ref={ref}>
-        {stack ? (
+        {stack &&
           createPortal(
             <NodePanelInner
               node={node}
@@ -62,20 +62,19 @@ const NodePanel: FC<IProps> = memo(
               stack
             />,
             document.body
-          )
-        ) : (
-          <NodePanelInner
-            node={node}
-            onEdit={onEdit}
-            onLike={onLike}
-            onStar={onStar}
-            onLock={onLock}
-            can_edit={can_edit}
-            can_like={can_like}
-            can_star={can_star}
-            is_loading={is_loading}
-          />
-        )}
+          )}
+
+        <NodePanelInner
+          node={node}
+          onEdit={onEdit}
+          onLike={onLike}
+          onStar={onStar}
+          onLock={onLock}
+          can_edit={can_edit}
+          can_like={can_like}
+          can_star={can_star}
+          is_loading={is_loading}
+        />
       </div>
     );
   }
