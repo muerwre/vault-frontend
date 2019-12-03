@@ -1,0 +1,13 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  padding: $gap;
+  text-transform: uppercase;
+
+  div {
+    flex: 1;
+    font: $font_14_semibold;
+  }
+}

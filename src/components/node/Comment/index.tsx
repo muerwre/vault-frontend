@@ -6,6 +6,7 @@ import * as styles from './styles.scss';
 import { nodeLockComment, nodeEditComment } from '~/redux/node/actions';
 import { INodeState } from '~/redux/node/reducer';
 import { CommentForm } from '../CommentForm';
+import { CommendDeleted } from '../CommendDeleted';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
@@ -43,7 +44,7 @@ const Comment: FC<IProps> = memo(
         <div className={styles.wrap}>
           {comment_group.comments.map(comment => {
             if (comment.deleted_at) {
-              return <div key={comment.id}>deleted</div>;
+              return <CommendDeleted id={comment.id} onDelete={onDelete} key={comment.id} />;
             }
 
             if (Object.prototype.hasOwnProperty.call(comment_data, comment.id)) {

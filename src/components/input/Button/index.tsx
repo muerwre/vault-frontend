@@ -55,9 +55,9 @@ const Button: FC<IButtonProps> = memo(
         ...props,
       },
       [
-        iconLeft && <Icon icon={iconLeft} size={20} key={0} />,
+        iconLeft && <Icon icon={iconLeft} size={20} key={0} className={styles.icon_left} />,
         title ? <span>{title}</span> : children || null,
-        iconRight && <Icon icon={iconRight} size={20} key={2} />,
+        iconRight && <Icon icon={iconRight} size={20} key={2} className={styles.icon_right} />,
       ]
     )
 );
