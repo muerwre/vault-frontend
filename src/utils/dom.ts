@@ -89,7 +89,7 @@ export const formatText = (text: string): string =>
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(
-          /~([\wа-яА-Я\-]+)/giu,
+          /~([\wа-яА-Я-]+)/giu,
           '<span class="username" onClick="window.postMessage({ type: \'username\', username: \'$1\'});">~$1</span>'
         )
         .replace(/:\/\//gim, ':|--|')

@@ -60,21 +60,20 @@ const HeaderUnconnected: FC<IProps> = memo(
 
           <Filler />
 
-          {is_user && (
-            <div className={style.plugs}>
-              <Link className={style.item} to={URLS.BASE}>
-                ФЛОУ
-              </Link>
+          <div className={style.plugs}>
+            <Link className={style.item} to={URLS.BASE}>
+              ФЛОУ
+            </Link>
 
-              <Link className={style.item} to={URLS.BORIS}>
-                БОРИС
-              </Link>
-
+            <Link className={style.item} to={URLS.BORIS}>
+              БОРИС
+            </Link>
+            {is_user && (
               <div className={style.item}>
                 <Notifications />
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {is_user && (
             <UserButton user={user} onLogout={authLogout} authOpenProfile={authOpenProfile} />
