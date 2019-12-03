@@ -141,9 +141,14 @@ function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
     related: call(reqWrapper, getNodeRelated, { id }),
   });
 
-  yield put(nodeSetComments(comments || []));
-  yield put(nodeSetRelated(related || []));
-  yield put(nodeSetLoadingComments(false));
+  yield put(
+    nodeSet({
+      comments,
+      related,
+      is_loading_comments: false,
+      comment_data: { 0: { ...EMPTY_COMMENT } },
+    })
+  );
 
   const { updated } = yield select(selectFlow);
 
