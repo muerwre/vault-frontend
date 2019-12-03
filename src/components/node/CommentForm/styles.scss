@@ -35,7 +35,4 @@
 
 .attaches {
   @include outer_shadow();
-
-  padding: $gap;
-  // background: darken($comment_bg, 2%);
 }

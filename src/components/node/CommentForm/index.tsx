@@ -17,17 +17,14 @@ import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { IState } from '~/redux/store';
 import { getFileType } from '~/utils/uploader';
-import { selectUser } from '~/redux/auth/selectors';
 import { ButtonGroup } from '~/components/input/ButtonGroup';
 import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 import { moveArrItem } from '~/utils/fn';
 import { SortEnd } from 'react-sortable-hoc';
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
-import { NodeCommentForm } from '../NodeCommentForm';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
-  user: selectUser(state),
   uploads: selectUploads(state),
 });
 
@@ -46,7 +43,6 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const CommentFormUnconnected: FC<IProps> = ({
   node: { comment_data, is_sending_comment },
   uploads: { statuses, files },
-  user,
   id,
   is_before = false,
   nodePostComment,
@@ -87,21 +83,6 @@ const CommentFormUnconnected: FC<IProps> = ({
     [nodeSetCommentData, comment_data, id]
   );
 
-  const onSubmit = useCallback(
-    event => {
-      if (event) event.preventDefault();
-      nodePostComment(id, is_before);
-    },
-    [nodePostComment, id, is_before]
-  );
-
-  const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
-    ({ ctrlKey, key }) => {
-      if (!!ctrlKey && key === 'Enter') onSubmit(null);
-    },
-    [onSubmit]
-  );
-
   useEffect(() => {
     const temp_ids = (comment_data && comment_data[id] && comment_data[id].temp_ids) || [];
     const added_files = temp_ids
@@ -126,6 +107,25 @@ const CommentFormUnconnected: FC<IProps> = ({
 
   const comment = comment_data[id];
 
+  const is_uploading_files = useMemo(() => comment.temp_ids.length > 0, [comment.temp_ids]);
+
+  const onSubmit = useCallback(
+    event => {
+      if (event) event.preventDefault();
+      if (is_uploading_files || is_sending_comment) return;
+
+      nodePostComment(id, is_before);
+    },
+    [nodePostComment, id, is_before, is_uploading_files, is_sending_comment]
+  );
+
+  const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
+    ({ ctrlKey, key }) => {
+      if (!!ctrlKey && key === 'Enter') onSubmit(null);
+    },
+    [onSubmit]
+  );
+
   const images = useMemo(
     () => comment.files.filter(file => file && file.type === UPLOAD_TYPES.IMAGE),
     [comment.files]
@@ -142,6 +142,14 @@ const CommentFormUnconnected: FC<IProps> = ({
   const audios = useMemo(
     () => comment.files.filter(file => file && file.type === UPLOAD_TYPES.AUDIO),
     [comment.files]
+  );
+
+  const locked_audios = useMemo(
+    () =>
+      comment.temp_ids
+        .filter(temp => statuses[temp] && statuses[temp].type === UPLOAD_TYPES.AUDIO)
+        .map(temp_id => statuses[temp_id]),
+    [statuses, comment.temp_ids]
   );
 
   const onFileDrop = useCallback(
@@ -215,13 +223,13 @@ const CommentFormUnconnected: FC<IProps> = ({
             />
           )}
 
-          {!!audios.length && (
+          {(!!audios.length || !!locked_audios.length) && (
             <SortableAudioGrid
               items={audios}
               onDrop={onFileDrop}
               onSortEnd={onAudioMove}
               axis="y"
-              locked={[]}
+              locked={locked_audios}
               pressDelay={50}
               helperClass={styles.helper}
             />
@@ -242,10 +250,15 @@ const CommentFormUnconnected: FC<IProps> = ({
 
         <Filler />
 
-        {is_sending_comment && <LoaderCircle size={20} />}
+        {(is_sending_comment || is_uploading_files) && <LoaderCircle size={20} />}
 
-        <Button size="small" color="gray" iconRight="enter" disabled={is_sending_comment}>
-          Сказать
+        <Button
+          size="small"
+          color="gray"
+          iconRight={id === 0 ? 'enter' : 'check'}
+          disabled={is_sending_comment || is_uploading_files}
+        >
+          {id === 0 ? 'Сказать' : 'Сохранить'}
         </Button>
       </Group>
     </form>
