@@ -1,4 +1,7 @@
 .wrap {
   flex: 1;
   background: $content_bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
