@@ -4,7 +4,8 @@
   position: relative;
 }
 
-.lock {
+.lock,
+.edit {
   position: absolute;
   right: 0;
   top: 0;
@@ -21,6 +22,7 @@
   transition: opacity 0.25s, transform 0.25s;
   cursor: pointer;
   background: $red;
+  z-index: 2;
 
   & > div {
     width: 20px;
@@ -46,6 +48,11 @@
   }
 }
 
+.edit {
+  top: 28px;
+  background: blue;
+}
+
 .block {
   @include outer_shadow();
   min-height: $comment_height;
@@ -68,7 +75,8 @@
   }
 
   &:hover {
-    .lock {
+    .lock,
+    .edit {
       opacity: 1;
       pointer-events: all;
       touch-action: initial;

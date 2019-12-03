@@ -1,5 +1,6 @@
 import { takeLatest, call, put, select, delay, all } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
+import omit from 'ramda/es/omit';
 
 import { NODE_ACTIONS, EMPTY_NODE, EMPTY_COMMENT, NODE_EDITOR_DATA } from './constants';
 import {
@@ -23,6 +24,8 @@ import {
   nodeGotoNode,
   nodeLock,
   nodeLockComment,
+  nodeEditComment,
+  nodeSet,
 } from './actions';
 import {
   postNode,
@@ -168,14 +171,23 @@ function* onPostComment({ id, is_before }: ReturnType<typeof nodePostComment>) {
   const { current: current_node } = yield select(selectNode);
 
   if (current_node && current_node.id === current.id) {
-    // if user still browsing that node
-    const { comments } = yield select(selectNode);
-    yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
+    const { comments, comment_data } = yield select(selectNode);
 
-    if (is_before) {
-      yield put(nodeSetComments([comment, ...comments]));
+    if (id === 0) {
+      yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
+
+      if (is_before) {
+        yield put(nodeSetComments([comment, ...comments]));
+      } else {
+        yield put(nodeSetComments([...comments, comment]));
+      }
     } else {
-      yield put(nodeSetComments([...comments, comment]));
+      yield put(
+        nodeSet({
+          comment_data: omit([id.toString()], comment_data),
+          comments: comments.map(item => (item.id === id ? comment : item)),
+        })
+      );
     }
   }
 }
@@ -279,6 +291,16 @@ function* onLockCommentSaga({ id, is_locked }: ReturnType<typeof nodeLockComment
   yield call(reqWrapper, postNodeLockComment, { current: current.id, id, is_locked });
 }
 
+function* onEditCommentSaga({ id }: ReturnType<typeof nodeEditComment>) {
+  const { comments } = yield select(selectNode);
+
+  const comment = comments.find(item => item.id === id);
+
+  if (!comment) return;
+
+  yield put(nodeSetCommentData(id, { ...EMPTY_COMMENT, ...comment }));
+}
+
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
   yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
@@ -291,4 +313,5 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.STAR, onStarSaga);
   yield takeLatest(NODE_ACTIONS.LOCK, onLockSaga);
   yield takeLatest(NODE_ACTIONS.LOCK_COMMENT, onLockCommentSaga);
+  yield takeLatest(NODE_ACTIONS.EDIT_COMMENT, onEditCommentSaga);
 }

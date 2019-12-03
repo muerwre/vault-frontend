@@ -12,8 +12,14 @@ import {
   nodeSetEditor,
   nodeSetCoverImage,
   nodeSetRelated,
+  nodeSet,
 } from './actions';
 import { INodeState } from './reducer';
+
+const setData = (state: INodeState, { node }: ReturnType<typeof nodeSet>) => ({
+  ...state,
+  ...node,
+});
 
 const setSaveErrors = (state: INodeState, { errors }: ReturnType<typeof nodeSetSaveErrors>) =>
   assocPath(['errors'], errors, state);
@@ -57,6 +63,7 @@ const setCoverImage = (
 ) => assocPath(['current_cover_image'], current_cover_image, state);
 
 export const NODE_HANDLERS = {
+  [NODE_ACTIONS.SET]: setData,
   [NODE_ACTIONS.SET_SAVE_ERRORS]: setSaveErrors,
   [NODE_ACTIONS.SET_LOADING]: setLoading,
   [NODE_ACTIONS.SET_LOADING_COMMENTS]: setLoadingComments,

@@ -23,6 +23,7 @@ import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 import { moveArrItem } from '~/utils/fn';
 import { SortEnd } from 'react-sortable-hoc';
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
+import { NodeCommentForm } from '../NodeCommentForm';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -188,68 +189,66 @@ const CommentFormUnconnected: FC<IProps> = ({
   );
 
   return (
-    <CommentWrapper user={user}>
-      <form onSubmit={onSubmit} className={styles.wrap}>
-        <div className={styles.input}>
-          <Textarea
-            value={comment.text}
-            handler={onInput}
-            onKeyDown={onKeyDown}
-            disabled={is_sending_comment}
-            minRows={2}
-          />
+    <form onSubmit={onSubmit} className={styles.wrap}>
+      <div className={styles.input}>
+        <Textarea
+          value={comment.text}
+          handler={onInput}
+          onKeyDown={onKeyDown}
+          disabled={is_sending_comment}
+          minRows={2}
+        />
+      </div>
+
+      {(!!images.length || !!audios.length) && (
+        <div className={styles.attaches}>
+          {!!images.length && (
+            <SortableImageGrid
+              onDrop={onFileDrop}
+              onSortEnd={onImageMove}
+              axis="xy"
+              items={images}
+              locked={locked_images}
+              pressDelay={50}
+              helperClass={styles.helper}
+              size={120}
+            />
+          )}
+
+          {!!audios.length && (
+            <SortableAudioGrid
+              items={audios}
+              onDrop={onFileDrop}
+              onSortEnd={onAudioMove}
+              axis="y"
+              locked={[]}
+              pressDelay={50}
+              helperClass={styles.helper}
+            />
+          )}
         </div>
+      )}
 
-        {(!!images.length || !!audios.length) && (
-          <div className={styles.attaches}>
-            {!!images.length && (
-              <SortableImageGrid
-                onDrop={onFileDrop}
-                onSortEnd={onImageMove}
-                axis="xy"
-                items={images}
-                locked={locked_images}
-                pressDelay={50}
-                helperClass={styles.helper}
-                size={120}
-              />
-            )}
-
-            {!!audios.length && (
-              <SortableAudioGrid
-                items={audios}
-                onDrop={onFileDrop}
-                onSortEnd={onAudioMove}
-                axis="y"
-                locked={[]}
-                pressDelay={50}
-                helperClass={styles.helper}
-              />
-            )}
-          </div>
-        )}
-
-        <Group horizontal className={styles.buttons}>
-          <ButtonGroup>
-            <Button iconLeft="image" size="small" color="gray" iconOnly>
-              <input type="file" onInput={onInputChange} multiple accept="image/*" />
-            </Button>
-
-            <Button iconRight="enter" size="small" color="gray" iconOnly>
-              <input type="file" onInput={onInputChange} multiple accept="audio/*" />
-            </Button>
-          </ButtonGroup>
-
-          <Filler />
-
-          {is_sending_comment && <LoaderCircle size={20} />}
-
-          <Button size="small" color="gray" iconRight="enter" disabled={is_sending_comment}>
-            Сказать
+      <Group horizontal className={styles.buttons}>
+        <ButtonGroup>
+          <Button iconLeft="image" size="small" color="gray" iconOnly>
+            <input type="file" onInput={onInputChange} multiple accept="image/*" />
           </Button>
-        </Group>
-      </form>
-    </CommentWrapper>
+
+          <Button iconRight="enter" size="small" color="gray" iconOnly>
+            <input type="file" onInput={onInputChange} multiple accept="audio/*" />
+          </Button>
+        </ButtonGroup>
+
+        <Filler />
+
+        {is_sending_comment && <LoaderCircle size={20} />}
+
+        <Button size="small" color="gray" iconRight="enter" disabled={is_sending_comment}>
+          Сказать
+        </Button>
+      </Group>
+    </form>
   );
 };
 

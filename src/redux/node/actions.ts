@@ -2,6 +2,11 @@ import { INode, IValidationErrors, IComment, ITag, IFile } from '../types';
 import { NODE_ACTIONS, NODE_TYPES } from './constants';
 import { INodeState } from './reducer';
 
+export const nodeSet = (node: Partial<INodeState>) => ({
+  node,
+  type: NODE_ACTIONS.SET,
+});
+
 export const nodeSave = (node: INode) => ({
   node,
   type: NODE_ACTIONS.SAVE,
@@ -107,6 +112,11 @@ export const nodeLockComment = (id: IComment['id'], is_locked: boolean) => ({
   type: NODE_ACTIONS.LOCK_COMMENT,
   id,
   is_locked,
+});
+
+export const nodeEditComment = (id: IComment['id']) => ({
+  type: NODE_ACTIONS.EDIT_COMMENT,
+  id,
 });
 
 export const nodeSetEditor = (editor: INode) => ({

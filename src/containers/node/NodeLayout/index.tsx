@@ -20,7 +20,7 @@ import { selectUser } from '~/redux/auth/selectors';
 import pick from 'ramda/es/pick';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
-import { IComment } from '~/redux/types';
+import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -36,6 +36,7 @@ const mapDispatchToProps = {
   nodeStar: NODE_ACTIONS.nodeStar,
   nodeLock: NODE_ACTIONS.nodeLock,
   nodeLockComment: NODE_ACTIONS.nodeLockComment,
+  nodeEditComment: NODE_ACTIONS.nodeEditComment,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -47,7 +48,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     match: {
       params: { id },
     },
-    node: { is_loading, is_loading_comments, comments = [], current: node, related },
+    node: { is_loading, is_loading_comments, comments = [], current: node, related, comment_data },
     user,
     user: { is_user },
     nodeGotoNode,
@@ -58,6 +59,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     nodeLock,
     nodeSetCoverImage,
     nodeLockComment,
+    nodeEditComment,
   }) => {
     const [layout, setLayout] = useState({});
 
@@ -131,10 +133,16 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                   {is_loading || is_loading_comments || (!comments.length && !inline_block) ? (
                     <NodeNoComments is_loading={is_loading_comments || is_loading} />
                   ) : (
-                    <NodeComments comments={comments} user={user} onDelete={nodeLockComment} />
+                    <NodeComments
+                      comments={comments}
+                      comment_data={comment_data}
+                      user={user}
+                      onDelete={nodeLockComment}
+                      onEdit={nodeEditComment}
+                    />
                   )}
 
-                  {is_user && !is_loading && <CommentForm id={0} />}
+                  {is_user && !is_loading && <NodeCommentForm />}
                 </Group>
 
                 <div className={styles.panel}>

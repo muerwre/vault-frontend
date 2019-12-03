@@ -7,14 +7,18 @@ import { ICommentGroup, IComment } from '~/redux/types';
 import { groupCommentsByUser } from '~/utils/fn';
 import { IUser } from '~/redux/auth/types';
 import { canEditComment } from '~/utils/node';
+import { nodeLockComment, nodeEditComment } from '~/redux/node/actions';
+import { INodeState } from '~/redux/node/reducer';
 
 interface IProps {
   comments?: IComment[];
+  comment_data: INodeState['comment_data'];
   user: IUser;
-  onDelete: (id: IComment['id'], is_deteted: boolean) => void;
+  onDelete: typeof nodeLockComment;
+  onEdit: typeof nodeEditComment;
 }
 
-const NodeComments: FC<IProps> = memo(({ comments, user, onDelete }) => {
+const NodeComments: FC<IProps> = memo(({ comments, comment_data, user, onDelete, onEdit }) => {
   const groupped: ICommentGroup[] = useMemo(() => comments.reduce(groupCommentsByUser, []), [
     comments,
   ]);
@@ -25,8 +29,10 @@ const NodeComments: FC<IProps> = memo(({ comments, user, onDelete }) => {
         <Comment
           key={group.ids.join()}
           comment_group={group}
+          comment_data={comment_data}
           can_edit={canEditComment(group, user)}
           onDelete={onDelete}
+          onEdit={onEdit}
         />
       ))}
 

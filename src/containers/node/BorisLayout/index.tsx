@@ -11,6 +11,7 @@ import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { getRandomPhrase } from '~/constants/phrases';
+import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -20,6 +21,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
   nodeLockComment: NODE_ACTIONS.nodeLockComment,
+  nodeEditComment: NODE_ACTIONS.nodeEditComment,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -29,11 +31,12 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const id = 696;
 
 const BorisLayoutUnconnected: FC<IProps> = ({
-  node: { is_loading, is_loading_comments, comments = [] },
+  node: { is_loading, is_loading_comments, comments = [], comment_data },
   user,
   user: { is_user },
   nodeLoadNode,
   nodeLockComment,
+  nodeEditComment,
 }) => {
   const title = getRandomPhrase('BORIS_TITLE');
 
@@ -77,12 +80,18 @@ const BorisLayoutUnconnected: FC<IProps> = ({
         </div>
 
         <Group className={styles.content}>
-          {is_user && <CommentForm id={0} is_before />}
+          {is_user && <NodeCommentForm is_before />}
 
           {is_loading_comments ? (
             <NodeNoComments is_loading />
           ) : (
-            <NodeComments comments={comments} user={user} onDelete={nodeLockComment} />
+            <NodeComments
+              comments={comments}
+              comment_data={comment_data}
+              user={user}
+              onDelete={nodeLockComment}
+              onEdit={nodeEditComment}
+            />
           )}
         </Group>
       </div>

@@ -19,12 +19,14 @@ export const NODE_ACTIONS = {
   SAVE: `${prefix}SAVE`,
   LOAD_NODE: `${prefix}LOAD_NODE`,
   GOTO_NODE: `${prefix}GOTO_NODE`,
+  SET: `${prefix}SET`,
 
   EDIT: `${prefix}EDIT`,
   LIKE: `${prefix}LIKE`,
   STAR: `${prefix}STAR`,
   LOCK: `${prefix}LOCK`,
   LOCK_COMMENT: `${prefix}LOCK_COMMENT`,
+  EDIT_COMMENT: `${prefix}EDIT_COMMENT`,
   CREATE: `${prefix}CREATE`,
 
   SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,

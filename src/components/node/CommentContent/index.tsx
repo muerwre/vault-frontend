@@ -13,14 +13,17 @@ import classnames from 'classnames';
 import { PRESETS } from '~/constants/urls';
 import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
 import { Icon } from '~/components/input/Icon';
+import { nodeLockComment, nodeEditComment } from '~/redux/node/actions';
+import { CommentMenu } from '../CommentMenu';
 
 interface IProps {
   comment: IComment;
   can_edit: boolean;
-  onDelete: (id: IComment['id'], is_deteted: boolean) => void;
+  onDelete: typeof nodeLockComment;
+  onEdit: typeof nodeEditComment;
 }
 
-const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete }) => {
+const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, onEdit }) => {
   const groupped = useMemo<Record<keyof typeof UPLOAD_TYPES, IFile[]>>(
     () =>
       reduce(
@@ -35,23 +38,20 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete }) => {
     onDelete(comment.id, !comment.deleted_at);
   }, [comment, onDelete]);
 
-  const lock = useMemo(
-    () =>
-      can_edit ? (
-        <div className={styles.lock} onClick={onLockClick}>
-          <div>
-            <Icon icon="close" />
-          </div>
-        </div>
-      ) : null,
-    [can_edit, comment]
+  const onEditClick = useCallback(() => {
+    onEdit(comment.id);
+  }, [comment, onEdit]);
+
+  const menu = useMemo(
+    () => can_edit && <CommentMenu onDelete={onLockClick} onEdit={onEditClick} />,
+    [can_edit, comment, onEditClick, onLockClick]
   );
 
   return (
     <div className={styles.wrap}>
       {comment.text && (
         <Group className={classnames(styles.block, styles.block_text)}>
-          {lock}
+          {menu}
 
           {formatCommentText(path(['user', 'username'], comment), comment.text).map(
             (block, key) =>
@@ -65,7 +65,7 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete }) => {
 
       {groupped.image && groupped.image.length > 0 && (
         <div className={classnames(styles.block, styles.block_image)}>
-          {lock}
+          {menu}
 
           <div className={styles.images}>
             {groupped.image.map(file => (
@@ -83,6 +83,8 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete }) => {
         <>
           {groupped.audio.map(file => (
             <div className={classnames(styles.block, styles.block_audio)} key={file.id}>
+              {menu}
+
               <AudioPlayer file={file} />
 
               <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
