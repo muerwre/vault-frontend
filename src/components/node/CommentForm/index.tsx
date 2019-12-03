@@ -21,6 +21,7 @@ import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 import { moveArrItem } from '~/utils/fn';
 import { SortEnd } from 'react-sortable-hoc';
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
+import { getRandomPhrase } from '~/constants/phrases';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -201,6 +202,8 @@ const CommentFormUnconnected: FC<IProps> = ({
     nodeCancelCommentEdit(id);
   }, [nodeCancelCommentEdit, comment.id]);
 
+  const placeholder = getRandomPhrase('SIMPLE');
+
   return (
     <form onSubmit={onSubmit} className={styles.wrap}>
       <div className={styles.input}>
@@ -209,6 +212,7 @@ const CommentFormUnconnected: FC<IProps> = ({
           handler={onInput}
           onKeyDown={onKeyDown}
           disabled={is_sending_comment}
+          placeholder={placeholder}
           minRows={2}
         />
       </div>
