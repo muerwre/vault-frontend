@@ -1,6 +1,5 @@
 import React, { FC, useCallback, KeyboardEventHandler, useEffect, useMemo } from 'react';
 import { Textarea } from '~/components/input/Textarea';
-import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import * as styles from './styles.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
@@ -30,6 +29,7 @@ const mapStateToProps = (state: IState) => ({
 
 const mapDispatchToProps = {
   nodePostComment: NODE_ACTIONS.nodePostComment,
+  nodeCancelCommentEdit: NODE_ACTIONS.nodeCancelCommentEdit,
   nodeSetCommentData: NODE_ACTIONS.nodeSetCommentData,
   uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
 };
@@ -48,6 +48,7 @@ const CommentFormUnconnected: FC<IProps> = ({
   nodePostComment,
   nodeSetCommentData,
   uploadUploadFiles,
+  nodeCancelCommentEdit,
 }) => {
   const onInputChange = useCallback(
     event => {
@@ -196,6 +197,10 @@ const CommentFormUnconnected: FC<IProps> = ({
     [images, audios]
   );
 
+  const onCancelEdit = useCallback(() => {
+    nodeCancelCommentEdit(id);
+  }, [nodeCancelCommentEdit, comment.id]);
+
   return (
     <form onSubmit={onSubmit} className={styles.wrap}>
       <div className={styles.input}>
@@ -251,6 +256,12 @@ const CommentFormUnconnected: FC<IProps> = ({
         <Filler />
 
         {(is_sending_comment || is_uploading_files) && <LoaderCircle size={20} />}
+
+        {id !== 0 && (
+          <Button size="small" color="link" type="button" onClick={onCancelEdit}>
+            Отмена
+          </Button>
+        )}
 
         <Button
           size="small"

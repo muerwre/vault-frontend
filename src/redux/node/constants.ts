@@ -27,6 +27,7 @@ export const NODE_ACTIONS = {
   LOCK: `${prefix}LOCK`,
   LOCK_COMMENT: `${prefix}LOCK_COMMENT`,
   EDIT_COMMENT: `${prefix}EDIT_COMMENT`,
+  CANCEL_COMMENT_EDIT: `${prefix}CANCEL_COMMENT_EDIT`,
   CREATE: `${prefix}CREATE`,
 
   SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,

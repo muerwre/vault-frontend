@@ -50,6 +50,11 @@ export const nodePostComment = (id: number, is_before: boolean) => ({
   type: NODE_ACTIONS.POST_COMMENT,
 });
 
+export const nodeCancelCommentEdit = (id: number) => ({
+  id,
+  type: NODE_ACTIONS.CANCEL_COMMENT_EDIT,
+});
+
 export const nodeSetSendingComment = (is_sending_comment: boolean) => ({
   is_sending_comment,
   type: NODE_ACTIONS.SET_SENDING_COMMENT,

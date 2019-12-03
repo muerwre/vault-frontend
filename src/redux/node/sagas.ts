@@ -26,6 +26,7 @@ import {
   nodeLockComment,
   nodeEditComment,
   nodeSet,
+  nodeCancelCommentEdit,
 } from './actions';
 import {
   postNode,
@@ -197,6 +198,16 @@ function* onPostComment({ id, is_before }: ReturnType<typeof nodePostComment>) {
   }
 }
 
+function* onCancelCommentEdit({ id }: ReturnType<typeof nodeCancelCommentEdit>) {
+  const { comment_data } = yield select(selectNode);
+
+  yield put(
+    nodeSet({
+      comment_data: omit([id.toString()], comment_data),
+    })
+  );
+}
+
 function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
   yield delay(1000);
   const {
@@ -311,6 +322,7 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
+  yield takeLatest(NODE_ACTIONS.CANCEL_COMMENT_EDIT, onCancelCommentEdit);
   yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
   yield takeLatest(NODE_ACTIONS.CREATE, onCreateSaga);
   yield takeLatest(NODE_ACTIONS.EDIT, onEditSaga);
