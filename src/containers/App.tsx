@@ -18,7 +18,7 @@ import { NodeLayout } from './node/NodeLayout';
 import { BottomContainer } from '~/containers/main/BottomContainer';
 import { BorisLayout } from './node/BorisLayout';
 import { ErrorNotFound } from './pages/ErrorNotFound';
-import { ProfileLayout } from './profile/ProfileLayout';
+import { ProfilePage } from './profile/ProfilePage';
 
 const mapStateToProps = state => ({
   modal: selectModal(state),
@@ -44,6 +44,7 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
               <Route path={URLS.NODE_URL(':id')} component={NodeLayout} />
               <Route path={URLS.BORIS} component={BorisLayout} />
               <Route path={URLS.ERRORS.NOT_FOUND} component={ErrorNotFound} />
+              <Route path={URLS.PROFILE_PAGE} component={ProfilePage} />
 
               <Redirect to="/" />
             </Switch>
