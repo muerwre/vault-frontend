@@ -5,23 +5,25 @@
   width: 48px;
   height: 48px;
   z-index: 3;
+  outline: none;
+  cursor: pointer;
 
   &:hover {
-    .menu {
-      display: flex;
+    .dot {
+      background: $secondary;
     }
   }
+}
 
-  &::before {
-    content: ' ';
-    width: 10px;
-    height: 10px;
-    border-radius: 100%;
-    background: transparentize(black, 0.7);
-    position: absolute;
-    right: 5px;
-    top: 5px;
-  }
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  background: transparentize(black, 0.7);
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  transition: background 0.25s;
 }
 
 @keyframes appear {
@@ -35,9 +37,9 @@
 
 .menu {
   position: absolute;
-  right: 0;
-  top: 0;
-  display: none;
+  right: 5px;
+  top: 5px;
+  display: flex;
   flex-direction: column;
   z-index: 6;
 

@@ -1,4 +1,4 @@
-import React, { FC, useMemo, memo, createElement, useCallback } from 'react';
+import React, { FC, useMemo, memo, createElement, useCallback, useState } from 'react';
 import { IComment, IFile } from '~/redux/types';
 import path from 'ramda/es/path';
 import { formatCommentText, getURL, getPrettyDate } from '~/utils/dom';

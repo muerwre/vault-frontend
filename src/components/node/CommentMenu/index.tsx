@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useCallback } from 'react';
 import styles from './styles.scss';
 
 interface IProps {
@@ -7,12 +7,25 @@ interface IProps {
 }
 
 const CommentMenu: FC<IProps> = ({ onEdit, onDelete }) => {
+  const [is_menu_opened, setIsMenuOpened] = useState(false);
+
+  const onFocus = useCallback(() => setIsMenuOpened(true), [setIsMenuOpened]);
+  const onBlur = useCallback(() => setIsMenuOpened(false), [setIsMenuOpened]);
+
   return (
-    <div className={styles.wrap}>
-      <div className={styles.menu}>
-        <div className={styles.item}>Редактировать</div>
-        <div className={styles.item}>Удалить</div>
-      </div>
+    <div className={styles.wrap} onFocus={onFocus} onBlur={onBlur} tabIndex={-1}>
+      <div className={styles.dot} />
+
+      {is_menu_opened && (
+        <div className={styles.menu}>
+          <div className={styles.item} onMouseDown={onEdit}>
+            Редактировать
+          </div>
+          <div className={styles.item} onMouseDown={onDelete}>
+            Удалить
+          </div>
+        </div>
+      )}
     </div>
   );
 };
