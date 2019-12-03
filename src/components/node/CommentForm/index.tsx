@@ -244,11 +244,11 @@ const CommentFormUnconnected: FC<IProps> = ({
 
       <Group horizontal className={styles.buttons}>
         <ButtonGroup>
-          <Button iconLeft="image" size="small" color="gray" iconOnly>
+          <Button iconLeft="photo" size="small" color="gray" iconOnly>
             <input type="file" onInput={onInputChange} multiple accept="image/*" />
           </Button>
 
-          <Button iconRight="enter" size="small" color="gray" iconOnly>
+          <Button iconRight="audio" size="small" color="gray" iconOnly>
             <input type="file" onInput={onInputChange} multiple accept="audio/*" />
           </Button>
         </ButtonGroup>

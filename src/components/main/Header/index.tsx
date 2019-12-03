@@ -4,22 +4,25 @@ import { push as historyPush } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import { Logo } from '~/components/main/Logo';
 
-import * as style from './style.scss';
 import { Filler } from '~/components/containers/Filler';
 import { selectUser } from '~/redux/auth/selectors';
 import { Group } from '~/components/containers/Group';
-import * as MODAL_ACTIONS from '~/redux/modal/actions';
-import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { DIALOGS } from '~/redux/modal/constants';
-import { pick } from 'ramda';
+import pick from 'ramda/es/pick';
+import path from 'ramda/es/path';
 import { UserButton } from '../UserButton';
 import { Notifications } from '../Notifications';
 import { URLS } from '~/constants/urls';
 import { createPortal } from 'react-dom';
 import classNames from 'classnames';
 
+import * as style from './style.scss';
+import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import * as AUTH_ACTIONS from '~/redux/auth/actions';
+
 const mapStateToProps = state => ({
   user: pick(['username', 'is_user', 'photo'])(selectUser(state)),
+  pathname: path(['router', 'location', 'pathname'], state),
 });
 
 const mapDispatchToProps = {
@@ -32,11 +35,10 @@ const mapDispatchToProps = {
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const HeaderUnconnected: FC<IProps> = memo(
-  ({ user, user: { username, is_user }, showDialog, authLogout, authOpenProfile }) => {
+  ({ user, user: { is_user }, showDialog, pathname, authLogout, authOpenProfile }) => {
     const [is_scrolled, setIsScrolled] = useState(false);
 
     const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
-    // const onProfileClick = useCallback(() => authOpenProfile(username), [authOpenProfile, user]);
 
     const onScroll = useCallback(() => {
       const active = window.scrollY > 32;
@@ -61,13 +63,20 @@ const HeaderUnconnected: FC<IProps> = memo(
           <Filler />
 
           <div className={style.plugs}>
-            <Link className={style.item} to={URLS.BASE}>
+            <Link
+              className={classNames(style.item, { [style.is_active]: pathname === URLS.BASE })}
+              to={URLS.BASE}
+            >
               ФЛОУ
             </Link>
 
-            <Link className={style.item} to={URLS.BORIS}>
+            <Link
+              className={classNames(style.item, { [style.is_active]: pathname === URLS.BORIS })}
+              to={URLS.BORIS}
+            >
               БОРИС
             </Link>
+
             {is_user && (
               <div className={style.item}>
                 <Notifications />
