@@ -19,9 +19,6 @@ render(
 );
 
 /*
-  [Stage 0]:
-  - illustrate 404
-  
   [stage 1]
   - check if email is registered at social login
   - profile cover upload
