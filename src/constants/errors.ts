@@ -16,6 +16,7 @@ export const ERRORS = {
   INCORRECT_PASSWORD: 'Incorrect_Password',
   CODE_IS_INVALID: 'Code_Is_Invalid',
   DOESNT_MATCH: 'Doesnt_Match',
+  REQUIRED: 'Required',
 };
 
 export const ERROR_LITERAL = {
@@ -36,4 +37,5 @@ export const ERROR_LITERAL = {
   [ERRORS.INCORRECT_PASSWORD]: 'Неправильный пароль',
   [ERRORS.CODE_IS_INVALID]: 'Код не существует или устарел',
   [ERRORS.DOESNT_MATCH]: 'Пароли не совпадают',
+  [ERRORS.REQUIRED]: 'Обязательное поле',
 };
