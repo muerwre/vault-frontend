@@ -76,19 +76,6 @@
     color: $red;
   }
 
-  &::after {
-    content: ' ';
-    margin-left: $spc;
-    background: white;
-    width: 4px;
-    height: $gap;
-    display: block;
-    opacity: 0.2;
-    border-radius: 4px;
-    position: absolute;
-    right: -2px;
-  }
-
   &::before {
     content: ' ';
     position: absolute;
@@ -101,13 +88,6 @@
     opacity: 0;
     border-radius: 3px;
     transition: transform 0.5s, opacity 0.25s;
-  }
-
-  &.is_active {
-    &::before {
-      transform: translate(50%, 0) scaleX(1);
-      opacity: 1;
-    }
   }
 
   @include tablet {
