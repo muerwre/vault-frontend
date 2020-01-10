@@ -17,6 +17,7 @@ export const ERRORS = {
   CODE_IS_INVALID: 'Code_Is_Invalid',
   DOESNT_MATCH: 'Doesnt_Match',
   REQUIRED: 'Required',
+  COMMENT_NOT_FOUND: 'Comment_Not_Found',
 };
 
 export const ERROR_LITERAL = {
@@ -38,4 +39,5 @@ export const ERROR_LITERAL = {
   [ERRORS.CODE_IS_INVALID]: 'Код не существует или устарел',
   [ERRORS.DOESNT_MATCH]: 'Пароли не совпадают',
   [ERRORS.REQUIRED]: 'Обязательное поле',
+  [ERRORS.COMMENT_NOT_FOUND]: 'Комментарий не найден',
 };
