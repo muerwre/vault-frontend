@@ -19,13 +19,14 @@ export const EMPTY_FILE: IFile = {
   user_id: null,
   node_id: null,
 
-  name: 'mario-collage-800x450.jpg',
-  path: '/wp-content/uploads/2017/09/',
-  full_path: '/wp-content/uploads/2017/09/mario-collage-800x450.jpg',
-  url: 'https://cdn.arstechnica.net/wp-content/uploads/2017/09/mario-collage-800x450.jpg',
-  size: 2400000,
-  type: 'image',
-  mime: 'image/jpeg',
+  name: '',
+  orig_name: '',
+  path: '',
+  full_path: '',
+  url: '',
+  size: 0,
+  type: null,
+  mime: '',
 };
 
 export const EMPTY_UPLOAD_STATUS: IUploadStatus = {

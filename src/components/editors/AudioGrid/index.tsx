@@ -28,9 +28,21 @@ const AudioGrid: FC<IProps> = ({ files, setFiles, locked }) => {
     [setFiles, files]
   );
 
+  const onTitleChange = useCallback(
+    (changeId: IFile['id'], title: IFile['metadata']['title']) => {
+      setFiles(
+        files.map(file =>
+          file && file.id === changeId ? { ...file, metadata: { ...file.metadata, title } } : file
+        )
+      );
+    },
+    [setFiles, files]
+  );
+
   return (
     <SortableAudioGrid
       onDrop={onDrop}
+      onTitleChange={onTitleChange}
       onSortEnd={onMove}
       axis="xy"
       items={files}

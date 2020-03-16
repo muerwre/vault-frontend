@@ -64,6 +64,7 @@ export interface IFile {
   node_id?: UUID;
 
   name: string;
+  orig_name: string;
   path: string;
   full_path: string;
   url: string;
