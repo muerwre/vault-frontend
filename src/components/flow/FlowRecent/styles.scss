@@ -26,7 +26,8 @@
 .thumb {
   height: 48px;
   margin-right: $gap;
-  background: 50% 50% no-repeat/cover;
+  background: 50% 50% no-repeat;
+  background-size: cover;
   border-radius: $radius;
   flex: 0 0 48px;
   display: flex;

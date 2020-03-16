@@ -55,7 +55,8 @@ $outgoing_color: $comment_bg;
   flex: 0 0 40px;
   border-radius: $radius;
 
-  background: 50% 50% no-repeat/cover;
+  background: 50% 50% no-repeat;
+  background-size: cover;
   // display: none;
 }
 

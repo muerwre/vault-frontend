@@ -18,7 +18,8 @@
   align-items: center;
   justify-content: flex-start;
   box-sizing: border-box;
-  background: url('~/sprites/lost.svg') 50% 50% no-repeat/cover;
+  background: url('~/sprites/lost.svg') 50% 50% no-repeat;
+  background-size: cover;
   text-transform: uppercase;
   text-align: center;
 

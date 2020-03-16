@@ -4,7 +4,8 @@
   border-radius: $radius;
   width: 100px;
   height: 100px;
-  background: $content_bg 50% 50% no-repeat/cover;
+  background: $content_bg 50% 50% no-repeat;
+  background-size: cover;
   position: absolute;
   bottom: 0;
   left: $gap;
@@ -40,11 +41,7 @@
   justify-content: flex-end;
   padding: $gap / 2;
   box-sizing: border-box;
-  background: linear-gradient(
-    330deg,
-    $content_bg,
-    transparentize($content_bg, 1)
-  );
+  background: linear-gradient(330deg, $content_bg, transparentize($content_bg, 1));
   border-radius: $radius;
 
   svg {
