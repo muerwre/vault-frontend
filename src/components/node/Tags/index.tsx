@@ -32,7 +32,7 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
           tag.title.substr(0, 1) === '/' ? [[...obj[0], tag], obj[1]] : [obj[0], [...obj[1], tag]],
         [[], []]
       ),
-    []
+    [tags]
   );
 
   const onInput = useCallback(
