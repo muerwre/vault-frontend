@@ -14,6 +14,10 @@
     "url": "https://github.com/muerwre/my-empty-react-project"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.7",
+    "@types/node": "^11.13.22",
+    "@types/ramda": "^0.26.33",
+    "@types/react": "16.9.23",
     "@babel/cli": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "@babel/types": "7.5.5",
@@ -50,10 +54,6 @@
   "license": "MIT",
   "dependencies": {
     "@hot-loader/react-dom": "^16.10.2",
-    "@types/classnames": "^2.2.7",
-    "@types/node": "^11.13.22",
-    "@types/ramda": "^0.26.33",
-    "@types/react": "16.8.23",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "axios": "^0.18.0",
@@ -87,8 +87,8 @@
     "node-sass": "^4.11.0",
     "raleway-cyrillic": "^4.0.2",
     "ramda": "^0.26.1",
-    "react": "16.8.6",
-    "react-dom": "^16.10.2",
+    "react": "16.13.0",
+    "react-dom": "^16.13.0",
     "react-hot-loader": "^4.12.15",
     "react-packery-component": "^1.0.2",
     "react-redux": "^6.0.1",
