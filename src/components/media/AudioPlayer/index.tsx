@@ -127,7 +127,11 @@ const AudioPlayerUnconnected = memo(
 
         {isEditing ? (
           <div className={styles.input}>
-            <InputText value={title} handler={onRename} />
+            <InputText
+              placeholder={title}
+              handler={onRename}
+              value={file.metadata && file.metadata.title}
+            />
           </div>
         ) : (
           <div className={styles.content}>
