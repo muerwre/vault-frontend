@@ -35,17 +35,17 @@ const Cell: FC<IProps> = ({
 
     const { top, height } = ref.current.getBoundingClientRect();
 
-    const visibility = top + height > -window.innerHeight && top < window.innerHeight * 2;
-
+    // const visibility = top + height > -window.innerHeight && top < window.innerHeight * 2;
+    const visibility = top + height > -600 && top < window.innerHeight + 600;
     if (visibility !== is_visible) setIsVisible(visibility);
   }, [ref, is_visible, setIsVisible]);
 
-  const checkIfVisibleDebounced = useCallback(debounce(Math.random() * 200, checkIfVisible), [
+  const checkIfVisibleDebounced = useCallback(debounce(Math.random() * 100 + 100, checkIfVisible), [
     checkIfVisible,
   ]);
 
   useEffect(() => {
-    checkIfVisible();
+    checkIfVisibleDebounced();
   }, []);
 
   useEffect(() => {
