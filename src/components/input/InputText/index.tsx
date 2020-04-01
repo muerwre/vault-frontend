@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, useCallback, useState, useEffect } from 'react';
+import React, { FC, ChangeEvent, useCallback, useState, useEffect, LegacyRef } from 'react';
 import classNames from 'classnames';
 import * as styles from '~/styles/inputs.scss';
 import { Icon } from '~/components/input/Icon';
@@ -19,7 +19,7 @@ const InputText: FC<IInputTextProps> = ({
   ...props
 }) => {
   const [focused, setFocused] = useState(false);
-  const [inner_ref, setInnerRef] = useState();
+  const [inner_ref, setInnerRef] = useState<HTMLInputElement>(null);
 
   const onInput = useCallback(
     ({ target }: ChangeEvent<HTMLInputElement>) => handler(target.value),
