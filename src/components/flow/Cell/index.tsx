@@ -150,7 +150,7 @@ const Cell: FC<IProps> = ({
                 opacity: is_loaded ? 1 : 0,
               }}
             >
-              <img src={getURL({ url: thumbnail })} onLoad={onImageLoad} alt="" />
+              <img src={getURL({ url: thumbnail }, PRESETS.cover)} onLoad={onImageLoad} alt="" />
             </div>
           )}
         </>
