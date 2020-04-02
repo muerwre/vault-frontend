@@ -1,87 +1,60 @@
-import {
-  takeLatest,
-  call,
-  put,
-  select,
-  takeLeading,
-  delay
-} from "redux-saga/effects";
-import { REHYDRATE } from "redux-persist";
-import { FLOW_ACTIONS } from "./constants";
-import { getNodeDiff } from "../node/api";
+import { takeLatest, call, put, select, takeLeading, delay } from 'redux-saga/effects';
+import { REHYDRATE } from 'redux-persist';
+import { FLOW_ACTIONS } from './constants';
+import { getNodeDiff } from '../node/api';
 import {
   flowSetNodes,
   flowSetCellView,
   flowSetHeroes,
   flowSetRecent,
   flowSetUpdated,
-  flowSetFlow
-} from "./actions";
-import { IResultWithStatus, INode } from "../types";
-import { selectFlowNodes } from "./selectors";
-import { reqWrapper } from "../auth/sagas";
-import { postCellView } from "./api";
-import { IFlowState } from "./reducer";
-import uniq from "ramda/es/uniq";
+  flowSetFlow,
+} from './actions';
+import { IResultWithStatus, INode } from '../types';
+import { selectFlowNodes } from './selectors';
+import { reqWrapper } from '../auth/sagas';
+import { postCellView } from './api';
+import { IFlowState } from './reducer';
+import uniq from 'ramda/es/uniq';
 
 function hideLoader() {
-  document.getElementById("main_loader").style.display = "none";
+  document.getElementById('main_loader').style.display = 'none';
 }
 
 function* onGetFlow() {
   const {
-    flow: { _persist }
+    flow: { _persist },
   } = yield select();
 
   if (!_persist.rehydrated) return;
 
-  const stored: IFlowState["nodes"] = yield select(selectFlowNodes);
+  const stored: IFlowState['nodes'] = yield select(selectFlowNodes);
 
   if (stored.length) {
     hideLoader();
   }
 
-  // const start =
-  // (stored && stored[0] && stored[0].created_at) || new Date().toISOString();
-  //
-  // const end =
-  // (stored &&
-  // stored[stored.length - 1] &&
-  // stored[stored.length - 1].created_at) ||
-  // new Date().toISOString();
-
   yield put(flowSetFlow({ is_loading: true }));
 
   const {
-    data: {
-      before = [],
-      after = [],
-      heroes = [],
-      recent = [],
-      updated = [],
-      valid = null
-    }
+    data: { before = [], after = [], heroes = [], recent = [], updated = [], valid = null },
   }: IResultWithStatus<{
-    before: IFlowState["nodes"];
-    after: IFlowState["nodes"];
-    heroes: IFlowState["heroes"];
-    recent: IFlowState["recent"];
-    updated: IFlowState["updated"];
-    valid: INode["id"][];
+    before: IFlowState['nodes'];
+    after: IFlowState['nodes'];
+    heroes: IFlowState['heroes'];
+    recent: IFlowState['recent'];
+    updated: IFlowState['updated'];
+    valid: INode['id'][];
   }> = yield call(reqWrapper, getNodeDiff, {
     start: new Date().toISOString(),
     end: new Date().toISOString(),
     with_heroes: true,
     with_updated: true,
     with_recent: true,
-    with_valid: false
+    with_valid: false,
   });
 
-  const result = uniq([
-    ...(before || []),
-    // ...(valid ? stored.filter(node => valid.includes(node.id)) : stored),
-    ...(after || [])
-  ]);
+  const result = uniq([...(before || []), ...(after || [])]);
 
   yield put(flowSetFlow({ is_loading: false, nodes: result }));
 
@@ -94,20 +67,19 @@ function* onGetFlow() {
 
 function* onSetCellView({ id, flow }: ReturnType<typeof flowSetCellView>) {
   const nodes = yield select(selectFlowNodes);
-  yield put(
-    flowSetNodes(nodes.map(node => (node.id === id ? { ...node, flow } : node)))
-  );
+  yield put(flowSetNodes(nodes.map(node => (node.id === id ? { ...node, flow } : node))));
 
   const { data, error } = yield call(reqWrapper, postCellView, { id, flow });
+
+  // TODO: error handling
 }
 
 function* getMore() {
   yield put(flowSetFlow({ is_loading: true }));
-  const nodes: IFlowState["nodes"] = yield select(selectFlowNodes);
+  const nodes: IFlowState['nodes'] = yield select(selectFlowNodes);
 
   const start = nodes && nodes[0] && nodes[0].created_at;
-  const end =
-    nodes && nodes[nodes.length - 1] && nodes[nodes.length - 1].created_at;
+  const end = nodes && nodes[nodes.length - 1] && nodes[nodes.length - 1].created_at;
 
   const { error, data } = yield call(reqWrapper, getNodeDiff, {
     start,
@@ -115,17 +87,15 @@ function* getMore() {
     with_heroes: false,
     with_updated: true,
     with_recent: true,
-    with_valid: true
+    with_valid: true,
   });
 
   if (error || !data) return;
 
   const result = uniq([
     ...(data.before || []),
-    ...(data.valid
-      ? nodes.filter(node => data.valid.includes(node.id))
-      : nodes),
-    ...(data.after || [])
+    ...(data.valid ? nodes.filter(node => data.valid.includes(node.id)) : nodes),
+    ...(data.after || []),
   ]);
 
   yield put(
@@ -133,7 +103,7 @@ function* getMore() {
       is_loading: false,
       nodes: result,
       ...(data.recent ? { recent: data.recent } : {}),
-      ...(data.updated ? { updated: data.updated } : {})
+      ...(data.updated ? { updated: data.updated } : {}),
     })
   );
 
