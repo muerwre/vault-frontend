@@ -11,10 +11,10 @@
 .left {
   flex: 1;
   background: darken($content_bg, 2%);
-  border-radius: $radius 0 0 $radius;
+  border-radius: 0 $radius $radius 0;
   box-sizing: border-box;
 }
 
 .right {
-  flex: 3;
+  flex: 4;
 }

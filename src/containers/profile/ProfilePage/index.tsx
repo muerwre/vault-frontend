@@ -32,14 +32,15 @@ const ProfilePageUnconnected: FC<Props> = ({
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.left}>
-        <ProfilePageLeft profile={profile} username={username} />
-      </div>
       <div className={styles.right}>
         <Switch>
           <Route path="/profile/:username" render={() => <div>DEFAULT</div>} />
           <Route path="/profile/:username/tab" render={() => <div>TAB</div>} />
         </Switch>
+      </div>
+
+      <div className={styles.left}>
+        <ProfilePageLeft profile={profile} username={username} />
       </div>
     </div>
   );

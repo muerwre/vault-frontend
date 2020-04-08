@@ -7,8 +7,8 @@
 
 .avatar {
   width: 100%;
-  padding-bottom: 50%;
-  border-radius: $radius 0 0 0;
+  padding-bottom: 75%;
+  border-radius: 0 $radius 0 0;
   background: 50% 50% no-repeat;
   background-size: cover;
 }
@@ -25,7 +25,7 @@
   // background: $content_bg;
   background: darken($content_bg, 2%);
   width: 100%;
-  border-radius: $radius;
+  border-radius: 0 $radius $radius 0;
 }
 
 .name {
