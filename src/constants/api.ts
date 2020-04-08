@@ -6,9 +6,9 @@ export const API = {
     LOGIN: '/user/login',
     VKONTAKTE_LOGIN: `${process.env.API_HOST}/user/vkontakte`,
     ME: '/user/',
-    PROFILE: (username: string) => `/user/${username}/profile`,
-    MESSAGES: (username: string) => `/user/${username}/messages`,
-    MESSAGE_SEND: (username: string) => `/user/${username}/messages`,
+    PROFILE: (username: string) => `/user/user/${username}/profile`,
+    MESSAGES: (username: string) => `/user/user/${username}/messages`,
+    MESSAGE_SEND: (username: string) => `/user/user/${username}/messages`,
     GET_UPDATES: '/user/updates',
     REQUEST_CODE: (code?: string) => `/user/restore/${code || ''}`,
 
@@ -17,7 +17,7 @@ export const API = {
   NODE: {
     SAVE: '/node/',
     GET: '/node/',
-    GET_DIFF: '/node/diff',
+    GET_DIFF: '/nodes/diff',
     GET_NODE: (id: number | string) => `/node/${id}`,
 
     COMMENT: (id: INode['id']) => `/node/${id}/comment`,
