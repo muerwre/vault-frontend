@@ -15,14 +15,15 @@
 
 .region_wrap {
   width: 100%;
-  padding: 0 10px;
+  // padding: 0 10px;
   position: relative;
   margin-top: -$radius;
   box-sizing: border-box;
 }
 
 .region {
-  background: $content_bg;
+  // background: $content_bg;
+  background: darken($content_bg, 2%);
   width: 100%;
   border-radius: $radius;
 }
@@ -82,7 +83,8 @@
 .description {
   padding: $gap;
   box-sizing: border-box;
+  // background: darken($content_bg, 2%);
   background: darken($content_bg, 4%);
-  margin: 0 $gap;
+  // margin: 0 $gap;
   border-radius: 0 0 $radius $radius;
 }
