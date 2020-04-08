@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, useEffect, useRef } from 'react';
+import React, { FC, useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { INode } from '~/redux/types';
 import { getURL, formatCellText } from '~/utils/dom';
 import classNames from 'classnames';
@@ -11,6 +11,10 @@ import { debounce } from 'throttle-debounce';
 import { NODE_TYPES } from '~/redux/node/constants';
 import { Group } from '~/components/containers/Group';
 
+const THUMBNAIL_SIZES = {
+  horizontal: PRESETS.small_hero,
+  default: PRESETS.cover,
+};
 interface IProps {
   node: INode;
   is_text?: boolean;
@@ -97,6 +101,11 @@ const Cell: FC<IProps> = ({
     onChangeCellView(id, { show_description, display: 'quadro' });
   }, [id, flow, onChangeCellView]);
 
+  const thumb = useMemo(() => {
+    const preset = THUMBNAIL_SIZES[flow.display] || THUMBNAIL_SIZES.default;
+    return getURL({ url: thumbnail }, preset);
+  }, [thumbnail, flow.display]);
+
   return (
     <div className={classNames(styles.cell, styles[(flow && flow.display) || 'single'])} ref={ref}>
       {is_visible && (
@@ -146,11 +155,11 @@ const Cell: FC<IProps> = ({
             <div
               className={styles.thumbnail}
               style={{
-                backgroundImage: `url("${getURL({ url: thumbnail }, PRESETS.cover)}")`,
+                backgroundImage: `url("${thumb}")`,
                 opacity: is_loaded ? 1 : 0,
               }}
             >
-              <img src={getURL({ url: thumbnail }, PRESETS.cover)} onLoad={onImageLoad} alt="" />
+              <img src={thumb} onLoad={onImageLoad} alt="" />
             </div>
           )}
         </>
