@@ -102,9 +102,10 @@ const Cell: FC<IProps> = ({
   }, [id, flow, onChangeCellView]);
 
   const thumb = useMemo(() => {
-    const preset = THUMBNAIL_SIZES[flow.display] || THUMBNAIL_SIZES.default;
+    const preset =
+      (flow && flow.display && THUMBNAIL_SIZES[flow.display]) || THUMBNAIL_SIZES.default;
     return getURL({ url: thumbnail }, preset);
-  }, [thumbnail, flow.display]);
+  }, [thumbnail, flow]);
 
   return (
     <div className={classNames(styles.cell, styles[(flow && flow.display) || 'single'])} ref={ref}>
