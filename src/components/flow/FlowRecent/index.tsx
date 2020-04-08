@@ -5,6 +5,7 @@ import { getURL, getPrettyDate } from '~/utils/dom';
 import { Link } from 'react-router-dom';
 import { URLS, PRESETS } from '~/constants/urls';
 import classNames from 'classnames';
+import { NodeRelatedItem } from '~/components/node/NodeRelatedItem';
 
 interface IProps {
   recent: IFlowState['recent'];
@@ -31,10 +32,10 @@ const FlowRecent: FC<IProps> = ({ recent, updated }) => (
     {recent &&
       recent.slice(0, 20).map(node => (
         <Link key={node.id} className={styles.item} to={URLS.NODE_URL(node.id)}>
-          <div
-            className={styles.thumb}
-            style={{ backgroundImage: `url("${getURL({ url: node.thumbnail }, PRESETS.avatar)}")` }}
-          />
+          <div className={styles.thumb}>
+            <NodeRelatedItem item={node} />
+          </div>
+
           <div className={styles.info}>
             <div className={styles.title}>{node.title}</div>
             <div className={styles.comment}>{getPrettyDate(node.created_at)}</div>

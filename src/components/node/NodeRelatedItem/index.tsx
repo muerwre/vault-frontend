@@ -10,6 +10,18 @@ type IProps = RouteComponentProps & {
   item: Partial<INode>;
 };
 
+const getTitleLetters = (title: string): string => {
+  const words = title.split(' ');
+
+  return words.length > 1
+    ? words
+        .slice(0, 2)
+        .map(word => word[0])
+        .join('')
+        .toUpperCase()
+    : words[0].substr(0, 2).toUpperCase();
+};
+
 const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
   const [is_loaded, setIsLoaded] = useState(false);
   const onClick = useCallback(() => history.push(URLS.NODE_URL(item.id)), [item, history]);
@@ -24,6 +36,8 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
         className={styles.thumb}
         style={{ backgroundImage: `url("${getURL({ url: item.thumbnail }, PRESETS.avatar)}")` }}
       />
+
+      {!item.thumbnail && <div className={styles.letters}>{getTitleLetters(item.title)}</div>}
 
       <img
         src={getURL({ url: item.thumbnail }, PRESETS.avatar)}
