@@ -14,7 +14,7 @@ export const URLS = {
   },
   NODE_URL: (id: number | string) => `/post${id}`,
   PROFILE: (username: string) => `/~${username}`,
-  PROFILE_PAGE: `/profile`,
+  PROFILE_PAGE: (username: string) => `/profile/${username}`,
 };
 
 export const PRESETS = {

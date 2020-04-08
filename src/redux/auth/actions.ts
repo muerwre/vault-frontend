@@ -44,6 +44,11 @@ export const authOpenProfile = (username: string, tab?: IAuthState['profile']['t
   tab,
 });
 
+export const authLoadProfile = (username: string) => ({
+  type: AUTH_USER_ACTIONS.LOAD_PROFILE,
+  username,
+});
+
 export const authSetProfile = (profile: Partial<IAuthState['profile']>) => ({
   type: AUTH_USER_ACTIONS.SET_PROFILE,
   profile,

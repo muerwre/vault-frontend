@@ -30,6 +30,7 @@ export const FlowGrid: FC<IProps> = ({
       <div className={styles.hero}>
         <FlowHero heroes={heroes} />
       </div>
+
       <div className={styles.stamp}>
         <FlowRecent recent={recent} updated={updated} />
       </div>

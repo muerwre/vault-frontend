@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import { BetterScrollDialog } from '../BetterScrollDialog';
 import { ProfileInfo } from '~/containers/profile/ProfileInfo';
 import { IDialogProps } from '~/redux/types';

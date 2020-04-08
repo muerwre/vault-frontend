@@ -18,6 +18,7 @@ import {
   authSetRestore,
   authRequestRestoreCode,
   authRestorePassword,
+  authLoadProfile,
 } from '~/redux/auth/actions';
 import {
   apiUserLogin,
@@ -127,9 +128,8 @@ function* logoutSaga() {
   );
 }
 
-function* openProfile({ username, tab = 'profile' }: ReturnType<typeof authOpenProfile>) {
-  yield put(modalShowDialog(DIALOGS.PROFILE));
-  yield put(authSetProfile({ is_loading: true, tab }));
+function* loadProfile({ username }: ReturnType<typeof authLoadProfile>) {
+  yield put(authSetProfile({ is_loading: true }));
 
   const {
     error,
@@ -137,10 +137,22 @@ function* openProfile({ username, tab = 'profile' }: ReturnType<typeof authOpenP
   } = yield call(reqWrapper, apiAuthGetUserProfile, { username });
 
   if (error || !user) {
-    return yield put(modalSetShown(false));
+    return false;
   }
 
   yield put(authSetProfile({ is_loading: false, user, messages: [] }));
+  return true;
+}
+
+function* openProfile({ username, tab = 'profile' }: ReturnType<typeof authOpenProfile>) {
+  yield put(modalShowDialog(DIALOGS.PROFILE));
+  yield put(authSetProfile({ tab }));
+
+  const success: boolean = yield call(loadProfile, authLoadProfile(username));
+
+  if (!success) {
+    return yield put(modalSetShown(false));
+  }
 }
 
 function* getMessages({ username }: ReturnType<typeof authGetMessages>) {
@@ -354,6 +366,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.SEND_LOGIN_REQUEST, sendLoginRequestSaga);
   yield takeLatest(AUTH_USER_ACTIONS.GOT_AUTH_POST_MESSAGE, gotPostMessageSaga);
   yield takeLatest(AUTH_USER_ACTIONS.OPEN_PROFILE, openProfile);
+  yield takeLatest(AUTH_USER_ACTIONS.LOAD_PROFILE, loadProfile);
   yield takeLatest(AUTH_USER_ACTIONS.GET_MESSAGES, getMessages);
   yield takeLatest(AUTH_USER_ACTIONS.SEND_MESSAGE, sendMessage);
   yield takeLatest(AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES, setLastSeenMessages);
