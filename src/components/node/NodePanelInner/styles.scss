@@ -24,18 +24,19 @@
 .content {
   flex: 0 1 $content_width;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: stretch;
   border-radius: $radius $radius 0 0;
   box-sizing: border-box;
   padding: $gap;
   background: $node_bg;
-  // height: 72px;
 
   @include outer_shadow();
 
   @include tablet {
     border-radius: 0;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   @include can_backdrop {
@@ -51,7 +52,7 @@
   padding-bottom: 6px;
 
   @include tablet {
-    font-size: 16px;
+    // font-size: 16px;
     word-break: break-word;
     padding-bottom: 0;
     padding-top: 10px;
@@ -84,7 +85,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
 
   & > * {
     margin: 0 $gap;
@@ -124,6 +124,11 @@
         display: none;
       }
     }
+  }
+
+  @include tablet {
+    margin-top: $gap * 2;
+    align-self: center;
   }
 }
 

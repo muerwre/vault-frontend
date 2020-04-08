@@ -1,18 +1,20 @@
-@keyframes fade {
-  0% {
-    // opacity: 0.25;
-  }
-  100% {
-    // opacity: 0.1;
-  }
-}
 .wrap {
   user-select: none;
-  height: 300px;
+  // height: 300px;
   overflow: hidden;
   position: relative;
+  flex: 0 0 auto;
 
-  // @include after_shade($node_bg);
+  &::after {
+    content: ' ';
+    position: absolute;
+    background: linear-gradient(transparentize($node_bg, 1), $node_bg);
+    border-radius: 0 0 $radius $radius;
+    height: 100px;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+  }
 
   &:global(.is_loading) {
     opacity: 1;
@@ -21,6 +23,10 @@
       background: $placeholder_bg;
       animation: fade 0.5s infinite alternate;
     }
+  }
+
+  @include tablet {
+    display: none;
   }
 }
 
@@ -36,14 +42,4 @@
   font: $font_18_semibold;
   color: transparentize(white, 0.5);
   flex: 0 0 $comment_height;
-
-  // @include outer_shadow();
-
-  &:nth-child(2) {
-    // animation-delay: -300ms !important;
-  }
-
-  &:nth-child(3) {
-    // animation-delay: -600ms !important;
-  }
 }

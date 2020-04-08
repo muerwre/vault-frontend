@@ -35,8 +35,6 @@ const NodeComments: FC<IProps> = memo(({ comments, comment_data, user, onDelete,
           onEdit={onEdit}
         />
       ))}
-
-      <Filler />
     </div>
   );
 });
