@@ -51,6 +51,10 @@ const ProfilePageLeft: FC<IProps> = ({ username, profile }) => {
           </div>
         </div>
       </div>
+
+      {profile && profile.user && profile.user.description && (
+        <div className={styles.description}>{profile.user.description}</div>
+      )}
     </div>
   );
 };

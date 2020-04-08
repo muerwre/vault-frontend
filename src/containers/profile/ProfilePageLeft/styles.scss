@@ -1,6 +1,6 @@
 .wrap {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: stretch;
   flex-direction: column;
 }
@@ -17,7 +17,7 @@
   width: 100%;
   padding: 0 10px;
   position: relative;
-  top: -$radius;
+  margin-top: -$radius;
   box-sizing: border-box;
 }
 
@@ -25,7 +25,6 @@
   background: $content_bg;
   width: 100%;
   border-radius: $radius;
-  box-shadow: rgba(0, 0, 0, 0.3) 0 2px;
 }
 
 .name {
@@ -52,6 +51,7 @@
   width: 100%;
   flex-direction: column;
   box-sizing: border-box;
+  display: none;
 
   a {
     width: 100%;
@@ -76,4 +76,12 @@
     margin-right: $gap;
     fill: currentColor;
   }
+}
+
+.description {
+  padding: $gap;
+  box-sizing: border-box;
+  background: darken($content_bg, 4%);
+  margin: 0 $gap;
+  border-radius: 0 0 $radius $radius;
 }
