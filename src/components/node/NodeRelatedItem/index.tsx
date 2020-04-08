@@ -11,7 +11,9 @@ type IProps = RouteComponentProps & {
 };
 
 const getTitleLetters = (title: string): string => {
-  const words = title.split(' ');
+  const words = (title && title.split(' ')) || [];
+
+  if (!words.length) return '';
 
   return words.length > 1
     ? words
