@@ -56,6 +56,10 @@ const NodeComments: FC<IProps> = memo(
               'комментариев'
             )}
             {comments_left > COMMENTS_DISPLAY ? ` из ${comments_left} оставшихся` : ''}
+            <div
+              className={styles.bar}
+              style={{ width: `${(comments_left / comment_count) * 100}%` }}
+            />
           </div>
         ),
       [comments_left, onLoadMore, COMMENTS_DISPLAY]

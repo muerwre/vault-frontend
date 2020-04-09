@@ -15,16 +15,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: darken($comment_bg, 8%);
   border-radius: $radius;
   text-transform: uppercase;
-  color: darken(white, 50%);
-  font: $font_14_regular;
+  color: darken(white, 60%);
+  font: $font_14_medium;
   cursor: pointer;
-  transition: background-color 0.25s;
+  transition: all 0.25s;
   user-select: none;
+  background: url('~/sprites/stripes.svg');
+  position: relative;
 
   &:hover {
-    background-color: lighten($comment_bg, 4%);
+    color: $wisegreen;
+    background-color: darken($wisegreen, 12%);
+
+    .bar {
+      background: $wisegreen;
+    }
   }
+}
+
+.bar {
+  position: absolute;
+  height: 2px;
+  border-radius: 2px;
+  background: darken(white, 60%);
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 50%;
+  transition: width 0.25s;
 }
