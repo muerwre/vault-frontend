@@ -103,7 +103,7 @@ export const getNodeComments = ({
   access: string;
   take?: number;
   skip?: number;
-}): Promise<IResultWithStatus<{ comments: Comment[] }>> =>
+}): Promise<IResultWithStatus<{ comments: IComment[]; comment_count: number }>> =>
   api
     .get(API.NODE.COMMENT(id), configWithToken(access, { params: { take, skip } }))
     .then(resultMiddleware)

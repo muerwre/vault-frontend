@@ -15,7 +15,6 @@ import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
 import { NODE_COMPONENTS, NODE_INLINES } from '~/redux/node/constants';
 import * as NODE_ACTIONS from '~/redux/node/actions';
-import { CommentForm } from '~/components/node/CommentForm';
 import { selectUser } from '~/redux/auth/selectors';
 import pick from 'ramda/es/pick';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
@@ -37,6 +36,7 @@ const mapDispatchToProps = {
   nodeLock: NODE_ACTIONS.nodeLock,
   nodeLockComment: NODE_ACTIONS.nodeLockComment,
   nodeEditComment: NODE_ACTIONS.nodeEditComment,
+  nodeLoadMoreComments: NODE_ACTIONS.nodeLoadMoreComments,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -68,6 +68,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     nodeSetCoverImage,
     nodeLockComment,
     nodeEditComment,
+    nodeLoadMoreComments,
   }) => {
     const [layout, setLayout] = useState({});
 
@@ -148,6 +149,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                       user={user}
                       onDelete={nodeLockComment}
                       onEdit={nodeEditComment}
+                      onLoadMore={nodeLoadMoreComments}
                       order="DESC"
                     />
                   )}

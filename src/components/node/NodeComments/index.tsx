@@ -7,7 +7,7 @@ import { ICommentGroup, IComment } from '~/redux/types';
 import { groupCommentsByUser } from '~/utils/fn';
 import { IUser } from '~/redux/auth/types';
 import { canEditComment } from '~/utils/node';
-import { nodeLockComment, nodeEditComment } from '~/redux/node/actions';
+import { nodeLockComment, nodeEditComment, nodeLoadMoreComments } from '~/redux/node/actions';
 import { INodeState } from '~/redux/node/reducer';
 import { COMMENTS_DISPLAY } from '~/redux/node/constants';
 import { plural } from '~/utils/dom';
@@ -19,11 +19,21 @@ interface IProps {
   user: IUser;
   onDelete: typeof nodeLockComment;
   onEdit: typeof nodeEditComment;
+  onLoadMore: typeof nodeLoadMoreComments;
   order?: 'ASC' | 'DESC';
 }
 
 const NodeComments: FC<IProps> = memo(
-  ({ comments, comment_data, user, onDelete, onEdit, comment_count = 0, order = 'DESC' }) => {
+  ({
+    comments,
+    comment_data,
+    user,
+    onDelete,
+    onEdit,
+    onLoadMore,
+    comment_count = 0,
+    order = 'DESC',
+  }) => {
     const comments_left = useMemo(() => Math.max(0, comment_count - comments.length), [
       comments,
       comment_count,
@@ -34,10 +44,10 @@ const NodeComments: FC<IProps> = memo(
       [comments, order]
     );
 
-    return (
-      <div className={styles.wrap}>
-        {comment_count > 0 && (
-          <div className={styles.more}>
+    const more = useMemo(
+      () =>
+        comments_left > 0 && (
+          <div className={styles.more} onClick={onLoadMore}>
             Показать ещё{' '}
             {plural(
               Math.min(comments_left, COMMENTS_DISPLAY),
@@ -47,7 +57,13 @@ const NodeComments: FC<IProps> = memo(
             )}
             {comments_left > COMMENTS_DISPLAY ? ` из ${comments_left} оставшихся` : ''}
           </div>
-        )}
+        ),
+      [comments_left, onLoadMore, COMMENTS_DISPLAY]
+    );
+
+    return (
+      <div className={styles.wrap}>
+        {order === 'DESC' && more}
 
         {groupped.map(group => (
           <Comment
@@ -59,6 +75,8 @@ const NodeComments: FC<IProps> = memo(
             onEdit={onEdit}
           />
         ))}
+
+        {order === 'ASC' && more}
       </div>
     );
   }

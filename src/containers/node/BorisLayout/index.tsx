@@ -22,6 +22,7 @@ const mapDispatchToProps = {
   nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
   nodeLockComment: NODE_ACTIONS.nodeLockComment,
   nodeEditComment: NODE_ACTIONS.nodeEditComment,
+  nodeLoadMoreComments: NODE_ACTIONS.nodeLoadMoreComments,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -37,6 +38,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
   nodeLoadNode,
   nodeLockComment,
   nodeEditComment,
+  nodeLoadMoreComments,
 }) => {
   const title = getRandomPhrase('BORIS_TITLE');
 
@@ -92,6 +94,8 @@ const BorisLayoutUnconnected: FC<IProps> = ({
               user={user}
               onDelete={nodeLockComment}
               onEdit={nodeEditComment}
+              onLoadMore={nodeLoadMoreComments}
+              order="ASC"
             />
           )}
         </Group>

@@ -133,3 +133,7 @@ export const nodeSetCoverImage = (current_cover_image: IFile) => ({
   type: NODE_ACTIONS.SET_COVER_IMAGE,
   current_cover_image,
 });
+
+export const nodeLoadMoreComments = () => ({
+  type: NODE_ACTIONS.LOAD_MORE_COMMENTS,
+});

@@ -1,4 +1,4 @@
-import { takeLatest, call, put, select, delay, all } from 'redux-saga/effects';
+import { takeLatest, call, put, select, delay, all, takeLeading } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import omit from 'ramda/es/omit';
 
@@ -53,7 +53,7 @@ import { modalSetShown, modalShowDialog } from '../modal/actions';
 import { selectFlowNodes, selectFlow } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
-import { IResultWithStatus, INode } from '../types';
+import { IResultWithStatus, INode, Unwrap } from '../types';
 import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
 import { DIALOGS } from '~/redux/modal/constants';
 import { INodeState } from './reducer';
@@ -117,6 +117,36 @@ function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
   yield put(nodeSetRelated(null));
 
   yield put(push(URLS.NODE_URL(id)));
+}
+
+function* onNodeLoadMoreComments() {
+  const {
+    current: { id },
+    comments,
+  }: ReturnType<typeof selectNode> = yield select(selectNode);
+
+  const { data, error }: Unwrap<ReturnType<typeof getNodeComments>> = yield call(
+    reqWrapper,
+    getNodeComments,
+    {
+      id,
+      take: COMMENTS_DISPLAY,
+      skip: comments.length,
+    }
+  );
+
+  const current: ReturnType<typeof selectNode> = yield select(selectNode);
+
+  if (!data || error || current.current.id != id) {
+    return;
+  }
+
+  yield put(
+    nodeSet({
+      comments: [...comments, ...data.comments],
+      comment_count: data.comment_count,
+    })
+  );
 }
 
 function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
@@ -338,4 +368,5 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.LOCK, onLockSaga);
   yield takeLatest(NODE_ACTIONS.LOCK_COMMENT, onLockCommentSaga);
   yield takeLatest(NODE_ACTIONS.EDIT_COMMENT, onEditCommentSaga);
+  yield takeLeading(NODE_ACTIONS.LOAD_MORE_COMMENTS, onNodeLoadMoreComments);
 }

@@ -20,4 +20,11 @@
   text-transform: uppercase;
   color: darken(white, 50%);
   font: $font_14_regular;
+  cursor: pointer;
+  transition: background-color 0.25s;
+  user-select: none;
+
+  &:hover {
+    background-color: lighten($comment_bg, 4%);
+  }
 }
