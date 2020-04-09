@@ -7,3 +7,17 @@
     }
   }
 }
+
+.more {
+  padding: $gap;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: darken($comment_bg, 8%);
+  border-radius: $radius;
+  text-transform: uppercase;
+  color: darken(white, 50%);
+  font: $font_14_regular;
+}

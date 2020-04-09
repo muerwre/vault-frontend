@@ -2,7 +2,13 @@ import { takeLatest, call, put, select, delay, all } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import omit from 'ramda/es/omit';
 
-import { NODE_ACTIONS, EMPTY_NODE, EMPTY_COMMENT, NODE_EDITOR_DATA } from './constants';
+import {
+  NODE_ACTIONS,
+  EMPTY_NODE,
+  EMPTY_COMMENT,
+  NODE_EDITOR_DATA,
+  COMMENTS_DISPLAY,
+} from './constants';
 import {
   nodeSave,
   nodeSetSaveErrors,
@@ -132,19 +138,20 @@ function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
 
   const {
     comments: {
-      data: { comments },
+      data: { comments, comment_count },
     },
     related: {
       data: { related },
     },
   } = yield all({
-    comments: call(reqWrapper, getNodeComments, { id, order }),
+    comments: call(reqWrapper, getNodeComments, { id, take: COMMENTS_DISPLAY, skip: 0 }),
     related: call(reqWrapper, getNodeRelated, { id }),
   });
 
   yield put(
     nodeSet({
       comments,
+      comment_count,
       related,
       is_loading_comments: false,
       comment_data: { 0: { ...EMPTY_COMMENT } },

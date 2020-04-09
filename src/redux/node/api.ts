@@ -3,6 +3,7 @@ import { INode, IResultWithStatus, IComment } from '../types';
 import { API } from '~/constants/api';
 import { nodeUpdateTags, nodeLike, nodeStar, nodeLock, nodeLockComment } from './actions';
 import { INodeState } from './reducer';
+import { COMMENTS_DISPLAY } from './constants';
 
 export const postNode = ({
   access,
@@ -95,14 +96,16 @@ export const postNodeComment = ({
 export const getNodeComments = ({
   id,
   access,
-  order = 'ASC',
+  take = COMMENTS_DISPLAY,
+  skip = 0,
 }: {
   id: number;
   access: string;
-  order: 'ASC' | 'DESC';
+  take?: number;
+  skip?: number;
 }): Promise<IResultWithStatus<{ comments: Comment[] }>> =>
   api
-    .get(API.NODE.COMMENT(id), configWithToken(access, { params: { order } }))
+    .get(API.NODE.COMMENT(id), configWithToken(access, { params: { take, skip } }))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 

@@ -48,7 +48,15 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     match: {
       params: { id },
     },
-    node: { is_loading, is_loading_comments, comments = [], current: node, related, comment_data },
+    node: {
+      is_loading,
+      is_loading_comments,
+      comments = [],
+      current: node,
+      related,
+      comment_data,
+      comment_count,
+    },
     user,
     user: { is_user },
     nodeGotoNode,
@@ -136,9 +144,11 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                     <NodeComments
                       comments={comments}
                       comment_data={comment_data}
+                      comment_count={comment_count}
                       user={user}
                       onDelete={nodeLockComment}
                       onEdit={nodeEditComment}
+                      order="DESC"
                     />
                   )}
 

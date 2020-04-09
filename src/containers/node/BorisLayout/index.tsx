@@ -31,7 +31,7 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const id = 696;
 
 const BorisLayoutUnconnected: FC<IProps> = ({
-  node: { is_loading, is_loading_comments, comments = [], comment_data },
+  node: { is_loading, is_loading_comments, comments = [], comment_data, comment_count },
   user,
   user: { is_user },
   nodeLoadNode,
@@ -88,6 +88,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
             <NodeComments
               comments={comments}
               comment_data={comment_data}
+              comment_count={comment_count}
               user={user}
               onDelete={nodeLockComment}
               onEdit={nodeEditComment}

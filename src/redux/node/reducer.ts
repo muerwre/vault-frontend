@@ -12,6 +12,7 @@ export type INodeState = Readonly<{
     similar: Partial<INode[]>;
   };
   comment_data: Record<number, IComment>;
+  comment_count: number;
   current_cover_image: IFile;
 
   error: string;
@@ -35,6 +36,7 @@ const INITIAL_STATE: INodeState = {
       ...EMPTY_COMMENT,
     },
   },
+  comment_count: 0,
   comments: [],
   related: null,
   current_cover_image: null,

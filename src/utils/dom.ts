@@ -152,3 +152,13 @@ export const getYoutubeThumb = (url: string) => {
 
   return match && match[1] ? `https://i.ytimg.com/vi/${match[1]}/hqdefault.jpg` : null;
 };
+
+export function plural(n: number, one: string, two: string, five: string) {
+  if (n % 10 === 1 && n % 100 !== 11) {
+    return `${n} ${one}`;
+  } else if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) {
+    return `${n} ${two}`;
+  } else {
+    return `${n} ${five}`;
+  }
+}
