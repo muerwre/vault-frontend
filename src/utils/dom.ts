@@ -100,6 +100,10 @@ export const formatText = (text: string): string =>
         .replace(/(\/\*[\s\S]*?\*\/)/gim, '<span class="grey">$1</span>')
         .replace(/([=|-]{5,})/gim, '<hr />')
         .replace(/:\|--\|/gim, '://')
+        .replace(
+          /(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)([-A-Z0-9+&@#%?\/=~_|!:,.;]*)[-A-Z0-9+&@#\/%=~_|])/gi,
+          '<a href="$1" target="blank" rel="nofollow">$1</a>'
+        )
         .split('\n')
         .filter(el => el.trim().length)
         .join('\n');
