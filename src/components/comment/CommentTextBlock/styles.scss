@@ -7,8 +7,23 @@
   position: relative;
   color: #cccccc;
   word-break: break-word;
+  width: 100%;
 
   b {
-    font-weight: 600;
+    font-weight: 900;
+  }
+
+  i {
+    font-style: italic;
+  }
+
+  hr {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+  }
+
+  :global(.green) {
+    color: $wisegreen;
   }
 }
