@@ -35,13 +35,6 @@ pipeline {
             }
         }
 
-        stage('LS') {
-            steps {
-                sh "ls -a ./"
-                sh "ls -a ${ENV}"
-            }
-        }
-
         stage('Build') {
             steps {
                 sh 'npm install'
