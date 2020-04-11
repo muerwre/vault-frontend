@@ -4,8 +4,8 @@ pipeline {
     agent any
     
     environment {        
-        WWW = "${env.BRANCH_NAME == "master" ? env.ORCHID_STABLE_WWW : env.ORCHID_STAGING_WWW}"
-        ENV = "${env.BRANCH_NAME == "master" ? env.ORCHID_STABLE_ENV : env.ORCHID_STAGING_ENV}"
+        WWW = "${env.BRANCH_NAME == "master" ? env.VAULT_STABLE_WWW : env.VAULT_STAGING_WWW}"
+        ENV = "${env.BRANCH_NAME == "master" ? env.VAULT_STABLE_ENV : env.VAULT_STAGING_ENV}"
     }
 
     stages {
@@ -29,39 +29,38 @@ pipeline {
             }
         }    
 
-        // stage('copy env') {
-        //     steps {
-        //         sh "cp -a ${ENV}/. ${WORKSPACE}"
-        //     }
-        // }
+        stage('copy env') {
+            steps {
+                sh "cp -a ${ENV}/. ${WORKSPACE}"
+            }
+        }
 
-        // stage('LS') {
-        //     steps {
-        //         sh "ls -a ./"
-        //         sh "ls -a ${ENV}"
-        //         sh "ls -a ./src/config"
-        //     }
-        // }
+        stage('LS') {
+            steps {
+                sh "ls -a ./"
+                sh "ls -a ${ENV}"
+                sh "ls -a ./src/config"
+            }
+        }
 
-        // stage('Build') {
-        //     steps {
-        //         sh 'npm install'
-        //         sh 'npm run build'
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
 
-        // stage('deploy') {
-        //     when {
-        //         // branch 'develop'
-        //         expression {
-        //             !failed
-        //         }
-        //     }
+        stage('deploy') {
+            when {
+                expression {
+                    !failed
+                }
+            }
             
-        //     steps{
-        //         sh "rm -rf ${WWW}"
-        //         sh "mv ${WORKSPACE}/dist ${WWW}"
-        //     }
-        // }
+            steps{
+                sh "rm -rf ${WWW}"
+                sh "mv ${WORKSPACE}/dist ${WWW}"
+            }
+        }
     }
 }
