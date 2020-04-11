@@ -39,7 +39,6 @@ pipeline {
             steps {
                 sh "ls -a ./"
                 sh "ls -a ${ENV}"
-                sh "ls -a ./src/config"
             }
         }
 
