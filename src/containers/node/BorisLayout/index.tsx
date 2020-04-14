@@ -1,17 +1,19 @@
 import React, { FC, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
-import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
 import { selectUser } from '~/redux/auth/selectors';
 import { connect } from 'react-redux';
 import { NodeComments } from '~/components/node/NodeComments';
 import styles from './styles.scss';
-import { CommentForm } from '~/components/node/CommentForm';
 import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { getRandomPhrase } from '~/constants/phrases';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
+
+import * as NODE_ACTIONS from '~/redux/node/actions';
+import * as AUTH_ACTIONS from '~/redux/auth/actions';
+import isBefore from 'date-fns/isBefore';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -23,6 +25,7 @@ const mapDispatchToProps = {
   nodeLockComment: NODE_ACTIONS.nodeLockComment,
   nodeEditComment: NODE_ACTIONS.nodeEditComment,
   nodeLoadMoreComments: NODE_ACTIONS.nodeLoadMoreComments,
+  authSetUser: AUTH_ACTIONS.authSetUser,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -34,13 +37,23 @@ const id = 696;
 const BorisLayoutUnconnected: FC<IProps> = ({
   node: { is_loading, is_loading_comments, comments = [], comment_data, comment_count },
   user,
-  user: { is_user },
+  user: { is_user, last_seen_boris },
   nodeLoadNode,
   nodeLockComment,
   nodeEditComment,
   nodeLoadMoreComments,
+  authSetUser,
 }) => {
   const title = getRandomPhrase('BORIS_TITLE');
+
+  useEffect(() => {
+    const last_comment = comments[0];
+    if (!last_comment) return;
+    if (last_seen_boris && !isBefore(new Date(last_seen_boris), new Date(last_comment.created_at)))
+      return;
+
+    authSetUser({ last_seen_boris: last_comment.created_at });
+  }, [comments, last_seen_boris]);
 
   useEffect(() => {
     if (is_loading) return;
