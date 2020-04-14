@@ -1,5 +1,3 @@
-def failed = false
-
 pipeline {
     agent any
     
@@ -29,11 +27,11 @@ pipeline {
             }
         }    
 
-        // stage('copy env') {
-        //     steps {
-        //         sh "cp -a ${ENV}/. ${WORKSPACE}"
-        //     }
-        // }
+        stage('copy env') {
+            steps {
+                sh "cp -a ${ENV}/. ${WORKSPACE}"
+            }
+        }
 
         // stage('LS') {
         //     steps {
@@ -43,25 +41,18 @@ pipeline {
         //     }
         // }
 
-        // stage('Build') {
-        //     steps {
-        //         sh 'npm install'
-        //         sh 'npm run build'
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
 
-        // stage('deploy') {
-        //     when {
-        //         // branch 'develop'
-        //         expression {
-        //             !failed
-        //         }
-        //     }
-            
-        //     steps{
-        //         sh "rm -rf ${WWW}"
-        //         sh "mv ${WORKSPACE}/dist ${WWW}"
-        //     }
-        // }
+        stage('deploy') {
+            steps{
+                sh "rm -rf ${WWW}"
+                sh "mv ${WORKSPACE}/dist ${WWW}"
+            }
+        }
     }
 }
