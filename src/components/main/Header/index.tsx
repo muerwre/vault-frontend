@@ -68,6 +68,7 @@ const HeaderUnconnected: FC<IProps> = memo(
 
     const hasBorisUpdates = useMemo(
       () =>
+        is_user &&
         boris_commented_at &&
         (!last_seen_boris || isBefore(new Date(last_seen_boris), new Date(boris_commented_at))),
       [boris_commented_at, last_seen_boris]
