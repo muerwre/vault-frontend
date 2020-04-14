@@ -33,14 +33,6 @@ pipeline {
             }
         }
 
-        stage('LS') {
-            steps {
-                sh "ls -a ./"
-                sh "ls -a ${ENV}"
-                sh "ls -a ./src/config"
-            }
-        }
-
         stage('Build') {
             steps {
                 sh 'npm install'
