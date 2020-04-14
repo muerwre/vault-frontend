@@ -31,6 +31,7 @@ export type IAuthState = Readonly<{
   updates: {
     last: string;
     notifications: INotification[];
+    boris_commented_at: string;
   };
 
   login: {

@@ -40,7 +40,7 @@ import {
   selectAuthUpdates,
   selectAuthRestore,
 } from './selectors';
-import { IResultWithStatus, INotification, IMessageNotification } from '../types';
+import { IResultWithStatus, INotification, IMessageNotification, Unwrap } from '../types';
 import { IUser, IAuthState } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { selectModal } from '~/redux/modal/selectors';
@@ -244,32 +244,42 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof authSendMessage>
 }
 
 function* getUpdates() {
-  const user = yield select(selectAuthUser);
+  const user: ReturnType<typeof selectAuthUser> = yield select(selectAuthUser);
 
   if (!user || !user.is_user || user.role === USER_ROLES.GUEST || !user.id) return;
 
   const modal: IModalState = yield select(selectModal);
   const profile: IAuthState['profile'] = yield select(selectAuthProfile);
-  const { last }: IAuthState['updates'] = yield select(selectAuthUpdates);
+  const { last, boris_commented_at }: IAuthState['updates'] = yield select(selectAuthUpdates);
   const exclude_dialogs =
     modal.is_shown && modal.dialog === DIALOGS.PROFILE && profile.user.id ? profile.user.id : null;
 
-  const { error, data }: IResultWithStatus<{ notifications: INotification[] }> = yield call(
+  const { error, data }: Unwrap<ReturnType<typeof apiAuthGetUpdates>> = yield call(
     reqWrapper,
     apiAuthGetUpdates,
     { exclude_dialogs, last: last || user.last_seen_messages }
   );
 
-  if (error || !data || !data.notifications || !data.notifications.length) return;
+  if (error || !data) {
+    return;
+  }
 
-  const { notifications } = data;
+  if (data.notifications && data.notifications.length) {
+    yield put(
+      authSetUpdates({
+        last: data.notifications[0].created_at,
+        notifications: data.notifications,
+      })
+    );
+  }
 
-  yield put(
-    authSetUpdates({
-      last: notifications[0].created_at,
-      notifications,
-    })
-  );
+  if (data.boris && data.boris.commented_at && boris_commented_at !== data.boris.commented_at) {
+    yield put(
+      authSetUpdates({
+        boris_commented_at: data.boris.commented_at,
+      })
+    );
+  }
 }
 
 function* startPollingSaga() {
