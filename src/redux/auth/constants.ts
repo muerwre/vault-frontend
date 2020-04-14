@@ -62,6 +62,7 @@ export const EMPTY_USER: IUser = {
 
   last_seen: null,
   last_seen_messages: null,
+  last_seen_boris: null,
 };
 
 export interface IApiUser {

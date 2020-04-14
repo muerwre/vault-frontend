@@ -1,6 +1,6 @@
 import { api, errorMiddleware, resultMiddleware, configWithToken } from '~/utils/api';
 import { API } from '~/constants/api';
-import { IResultWithStatus, IMessage } from '~/redux/types';
+import { IResultWithStatus, IMessage, INotification } from '~/redux/types';
 import { userLoginTransform } from '~/redux/auth/transforms';
 import { IUser } from './types';
 
@@ -55,7 +55,9 @@ export const apiAuthGetUpdates = ({
   access,
   exclude_dialogs,
   last,
-}): Promise<IResultWithStatus<{ message: IMessage }>> =>
+}): Promise<
+  IResultWithStatus<{ notifications: INotification[]; boris: { commented_at: string } }>
+> =>
   api
     .get(API.USER.GET_UPDATES, configWithToken(access, { params: { exclude_dialogs, last } }))
     .then(resultMiddleware)
