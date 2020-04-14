@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     environment {        
-        WWW = "${env.BRANCH_NAME == "master" ? env.ORCHID_STABLE_WWW : env.ORCHID_STAGING_WWW}"
-        ENV = "${env.BRANCH_NAME == "master" ? env.ORCHID_STABLE_ENV : env.ORCHID_STAGING_ENV}"
+        WWW = "${env.BRANCH_NAME == "master" ? env.VAULT_STABLE_WWW : env.VAULT_STAGING_WWW}"
+        ENV = "${env.BRANCH_NAME == "master" ? env.VAULT_STABLE_ENV : env.VAULT_STAGING_ENV}"
     }
 
     stages {
@@ -33,13 +33,13 @@ pipeline {
             }
         }
 
-        // stage('LS') {
-        //     steps {
-        //         sh "ls -a ./"
-        //         sh "ls -a ${ENV}"
-        //         sh "ls -a ./src/config"
-        //     }
-        // }
+        stage('LS') {
+            steps {
+                sh "ls -a ./"
+                sh "ls -a ${ENV}"
+                sh "ls -a ./src/config"
+            }
+        }
 
         stage('Build') {
             steps {
