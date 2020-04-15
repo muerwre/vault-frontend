@@ -111,5 +111,9 @@
 
   @include tablet {
     padding: $gap;
+
+    &::after {
+      right: 0;
+    }
   }
 }
