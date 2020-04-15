@@ -40,6 +40,11 @@
   width: 100%;
   height: 100%;
   font: $font_24_semibold;
-  // opacity: 0.2;
-  color: #444444;
+  color: white;
+  border-radius: $cell_radius;
+  background-image: linear-gradient(
+    180deg,
+    transparentize($content_bg, 0.4),
+    transparentize($content_bg, 0.4)
+  );
 }

@@ -1,10 +1,10 @@
-import React, { FC, memo, useCallback, useState } from 'react';
+import React, { FC, memo, useCallback, useState, useMemo } from 'react';
 import * as styles from './styles.scss';
 import classNames from 'classnames';
 import { INode } from '~/redux/types';
 import { URLS, PRESETS } from '~/constants/urls';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { getURL } from '~/utils/dom';
+import { getURL, stringToColour } from '~/utils/dom';
 
 type IProps = RouteComponentProps & {
   item: Partial<INode>;
@@ -28,6 +28,15 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
   const [is_loaded, setIsLoaded] = useState(false);
   const onClick = useCallback(() => history.push(URLS.NODE_URL(item.id)), [item, history]);
 
+  const thumb = useMemo(
+    () => (item.thumbnail ? getURL({ url: item.thumbnail }, PRESETS.avatar) : ''),
+    [item]
+  );
+  const backgroundColor = useMemo(
+    () => (!thumb && item.title && stringToColour(item.title)) || '',
+    []
+  );
+
   return (
     <div
       className={classNames(styles.item, { [styles.is_loaded]: is_loaded })}
@@ -36,10 +45,16 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
     >
       <div
         className={styles.thumb}
-        style={{ backgroundImage: `url("${getURL({ url: item.thumbnail }, PRESETS.avatar)}")` }}
+        style={{
+          backgroundImage: `url("${thumb}")`,
+        }}
       />
 
-      {!item.thumbnail && <div className={styles.letters}>{getTitleLetters(item.title)}</div>}
+      {!item.thumbnail && (
+        <div className={styles.letters} style={{ backgroundColor }}>
+          {getTitleLetters(item.title)}
+        </div>
+      )}
 
       <img
         src={getURL({ url: item.thumbnail }, PRESETS.avatar)}
