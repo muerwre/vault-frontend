@@ -39,6 +39,7 @@ import {
   selectAuthUser,
   selectAuthUpdates,
   selectAuthRestore,
+  selectAuth,
 } from './selectors';
 import { IResultWithStatus, INotification, IMessageNotification, Unwrap } from '../types';
 import { IUser, IAuthState } from './types';
@@ -83,6 +84,10 @@ function* sendLoginRequestSaga({ username, password }: ReturnType<typeof userSen
 }
 
 function* refreshUser() {
+  const { token }: ReturnType<typeof selectAuth> = yield select(selectAuth);
+
+  if (!token) return;
+
   const {
     error,
     data: { user },
