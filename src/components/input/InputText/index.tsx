@@ -71,11 +71,13 @@ const InputText: FC<IInputTextProps> = ({
           <LoaderCircle size={20} />
         </div>
       </div>
+
       {title && (
         <div className={styles.title}>
           <span>{title}</span>
         </div>
       )}
+
       {error && (
         <div className={styles.error}>
           <span>{error}</span>

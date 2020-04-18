@@ -73,12 +73,8 @@ $cols: $content_width / $cell;
 }
 
 .stamp {
-  @include outer_shadow();
-
   grid-row-end: span 2;
   grid-column: -2 / -1;
-  display: flex;
-  font: $font_24_semibold;
   display: flex;
   align-items: stretch;
   justify-content: stretch;

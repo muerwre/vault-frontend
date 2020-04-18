@@ -215,7 +215,7 @@
   .textarea {
     outline: none;
     border: none;
-    font: inherit;
+    font: $font_16_medium;
     box-sizing: border-box;
     background: transparent;
     color: white;
@@ -270,7 +270,7 @@
     transition: top 0.25s, bottom 0.25s, font 0.25s, color 0.25s;
     pointer-events: none;
     touch-action: none;
-    color: transparentize(white, 0.3);
+    color: transparentize(white, 0.5);
     text-transform: capitalize;
     background: $input_bg_color;
 
