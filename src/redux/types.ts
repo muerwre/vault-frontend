@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import { DetailedHTMLProps, InputHTMLAttributes, ReactElement } from 'react';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 import { IUser } from './auth/types';
@@ -30,6 +30,7 @@ export type IInputTextProps = DetailedHTMLProps<
   mask?: string;
   onRef?: (ref: any) => void;
   is_loading?: boolean;
+  after?: ReactElement;
 };
 
 export type IIcon = string;

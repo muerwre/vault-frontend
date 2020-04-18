@@ -13,6 +13,19 @@
   flex: 1;
   border-radius: $radius;
   overflow: hidden;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 60px;
+    width: 100%;
+    background: linear-gradient(transparentize($content_bg, 1), $content_bg 90%);
+    pointer-events: none;
+    touch-action: none;
+  }
 
   @include outer_shadow();
 }
@@ -53,9 +66,28 @@
 }
 
 .search {
-  background: lighten($content_bg, 4%);
+  background: lighten($content_bg, 3%);
   border-radius: $radius $radius 0 0;
   padding: $gap;
 
   @include outer_shadow();
+}
+
+.search_icon {
+  fill: white;
+  opacity: 0.1;
+  stroke: white;
+  stroke-width: 0.5;
+}
+
+.close_icon {
+  cursor: pointer;
+  stroke: white;
+  stroke-width: 0.5;
+  opacity: 0.5;
+  transition: opacity 0.25s;
+
+  &:hover {
+    opacity: 0.7;
+  }
 }

@@ -16,6 +16,7 @@ const InputText: FC<IInputTextProps> = ({
   value = '',
   onRef,
   is_loading,
+  after,
   ...props
 }) => {
   const [focused, setFocused] = useState(false);
@@ -61,6 +62,7 @@ const InputText: FC<IInputTextProps> = ({
         <div className={classNames(styles.success_icon, { active: status === 'success' })}>
           <Icon icon="check" size={20} />
         </div>
+
         <div className={classNames(styles.error_icon, { active: status === 'error' || !!error })}>
           <Icon icon="close" size={20} />
         </div>
@@ -83,6 +85,8 @@ const InputText: FC<IInputTextProps> = ({
           <span>{error}</span>
         </div>
       )}
+
+      {!!after && <div className={styles.after}>{after}</div>}
     </div>
   );
 };

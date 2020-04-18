@@ -80,16 +80,4 @@ $cols: $content_width / $cell;
   justify-content: stretch;
   overflow: hidden;
   position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 60px;
-    width: 100%;
-    background: linear-gradient(transparentize($content_bg, 1), $content_bg 90%);
-    pointer-events: none;
-    touch-action: none;
-  }
 }

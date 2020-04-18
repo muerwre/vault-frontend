@@ -1,11 +1,9 @@
-import React, { FC, useCallback, MouseEvent } from 'react';
+import React, { FC, useCallback } from 'react';
 import styles from './styles.scss';
 import { IFlowState } from '~/redux/flow/reducer';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
-import { URLS, PRESETS } from '~/constants/urls';
-import { Link } from 'react-router-dom';
-import classNames from 'classnames';
-import { getURL, getPrettyDate } from '~/utils/dom';
+import { FlowRecentItem } from '../FlowRecentItem';
+import { Icon } from '~/components/input/Icon';
 
 interface IProps {
   search: IFlowState['search'];
@@ -33,22 +31,19 @@ const FlowSearchResults: FC<IProps> = ({ search, onLoadMore }) => {
     );
   }
 
+  if (!search.results.length) {
+    return (
+      <div className={styles.loading}>
+        <Icon size={96} icon="search" />
+        <div className={styles.nothing}>Ничего не найдено</div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.wrap} onScroll={onScroll}>
       {search.results.map(node => (
-        <Link key={node.id} className={styles.item} to={URLS.NODE_URL(node.id)}>
-          <div
-            className={classNames(styles.thumb)}
-            style={{
-              backgroundImage: `url("${getURL({ url: node.thumbnail }, PRESETS.avatar)}")`,
-            }}
-          />
-
-          <div className={styles.info}>
-            <div className={styles.title}>{node.title}</div>
-            <div className={styles.comment}>{getPrettyDate(node.created_at)}</div>
-          </div>
-        </Link>
+        <FlowRecentItem node={node} key={node.id} />
       ))}
     </div>
   );

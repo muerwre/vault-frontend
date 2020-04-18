@@ -12,21 +12,6 @@
   @include inner_shadow();
   background: $input_bg_color;
 
-  &::before {
-    content: ' ';
-    background: linear-gradient(270deg, $input_bg_color $gap, transparentize($input_bg_color, 1));
-    position: absolute;
-    width: $gap * 2;
-    height: $input_height;
-    top: 1px;
-    right: 1px;
-    transform: translateX(0);
-    transition: transform 0.25s;
-    border-radius: 0 $input_radius $input_radius 0;
-    pointer-events: none;
-    touch-action: none;
-  }
-
   :global(.react-datepicker-wrapper) {
     flex: 1;
     padding: 0 18px;
@@ -90,6 +75,22 @@
     flex: 1 0 0;
     outline: none;
     color: white;
+    position: relative;
+
+    &::before {
+      content: ' ';
+      background: linear-gradient(270deg, $input_bg_color $gap, transparentize($input_bg_color, 1));
+      position: absolute;
+      width: $gap * 2;
+      height: $input_height;
+      top: 1px;
+      right: 1px;
+      transform: translateX(0);
+      transition: transform 0.25s;
+      border-radius: 0 $input_radius $input_radius 0;
+      pointer-events: none;
+      touch-action: none;
+    }
   }
 
   &.required {
@@ -373,4 +374,15 @@
     box-shadow: $input_shadow;
     border-radius: $input_radius;
   }
+}
+
+.after {
+  width: 24px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  top: -1px;
 }
