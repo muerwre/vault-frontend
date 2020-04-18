@@ -4,3 +4,102 @@
   display: flex;
   flex-direction: column;
 }
+
+$cols: $content_width / $cell;
+$stamp_color: $content_bg;
+
+.grid {
+  display: grid;
+
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 50vh $cell;
+  grid-auto-rows: $cell;
+
+  grid-auto-flow: row dense;
+  grid-column-gap: $gap;
+  grid-row-gap: $gap;
+
+  @include tablet {
+    padding: 0 $gap;
+  }
+
+  @media (max-width: $cell * 6) {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 50vh 20vw;
+    grid-auto-rows: 20vw;
+  }
+
+  @media (max-width: $cell * 5) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 40vh 25vw;
+    grid-auto-rows: 25vw;
+  }
+
+  @media (max-width: $cell * 4) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 40vh 33vw;
+    grid-auto-rows: 33vw;
+  }
+
+  @media (max-width: $cell * 3) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 40vh 50vw;
+    grid-auto-rows: 50vw;
+  }
+
+  @media (max-width: $cell * 2) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 40vh 50vw;
+    grid-auto-rows: 50vw;
+    grid-column-gap: $gap;
+    grid-row-gap: $gap;
+  }
+}
+
+.pad_last {
+  grid-column-end: $cols + 1;
+}
+
+.hero {
+  grid-row-start: 1;
+  grid-row-end: span 1;
+  grid-column-start: 1;
+  grid-column-end: -1;
+  background: darken($content_bg, 2%);
+  border-radius: $radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: $font_24_semibold;
+}
+
+.stamp {
+  @include outer_shadow();
+
+  grid-row-end: span 2;
+  grid-column: -2 / -1;
+  background: $stamp_color;
+  border-radius: $radius;
+  padding: $gap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: $font_24_semibold;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 60px;
+    width: 100%;
+    background: linear-gradient(transparentize($stamp_color, 1), $stamp_color 90%);
+    pointer-events: none;
+    touch-action: none;
+  }
+}
