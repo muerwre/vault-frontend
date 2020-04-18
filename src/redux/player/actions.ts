@@ -36,3 +36,8 @@ export const playerSeek = (seek: number) => ({
   type: PLAYER_ACTIONS.SEEK,
   seek,
 });
+
+export const playerGetYoutubeInfo = (url: string) => ({
+  type: PLAYER_ACTIONS.GET_YOUTUBE_INFO,
+  url,
+});
