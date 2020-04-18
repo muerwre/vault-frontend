@@ -72,12 +72,15 @@
   padding: $gap;
 
   @include outer_shadow();
+
+  :global(.input_title) {
+    color: lighten($content_bg, 10%);
+  }
 }
 
 .search_icon {
-  fill: white;
-  opacity: 0.1;
-  stroke: white;
+  fill: lighten($content_bg, 8%);
+  stroke: lighten($content_bg, 8%);
   stroke-width: 0.5;
   pointer-events: none;
   touch-action: none;

@@ -75,7 +75,7 @@ const InputText: FC<IInputTextProps> = ({
       </div>
 
       {title && (
-        <div className={styles.title}>
+        <div className={classNames(styles.title, 'input_title')}>
           <span>{title}</span>
         </div>
       )}
