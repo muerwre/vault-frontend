@@ -13,9 +13,10 @@ interface IProps {
   updated: IFlowState['updated'];
   search: IFlowState['search'];
   flowChangeSearch: typeof FLOW_ACTIONS.flowChangeSearch;
+  onLoadMore: () => void;
 }
 
-const FlowStamp: FC<IProps> = ({ recent, updated, search, flowChangeSearch }) => {
+const FlowStamp: FC<IProps> = ({ recent, updated, search, flowChangeSearch, onLoadMore }) => {
   const onSearchChange = useCallback((text: string) => flowChangeSearch({ text }), [
     flowChangeSearch,
   ]);
@@ -35,16 +36,19 @@ const FlowStamp: FC<IProps> = ({ recent, updated, search, flowChangeSearch }) =>
           <>
             <div className={styles.label}>
               <span className={styles.label_text}>Результаты поиска</span>
+              <span className="line" />
+              <span>{!search.is_loading && search.total}</span>
             </div>
 
             <div className={styles.items}>
-              <FlowSearchResults search={search} />
+              <FlowSearchResults search={search} onLoadMore={onLoadMore} />
             </div>
           </>
         ) : (
           <>
             <div className={styles.label}>
               <span className={styles.label_text}>Что нового?</span>
+              <span className="line" />
             </div>
 
             <div className={styles.items}>

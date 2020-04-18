@@ -165,8 +165,7 @@ $input_shadow_filled: $input_shadow;
     padding-right: $gap;
   }
 
-  &:after {
-    content: ' ';
+  & > :global(.line) {
     flex: 1;
     height: 2px;
     background: transparentize(white, 0.95);

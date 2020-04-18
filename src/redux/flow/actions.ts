@@ -46,3 +46,7 @@ export const flowChangeSearch = (search: Partial<IFlowState['search']>) => ({
   type: FLOW_ACTIONS.CHANGE_SEARCH,
   search,
 });
+
+export const flowLoadMoreSearch = () => ({
+  type: FLOW_ACTIONS.LOAD_MORE_SEARCH,
+});

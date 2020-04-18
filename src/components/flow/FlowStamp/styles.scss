@@ -12,6 +12,7 @@
   flex-direction: column;
   flex: 1;
   border-radius: $radius;
+  overflow: hidden;
 
   @include outer_shadow();
 }
@@ -21,6 +22,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .label {
@@ -37,6 +39,10 @@
   &_search {
     color: white;
     padding-left: $gap * 1.2;
+  }
+
+  & > :global(.line) {
+    margin-right: $gap;
   }
 }
 

@@ -1,4 +1,4 @@
-import { takeLatest, call, put, select, takeLeading, delay } from 'redux-saga/effects';
+import { takeLatest, call, put, select, takeLeading, delay, race, take } from 'redux-saga/effects';
 import { REHYDRATE } from 'redux-persist';
 import { FLOW_ACTIONS } from './constants';
 import { getNodeDiff } from '../node/api';
@@ -13,7 +13,7 @@ import {
   flowSetSearch,
 } from './actions';
 import { IResultWithStatus, INode, Unwrap } from '../types';
-import { selectFlowNodes } from './selectors';
+import { selectFlowNodes, selectFlow } from './selectors';
 import { reqWrapper } from '../auth/sagas';
 import { postCellView, getSearchResults } from './api';
 import { IFlowState } from './reducer';
@@ -124,11 +124,59 @@ function* changeSearch({ search }: ReturnType<typeof flowChangeSearch>) {
 
   yield delay(500);
 
-  const res: Unwrap<typeof getSearchResults> = yield call(reqWrapper, getSearchResults, {
-    ...search,
+  const { data, error }: Unwrap<ReturnType<typeof getSearchResults>> = yield call(
+    reqWrapper,
+    getSearchResults,
+    {
+      ...search,
+    }
+  );
+
+  if (error) {
+    yield put(flowSetSearch({ is_loading: false, results: [], total: 0 }));
+    return;
+  }
+
+  yield put(
+    flowSetSearch({
+      is_loading: false,
+      results: data.nodes,
+      total: data.total,
+    })
+  );
+}
+
+function* loadMoreSearch() {
+  yield put(
+    flowSetSearch({
+      is_loading_more: true,
+    })
+  );
+
+  const { search }: ReturnType<typeof selectFlow> = yield select(selectFlow);
+
+  const {
+    result,
+    delay,
+  }: { result: Unwrap<ReturnType<typeof getSearchResults>>; delay: any } = yield race({
+    result: call(reqWrapper, getSearchResults, {
+      ...search,
+      skip: search.results.length,
+    }),
+    delay: take(FLOW_ACTIONS.CHANGE_SEARCH),
   });
 
-  console.log(res);
+  if (delay || result.error) {
+    return put(flowSetSearch({ is_loading_more: false }));
+  }
+
+  yield put(
+    flowSetSearch({
+      results: [...search.results, ...result.data.nodes],
+      total: result.data.total,
+      is_loading_more: false,
+    })
+  );
 }
 
 export default function* nodeSaga() {
@@ -136,4 +184,5 @@ export default function* nodeSaga() {
   yield takeLatest(FLOW_ACTIONS.SET_CELL_VIEW, onSetCellView);
   yield takeLeading(FLOW_ACTIONS.GET_MORE, getMore);
   yield takeLatest(FLOW_ACTIONS.CHANGE_SEARCH, changeSearch);
+  yield takeLatest(FLOW_ACTIONS.LOAD_MORE_SEARCH, loadMoreSearch);
 }

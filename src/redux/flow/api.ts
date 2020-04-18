@@ -2,6 +2,7 @@ import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils
 import { INode, IResultWithStatus } from '../types';
 import { API } from '~/constants/api';
 import { flowSetCellView } from '~/redux/flow/actions';
+import { IFlowState } from './reducer';
 
 export const postNode = ({
   access,
@@ -30,11 +31,12 @@ export const postCellView = ({
 export const getSearchResults = ({
   access,
   text,
-}: {
+  skip = 0,
+}: IFlowState['search'] & {
   access: string;
-  text: string;
+  skip: number;
 }): Promise<IResultWithStatus<{ nodes: INode[]; total: number }>> =>
   api
-    .get(API.SEARCH, configWithToken(access, { params: { text } }))
+    .get(API.SEARCH.NODES, configWithToken(access, { params: { text, skip } }))
     .then(resultMiddleware)
     .catch(errorMiddleware);

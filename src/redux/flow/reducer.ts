@@ -10,8 +10,10 @@ export type IFlowState = Readonly<{
   updated: Partial<INode>[];
   search: {
     text: string;
-    is_loading: boolean;
     results: INode[];
+    total: number;
+    is_loading: boolean;
+    is_loading_more: boolean;
   };
   error: IError;
 }>;
@@ -23,8 +25,10 @@ const INITIAL_STATE: IFlowState = {
   updated: [],
   search: {
     text: '',
-    is_loading: false,
     results: [],
+    total: 0,
+    is_loading: false,
+    is_loading_more: false,
   },
   is_loading: false,
   error: null,

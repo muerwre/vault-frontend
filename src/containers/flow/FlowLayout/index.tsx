@@ -21,6 +21,7 @@ const mapDispatchToProps = {
   flowSetCellView: FLOW_ACTIONS.flowSetCellView,
   flowGetMore: FLOW_ACTIONS.flowGetMore,
   flowChangeSearch: FLOW_ACTIONS.flowChangeSearch,
+  flowLoadMoreSearch: FLOW_ACTIONS.flowLoadMoreSearch,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
@@ -32,8 +33,9 @@ const FlowLayoutUnconnected: FC<IProps> = ({
   flowSetCellView,
   flowGetMore,
   flowChangeSearch,
+  flowLoadMoreSearch,
 }) => {
-  const loadMore = useCallback(() => {
+  const onLoadMore = useCallback(() => {
     const pos = window.scrollY + window.innerHeight - document.body.scrollHeight;
 
     if (is_loading || pos < -600) return;
@@ -41,11 +43,16 @@ const FlowLayoutUnconnected: FC<IProps> = ({
     flowGetMore();
   }, [flowGetMore, is_loading]);
 
-  useEffect(() => {
-    window.addEventListener('scroll', loadMore);
+  const onLoadMoreSearch = useCallback(() => {
+    if (search.is_loading_more) return;
+    flowLoadMoreSearch();
+  }, [search.is_loading_more, flowLoadMoreSearch]);
 
-    return () => window.removeEventListener('scroll', loadMore);
-  }, [loadMore]);
+  useEffect(() => {
+    window.addEventListener('scroll', onLoadMore);
+
+    return () => window.removeEventListener('scroll', onLoadMore);
+  }, [onLoadMore]);
 
   return (
     <div className={styles.grid}>
@@ -57,15 +64,16 @@ const FlowLayoutUnconnected: FC<IProps> = ({
         <FlowStamp
           recent={recent}
           updated={updated}
-          flowChangeSearch={flowChangeSearch}
           search={search}
+          flowChangeSearch={flowChangeSearch}
+          onLoadMore={onLoadMoreSearch}
         />
       </div>
 
       <FlowGrid
         nodes={nodes}
-        onSelect={nodeGotoNode}
         user={user}
+        onSelect={nodeGotoNode}
         onChangeCellView={flowSetCellView}
       />
     </div>
