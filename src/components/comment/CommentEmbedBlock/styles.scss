@@ -33,16 +33,19 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: transparentize(black, 0.5);
+  background: transparentize(black, 0.5) 50% 50%;
+  background-size: cover;
   z-index: 15;
   border-radius: $radius;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  font: $font_16_medium;
 
   @include can_backdrop {
-    background: transparentize(black, 0.3);
-    backdrop-filter: blur(5px);
+    background: transparentize(black, 0.5) 50% 50%;
+    backdrop-filter: blur(3px);
   }
 }
 
@@ -63,5 +66,7 @@
     width: 100%;
     border-radius: $radius;
     position: relative;
+    background-position: 50% 50%;
+    background-size: cover;
   }
 }

@@ -37,7 +37,12 @@ const authPersistConfig: PersistConfig = {
 const flowPersistConfig: PersistConfig = {
   key: 'flow',
   whitelist: ['nodes', 'recent', 'updated'],
-  // whitelist: [],
+  storage,
+};
+
+const playerPersistConfig: PersistConfig = {
+  key: 'player',
+  whitelist: ['youtubes'],
   storage,
 };
 
@@ -54,17 +59,6 @@ export interface IState {
 export const sagaMiddleware = createSagaMiddleware();
 export const history = createBrowserHistory();
 
-// history.
-// history.listen(({ pathname }) => {
-//   if (pathname.match(/~([\wа-яА-Я]+)/)) {
-//     const [, username] = pathname.match(/~([\wа-яА-Я]+)/);
-//     window.postMessage({ type: 'username', username }, '*');
-//   }
-
-//   console.log({ pathname });
-//   // if (pathname.match)
-// });
-
 const composeEnhancers =
   typeof window === 'object' && (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
@@ -78,7 +72,7 @@ export const store = createStore(
     node: nodeReducer,
     uploads: uploadReducer,
     flow: persistReducer(flowPersistConfig, flowReducer),
-    player: playerReducer,
+    player: persistReducer(playerPersistConfig, playerReducer),
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
