@@ -13,12 +13,8 @@
   background: $input_bg_color;
 
   &::before {
-    content: " ";
-    background: linear-gradient(
-      270deg,
-      $input_bg_color $gap,
-      transparentize($input_bg_color, 1)
-    );
+    content: ' ';
+    background: linear-gradient(270deg, $input_bg_color $gap, transparentize($input_bg_color, 1));
     position: absolute;
     width: $gap * 2;
     height: $input_height;
@@ -98,7 +94,7 @@
 
   &.required {
     &::after {
-      content: " ";
+      content: ' ';
       width: 5px;
       height: 5px;
       border-radius: 3px;
@@ -261,11 +257,10 @@
   }
 
   .title {
-    font: $font;
+    font: $font_16_semibold;
     position: absolute;
     left: 6px;
-    // width: 100%;
-    top: 12px;
+    top: 10px;
     bottom: auto;
     padding: 0 4px;
     box-sizing: border-box;

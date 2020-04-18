@@ -3,12 +3,18 @@
   justify-content: stretch;
   flex-direction: column;
   flex: 1;
+  background: $content_bg;
+  padding: $gap;
 
-  & > div {
-    // background: $content_bg;
-    // @include outer_shadow();
-    // background: darken($content_bg, 4%);
-  }
+  @include outer_shadow();
+}
+
+.search {
+  background: lighten($content_bg, 3%);
+  border-radius: $radius $radius 0 0;
+  padding: $gap;
+
+  @include outer_shadow();
 }
 
 .item {

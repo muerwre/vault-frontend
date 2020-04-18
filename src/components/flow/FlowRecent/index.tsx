@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { URLS, PRESETS } from '~/constants/urls';
 import classNames from 'classnames';
 import { NodeRelatedItem } from '~/components/node/NodeRelatedItem';
+import { InputText } from '~/components/input/InputText';
 
 interface IProps {
   recent: IFlowState['recent'];
@@ -13,35 +14,43 @@ interface IProps {
 }
 
 const FlowRecent: FC<IProps> = ({ recent, updated }) => (
-  <div className={styles.grid}>
-    {updated &&
-      updated.slice(0, 20).map(node => (
-        <Link key={node.id} className={styles.item} to={URLS.NODE_URL(node.id)}>
-          <div
-            className={classNames(styles.thumb, styles.new)}
-            style={{ backgroundImage: `url("${getURL({ url: node.thumbnail }, PRESETS.avatar)}")` }}
-          />
+  <div>
+    <div className={styles.search}>
+      <InputText title="Поиск" />
+    </div>
 
-          <div className={styles.info}>
-            <div className={styles.title}>{node.title}</div>
-            <div className={styles.comment}>{getPrettyDate(node.created_at)}</div>
-          </div>
-        </Link>
-      ))}
+    <div className={styles.grid}>
+      {updated &&
+        updated.slice(0, 20).map(node => (
+          <Link key={node.id} className={styles.item} to={URLS.NODE_URL(node.id)}>
+            <div
+              className={classNames(styles.thumb, styles.new)}
+              style={{
+                backgroundImage: `url("${getURL({ url: node.thumbnail }, PRESETS.avatar)}")`,
+              }}
+            />
 
-    {recent &&
-      recent.slice(0, 20).map(node => (
-        <Link key={node.id} className={styles.item} to={URLS.NODE_URL(node.id)}>
-          <div className={styles.thumb}>
-            <NodeRelatedItem item={node} />
-          </div>
+            <div className={styles.info}>
+              <div className={styles.title}>{node.title}</div>
+              <div className={styles.comment}>{getPrettyDate(node.created_at)}</div>
+            </div>
+          </Link>
+        ))}
 
-          <div className={styles.info}>
-            <div className={styles.title}>{node.title}</div>
-            <div className={styles.comment}>{getPrettyDate(node.created_at)}</div>
-          </div>
-        </Link>
-      ))}
+      {recent &&
+        recent.slice(0, 20).map(node => (
+          <Link key={node.id} className={styles.item} to={URLS.NODE_URL(node.id)}>
+            <div className={styles.thumb}>
+              <NodeRelatedItem item={node} />
+            </div>
+
+            <div className={styles.info}>
+              <div className={styles.title}>{node.title}</div>
+              <div className={styles.comment}>{getPrettyDate(node.created_at)}</div>
+            </div>
+          </Link>
+        ))}
+    </div>
   </div>
 );
 

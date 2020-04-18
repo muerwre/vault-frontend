@@ -6,7 +6,6 @@
 }
 
 $cols: $content_width / $cell;
-$stamp_color: $content_bg;
 
 .grid {
   display: grid;
@@ -78,12 +77,7 @@ $stamp_color: $content_bg;
 
   grid-row-end: span 2;
   grid-column: -2 / -1;
-  background: $stamp_color;
-  border-radius: $radius;
-  padding: $gap;
   display: flex;
-  align-items: center;
-  justify-content: center;
   font: $font_24_semibold;
   display: flex;
   align-items: stretch;
@@ -98,7 +92,7 @@ $stamp_color: $content_bg;
     left: 0;
     height: 60px;
     width: 100%;
-    background: linear-gradient(transparentize($stamp_color, 1), $stamp_color 90%);
+    background: linear-gradient(transparentize($content_bg, 1), $content_bg 90%);
     pointer-events: none;
     touch-action: none;
   }

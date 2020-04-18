@@ -67,17 +67,8 @@ $stamp_color: $content_bg;
 }
 
 .stamp {
-  @include outer_shadow();
-
   grid-row-end: span 2;
   grid-column: -2 / -1;
-  background: $stamp_color;
-  border-radius: $radius;
-  padding: $gap;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font: $font_24_semibold;
   display: flex;
   align-items: stretch;
   justify-content: stretch;
