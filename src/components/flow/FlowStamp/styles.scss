@@ -1,0 +1,55 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: $content_bg;
+  border-radius: $radius;
+}
+
+.grid {
+  display: flex;
+  justify-content: stretch;
+  flex-direction: column;
+  flex: 1;
+  border-radius: $radius;
+
+  @include outer_shadow();
+}
+
+.items {
+  padding: 0 $gap 0 $gap;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: flex;
+  flex-direction: row;
+  min-width: 0;
+  padding: $gap;
+  border-radius: $radius;
+
+  @include title_with_line();
+
+  color: transparentize(white, $amount: 0.8);
+
+  &_search {
+    color: white;
+    padding-left: $gap * 1.2;
+  }
+}
+
+.label_text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search {
+  background: lighten($content_bg, 4%);
+  border-radius: $radius $radius 0 0;
+  padding: $gap;
+
+  @include outer_shadow();
+}

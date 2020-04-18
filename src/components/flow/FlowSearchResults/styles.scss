@@ -1,0 +1,12 @@
+.wrap {
+  flex: 1;
+  background: red;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  opacity: 0.3;
+}

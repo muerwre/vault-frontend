@@ -7,11 +7,12 @@ import * as FLOW_ACTIONS from '~/redux/flow/actions';
 import pick from 'ramda/es/pick';
 import { selectUser } from '~/redux/auth/selectors';
 import { FlowHero } from '~/components/flow/FlowHero';
-import { FlowRecent } from '~/components/flow/FlowRecent';
 import styles from './styles.scss';
+import { IState } from '~/redux/store';
+import { FlowStamp } from '~/components/flow/FlowStamp';
 
-const mapStateToProps = state => ({
-  flow: pick(['nodes', 'heroes', 'recent', 'updated', 'is_loading'], selectFlow(state)),
+const mapStateToProps = (state: IState) => ({
+  flow: pick(['nodes', 'heroes', 'recent', 'updated', 'is_loading', 'search'], selectFlow(state)),
   user: pick(['role', 'id'], selectUser(state)),
 });
 
@@ -19,16 +20,18 @@ const mapDispatchToProps = {
   nodeGotoNode: NODE_ACTIONS.nodeGotoNode,
   flowSetCellView: FLOW_ACTIONS.flowSetCellView,
   flowGetMore: FLOW_ACTIONS.flowGetMore,
+  flowChangeSearch: FLOW_ACTIONS.flowChangeSearch,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const FlowLayoutUnconnected: FC<IProps> = ({
-  flow: { nodes, heroes, recent, updated, is_loading },
+  flow: { nodes, heroes, recent, updated, is_loading, search },
   user,
   nodeGotoNode,
   flowSetCellView,
   flowGetMore,
+  flowChangeSearch,
 }) => {
   const loadMore = useCallback(() => {
     const pos = window.scrollY + window.innerHeight - document.body.scrollHeight;
@@ -51,7 +54,12 @@ const FlowLayoutUnconnected: FC<IProps> = ({
       </div>
 
       <div className={styles.stamp}>
-        <FlowRecent recent={recent} updated={updated} />
+        <FlowStamp
+          recent={recent}
+          updated={updated}
+          flowChangeSearch={flowChangeSearch}
+          search={search}
+        />
       </div>
 
       <FlowGrid

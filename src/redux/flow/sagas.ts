@@ -9,11 +9,13 @@ import {
   flowSetRecent,
   flowSetUpdated,
   flowSetFlow,
+  flowChangeSearch,
+  flowSetSearch,
 } from './actions';
-import { IResultWithStatus, INode } from '../types';
+import { IResultWithStatus, INode, Unwrap } from '../types';
 import { selectFlowNodes } from './selectors';
 import { reqWrapper } from '../auth/sagas';
-import { postCellView } from './api';
+import { postCellView, getSearchResults } from './api';
 import { IFlowState } from './reducer';
 import uniq from 'ramda/es/uniq';
 
@@ -110,8 +112,28 @@ function* getMore() {
   yield delay(1000);
 }
 
+function* changeSearch({ search }: ReturnType<typeof flowChangeSearch>) {
+  yield put(
+    flowSetSearch({
+      ...search,
+      is_loading: !!search.text,
+    })
+  );
+
+  if (!search.text) return;
+
+  yield delay(500);
+
+  const res: Unwrap<typeof getSearchResults> = yield call(reqWrapper, getSearchResults, {
+    ...search,
+  });
+
+  console.log(res);
+}
+
 export default function* nodeSaga() {
   yield takeLatest([FLOW_ACTIONS.GET_FLOW, REHYDRATE], onGetFlow);
   yield takeLatest(FLOW_ACTIONS.SET_CELL_VIEW, onSetCellView);
   yield takeLeading(FLOW_ACTIONS.GET_MORE, getMore);
+  yield takeLatest(FLOW_ACTIONS.CHANGE_SEARCH, changeSearch);
 }

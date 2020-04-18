@@ -1,29 +1,3 @@
-.grid {
-  display: flex;
-  justify-content: stretch;
-  flex-direction: column;
-  flex: 1;
-  background: $content_bg;
-  padding: $gap;
-  border-radius: 0 0 $radius $radius;
-
-  @include outer_shadow();
-}
-
-.grid_label {
-  margin-bottom: $gap;
-  @include title_with_line();
-  color: transparentize(white, $amount: 0.8);
-}
-
-.search {
-  background: lighten($content_bg, 4%);
-  border-radius: $radius $radius 0 0;
-  padding: $gap;
-
-  @include outer_shadow();
-}
-
 .item {
   display: flex;
   align-items: center;

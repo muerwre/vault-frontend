@@ -1,4 +1,4 @@
-const prefix = "FLOW.";
+const prefix = 'FLOW.';
 
 export const FLOW_ACTIONS = {
   GET_FLOW: `${prefix}GET_FLOW`,
@@ -9,5 +9,8 @@ export const FLOW_ACTIONS = {
   SET_UPDATED: `${prefix}SET_UPDATED`,
   SET_RANGE: `${prefix}SET_RANGE`,
   SET_CELL_VIEW: `${prefix}SET_CELL_VIEW`,
-  GET_MORE: `${prefix}GET_MORE`
+  GET_MORE: `${prefix}GET_MORE`,
+
+  SET_SEARCH: `${prefix}SET_SEARCH`,
+  CHANGE_SEARCH: `${prefix}CHANGE_SEARCH`,
 };
