@@ -78,6 +78,8 @@
   opacity: 0.1;
   stroke: white;
   stroke-width: 0.5;
+  pointer-events: none;
+  touch-action: none;
 }
 
 .close_icon {
