@@ -1,7 +1,4 @@
 .blur {
-  filter: blur(0);
-  transition: filter 0.25s;
-  will-change: filter;
   padding-top: $header_height + 2px;
   display: flex;
   box-sizing: border-box;

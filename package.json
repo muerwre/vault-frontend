@@ -99,6 +99,7 @@
     "redux-persist": "^5.10.0",
     "redux-saga": "^1.1.1",
     "reduxsauce": "^1.0.0",
+    "resize-sensor": "^0.0.6",
     "sass-loader": "^7.3.1",
     "sass-resources-loader": "^2.0.0",
     "scrypt": "^6.0.3",
