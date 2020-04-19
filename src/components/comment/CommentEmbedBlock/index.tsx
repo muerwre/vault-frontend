@@ -1,10 +1,11 @@
-import React, { FC, memo, useMemo } from 'react';
+import React, { FC, memo, useMemo, useEffect } from 'react';
 import { ICommentBlock } from '~/constants/comment';
 import styles from './styles.scss';
 import { getYoutubeThumb } from '~/utils/dom';
 import { selectPlayer } from '~/redux/player/selectors';
 import { connect } from 'react-redux';
 import * as PLAYER_ACTIONS from '~/redux/player/actions';
+import { Icon } from '~/components/input/Icon';
 
 const mapStateToProps = state => ({
   youtubes: selectPlayer(state).youtubes,
@@ -31,11 +32,16 @@ const CommentEmbedBlockUnconnected: FC<Props> = memo(
 
     const preview = useMemo(() => getYoutubeThumb(block.content), [block.content]);
 
-    useMemo(() => {
+    useEffect(() => {
       if (!link[5] || youtubes[link[5]]) return;
-
       playerGetYoutubeInfo(link[5]);
-    }, [playerGetYoutubeInfo]);
+    }, [link, playerGetYoutubeInfo]);
+
+    const title = useMemo(
+      () =>
+        (youtubes[link[5]] && youtubes[link[5]].metadata && youtubes[link[5]].metadata.title) || '',
+      [link, youtubes]
+    );
 
     return (
       <div className={styles.embed}>
@@ -43,7 +49,13 @@ const CommentEmbedBlockUnconnected: FC<Props> = memo(
 
         <div className={styles.preview}>
           <div style={{ backgroundImage: `url("${preview}")` }}>
-            <div className={styles.backdrop}>{link[0]}</div>
+            <div className={styles.backdrop}>
+              <div className={styles.play}>
+                <Icon icon="play" size={32} />
+              </div>
+
+              <div className={styles.title}>{title || link[0]}</div>
+            </div>
           </div>
         </div>
       </div>
