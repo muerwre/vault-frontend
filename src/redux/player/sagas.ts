@@ -1,8 +1,17 @@
-import { takeLatest, put, fork, race, take, delay } from 'redux-saga/effects';
+import { takeLatest, put, fork, race, take, delay, call, select } from 'redux-saga/effects';
 import { PLAYER_ACTIONS, PLAYER_STATES } from './constants';
-import { playerSetFile, playerSeek, playerSetStatus, playerGetYoutubeInfo } from './actions';
+import {
+  playerSetFile,
+  playerSeek,
+  playerSetStatus,
+  playerGetYoutubeInfo,
+  playerSet,
+} from './actions';
 import { Player } from '~/utils/player';
 import { getURL } from '~/utils/dom';
+import { Unwrap } from '../types';
+import { getEmbedYoutube } from './api';
+import { selectPlayer } from './selectors';
 
 function* setFileAndPlaySaga({ file }: ReturnType<typeof playerSetFile>) {
   yield put(playerSetFile(file));
@@ -32,7 +41,7 @@ function* stoppedSaga() {
 }
 
 function* getYoutubeInfo() {
-  let ids = [];
+  let ids: string[] = [];
 
   while (true) {
     const {
@@ -48,7 +57,13 @@ function* getYoutubeInfo() {
     }
 
     if (ticker || ids.length > 25) {
-      // console.log('FETCHING!', ids);
+      const result: Unwrap<ReturnType<typeof getEmbedYoutube>> = yield call(getEmbedYoutube, ids);
+
+      if (!result.error && result.data.items && Object.keys(result.data.items).length) {
+        const { youtubes }: ReturnType<typeof selectPlayer> = yield select(selectPlayer);
+        yield put(playerSet({ youtubes: { ...youtubes, ...result.data.items } }));
+      }
+
       ids = [];
     }
   }

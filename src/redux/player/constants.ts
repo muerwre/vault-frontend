@@ -1,6 +1,8 @@
 const prefix = 'PLAYER.';
 
 export const PLAYER_ACTIONS = {
+  SET: `${prefix}SET`,
+
   SET_FILE: `${prefix}SET_FILE`,
   SET_FILE_AND_PLAY: `${prefix}SET_FILE_AND_PLAY`,
   SET_STATUS: `${prefix}SET_STATUS`,

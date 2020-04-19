@@ -33,4 +33,7 @@ export const API = {
   SEARCH: {
     NODES: '/search/nodes',
   },
+  EMBED: {
+    YOUTUBE: '/embed/youtube',
+  },
 };

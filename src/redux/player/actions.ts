@@ -1,6 +1,11 @@
 import { IPlayerState } from './reducer';
 import { PLAYER_ACTIONS } from './constants';
 
+export const playerSet = (player: Partial<IPlayerState>) => ({
+  type: PLAYER_ACTIONS.SET,
+  player,
+});
+
 export const playerSetFile = (file: IPlayerState['file']) => ({
   type: PLAYER_ACTIONS.SET_FILE,
   file,

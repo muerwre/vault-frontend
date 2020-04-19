@@ -194,3 +194,14 @@ export type INodeNotification = {
 export type INotification = IMessageNotification | ICommentNotification;
 
 export type Unwrap<T> = T extends Promise<infer U> ? U : T;
+
+export interface IEmbed {
+  provider: string;
+  address: string;
+  id: number;
+  metadata: {
+    title: string;
+    thumb: string;
+    duration: string;
+  };
+}
