@@ -21,6 +21,7 @@ import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholde
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { Sticky } from '~/components/containers/Sticky';
+import { Footer } from '~/components/main/Footer';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -186,6 +187,8 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
             </Padder>
           </Group>
         )}
+
+        <Footer />
       </Card>
     );
   }
