@@ -53,11 +53,13 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, onEdit }
         <Group className={classnames(styles.block, styles.block_text)}>
           {menu}
 
-          {formatCommentText(path(['user', 'username'], comment), comment.text).map(
-            (block, key) =>
-              COMMENT_BLOCK_RENDERERS[block.type] &&
-              createElement(COMMENT_BLOCK_RENDERERS[block.type], { block, key })
-          )}
+          <Group className={styles.renderers}>
+            {formatCommentText(path(['user', 'username'], comment), comment.text).map(
+              (block, key) =>
+                COMMENT_BLOCK_RENDERERS[block.type] &&
+                createElement(COMMENT_BLOCK_RENDERERS[block.type], { block, key })
+            )}
+          </Group>
 
           <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
         </Group>
