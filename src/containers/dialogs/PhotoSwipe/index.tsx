@@ -29,7 +29,7 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
   const items = useMemo(
     () =>
       photoswipe.images.map(image => ({
-        src: getURL(image, window.innerWidth < 768 ? PRESETS[900] : ''),
+        src: getURL(image, window.innerWidth < 768 ? PRESETS[900] : PRESETS[1600]),
       })),
     [photoswipe.images]
   );
