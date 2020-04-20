@@ -7,20 +7,14 @@ pipeline {
     }
 
     stages {
-        stage('check') {
+        stage('') {
             steps {
-                echo "WWW: ${WWW}"
-                echo "ENV: ${ENV}"
-                echo "WORKSPACE: ${WORKSPACE}"
-                sh 'pwd'
-                sh 'ls'
+                echo "WWW: ${WWW}\nENV: ${ENV}\n"
 
                 script {
-                    if("${WWW}" == "" || "${ENV}" == "" || ("${env.BRANCH_NAME}" != "master" && "${env.BRANCH_NAME}" != "develop")) {
-                        println "INCORRECT VARIABLES"
+                    if("${WWW}" == "" || "${ENV}" == "" {
                         currentBuild.result = 'FAILED'
-                        failed = true
-                        error "Build failed :-("
+                        error "No valid deploy dirs"
                         return
                     }
                 }
@@ -33,14 +27,18 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('build') {
             steps {
-                sh 'npm install'
-                sh 'npm run build'
+                sh 'yarn'
+                sh 'yarn build'
             }
         }
 
         stage('deploy') {
+            when {
+                anyOf { branch 'master'; branch 'develop' }
+            }
+
             steps{
                 sh "rm -rf ${WWW}"
                 sh "mv ${WORKSPACE}/dist ${WWW}"
