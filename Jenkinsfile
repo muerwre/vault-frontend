@@ -7,10 +7,8 @@ pipeline {
     }
 
     stages {
-        stage('') {
+        stage('check') {
             steps {
-                echo "WWW: ${WWW}\nENV: ${ENV}\n"
-
                 script {
                     if("${WWW}" == "" || "${ENV}" == "" {
                         currentBuild.result = 'FAILED'
