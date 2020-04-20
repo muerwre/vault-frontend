@@ -20,6 +20,8 @@ import pick from 'ramda/es/pick';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
+import { Sticky } from '~/components/containers/Sticky';
+import { Footer } from '~/components/main/Footer';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -158,39 +160,40 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                 </Group>
 
                 <div className={styles.panel}>
-                  <Group style={{ flex: 1, minWidth: 0 }}>
-                    {!is_loading && (
-                      <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
-                    )}
+                  <Sticky>
+                    <Group style={{ flex: 1, minWidth: 0 }}>
+                      {!is_loading && (
+                        <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
+                      )}
 
-                    {is_loading && <NodeRelatedPlaceholder />}
+                      {is_loading && <NodeRelatedPlaceholder />}
 
-                    {!is_loading &&
-                      related &&
-                      related.albums &&
-                      Object.keys(related.albums)
-                        .filter(album => related.albums[album].length > 0)
-                        .map(album => (
-                          <NodeRelated title={album} items={related.albums[album]} key={album} />
-                        ))}
+                      {!is_loading &&
+                        related &&
+                        related.albums &&
+                        Object.keys(related.albums)
+                          .filter(album => related.albums[album].length > 0)
+                          .map(album => (
+                            <NodeRelated title={album} items={related.albums[album]} key={album} />
+                          ))}
 
-                    {!is_loading && related && related.similar && related.similar.length > 0 && (
-                      <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
-                    )}
-                  </Group>
+                      {!is_loading && related && related.similar && related.similar.length > 0 && (
+                        <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
+                      )}
+                    </Group>
+                  </Sticky>
                 </div>
               </Group>
             </Padder>
           </Group>
         )}
+
+        <Footer />
       </Card>
     );
   }
 );
 
-const NodeLayout = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NodeLayoutUnconnected);
+const NodeLayout = connect(mapStateToProps, mapDispatchToProps)(NodeLayoutUnconnected);
 
 export { NodeLayout, NodeLayoutUnconnected };

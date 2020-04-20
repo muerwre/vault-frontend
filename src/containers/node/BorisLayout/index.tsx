@@ -14,6 +14,8 @@ import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import isBefore from 'date-fns/isBefore';
+import { Card } from '~/components/containers/Card';
+import { Footer } from '~/components/main/Footer';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -68,58 +70,38 @@ const BorisLayoutUnconnected: FC<IProps> = ({
         <div className={styles.caption}>
           <div className={styles.caption_text}>{title}</div>
         </div>
-        <img src={boris} />
+
+        <img src={boris} alt="Борис" />
       </div>
 
       <div className={styles.container}>
-        <div className={styles.column}>
-          <div className={styles.daygrid}>
-            <div className={styles.label}>Убежищу сегодня:</div>
-            <div className={styles.day}>10</div>
-            <div>лет</div>
-            <div className={styles.day}>2</div>
-            <div>месяца</div>
+        <Card className={styles.content}>
+          <Group className={styles.grid}>
+            {is_user && <NodeCommentForm is_before />}
 
-            <div className={styles.line} />
+            {is_loading_comments ? (
+              <NodeNoComments is_loading />
+            ) : (
+              <NodeComments
+                comments={comments}
+                comment_data={comment_data}
+                comment_count={comment_count}
+                user={user}
+                onDelete={nodeLockComment}
+                onEdit={nodeEditComment}
+                onLoadMore={nodeLoadMoreComments}
+                order="ASC"
+              />
+            )}
+          </Group>
 
-            <div className={styles.label}>Мы собрали:</div>
-            <div className={styles.day}>2374</div>
-            <div>поста</div>
-            <div className={styles.day}>14765</div>
-            <div>комментариев</div>
-            <div className={styles.day}>4260</div>
-            <div>файла</div>
-            <div className={styles.day}>54</div>
-            <div>жителя</div>
-          </div>
-        </div>
-
-        <Group className={styles.content}>
-          {is_user && <NodeCommentForm is_before />}
-
-          {is_loading_comments ? (
-            <NodeNoComments is_loading />
-          ) : (
-            <NodeComments
-              comments={comments}
-              comment_data={comment_data}
-              comment_count={comment_count}
-              user={user}
-              onDelete={nodeLockComment}
-              onEdit={nodeEditComment}
-              onLoadMore={nodeLoadMoreComments}
-              order="ASC"
-            />
-          )}
-        </Group>
+          <Footer />
+        </Card>
       </div>
     </div>
   );
 };
 
-const BorisLayout = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BorisLayoutUnconnected);
+const BorisLayout = connect(mapStateToProps, mapDispatchToProps)(BorisLayoutUnconnected);
 
 export { BorisLayout };

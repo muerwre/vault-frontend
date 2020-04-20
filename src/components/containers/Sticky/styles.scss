@@ -1,0 +1,15 @@
+.wrap {
+  height: 100%;
+  width: 100%;
+  position: relative;
+
+  :global(.sidebar) {
+    will-change: min-height;
+  }
+
+  :global(.sidebar__inner) {
+    transform: translate(0, 0); /* For browsers don't support translate3d. */
+    transform: translate3d(0, 0, 0);
+    will-change: position, transform;
+  }
+}

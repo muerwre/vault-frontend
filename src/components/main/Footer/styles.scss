@@ -1,0 +1,23 @@
+.footer {
+  display: flex;
+  flex-direction: row;
+  font: $font_12_semibold;
+  background: transparentize(black, 0.9);
+  border-radius: 0 0 $radius $radius;
+  align-items: center;
+  text-transform: uppercase;
+  color: darken(white, 80%);
+  padding-top: 2px;
+  box-sizing: border-box;
+
+  @include outer_shadow();
+}
+
+.slogan {
+  flex: 1;
+  padding: $gap;
+}
+
+.copy {
+  padding: $gap;
+}
