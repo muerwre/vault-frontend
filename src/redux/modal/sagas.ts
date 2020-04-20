@@ -1,6 +1,8 @@
 import { takeEvery, put } from 'redux-saga/effects';
 import { LocationChangeAction, LOCATION_CHANGE } from 'connected-react-router';
 import { authOpenProfile, authShowRestoreModal } from '../auth/actions';
+import { MODAL_ACTIONS, DIALOGS } from './constants';
+import { modalShowPhotoswipe, modalSet } from './actions';
 
 function* onPathChange({
   payload: {
@@ -18,6 +20,21 @@ function* onPathChange({
   }
 }
 
+function* onShowPhotoswipe({ images, index }: ReturnType<typeof modalShowPhotoswipe>) {
+  console.log({ images, index });
+  yield put(
+    modalSet({
+      dialog: DIALOGS.PHOTOSWIPE,
+      is_shown: true,
+      photoswipe: {
+        images,
+        index,
+      },
+    })
+  );
+}
+
 export function* modalSaga() {
   yield takeEvery(LOCATION_CHANGE, onPathChange);
+  yield takeEvery(MODAL_ACTIONS.SHOW_PHOTOSWIPE, onShowPhotoswipe);
 }

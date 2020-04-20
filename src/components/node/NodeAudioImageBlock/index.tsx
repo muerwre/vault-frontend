@@ -8,6 +8,7 @@ import { PRESETS } from '~/constants/urls';
 
 interface IProps {
   node: INode;
+  modalShowPhotoswipe: any;
 }
 
 const NodeAudioImageBlock: FC<IProps> = ({ node }) => {

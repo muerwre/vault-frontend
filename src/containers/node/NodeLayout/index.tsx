@@ -10,11 +10,9 @@ import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelated } from '~/components/node/NodeRelated';
-import * as styles from './styles.scss';
 import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
 import { NODE_COMPONENTS, NODE_INLINES } from '~/redux/node/constants';
-import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectUser } from '~/redux/auth/selectors';
 import pick from 'ramda/es/pick';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
@@ -23,7 +21,12 @@ import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { Sticky } from '~/components/containers/Sticky';
 import { Footer } from '~/components/main/Footer';
 
-const mapStateToProps = state => ({
+import * as styles from './styles.scss';
+import * as NODE_ACTIONS from '~/redux/node/actions';
+import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import { IState } from '~/redux/store';
+
+const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
   user: selectUser(state),
 });
@@ -39,6 +42,7 @@ const mapDispatchToProps = {
   nodeLockComment: NODE_ACTIONS.nodeLockComment,
   nodeEditComment: NODE_ACTIONS.nodeEditComment,
   nodeLoadMoreComments: NODE_ACTIONS.nodeLoadMoreComments,
+  modalShowPhotoswipe: MODAL_ACTIONS.modalShowPhotoswipe,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -71,6 +75,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     nodeLockComment,
     nodeEditComment,
     nodeLoadMoreComments,
+    modalShowPhotoswipe,
   }) => {
     const [layout, setLayout] = useState({});
 
@@ -108,7 +113,8 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
 
     return (
       <Card className={styles.node} seamless>
-        {block && createElement(block, { node, is_loading, updateLayout, layout })}
+        {block &&
+          createElement(block, { node, is_loading, updateLayout, layout, modalShowPhotoswipe })}
 
         <NodePanel
           node={pick(['title', 'user', 'is_liked', 'is_heroic', 'deleted_at', 'created_at'], node)}
@@ -137,6 +143,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                         is_loading,
                         updateLayout,
                         layout,
+                        modalShowPhotoswipe,
                       })}
                     </div>
                   )}

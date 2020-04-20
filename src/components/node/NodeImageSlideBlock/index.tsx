@@ -1,12 +1,4 @@
-import React, {
-  FC,
-  useMemo,
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useLayoutEffect,
-} from 'react';
+import React, { FC, useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { ImageSwitcher } from '../ImageSwitcher';
 import * as styles from './styles.scss';
 import { INode } from '~/redux/types';
@@ -17,17 +9,24 @@ import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { throttle } from 'throttle-debounce';
+import * as MODAL_ACTIONS from '~/redux/modal/actions';
 
 interface IProps {
   is_loading: boolean;
   node: INode;
   layout: {};
   updateLayout: () => void;
+  modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
 }
 
 const getX = event => (event.touches ? event.touches[0].clientX : event.clientX);
 
-const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => {
+const NodeImageSlideBlock: FC<IProps> = ({
+  node,
+  is_loading,
+  updateLayout,
+  modalShowPhotoswipe,
+}) => {
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(320);
   const [max_height, setMaxHeight] = useState(960);
@@ -39,6 +38,8 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   const [initial_x, setInitialX] = useState(0);
   const [offset, setOffset] = useState(0);
   const [is_dragging, setIsDragging] = useState(false);
+  const [drag_start_time, setDragStartTime] = useState(0);
+
   const slide = useRef<HTMLDivElement>();
   const wrap = useRef<HTMLDivElement>();
 
@@ -166,12 +167,25 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     normalizeOffset();
   }, [wrap, setMaxHeight, normalizeOffset]);
 
-  const stopDragging = useCallback(() => {
-    if (!is_dragging) return;
+  const onOpenPhotoSwipe = useCallback(() => modalShowPhotoswipe(images, current), [
+    modalShowPhotoswipe,
+    images,
+    current,
+  ]);
 
-    setIsDragging(false);
-    normalizeOffset();
-  }, [setIsDragging, is_dragging, normalizeOffset]);
+  const stopDragging = useCallback(
+    event => {
+      if (!is_dragging) return;
+
+      setIsDragging(false);
+      normalizeOffset();
+
+      if (initial_x - event.clientX < 10) {
+        onOpenPhotoSwipe();
+      }
+    },
+    [setIsDragging, is_dragging, normalizeOffset, onOpenPhotoSwipe]
+  );
 
   const startDragging = useCallback(
     event => {

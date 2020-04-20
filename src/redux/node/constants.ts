@@ -13,6 +13,7 @@ import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadB
 import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadButton';
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
 import { Filler } from '~/components/containers/Filler';
+import { modalShowPhotoswipe } from '../modal/actions';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -77,7 +78,13 @@ export const NODE_TYPES = {
 
 type INodeComponents = Record<
   ValueOf<typeof NODE_TYPES>,
-  FC<{ node: INode; is_loading: boolean; layout: {}; updateLayout: () => void }>
+  FC<{
+    node: INode;
+    is_loading: boolean;
+    layout: {};
+    updateLayout: () => void;
+    modalShowPhotoswipe: typeof modalShowPhotoswipe;
+  }>
 >;
 
 export const NODE_COMPONENTS: INodeComponents = {
