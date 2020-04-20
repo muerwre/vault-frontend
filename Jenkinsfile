@@ -10,7 +10,7 @@ pipeline {
         stage('check') {
             steps {
                 script {
-                    if("${WWW}" == "" || "${ENV}" == "" {
+                    if("${WWW}" == "" || "${ENV}" == "") {
                         currentBuild.result = 'FAILED'
                         error "No valid deploy dirs"
                         return
