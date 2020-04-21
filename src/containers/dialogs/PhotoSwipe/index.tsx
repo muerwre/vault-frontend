@@ -26,27 +26,19 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
   let ref = useRef<HTMLDivElement>(null);
 
-  const items = useMemo(
-    () =>
-      photoswipe.images.map(image => ({
-        src: getURL(image, window.innerWidth < 768 ? PRESETS[900] : PRESETS[1600]),
-      })),
-    [photoswipe.images]
-  );
-
   const closeModal = useCallback(() => modalSetShown(false), [modalSetShown]);
 
   useEffect(() => {
     new Promise(async resolve => {
       const images = await Promise.all(
-        items.map(
-          item =>
+        photoswipe.images.map(
+          image =>
             new Promise(resolveImage => {
               const img = new Image();
 
               img.onload = () => {
                 resolveImage({
-                  src: item.src,
+                  src: getURL(image, window.innerWidth < 768 ? PRESETS[900] : PRESETS[1600]),
                   h: img.naturalHeight,
                   w: img.naturalWidth,
                 });
@@ -56,7 +48,7 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
                 resolveImage({});
               };
 
-              img.src = item.src;
+              img.src = getURL(image, PRESETS[1600]);
             })
         )
       );
@@ -73,7 +65,7 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
       ps.listen('destroy', closeModal);
       ps.listen('close', closeModal);
     });
-  }, [items, photoswipe.index]);
+  }, [photoswipe.images, photoswipe.index]);
 
   return (
     <div className="pswp" tabIndex={-1} role="dialog" aria-hidden="true" ref={ref}>
