@@ -70,7 +70,7 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
   return (
     <div className="pswp" tabIndex={-1} role="dialog" aria-hidden="true" ref={ref}>
       <div className={classNames('pswp__bg', styles.bg)} />
-      <div className="pswp__scroll-wrap">
+      <div className={classNames('pswp__scroll-wrap', styles.wrap)}>
         <div className="pswp__container">
           <div className="pswp__item" />
           <div className="pswp__item" />
@@ -91,14 +91,18 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
               </div>
             </div>
           </div>
+
           <div className="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
             <div className="pswp__share-tooltip" />
           </div>
+
           <button
             className="pswp__button pswp__button--arrow--left"
             title="Previous (arrow left)"
           />
+
           <button className="pswp__button pswp__button--arrow--right" title="Next (arrow right)" />
+
           <div className="pswp__caption">
             <div className="pswp__caption__center" />
           </div>

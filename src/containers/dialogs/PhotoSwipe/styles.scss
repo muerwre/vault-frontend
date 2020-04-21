@@ -1,3 +1,9 @@
+.wrap {
+  :global(.pswp__img) {
+    border-radius: $radius;
+  }
+}
+
 .bg {
   background-color: transparent !important;
 }
