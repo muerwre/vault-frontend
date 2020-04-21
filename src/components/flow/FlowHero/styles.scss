@@ -16,7 +16,9 @@
     background: url('~/sprites/stripes.svg') rgba(0, 0, 0, 0.3);
     z-index: 4;
     pointer-events: none;
+    box-shadow: inset transparentize($color: white, $amount: 0.85) 0 1px;
     touch-action: none;
+    border-radius: $radius;
   }
 
   &::before {
