@@ -19,7 +19,10 @@ interface IProps {
   modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
 }
 
-const getX = event => (event.touches ? event.touches[0].clientX : event.clientX);
+const getX = event =>
+  (event.touches && event.touches.length) || (event.changedTouches && event.changedTouches.length)
+    ? (event.touches.length && event.touches[0].clientX) || event.changedTouches[0].clientX
+    : event.clientX;
 
 const NodeImageSlideBlock: FC<IProps> = ({
   node,
@@ -38,7 +41,6 @@ const NodeImageSlideBlock: FC<IProps> = ({
   const [initial_x, setInitialX] = useState(0);
   const [offset, setOffset] = useState(0);
   const [is_dragging, setIsDragging] = useState(false);
-  const [drag_start_time, setDragStartTime] = useState(0);
 
   const slide = useRef<HTMLDivElement>();
   const wrap = useRef<HTMLDivElement>();
@@ -180,7 +182,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
       setIsDragging(false);
       normalizeOffset();
 
-      if (initial_x - event.clientX < 10) {
+      if (initial_x - getX(event) < 10) {
         onOpenPhotoSwipe();
       }
     },
