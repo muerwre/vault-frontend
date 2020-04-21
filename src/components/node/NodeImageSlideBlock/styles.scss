@@ -5,7 +5,6 @@
   width: 100%;
   transition: height 0.25s;
   border-radius: $radius;
-  margin-bottom: 20px;
 
   .is_loading {
     .placeholder {
@@ -25,7 +24,7 @@
   user-select: none;
   will-change: transform, height;
   transition: height 500ms, transform 500ms;
-  padding: 10px 0;
+  padding: 0 0 20px 0;
 
   &:active {
     transition: none;

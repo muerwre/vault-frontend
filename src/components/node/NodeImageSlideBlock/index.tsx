@@ -166,7 +166,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
     if (!wrap.current) return;
     const { width } = wrap.current.getBoundingClientRect();
     // setMaxHeight(width * NODE_SETTINGS.MAX_IMAGE_ASPECT);
-    setMaxHeight(window.innerHeight - 175);
+    setMaxHeight(window.innerHeight - 152);
     normalizeOffset();
   }, [wrap, setMaxHeight, normalizeOffset]);
 
