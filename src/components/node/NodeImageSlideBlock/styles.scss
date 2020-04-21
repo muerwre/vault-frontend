@@ -38,7 +38,7 @@
     opacity: 1;
     border-radius: $radius;
     box-shadow: transparentize($color: white, $amount: 0.95) 0 -1px,
-      transparentize($color: #000000, $amount: 0.5) 0 4px 10px;
+      transparentize($color: #000000, $amount: 0.6) 0 2px 5px;
   }
 
   &.is_dragging {
