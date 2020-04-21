@@ -4,7 +4,8 @@
   min-width: 0;
   width: 100%;
   transition: height 0.25s;
-  border-radius: $radius $radius 0 0;
+  border-radius: $radius;
+  margin-bottom: 20px;
 
   .is_loading {
     .placeholder {
@@ -24,17 +25,21 @@
   user-select: none;
   will-change: transform, height;
   transition: height 500ms, transform 500ms;
+  padding: 10px 0;
 
   &:active {
     transition: none;
   }
 
   .image {
+    // that was for containered image:
     // max-height: 960px;
-    max-height: 120vh !important;
-    max-width: 100%;
+    // max-height: 120vh !important;
+    // max-width: 100%;
     opacity: 1;
-    border-radius: $radius $radius 0 0;
+    border-radius: $radius;
+    box-shadow: transparentize($color: white, $amount: 0.95) 0 -1px,
+      transparentize($color: #000000, $amount: 0.5) 0 4px 10px;
   }
 
   &.is_dragging {
