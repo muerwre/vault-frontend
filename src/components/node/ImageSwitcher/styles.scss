@@ -7,14 +7,15 @@
 
 .switcher {
   position: absolute;
-  background: darken($content_bg, 2%);
+  // background: darken($content_bg, 2%);
+  background: url('../../../../src/sprites/noise.png') $main_bg_color;
   display: flex;
   left: 50%;
   transform: translate(-50%, 0);
-  top: 0;
+  top: -5px;
   border-radius: 24px;
-  padding: 0 13px;
-  flex-wrap: wrap;
+  padding: 0 3px;
+  // flex-wrap: wrap;
   transition: background-color 0.5s;
 
   & > div {

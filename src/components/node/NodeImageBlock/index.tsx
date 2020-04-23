@@ -20,7 +20,7 @@ interface IProps {
 const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout, modalShowPhotoswipe }) => {
   const [is_animated, setIsAnimated] = useState(false);
   const [current, setCurrent] = useState(0);
-  const [height, setHeight] = useState(window.innerHeight - 140);
+  const [height, setHeight] = useState(window.innerHeight - 150);
   const [loaded, setLoaded] = useState<Record<number, boolean>>({});
   const refs = useRef<Record<number, HTMLDivElement>>({});
 
@@ -41,7 +41,7 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout, modalShowP
 
   useEffect(() => {
     if (!refs || !refs.current[current] || !loaded[current])
-      return setHeight(window.innerHeight - 140);
+      return setHeight(window.innerHeight - 150);
 
     const el = refs.current[current];
     const element_height = el.getBoundingClientRect && el.getBoundingClientRect().height;

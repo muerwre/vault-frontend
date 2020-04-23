@@ -23,7 +23,7 @@
   user-select: none;
 
   .image {
-    max-height: calc(100vh - 140px);
+    max-height: calc(100vh - 150px);
     max-width: 100%;
     opacity: 1;
     border-radius: $radius;
@@ -52,7 +52,7 @@
 
 .placeholder {
   width: 100%;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 130px);
   border-radius: $radius;
   display: flex;
   align-items: center;
