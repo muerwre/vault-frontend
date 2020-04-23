@@ -51,6 +51,10 @@
 }
 
 .placeholder {
-  background: red;
-  height: 320px;
+  width: 100%;
+  height: calc(100vh - 140px);
+  border-radius: $radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

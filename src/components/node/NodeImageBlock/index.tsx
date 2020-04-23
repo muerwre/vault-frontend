@@ -7,6 +7,7 @@ import { getURL } from '~/utils/dom';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { PRESETS } from '~/constants/urls';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
 
 interface IProps {
   is_loading: boolean;
@@ -19,7 +20,7 @@ interface IProps {
 const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout, modalShowPhotoswipe }) => {
   const [is_animated, setIsAnimated] = useState(false);
   const [current, setCurrent] = useState(0);
-  const [height, setHeight] = useState(320);
+  const [height, setHeight] = useState(window.innerHeight - 140);
   const [loaded, setLoaded] = useState<Record<number, boolean>>({});
   const refs = useRef<Record<number, HTMLDivElement>>({});
 
@@ -39,9 +40,12 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout, modalShowP
   useEffect(() => updateLayout(), [loaded]);
 
   useEffect(() => {
-    if (!refs || !refs.current[current] || !loaded[current]) return setHeight(320);
+    if (!refs || !refs.current[current] || !loaded[current])
+      return setHeight(window.innerHeight - 140);
+
     const el = refs.current[current];
     const element_height = el.getBoundingClientRect && el.getBoundingClientRect().height;
+
     setHeight(element_height);
   }, [refs, current, loaded]);
 
@@ -49,6 +53,12 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout, modalShowP
     const timer = setTimeout(() => setIsAnimated(true), 250);
     return () => clearTimeout(timer);
   }, []);
+
+  const onOpenPhotoSwipe = useCallback(() => modalShowPhotoswipe(images, current), [
+    modalShowPhotoswipe,
+    images,
+    current,
+  ]);
 
   return (
     <div className={classNames(styles.wrap, { is_loading, is_animated })}>
@@ -59,8 +69,12 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout, modalShowP
         loaded={loaded}
       />
 
-      <div className={styles.image_container} style={{ height }}>
-        {(is_loading || !loaded[0] || !images.length) && <div className={styles.placeholder} />}
+      <div className={styles.image_container} style={{ height }} onClick={onOpenPhotoSwipe}>
+        {(is_loading || !loaded[0] || !images.length) && (
+          <div className={styles.placeholder}>
+            <LoaderCircle size={72} />
+          </div>
+        )}
 
         {images.map((file, index) => (
           <div
