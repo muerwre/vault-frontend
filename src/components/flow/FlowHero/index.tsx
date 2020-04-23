@@ -16,7 +16,6 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
   const [limit, setLimit] = useState(Math.min(heroes.length, 6));
   const [current, setCurrent] = useState(0);
   const [loaded, setLoaded] = useState([]);
-  const [is_mobile, setIsMobile] = useState(false);
 
   const timer = useRef(null);
   const onLoad = useCallback(id => () => setLoaded([...loaded, id]), [setLoaded, loaded]);
@@ -48,8 +47,10 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
   useEffect(() => {
     timer.current = setTimeout(onNext, 5000);
 
-    return () => clearTimeout(timer.current);
-  }, [current]);
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, [current, onNext]);
 
   useEffect(() => {
     if (current === 0 && loaded.length > 0) setCurrent(loaded[0]);
