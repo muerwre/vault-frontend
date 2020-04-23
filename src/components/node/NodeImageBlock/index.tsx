@@ -30,25 +30,18 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout, modalShowP
   );
 
   const setRef = useCallback(index => el => (refs.current[index] = el), [refs]);
+
   const onImageLoad = useCallback(index => () => setLoaded({ ...loaded, [index]: true }), [
     setLoaded,
     loaded,
   ]);
 
-  const onOpenPhotoSwipe = useCallback(
-    (index: number) => () => modalShowPhotoswipe(images, index),
-    [modalShowPhotoswipe, images]
-  );
-
   useEffect(() => updateLayout(), [loaded]);
 
   useEffect(() => {
     if (!refs || !refs.current[current] || !loaded[current]) return setHeight(320);
-
     const el = refs.current[current];
-
     const element_height = el.getBoundingClientRect && el.getBoundingClientRect().height;
-
     setHeight(element_height);
   }, [refs, current, loaded]);
 
@@ -59,35 +52,33 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout, modalShowP
 
   return (
     <div className={classNames(styles.wrap, { is_loading, is_animated })}>
-      <div>
-        <ImageSwitcher
-          total={images.length}
-          current={current}
-          onChange={setCurrent}
-          loaded={loaded}
-        />
+      <ImageSwitcher
+        total={images.length}
+        current={current}
+        onChange={setCurrent}
+        loaded={loaded}
+      />
 
-        <div className={styles.image_container} style={{ height }}>
-          {(is_loading || !loaded[0] || !images.length) && <div className={styles.placeholder} />}
+      <div className={styles.image_container} style={{ height }}>
+        {(is_loading || !loaded[0] || !images.length) && <div className={styles.placeholder} />}
 
-          {images.map((file, index) => (
-            <div
-              className={classNames(styles.image_wrap, {
-                is_active: index === current && loaded[index],
-              })}
-              ref={setRef(index)}
+        {images.map((file, index) => (
+          <div
+            className={classNames(styles.image_wrap, {
+              is_active: index === current && loaded[index],
+            })}
+            ref={setRef(index)}
+            key={file.id}
+          >
+            <img
+              className={styles.image}
+              src={getURL(file, PRESETS['1600'])}
+              alt=""
               key={file.id}
-            >
-              <img
-                className={styles.image}
-                src={getURL(file, PRESETS['1600'])}
-                alt=""
-                key={file.id}
-                onLoad={onImageLoad(index)}
-              />
-            </div>
-          ))}
-        </div>
+              onLoad={onImageLoad(index)}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

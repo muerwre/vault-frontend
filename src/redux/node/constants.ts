@@ -14,6 +14,7 @@ import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadB
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
 import { Filler } from '~/components/containers/Filler';
 import { modalShowPhotoswipe } from '../modal/actions';
+import { NodeImageBlock } from '~/components/node/NodeImageBlock';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -87,8 +88,12 @@ type INodeComponents = Record<
   }>
 >;
 
+export const NODE_HEADS: INodeComponents = {
+  [NODE_TYPES.IMAGE]: NodeImageBlock,
+};
+
 export const NODE_COMPONENTS: INodeComponents = {
-  [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
+  // [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
   [NODE_TYPES.VIDEO]: NodeVideoBlock,
   [NODE_TYPES.AUDIO]: NodeAudioImageBlock,
 };
