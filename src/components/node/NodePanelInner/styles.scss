@@ -3,7 +3,6 @@
   align-items: center;
   justify-content: stretch;
   position: relative;
-  // height: 72px;
   width: 100%;
   flex-direction: row;
   align-items: center;
@@ -14,6 +13,7 @@
     padding: 0 $gap;
     bottom: 0;
     position: fixed;
+    z-index: 5;
 
     @include tablet {
       padding: 0;
@@ -28,8 +28,9 @@
   justify-content: stretch;
   border-radius: $radius $radius 0 0;
   box-sizing: border-box;
-  padding: $gap;
+  padding: 0 $gap;
   background: $node_bg;
+  height: 64px;
 
   @include outer_shadow();
 
@@ -49,7 +50,7 @@
   text-transform: uppercase;
   font: $font_24_semibold;
   // height: 24px;
-  padding-bottom: 6px;
+  padding-bottom: 3px;
 
   @include tablet {
     // font-size: 16px;
