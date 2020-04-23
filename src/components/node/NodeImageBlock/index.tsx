@@ -62,13 +62,6 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout, modalShowP
 
   return (
     <div className={classNames(styles.wrap, { is_loading, is_animated })}>
-      <ImageSwitcher
-        total={images.length}
-        current={current}
-        onChange={setCurrent}
-        loaded={loaded}
-      />
-
       <div className={styles.image_container} style={{ height }} onClick={onOpenPhotoSwipe}>
         {(is_loading || !loaded[0] || !images.length) && (
           <div className={styles.placeholder}>
@@ -94,6 +87,13 @@ const NodeImageBlock: FC<IProps> = ({ node, is_loading, updateLayout, modalShowP
           </div>
         ))}
       </div>
+
+      <ImageSwitcher
+        total={images.length}
+        current={current}
+        onChange={setCurrent}
+        loaded={loaded}
+      />
     </div>
   );
 };
