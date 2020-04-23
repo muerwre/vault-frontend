@@ -12,7 +12,7 @@ import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
-import { NODE_COMPONENTS, NODE_INLINES } from '~/redux/node/constants';
+import { NODE_COMPONENTS, NODE_INLINES, NODE_HEADS } from '~/redux/node/constants';
 import { selectUser } from '~/redux/auth/selectors';
 import pick from 'ramda/es/pick';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
@@ -97,8 +97,9 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     const can_like = useMemo(() => canLikeNode(node, user), [node, user]);
     const can_star = useMemo(() => canStarNode(node, user), [node, user]);
 
+    const head = node && node.type && NODE_HEADS[node.type];
     const block = node && node.type && NODE_COMPONENTS[node.type];
-    const inline_block = node && node.type && NODE_INLINES[node.type];
+    const inline = node && node.type && NODE_INLINES[node.type];
 
     const onEdit = useCallback(() => nodeEdit(node.id), [nodeEdit, node]);
     const onLike = useCallback(() => nodeLike(node.id), [nodeLike, node]);
@@ -112,91 +113,110 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     }, [nodeSetCoverImage, node.cover]);
 
     return (
-      <Card className={styles.node} seamless>
-        {block &&
-          createElement(block, { node, is_loading, updateLayout, layout, modalShowPhotoswipe })}
+      <>
+        {head &&
+          createElement(head, { node, is_loading, updateLayout, layout, modalShowPhotoswipe })}
 
-        <NodePanel
-          node={pick(['title', 'user', 'is_liked', 'is_heroic', 'deleted_at', 'created_at'], node)}
-          layout={layout}
-          can_edit={can_edit}
-          can_like={can_like}
-          can_star={can_star}
-          onEdit={onEdit}
-          onLike={onLike}
-          onStar={onStar}
-          onLock={onLock}
-          is_loading={is_loading}
-        />
+        <Card className={styles.node} seamless>
+          {block &&
+            createElement(block, { node, is_loading, updateLayout, layout, modalShowPhotoswipe })}
 
-        {node.deleted_at ? (
-          <NodeDeletedBadge />
-        ) : (
-          <Group>
-            <Padder>
-              <Group horizontal className={styles.content}>
-                <Group className={styles.comments}>
-                  {inline_block && (
-                    <div className={styles.inline_block}>
-                      {createElement(inline_block, {
-                        node,
-                        is_loading,
-                        updateLayout,
-                        layout,
-                        modalShowPhotoswipe,
-                      })}
-                    </div>
-                  )}
+          <NodePanel
+            node={pick(
+              ['title', 'user', 'is_liked', 'is_heroic', 'deleted_at', 'created_at'],
+              node
+            )}
+            layout={layout}
+            can_edit={can_edit}
+            can_like={can_like}
+            can_star={can_star}
+            onEdit={onEdit}
+            onLike={onLike}
+            onStar={onStar}
+            onLock={onLock}
+            is_loading={is_loading}
+          />
 
-                  {is_loading || is_loading_comments || (!comments.length && !inline_block) ? (
-                    <NodeNoComments is_loading={is_loading_comments || is_loading} />
-                  ) : (
-                    <NodeComments
-                      comments={comments}
-                      comment_data={comment_data}
-                      comment_count={comment_count}
-                      user={user}
-                      onDelete={nodeLockComment}
-                      onEdit={nodeEditComment}
-                      onLoadMore={nodeLoadMoreComments}
-                      order="DESC"
-                    />
-                  )}
+          {node.deleted_at ? (
+            <NodeDeletedBadge />
+          ) : (
+            <Group>
+              <Padder>
+                <Group horizontal className={styles.content}>
+                  <Group className={styles.comments}>
+                    {inline && (
+                      <div className={styles.inline}>
+                        {createElement(inline, {
+                          node,
+                          is_loading,
+                          updateLayout,
+                          layout,
+                          modalShowPhotoswipe,
+                        })}
+                      </div>
+                    )}
 
-                  {is_user && !is_loading && <NodeCommentForm />}
+                    {is_loading || is_loading_comments || (!comments.length && !inline) ? (
+                      <NodeNoComments is_loading={is_loading_comments || is_loading} />
+                    ) : (
+                      <NodeComments
+                        comments={comments}
+                        comment_data={comment_data}
+                        comment_count={comment_count}
+                        user={user}
+                        onDelete={nodeLockComment}
+                        onEdit={nodeEditComment}
+                        onLoadMore={nodeLoadMoreComments}
+                        order="DESC"
+                      />
+                    )}
+
+                    {is_user && !is_loading && <NodeCommentForm />}
+                  </Group>
+
+                  <div className={styles.panel}>
+                    <Sticky>
+                      <Group style={{ flex: 1, minWidth: 0 }}>
+                        {!is_loading && (
+                          <NodeTags
+                            is_editable={is_user}
+                            tags={node.tags}
+                            onChange={onTagsChange}
+                          />
+                        )}
+
+                        {is_loading && <NodeRelatedPlaceholder />}
+
+                        {!is_loading &&
+                          related &&
+                          related.albums &&
+                          Object.keys(related.albums)
+                            .filter(album => related.albums[album].length > 0)
+                            .map(album => (
+                              <NodeRelated
+                                title={album}
+                                items={related.albums[album]}
+                                key={album}
+                              />
+                            ))}
+
+                        {!is_loading &&
+                          related &&
+                          related.similar &&
+                          related.similar.length > 0 && (
+                            <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
+                          )}
+                      </Group>
+                    </Sticky>
+                  </div>
                 </Group>
+              </Padder>
+            </Group>
+          )}
 
-                <div className={styles.panel}>
-                  <Sticky>
-                    <Group style={{ flex: 1, minWidth: 0 }}>
-                      {!is_loading && (
-                        <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
-                      )}
-
-                      {is_loading && <NodeRelatedPlaceholder />}
-
-                      {!is_loading &&
-                        related &&
-                        related.albums &&
-                        Object.keys(related.albums)
-                          .filter(album => related.albums[album].length > 0)
-                          .map(album => (
-                            <NodeRelated title={album} items={related.albums[album]} key={album} />
-                          ))}
-
-                      {!is_loading && related && related.similar && related.similar.length > 0 && (
-                        <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
-                      )}
-                    </Group>
-                  </Sticky>
-                </div>
-              </Group>
-            </Padder>
-          </Group>
-        )}
-
-        <Footer />
-      </Card>
+          <Footer />
+        </Card>
+      </>
     );
   }
 );

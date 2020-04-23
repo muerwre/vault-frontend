@@ -1,4 +1,6 @@
 .wrap {
+  padding-bottom: $gap * 2;
+
   &:global(.is_animated) {
     .image_container {
       transition: height 0.5s;
@@ -12,7 +14,6 @@
 
 .image_container {
   width: 100%;
-  background: $node_image_bg;
   border-radius: $panel_radius 0 0 $panel_radius;
   display: flex;
   align-items: center;
@@ -22,10 +23,12 @@
   user-select: none;
 
   .image {
-    max-height: 960px;
+    max-height: calc(100vh - 140px);
     max-width: 100%;
     opacity: 1;
-    border-radius: $radius $radius 0 0;
+    border-radius: $radius;
+
+    @include outer_shadow();
   }
 }
 
