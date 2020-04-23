@@ -46,10 +46,6 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
 
   useEffect(() => {
     timer.current = setTimeout(onNext, 5000);
-
-    return () => {
-      clearTimeout(timer.current);
-    };
   }, [current, onNext]);
 
   useEffect(() => {
