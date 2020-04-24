@@ -2,24 +2,22 @@
   width: 100%;
   height: 0;
   position: relative;
-  z-index: 2;
+  z-index: 4;
 }
 
 .switcher {
   position: absolute;
-  background: transparentize(black, 0.5);
+  // background: darken($content_bg, 2%);
+  background: url('../../../../src/sprites/noise.png') $main_bg_color;
   display: flex;
   left: 50%;
-  top: -60px;
+  transform: translate(-50%, 0);
+  top: -5px;
   border-radius: 24px;
   padding: 0 3px;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   transition: background-color 0.5s;
   transform: translate(-50%, 0);
-
-  &:hover {
-    background: transparentize(black, 0.2);
-  }
 
   & > div {
     width: 30px;
@@ -29,19 +27,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.5;
     transition: opacity 0.25s;
-
-    &:hover {
-      opacity: 1;
-    }
+    opacity: 0.5;
 
     &::after {
       content: ' ';
       display: block;
       width: 14px;
       height: 14px;
-      // background: white;
       border-radius: 8px;
       box-shadow: inset white 0 0 0 2px;
       transform: scale(0.5);

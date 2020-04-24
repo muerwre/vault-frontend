@@ -12,7 +12,7 @@ import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
-import { NODE_COMPONENTS, NODE_INLINES } from '~/redux/node/constants';
+import { NODE_COMPONENTS, NODE_INLINES, NODE_HEADS } from '~/redux/node/constants';
 import { selectUser } from '~/redux/auth/selectors';
 import pick from 'ramda/es/pick';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
@@ -97,8 +97,9 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     const can_like = useMemo(() => canLikeNode(node, user), [node, user]);
     const can_star = useMemo(() => canStarNode(node, user), [node, user]);
 
+    const head = node && node.type && NODE_HEADS[node.type];
     const block = node && node.type && NODE_COMPONENTS[node.type];
-    const inline_block = node && node.type && NODE_INLINES[node.type];
+    const inline = node && node.type && NODE_INLINES[node.type];
 
     const onEdit = useCallback(() => nodeEdit(node.id), [nodeEdit, node]);
     const onLike = useCallback(() => nodeLike(node.id), [nodeLike, node]);
@@ -112,11 +113,14 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     }, [nodeSetCoverImage, node.cover]);
 
     return (
-      <div className={styles.node}>
-        {block &&
-          createElement(block, { node, is_loading, updateLayout, layout, modalShowPhotoswipe })}
+      <>
+        {head &&
+          createElement(head, { node, is_loading, updateLayout, layout, modalShowPhotoswipe })}
 
-        <Card seamless>
+        <Card className={styles.node} seamless>
+          {block &&
+            createElement(block, { node, is_loading, updateLayout, layout, modalShowPhotoswipe })}
+
           <NodePanel
             node={pick(
               ['title', 'user', 'is_liked', 'is_heroic', 'deleted_at', 'created_at'],
@@ -140,9 +144,9 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
               <Padder>
                 <Group horizontal className={styles.content}>
                   <Group className={styles.comments}>
-                    {inline_block && (
-                      <div className={styles.inline_block}>
-                        {createElement(inline_block, {
+                    {inline && (
+                      <div className={styles.inline}>
+                        {createElement(inline, {
                           node,
                           is_loading,
                           updateLayout,
@@ -152,7 +156,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                       </div>
                     )}
 
-                    {is_loading || is_loading_comments || (!comments.length && !inline_block) ? (
+                    {is_loading || is_loading_comments || (!comments.length && !inline) ? (
                       <NodeNoComments is_loading={is_loading_comments || is_loading} />
                     ) : (
                       <NodeComments
@@ -212,7 +216,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
 
           <Footer />
         </Card>
-      </div>
+      </>
     );
   }
 );
