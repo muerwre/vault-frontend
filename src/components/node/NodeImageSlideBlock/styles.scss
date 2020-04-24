@@ -2,9 +2,10 @@
   overflow: hidden;
   position: relative;
   min-width: 0;
-  width: 100%;
   transition: height 0.25s;
   border-radius: $radius;
+  margin-right: -10px;
+  margin-left: -10px;
 
   .is_loading {
     .placeholder {
@@ -14,7 +15,6 @@
 }
 
 .image_container {
-  // background: $node_image_bg;
   border-radius: $panel_radius 0 0 $panel_radius;
   display: flex;
   align-items: flex-start;
@@ -31,10 +31,7 @@
   }
 
   .image {
-    // that was for containered image:
-    // max-height: 960px;
-    // max-height: 120vh !important;
-    // max-width: 100%;
+    max-width: 100%;
     opacity: 1;
     border-radius: $radius;
     box-shadow: transparentize($color: white, $amount: 0.95) 0 -1px,
@@ -48,15 +45,13 @@
 
 .image_wrap {
   width: 100%;
-  // top: 0;
-  // left: 0;
-  // opacity: 0;
   pointer-events: none;
   touch-action: none;
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 10px;
 
   &:global(.is_active) {
     opacity: 1;
