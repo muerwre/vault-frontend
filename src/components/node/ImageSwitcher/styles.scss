@@ -9,12 +9,13 @@
   position: absolute;
   background: transparentize(black, 0.5);
   display: flex;
-  right: $gap;
-  top: $gap;
+  left: 50%;
+  top: -60px;
   border-radius: 24px;
   padding: 0 3px;
   flex-wrap: wrap;
   transition: background-color 0.5s;
+  transform: translate(-50%, 0);
 
   &:hover {
     background: transparentize(black, 0.2);

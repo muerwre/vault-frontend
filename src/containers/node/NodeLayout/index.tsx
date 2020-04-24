@@ -112,91 +112,107 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     }, [nodeSetCoverImage, node.cover]);
 
     return (
-      <Card className={styles.node} seamless>
+      <div className={styles.node}>
         {block &&
           createElement(block, { node, is_loading, updateLayout, layout, modalShowPhotoswipe })}
 
-        <NodePanel
-          node={pick(['title', 'user', 'is_liked', 'is_heroic', 'deleted_at', 'created_at'], node)}
-          layout={layout}
-          can_edit={can_edit}
-          can_like={can_like}
-          can_star={can_star}
-          onEdit={onEdit}
-          onLike={onLike}
-          onStar={onStar}
-          onLock={onLock}
-          is_loading={is_loading}
-        />
+        <Card seamless>
+          <NodePanel
+            node={pick(
+              ['title', 'user', 'is_liked', 'is_heroic', 'deleted_at', 'created_at'],
+              node
+            )}
+            layout={layout}
+            can_edit={can_edit}
+            can_like={can_like}
+            can_star={can_star}
+            onEdit={onEdit}
+            onLike={onLike}
+            onStar={onStar}
+            onLock={onLock}
+            is_loading={is_loading}
+          />
 
-        {node.deleted_at ? (
-          <NodeDeletedBadge />
-        ) : (
-          <Group>
-            <Padder>
-              <Group horizontal className={styles.content}>
-                <Group className={styles.comments}>
-                  {inline_block && (
-                    <div className={styles.inline_block}>
-                      {createElement(inline_block, {
-                        node,
-                        is_loading,
-                        updateLayout,
-                        layout,
-                        modalShowPhotoswipe,
-                      })}
-                    </div>
-                  )}
+          {node.deleted_at ? (
+            <NodeDeletedBadge />
+          ) : (
+            <Group>
+              <Padder>
+                <Group horizontal className={styles.content}>
+                  <Group className={styles.comments}>
+                    {inline_block && (
+                      <div className={styles.inline_block}>
+                        {createElement(inline_block, {
+                          node,
+                          is_loading,
+                          updateLayout,
+                          layout,
+                          modalShowPhotoswipe,
+                        })}
+                      </div>
+                    )}
 
-                  {is_loading || is_loading_comments || (!comments.length && !inline_block) ? (
-                    <NodeNoComments is_loading={is_loading_comments || is_loading} />
-                  ) : (
-                    <NodeComments
-                      comments={comments}
-                      comment_data={comment_data}
-                      comment_count={comment_count}
-                      user={user}
-                      onDelete={nodeLockComment}
-                      onEdit={nodeEditComment}
-                      onLoadMore={nodeLoadMoreComments}
-                      order="DESC"
-                    />
-                  )}
+                    {is_loading || is_loading_comments || (!comments.length && !inline_block) ? (
+                      <NodeNoComments is_loading={is_loading_comments || is_loading} />
+                    ) : (
+                      <NodeComments
+                        comments={comments}
+                        comment_data={comment_data}
+                        comment_count={comment_count}
+                        user={user}
+                        onDelete={nodeLockComment}
+                        onEdit={nodeEditComment}
+                        onLoadMore={nodeLoadMoreComments}
+                        order="DESC"
+                      />
+                    )}
 
-                  {is_user && !is_loading && <NodeCommentForm />}
+                    {is_user && !is_loading && <NodeCommentForm />}
+                  </Group>
+
+                  <div className={styles.panel}>
+                    <Sticky>
+                      <Group style={{ flex: 1, minWidth: 0 }}>
+                        {!is_loading && (
+                          <NodeTags
+                            is_editable={is_user}
+                            tags={node.tags}
+                            onChange={onTagsChange}
+                          />
+                        )}
+
+                        {is_loading && <NodeRelatedPlaceholder />}
+
+                        {!is_loading &&
+                          related &&
+                          related.albums &&
+                          Object.keys(related.albums)
+                            .filter(album => related.albums[album].length > 0)
+                            .map(album => (
+                              <NodeRelated
+                                title={album}
+                                items={related.albums[album]}
+                                key={album}
+                              />
+                            ))}
+
+                        {!is_loading &&
+                          related &&
+                          related.similar &&
+                          related.similar.length > 0 && (
+                            <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
+                          )}
+                      </Group>
+                    </Sticky>
+                  </div>
                 </Group>
+              </Padder>
+            </Group>
+          )}
 
-                <div className={styles.panel}>
-                  <Sticky>
-                    <Group style={{ flex: 1, minWidth: 0 }}>
-                      {!is_loading && (
-                        <NodeTags is_editable={is_user} tags={node.tags} onChange={onTagsChange} />
-                      )}
-
-                      {is_loading && <NodeRelatedPlaceholder />}
-
-                      {!is_loading &&
-                        related &&
-                        related.albums &&
-                        Object.keys(related.albums)
-                          .filter(album => related.albums[album].length > 0)
-                          .map(album => (
-                            <NodeRelated title={album} items={related.albums[album]} key={album} />
-                          ))}
-
-                      {!is_loading && related && related.similar && related.similar.length > 0 && (
-                        <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
-                      )}
-                    </Group>
-                  </Sticky>
-                </div>
-              </Group>
-            </Padder>
-          </Group>
-        )}
-
-        <Footer />
-      </Card>
+          <Footer />
+        </Card>
+      </div>
     );
   }
 );

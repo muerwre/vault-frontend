@@ -41,6 +41,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
   const [initial_x, setInitialX] = useState(0);
   const [offset, setOffset] = useState(0);
   const [is_dragging, setIsDragging] = useState(false);
+  const [drag_start, setDragStart] = useState();
 
   const slide = useRef<HTMLDivElement>();
   const wrap = useRef<HTMLDivElement>();
@@ -165,7 +166,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
   const updateMaxHeight = useCallback(() => {
     if (!wrap.current) return;
     const { width } = wrap.current.getBoundingClientRect();
-    setMaxHeight(width * NODE_SETTINGS.MAX_IMAGE_ASPECT);
+    setMaxHeight(window.innerHeight - 143);
     normalizeOffset();
   }, [wrap, setMaxHeight, normalizeOffset]);
 
@@ -182,11 +183,12 @@ const NodeImageSlideBlock: FC<IProps> = ({
       setIsDragging(false);
       normalizeOffset();
 
-      if (initial_x - getX(event) < 10) {
+      if (+new Date() - drag_start < 300) {
+        // click detection
         onOpenPhotoSwipe();
       }
     },
-    [setIsDragging, is_dragging, normalizeOffset, onOpenPhotoSwipe]
+    [setIsDragging, is_dragging, normalizeOffset, onOpenPhotoSwipe, drag_start]
   );
 
   const startDragging = useCallback(
@@ -194,8 +196,9 @@ const NodeImageSlideBlock: FC<IProps> = ({
       setIsDragging(true);
       setInitialX(getX(event));
       setInitialOffset(offset);
+      setDragStart(+new Date());
     },
-    [setIsDragging, setInitialX, offset, setInitialOffset]
+    [setIsDragging, setInitialX, offset, setInitialOffset, setDragStart]
   );
 
   useEffect(() => updateMaxHeight(), [images]);
@@ -242,15 +245,6 @@ const NodeImageSlideBlock: FC<IProps> = ({
         </div>
       </div>
 
-      {!is_loading && (
-        <ImageSwitcher
-          total={images.length}
-          current={current}
-          onChange={changeCurrent}
-          loaded={loaded}
-        />
-      )}
-
       <div
         className={classNames(styles.image_container, { [styles.is_dragging]: is_dragging })}
         style={{
@@ -282,6 +276,15 @@ const NodeImageSlideBlock: FC<IProps> = ({
             </div>
           ))}
       </div>
+
+      {!is_loading && (
+        <ImageSwitcher
+          total={images.length}
+          current={current}
+          onChange={changeCurrent}
+          loaded={loaded}
+        />
+      )}
     </div>
   );
 };
