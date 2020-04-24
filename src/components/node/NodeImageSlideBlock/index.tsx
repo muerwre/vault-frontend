@@ -41,7 +41,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
   const [initial_x, setInitialX] = useState(0);
   const [offset, setOffset] = useState(0);
   const [is_dragging, setIsDragging] = useState(false);
-  const [drag_start, setDragStart] = useState();
+  const [drag_start, setDragStart] = useState(0);
 
   const slide = useRef<HTMLDivElement>();
   const wrap = useRef<HTMLDivElement>();
