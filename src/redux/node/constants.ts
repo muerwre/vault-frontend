@@ -89,7 +89,8 @@ type INodeComponents = Record<
 >;
 
 export const NODE_HEADS: INodeComponents = {
-  [NODE_TYPES.IMAGE]: NodeImageBlock,
+  // [NODE_TYPES.IMAGE]: NodeImageBlock,
+  [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
 };
 
 export const NODE_COMPONENTS: INodeComponents = {
