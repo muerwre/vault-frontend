@@ -183,8 +183,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
       setIsDragging(false);
       normalizeOffset();
 
-      if (Math.abs(+new Date() - drag_start) < 200) {
-        // click detection
+      if (Math.abs(new Date().getTime() - drag_start) < 200 && initial_x - getX(event) < 50) {
         onOpenPhotoSwipe();
       }
     },
@@ -196,7 +195,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
       setIsDragging(true);
       setInitialX(getX(event));
       setInitialOffset(offset);
-      setDragStart(+new Date());
+      setDragStart(new Date().getTime());
     },
     [setIsDragging, setInitialX, offset, setInitialOffset, setDragStart]
   );
