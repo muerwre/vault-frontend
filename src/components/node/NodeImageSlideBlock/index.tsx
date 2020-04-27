@@ -10,6 +10,7 @@ import { PRESETS } from '~/constants/urls';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { throttle } from 'throttle-debounce';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import { Icon } from '~/components/input/Icon';
 
 interface IProps {
   is_loading: boolean;
@@ -183,7 +184,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
       setIsDragging(false);
       normalizeOffset();
 
-      if (Math.abs(new Date().getTime() - drag_start) < 200 && initial_x - getX(event) < 50) {
+      if (Math.abs(new Date().getTime() - drag_start) < 200 && initial_x - getX(event) < 20) {
         onOpenPhotoSwipe();
       }
     },
@@ -233,57 +234,77 @@ const NodeImageSlideBlock: FC<IProps> = ({
   );
 
   return (
-    <div className={classNames(styles.wrap, { [styles.is_loading]: is_loading })} ref={wrap}>
-      <div
-        className={classNames(styles.placeholder, {
-          [styles.is_loading]: is_loading || !loaded[current],
-        })}
-      >
-        <div>
-          <LoaderCircle size={96} />
+    <div className={styles.wrap}>
+      <div className={classNames(styles.cutter, { [styles.is_loading]: is_loading })} ref={wrap}>
+        <div
+          className={classNames(styles.placeholder, {
+            [styles.is_loading]: is_loading || !loaded[current],
+          })}
+        >
+          <div>
+            <LoaderCircle size={96} />
+          </div>
         </div>
-      </div>
 
-      <div
-        className={classNames(styles.image_container, { [styles.is_dragging]: is_dragging })}
-        style={{
-          height,
-          transform: `translate(${offset}px, 0)`,
-          width: `${images.length * 100}%`,
-        }}
-        onMouseDown={startDragging}
-        onTouchStart={startDragging}
-        ref={slide}
-      >
-        {!is_loading &&
-          images.map((file, index) => (
-            <div
-              className={classNames(styles.image_wrap, {
-                is_active: index === current && loaded[index],
-              })}
-              ref={setRef(index)}
-              key={node.updated_at + file.id}
-            >
-              <img
-                className={styles.image}
-                src={getURL(file, PRESETS['1600'])}
-                alt=""
-                key={file.id}
-                onLoad={onImageLoad(index)}
-                style={{ maxHeight: max_height }}
-              />
-            </div>
-          ))}
-      </div>
+        <div
+          className={classNames(styles.image_container, { [styles.is_dragging]: is_dragging })}
+          style={{
+            height,
+            transform: `translate(${offset}px, 0)`,
+            width: `${images.length * 100}%`,
+          }}
+          onMouseDown={startDragging}
+          onTouchStart={startDragging}
+          ref={slide}
+        >
+          {!is_loading &&
+            images.map((file, index) => (
+              <div
+                className={classNames(styles.image_wrap, {
+                  is_active: index === current && loaded[index],
+                })}
+                ref={setRef(index)}
+                key={node.updated_at + file.id}
+              >
+                <img
+                  className={styles.image}
+                  src={getURL(file, PRESETS['1600'])}
+                  alt=""
+                  key={file.id}
+                  onLoad={onImageLoad(index)}
+                  style={{ maxHeight: max_height }}
+                />
+              </div>
+            ))}
+        </div>
 
-      {!is_loading && (
+        {images.length > 1 && (
+          <div className={styles.image_count}>
+            {current + 1}
+            <small> / </small>
+            {images.length}
+          </div>
+        )}
+
+        {/*
+      !is_loading && (
         <ImageSwitcher
           total={images.length}
           current={current}
           onChange={changeCurrent}
           loaded={loaded}
         />
-      )}
+      )
+      */}
+      </div>
+
+      <div className={classNames(styles.image_arrow)}>
+        <Icon icon="left" size={40} />
+      </div>
+
+      <div className={classNames(styles.image_arrow, styles.image_arrow_right)}>
+        <Icon icon="right" size={40} />
+      </div>
     </div>
   );
 };

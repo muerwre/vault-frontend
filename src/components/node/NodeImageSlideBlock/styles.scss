@@ -1,4 +1,8 @@
 .wrap {
+  position: relative;
+}
+
+.cutter {
   overflow: hidden;
   position: relative;
   min-width: 0;
@@ -52,9 +56,55 @@
   align-items: center;
   justify-content: center;
   padding: 0 $gap / 2;
+  position: relative;
 
   &:global(.is_active) {
     opacity: 1;
+  }
+}
+
+.image_count {
+  position: absolute;
+  color: transparentize(white, 0.5);
+  bottom: $gap * 3;
+  right: 50%;
+  padding: $gap / 2 $gap * 1.2;
+  border-radius: 20px;
+  background: $content_bg;
+  font: $font_14_semibold;
+  transform: translate(50%, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+
+  small {
+    font-size: 0.8em;
+    padding: 0 5px;
+  }
+}
+
+.image_arrow {
+  position: absolute;
+  left: -$gap;
+  top: 50%;
+  width: 40px;
+  height: 64px;
+  border-radius: $radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-100%, -50%);
+
+  &_right {
+    right: -$gap;
+    left: auto;
+    transform: translate(100%, -50%);
+  }
+
+  svg {
+    position: relative;
+    left: -2px;
   }
 }
 
