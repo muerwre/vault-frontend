@@ -95,6 +95,7 @@
   align-items: center;
   justify-content: center;
   transform: translate(-100%, -50%);
+  display: none;
 
   &_right {
     right: -$gap;
