@@ -1,6 +1,8 @@
 .wrap {
   :global(.pswp__img) {
     border-radius: $radius;
+
+    @include outer_shadow();
   }
 }
 

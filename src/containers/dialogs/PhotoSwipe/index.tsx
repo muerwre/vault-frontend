@@ -81,8 +81,7 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
           <div className={classNames('pswp__top-bar', styles.bar)}>
             <div className="pswp__counter" />
             <button className="pswp__button pswp__button--close" title="Close (Esc)" />
-            <button className="pswp__button pswp__button--fs" title="Toggle fullscreen" />
-            <button className="pswp__button pswp__button--zoom" title="Zoom in/out" />
+
             <div className="pswp__preloader">
               <div className="pswp__preloader__icn">
                 <div className="pswp__preloader__cut">
