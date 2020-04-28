@@ -184,7 +184,10 @@ const NodeImageSlideBlock: FC<IProps> = ({
       setIsDragging(false);
       normalizeOffset();
 
-      if (Math.abs(new Date().getTime() - drag_start) < 200 && initial_x - getX(event) < 20) {
+      if (
+        Math.abs(new Date().getTime() - drag_start) < 200 &&
+        Math.abs(initial_x - getX(event)) < 5
+      ) {
         onOpenPhotoSwipe();
       }
     },
