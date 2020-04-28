@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import React, { FC, useMemo, useState, useEffect, useRef, useCallback, KeyboardEvent } from 'react';
 import { ImageSwitcher } from '../ImageSwitcher';
 import * as styles from './styles.scss';
 import { INode } from '~/redux/types';
@@ -233,6 +233,38 @@ const NodeImageSlideBlock: FC<IProps> = ({
     [wrap]
   );
 
+  const onPrev = useCallback(() => changeCurrent(current > 0 ? current - 1 : images.length - 1), [
+    changeCurrent,
+    current,
+    images,
+  ]);
+
+  const onNext = useCallback(() => changeCurrent(current < images.length - 1 ? current + 1 : 0), [
+    changeCurrent,
+    current,
+    images,
+  ]);
+
+  const onKeyDown = useCallback(
+    event => {
+      if (event.target.tagName && ['TEXTAREA', 'INPUT'].includes(event.target.tagName)) return;
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          return onPrev();
+        case 'ArrowRight':
+          return onNext();
+      }
+    },
+    [onNext, onPrev]
+  );
+
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onKeyDown]);
+
   return (
     <div className={styles.wrap}>
       <div className={classNames(styles.cutter, { [styles.is_loading]: is_loading })} ref={wrap}>
@@ -298,13 +330,17 @@ const NodeImageSlideBlock: FC<IProps> = ({
       */}
       </div>
 
-      <div className={classNames(styles.image_arrow)}>
-        <Icon icon="left" size={40} />
-      </div>
+      {images.length > 0 && (
+        <div className={classNames(styles.image_arrow)} onClick={onPrev}>
+          <Icon icon="left" size={40} />
+        </div>
+      )}
 
-      <div className={classNames(styles.image_arrow, styles.image_arrow_right)}>
-        <Icon icon="right" size={40} />
-      </div>
+      {images.length > 0 && (
+        <div className={classNames(styles.image_arrow, styles.image_arrow_right)} onClick={onNext}>
+          <Icon icon="right" size={40} />
+        </div>
+      )}
     </div>
   );
 };
