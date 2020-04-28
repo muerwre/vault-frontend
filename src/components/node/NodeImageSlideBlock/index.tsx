@@ -330,13 +330,13 @@ const NodeImageSlideBlock: FC<IProps> = ({
       */}
       </div>
 
-      {images.length > 0 && (
+      {images.length > 1 && (
         <div className={classNames(styles.image_arrow)} onClick={onPrev}>
           <Icon icon="left" size={40} />
         </div>
       )}
 
-      {images.length > 0 && (
+      {images.length > 1 && (
         <div className={classNames(styles.image_arrow, styles.image_arrow_right)} onClick={onNext}>
           <Icon icon="right" size={40} />
         </div>
