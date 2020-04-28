@@ -265,6 +265,10 @@ const NodeImageSlideBlock: FC<IProps> = ({
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [onKeyDown]);
 
+  useEffect(() => {
+    setOffset(0);
+  }, [node.id]);
+
   return (
     <div className={styles.wrap}>
       <div className={classNames(styles.cutter, { [styles.is_loading]: is_loading })} ref={wrap}>
