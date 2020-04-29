@@ -1,6 +1,5 @@
 .content {
   align-items: stretch !important;
-
   @include vertical_at_tablet;
 }
 
@@ -11,6 +10,10 @@
   align-items: stretch;
   justify-content: flex-start;
   flex-direction: column;
+
+  @media (max-width: 1024px) {
+    flex: 2 1;
+  }
 }
 
 .panel {
@@ -21,14 +24,11 @@
   padding-left: $gap / 2;
   min-width: 0;
 
-  @include tablet {
+  @media (max-width: 1024px) {
     padding-left: 0;
+    padding-top: $comment_height / 2;
+    flex: 1 2;
   }
-}
-
-.node {
-  // background: $node_bg;
-  // box-shadow: $node_shadow;
 }
 
 .buttons {
