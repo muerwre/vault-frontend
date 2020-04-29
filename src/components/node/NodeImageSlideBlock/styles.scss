@@ -20,11 +20,11 @@
   @include tablet {
     margin-left: 0;
     margin-right: 0;
+    border-radius: 0;
   }
 }
 
 .image_container {
-  border-radius: $panel_radius 0 0 $panel_radius;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -45,6 +45,10 @@
     border-radius: $radius;
     box-shadow: transparentize($color: white, $amount: 0.95) 0 -1px,
       transparentize($color: #000000, $amount: 0.6) 0 2px 5px;
+
+    @include tablet {
+      border-radius: 0;
+    }
   }
 
   &.is_dragging {

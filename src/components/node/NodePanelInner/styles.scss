@@ -1,3 +1,32 @@
+@mixin button {
+  margin: 0 $gap;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    fill: darken(white, 50%);
+    transition: fill 0.25s;
+  }
+
+  &:hover {
+    svg {
+      fill: $red;
+    }
+  }
+
+  &::after {
+    content: ' ';
+    flex: 0 0 6px;
+    height: $gap;
+    width: 6px;
+    border-radius: 4px;
+    background: transparentize(black, 0.7);
+    margin-left: $gap * 2;
+  }
+}
+
 .wrap {
   display: flex;
   align-items: center;
@@ -96,36 +125,7 @@
   justify-content: center;
 
   & > * {
-    margin: 0 $gap;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    svg {
-      fill: darken(white, 50%);
-      transition: fill 0.25s;
-    }
-
-    &:hover {
-      svg {
-        fill: $red;
-      }
-    }
-
-    &::after {
-      content: ' ';
-      flex: 0 0 6px;
-      height: $gap;
-      width: 6px;
-      border-radius: 4px;
-      background: transparentize(black, 0.7);
-      margin-left: $gap * 2;
-    }
-
-    &:first-child {
-      margin-left: 0;
-    }
+    @include button;
   }
 
   @include tablet {
@@ -148,6 +148,20 @@
 .editor_buttons {
   @include tablet {
     display: none;
+
+    & > * {
+      &:last-child {
+        margin-right: 0;
+
+        &::after {
+          display: none;
+        }
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
   }
 }
 
@@ -225,5 +239,32 @@
 
   &:hover {
     fill: $orange;
+  }
+}
+
+.editor_menu_button {
+  display: none !important;
+
+  @include button();
+
+  @include tablet {
+    display: flex !important;
+  }
+}
+
+.editor_menu {
+  // position: relative;
+
+  &:hover {
+    .editor_buttons {
+      display: flex;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: darken($content_bg, 4%);
+      padding: $gap $gap * 2;
+      border-radius: $radius;
+      box-shadow: transparentize(black, 0.8) 5px 5px 5px;
+    }
   }
 }

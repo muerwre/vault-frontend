@@ -60,23 +60,29 @@ const NodePanelInner: FC<IProps> = memo(
           </div>
 
           {can_edit && (
-            <div className={styles.editor_buttons}>
-              {can_star && (
-                <div className={classNames(styles.star, { is_heroic })}>
-                  {is_heroic ? (
-                    <Icon icon="star_full" size={24} onClick={onStar} />
-                  ) : (
-                    <Icon icon="star" size={24} onClick={onStar} />
-                  )}
-                </div>
-              )}
-
-              <div>
-                <Icon icon={deleted_at ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
+            <div className={styles.editor_menu}>
+              <div className={styles.editor_menu_button}>
+                <Icon icon="dots-vertical" size={24} onClick={onStar} />
               </div>
 
-              <div>
-                <Icon icon="edit" size={24} onClick={onEdit} />
+              <div className={styles.editor_buttons}>
+                {can_star && (
+                  <div className={classNames(styles.star, { is_heroic })}>
+                    {is_heroic ? (
+                      <Icon icon="star_full" size={24} onClick={onStar} />
+                    ) : (
+                      <Icon icon="star" size={24} onClick={onStar} />
+                    )}
+                  </div>
+                )}
+
+                <div>
+                  <Icon icon={deleted_at ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
+                </div>
+
+                <div>
+                  <Icon icon="edit" size={24} onClick={onEdit} />
+                </div>
               </div>
             </div>
           )}
