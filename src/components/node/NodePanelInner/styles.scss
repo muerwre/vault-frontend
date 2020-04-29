@@ -8,6 +8,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  min-width: 0;
 
   &:global(.stack) {
     padding: 0 $gap;
@@ -31,14 +32,13 @@
   padding: $gap $gap;
   background: $node_bg;
   height: 64px;
+  min-width: 0;
 
   @include outer_shadow();
 
   @include tablet {
     border-radius: 0;
-    // flex-direction: column;
-    // align-items: flex-start;
-    height: 128px;
+    height: auto;
   }
 
   @include can_backdrop {
@@ -50,20 +50,25 @@
 .title {
   text-transform: uppercase;
   font: $font_24_semibold;
-  // height: 24px;
-  // padding-bottom: 6px;
+  overflow: hidden;
+  flex: 1;
+  text-overflow: ellipsis;
 
   @include tablet {
-    // font-size: 16px;
-    word-break: break-word;
+    white-space: nowrap;
     padding-bottom: 0;
-    padding-top: 10px;
+    font: $font_16_semibold;
   }
 }
 
 .name {
   font: $font_14_regular;
   color: transparentize(white, 0.5);
+  text-transform: lowercase;
+
+  @include tablet {
+    font: $font_12_regular;
+  }
 }
 
 .btn {
@@ -77,9 +82,11 @@
 
 .panel {
   flex: 1;
+  min-width: 0;
 }
 
-.buttons {
+.buttons,
+.editor_buttons {
   flex: 0;
   padding-right: $gap;
   fill: transparentize(white, 0.7);
@@ -119,18 +126,28 @@
     &:first-child {
       margin-left: 0;
     }
+  }
 
+  @include tablet {
+    align-self: center;
+  }
+}
+
+.buttons {
+  & > * {
     &:last-child {
       margin-right: 0;
+
       &::after {
         display: none;
       }
     }
   }
+}
 
+.editor_buttons {
   @include tablet {
-    margin-top: $gap * 2;
-    align-self: center;
+    display: none;
   }
 }
 

@@ -43,46 +43,45 @@ const NodePanelInner: FC<IProps> = memo(
     return (
       <div className={classNames(styles.wrap, { stack })}>
         <div className={styles.content}>
-          <Group horizontal className={styles.panel}>
-            <Filler>
-              <div className={styles.title}>
-                {is_loading ? <Placeholder width="40%" /> : title || '...'}
-              </div>
-              {user && user.username && (
-                <div className={styles.name}>
-                  {is_loading ? (
-                    <Placeholder width="100px" />
-                  ) : (
-                    `~${user.username}, ${getPrettyDate(created_at)}`
-                  )}
-                </div>
-              )}
-            </Filler>
-          </Group>
+          <div className={styles.panel}>
+            <div className={styles.title}>
+              {is_loading ? <Placeholder width="40%" /> : title || '...'}
+            </div>
 
-          <div className={styles.buttons}>
-            {can_star && (
-              <div className={classNames(styles.star, { is_heroic })}>
-                {is_heroic ? (
-                  <Icon icon="star_full" size={24} onClick={onStar} />
+            {user && user.username && (
+              <div className={styles.name}>
+                {is_loading ? (
+                  <Placeholder width="100px" />
                 ) : (
-                  <Icon icon="star" size={24} onClick={onStar} />
+                  `~${user.username}, ${getPrettyDate(created_at)}`
                 )}
               </div>
             )}
+          </div>
 
-            {can_edit && (
-              <>
-                <div>
-                  <Icon icon={deleted_at ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
+          {can_edit && (
+            <div className={styles.editor_buttons}>
+              {can_star && (
+                <div className={classNames(styles.star, { is_heroic })}>
+                  {is_heroic ? (
+                    <Icon icon="star_full" size={24} onClick={onStar} />
+                  ) : (
+                    <Icon icon="star" size={24} onClick={onStar} />
+                  )}
                 </div>
+              )}
 
-                <div>
-                  <Icon icon="edit" size={24} onClick={onEdit} />
-                </div>
-              </>
-            )}
+              <div>
+                <Icon icon={deleted_at ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
+              </div>
 
+              <div>
+                <Icon icon="edit" size={24} onClick={onEdit} />
+              </div>
+            </div>
+          )}
+
+          <div className={styles.buttons}>
             {can_like && (
               <div className={classNames(styles.like, { is_liked })}>
                 {is_liked ? (
