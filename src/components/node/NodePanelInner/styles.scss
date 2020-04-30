@@ -253,18 +253,19 @@
 }
 
 .editor_menu {
-  // position: relative;
-
   &:hover {
     .editor_buttons {
-      display: flex;
-      position: absolute;
-      right: 0;
-      top: 100%;
-      background: darken($content_bg, 4%);
-      padding: $gap $gap * 2;
-      border-radius: $radius;
-      box-shadow: transparentize(black, 0.8) 5px 5px 5px;
+      @include tablet {
+        display: flex;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: darken($content_bg, 4%);
+        padding: $gap * 2;
+        border-radius: $radius;
+        box-shadow: transparentize(black, 0.8) 5px 5px 5px;
+        transform: translate(0, -10px);
+      }
     }
   }
 }

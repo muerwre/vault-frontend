@@ -62,7 +62,7 @@ const NodePanelInner: FC<IProps> = memo(
           {can_edit && (
             <div className={styles.editor_menu}>
               <div className={styles.editor_menu_button}>
-                <Icon icon="dots-vertical" size={24} onClick={onStar} />
+                <Icon icon="dots-vertical" size={24} />
               </div>
 
               <div className={styles.editor_buttons}>
