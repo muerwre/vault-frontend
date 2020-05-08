@@ -214,17 +214,42 @@
 .like {
   transition: fill, stroke 0.25s;
   will-change: transform;
+  position: relative;
 
   &:global(.is_liked) {
     svg {
       fill: $red;
+    }
+
+    .like_count {
+      color: $red;
     }
   }
 
   &:hover {
     fill: $red;
     animation: pulse 0.75s infinite;
+
+    .like_count {
+      opacity: 0;
+    }
   }
+}
+
+.like_count {
+  position: absolute;
+  font: $font_12_bold;
+  left: 16px;
+  bottom: 0;
+  opacity: 1;
+  transition: opacity 0.25s, color 0.25s;
+  background: $node_bg;
+  padding: 0 3px;
+  border-radius: 10px;
+  z-index: 3;
+  color: transparentize($color: white, $amount: 0.5);
+  pointer-events: none;
+  touch-action: none;
 }
 
 .star {

@@ -124,6 +124,7 @@ export interface INode {
   description?: string;
   is_liked?: boolean;
   is_heroic?: boolean;
+  like_count?: number;
 
   flow: {
     display: 'single' | 'vertical' | 'horizontal' | 'quadro';

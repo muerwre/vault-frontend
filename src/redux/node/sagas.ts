@@ -280,16 +280,20 @@ function* onEditSaga({ id }: ReturnType<typeof nodeEdit>) {
 function* onLikeSaga({ id }: ReturnType<typeof nodeLike>) {
   const {
     current,
-    current: { is_liked },
+    current: { is_liked, like_count },
   } = yield select(selectNode);
 
-  yield call(updateNodeEverywhere, { ...current, is_liked: !is_liked });
+  yield call(updateNodeEverywhere, {
+    ...current,
+    is_liked: !is_liked,
+    like_count: is_liked ? Math.max(like_count - 1, 0) : like_count + 1,
+  });
 
   const { data, error } = yield call(reqWrapper, postNodeLike, { id });
 
   if (!error || data.is_liked === !is_liked) return; // ok and matches
 
-  yield call(updateNodeEverywhere, { ...current, is_liked });
+  yield call(updateNodeEverywhere, { ...current, is_liked, like_count });
 }
 
 function* onStarSaga({ id }: ReturnType<typeof nodeLike>) {

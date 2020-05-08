@@ -123,7 +123,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
 
           <NodePanel
             node={pick(
-              ['title', 'user', 'is_liked', 'is_heroic', 'deleted_at', 'created_at'],
+              ['title', 'user', 'is_liked', 'is_heroic', 'deleted_at', 'created_at', 'like_count'],
               node
             )}
             layout={layout}

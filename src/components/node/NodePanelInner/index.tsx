@@ -26,7 +26,7 @@ interface IProps {
 
 const NodePanelInner: FC<IProps> = memo(
   ({
-    node: { title, user, is_liked, is_heroic, deleted_at, created_at },
+    node: { title, user, is_liked, is_heroic, deleted_at, created_at, like_count },
     stack,
 
     can_star,
@@ -53,7 +53,7 @@ const NodePanelInner: FC<IProps> = memo(
                 {is_loading ? (
                   <Placeholder width="100px" />
                 ) : (
-                  `~${user.username}, ${getPrettyDate(created_at)}`
+                  `~${user.username.toLocaleLowerCase()}, ${getPrettyDate(created_at)}`
                 )}
               </div>
             )}
@@ -95,6 +95,8 @@ const NodePanelInner: FC<IProps> = memo(
                 ) : (
                   <Icon icon="heart" size={24} onClick={onLike} />
                 )}
+
+                {like_count > 0 && <div className={styles.like_count}>{like_count}</div>}
               </div>
             )}
           </div>
