@@ -11,7 +11,7 @@ const CommentTextBlock: FC<IProps> = ({ block }) => {
     <div
       className={styles.text}
       dangerouslySetInnerHTML={{
-        __html: `<p>${block.content}</p>`,
+        __html: `<p>${block.content} <span class="${styles.blank}"></span></p>`,
       }}
     />
   );
