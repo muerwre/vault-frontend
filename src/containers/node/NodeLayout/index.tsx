@@ -12,7 +12,12 @@ import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
-import { NODE_COMPONENTS, NODE_INLINES, NODE_HEADS } from '~/redux/node/constants';
+import {
+  NODE_COMPONENTS,
+  NODE_INLINES,
+  NODE_HEADS,
+  INodeComponentProps,
+} from '~/redux/node/constants';
 import { selectUser } from '~/redux/auth/selectors';
 import pick from 'ramda/es/pick';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
@@ -25,10 +30,12 @@ import * as styles from './styles.scss';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { IState } from '~/redux/store';
+import { selectModal } from '~/redux/modal/selectors';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
   user: selectUser(state),
+  modal: pick(['is_shown'])(selectModal(state)),
 });
 
 const mapDispatchToProps = {
@@ -63,6 +70,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
       comment_data,
       comment_count,
     },
+    modal: { is_shown: is_modal_shown },
     user,
     user: { is_user },
     nodeGotoNode,
@@ -106,6 +114,20 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     const onStar = useCallback(() => nodeStar(node.id), [nodeStar, node]);
     const onLock = useCallback(() => nodeLock(node.id, !node.deleted_at), [nodeStar, node]);
 
+    const createNodeBlock = useCallback(
+      (block: FC<INodeComponentProps>) =>
+        block &&
+        createElement(block, {
+          node,
+          is_loading,
+          updateLayout,
+          layout,
+          modalShowPhotoswipe,
+          is_modal_shown,
+        }),
+      [node, is_loading, updateLayout, layout, modalShowPhotoswipe, is_modal_shown]
+    );
+
     useEffect(() => {
       if (!node.cover) return;
       nodeSetCoverImage(node.cover);
@@ -114,12 +136,10 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
 
     return (
       <>
-        {head &&
-          createElement(head, { node, is_loading, updateLayout, layout, modalShowPhotoswipe })}
+        {createNodeBlock(head)}
 
         <Card className={styles.node} seamless>
-          {block &&
-            createElement(block, { node, is_loading, updateLayout, layout, modalShowPhotoswipe })}
+          {createNodeBlock(block)}
 
           <NodePanel
             node={pick(
@@ -144,17 +164,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
               <Padder>
                 <Group horizontal className={styles.content}>
                   <Group className={styles.comments}>
-                    {inline && (
-                      <div className={styles.inline}>
-                        {createElement(inline, {
-                          node,
-                          is_loading,
-                          updateLayout,
-                          layout,
-                          modalShowPhotoswipe,
-                        })}
-                      </div>
-                    )}
+                    {inline && <div className={styles.inline}>{createNodeBlock(inline)}</div>}
 
                     {is_loading || is_loading_comments || (!comments.length && !inline) ? (
                       <NodeNoComments is_loading={is_loading_comments || is_loading} />

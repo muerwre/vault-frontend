@@ -76,24 +76,22 @@ export const NODE_TYPES = {
   TEXT: 'text',
 };
 
-type INodeComponents = Record<
-  ValueOf<typeof NODE_TYPES>,
-  FC<{
-    node: INode;
-    is_loading: boolean;
-    layout: {};
-    updateLayout: () => void;
-    modalShowPhotoswipe: typeof modalShowPhotoswipe;
-  }>
->;
+export type INodeComponentProps = {
+  node: INode;
+  is_loading: boolean;
+  is_modal_shown: boolean;
+  layout: {};
+  updateLayout: () => void;
+  modalShowPhotoswipe: typeof modalShowPhotoswipe;
+};
+
+export type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<INodeComponentProps>>;
 
 export const NODE_HEADS: INodeComponents = {
-  // [NODE_TYPES.IMAGE]: NodeImageBlock,
   [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
 };
 
 export const NODE_COMPONENTS: INodeComponents = {
-  // [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
   [NODE_TYPES.VIDEO]: NodeVideoBlock,
   [NODE_TYPES.AUDIO]: NodeAudioImageBlock,
 };

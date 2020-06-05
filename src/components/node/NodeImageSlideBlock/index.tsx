@@ -1,24 +1,15 @@
-import React, { FC, useMemo, useState, useEffect, useRef, useCallback, KeyboardEvent } from 'react';
-import { ImageSwitcher } from '../ImageSwitcher';
+import React, { FC, useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import * as styles from './styles.scss';
-import { INode } from '~/redux/types';
 import classNames from 'classnames';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
-import { NODE_SETTINGS } from '~/redux/node/constants';
+import { INodeComponentProps } from '~/redux/node/constants';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { throttle } from 'throttle-debounce';
-import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { Icon } from '~/components/input/Icon';
 
-interface IProps {
-  is_loading: boolean;
-  node: INode;
-  layout: {};
-  updateLayout: () => void;
-  modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
-}
+interface IProps extends INodeComponentProps {}
 
 const getX = event =>
   (event.touches && event.touches.length) || (event.changedTouches && event.changedTouches.length)
@@ -28,6 +19,7 @@ const getX = event =>
 const NodeImageSlideBlock: FC<IProps> = ({
   node,
   is_loading,
+  is_modal_shown,
   updateLayout,
   modalShowPhotoswipe,
 }) => {
@@ -250,7 +242,11 @@ const NodeImageSlideBlock: FC<IProps> = ({
 
   const onKeyDown = useCallback(
     event => {
-      if (event.target.tagName && ['TEXTAREA', 'INPUT'].includes(event.target.tagName)) return;
+      if (
+        (event.target.tagName && ['TEXTAREA', 'INPUT'].includes(event.target.tagName)) ||
+        is_modal_shown
+      )
+        return;
 
       switch (event.key) {
         case 'ArrowLeft':
@@ -259,7 +255,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
           return onNext();
       }
     },
-    [onNext, onPrev]
+    [onNext, onPrev, is_modal_shown]
   );
 
   useEffect(() => {
