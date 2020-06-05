@@ -21,7 +21,6 @@ function* onPathChange({
 }
 
 function* onShowPhotoswipe({ images, index }: ReturnType<typeof modalShowPhotoswipe>) {
-  console.log({ images, index });
   yield put(
     modalSet({
       dialog: DIALOGS.PHOTOSWIPE,
