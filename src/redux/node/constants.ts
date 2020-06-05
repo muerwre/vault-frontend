@@ -14,7 +14,6 @@ import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadB
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
 import { Filler } from '~/components/containers/Filler';
 import { modalShowPhotoswipe } from '../modal/actions';
-import { NodeImageBlock } from '~/components/node/NodeImageBlock';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
