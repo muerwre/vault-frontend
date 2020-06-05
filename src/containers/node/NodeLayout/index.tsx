@@ -177,6 +177,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                         onDelete={nodeLockComment}
                         onEdit={nodeEditComment}
                         onLoadMore={nodeLoadMoreComments}
+                        modalShowPhotoswipe={modalShowPhotoswipe}
                         order="DESC"
                       />
                     )}

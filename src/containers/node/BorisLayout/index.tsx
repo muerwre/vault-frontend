@@ -13,6 +13,7 @@ import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
+import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import isBefore from 'date-fns/isBefore';
 import { Card } from '~/components/containers/Card';
 import { Footer } from '~/components/main/Footer';
@@ -28,6 +29,7 @@ const mapDispatchToProps = {
   nodeEditComment: NODE_ACTIONS.nodeEditComment,
   nodeLoadMoreComments: NODE_ACTIONS.nodeLoadMoreComments,
   authSetUser: AUTH_ACTIONS.authSetUser,
+  modalShowPhotoswipe: MODAL_ACTIONS.modalShowPhotoswipe,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -44,6 +46,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
   nodeLockComment,
   nodeEditComment,
   nodeLoadMoreComments,
+  modalShowPhotoswipe,
   authSetUser,
 }) => {
   const title = getRandomPhrase('BORIS_TITLE');
@@ -90,6 +93,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
                 onDelete={nodeLockComment}
                 onEdit={nodeEditComment}
                 onLoadMore={nodeLoadMoreComments}
+                modalShowPhotoswipe={modalShowPhotoswipe}
                 order="ASC"
               />
             )}

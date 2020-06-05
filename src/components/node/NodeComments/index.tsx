@@ -11,6 +11,7 @@ import { nodeLockComment, nodeEditComment, nodeLoadMoreComments } from '~/redux/
 import { INodeState } from '~/redux/node/reducer';
 import { COMMENTS_DISPLAY } from '~/redux/node/constants';
 import { plural } from '~/utils/dom';
+import * as MODAL_ACTIONS from '~/redux/modal/actions';
 
 interface IProps {
   comments?: IComment[];
@@ -21,6 +22,7 @@ interface IProps {
   onEdit: typeof nodeEditComment;
   onLoadMore: typeof nodeLoadMoreComments;
   order?: 'ASC' | 'DESC';
+  modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
 }
 
 const NodeComments: FC<IProps> = memo(
@@ -33,6 +35,7 @@ const NodeComments: FC<IProps> = memo(
     onLoadMore,
     comment_count = 0,
     order = 'DESC',
+    modalShowPhotoswipe,
   }) => {
     const comments_left = useMemo(() => Math.max(0, comment_count - comments.length), [
       comments,
@@ -73,6 +76,7 @@ const NodeComments: FC<IProps> = memo(
             can_edit={canEditComment(group, user)}
             onDelete={onDelete}
             onEdit={onEdit}
+            modalShowPhotoswipe={modalShowPhotoswipe}
           />
         ))}
 
