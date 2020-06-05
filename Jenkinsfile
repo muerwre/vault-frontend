@@ -35,7 +35,7 @@ pipeline {
         stage('stats') {
             steps {
                 sh "mkdir -p ${WORKSPACE}/dist/stats"
-                sh "git log --pretty=format:\'{ \"commit\": \"%H\", \"subject\": \"%s\", \"timestamp\": \"%at\" } | awk \'BEGIN { print(\"[\") } { print(\$0\",\") } END { print(\"]\") }'' > ${WORKSPACE}/dist/stats/git.json"
+                sh "git log --pretty=format:\'{ \"commit\": \"%H\", \"subject\": \"%s\", \"timestamp\": \"%at\" }\' | awk \'BEGIN { print(\"[\") } { print(\$0\",\") } END { print(\"]\") }\' > ${WORKSPACE}/dist/stats/git.json"
             }
         }
 
