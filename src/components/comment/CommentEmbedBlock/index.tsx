@@ -1,5 +1,5 @@
 import React, { FC, memo, useMemo, useEffect } from 'react';
-import { ICommentBlock } from '~/constants/comment';
+import { ICommentBlockProps } from '~/constants/comment';
 import styles from './styles.scss';
 import { getYoutubeThumb } from '~/utils/dom';
 import { selectPlayer } from '~/redux/player/selectors';
@@ -16,9 +16,8 @@ const mapDispatchToProps = {
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps & {
-    block: ICommentBlock;
-  };
+  typeof mapDispatchToProps &
+  ICommentBlockProps & {};
 
 const CommentEmbedBlockUnconnected: FC<Props> = memo(
   ({ block, youtubes, playerGetYoutubeInfo }) => {

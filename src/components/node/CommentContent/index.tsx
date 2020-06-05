@@ -12,7 +12,6 @@ import { AudioPlayer } from '~/components/media/AudioPlayer';
 import classnames from 'classnames';
 import { PRESETS } from '~/constants/urls';
 import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
-import { Icon } from '~/components/input/Icon';
 import { nodeLockComment, nodeEditComment } from '~/redux/node/actions';
 import { CommentMenu } from '../CommentMenu';
 

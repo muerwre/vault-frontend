@@ -27,6 +27,10 @@ export type ICommentBlock = {
   content: string;
 };
 
+export type ICommentBlockProps = {
+  block: ICommentBlock;
+};
+
 export const COMMENT_BLOCK_RENDERERS = {
   [COMMENT_BLOCK_TYPES.TEXT]: CommentTextBlock,
   [COMMENT_BLOCK_TYPES.MARK]: CommentTextBlock,
