@@ -98,14 +98,3 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, onEdit }
 });
 
 export { CommentContent };
-
-/*
-{comment.text && (
-        
-      )}
-
-
-
-
-
-      */
