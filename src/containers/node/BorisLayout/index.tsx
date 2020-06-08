@@ -119,7 +119,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
             <Group className={styles.stats__container}>
               <div className={styles.stats__about}>
                 <p>Здесь мы сидим и слушаем всё, что вас беспокоит.</p>
-                <p>А потом чиним долгими дождливыми вечерами.</p>
+                <p>Все виновные будут наказаны. Невиновные, впрочем, тоже. Такова жизнь.</p>
               </div>
 
               {/*

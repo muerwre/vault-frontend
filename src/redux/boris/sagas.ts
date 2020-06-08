@@ -1,9 +1,14 @@
-import { takeLatest, put } from 'redux-saga/effects';
+import { takeLatest, put, call } from 'redux-saga/effects';
 import { BORIS_ACTIONS } from './constants';
 import { borisSet } from './actions';
+import { getBorisGitStats } from './api';
 
 function* loadStats() {
   yield put(borisSet({ is_loading: true }));
+
+  const result = yield getBorisGitStats();
+  console.log(result);
+
   yield put(borisSet({ is_loading: false }));
 }
 
