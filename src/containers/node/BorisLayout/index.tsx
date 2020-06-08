@@ -17,6 +17,8 @@ import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import isBefore from 'date-fns/isBefore';
 import { Card } from '~/components/containers/Card';
 import { Footer } from '~/components/main/Footer';
+import { Filler } from '~/components/containers/Filler';
+import { Sticky } from '~/components/containers/Sticky';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -101,6 +103,18 @@ const BorisLayoutUnconnected: FC<IProps> = ({
 
           <Footer />
         </Card>
+
+        <Group className={styles.stats}>
+          <Sticky>
+            <Group className={styles.stats__container}>
+              <div className={styles.stats__about}>
+                <p>Здесь мы сидим и слушаем всё, что вас беспокоит.</p>
+                <p>А потом чиним долгими дождливыми вечерами.</p>
+              </div>
+              <div className={styles.stats__title}>Изменения</div>
+            </Group>
+          </Sticky>
+        </Group>
       </div>
     </div>
   );

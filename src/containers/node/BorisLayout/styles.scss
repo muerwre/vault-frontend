@@ -6,13 +6,17 @@
 }
 
 .content {
-  flex: 3;
+  flex: 4;
   z-index: 2;
-  border-radius: $radius;
-  flex: 0 1 $limited_width;
+  border-radius: $radius 0 0 $radius;
+  // flex: 0 1 $limited_width;
   padding: 0;
   background: $node_bg;
   box-shadow: inset transparentize(mix($wisegreen, white, 60%), 0.6) 0 1px;
+
+  @include desktop {
+    flex: 2;
+  }
 }
 
 .grid {
@@ -40,8 +44,11 @@
   align-items: flex-start;
   justify-content: center;
   flex-direction: row;
-  flex: 0 1 $limited_width;
   width: 100%;
+
+  @include tablet {
+    flex-direction: column;
+  }
 }
 
 .image {
@@ -76,7 +83,7 @@
   left: 50%;
   bottom: 0;
   width: 100%;
-  max-width: $limited_width;
+  // max-width: $limited_width;
   height: 100%;
   display: flex;
   align-items: flex-start;
@@ -103,4 +110,35 @@
 .caption_text {
   max-width: 400px;
   text-transform: uppercase;
+}
+
+.stats {
+  position: relative;
+  z-index: 2;
+  align-self: stretch;
+  flex-direction: column;
+
+  &__container {
+    background: darken($content_bg, 4%);
+    border-radius: 0 $radius $radius 0;
+    box-shadow: inset transparentize(mix($wisegreen, white, 60%), 0.6) 0 1px;
+    padding: $gap;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+  }
+
+  &__title {
+    font: $font_12_semibold;
+    text-transform: uppercase;
+    opacity: 0.3;
+    margin-top: 16px !important;
+  }
+
+  &__about {
+    line-height: 1.4em;
+
+    p {
+      margin-bottom: 8px;
+    }
+  }
 }
