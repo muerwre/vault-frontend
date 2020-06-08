@@ -11,12 +11,14 @@ export type IBorisState = Readonly<{
   stats: {
     git: IStatGitRow[];
   };
+  is_loading: boolean;
 }>;
 
 const BORIS_INITIAL_STATE: IBorisState = {
   stats: {
     git: [],
   },
+  is_loading: false,
 };
 
 export default createReducer(BORIS_INITIAL_STATE, BORIS_HANDLERS);

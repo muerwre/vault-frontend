@@ -6,10 +6,9 @@
 }
 
 .content {
-  flex: 4;
+  flex: 3;
   z-index: 2;
-  border-radius: $radius 0 0 $radius;
-  // flex: 0 1 $limited_width;
+  border-radius: $radius;
   padding: 0;
   background: $node_bg;
   box-shadow: inset transparentize(mix($wisegreen, white, 60%), 0.6) 0 1px;
@@ -117,6 +116,7 @@
   z-index: 2;
   align-self: stretch;
   flex-direction: column;
+  padding-top: 10px;
 
   &__container {
     background: darken($content_bg, 4%);
@@ -132,7 +132,6 @@
     text-transform: uppercase;
     opacity: 0.3;
     margin-top: 16px !important;
-    display: none;
   }
 
   &__about {

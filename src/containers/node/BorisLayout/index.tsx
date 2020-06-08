@@ -14,15 +14,18 @@ import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import * as BORIS_ACTIONS from '~/redux/boris/actions';
 import isBefore from 'date-fns/isBefore';
 import { Card } from '~/components/containers/Card';
 import { Footer } from '~/components/main/Footer';
-import { Filler } from '~/components/containers/Filler';
 import { Sticky } from '~/components/containers/Sticky';
+import { Placeholder } from '~/components/placeholders/Placeholder';
+import { selectBorisStats } from '~/redux/boris/selectors';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
   user: selectUser(state),
+  stats: selectBorisStats(state),
 });
 
 const mapDispatchToProps = {
@@ -32,6 +35,7 @@ const mapDispatchToProps = {
   nodeLoadMoreComments: NODE_ACTIONS.nodeLoadMoreComments,
   authSetUser: AUTH_ACTIONS.authSetUser,
   modalShowPhotoswipe: MODAL_ACTIONS.modalShowPhotoswipe,
+  borisLoadStats: BORIS_ACTIONS.borisLoadStats,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -50,6 +54,8 @@ const BorisLayoutUnconnected: FC<IProps> = ({
   nodeLoadMoreComments,
   modalShowPhotoswipe,
   authSetUser,
+  borisLoadStats,
+  stats,
 }) => {
   const title = getRandomPhrase('BORIS_TITLE');
 
@@ -66,6 +72,10 @@ const BorisLayoutUnconnected: FC<IProps> = ({
     if (is_loading) return;
     nodeLoadNode(id, 'DESC');
   }, [nodeLoadNode, id]);
+
+  useEffect(() => {
+    borisLoadStats();
+  }, [borisLoadStats]);
 
   return (
     <div className={styles.wrap}>
@@ -111,7 +121,30 @@ const BorisLayoutUnconnected: FC<IProps> = ({
                 <p>Здесь мы сидим и слушаем всё, что вас беспокоит.</p>
                 <p>А потом чиним долгими дождливыми вечерами.</p>
               </div>
+
+              {/*
+                <div className={styles.stats__title}>Контент</div>
+
+              <Placeholder width="35%" />
+              <Placeholder width="40%" />
+              <Placeholder width="35%" />
+              <Placeholder width="20%" />
+
+              <div className={styles.stats__title}>Хранилище</div>
+
+              <Placeholder width="35%" />
+              <Placeholder width="35%" />
+              <Placeholder width="40%" />
+                */}
+
               <div className={styles.stats__title}>Изменения</div>
+
+              <Placeholder width="50%" />
+              <Placeholder width="100%" />
+              <Placeholder width="50%" />
+              <Placeholder width="70%" />
+              <Placeholder width="60%" />
+              <Placeholder width="100%" />
             </Group>
           </Sticky>
         </Group>
