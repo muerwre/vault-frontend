@@ -7,26 +7,29 @@ import { connectRouter, RouterState, routerMiddleware } from 'connected-react-ro
 import { createBrowserHistory } from 'history';
 import { PersistConfig, Persistor } from 'redux-persist/es/types';
 
-import authReducer from '~/redux/auth/reducer';
+import auth from '~/redux/auth/reducer';
 import authSaga from '~/redux/auth/sagas';
-
-import nodeReducer, { INodeState } from '~/redux/node/reducer';
-import nodeSaga from '~/redux/node/sagas';
-
-import flowReducer, { IFlowState } from '~/redux/flow/reducer';
-import flowSaga from '~/redux/flow/sagas';
-
-import uploadReducer, { IUploadState } from '~/redux/uploads/reducer';
-import uploadSaga from '~/redux/uploads/sagas';
-
-import playerReducer, { IPlayerState } from '~/redux/player/reducer';
-import playerSaga from '~/redux/player/sagas';
-
 import { IAuthState } from '~/redux/auth/types';
 
-import modalReducer, { IModalState } from '~/redux/modal/reducer';
-import { gotAuthPostMessage, authOpenProfile } from './auth/actions';
+import node, { INodeState } from '~/redux/node/reducer';
+import nodeSaga from '~/redux/node/sagas';
+
+import flow, { IFlowState } from '~/redux/flow/reducer';
+import flowSaga from '~/redux/flow/sagas';
+
+import uploads, { IUploadState } from '~/redux/uploads/reducer';
+import uploadSaga from '~/redux/uploads/sagas';
+
+import player, { IPlayerState } from '~/redux/player/reducer';
+import playerSaga from '~/redux/player/sagas';
+
+import modal, { IModalState } from '~/redux/modal/reducer';
 import { modalSaga } from './modal/sagas';
+
+import { gotAuthPostMessage, authOpenProfile } from './auth/actions';
+
+import boris, { IBorisState } from './boris/reducer';
+import borisSaga from './boris/sagas';
 
 const authPersistConfig: PersistConfig = {
   key: 'auth',
@@ -54,6 +57,7 @@ export interface IState {
   uploads: IUploadState;
   flow: IFlowState;
   player: IPlayerState;
+  boris: IBorisState;
 }
 
 export const sagaMiddleware = createSagaMiddleware();
@@ -66,13 +70,14 @@ const composeEnhancers =
 
 export const store = createStore(
   combineReducers<IState>({
-    auth: persistReducer(authPersistConfig, authReducer),
-    modal: modalReducer,
+    auth: persistReducer(authPersistConfig, auth),
+    modal,
+    boris,
     router: connectRouter(history),
-    node: nodeReducer,
-    uploads: uploadReducer,
-    flow: persistReducer(flowPersistConfig, flowReducer),
-    player: persistReducer(playerPersistConfig, playerReducer),
+    node,
+    uploads,
+    flow: persistReducer(flowPersistConfig, flow),
+    player: persistReducer(playerPersistConfig, player),
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
@@ -87,6 +92,7 @@ export function configureStore(): {
   sagaMiddleware.run(flowSaga);
   sagaMiddleware.run(playerSaga);
   sagaMiddleware.run(modalSaga);
+  sagaMiddleware.run(borisSaga);
 
   window.addEventListener('message', message => {
     if (message && message.data && message.data.type === 'oauth_login' && message.data.token)
