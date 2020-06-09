@@ -7,9 +7,31 @@ export type IStatGitRow = {
   timestamp: string;
 };
 
+export type IStatBackend = {
+  users: {
+    total: number;
+    alive: number;
+  };
+  nodes: {
+    images: number;
+    audios: number;
+    videos: number;
+    texts: number;
+    total: number;
+  };
+  comments: {
+    total: number;
+  };
+  files: {
+    count: number;
+    size: number;
+  };
+};
+
 export type IBorisState = Readonly<{
   stats: {
     git: IStatGitRow[];
+    backend: IStatBackend;
     is_loading: boolean;
   };
 }>;
@@ -17,6 +39,7 @@ export type IBorisState = Readonly<{
 const BORIS_INITIAL_STATE: IBorisState = {
   stats: {
     git: [],
+    backend: null,
     is_loading: false,
   },
 };

@@ -37,6 +37,6 @@ export const API = {
     YOUTUBE: '/embed/youtube',
   },
   BORIS: {
-    GET_GIT_LOG: 'http://vault48.org/stats/git.json',
+    GET_BACKEND_STATS: '/stats',
   },
 };

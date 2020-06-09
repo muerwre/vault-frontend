@@ -49,7 +49,7 @@ export interface IApiErrorResult {
 
 export interface IResultWithStatus<T> {
   status: any;
-  data?: Partial<T> & IApiErrorResult;
+  data?: T & IApiErrorResult;
   error?: string;
   debug?: string;
 }
