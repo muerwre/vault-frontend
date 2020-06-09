@@ -46,7 +46,7 @@
   width: 100%;
 
   @include tablet {
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 }
 
@@ -68,8 +68,9 @@
   }
 
   @include tablet {
-    height: 100px;
+    height: 40px;
     width: 100%;
+    padding-bottom: 0;
 
     img {
       display: none;
@@ -99,15 +100,22 @@
     align-items: flex-start;
     justify-content: center;
     width: 100%;
+    text-align: center;
+    display: none;
 
     padding: $gap;
-    font-size: 48px;
+    font-size: 32px;
   }
 }
 
 .caption_text {
   max-width: 400px;
   text-transform: uppercase;
+
+  @include tablet {
+    max-width: 100%;
+    margin: auto;
+  }
 }
 
 .stats {
@@ -144,6 +152,12 @@
 
     p {
       margin-bottom: $gap;
+    }
+  }
+
+  &__wrap {
+    @include tablet {
+      display: none;
     }
   }
 }

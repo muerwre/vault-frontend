@@ -129,7 +129,9 @@ const BorisLayoutUnconnected: FC<IProps> = ({
                 <p className="grey">//&nbsp;Такова&nbsp;жизнь.</p>
               </div>
 
-              <BorisStats stats={stats} />
+              <div className={styles.stats__wrap}>
+                <BorisStats stats={stats} />
+              </div>
             </Group>
           </Sticky>
         </Group>
