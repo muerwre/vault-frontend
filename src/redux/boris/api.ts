@@ -1,8 +1,3 @@
-import Axios from 'axios';
-import { API } from '~/constants/api';
-import { resultMiddleware, errorMiddleware } from '~/utils/api';
+import git from '~/stats/git.json';
 
-export const getBorisGitStats = (): Promise<any> =>
-  Axios.get(API.BORIS.GET_GIT_LOG)
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const getBorisGitStats = (): Promise<any> => Promise.resolve(git);

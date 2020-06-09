@@ -21,6 +21,7 @@ import { Footer } from '~/components/main/Footer';
 import { Sticky } from '~/components/containers/Sticky';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { selectBorisStats } from '~/redux/boris/selectors';
+import { BorisStats } from '~/components/boris/BorisStats';
 
 const mapStateToProps = state => ({
   node: selectNode(state),
@@ -118,33 +119,19 @@ const BorisLayoutUnconnected: FC<IProps> = ({
           <Sticky>
             <Group className={styles.stats__container}>
               <div className={styles.stats__about}>
+                <h4>Господи-боженьки, где это я?</h4>
+
+                <p>
+                  Всё впорядке, это &mdash; главный штаб суицидальных роботов, строящих Убежище.
+                </p>
                 <p>Здесь мы сидим и слушаем всё, что вас беспокоит.</p>
-                <p>Все виновные будут наказаны. Невиновные, впрочем, тоже. Такова жизнь.</p>
+                <p>
+                  Все виновные будут наказаны. Невиновные, впрочем, тоже.{' '}
+                  <span className="grey">//&nbsp;Такова&nbsp;жизнь.</span>
+                </p>
               </div>
 
-              {/*
-                <div className={styles.stats__title}>Контент</div>
-
-              <Placeholder width="35%" />
-              <Placeholder width="40%" />
-              <Placeholder width="35%" />
-              <Placeholder width="20%" />
-
-              <div className={styles.stats__title}>Хранилище</div>
-
-              <Placeholder width="35%" />
-              <Placeholder width="35%" />
-              <Placeholder width="40%" />
-                */}
-
-              <div className={styles.stats__title}>Изменения</div>
-
-              <Placeholder width="50%" />
-              <Placeholder width="100%" />
-              <Placeholder width="50%" />
-              <Placeholder width="70%" />
-              <Placeholder width="60%" />
-              <Placeholder width="100%" />
+              <BorisStats stats={stats} />
             </Group>
           </Sticky>
         </Group>
