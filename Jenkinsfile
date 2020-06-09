@@ -28,14 +28,9 @@ pipeline {
         stage('build') {
             steps {
                 sh 'yarn'
+                sh "mkdir -p ${WORKSPACE}/src/stats"
+                sh "git log -n 50 --pretty=format:\'   { \"commit\": \"%H\", \"subject\": \"%s\", \"timestamp\": \"%at\" }\' | awk \'BEGIN { print(\"[\") } { print(\$0\",\") } END { print(\"   {}\\n]\") }\' > ${WORKSPACE}/src/stats/git.json"
                 sh 'yarn build'
-            }
-        }
-
-        stage('stats') {
-            steps {
-                sh "mkdir -p ${WORKSPACE}/dist/stats"
-                sh "git log -n 50 --pretty=format:\'   { \"commit\": \"%H\", \"subject\": \"%s\", \"timestamp\": \"%at\" }\' | awk \'BEGIN { print(\"[\") } { print(\$0\",\") } END { print(\"   {}\\n]\") }\' > ${WORKSPACE}/dist/stats/git.json"
             }
         }
 
