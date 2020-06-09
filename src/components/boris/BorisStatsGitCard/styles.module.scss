@@ -1,9 +1,18 @@
 .wrap {
-  margin-top: $gap;
+  padding: $gap / 2 0;
+  border-bottom: 1px solid #333333;
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .time {
   font: $font_12_regular;
   line-height: 17px;
-  opacity: 0.5;
+  opacity: 0.3;
+}
+
+.subject {
+  font: $font_14_regular;
 }

@@ -215,3 +215,11 @@ export const darken = (col: string, amt: number) => {
 
   return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16);
 };
+
+export const sizeOf = (bytes: number): string => {
+  if (bytes == 0) {
+    return '0.00 B';
+  }
+  var e = Math.floor(Math.log(bytes) / Math.log(1024));
+  return (bytes / Math.pow(1024, e)).toFixed(2) + ' ' + ' KMGTP'.charAt(e) + 'B';
+};

@@ -3,6 +3,6 @@
     font: $font_12_semibold;
     text-transform: uppercase;
     opacity: 0.3;
-    margin-top: 16px !important;
+    margin: $gap * 2 0 $gap;
   }
 }
