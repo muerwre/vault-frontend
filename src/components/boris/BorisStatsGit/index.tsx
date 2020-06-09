@@ -30,7 +30,7 @@ const BorisStatsGit: FC<IProps> = ({ stats }) => {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.stats__title}>Изменения</div>
+      <div className={styles.stats__title}>КОММИТС</div>
 
       {stats.git
         .filter(data => data.commit && data.timestamp && data.subject)
