@@ -74,7 +74,7 @@ const CommentContent: FC<IProps> = memo(
             <div className={styles.images}>
               {groupped.image.map((file, index) => (
                 <div key={file.id} onClick={() => modalShowPhotoswipe(groupped.image, index)}>
-                  <img src={getURL(file, PRESETS['300'])} alt={file.name} />
+                  <img src={getURL(file, PRESETS['600'])} alt={file.name} />
                 </div>
               ))}
             </div>
