@@ -8,7 +8,7 @@
   &::after {
     content: ' ';
     position: absolute;
-    background: linear-gradient(transparentize($node_bg, 1), $node_bg);
+    background: linear-gradient(transparentize($content_bg, 1), $content_bg);
     border-radius: 0 0 $radius $radius;
     height: 100px;
     width: 100%;
