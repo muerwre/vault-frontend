@@ -159,7 +159,11 @@ const CommentFormUnconnected: FC<IProps> = memo(
       (fileId: IFile['id']) => {
         nodeSetCommentData(
           id,
-          assocPath(['files'], comment.files.filter(file => file.id != fileId), comment_data[id])
+          assocPath(
+            ['files'],
+            comment.files.filter(file => file.id != fileId),
+            comment_data[id]
+          )
         );
       },
       [comment_data, id, nodeSetCommentData]
@@ -189,13 +193,17 @@ const CommentFormUnconnected: FC<IProps> = memo(
             ['files'],
             [
               ...audios,
-              ...(moveArrItem(oldIndex, newIndex, images.filter(file => !!file)) as IFile[]),
+              ...(moveArrItem(
+                oldIndex,
+                newIndex,
+                images.filter(file => !!file)
+              ) as IFile[]),
             ],
             comment_data[id]
           )
         );
       },
-      [images, audios]
+      [images, audios, comment_data, nodeSetCommentData]
     );
 
     const onAudioMove = useCallback(
@@ -206,13 +214,17 @@ const CommentFormUnconnected: FC<IProps> = memo(
             ['files'],
             [
               ...images,
-              ...(moveArrItem(oldIndex, newIndex, audios.filter(file => !!file)) as IFile[]),
+              ...(moveArrItem(
+                oldIndex,
+                newIndex,
+                audios.filter(file => !!file)
+              ) as IFile[]),
             ],
             comment_data[id]
           )
         );
       },
-      [images, audios]
+      [images, audios, comment_data, nodeSetCommentData]
     );
 
     const onCancelEdit = useCallback(() => {
@@ -299,9 +311,6 @@ const CommentFormUnconnected: FC<IProps> = memo(
   }
 );
 
-const CommentForm = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CommentFormUnconnected);
+const CommentForm = connect(mapStateToProps, mapDispatchToProps)(CommentFormUnconnected);
 
 export { CommentForm, CommentFormUnconnected };
