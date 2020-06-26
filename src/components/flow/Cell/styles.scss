@@ -30,8 +30,8 @@
     }
 
     .title {
-      opacity: 1;
-      transform: translate(0, -2px);
+      opacity: 0;
+      transform: translate(0, 10px);
     }
   }
   @include outer_shadow();
@@ -92,10 +92,9 @@
 
 .title {
   padding: $gap / 2;
-  opacity: 0.2;
+  opacity: 1;
   transform: translate(0, 0);
-  transition: opacity 0.5s 0.25s, transform 0.5s;
-  // max-height: 3.3em;
+  transition: opacity 0.5s, transform 1s;
 }
 
 .text_title {
