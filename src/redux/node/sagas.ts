@@ -115,8 +115,6 @@ function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
   yield put(nodeLoadNode(id));
   yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
   yield put(nodeSetRelated(null));
-
-  yield put(push(URLS.NODE_URL(id)));
 }
 
 function* onNodeLoadMoreComments() {

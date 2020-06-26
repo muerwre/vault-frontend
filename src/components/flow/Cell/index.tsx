@@ -10,6 +10,7 @@ import { PRESETS } from '~/constants/urls';
 import { debounce } from 'throttle-debounce';
 import { NODE_TYPES } from '~/redux/node/constants';
 import { Group } from '~/components/containers/Group';
+import { Link } from 'react-router-dom';
 
 const THUMBNAIL_SIZES = {
   horizontal: PRESETS.small_hero,
@@ -67,6 +68,7 @@ const Cell: FC<IProps> = ({
     setIsLoaded(true);
   }, [setIsLoaded]);
 
+  // Replaced it with <Link>, maybe, you can remove it completely with NodeSelect action
   const onClick = useCallback(() => onSelect(id, type), [onSelect, id, type]);
   const has_description = description && description.length > 32;
 
@@ -130,7 +132,7 @@ const Cell: FC<IProps> = ({
             </div>
           )}
 
-          <div className={classNames(styles.face)} onClick={onClick}>
+          <Link className={classNames(styles.face)} to={`/post${id}`}>
             <div className={styles.face_content}>
               {title && !text && <div className={styles.title}>{title}</div>}
 
@@ -150,7 +152,7 @@ const Cell: FC<IProps> = ({
                 </div>
               )}
             </div>
-          </div>
+          </Link>
 
           {thumbnail && (
             <div
