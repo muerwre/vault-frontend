@@ -22,21 +22,21 @@ render(
   [stage 1]
   - check if email is registered at social login
   - profile cover upload
-  - illustrate login  
+  - illustrate login
   - illustrate restoreRequestDialog
   - friendship
   - signup?
   - text post can also has songs http://vault48.org/post5052
   - fulltext search: https://github.com/typeorm/typeorm/issues/3191
   - zoom: https://manuelstofer.github.io/pinchzoom/
-  
+
   - notifications (node, comment)
-  
+
   - social integration (assimilate)
   - comment editing
-  
+
   Done:
-  - set file target on comment save, node save, profile upload  
+  - set file target on comment save, node save, profile upload
   - delete comments
   - import videos (partially)
   - delete nodes
@@ -62,7 +62,7 @@ render(
   - imagecaching at backend
   - social integration (login, signup)
   - boris with comments (import)
-  - boris with comments (layout) 
+  - boris with comments (layout)
   - fix: user receives his own notifications :-(
   - fix: node related and albums should exclude node itself
   - fix: select node and edit it. All images will be not loaded
