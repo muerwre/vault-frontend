@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import { DetailedHTMLProps, InputHTMLAttributes, ReactElement } from 'react';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 import { IUser } from './auth/types';
@@ -30,6 +30,7 @@ export type IInputTextProps = DetailedHTMLProps<
   mask?: string;
   onRef?: (ref: any) => void;
   is_loading?: boolean;
+  after?: ReactElement;
 };
 
 export type IIcon = string;
@@ -48,7 +49,7 @@ export interface IApiErrorResult {
 
 export interface IResultWithStatus<T> {
   status: any;
-  data?: Partial<T> & IApiErrorResult;
+  data?: T & IApiErrorResult;
   error?: string;
   debug?: string;
 }
@@ -123,6 +124,7 @@ export interface INode {
   description?: string;
   is_liked?: boolean;
   is_heroic?: boolean;
+  like_count?: number;
 
   flow: {
     display: 'single' | 'vertical' | 'horizontal' | 'quadro';
@@ -191,3 +193,16 @@ export type INodeNotification = {
 };
 
 export type INotification = IMessageNotification | ICommentNotification;
+
+export type Unwrap<T> = T extends Promise<infer U> ? U : T;
+
+export interface IEmbed {
+  provider: string;
+  address: string;
+  id: number;
+  metadata: {
+    title: string;
+    thumb: string;
+    duration: string;
+  };
+}

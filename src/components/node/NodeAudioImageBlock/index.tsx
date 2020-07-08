@@ -5,10 +5,9 @@ import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import path from 'ramda/es/path';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
+import { INodeComponentProps } from '~/redux/node/constants';
 
-interface IProps {
-  node: INode;
-}
+interface IProps extends INodeComponentProps {}
 
 const NodeAudioImageBlock: FC<IProps> = ({ node }) => {
   const images = useMemo(

@@ -18,6 +18,7 @@ export interface IUser {
 
   last_seen: string;
   last_seen_messages: string;
+  last_seen_boris: string;
 
   is_activated: boolean;
   is_user: boolean;
@@ -30,6 +31,7 @@ export type IAuthState = Readonly<{
   updates: {
     last: string;
     notifications: INotification[];
+    boris_commented_at: string;
   };
 
   login: {

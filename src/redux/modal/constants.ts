@@ -11,12 +11,17 @@ export const DIALOGS = {
   RESTORE_REQUEST: 'RESTORE_REQUEST',
   RESTORE_PASSWORD: 'RESTORE_PASSWORD',
   TEST: 'TEST',
+  PHOTOSWIPE: 'PHOTOSWIPE',
 };
 
+const prefix = 'MODAL.';
+
 export const MODAL_ACTIONS = {
-  SET_SHOWN: 'MODAL.SET_SHOWN',
-  SET_DIALOG: 'SET_DIALOG',
-  SHOW_DIALOG: 'SHOW_DIALOG',
+  SET: `${prefix}SET`,
+  SET_SHOWN: `${prefix}MODAL.SET_SHOWN`,
+  SET_DIALOG: `${prefix}SET_DIALOG`,
+  SHOW_DIALOG: `${prefix}SHOW_DIALOG`,
+  SHOW_PHOTOSWIPE: `${prefix}SHOW_PHOTOSWIPE`,
 };
 
 export interface IDialogProps {

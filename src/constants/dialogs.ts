@@ -10,6 +10,7 @@ import { ProfileDialog } from '~/containers/dialogs/ProfileDialog';
 import { RestoreRequestDialog } from '~/containers/dialogs/RestoreRequestDialog';
 import { RestorePasswordDialog } from '~/containers/dialogs/RestorePasswordDialog';
 import { DIALOGS } from '~/redux/modal/constants';
+import { PhotoSwipe } from '~/containers/dialogs/PhotoSwipe';
 
 export const DIALOG_CONTENT = {
   [DIALOGS.EDITOR_IMAGE]: EditorDialogImage,
@@ -22,6 +23,7 @@ export const DIALOG_CONTENT = {
   [DIALOGS.PROFILE]: ProfileDialog,
   [DIALOGS.RESTORE_REQUEST]: RestoreRequestDialog,
   [DIALOGS.RESTORE_PASSWORD]: RestorePasswordDialog,
+  [DIALOGS.PHOTOSWIPE]: PhotoSwipe,
 };
 
 export const NODE_EDITOR_DIALOGS = {

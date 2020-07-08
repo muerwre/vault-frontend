@@ -3,10 +3,9 @@ import { INode } from '~/redux/types';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import * as styles from './styles.scss';
+import { INodeComponentProps } from '~/redux/node/constants';
 
-interface IProps {
-  node: INode;
-}
+interface IProps extends INodeComponentProps {}
 
 const NodeAudioBlock: FC<IProps> = ({ node }) => {
   const audios = useMemo(

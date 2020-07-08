@@ -90,11 +90,30 @@
     transition: transform 0.5s, opacity 0.25s;
   }
 
+  &::after {
+    content: ' ';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 4px;
+    background: lighten($red, 10%);
+    right: 12px;
+    top: 6px;
+    transition: opacity 0.5s;
+    opacity: 0;
+  }
+
+  &.has_dot {
+    &::after {
+      opacity: 1;
+    }
+  }
+
   @include tablet {
     padding: $gap;
 
     &::after {
-      margin-left: $gap;
+      right: 0;
     }
   }
 }

@@ -14,6 +14,7 @@ const INITIAL_STATE: IAuthState = {
   updates: {
     last: null,
     notifications: [],
+    boris_commented_at: null,
   },
 
   login: {

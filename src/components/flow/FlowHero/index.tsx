@@ -16,10 +16,9 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
   const [limit, setLimit] = useState(Math.min(heroes.length, 6));
   const [current, setCurrent] = useState(0);
   const [loaded, setLoaded] = useState([]);
+
   const timer = useRef(null);
-
   const onLoad = useCallback(id => () => setLoaded([...loaded, id]), [setLoaded, loaded]);
-
   const onNext = useCallback(() => {
     clearTimeout(timer.current);
 
@@ -47,9 +46,7 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
 
   useEffect(() => {
     timer.current = setTimeout(onNext, 5000);
-
-    return () => clearTimeout(timer.current);
-  }, [current]);
+  }, [current, onNext]);
 
   useEffect(() => {
     if (current === 0 && loaded.length > 0) setCurrent(loaded[0]);
@@ -80,6 +77,8 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
     return item.title;
   }, [loaded, current, heroes]);
 
+  const preset = useMemo(() => (window.innerWidth <= 768 ? PRESETS.cover : PRESETS.small_hero), []);
+
   return (
     <div className={styles.wrap} onMouseOver={stopSliding} onFocus={stopSliding}>
       {loaded && loaded.length > 0 && (
@@ -104,13 +103,13 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes, history }) => {
             [styles.is_active]: current === hero.id,
           })}
           style={{
-            backgroundImage: `url("${getURL({ url: hero.thumbnail }, PRESETS.small_hero)}")`,
+            backgroundImage: `url("${getURL({ url: hero.thumbnail }, preset)}")`,
           }}
           key={hero.id}
           onClick={onClick}
         >
           <img
-            src={getURL({ url: hero.thumbnail }, PRESETS.small_hero)}
+            src={getURL({ url: hero.thumbnail }, preset)}
             alt={hero.thumbnail}
             onLoad={onLoad(hero.id)}
           />

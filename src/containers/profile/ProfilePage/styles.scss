@@ -2,6 +2,19 @@
   flex: 1;
   background: $content_bg;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: stretch;
+  box-shadow: $node_shadow;
+  border-radius: $radius;
+}
+
+.left {
+  flex: 1;
+  background: darken($content_bg, 2%);
+  border-radius: 0 $radius $radius 0;
+  box-sizing: border-box;
+}
+
+.right {
+  flex: 4;
 }

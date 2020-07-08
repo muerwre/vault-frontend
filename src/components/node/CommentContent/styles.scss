@@ -111,8 +111,13 @@
   right: 0;
   font: $font_12_regular;
   color: transparentize($color: white, $amount: 0.8);
-  padding: 4px 6px 4px 6px;
+  padding: 0 6px 2px;
   border-radius: 0 0 $radius 0;
+  z-index: 2;
+  background: $comment_bg;
+  border-radius: 4px;
+  pointer-events: none;
+  touch-action: none;
 }
 
 .images {
@@ -132,4 +137,9 @@
     align-items: center;
     text-align: center;
   }
+}
+
+.renderers {
+  width: 100%;
+  margin: 0 !important;
 }

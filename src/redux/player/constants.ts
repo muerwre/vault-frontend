@@ -1,6 +1,8 @@
 const prefix = 'PLAYER.';
 
 export const PLAYER_ACTIONS = {
+  SET: `${prefix}SET`,
+
   SET_FILE: `${prefix}SET_FILE`,
   SET_FILE_AND_PLAY: `${prefix}SET_FILE_AND_PLAY`,
   SET_STATUS: `${prefix}SET_STATUS`,
@@ -10,6 +12,8 @@ export const PLAYER_ACTIONS = {
   SEEK: `${prefix}SEEK`,
   STOP: `${prefix}STOP`,
   STOPPED: `${prefix}STOPPED`,
+
+  GET_YOUTUBE_INFO: `${prefix}GET_YOUTUBE_INFO`,
 };
 
 export const PLAYER_STATES = {

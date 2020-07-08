@@ -7,6 +7,7 @@ import { nodeLockComment, nodeEditComment } from '~/redux/node/actions';
 import { INodeState } from '~/redux/node/reducer';
 import { CommentForm } from '../CommentForm';
 import { CommendDeleted } from '../CommendDeleted';
+import * as MODAL_ACTIONS from '~/redux/modal/actions';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
@@ -17,6 +18,7 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
   can_edit?: boolean;
   onDelete: typeof nodeLockComment;
   onEdit: typeof nodeEditComment;
+  modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
 };
 
 const Comment: FC<IProps> = memo(
@@ -30,6 +32,7 @@ const Comment: FC<IProps> = memo(
     can_edit,
     onDelete,
     onEdit,
+    modalShowPhotoswipe,
     ...props
   }) => {
     return (
@@ -58,6 +61,7 @@ const Comment: FC<IProps> = memo(
                 can_edit={can_edit}
                 onDelete={onDelete}
                 onEdit={onEdit}
+                modalShowPhotoswipe={modalShowPhotoswipe}
               />
             );
           })}

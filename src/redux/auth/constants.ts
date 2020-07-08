@@ -11,6 +11,7 @@ export const AUTH_USER_ACTIONS = {
 
   GOT_AUTH_POST_MESSAGE: 'GOT_POST_MESSAGE',
   OPEN_PROFILE: 'OPEN_PROFILE',
+  LOAD_PROFILE: 'LOAD_PROFILE',
   SET_PROFILE: 'SET_PROFILE',
   GET_MESSAGES: 'GET_MESSAGES',
   SEND_MESSAGE: 'SEND_MESSAGE',
@@ -61,6 +62,7 @@ export const EMPTY_USER: IUser = {
 
   last_seen: null,
   last_seen_messages: null,
+  last_seen_boris: null,
 };
 
 export interface IApiUser {

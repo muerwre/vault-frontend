@@ -30,4 +30,13 @@ export const API = {
       `/node/${id}/comment/${comment_id}/lock`,
     SET_CELL_VIEW: (id: INode['id']) => `/node/${id}/cell-view`,
   },
+  SEARCH: {
+    NODES: '/search/nodes',
+  },
+  EMBED: {
+    YOUTUBE: '/embed/youtube',
+  },
+  BORIS: {
+    GET_BACKEND_STATS: '/stats',
+  },
 };

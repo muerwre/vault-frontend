@@ -94,8 +94,16 @@ export const formatText = (text: string): string =>
         )
         .replace(/:\/\//gim, ':|--|')
         .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
+        .replace(/(\*\*[\s\S]*?\*\*)/gim, '<b class="bold white">$1</b>')
+        .replace(/(\_\_[\s\S]*?\_\_)/gim, '<i>$1</i>')
+        .replace(/(\!\![\s\S]*?(\!\!|\n|$))/gim, '<span class="green">$1</span>')
         .replace(/(\/\*[\s\S]*?\*\/)/gim, '<span class="grey">$1</span>')
+        .replace(/([=|-]{5,})/gim, '<hr />')
         .replace(/:\|--\|/gim, '://')
+        .replace(
+          /(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)([-A-Z0-9+&@#%?\/=~_|!:,.;]*)[-A-Z0-9+&@#\/%=~_|])/gi,
+          '<a href="$1" target="blank" rel="nofollow">$1</a>'
+        )
         .split('\n')
         .filter(el => el.trim().length)
         .join('\n');
@@ -151,4 +159,67 @@ export const getYoutubeThumb = (url: string) => {
     );
 
   return match && match[1] ? `https://i.ytimg.com/vi/${match[1]}/hqdefault.jpg` : null;
+};
+
+export function plural(n: number, one: string, two: string, five: string) {
+  if (n % 10 === 1 && n % 100 !== 11) {
+    return `${n} ${one}`;
+  } else if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) {
+    return `${n} ${two}`;
+  } else {
+    return `${n} ${five}`;
+  }
+}
+
+export const stringToColour = (str: string) => {
+  let hash = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let colour = '#';
+
+  for (let i = 0; i < 3; i++) {
+    let value = (hash >> (i * 8)) & 0xff;
+    colour += ('00' + value.toString(16)).substr(-2);
+  }
+
+  return colour;
+};
+
+export const darken = (col: string, amt: number) => {
+  var usePound = false;
+
+  if (col[0] == '#') {
+    col = col.slice(1);
+    usePound = true;
+  }
+
+  var num = parseInt(col, 16);
+
+  var r = (num >> 16) + amt;
+
+  if (r > 255) r = 255;
+  else if (r < 0) r = 0;
+
+  var b = ((num >> 8) & 0x00ff) + amt;
+
+  if (b > 255) b = 255;
+  else if (b < 0) b = 0;
+
+  var g = (num & 0x0000ff) + amt;
+
+  if (g > 255) g = 255;
+  else if (g < 0) g = 0;
+
+  return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16);
+};
+
+export const sizeOf = (bytes: number): string => {
+  if (bytes == 0) {
+    return '0.00 B';
+  }
+  var e = Math.floor(Math.log(bytes) / Math.log(1024));
+  return (bytes / Math.pow(1024, e)).toFixed(2) + ' ' + ' KMGTP'.charAt(e) + 'B';
 };

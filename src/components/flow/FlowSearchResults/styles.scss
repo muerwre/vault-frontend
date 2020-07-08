@@ -1,0 +1,26 @@
+.wrap {
+  flex: 1;
+  overflow: auto;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex: 1;
+  opacity: 0.3;
+  fill: transparentize(white, 0.7);
+  stroke: none;
+}
+
+.nothing {
+  color: white;
+  text-transform: uppercase;
+  font: $font_18_semibold;
+  font-weight: 900;
+  opacity: 0.3;
+  padding: 10px 20px;
+  text-align: center;
+  line-height: 1.5em;
+}

@@ -1,11 +1,9 @@
 import React, { FC, useMemo } from 'react';
-import { INode } from '~/redux/types';
 import * as styles from './styles.scss';
 import path from 'ramda/es/path';
+import { INodeComponentProps } from '~/redux/node/constants';
 
-interface IProps {
-  node: INode;
-}
+interface IProps extends INodeComponentProps {}
 
 const NodeVideoBlock: FC<IProps> = ({ node }) => {
   const video = useMemo(() => {

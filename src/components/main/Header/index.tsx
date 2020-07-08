@@ -1,11 +1,11 @@
-import React, { FC, useCallback, memo, useState, useEffect } from 'react';
+import React, { FC, useCallback, memo, useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { push as historyPush } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import { Logo } from '~/components/main/Logo';
 
 import { Filler } from '~/components/containers/Filler';
-import { selectUser } from '~/redux/auth/selectors';
+import { selectUser, selectAuthUpdates } from '~/redux/auth/selectors';
 import { Group } from '~/components/containers/Group';
 import { DIALOGS } from '~/redux/modal/constants';
 import pick from 'ramda/es/pick';
@@ -19,9 +19,12 @@ import classNames from 'classnames';
 import * as style from './style.scss';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
+import { IState } from '~/redux/store';
+import isBefore from 'date-fns/isBefore';
 
-const mapStateToProps = state => ({
-  user: pick(['username', 'is_user', 'photo'])(selectUser(state)),
+const mapStateToProps = (state: IState) => ({
+  user: pick(['username', 'is_user', 'photo', 'last_seen_boris'])(selectUser(state)),
+  updates: pick(['boris_commented_at'])(selectAuthUpdates(state)),
   pathname: path(['router', 'location', 'pathname'], state),
 });
 
@@ -35,7 +38,15 @@ const mapDispatchToProps = {
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const HeaderUnconnected: FC<IProps> = memo(
-  ({ user, user: { is_user }, showDialog, pathname, authLogout, authOpenProfile }) => {
+  ({
+    user,
+    user: { is_user, last_seen_boris },
+    showDialog,
+    pathname,
+    updates: { boris_commented_at },
+    authLogout,
+    authOpenProfile,
+  }) => {
     const [is_scrolled, setIsScrolled] = useState(false);
 
     const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
@@ -55,6 +66,14 @@ const HeaderUnconnected: FC<IProps> = memo(
       return () => window.removeEventListener('scroll', onScroll);
     }, [onScroll]);
 
+    const hasBorisUpdates = useMemo(
+      () =>
+        is_user &&
+        boris_commented_at &&
+        (!last_seen_boris || isBefore(new Date(last_seen_boris), new Date(boris_commented_at))),
+      [boris_commented_at, last_seen_boris]
+    );
+
     return createPortal(
       <div className={classNames(style.wrap, { [style.is_scrolled]: is_scrolled })}>
         <div className={style.container}>
@@ -71,7 +90,10 @@ const HeaderUnconnected: FC<IProps> = memo(
             </Link>
 
             <Link
-              className={classNames(style.item, { [style.is_active]: pathname === URLS.BORIS })}
+              className={classNames(style.item, {
+                [style.is_active]: pathname === URLS.BORIS,
+                [style.has_dot]: hasBorisUpdates,
+              })}
               to={URLS.BORIS}
             >
               БОРИС

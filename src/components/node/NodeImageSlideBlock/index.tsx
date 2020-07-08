@@ -1,33 +1,28 @@
-import React, {
-  FC,
-  useMemo,
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useLayoutEffect,
-} from 'react';
-import { ImageSwitcher } from '../ImageSwitcher';
+import React, { FC, useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import * as styles from './styles.scss';
-import { INode } from '~/redux/types';
 import classNames from 'classnames';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
-import { NODE_SETTINGS } from '~/redux/node/constants';
+import { INodeComponentProps } from '~/redux/node/constants';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { throttle } from 'throttle-debounce';
+import { Icon } from '~/components/input/Icon';
 
-interface IProps {
-  is_loading: boolean;
-  node: INode;
-  layout: {};
-  updateLayout: () => void;
-}
+interface IProps extends INodeComponentProps {}
 
-const getX = event => (event.touches ? event.touches[0].clientX : event.clientX);
+const getX = event =>
+  (event.touches && event.touches.length) || (event.changedTouches && event.changedTouches.length)
+    ? (event.touches.length && event.touches[0].clientX) || event.changedTouches[0].clientX
+    : event.clientX;
 
-const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => {
+const NodeImageSlideBlock: FC<IProps> = ({
+  node,
+  is_loading,
+  is_modal_shown,
+  updateLayout,
+  modalShowPhotoswipe,
+}) => {
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(320);
   const [max_height, setMaxHeight] = useState(960);
@@ -39,6 +34,8 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   const [initial_x, setInitialX] = useState(0);
   const [offset, setOffset] = useState(0);
   const [is_dragging, setIsDragging] = useState(false);
+  const [drag_start, setDragStart] = useState(0);
+
   const slide = useRef<HTMLDivElement>();
   const wrap = useRef<HTMLDivElement>();
 
@@ -162,24 +159,41 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
   const updateMaxHeight = useCallback(() => {
     if (!wrap.current) return;
     const { width } = wrap.current.getBoundingClientRect();
-    setMaxHeight(width * NODE_SETTINGS.MAX_IMAGE_ASPECT);
+    setMaxHeight(window.innerHeight - 143);
     normalizeOffset();
   }, [wrap, setMaxHeight, normalizeOffset]);
 
-  const stopDragging = useCallback(() => {
-    if (!is_dragging) return;
+  const onOpenPhotoSwipe = useCallback(() => modalShowPhotoswipe(images, current), [
+    modalShowPhotoswipe,
+    images,
+    current,
+  ]);
 
-    setIsDragging(false);
-    normalizeOffset();
-  }, [setIsDragging, is_dragging, normalizeOffset]);
+  const stopDragging = useCallback(
+    event => {
+      if (!is_dragging) return;
+
+      setIsDragging(false);
+      normalizeOffset();
+
+      if (
+        Math.abs(new Date().getTime() - drag_start) < 200 &&
+        Math.abs(initial_x - getX(event)) < 5
+      ) {
+        onOpenPhotoSwipe();
+      }
+    },
+    [setIsDragging, is_dragging, normalizeOffset, onOpenPhotoSwipe, drag_start]
+  );
 
   const startDragging = useCallback(
     event => {
       setIsDragging(true);
       setInitialX(getX(event));
       setInitialOffset(offset);
+      setDragStart(new Date().getTime());
     },
-    [setIsDragging, setInitialX, offset, setInitialOffset]
+    [setIsDragging, setInitialX, offset, setInitialOffset, setDragStart]
   );
 
   useEffect(() => updateMaxHeight(), [images]);
@@ -214,58 +228,122 @@ const NodeImageSlideBlock: FC<IProps> = ({ node, is_loading, updateLayout }) => 
     [wrap]
   );
 
-  return (
-    <div className={classNames(styles.wrap, { [styles.is_loading]: is_loading })} ref={wrap}>
-      <div
-        className={classNames(styles.placeholder, {
-          [styles.is_loading]: is_loading || !loaded[current],
-        })}
-      >
-        <div>
-          <LoaderCircle size={96} />
-        </div>
-      </div>
+  const onPrev = useCallback(() => changeCurrent(current > 0 ? current - 1 : images.length - 1), [
+    changeCurrent,
+    current,
+    images,
+  ]);
 
-      {!is_loading && (
+  const onNext = useCallback(() => changeCurrent(current < images.length - 1 ? current + 1 : 0), [
+    changeCurrent,
+    current,
+    images,
+  ]);
+
+  const onKeyDown = useCallback(
+    event => {
+      if (
+        (event.target.tagName && ['TEXTAREA', 'INPUT'].includes(event.target.tagName)) ||
+        is_modal_shown
+      )
+        return;
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          return onPrev();
+        case 'ArrowRight':
+          return onNext();
+      }
+    },
+    [onNext, onPrev, is_modal_shown]
+  );
+
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onKeyDown]);
+
+  useEffect(() => {
+    setOffset(0);
+  }, [node.id]);
+
+  return (
+    <div className={styles.wrap}>
+      <div className={classNames(styles.cutter, { [styles.is_loading]: is_loading })} ref={wrap}>
+        <div
+          className={classNames(styles.placeholder, {
+            [styles.is_loading]: is_loading || !loaded[current],
+          })}
+        >
+          <div>
+            <LoaderCircle size={96} />
+          </div>
+        </div>
+
+        <div
+          className={classNames(styles.image_container, { [styles.is_dragging]: is_dragging })}
+          style={{
+            height,
+            transform: `translate(${offset}px, 0)`,
+            width: `${images.length * 100}%`,
+          }}
+          onMouseDown={startDragging}
+          onTouchStart={startDragging}
+          ref={slide}
+        >
+          {!is_loading &&
+            images.map((file, index) => (
+              <div
+                className={classNames(styles.image_wrap, {
+                  is_active: index === current && loaded[index],
+                })}
+                ref={setRef(index)}
+                key={node.updated_at + file.id}
+              >
+                <img
+                  className={styles.image}
+                  src={getURL(file, PRESETS['1600'])}
+                  alt=""
+                  key={file.id}
+                  onLoad={onImageLoad(index)}
+                  style={{ maxHeight: max_height }}
+                />
+              </div>
+            ))}
+        </div>
+
+        {images.length > 1 && (
+          <div className={styles.image_count}>
+            {current + 1}
+            <small> / </small>
+            {images.length}
+          </div>
+        )}
+
+        {/*
+      !is_loading && (
         <ImageSwitcher
           total={images.length}
           current={current}
           onChange={changeCurrent}
           loaded={loaded}
         />
+      )
+      */}
+      </div>
+
+      {images.length > 1 && (
+        <div className={classNames(styles.image_arrow)} onClick={onPrev}>
+          <Icon icon="left" size={40} />
+        </div>
       )}
 
-      <div
-        className={classNames(styles.image_container, { [styles.is_dragging]: is_dragging })}
-        style={{
-          height,
-          transform: `translate(${offset}px, 0)`,
-          width: `${images.length * 100}%`,
-        }}
-        onMouseDown={startDragging}
-        onTouchStart={startDragging}
-        ref={slide}
-      >
-        {!is_loading &&
-          images.map((file, index) => (
-            <div
-              className={classNames(styles.image_wrap, {
-                is_active: index === current && loaded[index],
-              })}
-              ref={setRef(index)}
-              key={node.updated_at + file.id}
-            >
-              <img
-                className={styles.image}
-                src={getURL(file, PRESETS['1600'])}
-                alt=""
-                key={file.id}
-                onLoad={onImageLoad(index)}
-                style={{ maxHeight: max_height }}
-              />
-            </div>
-          ))}
-      </div>
+      {images.length > 1 && (
+        <div className={classNames(styles.image_arrow, styles.image_arrow_right)} onClick={onNext}>
+          <Icon icon="right" size={40} />
+        </div>
+      )}
     </div>
   );
 };

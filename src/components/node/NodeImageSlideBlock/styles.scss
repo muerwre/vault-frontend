@@ -1,21 +1,30 @@
 .wrap {
+  position: relative;
+}
+
+.cutter {
   overflow: hidden;
   position: relative;
   min-width: 0;
-  width: 100%;
   transition: height 0.25s;
-  border-radius: $radius $radius 0 0;
+  border-radius: $radius;
+  margin-right: -$gap / 2;
+  margin-left: -$gap / 2;
 
   .is_loading {
     .placeholder {
       opacity: 1;
     }
   }
+
+  @include tablet {
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 0;
+  }
 }
 
 .image_container {
-  // background: $node_image_bg;
-  border-radius: $panel_radius 0 0 $panel_radius;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -24,17 +33,22 @@
   user-select: none;
   will-change: transform, height;
   transition: height 500ms, transform 500ms;
+  padding: 0 0 20px 0;
 
   &:active {
     transition: none;
   }
 
   .image {
-    // max-height: 960px;
-    max-height: 120vh !important;
     max-width: 100%;
     opacity: 1;
-    border-radius: $radius $radius 0 0;
+    border-radius: $radius;
+    box-shadow: transparentize($color: white, $amount: 0.95) 0 -1px,
+      transparentize($color: #000000, $amount: 0.6) 0 2px 5px;
+
+    @include tablet {
+      border-radius: 0;
+    }
   }
 
   &.is_dragging {
@@ -44,18 +58,90 @@
 
 .image_wrap {
   width: 100%;
-  // top: 0;
-  // left: 0;
-  // opacity: 0;
   pointer-events: none;
   touch-action: none;
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 $gap / 2;
+  position: relative;
 
   &:global(.is_active) {
     opacity: 1;
+  }
+
+  @include tablet {
+    padding: 0;
+  }
+}
+
+.image_count {
+  position: absolute;
+  color: transparentize(white, 0.5);
+  bottom: $gap * 3;
+  right: 50%;
+  padding: $gap / 3 $gap;
+  border-radius: 20px;
+  background: $content_bg;
+  font: $font_12_semibold;
+  transform: translate(50%, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+
+  small {
+    font-size: 0.8em;
+    padding: 0 3px;
+  }
+}
+
+.image_arrow {
+  position: absolute;
+  left: -$gap;
+  top: 50%;
+  width: 40px;
+  height: 64px;
+  border-radius: $radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-100%, -50%);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.5s;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &_right {
+    right: -$gap;
+    left: auto;
+    transform: translate(100%, -50%);
+  }
+
+  @media (max-width: $content_width + 80px + 40px) {
+    background: $content_bg;
+    left: 0;
+    transform: translate(0, -50%);
+    border-radius: 0 $radius $radius 0;
+
+    &_right {
+      right: 0;
+      left: auto;
+      border-radius: $radius 0 0 $radius;
+    }
+  }
+
+  @include tablet {
+    display: none;
+  }
+
+  svg {
+    position: relative;
+    left: -2px;
   }
 }
 

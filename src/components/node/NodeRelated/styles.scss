@@ -17,24 +17,13 @@
     grid-template-columns: repeat(6, 1fr);
   }
 }
-.title {
-  font: $font_14_semibold;
-  text-transform: uppercase;
-  color: transparentize(white, 0.3);
-  flex-direction: row;
-  display: flex;
-  align-items: center;
-}
 
-.line {
-  display: none;
-  flex: 1;
-  height: 2px;
-  background: transparentize(white, 0.95);
+.title {
+  @include title_with_line();
 }
 
 .text {
-  margin: 0 $gap;
+  margin-left: $gap / 2;
 }
 
 .placeholder {

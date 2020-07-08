@@ -7,3 +7,42 @@
     }
   }
 }
+
+.more {
+  padding: $gap;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius;
+  text-transform: uppercase;
+  color: darken(white, 60%);
+  font: $font_14_medium;
+  cursor: pointer;
+  transition: all 0.25s;
+  user-select: none;
+  background: url('~/sprites/stripes.svg');
+  position: relative;
+
+  &:hover {
+    color: $wisegreen;
+    background-color: darken($wisegreen, 12%);
+
+    .bar {
+      background: $wisegreen;
+    }
+  }
+}
+
+.bar {
+  position: absolute;
+  height: 2px;
+  border-radius: 2px;
+  background: darken(white, 60%);
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 50%;
+  transition: width 0.25s;
+}

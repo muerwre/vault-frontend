@@ -6,23 +6,20 @@
 }
 
 .content {
-  flex: 3;
+  flex: 4;
   z-index: 2;
-  padding: $gap;
-  background: $content_bg;
   border-radius: $radius;
-  flex: 0 1 $limited_width;
+  padding: 0;
+  background: $node_bg;
+  box-shadow: inset transparentize(mix($wisegreen, white, 60%), 0.6) 0 1px;
+
+  @include desktop {
+    flex: 2;
+  }
 }
 
-.column {
-  flex: 1;
-  background: $content_bg;
-  position: relative;
-  z-index: 2;
-  margin-right: $gap;
-  border-radius: $radius;
-  padding: $gap * 2;
-  display: none;
+.grid {
+  padding: $gap;
 }
 
 .cover {
@@ -33,7 +30,7 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: 50% 0% no-repeat url("~/sprites/boris_bg.svg");
+  background: 50% 0% no-repeat url('~/sprites/boris_bg.svg');
   background-size: cover;
 }
 
@@ -41,44 +38,16 @@
   font-size: 2em;
 }
 
-.daygrid {
-  display: grid;
-  grid-template-columns: 1fr 100%;
-  column-gap: $gap;
-  align-items: center;
-}
-
-.day {
-  font-size: 2em;
-  font-weight: 600;
-  text-align: right;
-}
-
-.label {
-  font: $font_14_regular;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-  opacity: 0.5;
-  grid-column: 1/3;
-}
-
-.line {
-  grid-column: 1/3;
-  height: $gap * 4;
-}
-
 .container {
   display: flex;
   align-items: flex-start;
   justify-content: center;
   flex-direction: row;
-  flex: 0 1 $limited_width;
   width: 100%;
-  // margin: auto;
 
-  // @include tablet {
-  // width: 100%;
-  // }
+  @include tablet {
+    flex-direction: column-reverse;
+  }
 }
 
 .image {
@@ -99,8 +68,9 @@
   }
 
   @include tablet {
-    height: 100px;
+    height: 40px;
     width: 100%;
+    padding-bottom: 0;
 
     img {
       display: none;
@@ -113,7 +83,6 @@
   left: 50%;
   bottom: 0;
   width: 100%;
-  max-width: $limited_width;
   height: 100%;
   display: flex;
   align-items: flex-start;
@@ -131,13 +100,64 @@
     align-items: flex-start;
     justify-content: center;
     width: 100%;
+    text-align: center;
+    display: none;
 
     padding: $gap;
-    font-size: 48px;
+    font-size: 32px;
   }
 }
 
 .caption_text {
   max-width: 400px;
   text-transform: uppercase;
+
+  @include tablet {
+    max-width: 100%;
+    margin: auto;
+  }
+}
+
+.stats {
+  position: relative;
+  z-index: 2;
+  align-self: stretch;
+  flex-direction: column;
+  padding-top: 10px;
+
+  h4 {
+    font: $font_20_semibold;
+    text-transform: uppercase;
+    margin-bottom: $gap * 2;
+  }
+
+  &__container {
+    background: darken($content_bg, 4%);
+    border-radius: 0 $radius $radius 0;
+    box-shadow: inset transparentize(mix($wisegreen, white, 60%), 0.6) 0 1px;
+    padding: $gap;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+  }
+
+  &__title {
+    font: $font_12_semibold;
+    text-transform: uppercase;
+    opacity: 0.3;
+    margin-top: 16px !important;
+  }
+
+  &__about {
+    line-height: 1.4em;
+
+    p {
+      margin-bottom: $gap;
+    }
+  }
+
+  &__wrap {
+    @include tablet {
+      display: none;
+    }
+  }
 }

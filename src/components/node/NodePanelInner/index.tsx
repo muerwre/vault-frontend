@@ -26,7 +26,7 @@ interface IProps {
 
 const NodePanelInner: FC<IProps> = memo(
   ({
-    node: { title, user, is_liked, is_heroic, deleted_at, created_at },
+    node: { title, user, is_liked, is_heroic, deleted_at, created_at, like_count },
     stack,
 
     can_star,
@@ -43,36 +43,39 @@ const NodePanelInner: FC<IProps> = memo(
     return (
       <div className={classNames(styles.wrap, { stack })}>
         <div className={styles.content}>
-          <Group horizontal className={styles.panel}>
-            <Filler>
-              <div className={styles.title}>
-                {is_loading ? <Placeholder width="40%" /> : title || '...'}
-              </div>
-              {user && user.username && (
-                <div className={styles.name}>
-                  {is_loading ? (
-                    <Placeholder width="100px" />
-                  ) : (
-                    `~${user.username}, ${getPrettyDate(created_at)}`
-                  )}
-                </div>
-              )}
-            </Filler>
-          </Group>
+          <div className={styles.panel}>
+            <div className={styles.title}>
+              {is_loading ? <Placeholder width="40%" /> : title || '...'}
+            </div>
 
-          <div className={styles.buttons}>
-            {can_star && (
-              <div className={classNames(styles.star, { is_heroic })}>
-                {is_heroic ? (
-                  <Icon icon="star_full" size={24} onClick={onStar} />
+            {user && user.username && (
+              <div className={styles.name}>
+                {is_loading ? (
+                  <Placeholder width="100px" />
                 ) : (
-                  <Icon icon="star" size={24} onClick={onStar} />
+                  `~${user.username.toLocaleLowerCase()}, ${getPrettyDate(created_at)}`
                 )}
               </div>
             )}
+          </div>
 
-            {can_edit && (
-              <>
+          {can_edit && (
+            <div className={styles.editor_menu}>
+              <div className={styles.editor_menu_button}>
+                <Icon icon="dots-vertical" size={24} />
+              </div>
+
+              <div className={styles.editor_buttons}>
+                {can_star && (
+                  <div className={classNames(styles.star, { is_heroic })}>
+                    {is_heroic ? (
+                      <Icon icon="star_full" size={24} onClick={onStar} />
+                    ) : (
+                      <Icon icon="star" size={24} onClick={onStar} />
+                    )}
+                  </div>
+                )}
+
                 <div>
                   <Icon icon={deleted_at ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
                 </div>
@@ -80,9 +83,11 @@ const NodePanelInner: FC<IProps> = memo(
                 <div>
                   <Icon icon="edit" size={24} onClick={onEdit} />
                 </div>
-              </>
-            )}
+              </div>
+            </div>
+          )}
 
+          <div className={styles.buttons}>
             {can_like && (
               <div className={classNames(styles.like, { is_liked })}>
                 {is_liked ? (
@@ -90,6 +95,8 @@ const NodePanelInner: FC<IProps> = memo(
                 ) : (
                   <Icon icon="heart" size={24} onClick={onLike} />
                 )}
+
+                {like_count > 0 && <div className={styles.like_count}>{like_count}</div>}
               </div>
             )}
           </div>

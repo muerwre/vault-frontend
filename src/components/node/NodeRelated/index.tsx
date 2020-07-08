@@ -13,10 +13,9 @@ const NodeRelated: FC<IProps> = ({ title, items }) => {
   return (
     <Group className={styles.wrap}>
       <div className={styles.title}>
-        <div className={styles.line} />
         <div className={styles.text}>{title}</div>
-        <div className={styles.line} />
       </div>
+
       <div className={styles.grid}>
         {items.map(item => (
           <NodeRelatedItem item={item} key={item.id} />

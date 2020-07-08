@@ -3,6 +3,7 @@ import { INode, IResultWithStatus, IComment } from '../types';
 import { API } from '~/constants/api';
 import { nodeUpdateTags, nodeLike, nodeStar, nodeLock, nodeLockComment } from './actions';
 import { INodeState } from './reducer';
+import { COMMENTS_DISPLAY } from './constants';
 
 export const postNode = ({
   access,
@@ -15,7 +16,6 @@ export const postNode = ({
     .post(API.NODE.SAVE, { node }, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
-// .then(console.log);
 
 export const getNodes = ({
   from = null,
@@ -95,14 +95,16 @@ export const postNodeComment = ({
 export const getNodeComments = ({
   id,
   access,
-  order = 'ASC',
+  take = COMMENTS_DISPLAY,
+  skip = 0,
 }: {
   id: number;
   access: string;
-  order: 'ASC' | 'DESC';
-}): Promise<IResultWithStatus<{ comments: Comment[] }>> =>
+  take?: number;
+  skip?: number;
+}): Promise<IResultWithStatus<{ comments: IComment[]; comment_count: number }>> =>
   api
-    .get(API.NODE.COMMENT(id), configWithToken(access, { params: { order } }))
+    .get(API.NODE.COMMENT(id), configWithToken(access, { params: { take, skip } }))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 

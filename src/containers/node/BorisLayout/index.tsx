@@ -1,27 +1,42 @@
 import React, { FC, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
-import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
 import { selectUser } from '~/redux/auth/selectors';
 import { connect } from 'react-redux';
 import { NodeComments } from '~/components/node/NodeComments';
 import styles from './styles.scss';
-import { CommentForm } from '~/components/node/CommentForm';
 import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { getRandomPhrase } from '~/constants/phrases';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 
+import * as NODE_ACTIONS from '~/redux/node/actions';
+import * as AUTH_ACTIONS from '~/redux/auth/actions';
+import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import * as BORIS_ACTIONS from '~/redux/boris/actions';
+import isBefore from 'date-fns/isBefore';
+import { Card } from '~/components/containers/Card';
+import { Footer } from '~/components/main/Footer';
+import { Sticky } from '~/components/containers/Sticky';
+import { Placeholder } from '~/components/placeholders/Placeholder';
+import { selectBorisStats } from '~/redux/boris/selectors';
+import { BorisStats } from '~/components/boris/BorisStats';
+
 const mapStateToProps = state => ({
   node: selectNode(state),
   user: selectUser(state),
+  stats: selectBorisStats(state),
 });
 
 const mapDispatchToProps = {
   nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
   nodeLockComment: NODE_ACTIONS.nodeLockComment,
   nodeEditComment: NODE_ACTIONS.nodeEditComment,
+  nodeLoadMoreComments: NODE_ACTIONS.nodeLoadMoreComments,
+  authSetUser: AUTH_ACTIONS.authSetUser,
+  modalShowPhotoswipe: MODAL_ACTIONS.modalShowPhotoswipe,
+  borisLoadStats: BORIS_ACTIONS.borisLoadStats,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -31,19 +46,37 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const id = 696;
 
 const BorisLayoutUnconnected: FC<IProps> = ({
-  node: { is_loading, is_loading_comments, comments = [], comment_data },
+  node: { is_loading, is_loading_comments, comments = [], comment_data, comment_count },
   user,
-  user: { is_user },
+  user: { is_user, last_seen_boris },
   nodeLoadNode,
   nodeLockComment,
   nodeEditComment,
+  nodeLoadMoreComments,
+  modalShowPhotoswipe,
+  authSetUser,
+  borisLoadStats,
+  stats,
 }) => {
   const title = getRandomPhrase('BORIS_TITLE');
+
+  useEffect(() => {
+    const last_comment = comments[0];
+    if (!last_comment) return;
+    if (last_seen_boris && !isBefore(new Date(last_seen_boris), new Date(last_comment.created_at)))
+      return;
+
+    authSetUser({ last_seen_boris: last_comment.created_at });
+  }, [comments, last_seen_boris]);
 
   useEffect(() => {
     if (is_loading) return;
     nodeLoadNode(id, 'DESC');
   }, [nodeLoadNode, id]);
+
+  useEffect(() => {
+    borisLoadStats();
+  }, [borisLoadStats]);
 
   return (
     <div className={styles.wrap}>
@@ -53,55 +86,60 @@ const BorisLayoutUnconnected: FC<IProps> = ({
         <div className={styles.caption}>
           <div className={styles.caption_text}>{title}</div>
         </div>
-        <img src={boris} />
+
+        <img src={boris} alt="Борис" />
       </div>
 
       <div className={styles.container}>
-        <div className={styles.column}>
-          <div className={styles.daygrid}>
-            <div className={styles.label}>Убежищу сегодня:</div>
-            <div className={styles.day}>10</div>
-            <div>лет</div>
-            <div className={styles.day}>2</div>
-            <div>месяца</div>
+        <Card className={styles.content}>
+          <Group className={styles.grid}>
+            {is_user && <NodeCommentForm is_before />}
 
-            <div className={styles.line} />
+            {is_loading_comments ? (
+              <NodeNoComments is_loading />
+            ) : (
+              <NodeComments
+                comments={comments}
+                comment_data={comment_data}
+                comment_count={comment_count}
+                user={user}
+                onDelete={nodeLockComment}
+                onEdit={nodeEditComment}
+                onLoadMore={nodeLoadMoreComments}
+                modalShowPhotoswipe={modalShowPhotoswipe}
+                order="ASC"
+              />
+            )}
+          </Group>
 
-            <div className={styles.label}>Мы собрали:</div>
-            <div className={styles.day}>2374</div>
-            <div>поста</div>
-            <div className={styles.day}>14765</div>
-            <div>комментариев</div>
-            <div className={styles.day}>4260</div>
-            <div>файла</div>
-            <div className={styles.day}>54</div>
-            <div>жителя</div>
-          </div>
-        </div>
+          <Footer />
+        </Card>
 
-        <Group className={styles.content}>
-          {is_user && <NodeCommentForm is_before />}
+        <Group className={styles.stats}>
+          <Sticky>
+            <Group className={styles.stats__container}>
+              <div className={styles.stats__about}>
+                <h4>Господи-боженьки, где это я?</h4>
 
-          {is_loading_comments ? (
-            <NodeNoComments is_loading />
-          ) : (
-            <NodeComments
-              comments={comments}
-              comment_data={comment_data}
-              user={user}
-              onDelete={nodeLockComment}
-              onEdit={nodeEditComment}
-            />
-          )}
+                <p>
+                  Всё впорядке, это &mdash; главный штаб Суицидальных Роботов, строителей Убежища.
+                </p>
+                <p>Здесь мы сидим и слушаем всё, что вас беспокоит.</p>
+                <p>Все виновные будут наказаны. Невиновные, впрочем, тоже. </p>
+                <p className="grey">//&nbsp;Такова&nbsp;жизнь.</p>
+              </div>
+
+              <div className={styles.stats__wrap}>
+                <BorisStats stats={stats} />
+              </div>
+            </Group>
+          </Sticky>
         </Group>
       </div>
     </div>
   );
 };
 
-const BorisLayout = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BorisLayoutUnconnected);
+const BorisLayout = connect(mapStateToProps, mapDispatchToProps)(BorisLayoutUnconnected);
 
 export { BorisLayout };

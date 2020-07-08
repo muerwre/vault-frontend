@@ -1,0 +1,15 @@
+.wrap {
+  :global(.pswp__img) {
+    border-radius: $radius;
+
+    @include outer_shadow();
+  }
+}
+
+.bg {
+  background-color: transparent !important;
+}
+
+.bar {
+  background-color: transparent !important;
+}

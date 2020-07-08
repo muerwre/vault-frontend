@@ -47,7 +47,8 @@ const NodePanel: FC<IProps> = memo(
 
     return (
       <div className={styles.place} ref={ref}>
-        {stack &&
+        {/*
+        stack &&
           createPortal(
             <NodePanelInner
               node={node}
@@ -62,7 +63,8 @@ const NodePanel: FC<IProps> = memo(
               stack
             />,
             document.body
-          )}
+          )
+          */}
 
         <NodePanelInner
           node={node}

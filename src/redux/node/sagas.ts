@@ -1,8 +1,14 @@
-import { takeLatest, call, put, select, delay, all } from 'redux-saga/effects';
+import { takeLatest, call, put, select, delay, all, takeLeading } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import omit from 'ramda/es/omit';
 
-import { NODE_ACTIONS, EMPTY_NODE, EMPTY_COMMENT, NODE_EDITOR_DATA } from './constants';
+import {
+  NODE_ACTIONS,
+  EMPTY_NODE,
+  EMPTY_COMMENT,
+  NODE_EDITOR_DATA,
+  COMMENTS_DISPLAY,
+} from './constants';
 import {
   nodeSave,
   nodeSetSaveErrors,
@@ -47,7 +53,7 @@ import { modalSetShown, modalShowDialog } from '../modal/actions';
 import { selectFlowNodes, selectFlow } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
-import { IResultWithStatus, INode } from '../types';
+import { IResultWithStatus, INode, Unwrap } from '../types';
 import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
 import { DIALOGS } from '~/redux/modal/constants';
 import { INodeState } from './reducer';
@@ -109,8 +115,36 @@ function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
   yield put(nodeLoadNode(id));
   yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
   yield put(nodeSetRelated(null));
+}
 
-  yield put(push(URLS.NODE_URL(id)));
+function* onNodeLoadMoreComments() {
+  const {
+    current: { id },
+    comments,
+  }: ReturnType<typeof selectNode> = yield select(selectNode);
+
+  const { data, error }: Unwrap<ReturnType<typeof getNodeComments>> = yield call(
+    reqWrapper,
+    getNodeComments,
+    {
+      id,
+      take: COMMENTS_DISPLAY,
+      skip: comments.length,
+    }
+  );
+
+  const current: ReturnType<typeof selectNode> = yield select(selectNode);
+
+  if (!data || error || current.current.id != id) {
+    return;
+  }
+
+  yield put(
+    nodeSet({
+      comments: [...comments, ...data.comments],
+      comment_count: data.comment_count,
+    })
+  );
 }
 
 function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
@@ -132,19 +166,20 @@ function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
 
   const {
     comments: {
-      data: { comments },
+      data: { comments, comment_count },
     },
     related: {
       data: { related },
     },
   } = yield all({
-    comments: call(reqWrapper, getNodeComments, { id, order }),
+    comments: call(reqWrapper, getNodeComments, { id, take: COMMENTS_DISPLAY, skip: 0 }),
     related: call(reqWrapper, getNodeRelated, { id }),
   });
 
   yield put(
     nodeSet({
       comments,
+      comment_count,
       related,
       is_loading_comments: false,
       comment_data: { 0: { ...EMPTY_COMMENT } },
@@ -160,7 +195,7 @@ function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
   return;
 }
 
-function* onPostComment({ id, is_before }: ReturnType<typeof nodePostComment>) {
+function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
   const { current, comment_data } = yield select(selectNode);
 
   yield put(nodeSetSendingComment(true));
@@ -181,12 +216,7 @@ function* onPostComment({ id, is_before }: ReturnType<typeof nodePostComment>) {
 
     if (id === 0) {
       yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
-
-      if (is_before) {
-        yield put(nodeSetComments([comment, ...comments]));
-      } else {
-        yield put(nodeSetComments([...comments, comment]));
-      }
+      yield put(nodeSetComments([comment, ...comments]));
     } else {
       yield put(
         nodeSet({
@@ -248,16 +278,20 @@ function* onEditSaga({ id }: ReturnType<typeof nodeEdit>) {
 function* onLikeSaga({ id }: ReturnType<typeof nodeLike>) {
   const {
     current,
-    current: { is_liked },
+    current: { is_liked, like_count },
   } = yield select(selectNode);
 
-  yield call(updateNodeEverywhere, { ...current, is_liked: !is_liked });
+  yield call(updateNodeEverywhere, {
+    ...current,
+    is_liked: !is_liked,
+    like_count: is_liked ? Math.max(like_count - 1, 0) : like_count + 1,
+  });
 
   const { data, error } = yield call(reqWrapper, postNodeLike, { id });
 
   if (!error || data.is_liked === !is_liked) return; // ok and matches
 
-  yield call(updateNodeEverywhere, { ...current, is_liked });
+  yield call(updateNodeEverywhere, { ...current, is_liked, like_count });
 }
 
 function* onStarSaga({ id }: ReturnType<typeof nodeLike>) {
@@ -331,4 +365,5 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.LOCK, onLockSaga);
   yield takeLatest(NODE_ACTIONS.LOCK_COMMENT, onLockCommentSaga);
   yield takeLatest(NODE_ACTIONS.EDIT_COMMENT, onEditCommentSaga);
+  yield takeLeading(NODE_ACTIONS.LOAD_MORE_COMMENTS, onNodeLoadMoreComments);
 }

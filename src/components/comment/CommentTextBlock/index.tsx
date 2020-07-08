@@ -1,10 +1,8 @@
 import React, { FC } from 'react';
-import { ICommentBlock } from '~/constants/comment';
+import { ICommentBlockProps } from '~/constants/comment';
 import styles from './styles.scss';
 
-interface IProps {
-  block: ICommentBlock;
-}
+interface IProps extends ICommentBlockProps {}
 
 const CommentTextBlock: FC<IProps> = ({ block }) => {
   return (

@@ -1,4 +1,4 @@
-import { takeLatest, call, put, select, takeLeading, delay } from 'redux-saga/effects';
+import { takeLatest, call, put, select, takeLeading, delay, race, take } from 'redux-saga/effects';
 import { REHYDRATE } from 'redux-persist';
 import { FLOW_ACTIONS } from './constants';
 import { getNodeDiff } from '../node/api';
@@ -9,11 +9,13 @@ import {
   flowSetRecent,
   flowSetUpdated,
   flowSetFlow,
+  flowChangeSearch,
+  flowSetSearch,
 } from './actions';
-import { IResultWithStatus, INode } from '../types';
-import { selectFlowNodes } from './selectors';
+import { IResultWithStatus, INode, Unwrap } from '../types';
+import { selectFlowNodes, selectFlow } from './selectors';
 import { reqWrapper } from '../auth/sagas';
-import { postCellView } from './api';
+import { postCellView, getSearchResults } from './api';
 import { IFlowState } from './reducer';
 import uniq from 'ramda/es/uniq';
 
@@ -110,8 +112,77 @@ function* getMore() {
   yield delay(1000);
 }
 
+function* changeSearch({ search }: ReturnType<typeof flowChangeSearch>) {
+  yield put(
+    flowSetSearch({
+      ...search,
+      is_loading: !!search.text,
+    })
+  );
+
+  if (!search.text) return;
+
+  yield delay(500);
+
+  const { data, error }: Unwrap<ReturnType<typeof getSearchResults>> = yield call(
+    reqWrapper,
+    getSearchResults,
+    {
+      ...search,
+    }
+  );
+
+  if (error) {
+    yield put(flowSetSearch({ is_loading: false, results: [], total: 0 }));
+    return;
+  }
+
+  yield put(
+    flowSetSearch({
+      is_loading: false,
+      results: data.nodes,
+      total: data.total,
+    })
+  );
+}
+
+function* loadMoreSearch() {
+  yield put(
+    flowSetSearch({
+      is_loading_more: true,
+    })
+  );
+
+  const { search }: ReturnType<typeof selectFlow> = yield select(selectFlow);
+
+  const {
+    result,
+    delay,
+  }: { result: Unwrap<ReturnType<typeof getSearchResults>>; delay: any } = yield race({
+    result: call(reqWrapper, getSearchResults, {
+      ...search,
+      skip: search.results.length,
+    }),
+    delay: take(FLOW_ACTIONS.CHANGE_SEARCH),
+  });
+
+  if (delay || result.error) {
+    return put(flowSetSearch({ is_loading_more: false }));
+  }
+
+  yield put(
+    flowSetSearch({
+      results: [...search.results, ...result.data.nodes],
+      total: result.data.total,
+      is_loading_more: false,
+    })
+  );
+}
+
 export default function* nodeSaga() {
   yield takeLatest([FLOW_ACTIONS.GET_FLOW, REHYDRATE], onGetFlow);
   yield takeLatest(FLOW_ACTIONS.SET_CELL_VIEW, onSetCellView);
   yield takeLeading(FLOW_ACTIONS.GET_MORE, getMore);
+  yield takeLatest(FLOW_ACTIONS.CHANGE_SEARCH, changeSearch);
+  yield takeLatest(FLOW_ACTIONS.LOAD_MORE_SEARCH, loadMoreSearch);
 }

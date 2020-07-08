@@ -6,8 +6,6 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { history } from '~/redux/store';
 import { FlowLayout } from '~/containers/flow/FlowLayout';
 import { MainLayout } from '~/containers/main/MainLayout';
-import { ImageExample } from '~/containers/examples/ImageExample';
-import { EditorExample } from '~/containers/examples/EditorExample';
 import { Sprites } from '~/sprites/Sprites';
 import { URLS } from '~/constants/urls';
 import { Modal } from '~/containers/dialogs/Modal';
@@ -39,12 +37,10 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
 
             <Switch>
               <Route exact path={URLS.BASE} component={FlowLayout} />
-              <Route path={URLS.EXAMPLES.IMAGE} component={ImageExample} />
-              <Route path={URLS.EXAMPLES.EDITOR} component={EditorExample} />
               <Route path={URLS.NODE_URL(':id')} component={NodeLayout} />
               <Route path={URLS.BORIS} component={BorisLayout} />
               <Route path={URLS.ERRORS.NOT_FOUND} component={ErrorNotFound} />
-              <Route path={URLS.PROFILE_PAGE} component={ProfilePage} />
+              <Route path={URLS.PROFILE_PAGE(':username')} component={ProfilePage} />
 
               <Redirect to="/" />
             </Switch>
@@ -57,7 +53,4 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(hot(module)(Component));
+export default connect(mapStateToProps, mapDispatchToProps)(hot(module)(Component));
