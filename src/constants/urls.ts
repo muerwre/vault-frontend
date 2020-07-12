@@ -19,13 +19,9 @@ export const URLS = {
 
 export const PRESETS = {
   '1600': '1600',
-  '900': '900',
   '600': '600',
   '300': '300',
-  '100': '100',
-  placeholder: 'placeholder',
   cover: 'cover',
-  hero: 'hero',
   small_hero: 'small_hero',
   avatar: 'avatar',
 };

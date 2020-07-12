@@ -17,7 +17,7 @@ export const API = {
   NODE: {
     SAVE: '/node/',
     GET: '/node/',
-    GET_DIFF: '/nodes/diff',
+    GET_DIFF: '/flow/diff',
     GET_NODE: (id: number | string) => `/node/${id}`,
 
     COMMENT: (id: INode['id']) => `/node/${id}/comment`,
@@ -34,9 +34,9 @@ export const API = {
     NODES: '/search/nodes',
   },
   EMBED: {
-    YOUTUBE: '/embed/youtube',
+    YOUTUBE: '/meta/youtube',
   },
   BORIS: {
-    GET_BACKEND_STATS: '/stats',
+    GET_BACKEND_STATS: '/stats/',
   },
 };

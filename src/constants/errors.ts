@@ -6,6 +6,7 @@ export const ERRORS = {
   FILES_REQUIRED: 'Files_Required',
   TEXT_REQUIRED: 'Text_Required',
   UNKNOWN_NODE_TYPE: 'Unknown_Node_Type',
+  UNKNOWN_FILE_TYPE: 'Unknown_File_Type',
   URL_INVALID: 'Url_Invalid',
   FILES_AUDIO_REQUIRED: 'Files_Audio_Required',
   NOT_ENOUGH_RIGHTS: 'Not_Enough_Rights',
@@ -18,6 +19,7 @@ export const ERRORS = {
   DOESNT_MATCH: 'Doesnt_Match',
   REQUIRED: 'Required',
   COMMENT_NOT_FOUND: 'Comment_Not_Found',
+  FILE_IS_TOO_BIG: 'File_Is_Too_Big',
 };
 
 export const ERROR_LITERAL = {
@@ -40,4 +42,6 @@ export const ERROR_LITERAL = {
   [ERRORS.DOESNT_MATCH]: 'Пароли не совпадают',
   [ERRORS.REQUIRED]: 'Обязательное поле',
   [ERRORS.COMMENT_NOT_FOUND]: 'Комментарий не найден',
+  [ERRORS.UNKNOWN_FILE_TYPE]: 'Запрещенный тип файла',
+  [ERRORS.FILE_IS_TOO_BIG]: 'Файл слишком большой',
 };

@@ -66,14 +66,12 @@ function* uploadWorker({ file, temp_id, target, type }: IFileWithUUID) {
 
   yield fork(onUploadProgress, chan);
 
-  const result = yield call(promise, {
+  return yield call(promise, {
     temp_id,
     file,
     target,
     type
   });
-
-  return result;
 }
 
 function* uploadFile({
