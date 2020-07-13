@@ -134,7 +134,7 @@ const Cell: FC<IProps> = ({
 
           <Link className={classNames(styles.face)} to={`/post${id}`}>
             <div className={styles.face_content}>
-              {title && !text && <div className={styles.title}>{title}</div>}
+              {!text && <div className={styles.title}>{title || '...'}</div>}
 
               {!!text && !!thumbnail && (
                 <div className={styles.text}>

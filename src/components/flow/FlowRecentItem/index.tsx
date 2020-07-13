@@ -20,7 +20,7 @@ const FlowRecentItem: FC<IProps> = ({ node, has_new }) => {
       </div>
 
       <div className={styles.info}>
-        <div className={styles.title}>{node.title}</div>
+        <div className={styles.title}>{node.title || '...'}</div>
         <div className={styles.comment}>{getPrettyDate(node.created_at)}</div>
       </div>
     </Link>
