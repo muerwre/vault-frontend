@@ -30,8 +30,8 @@
     }
 
     .title {
-      opacity: 0;
-      transform: translate(0, 10px);
+      //opacity: 0;
+      //transform: translate(-3px, 3px);
     }
   }
   @include outer_shadow();
