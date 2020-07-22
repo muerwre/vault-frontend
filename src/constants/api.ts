@@ -11,7 +11,6 @@ export const API = {
     MESSAGE_SEND: (username: string) => `/user/${username}/messages`,
     GET_UPDATES: '/user/updates',
     REQUEST_CODE: (code?: string) => `/user/restore/${code || ''}`,
-
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
   },
   NODE: {
