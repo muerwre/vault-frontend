@@ -83,7 +83,7 @@
     "http-errors": "~1.6.2",
     "less": "^3.10.3",
     "less-middleware": "~2.2.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.19",
     "node-sass": "^4.11.0",
     "photoswipe": "^4.1.3",
     "raleway-cyrillic": "^4.0.2",
