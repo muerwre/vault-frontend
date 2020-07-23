@@ -32,8 +32,6 @@ const LoginDialogUnconnected: FC<IProps> = ({
   userSetLoginError,
   modalShowDialog,
 }) => {
-  console.log({ modalShowDialog, MODAL_ACTIONS });
-
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 

@@ -4,7 +4,7 @@ export const API = {
   BASE: process.env.API_HOST,
   USER: {
     LOGIN: '/user/login',
-    VKONTAKTE_LOGIN: `${process.env.API_HOST}/user/vkontakte`,
+    VKONTAKTE_LOGIN: `${process.env.API_HOST}/oauth/vkontakte/redirect/login`,
     ME: '/user/',
     PROFILE: (username: string) => `/user/user/${username}/profile`,
     MESSAGES: (username: string) => `/user/user/${username}/messages`,
