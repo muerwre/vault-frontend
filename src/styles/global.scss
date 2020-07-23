@@ -49,9 +49,11 @@ body {
   &:global(.double) {
     height: $spc * 2;
   }
+
   &:global(.quadro) {
     height: $spc * 4;
   }
+
   &:global(.sixty) {
     height: $spc * 6;
   }
@@ -81,6 +83,24 @@ body {
 
 :global(.grey) {
   color: #555555;
+}
+
+:global {
+  .todo, .done {
+    color: #333333;
+    border-radius: 3px;
+    padding: 0 2px;
+    font: $font_14_semibold;
+    text-transform: uppercase;
+  }
+
+  .todo {
+    background-color: $red;
+  }
+
+  .done {
+    background-color: $green;
+  }
 }
 
 :global(h2) {
