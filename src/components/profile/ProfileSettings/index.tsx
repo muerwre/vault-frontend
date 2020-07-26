@@ -1,17 +1,16 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import styles from './styles.scss';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
-import { selectAuthUser, selectAuthProfile } from '~/redux/auth/selectors';
+import { selectAuthProfile, selectAuthUser } from '~/redux/auth/selectors';
 import { Textarea } from '~/components/input/Textarea';
 import { Button } from '~/components/input/Button';
 import { Group } from '~/components/containers/Group';
 import { Filler } from '~/components/containers/Filler';
-import { TextInput } from '~/components/input/TextInput';
 import { InputText } from '~/components/input/InputText';
 import reject from 'ramda/es/reject';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { ERROR_LITERAL } from '~/constants/errors';
+import { ProfileSettingsSocials } from '~/components/profile/ProfileSettingsSocials';
 
 const mapStateToProps = state => ({
   user: selectAuthUser(state),
@@ -21,15 +20,19 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   authPatchUser: AUTH_ACTIONS.authPatchUser,
   authSetProfile: AUTH_ACTIONS.authSetProfile,
+  authGetSocials: AUTH_ACTIONS.authGetSocials,
+  authDropSocial: AUTH_ACTIONS.authDropSocial,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
 const ProfileSettingsUnconnected: FC<IProps> = ({
   user,
-  profile: { patch_errors },
+  profile: { patch_errors, socials },
   authPatchUser,
   authSetProfile,
+  authGetSocials,
+  authDropSocial,
 }) => {
   const [password, setPassword] = useState('');
   const [new_password, setNewPassword] = useState('');
@@ -40,11 +43,8 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
     data,
     setData,
   ]);
-
   const setEmail = useCallback(email => setData({ ...data, email }), [data, setData]);
-
   const setUsername = useCallback(username => setData({ ...data, username }), [data, setData]);
-
   const setFullname = useCallback(fullname => setData({ ...data, fullname }), [data, setData]);
 
   const onSubmit = useCallback(
@@ -87,6 +87,13 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
           Описание будет видно на странице профиля. Здесь работают те же правила оформления, что и в
           комментариях.
         </div>
+
+        <ProfileSettingsSocials
+          accounts={socials.accounts}
+          is_loading={socials.is_loading}
+          authGetSocials={authGetSocials}
+          authDropSocial={authDropSocial}
+        />
 
         <Group className={styles.pad}>
           <InputText
@@ -135,9 +142,6 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
   );
 };
 
-const ProfileSettings = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProfileSettingsUnconnected);
+const ProfileSettings = connect(mapStateToProps, mapDispatchToProps)(ProfileSettingsUnconnected);
 
 export { ProfileSettings };

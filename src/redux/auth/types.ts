@@ -24,6 +24,15 @@ export interface IUser {
   is_user: boolean;
 }
 
+export type ISocialProvider = 'vkontakte' | 'google';
+
+export interface ISocialAccount {
+  provider: ISocialProvider;
+  id: string;
+  name: string;
+  photo: string;
+}
+
 export type IAuthState = Readonly<{
   user: IUser;
   token: string;
@@ -48,8 +57,13 @@ export type IAuthState = Readonly<{
     user: IUser;
     messages: IMessage[];
     messages_error: string;
-
     patch_errors: Record<string, string>;
+
+    socials: {
+      accounts: ISocialAccount[];
+      error: string;
+      is_loading: boolean;
+    };
   };
 
   restore: {

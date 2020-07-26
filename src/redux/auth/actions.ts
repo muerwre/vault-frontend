@@ -1,5 +1,5 @@
 import { AUTH_USER_ACTIONS } from '~/redux/auth/constants';
-import { IAuthState, IUser } from '~/redux/auth/types';
+import { IAuthState, ISocialProvider, IUser } from '~/redux/auth/types';
 import { IMessage } from '../types';
 
 export const userSendLoginRequest = ({
@@ -100,4 +100,24 @@ export const authShowRestoreModal = (code: string) => ({
 export const authRestorePassword = (password: string) => ({
   type: AUTH_USER_ACTIONS.RESTORE_PASSWORD,
   password,
+});
+
+export const authGetSocials = () => ({
+  type: AUTH_USER_ACTIONS.GET_SOCIALS,
+});
+
+export const authAddSocial = (provider: ISocialProvider) => ({
+  type: AUTH_USER_ACTIONS.ADD_SOCIAL,
+  provider,
+});
+
+export const authDropSocial = (provider: string, id: string) => ({
+  type: AUTH_USER_ACTIONS.DROP_SOCIAL,
+  provider,
+  id,
+});
+
+export const authSetSocials = (socials: Partial<IAuthState['profile']['socials']>) => ({
+  type: AUTH_USER_ACTIONS.SET_SOCIALS,
+  socials,
 });

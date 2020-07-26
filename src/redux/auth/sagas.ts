@@ -1,48 +1,53 @@
-import { call, put, takeEvery, takeLatest, select, delay } from 'redux-saga/effects';
+import { call, delay, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { AUTH_USER_ACTIONS, EMPTY_USER, USER_ERRORS, USER_ROLES } from '~/redux/auth/constants';
 import {
-  authSetToken,
-  userSetLoginError,
-  authSetUser,
-  userSendLoginRequest,
-  gotAuthPostMessage,
-  authOpenProfile,
-  authSetProfile,
+  authDropSocial,
   authGetMessages,
-  authSendMessage,
-  authSetUpdates,
+  authGetSocials,
+  authLoadProfile,
   authLoggedIn,
-  authSetLastSeenMessages,
+  authOpenProfile,
   authPatchUser,
-  authShowRestoreModal,
-  authSetRestore,
   authRequestRestoreCode,
   authRestorePassword,
-  authLoadProfile,
+  authSendMessage,
+  authSetLastSeenMessages,
+  authSetProfile,
+  authSetRestore,
+  authSetSocials,
+  authSetToken,
+  authSetUpdates,
+  authSetUser,
+  authShowRestoreModal,
+  gotAuthPostMessage,
+  userSendLoginRequest,
+  userSetLoginError,
 } from '~/redux/auth/actions';
 import {
-  apiUserLogin,
-  apiAuthGetUser,
-  apiAuthGetUserProfile,
-  apiAuthGetUserMessages,
-  apiAuthSendMessage,
   apiAuthGetUpdates,
-  apiUpdateUser,
-  apiRequestRestoreCode,
+  apiAuthGetUser,
+  apiAuthGetUserMessages,
+  apiAuthGetUserProfile,
+  apiAuthSendMessage,
   apiCheckRestoreCode,
+  apiDropSocial,
+  apiGetSocials,
+  apiRequestRestoreCode,
   apiRestoreCode,
+  apiUpdateUser,
+  apiUserLogin,
 } from '~/redux/auth/api';
 import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
 import {
-  selectToken,
-  selectAuthProfile,
-  selectAuthUser,
-  selectAuthUpdates,
-  selectAuthRestore,
   selectAuth,
+  selectAuthProfile,
+  selectAuthRestore,
+  selectAuthUpdates,
+  selectAuthUser,
+  selectToken,
 } from './selectors';
-import { IResultWithStatus, INotification, IMessageNotification, Unwrap } from '../types';
-import { IUser, IAuthState } from './types';
+import { IMessageNotification, IResultWithStatus, Unwrap } from '../types';
+import { IAuthState, IUser } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { selectModal } from '~/redux/modal/selectors';
 import { IModalState } from '~/redux/modal/reducer';
@@ -372,6 +377,45 @@ function* restorePassword({ password }: ReturnType<typeof authRestorePassword>) 
   yield call(refreshUser);
 }
 
+function* getSocials() {
+  yield put(authSetSocials({ is_loading: true, error: '' }));
+
+  try {
+    const { data, error }: Unwrap<ReturnType<typeof apiGetSocials>> = yield call(
+      reqWrapper,
+      apiGetSocials,
+      {}
+    );
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    yield put(authSetSocials({ is_loading: false, accounts: data.accounts, error: '' }));
+  } catch (e) {
+    yield put(authSetSocials({ is_loading: false, error: e.toString() }));
+  }
+}
+
+function* dropSocial({ provider, id }: ReturnType<typeof authDropSocial>) {
+  try {
+    yield put(authSetSocials({ error: '' }));
+    const { error }: Unwrap<ReturnType<typeof apiDropSocial>> = yield call(
+      reqWrapper,
+      apiDropSocial,
+      { id, provider }
+    );
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    yield call(getSocials);
+  } catch (e) {
+    yield put(authSetSocials({ error: e.toString() }));
+  }
+}
+
 function* authSaga() {
   yield takeEvery(REHYDRATE, checkUserSaga);
   yield takeLatest([REHYDRATE, AUTH_USER_ACTIONS.LOGGED_IN], startPollingSaga);
@@ -388,6 +432,8 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.REQUEST_RESTORE_CODE, requestRestoreCode);
   yield takeLatest(AUTH_USER_ACTIONS.SHOW_RESTORE_MODAL, showRestoreModal);
   yield takeLatest(AUTH_USER_ACTIONS.RESTORE_PASSWORD, restorePassword);
+  yield takeLatest(AUTH_USER_ACTIONS.GET_SOCIALS, getSocials);
+  yield takeLatest(AUTH_USER_ACTIONS.DROP_SOCIAL, dropSocial);
 }
 
 export default authSaga;

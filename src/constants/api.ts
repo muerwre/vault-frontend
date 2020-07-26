@@ -12,6 +12,8 @@ export const API = {
     GET_UPDATES: '/user/updates',
     REQUEST_CODE: (code?: string) => `/user/restore/${code || ''}`,
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
+    GET_SOCIALS: '/oauth/',
+    DROP_SOCIAL: (provider, id) => `/oauth/${provider}/${id}`,
   },
   NODE: {
     SAVE: '/node/',

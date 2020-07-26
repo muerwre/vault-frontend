@@ -2,7 +2,7 @@ import { api, errorMiddleware, resultMiddleware, configWithToken } from '~/utils
 import { API } from '~/constants/api';
 import { IResultWithStatus, IMessage, INotification } from '~/redux/types';
 import { userLoginTransform } from '~/redux/auth/transforms';
-import { IUser } from './types';
+import { ISocialAccount, IUser } from './types';
 
 export const apiUserLogin = ({
   username,
@@ -55,9 +55,10 @@ export const apiAuthGetUpdates = ({
   access,
   exclude_dialogs,
   last,
-}): Promise<
-  IResultWithStatus<{ notifications: INotification[]; boris: { commented_at: string } }>
-> =>
+}): Promise<IResultWithStatus<{
+  notifications: INotification[];
+  boris: { commented_at: string };
+}>> =>
   api
     .get(API.USER.GET_UPDATES, configWithToken(access, { params: { exclude_dialogs, last } }))
     .then(resultMiddleware)
@@ -84,5 +85,33 @@ export const apiCheckRestoreCode = ({ code }): Promise<IResultWithStatus<{}>> =>
 export const apiRestoreCode = ({ code, password }): Promise<IResultWithStatus<{}>> =>
   api
     .post(API.USER.REQUEST_CODE(code), { password })
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const apiGetSocials = ({
+  access,
+}: {
+  access: string;
+}): Promise<IResultWithStatus<{
+  accounts: ISocialAccount[];
+}>> =>
+  api
+    .get(API.USER.GET_SOCIALS, configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const apiDropSocial = ({
+  access,
+  id,
+  provider,
+}: {
+  access: string;
+  id: string;
+  provider: string;
+}): Promise<IResultWithStatus<{
+  accounts: ISocialAccount[];
+}>> =>
+  api
+    .delete(API.USER.DROP_SOCIAL(provider, id), configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);

@@ -31,6 +31,12 @@ const INITIAL_STATE: IAuthState = {
     messages: [],
     messages_error: null,
     patch_errors: {},
+
+    socials: {
+      accounts: [],
+      error: '',
+      is_loading: false,
+    },
   },
 
   restore: {
