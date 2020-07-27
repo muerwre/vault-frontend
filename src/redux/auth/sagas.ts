@@ -1,9 +1,9 @@
 import { call, delay, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { AUTH_USER_ACTIONS, EMPTY_USER, USER_ERRORS, USER_ROLES } from '~/redux/auth/constants';
 import {
+  authAttachSocial,
   authDropSocial,
   authGetMessages,
-  authGetSocials,
   authLoadProfile,
   authLoggedIn,
   authOpenProfile,
@@ -24,6 +24,7 @@ import {
   userSetLoginError,
 } from '~/redux/auth/actions';
 import {
+  apiAttachSocial,
   apiAuthGetUpdates,
   apiAuthGetUser,
   apiAuthGetUserMessages,
@@ -412,7 +413,37 @@ function* dropSocial({ provider, id }: ReturnType<typeof authDropSocial>) {
 
     yield call(getSocials);
   } catch (e) {
-    yield put(authSetSocials({ error: e.toString() }));
+    yield put(authSetSocials({ error: e.message }));
+  }
+}
+
+function* attachSocial({ token }: ReturnType<typeof authAttachSocial>) {
+  if (!token) return;
+
+  try {
+    yield put(authSetSocials({ error: '', is_loading: true }));
+
+    const { data, error }: Unwrap<ReturnType<typeof apiAttachSocial>> = yield call(
+      reqWrapper,
+      apiAttachSocial,
+      { token }
+    );
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    const {
+      socials: { accounts },
+    }: ReturnType<typeof selectAuthProfile> = yield select(selectAuthProfile);
+
+    if (accounts.some(it => it.id === data.account.id && it.provider === data.account.provider)) {
+      yield put(authSetSocials({ is_loading: false }));
+    } else {
+      yield put(authSetSocials({ is_loading: false, accounts: [...accounts, data.account] }));
+    }
+  } catch (e) {
+    yield put(authSetSocials({ is_loading: false, error: e.message }));
   }
 }
 
@@ -434,6 +465,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.RESTORE_PASSWORD, restorePassword);
   yield takeLatest(AUTH_USER_ACTIONS.GET_SOCIALS, getSocials);
   yield takeLatest(AUTH_USER_ACTIONS.DROP_SOCIAL, dropSocial);
+  yield takeLatest(AUTH_USER_ACTIONS.ATTACH_SOCIAL, attachSocial);
 }
 
 export default authSaga;

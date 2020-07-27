@@ -1,6 +1,6 @@
-import { api, errorMiddleware, resultMiddleware, configWithToken } from '~/utils/api';
+import { api, configWithToken, errorMiddleware, resultMiddleware } from '~/utils/api';
 import { API } from '~/constants/api';
-import { IResultWithStatus, IMessage, INotification } from '~/redux/types';
+import { IMessage, INotification, IResultWithStatus } from '~/redux/types';
 import { userLoginTransform } from '~/redux/auth/transforms';
 import { ISocialAccount, IUser } from './types';
 
@@ -113,5 +113,19 @@ export const apiDropSocial = ({
 }>> =>
   api
     .delete(API.USER.DROP_SOCIAL(provider, id), configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const apiAttachSocial = ({
+  access,
+  token,
+}: {
+  access: string;
+  token: string;
+}): Promise<IResultWithStatus<{
+  account: ISocialAccount;
+}>> =>
+  api
+    .post(API.USER.ATTACH_SOCIAL, { token }, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);

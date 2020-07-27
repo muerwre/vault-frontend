@@ -7,7 +7,6 @@ export const API = {
     LOGIN: '/user/login',
     OAUTH_WINDOW: (provider: ISocialProvider) =>
       `${process.env.API_HOST}oauth/${provider}/redirect`,
-    VKONTAKTE_LOGIN: `${process.env.API_HOST}/oauth/vkontakte/redirect/login`,
     ME: '/user/',
     PROFILE: (username: string) => `/user/user/${username}/profile`,
     MESSAGES: (username: string) => `/user/user/${username}/messages`,
@@ -15,8 +14,12 @@ export const API = {
     GET_UPDATES: '/user/updates',
     REQUEST_CODE: (code?: string) => `/user/restore/${code || ''}`,
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
+
     GET_SOCIALS: '/oauth/',
     DROP_SOCIAL: (provider, id) => `/oauth/${provider}/${id}`,
+    ATTACH_SOCIAL: `/oauth/attach`,
+    // TODO: REMOVE
+    VKONTAKTE_LOGIN: `${process.env.API_HOST}/oauth/vkontakte/redirect/login`,
   },
   NODE: {
     SAVE: '/node/',

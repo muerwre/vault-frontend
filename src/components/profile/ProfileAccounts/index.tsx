@@ -10,6 +10,7 @@ import { selectAuthProfile } from '~/redux/auth/selectors';
 import { IState } from '~/redux/store';
 import { connect } from 'react-redux';
 import { API } from '~/constants/api';
+import { ProfileAccountsError } from '~/components/profile/ProfileAccountsError';
 
 const mapStateToProps = (state: IState) => selectAuthProfile(state).socials;
 const mapDispatchToProps = {
@@ -33,6 +34,7 @@ const ProfileAccountsUnconnected: FC<IProps> = ({
   authSetSocials,
   accounts,
   is_loading,
+  error,
 }) => {
   const onMessage = useCallback(
     (event: MessageEvent) => {
@@ -57,6 +59,8 @@ const ProfileAccountsUnconnected: FC<IProps> = ({
     []
   );
 
+  const resetErrors = useCallback(() => authSetSocials({ error: '' }), [authSetSocials]);
+
   useEffect(() => {
     authGetSocials();
   }, [authGetSocials]);
@@ -68,6 +72,8 @@ const ProfileAccountsUnconnected: FC<IProps> = ({
 
   return (
     <Group className={styles.wrap}>
+      {error && <ProfileAccountsError onClose={resetErrors} error={error} />}
+
       <Group className={styles.info}>
         <p>
           Ты можешь входить в Убежище, используя аккаунты на других сайтах вместо ввода логина и

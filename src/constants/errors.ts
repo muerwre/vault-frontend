@@ -20,6 +20,7 @@ export const ERRORS = {
   REQUIRED: 'Required',
   COMMENT_NOT_FOUND: 'Comment_Not_Found',
   FILE_IS_TOO_BIG: 'File_Is_Too_Big',
+  USER_EXIST_WITH_EMAIL: 'User_Exist_With_Email',
 };
 
 export const ERROR_LITERAL = {
@@ -44,4 +45,6 @@ export const ERROR_LITERAL = {
   [ERRORS.COMMENT_NOT_FOUND]: 'Комментарий не найден',
   [ERRORS.UNKNOWN_FILE_TYPE]: 'Запрещенный тип файла',
   [ERRORS.FILE_IS_TOO_BIG]: 'Файл слишком большой',
+  [ERRORS.USER_EXIST_WITH_EMAIL]:
+    'Мы не можем продолжить, потому что у другого пользователя есть этот email',
 };
