@@ -11,11 +11,13 @@ import { IAuthState } from '~/redux/auth/types';
 import pick from 'ramda/es/pick';
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { ProfileSettings } from '~/components/profile/ProfileSettings';
+import { ProfileAccounts } from '~/components/profile/ProfileAccounts';
 
 const TAB_CONTENT = {
   profile: <ProfileDescription />,
   messages: <ProfileMessages />,
   settings: <ProfileSettings />,
+  accounts: <ProfileAccounts />,
 };
 
 const mapStateToProps = state => ({
@@ -59,9 +61,6 @@ const ProfileDialogUnconnected: FC<IProps> = ({
   );
 };
 
-const ProfileDialog = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProfileDialogUnconnected);
+const ProfileDialog = connect(mapStateToProps, mapDispatchToProps)(ProfileDialogUnconnected);
 
 export { ProfileDialog };

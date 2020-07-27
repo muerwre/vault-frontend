@@ -10,7 +10,7 @@ import { InputText } from '~/components/input/InputText';
 import reject from 'ramda/es/reject';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { ERROR_LITERAL } from '~/constants/errors';
-import { ProfileSettingsSocials } from '~/components/profile/ProfileSettingsSocials';
+import { ProfileAccounts } from '~/components/profile/ProfileAccounts';
 
 const mapStateToProps = state => ({
   user: selectAuthUser(state),
@@ -20,8 +20,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   authPatchUser: AUTH_ACTIONS.authPatchUser,
   authSetProfile: AUTH_ACTIONS.authSetProfile,
-  authGetSocials: AUTH_ACTIONS.authGetSocials,
-  authDropSocial: AUTH_ACTIONS.authDropSocial,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
@@ -31,8 +29,6 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
   profile: { patch_errors, socials },
   authPatchUser,
   authSetProfile,
-  authGetSocials,
-  authDropSocial,
 }) => {
   const [password, setPassword] = useState('');
   const [new_password, setNewPassword] = useState('');
@@ -74,26 +70,21 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
   return (
     <form className={styles.wrap} onSubmit={onSubmit}>
       <Group>
-        <InputText
-          value={data.fullname}
-          handler={setFullname}
-          title="Полное имя"
-          error={patch_errors.fullname && ERROR_LITERAL[patch_errors.fullname]}
-        />
+        <Group>
+          <InputText
+            value={data.fullname}
+            handler={setFullname}
+            title="Полное имя"
+            error={patch_errors.fullname && ERROR_LITERAL[patch_errors.fullname]}
+          />
 
-        <Textarea value={data.description} handler={setDescription} title="Описание" />
+          <Textarea value={data.description} handler={setDescription} title="Описание" />
 
-        <div className={styles.small}>
-          Описание будет видно на странице профиля. Здесь работают те же правила оформления, что и в
-          комментариях.
-        </div>
-
-        <ProfileSettingsSocials
-          accounts={socials.accounts}
-          is_loading={socials.is_loading}
-          authGetSocials={authGetSocials}
-          authDropSocial={authDropSocial}
-        />
+          <div className={styles.small}>
+            Описание будет видно на странице профиля. Здесь работают те же правила оформления, что и
+            в комментариях.
+          </div>
+        </Group>
 
         <Group className={styles.pad}>
           <InputText
@@ -132,6 +123,8 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
             Чтобы изменить любое из этих полей, нужно ввести старый пароль.
           </div>
         </Group>
+
+        <Filler />
 
         <Group horizontal>
           <Filler />

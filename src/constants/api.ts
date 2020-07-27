@@ -1,9 +1,12 @@
 import { INode, IComment } from '~/redux/types';
+import { ISocialProvider } from '~/redux/auth/types';
 
 export const API = {
   BASE: process.env.API_HOST,
   USER: {
     LOGIN: '/user/login',
+    OAUTH_WINDOW: (provider: ISocialProvider) =>
+      `${process.env.API_HOST}oauth/${provider}/redirect`,
     VKONTAKTE_LOGIN: `${process.env.API_HOST}/oauth/vkontakte/redirect/login`,
     ME: '/user/',
     PROFILE: (username: string) => `/user/user/${username}/profile`,

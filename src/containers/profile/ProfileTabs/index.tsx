@@ -23,12 +23,21 @@ const ProfileTabs: FC<IProps> = ({ tab, is_own, setTab }) => (
       Сообщения
     </div>
     {is_own && (
-      <div
-        className={classNames(styles.tab, { [styles.active]: tab === 'settings' })}
-        onClick={() => setTab('settings')}
-      >
-        Настройки
-      </div>
+      <>
+        <div
+          className={classNames(styles.tab, { [styles.active]: tab === 'settings' })}
+          onClick={() => setTab('settings')}
+        >
+          Настройки
+        </div>
+
+        <div
+          className={classNames(styles.tab, { [styles.active]: tab === 'accounts' })}
+          onClick={() => setTab('accounts')}
+        >
+          Аккаунты
+        </div>
+      </>
     )}
   </div>
 );

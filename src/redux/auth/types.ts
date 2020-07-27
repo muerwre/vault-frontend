@@ -49,7 +49,7 @@ export type IAuthState = Readonly<{
   };
 
   profile: {
-    tab: 'profile' | 'messages' | 'settings';
+    tab: 'profile' | 'messages' | 'settings' | 'accounts';
     is_loading: boolean;
     is_loading_messages: boolean;
     is_sending_messages: boolean;
