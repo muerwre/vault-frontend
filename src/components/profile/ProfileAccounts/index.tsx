@@ -15,6 +15,8 @@ const mapStateToProps = (state: IState) => selectAuthProfile(state).socials;
 const mapDispatchToProps = {
   authGetSocials: AUTH_ACTIONS.authGetSocials,
   authDropSocial: AUTH_ACTIONS.authDropSocial,
+  authAttachSocial: AUTH_ACTIONS.authAttachSocial,
+  authSetSocials: AUTH_ACTIONS.authSetSocials,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
@@ -27,21 +29,29 @@ const SOCIAL_ICONS: Record<ISocialProvider, string> = {
 const ProfileAccountsUnconnected: FC<IProps> = ({
   authGetSocials,
   authDropSocial,
+  authAttachSocial,
+  authSetSocials,
   accounts,
   is_loading,
 }) => {
-  const onMessage = useCallback(event => {
-    // TODO: handle errors
-    if (event?.data?.type !== 'oauth_attach' || !event?.data?.payload?.token) return;
+  const onMessage = useCallback(
+    (event: MessageEvent) => {
+      if (!event?.data?.type) return;
 
-    const token = event?.data?.payload?.token;
-
-    console.log('GOT TOKEN!!!', token);
-  }, []);
+      switch (event?.data?.type) {
+        case 'oauth_processed':
+          return authAttachSocial(event?.data?.payload?.token);
+        case 'oauth_error':
+          return authSetSocials({ error: event?.data?.payload?.error || '' });
+        default:
+          return;
+      }
+    },
+    [authAttachSocial, authSetSocials]
+  );
 
   const openOauthWindow = useCallback(
     (provider: ISocialProvider) => () => {
-      console.log(API.USER.OAUTH_WINDOW(provider));
       window.open(API.USER.OAUTH_WINDOW(provider), '', 'width=600,height=400');
     },
     []

@@ -121,3 +121,8 @@ export const authSetSocials = (socials: Partial<IAuthState['profile']['socials']
   type: AUTH_USER_ACTIONS.SET_SOCIALS,
   socials,
 });
+
+export const authAttachSocial = (token: string) => ({
+  type: AUTH_USER_ACTIONS.ATTACH_SOCIAL,
+  token,
+});
