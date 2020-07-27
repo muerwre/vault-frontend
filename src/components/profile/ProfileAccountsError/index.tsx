@@ -14,7 +14,9 @@ const ProfileAccountsError: FC<IProps> = ({ onClose, error }) => (
     <Group className={styles.content}>
       <div className={styles.title}>О НЕТ!</div>
       <div className={styles.text}>{ERROR_LITERAL[error] || error}</div>
-      <Button onClick={onClose}>Оу, жаль</Button>
+      <Button onClick={onClose} size="small">
+        Оу, жаль
+      </Button>
     </Group>
   </div>
 );

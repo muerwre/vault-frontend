@@ -46,5 +46,5 @@ export const ERROR_LITERAL = {
   [ERRORS.UNKNOWN_FILE_TYPE]: 'Запрещенный тип файла',
   [ERRORS.FILE_IS_TOO_BIG]: 'Файл слишком большой',
   [ERRORS.USER_EXIST_WITH_EMAIL]:
-    'Мы не можем продолжить, потому что у другого пользователя есть этот email',
+    'Мы не можем продолжить, потому что у другого пользователя есть этот email.',
 };
