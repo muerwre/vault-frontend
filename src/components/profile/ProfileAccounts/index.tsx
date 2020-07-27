@@ -31,8 +31,11 @@ const ProfileAccountsUnconnected: FC<IProps> = ({
   is_loading,
 }) => {
   const onMessage = useCallback(event => {
+    // TODO: handle errors
     if (event?.data?.type !== 'oauth_attach' || !event?.data?.payload?.token) return;
+
     const token = event?.data?.payload?.token;
+
     console.log('GOT TOKEN!!!', token);
   }, []);
 
