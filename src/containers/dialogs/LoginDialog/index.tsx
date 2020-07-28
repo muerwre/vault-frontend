@@ -14,6 +14,7 @@ import { BetterScrollDialog } from '../BetterScrollDialog';
 import * as styles from './styles.scss';
 import * as ACTIONS from '~/redux/auth/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import { ISocialProvider } from '~/redux/auth/types';
 
 const mapStateToProps = selectAuthLogin;
 
@@ -52,27 +53,54 @@ const LoginDialogUnconnected: FC<IProps> = ({
     [modalShowDialog, userSetLoginError]
   );
 
-  const onSocialLogin = useCallback(() => {
-    window.open(API.USER.VKONTAKTE_LOGIN, '', 'width=600,height=400');
+  const openOauthWindow = useCallback(
+    (provider: ISocialProvider) => () => {
+      window.open(API.USER.OAUTH_WINDOW(provider), '', 'width=600,height=400');
+    },
+    []
+  );
+
+  const onMessage = useCallback((event: MessageEvent) => {
+    if (!event?.data?.type) return;
+
+    switch (event?.data?.type) {
+      case 'oauth_processed':
+        // return authAttachSocial(event?.data?.payload?.token);
+        return console.log('oauth_processed', event?.data?.payload?.token);
+      case 'oauth_error':
+        // return authSetSocials({ error: event?.data?.payload?.error || '' });
+        return console.log('oauth_error', { error: event?.data?.payload?.error || '' });
+      default:
+        return;
+    }
   }, []);
 
   useEffect(() => {
     if (error) userSetLoginError(null);
   }, [username, password]);
 
+  useEffect(() => {
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, [onMessage]);
+
   const buttons = useMemo(
     () => (
       <Group className={styles.footer}>
-        <Button color="outline" iconLeft="vk" type="button" onClick={onSocialLogin}>
-          <span>Вконтакте</span>
-        </Button>
-
         <Button>
           <span>Войти</span>
         </Button>
+
+        <Button color="outline" iconLeft="google" type="button" onClick={openOauthWindow('google')}>
+          <span>Google</span>
+        </Button>
+
+        <Button color="outline" iconLeft="vk" type="button" onClick={openOauthWindow('vkontakte')}>
+          <span>Вконтакте</span>
+        </Button>
       </Group>
     ),
-    [onSocialLogin]
+    [openOauthWindow]
   );
 
   useCloseOnEscape(onRequestClose);
@@ -105,9 +133,6 @@ const LoginDialogUnconnected: FC<IProps> = ({
   );
 };
 
-const LoginDialog = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginDialogUnconnected);
+const LoginDialog = connect(mapStateToProps, mapDispatchToProps)(LoginDialogUnconnected);
 
 export { LoginDialog };
