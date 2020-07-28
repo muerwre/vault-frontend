@@ -16,6 +16,7 @@ import * as ACTIONS from '~/redux/auth/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { ISocialProvider } from '~/redux/auth/types';
 import { Grid } from '~/components/containers/Grid';
+import { GodRays } from '~/components/main/GodRays';
 
 const mapStateToProps = selectAuthLogin;
 

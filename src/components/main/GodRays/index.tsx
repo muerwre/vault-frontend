@@ -27,7 +27,7 @@ export class GodRays extends React.Component<IGodRaysProps> {
 
   draw = () => {
     if (this.props.raised || !this.canvas) {
-      return setTimeout(() => window.requestAnimationFrame(this.draw), 1000);
+      return setTimeout(() => window.requestAnimationFrame(this.draw), 500);
     }
 
     const { width, height, rays, particles } = this.state;
@@ -40,12 +40,12 @@ export class GodRays extends React.Component<IGodRaysProps> {
 
     rays.map(({ angle, iterator, weight, speed, pulsar, opacity }, index) => {
       const gradient = ctx.createLinearGradient(0, 0, 0, height * 1.3);
-      gradient.addColorStop(0.2, `rgba(255, 60, 40, ${opacity * 0.1})`);
-      gradient.addColorStop(1, 'rgba(255, 60, 40, 0)');
+      gradient.addColorStop(0.2, `rgba(160, 255, 60, ${opacity * 0.1})`);
+      gradient.addColorStop(1, 'rgba(160, 255, 60, 0)');
 
       const gradient2 = ctx.createLinearGradient(0, 0, 0, height * 1.3);
-      gradient2.addColorStop(0.2, `rgba(255, 40, 100, ${opacity * 0.2})`);
-      gradient2.addColorStop(1, 'rgba(255, 40, 100, 0)');
+      gradient2.addColorStop(0.2, `rgba(60, 255, 200, ${opacity * 0.2})`);
+      gradient2.addColorStop(1, 'rgba(60, 255, 200, 0)');
 
       ctx.save();
       ctx.translate(width / 2, -900);
@@ -85,24 +85,9 @@ export class GodRays extends React.Component<IGodRaysProps> {
     setTimeout(() => window.requestAnimationFrame(this.draw), 1000 / 15);
   };
 
-  generateParticles = ({ width, height }) => {
-    const particles = [...new Array(1)].map(() => ({
-      // left: Math.random() * width / 2 + width / 4,
-      left: Math.random() * width * 0.7 + 0.15,
-      top: Math.random() * (height + 400) - 400,
-      iterator: Math.random() * 10,
-      speed: Math.random() * 0.2 + 0.2,
-    }));
-
-    this.setState({ particles });
-  };
-
   componentDidMount() {
     const { innerWidth: width, innerHeight: height } = window;
-
     this.setState({ width, height });
-    // this.generateParticles({ width, height });
-
     this.init();
   }
 
