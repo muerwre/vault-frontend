@@ -15,6 +15,7 @@ import * as styles from './styles.scss';
 import * as ACTIONS from '~/redux/auth/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { ISocialProvider } from '~/redux/auth/types';
+import { Grid } from '~/components/containers/Grid';
 
 const mapStateToProps = selectAuthLogin;
 
@@ -91,13 +92,25 @@ const LoginDialogUnconnected: FC<IProps> = ({
           <span>Войти</span>
         </Button>
 
-        <Button color="outline" iconLeft="google" type="button" onClick={openOauthWindow('google')}>
-          <span>Google</span>
-        </Button>
+        <Grid columns="repeat(2, 1fr)">
+          <Button
+            color="outline"
+            iconLeft="google"
+            type="button"
+            onClick={openOauthWindow('google')}
+          >
+            <span>Google</span>
+          </Button>
 
-        <Button color="outline" iconLeft="vk" type="button" onClick={openOauthWindow('vkontakte')}>
-          <span>Вконтакте</span>
-        </Button>
+          <Button
+            color="outline"
+            iconLeft="vk"
+            type="button"
+            onClick={openOauthWindow('vkontakte')}
+          >
+            <span>Вконтакте</span>
+          </Button>
+        </Grid>
       </Group>
     ),
     [openOauthWindow]
