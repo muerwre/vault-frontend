@@ -11,6 +11,7 @@ import reject from 'ramda/es/reject';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { ProfileAccounts } from '~/components/profile/ProfileAccounts';
+import classNames from 'classnames';
 
 const mapStateToProps = state => ({
   user: selectAuthUser(state),
@@ -70,7 +71,11 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
   return (
     <form className={styles.wrap} onSubmit={onSubmit}>
       <Group>
-        <Group>
+        <Group className={styles.pad}>
+          <div className={styles.pad__title}>
+            <span>О себе</span>
+          </div>
+
           <InputText
             value={data.fullname}
             handler={setFullname}
@@ -86,7 +91,13 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
           </div>
         </Group>
 
-        <Group className={styles.pad}>
+        <Filler />
+
+        <Group className={classNames(styles.pad, styles.pad_danger)}>
+          <div className={styles.pad__title}>
+            <span>Логин и пароли</span>
+          </div>
+
           <InputText
             value={data.username}
             handler={setUsername}
@@ -109,8 +120,6 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
             error={patch_errors.new_password && ERROR_LITERAL[patch_errors.new_password]}
           />
 
-          <div />
-
           <InputText
             value={password}
             handler={setPassword}
@@ -122,11 +131,23 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
           <div className={styles.small}>
             Чтобы изменить любое из этих полей, нужно ввести старый пароль.
           </div>
+
+          <Filler />
         </Group>
 
         <Filler />
 
-        <Group horizontal>
+        <Filler />
+
+        <div className={styles.pad}>
+          <div className={styles.pad__title}>
+            <span>Аккаунты</span>
+          </div>
+
+          <ProfileAccounts />
+        </div>
+
+        <Group horizontal className={styles.buttons}>
           <Filler />
           <Button title="Сохранить" type="submit" />
         </Group>

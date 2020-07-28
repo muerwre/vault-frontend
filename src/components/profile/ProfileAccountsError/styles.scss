@@ -12,9 +12,10 @@
   margin: 0 !important;
   padding: $gap;
   box-sizing: border-box;
+  border-radius: $radius;
 
   @include can_backdrop {
-  background-color: transparentize($red, 0.5);
+    background-color: transparentize($red, 0.5);
     backdrop-filter: blur(10px);
   }
 }

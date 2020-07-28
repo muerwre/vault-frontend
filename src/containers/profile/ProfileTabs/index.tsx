@@ -30,13 +30,6 @@ const ProfileTabs: FC<IProps> = ({ tab, is_own, setTab }) => (
         >
           Настройки
         </div>
-
-        <div
-          className={classNames(styles.tab, { [styles.active]: tab === 'accounts' })}
-          onClick={() => setTab('accounts')}
-        >
-          Аккаунты
-        </div>
       </>
     )}
   </div>

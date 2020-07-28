@@ -1,10 +1,9 @@
 .wrap {
-  padding: $gap;
 }
 
 .list {
-  box-shadow: inset transparentize(white, 0.9) 0 0 0 2px;
   border-radius: $radius;
+  background: transparentize(white, 0.95);
 }
 
 .buttons {
@@ -80,6 +79,6 @@
 }
 
 .info {
-  padding: $gap;
+  padding: $gap $gap / 2;
   font: $font_14_regular;
 }

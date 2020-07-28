@@ -22,10 +22,6 @@ const UserButton: FC<IProps> = ({ user: { username, photo }, authOpenProfile, on
     authOpenProfile(username, 'settings');
   }, [authOpenProfile, username]);
 
-  const onAccountsOpen = useCallback(() => {
-    authOpenProfile(username, 'accounts');
-  }, [authOpenProfile, username]);
-
   return (
     <div className={styles.wrap}>
       <Group horizontal className={styles.user_button}>
@@ -42,7 +38,6 @@ const UserButton: FC<IProps> = ({ user: { username, photo }, authOpenProfile, on
       <div className={styles.menu}>
         <div onClick={onProfileOpen}>Профиль</div>
         <div onClick={onSettingsOpen}>Настройки</div>
-        <div onClick={onAccountsOpen}>Аккаунты</div>
         <div onClick={onLogout}>Выдох</div>
       </div>
     </div>
