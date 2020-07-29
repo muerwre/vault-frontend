@@ -16,13 +16,13 @@ import * as ACTIONS from '~/redux/auth/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { ISocialProvider } from '~/redux/auth/types';
 import { Grid } from '~/components/containers/Grid';
-import { GodRays } from '~/components/main/GodRays';
 
 const mapStateToProps = selectAuthLogin;
 
 const mapDispatchToProps = {
   userSendLoginRequest: ACTIONS.userSendLoginRequest,
   userSetLoginError: ACTIONS.userSetLoginError,
+  authLoginWithSocial: ACTIONS.authLoginWithSocial,
   modalShowDialog: MODAL_ACTIONS.modalShowDialog,
 };
 
@@ -33,6 +33,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
   error,
   userSendLoginRequest,
   userSetLoginError,
+  authLoginWithSocial,
   modalShowDialog,
 }) => {
   const [username, setUserName] = useState('');
@@ -62,20 +63,21 @@ const LoginDialogUnconnected: FC<IProps> = ({
     []
   );
 
-  const onMessage = useCallback((event: MessageEvent) => {
-    if (!event?.data?.type) return;
+  const onMessage = useCallback(
+    (event: MessageEvent) => {
+      if (!event?.data?.type) return;
 
-    switch (event?.data?.type) {
-      case 'oauth_processed':
-        // return authAttachSocial(event?.data?.payload?.token);
-        return console.log('oauth_processed', event?.data?.payload?.token);
-      case 'oauth_error':
-        // return authSetSocials({ error: event?.data?.payload?.error || '' });
-        return console.log('oauth_error', { error: event?.data?.payload?.error || '' });
-      default:
-        return;
-    }
-  }, []);
+      switch (event?.data?.type) {
+        case 'oauth_processed':
+          return authLoginWithSocial(event?.data?.payload?.token);
+        case 'oauth_error':
+          return userSetLoginError(event?.data?.payload?.error);
+        default:
+          return;
+      }
+    },
+    [authLoginWithSocial, userSetLoginError]
+  );
 
   useEffect(() => {
     if (error) userSetLoginError(null);
@@ -137,7 +139,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
                 onClick={onRestoreRequest}
                 className={styles.forgot_button}
               >
-                Вспомнить пароль
+                Вспомнить парольF
               </Button>
             </Group>
           </div>

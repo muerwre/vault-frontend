@@ -126,3 +126,10 @@ export const authAttachSocial = (token: string) => ({
   type: AUTH_USER_ACTIONS.ATTACH_SOCIAL,
   token,
 });
+
+export const authLoginWithSocial = (token: string, username?: string, password?: string) => ({
+  type: AUTH_USER_ACTIONS.LOGIN_WITH_SOCIAL,
+  token,
+  username,
+  password,
+});

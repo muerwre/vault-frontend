@@ -18,6 +18,7 @@ export const API = {
     GET_SOCIALS: '/oauth/',
     DROP_SOCIAL: (provider, id) => `/oauth/${provider}/${id}`,
     ATTACH_SOCIAL: `/oauth/attach`,
+    LOGIN_WITH_SOCIAL: `/oauth/login`,
     // TODO: REMOVE
     VKONTAKTE_LOGIN: `${process.env.API_HOST}/oauth/vkontakte/redirect/login`,
   },

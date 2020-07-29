@@ -6,6 +6,7 @@ import {
   authGetMessages,
   authLoadProfile,
   authLoggedIn,
+  authLoginWithSocial,
   authOpenProfile,
   authPatchUser,
   authRequestRestoreCode,
@@ -33,6 +34,7 @@ import {
   apiCheckRestoreCode,
   apiDropSocial,
   apiGetSocials,
+  apiLoginWithSocial,
   apiRequestRestoreCode,
   apiRestoreCode,
   apiUpdateUser,
@@ -447,6 +449,30 @@ function* attachSocial({ token }: ReturnType<typeof authAttachSocial>) {
   }
 }
 
+function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
+  try {
+    yield put(userSetLoginError(''));
+
+    const {
+      data,
+      error,
+    }: Unwrap<ReturnType<typeof apiLoginWithSocial>> = yield call(apiLoginWithSocial, { token });
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    if (data.token) {
+      yield put(authSetToken(data.token));
+      yield put(modalSetShown(false));
+      yield call(refreshUser);
+      return;
+    }
+  } catch (e) {
+    yield put(userSetLoginError(e.message));
+  }
+}
+
 function* authSaga() {
   yield takeEvery(REHYDRATE, checkUserSaga);
   yield takeLatest([REHYDRATE, AUTH_USER_ACTIONS.LOGGED_IN], startPollingSaga);
@@ -466,6 +492,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.GET_SOCIALS, getSocials);
   yield takeLatest(AUTH_USER_ACTIONS.DROP_SOCIAL, dropSocial);
   yield takeLatest(AUTH_USER_ACTIONS.ATTACH_SOCIAL, attachSocial);
+  yield takeLatest(AUTH_USER_ACTIONS.LOGIN_WITH_SOCIAL, loginWithSocial);
 }
 
 export default authSaga;

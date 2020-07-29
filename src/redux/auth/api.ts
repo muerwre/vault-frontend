@@ -2,7 +2,7 @@ import { api, configWithToken, errorMiddleware, resultMiddleware } from '~/utils
 import { API } from '~/constants/api';
 import { IMessage, INotification, IResultWithStatus } from '~/redux/types';
 import { userLoginTransform } from '~/redux/auth/transforms';
-import { ISocialAccount, IUser } from './types';
+import { ISocialAccount, IToken, IUser } from './types';
 
 export const apiUserLogin = ({
   username,
@@ -127,5 +127,22 @@ export const apiAttachSocial = ({
 }>> =>
   api
     .post(API.USER.ATTACH_SOCIAL, { token }, configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
+export const apiLoginWithSocial = ({
+  token,
+  username,
+  password,
+}: {
+  token: string;
+  username?: string;
+  password?: string;
+}): Promise<IResultWithStatus<{
+  token: string;
+  needs_login: boolean;
+}>> =>
+  api
+    .post(API.USER.LOGIN_WITH_SOCIAL, { token, username, password })
     .then(resultMiddleware)
     .catch(errorMiddleware);
