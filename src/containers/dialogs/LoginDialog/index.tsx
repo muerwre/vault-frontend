@@ -139,7 +139,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
                 onClick={onRestoreRequest}
                 className={styles.forgot_button}
               >
-                Вспомнить парольF
+                Вспомнить пароль
               </Button>
             </Group>
           </div>

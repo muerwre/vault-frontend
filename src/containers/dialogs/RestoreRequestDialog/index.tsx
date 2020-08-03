@@ -56,7 +56,7 @@ const RestoreRequestDialogUnconnected: FC<IProps> = ({
     []
   );
 
-  const header = useMemo(() => <div className={styles.illustration}>ILLUSTRATE ME</div>, []);
+  const header = useMemo(() => <div className={styles.illustration} />, []);
 
   const overlay = useMemo(
     () =>

@@ -464,8 +464,8 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
 
     if (data.token) {
       yield put(authSetToken(data.token));
-      yield put(modalSetShown(false));
       yield call(refreshUser);
+      yield put(modalSetShown(false));
       return;
     }
   } catch (e) {
