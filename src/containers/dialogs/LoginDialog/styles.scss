@@ -1,6 +1,8 @@
 $secondary_color: darken(desaturate($blue, 100%), 30%);
 $vk_color: $secondary_color;
 
+.dialog {}
+
 .wrap {
   display: flex;
   align-items: flex-start;
@@ -35,14 +37,6 @@ $vk_color: $secondary_color;
   margin: $gap * 2 0 0 0 !important;
   padding: $gap * 2 0 0 0;
   border-top: 1px solid black;
-}
-
-.footer {
-  padding: $gap;
-
-  button {
-    // text-align: left;
-  }
 }
 
 .links {

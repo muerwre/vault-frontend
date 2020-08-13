@@ -20,6 +20,7 @@ const INITIAL_STATE: IAuthState = {
   login: {
     error: null,
     is_loading: false,
+    is_registering: true,
   },
 
   profile: {

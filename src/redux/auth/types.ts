@@ -46,6 +46,7 @@ export type IAuthState = Readonly<{
   login: {
     error: string;
     is_loading: boolean;
+    is_registering: boolean;
   };
 
   profile: {
