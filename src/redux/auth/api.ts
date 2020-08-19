@@ -140,7 +140,7 @@ export const apiLoginWithSocial = ({
   password?: string;
 }): Promise<IResultWithStatus<{
   token: string;
-  needs_login: boolean;
+  needs_register: boolean;
 }>> =>
   api
     .post(API.USER.LOGIN_WITH_SOCIAL, { token, username, password })

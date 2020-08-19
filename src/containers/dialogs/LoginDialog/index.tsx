@@ -16,7 +16,7 @@ import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { ISocialProvider } from '~/redux/auth/types';
 import pick from 'ramda/es/pick';
 import { LoginDialogButtons } from '~/containers/dialogs/LoginDialogButtons';
-import { IOAuthEvent } from '~/redux/types';
+import { IOAuthEvent, OAUTH_EVENT_TYPES } from '~/redux/types';
 
 const mapStateToProps = state => ({
   ...pick(['error', 'is_registering'], selectAuthLogin(state)),
@@ -69,9 +69,16 @@ const LoginDialogUnconnected: FC<IProps> = ({
     []
   );
 
-  const onMessage = useCallback((event: IOAuthEvent) => authGotOauthEvent(event), [
-    authGotOauthEvent,
-  ]);
+  const onMessage = useCallback(
+    (event: MessageEvent) => {
+      if (!event?.data?.type || !Object.values(OAUTH_EVENT_TYPES).includes(event.data.type)) {
+        return;
+      }
+
+      authGotOauthEvent(event.data);
+    },
+    [authGotOauthEvent]
+  );
 
   useEffect(() => {
     if (error) userSetLoginError(null);

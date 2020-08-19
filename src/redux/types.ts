@@ -207,13 +207,16 @@ export interface IEmbed {
   };
 }
 
-export type IOAuthEvent = MessageEvent & {
-  data: {
-    type: 'oauth_processed' | 'oauth_error';
-    payload: {
-      token: string;
-      error: string;
-      needs_register: boolean;
-    };
+export const OAUTH_EVENT_TYPES = {
+  OAUTH_PROCESSED: 'oauth_processed',
+  OAUTH_ERROR: 'oauth_error',
+};
+
+export type IOAuthEvent = {
+  type: typeof OAUTH_EVENT_TYPES[keyof typeof OAUTH_EVENT_TYPES];
+  payload: {
+    token: string;
+    error: string;
+    needs_register: boolean;
   };
 };

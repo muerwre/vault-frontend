@@ -50,7 +50,7 @@ import {
   selectAuthUser,
   selectToken,
 } from './selectors';
-import { IMessageNotification, IResultWithStatus, Unwrap } from '../types';
+import { IMessageNotification, IResultWithStatus, OAUTH_EVENT_TYPES, Unwrap } from '../types';
 import { IAuthState, IUser } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { selectModal } from '~/redux/modal/selectors';
@@ -459,6 +459,11 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
       error,
     }: Unwrap<ReturnType<typeof apiLoginWithSocial>> = yield call(apiLoginWithSocial, { token });
 
+    if (data?.needs_register) {
+      yield put(modalShowDialog(DIALOGS.LOGIN_SOCIAL_REGISTER));
+      return;
+    }
+
     if (error) {
       throw new Error(error);
     }
@@ -475,13 +480,15 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
 }
 
 function* gotOauthEvent({ event }: ReturnType<typeof authGotOauthEvent>) {
-  if (!event?.data?.type) return;
+  if (!event?.type) return;
 
-  switch (event?.data?.type) {
-    case 'oauth_processed':
-      return put(authLoginWithSocial(event?.data?.payload?.token));
-    case 'oauth_error':
-      return put(userSetLoginError(event?.data?.payload?.error));
+  switch (event.type) {
+    case OAUTH_EVENT_TYPES.OAUTH_PROCESSED:
+      return yield put(authLoginWithSocial(event?.payload?.token));
+
+    case OAUTH_EVENT_TYPES.OAUTH_ERROR:
+      return yield put(userSetLoginError(event?.payload?.error));
+
     default:
       return;
   }

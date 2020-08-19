@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { push } from 'connected-react-router';
 import { API } from '~/constants/api';
 import { store } from '~/redux/store';
-import { IResultWithStatus } from '~/redux/types';
+import { IApiErrorResult, IResultWithStatus } from '~/redux/types';
 
 export const authMiddleware = r => {
   store.dispatch(push('/login'));
@@ -33,10 +33,15 @@ export const resultMiddleware = <T extends {}>({
 
 export const errorMiddleware = <T extends any>(debug): IResultWithStatus<T> =>
   debug && debug.response
-    ? debug.response.data || debug.response
+    ? {
+        status: debug.response.status,
+        data:
+          (debug.response.data as T & IApiErrorResult) || (debug.response as T & IApiErrorResult),
+        error: debug?.response?.data?.error || debug?.response?.error || 'Неизвестная ошибка',
+      }
     : {
         status: HTTP_RESPONSES.CONNECTION_REFUSED,
-        data: {},
+        data: {} as T & IApiErrorResult,
         debug,
         error: 'Ошибка сети',
       };
