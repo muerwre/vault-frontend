@@ -1,6 +1,5 @@
-import React, { FC, useState, useCallback, FormEvent, useEffect, createElement } from 'react';
+import React, { createElement, FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { ScrollDialog } from '../ScrollDialog';
 import { IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
 import { Group } from '~/components/containers/Group';
@@ -13,9 +12,10 @@ import { EditorPanel } from '~/components/editors/EditorPanel';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ERROR_LITERAL } from '~/constants/errors';
-import { NODE_EDITORS, EMPTY_NODE } from '~/redux/node/constants';
+import { EMPTY_NODE, NODE_EDITORS } from '~/redux/node/constants';
 import { BetterScrollDialog } from '../BetterScrollDialog';
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
+import { IEditorComponentProps } from '~/redux/node/types';
 
 const mapStateToProps = state => {
   const { editor, errors } = selectNode(state);
@@ -32,7 +32,7 @@ const mapDispatchToProps = {
 type IProps = IDialogProps &
   ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & {
-    type: typeof NODE_EDITORS[keyof typeof NODE_EDITORS];
+    type: keyof typeof NODE_EDITORS;
   };
 
 const EditorDialogUnconnected: FC<IProps> = ({
@@ -64,7 +64,8 @@ const EditorDialogUnconnected: FC<IProps> = ({
   );
 
   useEffect(() => {
-    if (!NODE_EDITORS[type] && onRequestClose) onRequestClose();
+    if (!Object.prototype.hasOwnProperty.call(NODE_EDITORS, type) && onRequestClose)
+      onRequestClose();
   }, [type]);
 
   useEffect(() => {
@@ -88,7 +89,7 @@ const EditorDialogUnconnected: FC<IProps> = ({
 
   const error = errors && Object.values(errors)[0];
 
-  if (!NODE_EDITORS[type]) return null;
+  if (!Object.prototype.hasOwnProperty.call(NODE_EDITORS, type)) return null;
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
@@ -105,16 +106,13 @@ const EditorDialogUnconnected: FC<IProps> = ({
             setData,
             temp,
             setTemp,
-          })}
+          } as IEditorComponentProps)}
         </div>
       </BetterScrollDialog>
     </form>
   );
 };
 
-const EditorDialog = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EditorDialogUnconnected);
+const EditorDialog = connect(mapStateToProps, mapDispatchToProps)(EditorDialogUnconnected);
 
 export { EditorDialog };

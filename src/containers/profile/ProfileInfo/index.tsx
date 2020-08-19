@@ -20,7 +20,7 @@ interface IProps {
 }
 
 const TAB_HEADERS = {
-  messages: <MessageForm is_sending_message={false} />,
+  messages: <MessageForm />,
 };
 
 const ProfileInfo: FC<IProps> = ({ user, tab, is_loading, is_own, setTab }) => (

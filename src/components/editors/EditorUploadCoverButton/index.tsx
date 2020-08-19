@@ -1,5 +1,5 @@
-import React, { FC, useState, useCallback, useEffect } from 'react';
-import { INode, IFileWithUUID } from '~/redux/types';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import { IFileWithUUID } from '~/redux/types';
 import uuid from 'uuid4';
 import * as styles from './styles.scss';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS, UPLOAD_TYPES } from '~/redux/uploads/constants';
@@ -10,6 +10,7 @@ import { selectUploads } from '~/redux/uploads/selectors';
 import { getURL } from '~/utils/dom';
 import { Icon } from '~/components/input/Icon';
 import { PRESETS } from '~/constants/urls';
+import { IEditorComponentProps } from '~/redux/node/types';
 
 const mapStateToProps = state => {
   const { statuses, files } = selectUploads(state);
@@ -22,12 +23,8 @@ const mapDispatchToProps = {
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps & {
-    data: INode;
-    setData: (data: INode) => void;
-    temp: string[];
-    setTemp: (val: string[]) => void;
-  };
+  typeof mapDispatchToProps &
+  IEditorComponentProps & {};
 
 const EditorUploadCoverButtonUnconnected: FC<IProps> = ({
   data,

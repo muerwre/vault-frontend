@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactElement } from 'react';
 import { INode, ValueOf, IComment } from '../types';
 import { NodeImageSlideBlock } from '~/components/node/NodeImageSlideBlock';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
@@ -14,6 +14,8 @@ import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadB
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
 import { Filler } from '~/components/containers/Filler';
 import { modalShowPhotoswipe } from '../modal/actions';
+import { IEditorComponentProps } from '~/redux/node/types';
+import { EditorFiller } from '~/components/editors/EditorFiller';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -117,14 +119,14 @@ export const NODE_EDITORS = {
   [NODE_TYPES.AUDIO]: AudioEditor,
 };
 
-export const NODE_PANEL_COMPONENTS = {
-  [NODE_TYPES.TEXT]: [Filler, EditorUploadCoverButton],
-  [NODE_TYPES.VIDEO]: [Filler, EditorUploadCoverButton],
-  [NODE_TYPES.IMAGE]: [EditorImageUploadButton, Filler, EditorUploadCoverButton],
+export const NODE_PANEL_COMPONENTS: Record<string, FC<IEditorComponentProps>[]> = {
+  [NODE_TYPES.TEXT]: [EditorFiller, EditorUploadCoverButton],
+  [NODE_TYPES.VIDEO]: [EditorFiller, EditorUploadCoverButton],
+  [NODE_TYPES.IMAGE]: [EditorImageUploadButton, EditorFiller, EditorUploadCoverButton],
   [NODE_TYPES.AUDIO]: [
     EditorAudioUploadButton,
     EditorImageUploadButton,
-    Filler,
+    EditorFiller,
     EditorUploadCoverButton,
   ],
 };

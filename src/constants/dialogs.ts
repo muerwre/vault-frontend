@@ -11,13 +11,17 @@ import { RestoreRequestDialog } from '~/containers/dialogs/RestoreRequestDialog'
 import { RestorePasswordDialog } from '~/containers/dialogs/RestorePasswordDialog';
 import { DIALOGS } from '~/redux/modal/constants';
 import { PhotoSwipe } from '~/containers/dialogs/PhotoSwipe';
+import { LoginSocialRegisterDialog } from '~/containers/dialogs/LoginSocialRegisterDialog';
+import { IDialogProps } from '~/redux/types';
+import { FC } from 'react';
 
-export const DIALOG_CONTENT = {
+export const DIALOG_CONTENT: Record<string, FC<IDialogProps>> = {
   [DIALOGS.EDITOR_IMAGE]: EditorDialogImage,
   [DIALOGS.EDITOR_TEXT]: EditorDialogText,
   [DIALOGS.EDITOR_VIDEO]: EditorDialogVideo,
   [DIALOGS.EDITOR_AUDIO]: EditorDialogAudio,
   [DIALOGS.LOGIN]: LoginDialog,
+  [DIALOGS.LOGIN_SOCIAL_REGISTER]: LoginSocialRegisterDialog,
   [DIALOGS.LOADING]: LoadingDialog,
   [DIALOGS.TEST]: TestDialog,
   [DIALOGS.PROFILE]: ProfileDialog,

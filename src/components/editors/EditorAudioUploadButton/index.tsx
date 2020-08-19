@@ -1,14 +1,9 @@
 import React, { FC } from 'react';
 import { EditorUploadButton } from '~/components/editors/EditorUploadButton';
-import { INode } from '~/redux/types';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
+import { IEditorComponentProps } from '~/redux/node/types';
 
-interface IProps {
-  data: INode;
-  setData: (val: INode) => void;
-  temp: string[];
-  setTemp: (val: string[]) => void;
-}
+type IProps = IEditorComponentProps & {};
 
 const EditorAudioUploadButton: FC<IProps> = ({ data, setData, temp, setTemp }) => (
   <EditorUploadButton
