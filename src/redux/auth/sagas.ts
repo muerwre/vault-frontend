@@ -4,6 +4,7 @@ import {
   authAttachSocial,
   authDropSocial,
   authGetMessages,
+  authGotOauthEvent,
   authLoadProfile,
   authLoggedIn,
   authLoginWithSocial,
@@ -473,6 +474,18 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
   }
 }
 
+function* gotOauthEvent({ event }: ReturnType<typeof authGotOauthEvent>) {
+  if (!event?.data?.type) return;
+
+  switch (event?.data?.type) {
+    case 'oauth_processed':
+      return put(authLoginWithSocial(event?.data?.payload?.token));
+    case 'oauth_error':
+      return put(userSetLoginError(event?.data?.payload?.error));
+    default:
+      return;
+  }
+}
 function* authSaga() {
   yield takeEvery(REHYDRATE, checkUserSaga);
   yield takeLatest([REHYDRATE, AUTH_USER_ACTIONS.LOGGED_IN], startPollingSaga);
@@ -493,6 +506,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.DROP_SOCIAL, dropSocial);
   yield takeLatest(AUTH_USER_ACTIONS.ATTACH_SOCIAL, attachSocial);
   yield takeLatest(AUTH_USER_ACTIONS.LOGIN_WITH_SOCIAL, loginWithSocial);
+  yield takeEvery(AUTH_USER_ACTIONS.GOT_OAUTH_EVENT, gotOauthEvent);
 }
 
 export default authSaga;

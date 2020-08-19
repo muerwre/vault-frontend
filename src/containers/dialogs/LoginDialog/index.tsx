@@ -14,9 +14,9 @@ import * as styles from './styles.scss';
 import * as ACTIONS from '~/redux/auth/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { ISocialProvider } from '~/redux/auth/types';
-import { Grid } from '~/components/containers/Grid';
 import pick from 'ramda/es/pick';
 import { LoginDialogButtons } from '~/containers/dialogs/LoginDialogButtons';
+import { IOAuthEvent } from '~/redux/types';
 
 const mapStateToProps = state => ({
   ...pick(['error', 'is_registering'], selectAuthLogin(state)),
@@ -27,6 +27,7 @@ const mapDispatchToProps = {
   userSetLoginError: ACTIONS.userSetLoginError,
   authLoginWithSocial: ACTIONS.authLoginWithSocial,
   modalShowDialog: MODAL_ACTIONS.modalShowDialog,
+  authGotOauthEvent: ACTIONS.authGotOauthEvent,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
@@ -39,6 +40,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
   userSetLoginError,
   authLoginWithSocial,
   modalShowDialog,
+  authGotOauthEvent,
 }) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -67,21 +69,9 @@ const LoginDialogUnconnected: FC<IProps> = ({
     []
   );
 
-  const onMessage = useCallback(
-    (event: MessageEvent) => {
-      if (!event?.data?.type) return;
-
-      switch (event?.data?.type) {
-        case 'oauth_processed':
-          return authLoginWithSocial(event?.data?.payload?.token);
-        case 'oauth_error':
-          return userSetLoginError(event?.data?.payload?.error);
-        default:
-          return;
-      }
-    },
-    [authLoginWithSocial, userSetLoginError]
-  );
+  const onMessage = useCallback((event: IOAuthEvent) => authGotOauthEvent(event), [
+    authGotOauthEvent,
+  ]);
 
   useEffect(() => {
     if (error) userSetLoginError(null);

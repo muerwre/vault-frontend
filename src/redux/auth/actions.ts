@@ -1,6 +1,6 @@
 import { AUTH_USER_ACTIONS } from '~/redux/auth/constants';
 import { IAuthState, ISocialProvider, IUser } from '~/redux/auth/types';
-import { IMessage } from '../types';
+import { IMessage, IOAuthEvent } from '../types';
 
 export const userSendLoginRequest = ({
   username,
@@ -132,4 +132,9 @@ export const authLoginWithSocial = (token: string, username?: string, password?:
   token,
   username,
   password,
+});
+
+export const authGotOauthEvent = (event: IOAuthEvent) => ({
+  type: AUTH_USER_ACTIONS.GOT_OAUTH_EVENT,
+  event,
 });

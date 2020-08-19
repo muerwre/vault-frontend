@@ -206,3 +206,14 @@ export interface IEmbed {
     duration: string;
   };
 }
+
+export type IOAuthEvent = MessageEvent & {
+  data: {
+    type: 'oauth_processed' | 'oauth_error';
+    payload: {
+      token: string;
+      error: string;
+      needs_register: boolean;
+    };
+  };
+};
