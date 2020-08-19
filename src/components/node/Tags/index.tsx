@@ -27,7 +27,7 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
 
   const [catTags, ordinaryTags] = useMemo(
     () =>
-      tags.reduce(
+      (tags || []).reduce(
         (obj, tag) =>
           tag.title.substr(0, 1) === '/' ? [[...obj[0], tag], obj[1]] : [obj[0], [...obj[1], tag]],
         [[], []]
