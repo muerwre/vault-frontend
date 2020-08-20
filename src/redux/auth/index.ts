@@ -47,6 +47,16 @@ const INITIAL_STATE: IAuthState = {
     is_succesfull: false,
     error: null,
   },
+
+  register_social: {
+    errors: {
+      username: '',
+      password: '',
+    },
+    error: '',
+    token: '',
+    is_loading: false,
+  },
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

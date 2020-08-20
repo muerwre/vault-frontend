@@ -1,9 +1,9 @@
-// create-reducer.ts
+// create-index.ts
 import { Action } from 'redux';
 
 type Handlers<State, Types extends string, Actions extends Action<Types>> = {
-  readonly [Type in Types]: (state: State, action: Actions) => State
-}
+  readonly [Type in Types]: (state: State, action: Actions) => State;
+};
 
 // export const createReducer = <State, Types extends string, Actions extends Action<Types>>(
 //   initialState: State,
@@ -11,9 +11,5 @@ type Handlers<State, Types extends string, Actions extends Action<Types>> = {
 // ) => (state = initialState, action: Actions) =>
 //   handlers.hasOwnProperty(action.type) ? handlers[action.type as Types](state, action) : state;
 
-export const createReducer = (
-  initialState,
-  handlers,
-) => (state = initialState, action) => (handlers.hasOwnProperty(action.type)
-  ? handlers[action.type](state, action)
-  : state);
+export const createReducer = (initialState, handlers) => (state = initialState, action) =>
+  handlers.hasOwnProperty(action.type) ? handlers[action.type](state, action) : state;

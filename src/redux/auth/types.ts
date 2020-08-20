@@ -74,4 +74,14 @@ export type IAuthState = Readonly<{
     is_succesfull: boolean;
     error: string;
   };
+
+  register_social: {
+    errors: {
+      username: string;
+      password: string;
+    };
+    error: string;
+    token: string;
+    is_loading: boolean;
+  };
 }>;

@@ -138,3 +138,15 @@ export const authGotOauthEvent = (event: IOAuthEvent) => ({
   type: AUTH_USER_ACTIONS.GOT_OAUTH_EVENT,
   event,
 });
+
+export const authSetRegisterSocial = (register_social: Partial<IAuthState['register_social']>) => ({
+  type: AUTH_USER_ACTIONS.SET_REGISTER_SOCIAL,
+  register_social,
+});
+
+export const authSetRegisterSocialErrors = (
+  errors: Partial<IAuthState['register_social']['errors']>
+) => ({
+  type: AUTH_USER_ACTIONS.SET_REGISTER_SOCIAL_ERRORS,
+  errors,
+});

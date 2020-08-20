@@ -7,7 +7,7 @@ import { connectRouter, RouterState, routerMiddleware } from 'connected-react-ro
 import { createBrowserHistory } from 'history';
 import { PersistConfig, Persistor } from 'redux-persist/es/types';
 
-import auth from '~/redux/auth/reducer';
+import auth from '~/redux/auth';
 import authSaga from '~/redux/auth/sagas';
 import { IAuthState } from '~/redux/auth/types';
 

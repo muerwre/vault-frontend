@@ -64,6 +64,7 @@ const setRestore: ActionHandler<typeof ActionCreators.authSetRestore> = (state, 
     ...restore,
   },
 });
+
 const setSocials: ActionHandler<typeof ActionCreators.authSetSocials> = (state, { socials }) => ({
   ...state,
   profile: {
@@ -71,6 +72,31 @@ const setSocials: ActionHandler<typeof ActionCreators.authSetSocials> = (state, 
     socials: {
       ...state.profile.socials,
       ...socials,
+    },
+  },
+});
+
+const setRegisterSocial: ActionHandler<typeof ActionCreators.authSetRegisterSocial> = (
+  state,
+  { register_social }
+) => ({
+  ...state,
+  register_social: {
+    ...state.register_social,
+    ...register_social,
+  },
+});
+
+const setRegisterSocialErrors: ActionHandler<typeof ActionCreators.authSetRegisterSocialErrors> = (
+  state,
+  { errors }
+) => ({
+  ...state,
+  register_social: {
+    ...state.register_social,
+    errors: {
+      ...state.register_social.errors,
+      ...errors,
     },
   },
 });
@@ -84,4 +110,6 @@ export const AUTH_USER_HANDLERS = {
   [AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES]: setLastSeenMessages,
   [AUTH_USER_ACTIONS.SET_RESTORE]: setRestore,
   [AUTH_USER_ACTIONS.SET_SOCIALS]: setSocials,
+  [AUTH_USER_ACTIONS.SET_REGISTER_SOCIAL]: setRegisterSocial,
+  [AUTH_USER_ACTIONS.SET_REGISTER_SOCIAL_ERRORS]: setRegisterSocialErrors,
 };
