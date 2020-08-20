@@ -7,13 +7,14 @@ import { DialogTitle } from '~/components/dialogs/DialogTitle';
 import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
 import styles from './styles.scss';
+import { selectAuthRegisterSocial } from '~/redux/auth/selectors';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = selectAuthRegisterSocial;
 const mapDispatchToProps = {};
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
 
-const LoginSocialRegisterDialogUnconnected: FC<Props> = ({ onRequestClose }) => {
+const LoginSocialRegisterDialogUnconnected: FC<Props> = ({ onRequestClose, token }) => {
   const [username, setUsername] = useState('');
 
   return (
@@ -22,6 +23,7 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({ onRequestClose }) => 
         <div className={styles.wrap}>
           <Group>
             <DialogTitle>Добро пожаловать в семью!</DialogTitle>
+            <InputText handler={setUsername} value={token} title="Token" />
             <InputText handler={setUsername} value={username} title="Юзернэйм" />
             <InputText handler={setUsername} value={username} title="Пароль" type="password" />
           </Group>

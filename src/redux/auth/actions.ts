@@ -134,8 +134,8 @@ export const authLoginWithSocial = (token: string, username?: string, password?:
   password,
 });
 
-export const authGotOauthEvent = (event: IOAuthEvent) => ({
-  type: AUTH_USER_ACTIONS.GOT_OAUTH_EVENT,
+export const authGotOauthLoginEvent = (event: IOAuthEvent) => ({
+  type: AUTH_USER_ACTIONS.GOT_OAUTH_LOGIN_EVENT,
   event,
 });
 

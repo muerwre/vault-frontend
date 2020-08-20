@@ -8,3 +8,4 @@ export const selectAuthProfile = (state: IState) => state.auth.profile;
 export const selectAuthUser = (state: IState) => state.auth.user;
 export const selectAuthUpdates = (state: IState) => state.auth.updates;
 export const selectAuthRestore = (state: IState) => state.auth.restore;
+export const selectAuthRegisterSocial = (state: IState) => state.auth.register_social;

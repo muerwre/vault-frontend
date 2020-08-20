@@ -28,7 +28,7 @@ const mapDispatchToProps = {
   userSetLoginError: ACTIONS.userSetLoginError,
   authLoginWithSocial: ACTIONS.authLoginWithSocial,
   modalShowDialog: MODAL_ACTIONS.modalShowDialog,
-  authGotOauthEvent: ACTIONS.authGotOauthEvent,
+  authGotOauthLoginEvent: ACTIONS.authGotOauthLoginEvent,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
@@ -39,9 +39,8 @@ const LoginDialogUnconnected: FC<IProps> = ({
   onRequestClose,
   userSendLoginRequest,
   userSetLoginError,
-  authLoginWithSocial,
   modalShowDialog,
-  authGotOauthEvent,
+  authGotOauthLoginEvent,
 }) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -76,9 +75,9 @@ const LoginDialogUnconnected: FC<IProps> = ({
         return;
       }
 
-      authGotOauthEvent(event.data);
+      authGotOauthLoginEvent(event.data);
     },
-    [authGotOauthEvent]
+    [authGotOauthLoginEvent]
   );
 
   useEffect(() => {

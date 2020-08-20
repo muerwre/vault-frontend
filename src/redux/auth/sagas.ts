@@ -4,7 +4,7 @@ import {
   authAttachSocial,
   authDropSocial,
   authGetMessages,
-  authGotOauthEvent,
+  authGotOauthLoginEvent,
   authLoadProfile,
   authLoggedIn,
   authLoginWithSocial,
@@ -15,6 +15,7 @@ import {
   authSendMessage,
   authSetLastSeenMessages,
   authSetProfile,
+  authSetRegisterSocial,
   authSetRestore,
   authSetSocials,
   authSetToken,
@@ -459,7 +460,9 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
       error,
     }: Unwrap<ReturnType<typeof apiLoginWithSocial>> = yield call(apiLoginWithSocial, { token });
 
+    // Backend asks us for account registration
     if (data?.needs_register) {
+      yield put(authSetRegisterSocial({ token }));
       yield put(modalShowDialog(DIALOGS.LOGIN_SOCIAL_REGISTER));
       return;
     }
@@ -479,7 +482,7 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
   }
 }
 
-function* gotOauthEvent({ event }: ReturnType<typeof authGotOauthEvent>) {
+function* gotOauthLoginEvent({ event }: ReturnType<typeof authGotOauthLoginEvent>) {
   if (!event?.type) return;
 
   switch (event.type) {
@@ -493,6 +496,7 @@ function* gotOauthEvent({ event }: ReturnType<typeof authGotOauthEvent>) {
       return;
   }
 }
+
 function* authSaga() {
   yield takeEvery(REHYDRATE, checkUserSaga);
   yield takeLatest([REHYDRATE, AUTH_USER_ACTIONS.LOGGED_IN], startPollingSaga);
@@ -513,7 +517,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.DROP_SOCIAL, dropSocial);
   yield takeLatest(AUTH_USER_ACTIONS.ATTACH_SOCIAL, attachSocial);
   yield takeLatest(AUTH_USER_ACTIONS.LOGIN_WITH_SOCIAL, loginWithSocial);
-  yield takeEvery(AUTH_USER_ACTIONS.GOT_OAUTH_EVENT, gotOauthEvent);
+  yield takeEvery(AUTH_USER_ACTIONS.GOT_OAUTH_LOGIN_EVENT, gotOauthLoginEvent);
 }
 
 export default authSaga;
