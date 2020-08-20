@@ -77,6 +77,8 @@ $input_shadow: inset transparentize(white, 0.9) 0 0 0 1px;
 $input_shadow_error: inset $red 0 0 0 1px;
 $input_shadow_filled: $input_shadow;
 
+$login_dialog_padding: $gap $gap 30px $gap;
+
 @mixin outer_shadow() {
   box-shadow: inset transparentize(white, 0.95) 0 1px, transparentize(black, 0.8) -1px -1px;
 }
