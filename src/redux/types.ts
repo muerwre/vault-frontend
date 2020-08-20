@@ -217,6 +217,5 @@ export type IOAuthEvent = {
   payload: {
     token: string;
     error: string;
-    needs_register: boolean;
   };
 };

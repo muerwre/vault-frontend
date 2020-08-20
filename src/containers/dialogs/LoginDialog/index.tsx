@@ -17,6 +17,7 @@ import { ISocialProvider } from '~/redux/auth/types';
 import pick from 'ramda/es/pick';
 import { LoginDialogButtons } from '~/containers/dialogs/LoginDialogButtons';
 import { IOAuthEvent, OAUTH_EVENT_TYPES } from '~/redux/types';
+import { DialogTitle } from '~/components/dialogs/DialogTitle';
 
 const mapStateToProps = state => ({
   ...pick(['error', 'is_registering'], selectAuthLogin(state)),
@@ -103,7 +104,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
           <Padder>
             <div className={styles.wrap}>
               <Group>
-                <h2>РЕШИТЕЛЬНО ВОЙТИ</h2>
+                <DialogTitle>Решительно войти</DialogTitle>
 
                 <InputText title="Логин" handler={setUserName} value={username} autoFocus />
 
