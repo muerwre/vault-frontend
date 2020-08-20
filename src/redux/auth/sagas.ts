@@ -13,9 +13,11 @@ import {
   authRequestRestoreCode,
   authRestorePassword,
   authSendMessage,
+  authSendRegisterSocial,
   authSetLastSeenMessages,
   authSetProfile,
   authSetRegisterSocial,
+  authSetRegisterSocialErrors,
   authSetRestore,
   authSetSocials,
   authSetToken,
@@ -46,6 +48,7 @@ import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
 import {
   selectAuth,
   selectAuthProfile,
+  selectAuthRegisterSocial,
   selectAuthRestore,
   selectAuthUpdates,
   selectAuthUser,
@@ -497,6 +500,40 @@ function* gotOauthLoginEvent({ event }: ReturnType<typeof authGotOauthLoginEvent
   }
 }
 
+function* authRegisterSocial({ username, password }: ReturnType<typeof authSendRegisterSocial>) {
+  try {
+    yield put(authSetRegisterSocial({ error: '' }));
+
+    const { token }: Unwrap<ReturnType<typeof selectAuthRegisterSocial>> = yield select(
+      selectAuthRegisterSocial
+    );
+
+    const {
+      data,
+      error,
+    }: Unwrap<ReturnType<typeof apiLoginWithSocial>> = yield call(apiLoginWithSocial, {
+      token,
+      username,
+      password,
+    });
+
+    if (data?.errors) {
+      yield put(authSetRegisterSocialErrors(data.errors));
+    } else if (data?.error) {
+      throw new Error(error);
+    }
+
+    if (data.token) {
+      yield put(authSetToken(data.token));
+      yield call(refreshUser);
+      yield put(modalSetShown(false));
+      return;
+    }
+  } catch (e) {
+    yield put(authSetRegisterSocial({ error: e.message }));
+  }
+}
+
 function* authSaga() {
   yield takeEvery(REHYDRATE, checkUserSaga);
   yield takeLatest([REHYDRATE, AUTH_USER_ACTIONS.LOGGED_IN], startPollingSaga);
@@ -518,6 +555,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.ATTACH_SOCIAL, attachSocial);
   yield takeLatest(AUTH_USER_ACTIONS.LOGIN_WITH_SOCIAL, loginWithSocial);
   yield takeEvery(AUTH_USER_ACTIONS.GOT_OAUTH_LOGIN_EVENT, gotOauthLoginEvent);
+  yield takeEvery(AUTH_USER_ACTIONS.SEND_REGISTER_SOCIAL, authRegisterSocial);
 }
 
 export default authSaga;

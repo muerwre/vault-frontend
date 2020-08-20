@@ -140,6 +140,8 @@ export const apiLoginWithSocial = ({
   password?: string;
 }): Promise<IResultWithStatus<{
   token: string;
+  error: string;
+  errors: Record<string, string>;
   needs_register: boolean;
 }>> =>
   api

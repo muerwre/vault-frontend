@@ -10,7 +10,7 @@ import styles from './styles.scss';
 import { selectAuthRegisterSocial } from '~/redux/auth/selectors';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { useCloseOnEscape } from '~/utils/hooks';
-import { LoginSocialRegisterButtons } from '~/containers/dialogs/LogianSocialRegisterButtons';
+import { LoginSocialRegisterButtons } from '~/containers/dialogs/LoginSocialRegisterButtons';
 
 const mapStateToProps = selectAuthRegisterSocial;
 const mapDispatchToProps = {

@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { Button } from '~/components/input/Button';
-import styles from './styles.module.scss';
+import styles from './styles.scss';
 
 interface IProps {}
 
 const LoginSocialRegisterButtons: FC<IProps> = () => (
   <div className={styles.wrap}>
-    <Button stretchy>Зарегистрироваться</Button>
+    <Button>Впустите меня!</Button>
   </div>
 );
 
