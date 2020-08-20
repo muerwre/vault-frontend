@@ -1,4 +1,4 @@
-import { IModalState } from '~/redux/modal/reducer';
+import { IModalState } from '~/redux/modal/index';
 import { MODAL_ACTIONS } from '~/redux/modal/constants';
 import { IFile } from '../types';
 

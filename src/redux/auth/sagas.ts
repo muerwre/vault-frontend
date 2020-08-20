@@ -55,7 +55,7 @@ import { IMessageNotification, IResultWithStatus, OAUTH_EVENT_TYPES, Unwrap } fr
 import { IAuthState, IUser } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { selectModal } from '~/redux/modal/selectors';
-import { IModalState } from '~/redux/modal/reducer';
+import { IModalState } from '~/redux/modal';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 

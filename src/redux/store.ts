@@ -23,7 +23,7 @@ import uploadSaga from '~/redux/uploads/sagas';
 import player, { IPlayerState } from '~/redux/player/reducer';
 import playerSaga from '~/redux/player/sagas';
 
-import modal, { IModalState } from '~/redux/modal/reducer';
+import modal, { IModalState } from '~/redux/modal';
 import { modalSaga } from './modal/sagas';
 
 import { gotAuthPostMessage, authOpenProfile } from './auth/actions';

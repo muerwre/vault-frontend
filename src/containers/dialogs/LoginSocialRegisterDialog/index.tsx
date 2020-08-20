@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { IDialogProps } from '~/redux/modal/constants';
 import { BetterScrollDialog } from '~/containers/dialogs/BetterScrollDialog';
@@ -8,24 +8,66 @@ import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
 import styles from './styles.scss';
 import { selectAuthRegisterSocial } from '~/redux/auth/selectors';
+import * as AUTH_ACTIONS from '~/redux/auth/actions';
+import { useCloseOnEscape } from '~/utils/hooks';
 
 const mapStateToProps = selectAuthRegisterSocial;
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  authSetRegisterSocialErrors: AUTH_ACTIONS.authSetRegisterSocialErrors,
+  authSetRegisterSocial: AUTH_ACTIONS.authSetRegisterSocial,
+};
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
 
-const LoginSocialRegisterDialogUnconnected: FC<Props> = ({ onRequestClose, token }) => {
+const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
+  onRequestClose,
+  token,
+  errors,
+  error,
+
+  authSetRegisterSocialErrors,
+  authSetRegisterSocial,
+}) => {
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (errors.username) authSetRegisterSocialErrors({ username: '' });
+  }, [username]);
+
+  useEffect(() => {
+    if (errors.password) authSetRegisterSocialErrors({ password: '' });
+  }, [password]);
+
+  useEffect(() => {
+    if (error) authSetRegisterSocial({ error: '' });
+  }, [username, password]);
+
+  useCloseOnEscape(onRequestClose);
 
   return (
-    <BetterScrollDialog onClose={onRequestClose} width={300}>
+    <BetterScrollDialog onClose={onRequestClose} width={300} error={error}>
       <Padder>
         <div className={styles.wrap}>
           <Group>
             <DialogTitle>Добро пожаловать в семью!</DialogTitle>
+
             <InputText handler={setUsername} value={token} title="Token" />
-            <InputText handler={setUsername} value={username} title="Юзернэйм" />
-            <InputText handler={setUsername} value={username} title="Пароль" type="password" />
+
+            <InputText
+              handler={setUsername}
+              value={username}
+              title="Юзернэйм"
+              error={errors.username}
+            />
+
+            <InputText
+              handler={setPassword}
+              value={password}
+              title="Пароль"
+              type="password"
+              error={errors.password}
+            />
           </Group>
         </div>
       </Padder>

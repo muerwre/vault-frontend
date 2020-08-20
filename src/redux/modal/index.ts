@@ -13,8 +13,8 @@ export interface IModalState {
 }
 
 const INITIAL_STATE: IModalState = {
-  is_shown: false,
-  dialog: null,
+  is_shown: true,
+  dialog: DIALOGS.LOGIN_SOCIAL_REGISTER,
   photoswipe: {
     images: [],
     index: 0,
