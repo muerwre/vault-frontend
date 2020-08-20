@@ -1,4 +1,4 @@
-// create-index.ts
+// create-index.tsx
 import { Action } from 'redux';
 
 type Handlers<State, Types extends string, Actions extends Action<Types>> = {

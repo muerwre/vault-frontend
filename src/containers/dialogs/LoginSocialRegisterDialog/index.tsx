@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { IDialogProps } from '~/redux/modal/constants';
 import { BetterScrollDialog } from '~/containers/dialogs/BetterScrollDialog';
@@ -10,11 +10,13 @@ import styles from './styles.scss';
 import { selectAuthRegisterSocial } from '~/redux/auth/selectors';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { useCloseOnEscape } from '~/utils/hooks';
+import { LoginSocialRegisterButtons } from '~/containers/dialogs/LogianSocialRegisterButtons';
 
 const mapStateToProps = selectAuthRegisterSocial;
 const mapDispatchToProps = {
   authSetRegisterSocialErrors: AUTH_ACTIONS.authSetRegisterSocialErrors,
   authSetRegisterSocial: AUTH_ACTIONS.authSetRegisterSocial,
+  authSendRegisterSocial: AUTH_ACTIONS.authSendRegisterSocial,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
@@ -27,9 +29,18 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
 
   authSetRegisterSocialErrors,
   authSetRegisterSocial,
+  authSendRegisterSocial,
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const onSubmit = useCallback(
+    (event: FormEvent) => {
+      event.preventDefault();
+      authSendRegisterSocial(username, password);
+    },
+    [username, password, authSendRegisterSocial]
+  );
 
   useEffect(() => {
     if (errors.username) authSetRegisterSocialErrors({ username: '' });
@@ -46,32 +57,39 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
   useCloseOnEscape(onRequestClose);
 
   return (
-    <BetterScrollDialog onClose={onRequestClose} width={300} error={error}>
-      <Padder>
-        <div className={styles.wrap}>
-          <Group>
-            <DialogTitle>Добро пожаловать в семью!</DialogTitle>
+    <form onSubmit={onSubmit}>
+      <BetterScrollDialog
+        onClose={onRequestClose}
+        width={300}
+        error={error}
+        footer={<LoginSocialRegisterButtons />}
+      >
+        <Padder>
+          <div className={styles.wrap}>
+            <Group>
+              <DialogTitle>Добро пожаловать в семью!</DialogTitle>
 
-            <InputText handler={setUsername} value={token} title="Token" />
+              <InputText handler={setUsername} value={token} title="Token" />
 
-            <InputText
-              handler={setUsername}
-              value={username}
-              title="Юзернэйм"
-              error={errors.username}
-            />
+              <InputText
+                handler={setUsername}
+                value={username}
+                title="Юзернэйм"
+                error={errors.username}
+              />
 
-            <InputText
-              handler={setPassword}
-              value={password}
-              title="Пароль"
-              type="password"
-              error={errors.password}
-            />
-          </Group>
-        </div>
-      </Padder>
-    </BetterScrollDialog>
+              <InputText
+                handler={setPassword}
+                value={password}
+                title="Пароль"
+                type="password"
+                error={errors.password}
+              />
+            </Group>
+          </div>
+        </Padder>
+      </BetterScrollDialog>
+    </form>
   );
 };
 

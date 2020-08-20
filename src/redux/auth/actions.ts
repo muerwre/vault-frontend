@@ -150,3 +150,9 @@ export const authSetRegisterSocialErrors = (
   type: AUTH_USER_ACTIONS.SET_REGISTER_SOCIAL_ERRORS,
   errors,
 });
+
+export const authSendRegisterSocial = (username: string, password: string) => ({
+  type: AUTH_USER_ACTIONS.SEND_REGISTER_SOCIAL,
+  username,
+  password,
+});
