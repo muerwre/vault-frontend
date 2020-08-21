@@ -23,7 +23,6 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & ID
 
 const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
   onRequestClose,
-  token,
   errors,
   error,
 
@@ -69,8 +68,6 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
             <Group>
               <DialogTitle>Добро пожаловать в семью!</DialogTitle>
 
-              <InputText handler={setUsername} value={token} title="Token" />
-
               <InputText
                 handler={setUsername}
                 value={username}
@@ -85,6 +82,11 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
                 type="password"
                 error={errors.password}
               />
+
+              <label className={styles.check}>
+                <input type="checkbox" />
+                <span>Это не мои штаны сушатся на радиаторе в третьей лаборатории</span>
+              </label>
             </Group>
           </div>
         </Padder>

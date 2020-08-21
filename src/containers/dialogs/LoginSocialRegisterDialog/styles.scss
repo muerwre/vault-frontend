@@ -1,3 +1,16 @@
 .wrap {
   padding: $login_dialog_padding;
 }
+
+.check {
+  padding: $gap 0 0 $gap / 2;
+  font: $font_12_medium;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  span {
+    padding-left: $gap;
+    color: darken(white, 50%);
+  }
+}

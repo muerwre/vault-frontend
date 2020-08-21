@@ -21,6 +21,7 @@
     "@types/node": "^11.13.22",
     "@types/ramda": "^0.26.33",
     "@types/react": "16.9.11",
+    "@types/react-redux": "^7.1.9",
     "@types/react-router": "^5.1.2",
     "autoresponsive-react": "^1.1.31",
     "awesome-typescript-loader": "^5.2.1",
@@ -114,7 +115,7 @@
     "tt-react-custom-scrollbars": "latest",
     "uuid4": "^1.1.4"
   },
-  "resolutions": { 
+  "resolutions": {
     "**/**/minimist": "^1.2.3",
     "**/**/acorn": "^6.4.1",
     "**/**/kind-of": "^6.0.3",
