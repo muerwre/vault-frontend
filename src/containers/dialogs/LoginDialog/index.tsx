@@ -55,7 +55,6 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
   const onRestoreRequest = useCallback(
     event => {
-      console.log('a', { MODAL_ACTIONS, modalShowDialog, userSetLoginError });
       event.preventDefault();
       modalShowDialog(DIALOGS.RESTORE_REQUEST);
     },
