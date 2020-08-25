@@ -13,7 +13,7 @@ export const postNode = ({
   node: INode;
 }): Promise<IResultWithStatus<INode>> =>
   api
-    .post(API.NODE.SAVE, { node }, configWithToken(access))
+    .post(API.NODE.SAVE, node, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 
@@ -124,9 +124,9 @@ export const updateNodeTags = ({
   id,
   tags,
   access,
-}: ReturnType<typeof nodeUpdateTags> & { access: string }): Promise<
-  IResultWithStatus<{ node: INode }>
-> =>
+}: ReturnType<typeof nodeUpdateTags> & { access: string }): Promise<IResultWithStatus<{
+  node: INode;
+}>> =>
   api
     .post(API.NODE.UPDATE_TAGS(id), { tags }, configWithToken(access))
     .then(resultMiddleware)
@@ -135,9 +135,9 @@ export const updateNodeTags = ({
 export const postNodeLike = ({
   id,
   access,
-}: ReturnType<typeof nodeLike> & { access: string }): Promise<
-  IResultWithStatus<{ is_liked: INode['is_liked'] }>
-> =>
+}: ReturnType<typeof nodeLike> & { access: string }): Promise<IResultWithStatus<{
+  is_liked: INode['is_liked'];
+}>> =>
   api
     .post(API.NODE.POST_LIKE(id), {}, configWithToken(access))
     .then(resultMiddleware)
@@ -146,9 +146,9 @@ export const postNodeLike = ({
 export const postNodeStar = ({
   id,
   access,
-}: ReturnType<typeof nodeStar> & { access: string }): Promise<
-  IResultWithStatus<{ is_liked: INode['is_liked'] }>
-> =>
+}: ReturnType<typeof nodeStar> & { access: string }): Promise<IResultWithStatus<{
+  is_liked: INode['is_liked'];
+}>> =>
   api
     .post(API.NODE.POST_STAR(id), {}, configWithToken(access))
     .then(resultMiddleware)
@@ -158,9 +158,9 @@ export const postNodeLock = ({
   id,
   is_locked,
   access,
-}: ReturnType<typeof nodeLock> & { access: string }): Promise<
-  IResultWithStatus<{ deleted_at: INode['deleted_at'] }>
-> =>
+}: ReturnType<typeof nodeLock> & { access: string }): Promise<IResultWithStatus<{
+  deleted_at: INode['deleted_at'];
+}>> =>
   api
     .post(API.NODE.POST_LOCK(id), { is_locked }, configWithToken(access))
     .then(resultMiddleware)
@@ -171,9 +171,10 @@ export const postNodeLockComment = ({
   is_locked,
   current,
   access,
-}: ReturnType<typeof nodeLockComment> & { access: string; current: INode['id'] }): Promise<
-  IResultWithStatus<{ deleted_at: INode['deleted_at'] }>
-> =>
+}: ReturnType<typeof nodeLockComment> & {
+  access: string;
+  current: INode['id'];
+}): Promise<IResultWithStatus<{ deleted_at: INode['deleted_at'] }>> =>
   api
     .post(API.NODE.POST_LOCK_COMMENT(current, id), { is_locked }, configWithToken(access))
     .then(resultMiddleware)
