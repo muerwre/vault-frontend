@@ -37,6 +37,7 @@ export const ERRORS = {
   CANT_SAVE_COMMENT: 'CantSaveComment',
   CANT_SAVE_NODE: 'CantSaveNode',
   INPUT_TOO_SHIRT: 'InputTooShirt',
+  CANT_SAVE_USER: 'CantSaveUser',
 };
 
 export const ERROR_LITERAL = {
@@ -79,4 +80,5 @@ export const ERROR_LITERAL = {
   [ERRORS.CANT_SAVE_COMMENT]: 'Не удалось сохранить коммент',
   [ERRORS.CANT_SAVE_NODE]: 'Не удалось сохранить пост',
   [ERRORS.INPUT_TOO_SHIRT]: 'Должно быть длиннее',
+  [ERRORS.CANT_SAVE_USER]: 'Не удалось сохранить пользователя',
 };

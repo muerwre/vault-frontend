@@ -508,14 +508,14 @@ function* authRegisterSocial({ username, password }: ReturnType<typeof authSendR
       selectAuthRegisterSocial
     );
 
-    const {
-      data,
-      error,
-    }: Unwrap<ReturnType<typeof apiLoginWithSocial>> = yield call(apiLoginWithSocial, {
-      token,
-      username,
-      password,
-    });
+    const { data, error }: Unwrap<ReturnType<typeof apiLoginWithSocial>> = yield call(
+      apiLoginWithSocial,
+      {
+        token,
+        username,
+        password,
+      }
+    );
 
     if (data?.errors) {
       yield put(authSetRegisterSocialErrors(data.errors));
