@@ -11,12 +11,16 @@
   font: $font_14_semibold;
   align-self: flex-start;
   padding: 0 8px 0 0;
-  // box-shadow: $shadow_depth_2;
   margin: 0 $gap $gap 0;
   position: relative;
 
   &:global(.is_hoverable) {
     cursor: pointer;
+  }
+
+  &:global(.is_editing) {
+    cursor: pointer;
+    background-color: lighten($tag_bg, 10%);
   }
 
   &:global(.red) {

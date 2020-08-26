@@ -77,9 +77,15 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
 
   const onSubmit = useCallback(() => {
     const title = input && input.trim();
-    const items = title ? [...data, { title }] : data;
+    const items = (title ? [...data, { title }] : data)
+      .filter(tag => tag.title.length > 0)
+      .map(tag => ({
+        ...tag,
+        title: tag.title.toLowerCase(),
+      }));
 
     if (!items.length) return;
+
     setData(items);
     setInput('');
     onTagsChange(uniq([...tags, ...items]).map(tag => tag.title));
@@ -100,7 +106,7 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
       ))}
 
       {data.map(tag => (
-        <Tag key={tag.title} tag={tag} />
+        <Tag key={tag.title} tag={tag} is_editing />
       ))}
 
       {is_editable && (

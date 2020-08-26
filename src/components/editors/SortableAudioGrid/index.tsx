@@ -18,7 +18,10 @@ const SortableAudioGrid = SortableContainer(
     locked: IUploadStatus[];
     onDrop: (file_id: IFile['id']) => void;
     onTitleChange: (file_id: IFile['id'], title: IFile['metadata']['title']) => void;
-  }) => (
+  }) => {
+    console.log(locked);
+
+    return (
       <div className={styles.grid}>
         {items
           .filter(file => file && file.id)
@@ -34,7 +37,8 @@ const SortableAudioGrid = SortableContainer(
           </SortableAudioGridItem>
         ))}
       </div>
-    )
+    );
+  }
 );
 
 export { SortableAudioGrid };

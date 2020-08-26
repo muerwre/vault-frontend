@@ -240,7 +240,8 @@ function* onCancelCommentEdit({ id }: ReturnType<typeof nodeCancelCommentEdit>) 
 }
 
 function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
-  yield delay(1000);
+  yield delay(100);
+
   const {
     data: { node },
   }: IResultWithStatus<{ node: INode }> = yield call(reqWrapper, updateNodeTags, { id, tags });

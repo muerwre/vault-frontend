@@ -1,10 +1,10 @@
-import React, { FC, useCallback, KeyboardEventHandler, useEffect, useMemo, memo } from 'react';
+import React, { FC, KeyboardEventHandler, memo, useCallback, useEffect, useMemo } from 'react';
 import { Textarea } from '~/components/input/Textarea';
 import * as styles from './styles.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import assocPath from 'ramda/es/assocPath';
-import { InputHandler, IFileWithUUID, IFile } from '~/redux/types';
+import { IFile, IFileWithUUID, InputHandler } from '~/redux/types';
 import { connect } from 'react-redux';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
@@ -233,6 +233,10 @@ const CommentFormUnconnected: FC<IProps> = memo(
 
     const placeholder = getRandomPhrase('SIMPLE');
 
+    const hasImageAttaches = images.length > 0 || locked_images.length > 0;
+    const hasAudioAttaches = audios.length > 0 || locked_audios.length > 0;
+    const hasAttaches = hasImageAttaches || hasAudioAttaches;
+
     return (
       <form onSubmit={onSubmit} className={styles.wrap}>
         <div className={styles.input}>
@@ -246,9 +250,9 @@ const CommentFormUnconnected: FC<IProps> = memo(
           />
         </div>
 
-        {(!!images.length || !!audios.length) && (
+        {hasAttaches && (
           <div className={styles.attaches}>
-            {!!images.length && (
+            {hasImageAttaches && (
               <SortableImageGrid
                 onDrop={onFileDrop}
                 onSortEnd={onImageMove}
@@ -261,7 +265,7 @@ const CommentFormUnconnected: FC<IProps> = memo(
               />
             )}
 
-            {(!!audios.length || !!locked_audios.length) && (
+            {hasAudioAttaches && (
               <SortableAudioGrid
                 items={audios}
                 onDrop={onFileDrop}
