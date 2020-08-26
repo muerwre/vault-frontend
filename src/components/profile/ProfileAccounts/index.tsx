@@ -122,11 +122,23 @@ const ProfileAccountsUnconnected: FC<IProps> = ({
       )}
 
       <Group horizontal className={styles.buttons}>
-        <Button size="small" iconLeft="vk" color="gray" onClick={openOauthWindow('vkontakte')}>
+        <Button
+          size="small"
+          type="button"
+          iconLeft="vk"
+          color="gray"
+          onClick={openOauthWindow('vkontakte')}
+        >
           Вконтакте
         </Button>
 
-        <Button size="small" iconLeft="google" color="gray" onClick={openOauthWindow('google')}>
+        <Button
+          size="small"
+          type="button"
+          iconLeft="google"
+          color="gray"
+          onClick={openOauthWindow('google')}
+        >
           Google
         </Button>
       </Group>

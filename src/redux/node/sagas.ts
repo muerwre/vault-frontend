@@ -82,6 +82,7 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   yield put(nodeSetSaveErrors({}));
 
   const {
+    error,
     data: { errors, node: result },
   } = yield call(reqWrapper, postNode, { node });
 
@@ -89,8 +90,8 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
     return yield put(nodeSetSaveErrors(errors));
   }
 
-  if (!result || !result.id) {
-    return yield put(nodeSetSaveErrors({ error: ERRORS.EMPTY_RESPONSE }));
+  if (error || !result || !result.id) {
+    return yield put(nodeSetSaveErrors({ error: error || ERRORS.CANT_SAVE_NODE }));
   }
 
   const nodes = yield select(selectFlowNodes);

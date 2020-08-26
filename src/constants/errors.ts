@@ -35,6 +35,7 @@ export const ERRORS = {
   USER_EXIST_WITH_SOCIAL: 'User_Exist_With_Social',
   USER_EXIST_WITH_USERNAME: 'User_Exist_With_Username',
   CANT_SAVE_COMMENT: 'CantSaveComment',
+  CANT_SAVE_NODE: 'CantSaveNode',
 };
 
 export const ERROR_LITERAL = {
@@ -75,4 +76,5 @@ export const ERROR_LITERAL = {
   [ERRORS.USER_EXIST_WITH_SOCIAL]: 'У кого-то уже привязан этот аккаунт',
   [ERRORS.USER_EXIST_WITH_USERNAME]: 'Имя пользователя занято',
   [ERRORS.CANT_SAVE_COMMENT]: 'Не удалось сохранить коммент',
+  [ERRORS.CANT_SAVE_NODE]: 'Не удалось сохранить пост',
 };
