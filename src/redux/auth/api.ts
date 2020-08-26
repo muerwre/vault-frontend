@@ -66,7 +66,7 @@ export const apiAuthGetUpdates = ({
 
 export const apiUpdateUser = ({ access, user }): Promise<IResultWithStatus<{ user: IUser }>> =>
   api
-    .patch(API.USER.ME, { user }, configWithToken(access))
+    .patch(API.USER.ME, user, configWithToken(access))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 
