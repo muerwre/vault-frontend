@@ -36,6 +36,7 @@ export const ERRORS = {
   USER_EXIST_WITH_USERNAME: 'User_Exist_With_Username',
   CANT_SAVE_COMMENT: 'CantSaveComment',
   CANT_SAVE_NODE: 'CantSaveNode',
+  INPUT_TOO_SHIRT: 'InputTooShirt',
 };
 
 export const ERROR_LITERAL = {
@@ -77,4 +78,5 @@ export const ERROR_LITERAL = {
   [ERRORS.USER_EXIST_WITH_USERNAME]: 'Имя пользователя занято',
   [ERRORS.CANT_SAVE_COMMENT]: 'Не удалось сохранить коммент',
   [ERRORS.CANT_SAVE_NODE]: 'Не удалось сохранить пост',
+  [ERRORS.INPUT_TOO_SHIRT]: 'Должно быть длиннее',
 };
