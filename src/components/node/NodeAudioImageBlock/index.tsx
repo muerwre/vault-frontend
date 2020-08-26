@@ -15,6 +15,8 @@ const NodeAudioImageBlock: FC<IProps> = ({ node }) => {
     [node.files]
   );
 
+  if (images.length === 0) return null;
+
   return (
     <div className={styles.wrap}>
       <div
