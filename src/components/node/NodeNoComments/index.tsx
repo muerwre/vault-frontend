@@ -20,7 +20,7 @@ const NodeNoComments: FC<IProps> = ({ is_loading = false, count = 3 }) => {
   return (
     <Group className={classNames(styles.wrap, { is_loading })}>
       {items}
-      <div className={styles.nothing}>{!is_loading && t(ERRORS.NO_COMMENTS)}</div>
+      {is_loading && <div className={styles.nothing}>{t(ERRORS.NO_COMMENTS)}</div>}
     </Group>
   );
 };
