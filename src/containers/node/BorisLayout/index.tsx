@@ -96,7 +96,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
             {is_user && <NodeCommentForm is_before />}
 
             {is_loading_comments ? (
-              <NodeNoComments is_loading />
+              <NodeNoComments is_loading count={7} />
             ) : (
               <NodeComments
                 comments={comments}

@@ -1,6 +1,5 @@
 .wrap {
   user-select: none;
-  // height: 300px;
   overflow: hidden;
   position: relative;
   flex: 0 0 auto;
@@ -38,8 +37,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  text-transform: uppercase;
-  font: $font_18_semibold;
-  color: transparentize(white, 0.5);
   flex: 0 0 $comment_height;
+}
+
+.nothing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font: $font_18_semibold;
+  text-transform: uppercase;
+  color: darken(white, 75%);
+  height: 20px;
+  margin-top: 0 !important;
 }
