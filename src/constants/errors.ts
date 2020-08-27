@@ -38,6 +38,8 @@ export const ERRORS = {
   CANT_SAVE_NODE: 'CantSaveNode',
   INPUT_TOO_SHIRT: 'InputTooShirt',
   CANT_SAVE_USER: 'CantSaveUser',
+  CANT_DELETE_COMMENT: 'CantDeleteComment',
+  CANT_RESTORE_COMMENT: 'CantRestoreComment',
 };
 
 export const ERROR_LITERAL = {
@@ -81,4 +83,6 @@ export const ERROR_LITERAL = {
   [ERRORS.CANT_SAVE_NODE]: 'Не удалось сохранить пост',
   [ERRORS.INPUT_TOO_SHIRT]: 'Должно быть длиннее',
   [ERRORS.CANT_SAVE_USER]: 'Не удалось сохранить пользователя',
+  [ERRORS.CANT_DELETE_COMMENT]: 'Не удалось удалить комментарий',
+  [ERRORS.CANT_RESTORE_COMMENT]: 'Не удалось восстановить комментарий',
 };
