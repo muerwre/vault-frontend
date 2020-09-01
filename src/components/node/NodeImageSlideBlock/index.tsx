@@ -24,7 +24,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
   modalShowPhotoswipe,
 }) => {
   const [current, setCurrent] = useState(0);
-  const [height, setHeight] = useState(320);
+  const [height, setHeight] = useState(window.innerHeight - 143);
   const [max_height, setMaxHeight] = useState(960);
   const [loaded, setLoaded] = useState<Record<number, boolean>>({});
   const refs = useRef<Record<number, HTMLDivElement>>({});
@@ -86,7 +86,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
     if (!wrap || !wrap.current) return () => clearTimeout(timeout);
 
     const { width } = wrap.current.getBoundingClientRect();
-    const fallback = (width * 9) / 16;
+    const fallback = window.innerHeight - 143;
 
     if (is_loading) {
       setHeight(fallback);
@@ -158,7 +158,6 @@ const NodeImageSlideBlock: FC<IProps> = ({
 
   const updateMaxHeight = useCallback(() => {
     if (!wrap.current) return;
-    const { width } = wrap.current.getBoundingClientRect();
     setMaxHeight(window.innerHeight - 143);
     normalizeOffset();
   }, [wrap, setMaxHeight, normalizeOffset]);
@@ -292,25 +291,26 @@ const NodeImageSlideBlock: FC<IProps> = ({
           onTouchStart={startDragging}
           ref={slide}
         >
-          {!is_loading &&
-            images.map((file, index) => (
-              <div
-                className={classNames(styles.image_wrap, {
-                  is_active: index === current && loaded[index],
-                })}
-                ref={setRef(index)}
-                key={node.updated_at + file.id}
-              >
-                <img
-                  className={styles.image}
-                  src={getURL(file, PRESETS['1600'])}
-                  alt=""
-                  key={file.id}
-                  onLoad={onImageLoad(index)}
-                  style={{ maxHeight: max_height }}
-                />
-              </div>
-            ))}
+          {images.map((file, index) => (
+            <div
+              className={classNames(styles.image_wrap, {
+                is_active: index === current && loaded[index],
+              })}
+              ref={setRef(index)}
+              key={node.updated_at + file.id}
+            >
+              <img
+                className={styles.image}
+                src={getURL(file, PRESETS['1600'])}
+                alt=""
+                key={file.id}
+                onLoad={onImageLoad(index)}
+                style={{
+                  maxHeight: max_height,
+                }}
+              />
+            </div>
+          ))}
         </div>
 
         {images.length > 1 && (
@@ -320,17 +320,6 @@ const NodeImageSlideBlock: FC<IProps> = ({
             {images.length}
           </div>
         )}
-
-        {/*
-      !is_loading && (
-        <ImageSwitcher
-          total={images.length}
-          current={current}
-          onChange={changeCurrent}
-          loaded={loaded}
-        />
-      )
-      */}
       </div>
 
       {images.length > 1 && (
