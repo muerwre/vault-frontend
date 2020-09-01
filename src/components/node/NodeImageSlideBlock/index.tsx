@@ -291,26 +291,25 @@ const NodeImageSlideBlock: FC<IProps> = ({
           onTouchStart={startDragging}
           ref={slide}
         >
-          {images.map((file, index) => (
-            <div
-              className={classNames(styles.image_wrap, {
-                is_active: index === current && loaded[index],
-              })}
-              ref={setRef(index)}
-              key={node.updated_at + file.id}
-            >
-              <img
-                className={styles.image}
-                src={getURL(file, PRESETS['1600'])}
-                alt=""
-                key={file.id}
-                onLoad={onImageLoad(index)}
-                style={{
-                  maxHeight: max_height,
-                }}
-              />
-            </div>
-          ))}
+          {!is_loading &&
+            images.map((file, index) => (
+              <div
+                className={classNames(styles.image_wrap, {
+                  is_active: index === current && loaded[index],
+                })}
+                ref={setRef(index)}
+                key={node.updated_at + file.id}
+              >
+                <img
+                  className={styles.image}
+                  src={getURL(file, PRESETS['1600'])}
+                  alt=""
+                  key={file.id}
+                  onLoad={onImageLoad(index)}
+                  style={{ maxHeight: max_height }}
+                />
+              </div>
+            ))}
         </div>
 
         {images.length > 1 && (
