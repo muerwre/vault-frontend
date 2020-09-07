@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, KeyboardEventHandler } from 'react';
+import React, { FC, useState, useCallback, KeyboardEventHandler, useMemo } from 'react';
 import styles from './styles.scss';
 import { Textarea } from '~/components/input/Textarea';
 import { Filler } from '~/components/containers/Filler';
@@ -22,19 +22,27 @@ type IProps = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & {
     id?: number;
     text?: string;
+    onCancel?: () => void;
   };
 
 const MessageFormUnconnected: FC<IProps> = ({
-  id = 0,
-  text: initialText = '',
   profile: { is_sending_messages, is_loading_messages, messages_error },
   authSendMessage,
+
+  id = 0,
+  text: initialText = '',
+  onCancel,
 }) => {
+  const isEditing = useMemo(() => id > 0, [id]);
   const [text, setText] = useState(initialText);
 
   const onSuccess = useCallback(() => {
     setText('');
-  }, [setText]);
+
+    if (isEditing) {
+      onCancel();
+    }
+  }, [setText, isEditing, onCancel]);
 
   const onSubmit = useCallback(() => {
     authSendMessage({ text, id }, onSuccess);
@@ -61,7 +69,7 @@ const MessageFormUnconnected: FC<IProps> = ({
           value={text}
           handler={setText}
           minRows={1}
-          maxRows={4}
+          maxRows={isEditing ? 15 : 5}
           seamless
           onKeyDown={onKeyDown}
           disabled={is_sending_messages}
@@ -73,6 +81,12 @@ const MessageFormUnconnected: FC<IProps> = ({
 
           {is_sending_messages && <LoaderCircle size={20} />}
 
+          {isEditing && (
+            <Button size="small" color="link" onClick={onCancel}>
+              Отмена
+            </Button>
+          )}
+
           <Button
             size="small"
             color="gray"
@@ -80,7 +94,7 @@ const MessageFormUnconnected: FC<IProps> = ({
             disabled={is_sending_messages}
             onClick={onSubmit}
           >
-            Сказать
+            {isEditing ? 'Схоронить' : 'Сказать'}
           </Button>
         </Group>
       </Group>

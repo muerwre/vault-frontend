@@ -31,7 +31,7 @@
       padding: 0;
 
       textarea {
-        padding: $gap;
+        padding: $gap / 2 $gap;
       }
     }
   }
@@ -77,20 +77,20 @@
     color: white;
     position: relative;
 
-    &::before {
-      content: ' ';
-      background: linear-gradient(270deg, $input_bg_color $gap, transparentize($input_bg_color, 1));
-      position: absolute;
-      width: $gap * 2;
-      height: $input_height;
-      top: 1px;
-      right: 1px;
-      transform: translateX(0);
-      transition: transform 0.25s;
-      border-radius: 0 $input_radius $input_radius 0;
-      pointer-events: none;
-      touch-action: none;
-    }
+    //&::before {
+    //  content: ' ';
+    //  background: linear-gradient(270deg, $input_bg_color $gap, transparentize($input_bg_color, 1));
+    //  position: absolute;
+    //  width: $gap * 2;
+    //  height: $input_height;
+    //  top: 1px;
+    //  right: 1px;
+    //  transform: translateX(0);
+    //  transition: transform 0.25s;
+    //  border-radius: 0 $input_radius $input_radius 0;
+    //  pointer-events: none;
+    //  touch-action: none;
+    //}
   }
 
   &.required {

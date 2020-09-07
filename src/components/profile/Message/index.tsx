@@ -13,10 +13,11 @@ interface IProps {
   incoming: boolean;
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
+  onCancelEdit: () => void;
   isEditing: boolean;
 }
 
-const Message: FC<IProps> = ({ message, incoming, onEdit, onDelete, isEditing }) => {
+const Message: FC<IProps> = ({ message, incoming, onEdit, onDelete, isEditing, onCancelEdit }) => {
   const onEditClicked = useCallback(() => onEdit(message.id), [message.id]);
   const onDeleteClicked = useCallback(() => onDelete(message.id), [message.id]);
 
@@ -24,7 +25,7 @@ const Message: FC<IProps> = ({ message, incoming, onEdit, onDelete, isEditing })
     <div className={classNames(styles.message, { [styles.incoming]: incoming })}>
       {isEditing ? (
         <div className={styles.form}>
-          <MessageForm id={message.id} text={message.text} />
+          <MessageForm id={message.id} text={message.text} onCancel={onCancelEdit} />
         </div>
       ) : (
         <div className={styles.text}>

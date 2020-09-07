@@ -23,6 +23,7 @@ const ProfileMessagesUnconnected: FC<IProps> = ({ profile, user: { id }, authGet
   const [editingMessageId, setEditingMessageId] = useState(0);
 
   const onEditMessage = useCallback((id: number) => setEditingMessageId(id), [setEditingMessageId]);
+  const onCancelEdit = useCallback(() => setEditingMessageId(0), [setEditingMessageId]);
   const onDeleteMessage = useCallback((id: number) => console.log({ id }), []);
 
   useEffect(() => {
@@ -57,6 +58,7 @@ const ProfileMessagesUnconnected: FC<IProps> = ({ profile, user: { id }, authGet
             onEdit={onEditMessage}
             onDelete={onDeleteMessage}
             isEditing={editingMessageId === message.id}
+            onCancelEdit={onCancelEdit}
           />
         ))}
 
