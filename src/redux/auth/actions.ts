@@ -65,6 +65,11 @@ export const authSendMessage = (message: Partial<IMessage>, onSuccess) => ({
   onSuccess,
 });
 
+export const authDeleteMessage = (id: IMessage['id']) => ({
+  type: AUTH_USER_ACTIONS.DELETE_MESSAGE,
+  id,
+});
+
 export const authSetUpdates = (updates: Partial<IAuthState['updates']>) => ({
   type: AUTH_USER_ACTIONS.SET_UPDATES,
   updates,

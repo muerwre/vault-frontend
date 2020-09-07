@@ -15,16 +15,22 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   authGetMessages: AUTH_ACTIONS.authGetMessages,
+  authDeleteMessage: AUTH_ACTIONS.authDeleteMessage,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const ProfileMessagesUnconnected: FC<IProps> = ({ profile, user: { id }, authGetMessages }) => {
+const ProfileMessagesUnconnected: FC<IProps> = ({
+  profile,
+  user: { id },
+  authGetMessages,
+  authDeleteMessage,
+}) => {
   const [editingMessageId, setEditingMessageId] = useState(0);
 
   const onEditMessage = useCallback((id: number) => setEditingMessageId(id), [setEditingMessageId]);
   const onCancelEdit = useCallback(() => setEditingMessageId(0), [setEditingMessageId]);
-  const onDeleteMessage = useCallback((id: number) => console.log({ id }), []);
+  const onDeleteMessage = useCallback((id: number) => authDeleteMessage(id), [authDeleteMessage]);
 
   useEffect(() => {
     if (profile.is_loading || !profile.user || !profile.user.username) return;
