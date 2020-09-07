@@ -2,14 +2,14 @@ import React, {
   ChangeEvent,
   LegacyRef,
   memo,
+  TextareaHTMLAttributes,
   useCallback,
-  useLayoutEffect,
+  useEffect,
   useRef,
   useState,
-  TextareaHTMLAttributes,
 } from 'react';
-import { getStyle } from '~/utils/dom';
 import classNames from 'classnames';
+import autosize from 'autosize';
 
 import * as styles from '~/styles/inputs.scss';
 import { Icon } from '../Icon';
@@ -55,34 +55,13 @@ const Textarea = memo<IProps>(
     const onFocus = useCallback(() => setFocused(true), [setFocused]);
     const onBlur = useCallback(() => setFocused(false), [setFocused]);
 
-    useLayoutEffect(() => {
-      const lineHeight = parseInt(getStyle(textarea.current, 'line-height'), 10) || 15;
+    useEffect(() => {
+      if (!textarea.current) return;
 
-      textarea.current.rows = 1; // reset number of rows in textarea
+      autosize(textarea.current);
 
-      const paddingTop = parseInt(getStyle(textarea.current, 'padding-top'), 10) || 0;
-      const paddingBottom = parseInt(getStyle(textarea.current, 'padding-bottom'), 10) || 0;
-
-      const actualScrollHeight =
-        (textarea.current.scrollHeight || 0) - (paddingTop + paddingBottom);
-
-      const rowsCount = Math.round(actualScrollHeight / lineHeight);
-
-      let currentRows = minRows;
-
-      if (rowsCount > maxRows) {
-        currentRows = maxRows;
-        textarea.current.scrollTop = textarea.current.scrollHeight;
-      } else if (rowsCount <= minRows) {
-        currentRows = minRows;
-      } else {
-        currentRows = rowsCount;
-      }
-
-      textarea.current.rows = currentRows;
-
-      setRows(currentRows);
-    }, [value, minRows, maxRows]);
+      return () => autosize.destroy(textarea.current);
+    }, [textarea.current]);
 
     return (
       <div
@@ -104,6 +83,10 @@ const Textarea = memo<IProps>(
             ref={textarea}
             onFocus={onFocus}
             onBlur={onBlur}
+            style={{
+              maxHeight: maxRows * 20,
+              minHeight: minRows * 20,
+            }}
             {...props}
           />
         </div>
