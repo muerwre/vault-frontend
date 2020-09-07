@@ -42,6 +42,7 @@
   display: flex;
   flex-direction: column;
   z-index: 6;
+  white-space: nowrap;
 
   animation: appear 0.25s forwards;
 }

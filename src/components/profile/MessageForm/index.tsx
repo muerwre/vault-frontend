@@ -18,21 +18,27 @@ const mapDispatchToProps = {
   authSendMessage: AUTH_ACTIONS.authSendMessage,
 };
 
-type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
+type IProps = ReturnType<typeof mapStateToProps> &
+  typeof mapDispatchToProps & {
+    id?: number;
+    text?: string;
+  };
 
 const MessageFormUnconnected: FC<IProps> = ({
+  id = 0,
+  text: initialText = '',
   profile: { is_sending_messages, is_loading_messages, messages_error },
   authSendMessage,
 }) => {
-  const [text, setText] = useState('');
+  const [text, setText] = useState(initialText);
 
   const onSuccess = useCallback(() => {
     setText('');
   }, [setText]);
 
   const onSubmit = useCallback(() => {
-    authSendMessage({ text }, onSuccess);
-  }, [authSendMessage, text, onSuccess]);
+    authSendMessage({ text, id }, onSuccess);
+  }, [authSendMessage, text, id, onSuccess]);
 
   const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
     ({ ctrlKey, key }) => {
@@ -82,9 +88,6 @@ const MessageFormUnconnected: FC<IProps> = ({
   );
 };
 
-const MessageForm = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MessageFormUnconnected);
+const MessageForm = connect(mapStateToProps, mapDispatchToProps)(MessageFormUnconnected);
 
 export { MessageForm };
