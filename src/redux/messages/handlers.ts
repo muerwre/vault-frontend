@@ -1,10 +1,10 @@
 import { MESSAGES_ACTIONS } from '~/redux/messages/constants';
 import { IMessagesState } from '~/redux/messages';
-import { messagesSetMessages } from '~/redux/messages/actions';
+import { messagesSet } from '~/redux/messages/actions';
 
 const setMessages = (
   state: IMessagesState,
-  { messages }: ReturnType<typeof messagesSetMessages>
+  { messages }: ReturnType<typeof messagesSet>
 ): IMessagesState => ({
   ...state,
   ...messages,

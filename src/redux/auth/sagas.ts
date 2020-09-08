@@ -57,7 +57,7 @@ import { selectModal } from '~/redux/modal/selectors';
 import { IModalState } from '~/redux/modal';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
-import { messagesSetMessages } from '~/redux/messages/actions';
+import { messagesSet } from '~/redux/messages/actions';
 
 export function* reqWrapper(requestAction, props = {}): ReturnType<typeof requestAction> {
   const access = yield select(selectToken);
@@ -155,7 +155,7 @@ function* loadProfile({ username }: ReturnType<typeof authLoadProfile>) {
   }
 
   yield put(authSetProfile({ is_loading: false, user }));
-  yield put(messagesSetMessages({ messages: [] }));
+  yield put(messagesSet({ messages: [] }));
   return true;
 }
 

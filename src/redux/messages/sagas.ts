@@ -5,7 +5,7 @@ import { apiAuthGetUserMessages, apiAuthSendMessage } from '~/redux/auth/api';
 import { ERRORS } from '~/constants/errors';
 import { IMessageNotification } from '~/redux/types';
 import { reqWrapper } from '~/redux/auth/sagas';
-import { messagesGetMessages, messagesSendMessage, messagesSetMessages, } from '~/redux/messages/actions';
+import { messagesGetMessages, messagesSendMessage, messagesSet } from '~/redux/messages/actions';
 import { MESSAGES_ACTIONS } from '~/redux/messages/constants';
 import { selectMessages } from '~/redux/messages/selectors';
 
@@ -13,7 +13,7 @@ function* getMessages({ username }: ReturnType<typeof messagesGetMessages>) {
   const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
 
   yield put(
-    messagesSetMessages({
+    messagesSet({
       is_loading_messages: true,
       messages:
         messages &&
@@ -28,14 +28,14 @@ function* getMessages({ username }: ReturnType<typeof messagesGetMessages>) {
 
   if (error || !data.messages) {
     return yield put(
-      messagesSetMessages({
+      messagesSet({
         is_loading_messages: false,
         messages_error: ERRORS.EMPTY_RESPONSE,
       })
     );
   }
 
-  yield put(messagesSetMessages({ is_loading_messages: false, messages: data.messages }));
+  yield put(messagesSet({ is_loading_messages: false, messages: data.messages }));
 
   const { notifications } = yield select(selectAuthUpdates);
 
@@ -58,7 +58,7 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMess
 
   if (!username) return;
 
-  yield put(messagesSetMessages({ is_sending_messages: true, messages_error: null }));
+  yield put(messagesSet({ is_sending_messages: true, messages_error: null }));
 
   const { error, data } = yield call(reqWrapper, apiAuthSendMessage, {
     username,
@@ -67,7 +67,7 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMess
 
   if (error || !data.message) {
     return yield put(
-      messagesSetMessages({
+      messagesSet({
         is_sending_messages: false,
         messages_error: error || ERRORS.EMPTY_RESPONSE,
       })
@@ -77,13 +77,13 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMess
   const { user }: ReturnType<typeof selectAuthProfile> = yield select(selectAuthProfile);
 
   if (user.username !== username) {
-    return yield put(messagesSetMessages({ is_sending_messages: false }));
+    return yield put(messagesSet({ is_sending_messages: false }));
   }
 
   const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
 
   yield put(
-    messagesSetMessages({
+    messagesSet({
       is_sending_messages: false,
       messages: [data.message, ...messages],
     })

@@ -18,7 +18,7 @@ export const messagesDeleteMessage = (id: IMessage['id']) => ({
   id,
 });
 
-export const messagesSetMessages = (messages: Partial<IMessagesState>) => ({
+export const messagesSet = (messages: Partial<IMessagesState>) => ({
   type: MESSAGES_ACTIONS.SET_MESSAGES,
   messages,
 });
