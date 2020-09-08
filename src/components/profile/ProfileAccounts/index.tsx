@@ -111,7 +111,7 @@ const ProfileAccountsUnconnected: FC<IProps> = ({
                   </div>
                 </div>
 
-                <div className={styles.account__name}>{it.name}</div>
+                <div className={styles.account__name}>{it.name || it.id}</div>
 
                 <div className={styles.account__drop}>
                   <Icon icon="close" size={22} onClick={() => authDropSocial(it.provider, it.id)} />
