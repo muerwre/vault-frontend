@@ -13,9 +13,10 @@ export const messagesSendMessage = (message: Partial<IMessage>, onSuccess) => ({
   onSuccess,
 });
 
-export const messagesDeleteMessage = (id: IMessage['id']) => ({
+export const messagesDeleteMessage = (id: IMessage['id'], is_locked: boolean) => ({
   type: MESSAGES_ACTIONS.DELETE_MESSAGE,
   id,
+  is_locked,
 });
 
 export const messagesSet = (messages: Partial<IMessagesState>) => ({

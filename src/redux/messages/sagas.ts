@@ -120,7 +120,7 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMess
   onSuccess();
 }
 
-function* deleteMessage({ id }: ReturnType<typeof messagesDeleteMessage>) {
+function* deleteMessage({ id, is_locked }: ReturnType<typeof messagesDeleteMessage>) {
   const username: ReturnType<typeof selectAuthProfileUsername> = yield select(
     selectAuthProfileUsername
   );
@@ -135,6 +135,7 @@ function* deleteMessage({ id }: ReturnType<typeof messagesDeleteMessage>) {
     {
       username,
       id,
+      is_locked,
     }
   );
 

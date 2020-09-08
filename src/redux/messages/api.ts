@@ -25,12 +25,17 @@ export const apiMessagesDeleteMessage = ({
   access,
   username,
   id,
+  is_locked,
 }: {
   access: string;
   username: string;
   id: number;
+  is_locked: boolean;
 }): Promise<IResultWithStatus<{ message: IMessage }>> =>
   api
-    .delete(API.USER.MESSAGE_DELETE(username, id), configWithToken(access))
+    .delete(
+      API.USER.MESSAGE_DELETE(username, id),
+      configWithToken(access, { params: { is_locked } })
+    )
     .then(resultMiddleware)
     .catch(errorMiddleware);

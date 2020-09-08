@@ -87,3 +87,15 @@ $outgoing_color: $comment_bg;
   padding: 2px $gap;
   border-radius: $radius;
 }
+
+.restore {
+  color: $red;
+  fill: $red;
+}
+
+.deleted {
+  background: mix($red, $content_bg, 50%);
+  border-radius: $radius $radius $radius 0;
+  padding: $gap / 2;
+  z-index: 2;
+}

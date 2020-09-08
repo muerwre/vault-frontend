@@ -33,7 +33,10 @@ const ProfileMessagesUnconnected: FC<IProps> = ({
 
   const onEditMessage = useCallback((id: number) => setEditingMessageId(id), [setEditingMessageId]);
   const onCancelEdit = useCallback(() => setEditingMessageId(0), [setEditingMessageId]);
-  const onDeleteMessage = useCallback((id: number) => messagesDeleteMessage(id), [
+  const onDeleteMessage = useCallback((id: number) => messagesDeleteMessage(id, true), [
+    messagesDeleteMessage,
+  ]);
+  const onRestoreMessage = useCallback((id: number) => messagesDeleteMessage(id, false), [
     messagesDeleteMessage,
   ]);
 
@@ -70,6 +73,7 @@ const ProfileMessagesUnconnected: FC<IProps> = ({
             onDelete={onDeleteMessage}
             isEditing={editingMessageId === message.id}
             onCancelEdit={onCancelEdit}
+            onRestore={onRestoreMessage}
           />
         ))}
 
