@@ -57,6 +57,7 @@
     "@hot-loader/react-dom": "^16.10.2",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
+    "autosize": "^4.0.2",
     "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
     "body-scroll-lock": "^2.6.4",

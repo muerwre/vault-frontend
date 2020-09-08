@@ -1,38 +1,52 @@
-import React, { FC, useState, useCallback, KeyboardEventHandler } from 'react';
+import React, { FC, KeyboardEventHandler, useCallback, useMemo, useState } from 'react';
 import styles from './styles.scss';
 import { Textarea } from '~/components/input/Textarea';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import { Group } from '~/components/containers/Group';
-import { selectAuthProfile } from '~/redux/auth/selectors';
 import { connect } from 'react-redux';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
-import * as AUTH_ACTIONS from '~/redux/auth/actions';
+import * as MESSAGES_ACTIONS from '~/redux/messages/actions';
 import { ERROR_LITERAL } from '~/constants/errors';
+import { selectMessages } from '~/redux/messages/selectors';
 
 const mapStateToProps = state => ({
-  profile: selectAuthProfile(state),
+  messages: selectMessages(state),
 });
 
 const mapDispatchToProps = {
-  authSendMessage: AUTH_ACTIONS.authSendMessage,
+  messagesSendMessage: MESSAGES_ACTIONS.messagesSendMessage,
 };
 
-type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
+type IProps = ReturnType<typeof mapStateToProps> &
+  typeof mapDispatchToProps & {
+    id?: number;
+    text?: string;
+    onCancel?: () => void;
+  };
 
 const MessageFormUnconnected: FC<IProps> = ({
-  profile: { is_sending_messages, is_loading_messages, messages_error },
-  authSendMessage,
+  messages: { is_sending_messages, is_loading_messages, messages_error },
+  messagesSendMessage,
+
+  id = 0,
+  text: initialText = '',
+  onCancel,
 }) => {
-  const [text, setText] = useState('');
+  const isEditing = useMemo(() => id > 0, [id]);
+  const [text, setText] = useState(initialText);
 
   const onSuccess = useCallback(() => {
     setText('');
-  }, [setText]);
+
+    if (isEditing) {
+      onCancel();
+    }
+  }, [setText, isEditing, onCancel]);
 
   const onSubmit = useCallback(() => {
-    authSendMessage({ text }, onSuccess);
-  }, [authSendMessage, text, onSuccess]);
+    messagesSendMessage({ text, id }, onSuccess);
+  }, [messagesSendMessage, text, id, onSuccess]);
 
   const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
     ({ ctrlKey, key }) => {
@@ -55,7 +69,7 @@ const MessageFormUnconnected: FC<IProps> = ({
           value={text}
           handler={setText}
           minRows={1}
-          maxRows={4}
+          maxRows={isEditing ? 15 : 5}
           seamless
           onKeyDown={onKeyDown}
           disabled={is_sending_messages}
@@ -67,6 +81,12 @@ const MessageFormUnconnected: FC<IProps> = ({
 
           {is_sending_messages && <LoaderCircle size={20} />}
 
+          {isEditing && (
+            <Button size="small" color="link" onClick={onCancel}>
+              Отмена
+            </Button>
+          )}
+
           <Button
             size="small"
             color="gray"
@@ -74,7 +94,7 @@ const MessageFormUnconnected: FC<IProps> = ({
             disabled={is_sending_messages}
             onClick={onSubmit}
           >
-            Сказать
+            {isEditing ? 'Схоронить' : 'Сказать'}
           </Button>
         </Group>
       </Group>
@@ -82,9 +102,6 @@ const MessageFormUnconnected: FC<IProps> = ({
   );
 };
 
-const MessageForm = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MessageFormUnconnected);
+const MessageForm = connect(mapStateToProps, mapDispatchToProps)(MessageFormUnconnected);
 
 export { MessageForm };

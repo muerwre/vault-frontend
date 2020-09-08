@@ -57,7 +57,6 @@ $outgoing_color: $comment_bg;
 
   background: 50% 50% no-repeat;
   background-size: cover;
-  // display: none;
 }
 
 .text {
@@ -65,8 +64,17 @@ $outgoing_color: $comment_bg;
   background: $outgoing_color;
   word-wrap: break-word;
   word-break: break-word;
-  width: 90%;
+  width: 100%;
   border-radius: $radius $radius 0 $radius;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.form {
+  width: 100%;
+  border-radius: $radius $radius 0 $radius;
+  background: $outgoing_color;
+  box-sizing: border-box;
 }
 
 .stamp {
@@ -78,4 +86,16 @@ $outgoing_color: $comment_bg;
   left: 42px;
   padding: 2px $gap;
   border-radius: $radius;
+}
+
+.restore {
+  color: $red;
+  fill: $red;
+}
+
+.deleted {
+  background: mix($red, $content_bg, 50%);
+  border-radius: $radius $radius $radius 0;
+  padding: $gap / 2;
+  z-index: 2;
 }
