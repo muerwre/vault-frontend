@@ -51,6 +51,20 @@ export const apiAuthSendMessage = ({
     .then(resultMiddleware)
     .catch(errorMiddleware);
 
+export const apiAuthDeleteMessage = ({
+  access,
+  username,
+  id,
+}: {
+  access: string;
+  username: string;
+  id: number;
+}): Promise<IResultWithStatus<{ message: IMessage }>> =>
+  api
+    .delete(API.USER.MESSAGE_DELETE(username, id), configWithToken(access))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
+
 export const apiAuthGetUpdates = ({
   access,
   exclude_dialogs,

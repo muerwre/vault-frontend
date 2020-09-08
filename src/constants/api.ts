@@ -11,6 +11,7 @@ export const API = {
     PROFILE: (username: string) => `/user/user/${username}/profile`,
     MESSAGES: (username: string) => `/user/user/${username}/messages`,
     MESSAGE_SEND: (username: string) => `/user/user/${username}/messages`,
+    MESSAGE_DELETE: (username: string, id: number) => `/user/user/${username}/messages/${id}`,
     GET_UPDATES: '/user/updates',
     REQUEST_CODE: (code?: string) => `/user/restore/${code || ''}`,
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
@@ -19,8 +20,6 @@ export const API = {
     DROP_SOCIAL: (provider, id) => `/oauth/${provider}/${id}`,
     ATTACH_SOCIAL: `/oauth/attach`,
     LOGIN_WITH_SOCIAL: `/oauth/login`,
-    // TODO: REMOVE
-    VKONTAKTE_LOGIN: `${process.env.API_HOST}/oauth/vkontakte/redirect/login`,
   },
   NODE: {
     SAVE: '/node/',
