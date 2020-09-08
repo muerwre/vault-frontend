@@ -82,12 +82,23 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMess
 
   const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
 
-  yield put(
-    messagesSet({
-      is_sending_messages: false,
-      messages: [data.message, ...messages],
-    })
-  );
+  if (message.id > 0) {
+    // modified
+    yield put(
+      messagesSet({
+        is_sending_messages: false,
+        messages: messages.map(item => (item.id === message.id ? data.message : item)),
+      })
+    );
+  } else {
+    // created
+    yield put(
+      messagesSet({
+        is_sending_messages: false,
+        messages: [data.message, ...messages],
+      })
+    );
+  }
 
   onSuccess();
 }
