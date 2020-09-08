@@ -1,9 +1,9 @@
-import { createStore, applyMiddleware, combineReducers, compose, Store } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore, Store } from 'redux';
 
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import createSagaMiddleware from 'redux-saga';
-import { connectRouter, RouterState, routerMiddleware } from 'connected-react-router';
+import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import { PersistConfig, Persistor } from 'redux-persist/es/types';
 
@@ -26,10 +26,13 @@ import playerSaga from '~/redux/player/sagas';
 import modal, { IModalState } from '~/redux/modal';
 import { modalSaga } from './modal/sagas';
 
-import { gotAuthPostMessage, authOpenProfile } from './auth/actions';
+import { authOpenProfile, gotAuthPostMessage } from './auth/actions';
 
 import boris, { IBorisState } from './boris/reducer';
 import borisSaga from './boris/sagas';
+
+import messages, { IMessagesState } from './messages';
+import messagesSaga from './messages/sagas';
 
 const authPersistConfig: PersistConfig = {
   key: 'auth',
@@ -58,6 +61,7 @@ export interface IState {
   flow: IFlowState;
   player: IPlayerState;
   boris: IBorisState;
+  messages: IMessagesState;
 }
 
 export const sagaMiddleware = createSagaMiddleware();
@@ -78,6 +82,7 @@ export const store = createStore(
     uploads,
     flow: persistReducer(flowPersistConfig, flow),
     player: persistReducer(playerPersistConfig, player),
+    messages,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
@@ -93,6 +98,7 @@ export function configureStore(): {
   sagaMiddleware.run(playerSaga);
   sagaMiddleware.run(modalSaga);
   sagaMiddleware.run(borisSaga);
+  sagaMiddleware.run(messagesSaga);
 
   window.addEventListener('message', message => {
     if (message && message.data && message.data.type === 'oauth_login' && message.data.token)

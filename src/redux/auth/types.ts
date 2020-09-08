@@ -1,4 +1,4 @@
-import { IFile, IMessage, INotification } from '../types';
+import { IFile, INotification } from '../types';
 
 export interface IToken {
   access: string;
@@ -52,12 +52,8 @@ export type IAuthState = Readonly<{
   profile: {
     tab: 'profile' | 'messages' | 'settings';
     is_loading: boolean;
-    is_loading_messages: boolean;
-    is_sending_messages: boolean;
 
     user: IUser;
-    messages: IMessage[];
-    messages_error: string;
     patch_errors: Record<string, string>;
 
     socials: {

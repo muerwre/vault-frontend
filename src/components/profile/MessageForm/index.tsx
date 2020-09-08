@@ -1,21 +1,21 @@
-import React, { FC, useState, useCallback, KeyboardEventHandler, useMemo } from 'react';
+import React, { FC, KeyboardEventHandler, useCallback, useMemo, useState } from 'react';
 import styles from './styles.scss';
 import { Textarea } from '~/components/input/Textarea';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import { Group } from '~/components/containers/Group';
-import { selectAuthProfile } from '~/redux/auth/selectors';
 import { connect } from 'react-redux';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
-import * as AUTH_ACTIONS from '~/redux/auth/actions';
+import * as MESSAGES_ACTIONS from '~/redux/messages/actions';
 import { ERROR_LITERAL } from '~/constants/errors';
+import { selectMessages } from '~/redux/messages/selectors';
 
 const mapStateToProps = state => ({
-  profile: selectAuthProfile(state),
+  messages: selectMessages(state),
 });
 
 const mapDispatchToProps = {
-  authSendMessage: AUTH_ACTIONS.authSendMessage,
+  messagesSendMessage: MESSAGES_ACTIONS.messagesSendMessage,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
@@ -26,8 +26,8 @@ type IProps = ReturnType<typeof mapStateToProps> &
   };
 
 const MessageFormUnconnected: FC<IProps> = ({
-  profile: { is_sending_messages, is_loading_messages, messages_error },
-  authSendMessage,
+  messages: { is_sending_messages, is_loading_messages, messages_error },
+  messagesSendMessage,
 
   id = 0,
   text: initialText = '',
@@ -45,8 +45,8 @@ const MessageFormUnconnected: FC<IProps> = ({
   }, [setText, isEditing, onCancel]);
 
   const onSubmit = useCallback(() => {
-    authSendMessage({ text, id }, onSuccess);
-  }, [authSendMessage, text, id, onSuccess]);
+    messagesSendMessage({ text, id }, onSuccess);
+  }, [messagesSendMessage, text, id, onSuccess]);
 
   const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
     ({ ctrlKey, key }) => {
