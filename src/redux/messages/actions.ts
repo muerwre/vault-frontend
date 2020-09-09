@@ -7,6 +7,15 @@ export const messagesGetMessages = (username: string) => ({
   username,
 });
 
+export const messagesRefreshMessages = () => ({
+  type: MESSAGES_ACTIONS.REFRESH_MESSAGES,
+});
+
+export const messagesLoadMoreMessages = (username: string) => ({
+  type: MESSAGES_ACTIONS.LOAD_MORE,
+  username,
+});
+
 export const messagesSendMessage = (message: Partial<IMessage>, onSuccess) => ({
   type: MESSAGES_ACTIONS.SEND_MESSAGE,
   message,

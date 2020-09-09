@@ -16,11 +16,13 @@ import { reqWrapper } from '~/redux/auth/sagas';
 import {
   messagesDeleteMessage,
   messagesGetMessages,
+  messagesRefreshMessages,
   messagesSendMessage,
   messagesSet,
 } from '~/redux/messages/actions';
 import { MESSAGES_ACTIONS } from '~/redux/messages/constants';
 import { selectMessages } from '~/redux/messages/selectors';
+import { sortCreatedAtDesc } from '~/utils/date';
 
 function* getMessages({ username }: ReturnType<typeof messagesGetMessages>) {
   const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
@@ -37,20 +39,27 @@ function* getMessages({ username }: ReturnType<typeof messagesGetMessages>) {
     })
   );
 
-  const { error, data } = yield call(reqWrapper, apiMessagesGetUserMessages, { username });
+  const {
+    error,
+    data,
+  }: Unwrap<ReturnType<typeof apiMessagesGetUserMessages>> = yield call(
+    reqWrapper,
+    apiMessagesGetUserMessages,
+    { username }
+  );
 
   if (error || !data.messages) {
     return yield put(
       messagesSet({
         is_loading_messages: false,
-        messages_error: ERRORS.EMPTY_RESPONSE,
+        error: ERRORS.EMPTY_RESPONSE,
       })
     );
   }
 
   yield put(messagesSet({ is_loading_messages: false, messages: data.messages }));
 
-  const { notifications } = yield select(selectAuthUpdates);
+  const { notifications }: ReturnType<typeof selectAuthUpdates> = yield select(selectAuthUpdates);
 
   // clear viewed message from notifcation list
   const filtered = notifications.filter(
@@ -71,7 +80,7 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMess
 
   if (!username) return;
 
-  yield put(messagesSet({ is_sending_messages: true, messages_error: null }));
+  yield put(messagesSet({ is_sending_messages: true, error: null }));
 
   const { error, data }: Unwrap<ReturnType<typeof apiMessagesSendMessage>> = yield call(
     reqWrapper,
@@ -86,7 +95,7 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMess
     return yield put(
       messagesSet({
         is_sending_messages: false,
-        messages_error: error || ERRORS.EMPTY_RESPONSE,
+        error: error || ERRORS.EMPTY_RESPONSE,
       })
     );
   }
@@ -127,7 +136,7 @@ function* deleteMessage({ id, is_locked }: ReturnType<typeof messagesDeleteMessa
 
   if (!username) return;
 
-  yield put(messagesSet({ is_sending_messages: true, messages_error: null }));
+  yield put(messagesSet({ is_sending_messages: true, error: null }));
 
   const { error, data }: Unwrap<ReturnType<typeof apiMessagesDeleteMessage>> = yield call(
     reqWrapper,
@@ -165,8 +174,47 @@ function* deleteMessage({ id, is_locked }: ReturnType<typeof messagesDeleteMessa
   );
 }
 
+function* refreshMessages({}: ReturnType<typeof messagesRefreshMessages>) {
+  const username: ReturnType<typeof selectAuthProfileUsername> = yield select(
+    selectAuthProfileUsername
+  );
+
+  if (!username) return;
+
+  const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
+
+  yield put(messagesSet({ is_loading_messages: true }));
+
+  const after = messages.length > 0 ? messages[0].created_at : undefined;
+
+  const {
+    data,
+    error,
+  }: Unwrap<ReturnType<typeof apiMessagesGetUserMessages>> = yield call(
+    reqWrapper,
+    apiMessagesGetUserMessages,
+    { username, after }
+  );
+
+  yield put(messagesSet({ is_loading_messages: false }));
+
+  if (error) {
+    return yield put(
+      messagesSet({
+        error: error || ERRORS.EMPTY_RESPONSE,
+      })
+    );
+  }
+
+  if (!data.messages || !data.messages.length) return;
+
+  const newMessages = [...data.messages, ...messages].sort(sortCreatedAtDesc);
+  yield put(messagesSet({ messages: newMessages }));
+}
+
 export default function*() {
   yield takeLatest(MESSAGES_ACTIONS.GET_MESSAGES, getMessages);
   yield takeLatest(MESSAGES_ACTIONS.SEND_MESSAGE, sendMessage);
   yield takeLatest(MESSAGES_ACTIONS.DELETE_MESSAGE, deleteMessage);
+  yield takeLatest(MESSAGES_ACTIONS.REFRESH_MESSAGES, refreshMessages);
 }

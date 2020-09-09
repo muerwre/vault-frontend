@@ -16,6 +16,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   messagesGetMessages: AUTH_ACTIONS.messagesGetMessages,
+  messagesRefreshMessages: AUTH_ACTIONS.messagesRefreshMessages,
   messagesDeleteMessage: AUTH_ACTIONS.messagesDeleteMessage,
 };
 
@@ -27,6 +28,7 @@ const ProfileMessagesUnconnected: FC<IProps> = ({
   user: { id },
   messagesGetMessages,
   messagesDeleteMessage,
+  messagesRefreshMessages,
 }) => {
   const wasAtBottom = useRef(true);
   const [wrap, setWrap] = useState<HTMLDivElement>(null);
@@ -48,13 +50,10 @@ const ProfileMessagesUnconnected: FC<IProps> = ({
   }, [profile.user]);
 
   useEffect(() => {
-    if (profile.is_loading || !profile.user || !profile.user.username || messages.messages_error)
-      return;
-
-    const timer = setTimeout(() => messagesGetMessages(profile.user.username), 20000);
+    const timer = setInterval(messagesRefreshMessages, 20000);
 
     return () => clearTimeout(timer);
-  }, [profile.user, messages.messages]);
+  }, [messagesRefreshMessages]);
 
   const storeRef = useCallback(
     (div: HTMLDivElement) => {

@@ -26,7 +26,7 @@ type IProps = ReturnType<typeof mapStateToProps> &
   };
 
 const MessageFormUnconnected: FC<IProps> = ({
-  messages: { is_sending_messages, is_loading_messages, messages_error },
+  messages: { is_sending_messages, is_loading_messages, error },
   messagesSendMessage,
 
   id = 0,
@@ -57,8 +57,8 @@ const MessageFormUnconnected: FC<IProps> = ({
 
   return (
     <div className={styles.wrap}>
-      {messages_error && <div className={styles.error}>{ERROR_LITERAL[messages_error]}</div>}
-      {is_loading_messages && !messages_error && (
+      {error && <div className={styles.error}>{ERROR_LITERAL[error]}</div>}
+      {is_loading_messages && !error && (
         <Group className={styles.loader} horizontal>
           <LoaderCircle size={20} />
           <div>Обновляем</div>

@@ -5,9 +5,16 @@ import { API } from '~/constants/api';
 export const apiMessagesGetUserMessages = ({
   access,
   username,
+  after,
+  before,
+}: {
+  access: string;
+  username: string;
+  after?: string;
+  before?: string;
 }): Promise<IResultWithStatus<{ messages: IMessage[] }>> =>
   api
-    .get(API.USER.MESSAGES(username), configWithToken(access))
+    .get(API.USER.MESSAGES(username), configWithToken(access, { params: { after, before } }))
     .then(resultMiddleware)
     .catch(errorMiddleware);
 
