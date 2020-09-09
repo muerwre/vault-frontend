@@ -1,10 +1,9 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { selectAuthProfile, selectAuthUser } from '~/redux/auth/selectors';
 import styles from './styles.scss';
 import * as AUTH_ACTIONS from '~/redux/messages/actions';
 import { Message } from '~/components/profile/Message';
-import { Group } from '~/components/containers/Group';
 import pick from 'ramda/es/pick';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { selectMessages } from '~/redux/messages/selectors';
@@ -29,6 +28,8 @@ const ProfileMessagesUnconnected: FC<IProps> = ({
   messagesGetMessages,
   messagesDeleteMessage,
 }) => {
+  const wasAtBottom = useRef(true);
+  const [wrap, setWrap] = useState<HTMLDivElement>(null);
   const [editingMessageId, setEditingMessageId] = useState(0);
 
   const onEditMessage = useCallback((id: number) => setEditingMessageId(id), [setEditingMessageId]);
@@ -55,32 +56,71 @@ const ProfileMessagesUnconnected: FC<IProps> = ({
     return () => clearTimeout(timer);
   }, [profile.user, messages.messages]);
 
+  const storeRef = useCallback(
+    (div: HTMLDivElement) => {
+      if (!div || !div.parentElement) return;
+      const parent = div.parentElement;
+      parent.scrollTo(0, parent.scrollHeight);
+      setWrap(div);
+    },
+    [setWrap]
+  );
+
+  useLayoutEffect(() => {
+    const parent = wrap?.parentElement;
+
+    if (!parent) return;
+
+    if (wasAtBottom.current) {
+      parent.scrollTo(0, parent.scrollHeight);
+    }
+  }, [messages.messages]);
+
+  const onScroll = useCallback(() => {
+    const parent = wrap?.parentElement;
+
+    if (!parent) return;
+
+    const scrollPos = parent.scrollTop + parent.clientHeight;
+    wasAtBottom.current = parent.scrollHeight - scrollPos < 40;
+  }, [wrap]);
+
+  useEffect(() => {
+    const parent = wrap?.parentElement;
+    if (!parent) return;
+
+    parent.addEventListener('scroll', onScroll);
+    return () => parent.removeEventListener('scroll', onScroll);
+  }, [wrap, onScroll]);
+
   if (!messages.messages.length || profile.is_loading)
     return <NodeNoComments is_loading={messages.is_loading_messages || profile.is_loading} />;
 
   return (
-    <Group className={styles.messages}>
-      {messages.messages
-        .filter(message => !!message.text)
-        .map((
-          message // TODO: show files / memo
-        ) => (
-          <Message
-            message={message}
-            incoming={id !== message.from.id}
-            key={message.id}
-            onEdit={onEditMessage}
-            onDelete={onDeleteMessage}
-            isEditing={editingMessageId === message.id}
-            onCancelEdit={onCancelEdit}
-            onRestore={onRestoreMessage}
-          />
-        ))}
+    messages.messages.length > 0 && (
+      <div className={styles.messages} ref={storeRef}>
+        {messages.messages
+          .filter(message => !!message.text)
+          .map((
+            message // TODO: show files / memo
+          ) => (
+            <Message
+              message={message}
+              incoming={id !== message.from.id}
+              key={message.id}
+              onEdit={onEditMessage}
+              onDelete={onDeleteMessage}
+              isEditing={editingMessageId === message.id}
+              onCancelEdit={onCancelEdit}
+              onRestore={onRestoreMessage}
+            />
+          ))}
 
-      {!messages.is_loading_messages && messages.messages.length > 0 && (
-        <div className={styles.placeholder}>Когда-нибудь здесь будут еще сообщения</div>
-      )}
-    </Group>
+        {!messages.is_loading_messages && messages.messages.length > 0 && (
+          <div className={styles.placeholder}>Когда-нибудь здесь будут еще сообщения</div>
+        )}
+      </div>
+    )
   );
 };
 

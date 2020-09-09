@@ -12,6 +12,7 @@ import pick from 'ramda/es/pick';
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { ProfileSettings } from '~/components/profile/ProfileSettings';
 import { ProfileAccounts } from '~/components/profile/ProfileAccounts';
+import { MessageForm } from '~/components/profile/MessageForm';
 
 const TAB_CONTENT = {
   profile: <ProfileDescription />,
@@ -30,6 +31,14 @@ const mapDispatchToProps = {
 };
 
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
+
+const PROFILE_HEADERS = {
+  // messages: <MessageForm />,
+};
+
+const PROFILE_FOOTERS = {
+  messages: <MessageForm />,
+};
 
 const ProfileDialogUnconnected: FC<IProps> = ({
   onRequestClose,
@@ -51,8 +60,10 @@ const ProfileDialogUnconnected: FC<IProps> = ({
           user={user}
           tab={tab}
           setTab={setTab}
+          content={PROFILE_HEADERS[tab]}
         />
       }
+      footer={PROFILE_FOOTERS[tab]}
       backdrop={<CoverBackdrop cover={user && user.cover} />}
       onClose={onRequestClose}
     >

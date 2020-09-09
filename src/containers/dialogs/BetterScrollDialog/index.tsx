@@ -1,6 +1,6 @@
-import React, { FC, MouseEventHandler, useEffect, useRef, ReactElement } from 'react';
+import React, { FC, MouseEventHandler, ReactElement, useEffect, useRef, } from 'react';
 import * as styles from './styles.scss';
-import { enableBodyScroll, disableBodyScroll } from 'body-scroll-lock';
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { Icon } from '~/components/input/Icon';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 

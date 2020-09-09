@@ -1,12 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { IUser } from '~/redux/auth/types';
 import styles from './styles.scss';
 import { Group } from '~/components/containers/Group';
 import { Placeholder } from '~/components/placeholders/Placeholder';
-import { getURL, getPrettyDate } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
+import { getPrettyDate } from '~/utils/dom';
 import { ProfileTabs } from '../ProfileTabs';
-import { MessageForm } from '~/components/profile/MessageForm';
 import { ProfileAvatar } from '../ProfileAvatar';
 
 interface IProps {
@@ -17,13 +15,11 @@ interface IProps {
   is_own?: boolean;
 
   setTab?: (tab: string) => void;
+
+  content?: ReactNode;
 }
 
-const TAB_HEADERS = {
-  messages: <MessageForm />,
-};
-
-const ProfileInfo: FC<IProps> = ({ user, tab, is_loading, is_own, setTab }) => (
+const ProfileInfo: FC<IProps> = ({ user, tab, is_loading, is_own, setTab, content = null }) => (
   <div>
     <Group className={styles.wrap} horizontal>
       <ProfileAvatar />
@@ -41,7 +37,7 @@ const ProfileInfo: FC<IProps> = ({ user, tab, is_loading, is_own, setTab }) => (
 
     <ProfileTabs tab={tab} is_own={is_own} setTab={setTab} />
 
-    {TAB_HEADERS[tab] || null}
+    {content}
   </div>
 );
 
