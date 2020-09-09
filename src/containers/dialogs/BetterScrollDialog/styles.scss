@@ -21,8 +21,10 @@
   min-width: $cell;
   max-width: 400px;
   max-height: 100%;
+  max-height: calc(100vh - 75px);
   width: 100%;
   position: relative;
+  box-sizing: border-box;
 
   & > div:nth-child(2) {
     border-top-left-radius: $dialog_radius;
