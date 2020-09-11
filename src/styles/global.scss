@@ -154,3 +154,46 @@ a {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+@keyframes fading {
+  0% {
+    opacity: 1;
+    background: red;
+    transform: rotate(45deg);
+  }
+  100% {
+    opacity: 0;
+    background: blue;
+    transform: rotate(-45deg);
+  }
+}
+
+:global {
+  .fade-enter {
+    opacity: 0;
+    transition: opacity 0.5s;
+
+    &-active {
+      opacity: 1;
+      transition: opacity 0.5s;
+    }
+
+    &-done {
+      opacity: 1;
+    }
+  }
+
+  .fade-exit {
+    opacity: 1;
+    transition: opacity 0.5s;
+
+    &-active {
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    &-done {
+      opacity: 0;
+    }
+  }
+}

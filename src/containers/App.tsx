@@ -2,21 +2,15 @@ import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { hot } from 'react-hot-loader';
 import { ConnectedRouter } from 'connected-react-router';
-import { Switch, Route, Redirect } from 'react-router-dom';
 import { history } from '~/redux/store';
-import { FlowLayout } from '~/containers/flow/FlowLayout';
 import { MainLayout } from '~/containers/main/MainLayout';
 import { Sprites } from '~/sprites/Sprites';
-import { URLS } from '~/constants/urls';
 import { Modal } from '~/containers/dialogs/Modal';
 import { selectModal } from '~/redux/modal/selectors';
 import { BlurWrapper } from '~/components/containers/BlurWrapper';
 import { PageCover } from '~/components/containers/PageCover';
-import { NodeLayout } from './node/NodeLayout';
 import { BottomContainer } from '~/containers/main/BottomContainer';
-import { BorisLayout } from './node/BorisLayout';
-import { ErrorNotFound } from './pages/ErrorNotFound';
-import { ProfilePage } from './profile/ProfilePage';
+import { MainRouter } from '~/containers/main/MainRouter';
 
 const mapStateToProps = state => ({
   modal: selectModal(state),
@@ -35,15 +29,7 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
             <Modal />
             <Sprites />
 
-            <Switch>
-              <Route exact path={URLS.BASE} component={FlowLayout} />
-              <Route path={URLS.NODE_URL(':id')} component={NodeLayout} />
-              <Route path={URLS.BORIS} component={BorisLayout} />
-              <Route path={URLS.ERRORS.NOT_FOUND} component={ErrorNotFound} />
-              <Route path={URLS.PROFILE_PAGE(':username')} component={ProfilePage} />
-
-              <Redirect to="/" />
-            </Switch>
+            <MainRouter />
           </MainLayout>
         </BlurWrapper>
 
