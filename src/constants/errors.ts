@@ -41,6 +41,7 @@ export const ERRORS = {
   CANT_DELETE_COMMENT: 'CantDeleteComment',
   CANT_RESTORE_COMMENT: 'CantRestoreComment',
   MESSAGE_NOT_FOUND: 'MessageNotFound',
+  COMMENT_TOO_LONG: 'CommentTooLong',
 };
 
 export const ERROR_LITERAL = {
@@ -87,4 +88,5 @@ export const ERROR_LITERAL = {
   [ERRORS.CANT_DELETE_COMMENT]: 'Не удалось удалить комментарий',
   [ERRORS.CANT_RESTORE_COMMENT]: 'Не удалось восстановить комментарий',
   [ERRORS.MESSAGE_NOT_FOUND]: 'Сообщение не найдено',
+  [ERRORS.COMMENT_TOO_LONG]: 'Комментарий слишком длинный',
 };

@@ -213,7 +213,7 @@ function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
   const { current: current_node } = yield select(selectNode);
 
   if (current_node && current_node.id === current.id) {
-    const { comments, comment_data } = yield select(selectNode);
+    const { comments, comment_data: current_comment_data } = yield select(selectNode);
 
     if (id === 0) {
       yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
@@ -221,7 +221,7 @@ function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
     } else {
       yield put(
         nodeSet({
-          comment_data: omit([id.toString()], comment_data),
+          comment_data: omit([id.toString()], current_comment_data),
           comments: comments.map(item => (item.id === id ? comment : item)),
         })
       );
