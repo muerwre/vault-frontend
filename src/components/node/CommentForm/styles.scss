@@ -9,7 +9,7 @@
 
 .input {
   @include outer_shadow();
-
+  position: relative;
   flex: 1;
   padding: ($gap / 2) ($gap / 2 + 1px);
 }
@@ -35,4 +35,18 @@
 
 .attaches {
   @include outer_shadow();
+}
+
+.error {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  background: $red;
+  z-index: 10;
+  font: $font_12_regular;
+  box-sizing: border-box;
+  padding: 0 $gap;
+  border-radius: 4px 4px 0 0;
+  transform: translate(-50%, 0);
+  cursor: pointer;
 }

@@ -70,7 +70,7 @@ export const nodeSetRelated = (related: INodeState['related']) => ({
   type: NODE_ACTIONS.SET_RELATED,
 });
 
-export const nodeSetCommentData = (id: number, comment: IComment) => ({
+export const nodeSetCommentData = (id: number, comment: Partial<IComment>) => ({
   id,
   comment,
   type: NODE_ACTIONS.SET_COMMENT_DATA,

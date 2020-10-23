@@ -146,6 +146,7 @@ export interface IComment {
   files: IFile[];
   is_private: boolean;
   user: IUser;
+  error?: string;
 
   created_at?: string;
   update_at?: string;

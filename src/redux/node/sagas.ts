@@ -207,7 +207,7 @@ function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
   yield put(nodeSetSendingComment(false));
 
   if (error || !comment) {
-    return yield put(nodeSetSaveErrors({ error: error || ERRORS.EMPTY_RESPONSE }));
+    return yield put(nodeSetCommentData(id, { error }));
   }
 
   const { current: current_node } = yield select(selectNode);

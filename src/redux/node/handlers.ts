@@ -49,7 +49,16 @@ const setRelated = (state: INodeState, { related }: ReturnType<typeof nodeSetRel
 const setCommentData = (
   state: INodeState,
   { id, comment }: ReturnType<typeof nodeSetCommentData>
-) => assocPath(['comment_data', id], comment, state);
+) => ({
+  ...state,
+  comment_data: {
+    ...state.comment_data,
+    [id]: {
+      ...(state.comment_data[id] || {}),
+      ...comment,
+    },
+  },
+})
 
 const setTags = (state: INodeState, { tags }: ReturnType<typeof nodeSetTags>) =>
   assocPath(['current', 'tags'], tags, state);

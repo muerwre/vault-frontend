@@ -110,6 +110,7 @@ export const EMPTY_COMMENT: IComment = {
   temp_ids: [],
   is_private: false,
   user: null,
+  error: '',
 };
 
 export const NODE_EDITORS = {

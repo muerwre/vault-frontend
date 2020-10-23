@@ -22,6 +22,7 @@ import { moveArrItem } from '~/utils/fn';
 import { SortEnd } from 'react-sortable-hoc';
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
 import { getRandomPhrase } from '~/constants/phrases';
+import { ERROR_LITERAL } from '~/constants/errors';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -237,6 +238,15 @@ const CommentFormUnconnected: FC<IProps> = memo(
     const hasAudioAttaches = audios.length > 0 || locked_audios.length > 0;
     const hasAttaches = hasImageAttaches || hasAudioAttaches;
 
+    const clearError = useCallback(() => nodeSetCommentData(id, { error: '' }), [
+      id,
+      nodeSetCommentData,
+    ]);
+
+    useEffect(() => {
+      if (comment.error) clearError();
+    }, [comment.files, comment.text]);
+
     return (
       <form onSubmit={onSubmit} className={styles.wrap}>
         <div className={styles.input}>
@@ -248,6 +258,12 @@ const CommentFormUnconnected: FC<IProps> = memo(
             placeholder={placeholder}
             minRows={2}
           />
+
+          {comment.error && (
+            <div className={styles.error} onClick={clearError}>
+              {ERROR_LITERAL[comment.error] || comment.error}
+            </div>
+          )}
         </div>
 
         {hasAttaches && (
