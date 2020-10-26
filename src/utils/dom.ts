@@ -95,7 +95,10 @@ export const formatText = (text: string): string =>
         .replace(/:\/\//gim, ':|--|')
         .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
         .replace(/\/\/\s*(todo|туду):?\s*([^\n]+)/gim, '// <span class="todo">$1</span> $2')
-        .replace(/\/\/\s*(done|сделано|сделал|готово|fixed|пофикшено|фиксед):?\s*([^\n]+)/gim, '// <span class="done">$1</span> $2')
+        .replace(
+          /\/\/\s*(done|сделано|сделал|готово|fixed|пофикшено|фиксед):?\s*([^\n]+)/gim,
+          '// <span class="done">$1</span> $2'
+        )
         .replace(/(\*\*[\s\S]*?\*\*)/gim, '<b class="bold white">$1</b>')
         .replace(/(\_\_[\s\S]*?\_\_)/gim, '<i>$1</i>')
         .replace(/(\!\![\s\S]*?(\!\!|\n|$))/gim, '<span class="green">$1</span>')
@@ -106,6 +109,7 @@ export const formatText = (text: string): string =>
           /(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)([-A-Z0-9+&@#%?\/=~_|!:,.;]*)[-A-Z0-9+&@#\/%=~_|])/gi,
           '<a href="$1" target="blank" rel="nofollow">$1</a>'
         )
+        .replace(' -- ', ' — ')
         .split('\n')
         .filter(el => el.trim().length)
         .join('\n');
