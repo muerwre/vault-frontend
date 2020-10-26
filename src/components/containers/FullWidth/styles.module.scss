@@ -1,0 +1,10 @@
+.sample {
+  width: 100%;
+  display: block;
+  background: green;
+  height: 0;
+}
+
+.slider {
+  max-height: calc(100vh - 125px);
+}

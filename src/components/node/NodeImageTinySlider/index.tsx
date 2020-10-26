@@ -1,44 +1,41 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC } from 'react';
+import { INodeComponentProps } from '~/redux/node/constants';
+import { FullWidth } from '~/components/containers/FullWidth';
+import { useNodeImages } from '~/utils/node';
+import { getURL } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
+import TinySlider from 'tiny-slider-react';
 import styles from './styles.module.scss';
 
-interface IProps {}
+const settings = {
+  nav: false,
+  buttons: false,
+  mouseDrag: true,
+  gutter: 10,
+  center: true,
+  lazyload: true,
+  items: 1,
+  edgePadding: 150,
+  loop: true,
+  arrowKeys: false,
+  prevButton: false,
+  nextButton: false,
+  swipeAngle: 45,
+};
 
-const NodeImageTinySlider: FC<IProps> = () => {
-  const sample = useRef<HTMLDivElement>(null);
-  const [clientWidth, setClientWidth] = useState(document.documentElement.clientWidth);
-
-  const style = useMemo(() => {
-    if (!sample.current) return { display: 'none' };
-
-    const { width } = sample.current.getBoundingClientRect();
-    const { clientWidth } = document.documentElement;
-
-    return {
-      // width: clientWidth,
-      // transform: `translate(-${(clientWidth - width) / 2}px, 0)`,
-    };
-  }, [sample.current, clientWidth]);
-
-  const onResize = useCallback(() => setClientWidth(document.documentElement.clientWidth), []);
-
-  useEffect(() => {
-    window.addEventListener('resize', onResize);
-    document.body.addEventListener('overflow', onResize);
-    document.body.addEventListener('overflowchanged', console.log);
-
-    document.body.addEventListener('resize', console.log);
-
-    return () => {
-      window.removeEventListener('resize', onResize);
-      window.removeEventListener('overflow', onResize);
-    };
-  }, []);
+const NodeImageTinySlider: FC<INodeComponentProps> = ({ node }) => {
+  const images = useNodeImages(node);
 
   return (
-    <div className={styles.wrap}>
-      <div className={styles.slider} style={style} />
-      <div className={styles.sample} ref={sample} />
-    </div>
+    <FullWidth>
+      <div className={styles.slider}>
+        <TinySlider settings={settings}>
+          {images.map(image => (
+            <img src={getURL(image, PRESETS['1600'])} key={image.url} />
+          ))}
+        </TinySlider>
+      </div>
+    </FullWidth>
   );
 };
 

@@ -9564,6 +9564,23 @@ tiny-invariant@^1.0.2:
   resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.0.6.tgz#b3f9b38835e36a41c843a3b0907a5a7b3755de73"
   integrity sha512-FOyLWWVjG+aC0UqG76V53yAWdXfH8bO6FNmyZOuUrzDzK8DI3/JRY25UD7+g49JWM1LXwymsKERB+DzI0dTEQA==
 
+tiny-slider-react@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/tiny-slider-react/-/tiny-slider-react-0.5.3.tgz#0e96f6b9a6cdafaac7b1bc29cfc9cb9a356760f5"
+  integrity sha512-miTPlaWgwfg2U7WBDxdR40LFhAncIS2fF03tuNE5nqVIF5tuvjVFHGz1V0LSJWoNeOtXgoWs94JB2/hdxrCWqA==
+  dependencies:
+    tiny-slider "^2.9.2"
+
+tiny-slider@2.9.2:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/tiny-slider/-/tiny-slider-2.9.2.tgz#dcd70ac79054a4d170bc2cfde3efbdaa2cc0c75f"
+  integrity sha512-2sgEJpVbpIbbgiYM/xGa0HMvvtUZSJvXeZJmLWBux6VgFqh/MQG8LXBR59ZLYpa/1OtwM0E6/ic55oLOJN9Mnw==
+
+tiny-slider@^2.9.2:
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/tiny-slider/-/tiny-slider-2.9.3.tgz#94d8158f704f3192fef1634c0ae6779fb14ea04e"
+  integrity sha512-KZY45m+t3fb3Kwlqsic0PIos1lgTNXBEC5N/AhI3aNEcryrd0nXohZMbVPMkcNYdbLjY1IUJAXWYAO6/RGJnKw==
+
 tiny-warning@^1.0.0, tiny-warning@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"

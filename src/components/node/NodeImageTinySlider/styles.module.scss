@@ -1,22 +1,5 @@
-.wrap {
-  background: $red;
-}
-
-.sample {
-  width: 100%;
-  display: block;
-  height: 24px;
-  background: green;
-}
-
 .slider {
-  background: blue;
-  height: 20px;
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  box-sizing: border-box;
+  img {
+    max-height: calc(100vh - 140px);
+  }
 }

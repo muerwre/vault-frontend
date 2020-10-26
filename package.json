@@ -110,6 +110,8 @@
     "scrypt": "^6.0.3",
     "sticky-sidebar": "^3.3.1",
     "throttle-debounce": "^2.1.0",
+    "tiny-slider-react": "^0.5.3",
+    "tiny-slider": "2.9.2",
     "tinycolor": "^0.0.1",
     "tslint": "^5.20.0",
     "tslint-config-airbnb": "^5.11.2",
