@@ -134,6 +134,10 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
       return () => nodeSetCoverImage(null);
     }, [nodeSetCoverImage, node.cover]);
 
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [id]);
+
     return (
       <>
         {createNodeBlock(head)}

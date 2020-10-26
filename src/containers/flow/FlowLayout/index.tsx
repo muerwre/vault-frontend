@@ -36,6 +36,8 @@ const FlowLayoutUnconnected: FC<IProps> = ({
   flowLoadMoreSearch,
 }) => {
   const onLoadMore = useCallback(() => {
+    (window as any).flowScrollPos = window.scrollY;
+
     const pos = window.scrollY + window.innerHeight - document.body.scrollHeight;
 
     if (is_loading || pos < -600) return;
@@ -53,6 +55,10 @@ const FlowLayoutUnconnected: FC<IProps> = ({
 
     return () => window.removeEventListener('scroll', onLoadMore);
   }, [onLoadMore]);
+
+  useEffect(() => {
+    window.scrollTo(0, (window as any).flowScrollPos || 0);
+  }, []);
 
   return (
     <div className={styles.grid}>
