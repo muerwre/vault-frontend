@@ -306,9 +306,28 @@ const NodeImageSlideBlock: FC<IProps> = ({
                 <svg
                   viewBox={`0 0 ${file.metadata.width} ${file.metadata.height}`}
                   className={styles.image}
-                  style={{ maxHeight: max_height, width: file.metadata.width }}
+                  style={{
+                    maxHeight: max_height,
+                    // height: file.metadata.height,
+                    width: file.metadata.width,
+                  }}
                 >
-                  <rect fill="blue" width="100%" height="100%" />
+                  <defs>
+                    <filter id="f1" x="0" y="0">
+                      <feGaussianBlur stdDeviation="10" />
+                      <feColorMatrix in="a1" type="saturate" values="0.5" />
+                      <feColorMatrix in="a1" type="brightness" values="2" />
+                    </filter>
+                  </defs>
+
+                  <rect fill="#333333" width="100%" height="100%" />
+
+                  <image
+                    xlinkHref={getURL(file, PRESETS['300'])}
+                    width="100%"
+                    height="100%"
+                    filter="url(#f1)"
+                  />
                 </svg>
                 {
                   <img
