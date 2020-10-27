@@ -77,8 +77,8 @@ const NodeImageSlideBlock: FC<IProps> = ({
   ]);
 
   // update outside hooks
-  useEffect(() => updateLayout(), [loaded, height, images]);
-  useEffect(() => updateSizes(), [refs, current, loaded, images]);
+  useEffect(updateLayout, [loaded, height, images]);
+  useEffect(updateSizes, [refs, current, loaded, images]);
 
   useEffect(() => {
     const timeout = setTimeout(updateLayout, 300);
@@ -300,14 +300,26 @@ const NodeImageSlideBlock: FC<IProps> = ({
                 ref={setRef(index)}
                 key={node.updated_at + file.id}
               >
-                <img
+                {
+                  // check if metadata is available, then show loader
+                }
+                <svg
+                  viewBox={`0 0 ${file.metadata.width} ${file.metadata.height}`}
                   className={styles.image}
-                  src={getURL(file, PRESETS['1600'])}
-                  alt=""
-                  key={file.id}
-                  onLoad={onImageLoad(index)}
-                  style={{ maxHeight: max_height }}
-                />
+                  style={{ maxHeight: max_height, width: file.metadata.width }}
+                >
+                  <rect fill="blue" width="100%" height="100%" />
+                </svg>
+                {
+                  <img
+                    className={styles.image}
+                    src={getURL(file, PRESETS['1600'])}
+                    alt=""
+                    key={file.id}
+                    onLoad={onImageLoad(index)}
+                    style={{ maxHeight: max_height, position: 'absolute', width: 100, top: '50%' }}
+                  />
+                }
               </div>
             ))}
         </div>
