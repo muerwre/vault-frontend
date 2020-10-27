@@ -6,20 +6,20 @@ import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import TinySlider from 'tiny-slider-react';
 import styles from './styles.module.scss';
+import { TinySliderSettings } from 'tiny-slider';
 
-const settings = {
+const settings: TinySliderSettings & { center: boolean } = {
   nav: false,
-  buttons: false,
   mouseDrag: true,
   gutter: 10,
   center: true,
   lazyload: true,
   items: 1,
   edgePadding: 150,
-  loop: true,
+  loop: false,
   arrowKeys: false,
-  prevButton: false,
-  nextButton: false,
+  // prevButton: false,
+  // nextButton: false,
   swipeAngle: 45,
 };
 
@@ -31,7 +31,9 @@ const NodeImageTinySlider: FC<INodeComponentProps> = ({ node }) => {
       <div className={styles.slider}>
         <TinySlider settings={settings}>
           {images.map(image => (
-            <img src={getURL(image, PRESETS['1600'])} key={image.url} />
+            <div className={styles.slide}>
+              <img src={getURL(image, PRESETS['1600'])} key={image.url} />
+            </div>
           ))}
         </TinySlider>
       </div>
