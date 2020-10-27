@@ -31,6 +31,7 @@ import * as NODE_ACTIONS from '~/redux/node/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { IState } from '~/redux/store';
 import { selectModal } from '~/redux/modal/selectors';
+import { SidebarRouter } from '~/containers/main/SidebarRouter';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -231,6 +232,8 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
 
           <Footer />
         </Card>
+
+        <SidebarRouter prefix="/post:id" />
       </>
     );
   }
