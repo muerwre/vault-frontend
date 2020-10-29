@@ -2,7 +2,11 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 're
 import styles from './styles.module.scss';
 import ResizeSensor from 'resize-sensor';
 
-const FullWidth: FC = ({ children }) => {
+interface IProps {
+  onRefresh?: (width: number) => void;
+}
+
+const FullWidth: FC<IProps> = ({ children, onRefresh }) => {
   const sample = useRef<HTMLDivElement>(null);
   const [clientWidth, setClientWidth] = useState(document.documentElement.clientWidth);
 
@@ -12,11 +16,13 @@ const FullWidth: FC = ({ children }) => {
     const { width } = sample.current.getBoundingClientRect();
     const { clientWidth } = document.documentElement;
 
+    onRefresh(clientWidth);
+
     return {
       width: clientWidth,
       transform: `translate(-${(clientWidth - width) / 2}px, 0)`,
     };
-  }, [sample.current, clientWidth]);
+  }, [sample.current, clientWidth, onRefresh]);
 
   const onResize = useCallback(() => setClientWidth(document.documentElement.clientWidth), []);
 

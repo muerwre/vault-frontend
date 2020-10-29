@@ -1,5 +1,7 @@
 .slider {
   padding-bottom: 15px;
+  overflow: hidden;
+  transition: height 0.25s;
 
   :global(.tns-controls) {
     display: none;
@@ -8,12 +10,12 @@
 
 .slide {
   align-items: center;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   text-align: center;
 
   img {
-    max-height: calc(100vh - 150px);
+    max-height: calc(100vh - 140px);
     max-width: 100%;
     border-radius: $radius;
   }
