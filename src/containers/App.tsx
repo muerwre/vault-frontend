@@ -25,6 +25,7 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
       <div>
         <BlurWrapper is_blurred={is_shown}>
           <PageCover />
+
           <MainLayout>
             <Modal />
             <Sprites />

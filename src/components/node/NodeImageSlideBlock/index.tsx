@@ -8,6 +8,7 @@ import { PRESETS } from '~/constants/urls';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { throttle } from 'throttle-debounce';
 import { Icon } from '~/components/input/Icon';
+import { useArrows } from '~/utils/hooks/keys';
 
 interface IProps extends INodeComponentProps {}
 
@@ -239,29 +240,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
     images,
   ]);
 
-  const onKeyDown = useCallback(
-    event => {
-      if (
-        (event.target.tagName && ['TEXTAREA', 'INPUT'].includes(event.target.tagName)) ||
-        is_modal_shown
-      )
-        return;
-
-      switch (event.key) {
-        case 'ArrowLeft':
-          return onPrev();
-        case 'ArrowRight':
-          return onNext();
-      }
-    },
-    [onNext, onPrev, is_modal_shown]
-  );
-
-  useEffect(() => {
-    window.addEventListener('keydown', onKeyDown);
-
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [onKeyDown]);
+  useArrows(onNext, onPrev, is_modal_shown);
 
   useEffect(() => {
     setOffset(0);

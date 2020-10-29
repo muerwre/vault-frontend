@@ -16,6 +16,7 @@ import { Filler } from '~/components/containers/Filler';
 import { modalShowPhotoswipe } from '../modal/actions';
 import { IEditorComponentProps } from '~/redux/node/types';
 import { EditorFiller } from '~/components/editors/EditorFiller';
+import { NodeImageTinySlider } from '~/components/node/NodeImageTinySlider';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -90,7 +91,8 @@ export type INodeComponentProps = {
 export type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<INodeComponentProps>>;
 
 export const NODE_HEADS: INodeComponents = {
-  [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
+  // [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
+  [NODE_TYPES.IMAGE]: NodeImageTinySlider,
 };
 
 export const NODE_COMPONENTS: INodeComponents = {
