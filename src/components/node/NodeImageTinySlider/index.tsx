@@ -44,24 +44,32 @@ const NodeImageTinySlider: FC<INodeComponentProps> = ({ node }) => {
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(images[0]?.metadata?.height || 0);
 
-  const onResize = useCallback(() => {
-    if (!ref.current) return;
-    ref.current.slider.refresh();
+  const onImageLoaded = useCallback(() => {
     const el = slides.current[current];
     if (!el) return;
     const { height } = el.getBoundingClientRect();
     setHeight(height);
-  }, [ref.current, slides.current, current]);
+  }, [current, slides.current]);
 
-  const onIndexChanged = useCallback(({ index }) => {
-    setCurrent(index || 0);
-  }, []);
+  const onIndexChanged = useCallback(
+    ({ index }) => {
+      if (!slides.current) return;
+      setCurrent(index || 0);
+    },
+    [setCurrent, setHeight, slides.current, onImageLoaded]
+  );
+
+  const onResize = useCallback(() => {
+    if (!ref.current?.slider) return;
+    ref.current.slider.refresh();
+  }, [ref.current?.slider]);
 
   useEffect(() => {
     setCurrent(0);
   }, [node.id]);
 
-  useEffect(onResize, [slides, current]);
+  useEffect(onResize, [slides]);
+  useEffect(onImageLoaded, [current]);
 
   const onNext = useCallback(() => {
     if (!ref.current || images.length <= 1 || current === images.length - 1) return;
@@ -81,7 +89,7 @@ const NodeImageTinySlider: FC<INodeComponentProps> = ({ node }) => {
         <TinySlider settings={settings} ref={ref} onTransitionEnd={onIndexChanged}>
           {images.map((image, i) => (
             <div className={styles.slide} key={image.id} ref={el => (slides.current[i] = el)}>
-              <img src={getURL(image, PRESETS['1600'])} key={image.url} onLoad={onResize} />
+              <img src={getURL(image, PRESETS['1600'])} key={image.url} onLoad={onImageLoaded} />
             </div>
           ))}
         </TinySlider>
