@@ -43,18 +43,19 @@ const TagAutocompleteUnconnected: FC<Props> = ({
 
   const onKeyDown = useCallback(
     event => {
+      const all = [...categories, ...tags];
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault();
-          setSelected(selected < options.length - 1 ? selected + 1 : -1);
+          setSelected(selected < all.length - 1 ? selected + 1 : -1);
           return;
         case 'ArrowUp':
           event.preventDefault();
-          setSelected(selected > -1 ? selected - 1 : options.length - 1);
+          setSelected(selected > -1 ? selected - 1 : all.length - 1);
           return;
         case 'Enter':
           event.preventDefault();
-          onSelect(selected >= 0 ? [...categories, ...tags][selected] : search);
+          onSelect(selected >= 0 ? all[selected] : search);
       }
     },
     [setSelected, selected, categories, tags, onSelect, search]
@@ -107,7 +108,7 @@ const TagAutocompleteUnconnected: FC<Props> = ({
       window.removeEventListener('resize', onScroll);
       window.removeEventListener('scroll', onScroll);
     };
-  }, []);
+  }, [options]);
 
   return (
     <div className={classNames(styles.window, { [styles.top]: top, [styles.left]: left })}>

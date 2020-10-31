@@ -7,7 +7,6 @@ $row_height: 24px;
   align-items: center;
   justify-content: flex-start;
   font: $font_16_semibold;
-  border-top: lighten($content_bg, 2%) solid 1px;
   opacity: 0.5;
   cursor: pointer;
   transition: all 0.1s;
@@ -17,12 +16,12 @@ $row_height: 24px;
 
   &:hover, &.selected {
     opacity: 1;
-    background: lighten($content_bg, 4%);
+    background: transparentize($wisegreen, 0.5);
   }
 
   &.right {
-    color: $wisegreen;
-    opacity: 0.7;
+    color: lighten($wisegreen, 4%);
+    opacity: 1;
   }
 
   svg {
