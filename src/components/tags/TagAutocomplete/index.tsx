@@ -44,6 +44,7 @@ const TagAutocompleteUnconnected: FC<Props> = ({
   const onKeyDown = useCallback(
     event => {
       const all = [...categories, ...tags];
+
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault();
