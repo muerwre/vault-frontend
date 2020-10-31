@@ -4,6 +4,7 @@ import { ITag } from '~/redux/types';
 import uniq from 'ramda/es/uniq';
 import { Tag } from '~/components/tags/Tag';
 import { TagInput } from '~/components/tags/TagInput';
+import { separateTags } from '~/utils/tag';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   tags: Partial<ITag>[];
@@ -15,15 +16,7 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
 export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, onTagClick, ...props }) => {
   const [data, setData] = useState<string[]>([]);
 
-  const [catTags, ordinaryTags] = useMemo(
-    () =>
-      (tags || []).reduce(
-        (obj, tag) =>
-          tag.title.substr(0, 1) === '/' ? [[...obj[0], tag], obj[1]] : [obj[0], [...obj[1], tag]],
-        [[], []]
-      ),
-    [tags]
-  );
+  const [catTags, ordinaryTags] = useMemo(() => separateTags(tags), [tags]);
 
   const onSubmit = useCallback(
     (last: string[]) => {
@@ -32,23 +25,6 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, onTagClick, 
     },
     [data]
   );
-
-  //
-  // const onSubmit = useCallback(() => {
-  //   const title = input && input.trim();
-  //   const items = (title ? [...data, { title }] : data)
-  //     .filter(tag => tag.title.length > 0)
-  //     .map(tag => ({
-  //       ...tag,
-  //       title: tag.title.toLowerCase(),
-  //     }));
-  //
-  //   if (!items.length) return;
-  //
-  //   setData(items);
-  //   setInput('');
-  //   onTagsChange(uniq([...tags, ...items]).map(tag => tag.title));
-  // }, [tags, data, onTagsChange, input, setInput]);
 
   useEffect(() => {
     setData(data.filter(title => !tags.some(tag => tag.title.trim() === title.trim())));
@@ -68,6 +44,11 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, onTagClick, 
     return last;
   }, [data, setData]);
 
+  const exclude = useMemo(() => [...(data || []), ...(tags || []).map(({ title }) => title)], [
+    data,
+    tags,
+  ]);
+
   return (
     <TagField {...props}>
       {catTags.map(tag => (
@@ -83,7 +64,12 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, onTagClick, 
       ))}
 
       {is_editable && (
-        <TagInput onAppend={onAppendTag} onClearTag={onClearTag} onSubmit={onSubmit} />
+        <TagInput
+          onAppend={onAppendTag}
+          onClearTag={onClearTag}
+          onSubmit={onSubmit}
+          exclude={exclude}
+        />
       )}
     </TagField>
   );

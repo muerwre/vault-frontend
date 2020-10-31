@@ -1,13 +1,4 @@
-import React, {
-  ChangeEvent,
-  FC,
-  FocusEventHandler,
-  KeyboardEvent,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { ChangeEvent, FC, KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState, } from 'react';
 import { TagAutocomplete } from '~/components/tags/TagAutocomplete';
 import { TagWrapper } from '~/components/tags/TagWrapper';
 import styles from './styles.module.scss';
@@ -30,17 +21,19 @@ interface IProps {
   onAppend: (tags: string[]) => void;
   onClearTag: () => string | undefined;
   onSubmit: (last: string[]) => void;
+  exclude: string[];
 }
 
-const TagInput: FC<IProps> = ({ onAppend, onClearTag, onSubmit }) => {
+const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
   const [focused, setFocused] = useState(false);
   const [input, setInput] = useState('');
   const ref = useRef<HTMLInputElement>(null);
+  const wrapper = useRef<HTMLDivElement>(null);
 
   const onInput = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
       if (!value.trim()) {
-        setInput(value);
+        setInput(value || '');
         return;
       }
 
@@ -50,7 +43,7 @@ const TagInput: FC<IProps> = ({ onAppend, onClearTag, onSubmit }) => {
         onAppend(items.slice(0, items.length - 1));
       }
 
-      setInput(items[items.length - 1]);
+      setInput(items[items.length - 1] || '');
     },
     [setInput]
   );
@@ -68,7 +61,7 @@ const TagInput: FC<IProps> = ({ onAppend, onClearTag, onSubmit }) => {
         return;
       }
 
-      if (key === 'Enter' || key === ',' || key === 'Comma') {
+      if (key === ',' || key === 'Comma') {
         const created = prepareInput(input);
 
         if (created.length) {
@@ -77,31 +70,47 @@ const TagInput: FC<IProps> = ({ onAppend, onClearTag, onSubmit }) => {
 
         setInput('');
       }
-
-      if (key === 'Enter' && ref.current) {
-        ref.current.blur();
-      }
     },
-    [input, setInput, onClearTag, onAppend, onSubmit, ref.current]
+    [input, setInput, onClearTag, onAppend, onSubmit, ref.current, wrapper.current]
   );
 
   const onFocus = useCallback(() => setFocused(true), []);
-  const onBlur = useCallback<FocusEventHandler<HTMLInputElement>>(() => {
-    setFocused(false);
+  const onBlur = useCallback(
+    event => {
+      if (wrapper.current.contains(event.target)) {
+        ref.current.focus();
+        return;
+      }
 
-    if (input.trim()) {
-      const created = prepareInput(input);
-      onAppend(created);
+      setFocused(false);
+
+      if (input.trim()) {
+        setInput('');
+      }
+
+      onSubmit([]);
+    },
+    [input, onAppend, setInput, onSubmit]
+  );
+
+  const onAutocompleteSelect = useCallback(
+    (val: string) => {
+      onAppend([val]);
       setInput('');
-      onSubmit(created);
-    }
-  }, [input, onAppend, setInput, onSubmit]);
+    },
+    [onAppend, setInput]
+  );
 
-  const feature = useMemo(() => (input.substr(0, 1) === '/' ? 'green' : ''), [input]);
+  const feature = useMemo(() => (input?.substr(0, 1) === '/' ? 'green' : ''), [input]);
+
+  useEffect(() => {
+    document.addEventListener('click', onBlur);
+
+    return () => document.removeEventListener('click', onBlur);
+  }, [onBlur]);
 
   return (
-    <div className={styles.wrap}>
-      {onInput && focused && <TagAutocomplete />}
+    <div className={styles.wrap} ref={wrapper}>
       <TagWrapper title={input || placeholder} has_input={true} feature={feature}>
         <input
           type="text"
@@ -110,12 +119,20 @@ const TagInput: FC<IProps> = ({ onAppend, onClearTag, onSubmit }) => {
           placeholder={placeholder}
           maxLength={24}
           onChange={onInput}
-          onKeyUp={onKeyUp}
-          onBlur={onBlur}
+          onKeyDown={onKeyUp}
           onFocus={onFocus}
           ref={ref}
         />
       </TagWrapper>
+
+      {onInput && focused && input?.length > 0 && (
+        <TagAutocomplete
+          exclude={exclude}
+          input={ref.current}
+          onSelect={onAutocompleteSelect}
+          search={input}
+        />
+      )}
     </div>
   );
 };

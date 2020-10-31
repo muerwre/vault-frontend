@@ -8,6 +8,10 @@ export interface ITagState {
     count: number;
     isLoading: boolean;
   };
+  autocomplete: {
+    isLoading: boolean;
+    options: string[];
+  };
 }
 
 const INITIAL_STATE: ITagState = {
@@ -15,6 +19,10 @@ const INITIAL_STATE: ITagState = {
     list: [],
     count: 0,
     isLoading: true,
+  },
+  autocomplete: {
+    isLoading: true,
+    options: [],
   },
 };
 

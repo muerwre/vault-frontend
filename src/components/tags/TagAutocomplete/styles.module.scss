@@ -3,18 +3,35 @@
   100% { opacity: 100 }
 }
 
-.window {
-  box-shadow: transparentize(black, 0.5) 4px 4px 4px, inset transparentize(white, 0.95) 1px 1px;
+$row_height: 24px;
 
+.window {
+  box-shadow: transparentize(white, 0.8) 0 0 0 1px;
   position: absolute;
-  top: 0;
-  right: 0;
-  width: calc(90vw - 20px);
+  top: -2px;
+  right: -2px;
+  width: calc(100vw - 15px);
   max-width: 300px;
-  background: lighten($content_bg, 4%);
-  height: 100px;
+  background: darken($content_bg, 1%);
   z-index: 10;
   border-radius: 3px;
-  padding-top: $tag_height;
+  padding: $tag_height + 2px 0 0;
   animation: appear 0.25s forwards;
+
+  &.top {
+    bottom: -2px;
+    top: auto;
+    padding: 0 0 $tag_height;
+  }
+
+  &.left {
+    right: auto;
+    left: -2px;
+  }
+}
+
+.scroll {
+  overflow: auto;
+  max-height: 7 * $row_height + $tag_height;
+  padding: 0 0 $gap / 2;
 }
