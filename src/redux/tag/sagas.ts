@@ -1,9 +1,9 @@
 import { TAG_ACTIONS } from '~/redux/tag/constants';
-import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { tagLoadNodes, tagSetNodes } from '~/redux/tag/actions';
+import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
+import { tagLoadAutocomplete, tagLoadNodes, tagSetAutocomplete, tagSetNodes, } from '~/redux/tag/actions';
 import { reqWrapper } from '~/redux/auth/sagas';
 import { selectTagNodes } from '~/redux/tag/selectors';
-import { getTagNodes } from '~/redux/tag/api';
+import { getTagAutocomplete, getTagNodes } from '~/redux/tag/api';
 import { Unwrap } from '~/redux/types';
 
 function* loadTagNodes({ tag }: ReturnType<typeof tagLoadNodes>) {
@@ -26,6 +26,28 @@ function* loadTagNodes({ tag }: ReturnType<typeof tagLoadNodes>) {
   }
 }
 
+function* loadAutocomplete({ search, exclude }: ReturnType<typeof tagLoadAutocomplete>) {
+  if (search.length < 3) return;
+
+  try {
+    yield put(tagSetAutocomplete({ isLoading: true }));
+    yield delay(100);
+
+    const { data, error }: Unwrap<ReturnType<typeof getTagAutocomplete>> = yield call(
+      reqWrapper,
+      getTagAutocomplete,
+      { search, exclude }
+    );
+
+    if (error) throw new Error(error);
+
+    yield put(tagSetAutocomplete({ options: data.tags, isLoading: false }));
+  } catch (e) {
+    yield put(tagSetAutocomplete({ isLoading: false }));
+  }
+}
+
 export default function* tagSaga() {
-  yield takeLatest(TAG_ACTIONS.LOAD_TAG_NODES, loadTagNodes);
+  yield takeLatest(TAG_ACTIONS.LOAD_NODES, loadTagNodes);
+  yield takeLatest(TAG_ACTIONS.LOAD_AUTOCOMPLETE, loadAutocomplete);
 }

@@ -14,8 +14,9 @@ $big: 1.2;
   font: $font_14_semibold;
   align-self: flex-start;
   padding: 0 8px 0 0;
-  margin: 0 $gap $gap 0;
+  //margin: 0 $gap $gap 0;
   position: relative;
+  z-index: 12;
 
   &:global(.big) {
     height: $tag_height * $big;
@@ -88,6 +89,7 @@ $big: 1.2;
     top: 0;
     bottom: 0;
     width: 100%;
+    min-width: 100px;
     padding-left: $tag_height;
     padding-right: 5px;
     box-sizing: border-box;
@@ -118,3 +120,4 @@ $big: 1.2;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+

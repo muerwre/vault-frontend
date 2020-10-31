@@ -2,7 +2,6 @@ import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import { SidebarWrapper } from '~/containers/sidebars/SidebarWrapper';
 import styles from './styles.module.scss';
 import { useHistory, useRouteMatch } from 'react-router';
-import { Tag } from '~/components/node/Tag';
 import { Icon } from '~/components/input/Icon';
 import { Link } from 'react-router-dom';
 import { TagSidebarList } from '~/components/sidebar/TagSidebarList';
@@ -11,6 +10,7 @@ import { selectTagNodes } from '~/redux/tag/selectors';
 import * as ACTIONS from '~/redux/tag/actions';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
+import { Tag } from '~/components/tags/Tag';
 
 const mapStateToProps = state => ({
   nodes: selectTagNodes(state),

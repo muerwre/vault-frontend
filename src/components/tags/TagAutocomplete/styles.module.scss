@@ -1,0 +1,37 @@
+@keyframes appear {
+  0% { opacity: 0 }
+  100% { opacity: 100 }
+}
+
+$row_height: 24px;
+
+.window {
+  box-shadow: transparentize(white, 0.8) 0 0 0 1px;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: calc(100vw - 15px);
+  max-width: 300px;
+  background: darken($content_bg, 1%);
+  z-index: 10;
+  border-radius: 3px;
+  padding: $tag_height + 2px 0 0;
+  animation: appear 0.25s forwards;
+
+  &.top {
+    bottom: -2px;
+    top: auto;
+    padding: 0 0 $tag_height;
+  }
+
+  &.left {
+    right: auto;
+    left: -2px;
+  }
+}
+
+.scroll {
+  overflow: auto;
+  max-height: 7 * $row_height + $tag_height;
+  padding: 0 0 $gap / 2;
+}

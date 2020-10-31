@@ -48,5 +48,6 @@ export const API = {
   },
   TAG: {
     NODES: `/tag/nodes`,
+    AUTOCOMPLETE: `/tag/autocomplete`,
   },
 };

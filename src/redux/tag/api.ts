@@ -17,3 +17,17 @@ export const getTagNodes = ({
     .get(API.TAG.NODES, configWithToken(access, { params: { name: tag, offset, limit } }))
     .then(resultMiddleware)
     .catch(errorMiddleware);
+
+export const getTagAutocomplete = ({
+  search,
+  exclude,
+  access,
+}: {
+  access: string;
+  search: string;
+  exclude: string[];
+}): Promise<IResultWithStatus<{ tags: string[] }>> =>
+  api
+    .get(API.TAG.AUTOCOMPLETE, configWithToken(access, { params: { search, exclude } }))
+    .then(resultMiddleware)
+    .catch(errorMiddleware);
