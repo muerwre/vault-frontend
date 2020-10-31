@@ -8,7 +8,7 @@ interface IProps {
 
 const SidebarRouter: FC<IProps> = ({ prefix = '' }) => (
   <Switch>
-    <Route path={`${prefix}/tag/:name`} component={TagSidebar} />
+    <Route path={`${prefix}/tag/:tag`} component={TagSidebar} />
   </Switch>
 );
 

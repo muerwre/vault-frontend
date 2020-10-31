@@ -13,6 +13,7 @@ export const URLS = {
     BACKEND_DOWN: '/oopsie',
   },
   NODE_URL: (id: number | string) => `/post${id}`,
+  NODE_TAG_URL: (id: number, tagName: string) => `/post${id}/tag/${tagName}`,
   PROFILE: (username: string) => `/~${username}`,
   PROFILE_PAGE: (username: string) => `/profile/${username}`,
 };

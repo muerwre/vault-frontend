@@ -1,13 +1,13 @@
 import React, {
+  ChangeEvent,
   FC,
   HTMLAttributes,
-  useState,
+  KeyboardEvent,
   useCallback,
   useEffect,
-  KeyboardEvent,
-  ChangeEvent,
-  useRef,
   useMemo,
+  useRef,
+  useState,
 } from 'react';
 import { TagField } from '~/components/containers/TagField';
 import { ITag } from '~/redux/types';
@@ -18,9 +18,10 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
   tags: Partial<ITag>[];
   is_editable?: boolean;
   onTagsChange?: (tags: string[]) => void;
+  onTagClick?: (tag: Partial<ITag>) => void;
 };
 
-export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) => {
+export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, onTagClick, ...props }) => {
   const [input, setInput] = useState('');
   const [data, setData] = useState([]);
   const timer = useRef(null);
@@ -98,11 +99,11 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, ...props }) 
   return (
     <TagField {...props}>
       {catTags.map(tag => (
-        <Tag key={tag.title} tag={tag} />
+        <Tag key={tag.title} tag={tag} onClick={onTagClick} />
       ))}
 
       {ordinaryTags.map(tag => (
-        <Tag key={tag.title} tag={tag} />
+        <Tag key={tag.title} tag={tag} onClick={onTagClick} />
       ))}
 
       {data.map(tag => (

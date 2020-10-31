@@ -6,7 +6,7 @@ import differenceInMinutes from 'date-fns/differenceInMinutes';
 import ru from 'date-fns/locale/ru';
 import Axios from 'axios';
 import { PRESETS } from '~/constants/urls';
-import { ICommentBlock, COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES } from '~/constants/comment';
+import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/constants/comment';
 import format from 'date-fns/format';
 
 export const getStyle = (oElm: any, strCssRule: string) => {
@@ -63,18 +63,23 @@ export const describeArc = (
   ].join(' ');
 };
 
-export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof PRESETS]) => {
-  if (!file || !file.url) return null;
-
+export const getURLFromString = (
+  url: string,
+  size?: typeof PRESETS[keyof typeof PRESETS]
+): string => {
   if (size) {
-    return file.url
+    return url
       .replace('REMOTE_CURRENT://', `${process.env.REMOTE_CURRENT}cache/${size}/`)
       .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
   }
 
-  return file.url
+  return url
     .replace('REMOTE_CURRENT://', process.env.REMOTE_CURRENT)
     .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
+};
+
+export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof PRESETS]) => {
+  return file?.url ? getURLFromString(file.url, size) : null;
 };
 
 export const formatText = (text: string): string =>
