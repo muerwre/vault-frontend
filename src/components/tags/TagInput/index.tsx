@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import { TagAutocomplete } from '~/components/tags/TagAutocomplete';
 import { TagWrapper } from '~/components/tags/TagWrapper';
+import styles from './styles.module.scss';
 
 const placeholder = 'Добавить';
 
@@ -99,22 +100,23 @@ const TagInput: FC<IProps> = ({ onAppend, onClearTag, onSubmit }) => {
   const feature = useMemo(() => (input.substr(0, 1) === '/' ? 'green' : ''), [input]);
 
   return (
-    <TagWrapper title={input || placeholder} has_input={true} feature={feature}>
-      {onInput && <TagAutocomplete />}
-
-      <input
-        type="text"
-        value={input}
-        size={1}
-        placeholder={placeholder}
-        maxLength={24}
-        onChange={onInput}
-        onKeyUp={onKeyUp}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        ref={ref}
-      />
-    </TagWrapper>
+    <div className={styles.wrap}>
+      {onInput && focused && <TagAutocomplete />}
+      <TagWrapper title={input || placeholder} has_input={true} feature={feature}>
+        <input
+          type="text"
+          value={input}
+          size={1}
+          placeholder={placeholder}
+          maxLength={24}
+          onChange={onInput}
+          onKeyUp={onKeyUp}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          ref={ref}
+        />
+      </TagWrapper>
+    </div>
   );
 };
 

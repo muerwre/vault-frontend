@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes, useCallback, useEffect, useMemo, useState, } from 'react';
+import React, { FC, HTMLAttributes, useCallback, useEffect, useMemo, useState } from 'react';
 import { TagField } from '~/components/containers/TagField';
 import { ITag } from '~/redux/types';
 import uniq from 'ramda/es/uniq';

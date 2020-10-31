@@ -1,5 +1,4 @@
-import React, { FC, FocusEventHandler, useCallback, } from 'react';
-import * as styles from './styles.scss';
+import React, { FC, FocusEventHandler, useCallback } from 'react';
 import { ITag } from '~/redux/types';
 import { TagWrapper } from '~/components/tags/TagWrapper';
 
@@ -27,16 +26,14 @@ const Tag: FC<IProps> = ({ tag, is_hoverable, is_editing, size = 'normal', onBlu
   }, [tag, onClick]);
 
   return (
-    <div className={styles.wrap}>
-      <TagWrapper
-        feature={getTagFeature(tag)}
-        size={size}
-        is_hoverable={is_hoverable}
-        is_editing={is_editing}
-        onClick={onClick && onClickHandler}
-        title={tag.title}
-      />
-    </div>
+    <TagWrapper
+      feature={getTagFeature(tag)}
+      size={size}
+      is_hoverable={is_hoverable}
+      is_editing={is_editing}
+      onClick={onClick && onClickHandler}
+      title={tag.title}
+    />
   );
 };
 
