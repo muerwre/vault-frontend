@@ -56,6 +56,7 @@
   "license": "MIT",
   "dependencies": {
     "@hot-loader/react-dom": "^16.10.2",
+    "@popperjs/core": "^2.5.4",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "autosize": "^4.0.2",
@@ -95,6 +96,7 @@
     "react-dom": "^16.13.0",
     "react-hot-loader": "^4.12.15",
     "react-packery-component": "^1.0.2",
+    "react-popper": "^2.2.3",
     "react-redux": "^6.0.1",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
