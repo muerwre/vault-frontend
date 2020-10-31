@@ -1,5 +1,5 @@
-import { FC, ReactElement } from 'react';
-import { INode, ValueOf, IComment } from '../types';
+import { FC } from 'react';
+import { IComment, INode, ValueOf } from '../types';
 import { NodeImageSlideBlock } from '~/components/node/NodeImageSlideBlock';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
@@ -12,7 +12,6 @@ import { AudioEditor } from '~/components/editors/AudioEditor';
 import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadButton';
 import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadButton';
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
-import { Filler } from '~/components/containers/Filler';
 import { modalShowPhotoswipe } from '../modal/actions';
 import { IEditorComponentProps } from '~/redux/node/types';
 import { EditorFiller } from '~/components/editors/EditorFiller';

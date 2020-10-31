@@ -1,6 +1,9 @@
+$big: 1.2;
+
 .tag {
   @include outer_shadow();
 
+  cursor: default;
   height: $tag_height;
   background: $tag_bg;
   display: flex;
@@ -11,8 +14,20 @@
   font: $font_14_semibold;
   align-self: flex-start;
   padding: 0 8px 0 0;
-  margin: 0 $gap $gap 0;
+  //margin: 0 $gap $gap 0;
   position: relative;
+  z-index: 12;
+
+  &:global(.big) {
+    height: $tag_height * $big;
+    font: $font_16_semibold;
+    border-radius: ($tag_height * $big / 2) 3px 3px ($tag_height * $big / 2);
+
+    .hole {
+      width: $tag_height * $big;
+      height: $tag_height * $big;
+    }
+  }
 
   &:global(.is_hoverable) {
     cursor: pointer;
@@ -56,6 +71,10 @@
     min-width: 100px;
   }
 
+  &:global(.clickable) {
+    cursor: pointer;
+  }
+
   input {
     background: none;
     border: none;
@@ -70,6 +89,7 @@
     top: 0;
     bottom: 0;
     width: 100%;
+    min-width: 100px;
     padding-left: $tag_height;
     padding-right: 5px;
     box-sizing: border-box;
@@ -80,7 +100,6 @@
   width: $tag_height;
   height: $tag_height;
   display: flex;
-  // padding-right: 0px;
   align-items: center;
   justify-content: center;
   flex: 0 0 $tag_height;
@@ -101,3 +120,4 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+

@@ -1,4 +1,4 @@
-import { INode, IComment } from '~/redux/types';
+import { IComment, INode } from '~/redux/types';
 import { ISocialProvider } from '~/redux/auth/types';
 
 export const API = {
@@ -45,5 +45,9 @@ export const API = {
   },
   BORIS: {
     GET_BACKEND_STATS: '/stats/',
+  },
+  TAG: {
+    NODES: `/tag/nodes`,
+    AUTOCOMPLETE: `/tag/autocomplete`,
   },
 };

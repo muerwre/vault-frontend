@@ -95,10 +95,21 @@
   opacity: 1;
   transform: translate(0, 0);
   transition: opacity 0.5s, transform 1s;
+
+  &.small {
+    @include clamp(8, 1.25em);
+    font-size: 24px;
+  }
+
+  &.medium{
+    @include clamp(6, 1.25em);
+    font-size: 28px;
+  }
 }
 
 .text_title {
   margin-bottom: $gap / 2;
+  @include clamp(3, 1.25em)
 }
 
 .horizontal,

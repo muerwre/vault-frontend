@@ -1,0 +1,32 @@
+$row_height: 24px;
+
+.row {
+  height: $row_height;
+  padding: 0 $gap;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font: $font_16_semibold;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: all 0.1s;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  &:hover, &.selected {
+    opacity: 1;
+    background: transparentize($wisegreen, 0.5);
+  }
+
+  &.right {
+    color: lighten($wisegreen, 4%);
+    opacity: 1;
+  }
+
+  svg {
+    margin-right: 5px;
+    fill: currentColor;
+    flex: 0 0 16px;
+  }
+}
