@@ -109,7 +109,7 @@ const TagAutocompleteUnconnected: FC<Props> = ({
       window.removeEventListener('resize', onScroll);
       window.removeEventListener('scroll', onScroll);
     };
-  }, [options]);
+  }, [options, search]);
 
   return (
     <div className={classNames(styles.window, { [styles.top]: top, [styles.left]: left })}>
