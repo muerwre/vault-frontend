@@ -23,15 +23,12 @@ export const HTTP_RESPONSES = {
   TOO_MANY_REQUESTS: 429,
 };
 
-export const resultMiddleware = <T extends {}>({
+export const resultMiddleware = <T extends any>({ status, data }: { status; data: T }) => ({
   status,
   data,
-}: {
-  status: number;
-  data: T;
-}): { status: number; data: T } => ({ status, data });
+});
 
-export const errorMiddleware = <T extends any>(debug): IResultWithStatus<T> =>
+export const errorMiddleware = <T extends any = any>(debug): IResultWithStatus<T> =>
   debug && debug.response
     ? {
         status: debug.response.status,
@@ -41,7 +38,7 @@ export const errorMiddleware = <T extends any>(debug): IResultWithStatus<T> =>
       }
     : {
         status: HTTP_RESPONSES.CONNECTION_REFUSED,
-        data: {} as T & IApiErrorResult,
+        data: {} as T & IApiErrorResult & any,
         debug,
         error: 'Ошибка сети',
       };

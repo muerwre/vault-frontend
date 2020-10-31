@@ -1,0 +1,105 @@
+.wrap {
+  @include outer_shadow;
+
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 400px;
+  max-width: 100vw;
+  position: relative;
+}
+
+.content {
+  background: $content_bg;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $gap;
+  background: lighten($content_bg, 2%);
+}
+
+.tag {
+  flex: 1;
+  display: flex;
+
+  & > * {
+    margin-bottom: 0;
+  }
+}
+
+.close {
+  cursor: pointer;
+
+  svg {
+    fill: white;
+    stroke: white;
+    color: white;
+  }
+}
+
+.list {
+  flex: 1 1 100%;
+  padding: $gap;
+  overflow: auto;
+}
+
+.sync {
+  padding-left: $gap * 2;
+
+  svg {
+    fill: transparentize(white, 0.5);
+  }
+}
+
+.progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: darken($content_bg, 2%);
+  height: 2px;
+  z-index: 2;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: lighten($content_bg, 20%);
+}
+
+.none {
+  padding: 40px $gap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: transparentize(white, 0.9);
+  fill: currentColor;
+  font: $font_18_semibold;
+  stroke: none;
+  line-height: 26px;
+  flex: 1;
+
+  div {
+    margin-top: 24px;
+    max-width: 200px;
+    text-align: center;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+}

@@ -54,4 +54,7 @@
   font: $font_12_regular;
   margin-top: 4px;
   opacity: 0.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

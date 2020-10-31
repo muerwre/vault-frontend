@@ -34,6 +34,9 @@ import borisSaga from './boris/sagas';
 import messages, { IMessagesState } from './messages';
 import messagesSaga from './messages/sagas';
 
+import tag, { ITagState } from './tag';
+import tagSaga from './tag/sagas';
+
 const authPersistConfig: PersistConfig = {
   key: 'auth',
   whitelist: ['token', 'user', 'updates'],
@@ -62,6 +65,7 @@ export interface IState {
   player: IPlayerState;
   boris: IBorisState;
   messages: IMessagesState;
+  tag: ITagState;
 }
 
 export const sagaMiddleware = createSagaMiddleware();
@@ -83,6 +87,7 @@ export const store = createStore(
     flow: persistReducer(flowPersistConfig, flow),
     player: persistReducer(playerPersistConfig, player),
     messages,
+    tag: tag,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
@@ -99,6 +104,7 @@ export function configureStore(): {
   sagaMiddleware.run(modalSaga);
   sagaMiddleware.run(borisSaga);
   sagaMiddleware.run(messagesSaga);
+  sagaMiddleware.run(tagSaga);
 
   window.addEventListener('message', message => {
     if (message && message.data && message.data.type === 'oauth_login' && message.data.token)
