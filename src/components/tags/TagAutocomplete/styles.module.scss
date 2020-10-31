@@ -1,0 +1,11 @@
+.window {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc(90vw - 20px);
+  max-width: 300px;
+  background: red;
+  height: 100px;
+  z-index: -1;
+}
