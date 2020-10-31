@@ -20,6 +20,7 @@ import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { Sticky } from '~/components/containers/Sticky';
 import { Footer } from '~/components/main/Footer';
+import { Link } from 'react-router-dom';
 
 import * as styles from './styles.scss';
 import * as NODE_ACTIONS from '~/redux/node/actions';
@@ -216,7 +217,11 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                             .filter(album => related.albums[album].length > 0)
                             .map(album => (
                               <NodeRelated
-                                title={album}
+                                title={
+                                  <Link to={URLS.NODE_TAG_URL(node.id, encodeURIComponent(album))}>
+                                    {album}
+                                  </Link>
+                                }
                                 items={related.albums[album]}
                                 key={album}
                               />

@@ -20,6 +20,11 @@
 
 .title {
   @include title_with_line();
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 }
 
 .text {
