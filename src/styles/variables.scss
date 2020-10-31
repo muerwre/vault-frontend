@@ -175,3 +175,13 @@ $login_dialog_padding: $gap $gap 30px $gap;
     background: transparentize(white, 0.95);
   }
 }
+
+@mixin clamp($lines, $line: 1em) {
+  max-height: $line * $lines;
+  overflow: hidden;
+  -webkit-line-clamp: $lines;
+  line-clamp: $lines;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+}

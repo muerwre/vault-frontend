@@ -1,6 +1,6 @@
-import React, { FC, useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { INode } from '~/redux/types';
-import { getURL, formatCellText } from '~/utils/dom';
+import { formatCellText, getURL } from '~/utils/dom';
 import classNames from 'classnames';
 
 import * as styles from './styles.scss';
@@ -109,6 +109,16 @@ const Cell: FC<IProps> = ({
     return getURL({ url: thumbnail }, preset);
   }, [thumbnail, flow]);
 
+  const titleSize = useMemo(() => {
+    if (title.length > 100) {
+      return styles.small;
+    } else if (title.length > 64) {
+      return styles.medium;
+    } else {
+      return;
+    }
+  }, [title]);
+
   return (
     <div className={classNames(styles.cell, styles[(flow && flow.display) || 'single'])} ref={ref}>
       {is_visible && (
@@ -134,7 +144,7 @@ const Cell: FC<IProps> = ({
 
           <Link className={classNames(styles.face)} to={`/post${id}`}>
             <div className={styles.face_content}>
-              {!text && <div className={styles.title}>{title || '...'}</div>}
+              {!text && <div className={classNames(styles.title, titleSize)}>{title || '...'}</div>}
 
               {!!text && !!thumbnail && (
                 <div className={styles.text}>
