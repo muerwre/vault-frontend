@@ -109,10 +109,21 @@ const TagAutocompleteUnconnected: FC<Props> = ({
       {...pop.attributes.popper}
     >
       <div className={styles.scroll} ref={scroll}>
-        <TagAutocompleteRow selected={selected === -1} title={search} type="enter" />
+        <TagAutocompleteRow
+          selected={selected === -1}
+          title={search}
+          type="enter"
+          onSelect={onSelect}
+        />
 
         {categories.map((item, i) => (
-          <TagAutocompleteRow selected={selected === i} title={item} type="right" key={item} />
+          <TagAutocompleteRow
+            selected={selected === i}
+            title={item}
+            type="right"
+            key={item}
+            onSelect={onSelect}
+          />
         ))}
 
         {tags.map((item, i) => (
@@ -121,6 +132,7 @@ const TagAutocompleteUnconnected: FC<Props> = ({
             title={item}
             type="tag"
             key={item}
+            onSelect={onSelect}
           />
         ))}
       </div>
