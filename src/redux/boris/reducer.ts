@@ -30,7 +30,7 @@ export type IStatBackend = {
 
 export type IBorisState = Readonly<{
   stats: {
-    git: IStatGitRow[];
+    git: Partial<IStatGitRow>[];
     backend: IStatBackend;
     is_loading: boolean;
   };

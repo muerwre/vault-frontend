@@ -1,5 +1,5 @@
-import assocPath from 'ramda/es/assocPath';
-import omit from 'ramda/es/omit';
+import { assocPath } from 'ramda';
+import { omit } from 'ramda';
 
 import { UPLOAD_ACTIONS, EMPTY_UPLOAD_STATUS } from './constants';
 import {

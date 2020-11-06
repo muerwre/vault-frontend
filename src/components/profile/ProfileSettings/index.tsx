@@ -7,7 +7,7 @@ import { Button } from '~/components/input/Button';
 import { Group } from '~/components/containers/Group';
 import { Filler } from '~/components/containers/Filler';
 import { InputText } from '~/components/input/InputText';
-import reject from 'ramda/es/reject';
+import { reject } from 'ramda';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { ProfileAccounts } from '~/components/profile/ProfileAccounts';

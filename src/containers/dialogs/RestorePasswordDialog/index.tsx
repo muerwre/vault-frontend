@@ -8,7 +8,7 @@ import { Button } from '~/components/input/Button';
 import styles from './styles.module.scss';
 
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
-import pick from 'ramda/es/pick';
+import { pick } from 'ramda';
 import { selectAuthRestore } from '~/redux/auth/selectors';
 import { ERROR_LITERAL, ERRORS } from '~/constants/errors';
 import { Icon } from '~/components/input/Icon';

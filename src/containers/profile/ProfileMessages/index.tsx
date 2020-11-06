@@ -4,7 +4,7 @@ import { selectAuthProfile, selectAuthUser } from '~/redux/auth/selectors';
 import styles from './styles.module.scss';
 import * as AUTH_ACTIONS from '~/redux/messages/actions';
 import { Message } from '~/components/profile/Message';
-import pick from 'ramda/es/pick';
+import { pick } from 'ramda';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { selectMessages } from '~/redux/messages/selectors';
 

@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import { createPortal } from 'react-dom';
 import { selectNode } from '~/redux/node/selectors';
 import { connect } from 'react-redux';
-import pick from 'ramda/es/pick';
+import { pick } from 'ramda';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 

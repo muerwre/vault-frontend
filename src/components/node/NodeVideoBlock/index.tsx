@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import styles from './styles.module.scss';
-import path from 'ramda/es/path';
+import { path } from 'ramda';
 import { INodeComponentProps } from '~/redux/node/constants';
 
 interface IProps extends INodeComponentProps {}

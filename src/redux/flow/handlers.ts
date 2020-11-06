@@ -1,4 +1,4 @@
-import assocPath from 'ramda/es/assocPath';
+import { assocPath } from 'ramda';
 import { FLOW_ACTIONS } from './constants';
 import {
   flowSetNodes,

@@ -5,7 +5,7 @@ import styles from './styles.module.scss';
 import { Card } from '../Card';
 import { IUser } from '~/redux/auth/types';
 import { getURL } from '~/utils/dom';
-import path from 'ramda/es/path';
+import { path } from 'ramda';
 import { PRESETS } from '~/constants/urls';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {

@@ -17,7 +17,7 @@ export interface IPlayerProgress {
 
 export class PlayerClass {
   public constructor() {
-    this.element.addEventListener('timeupdate', () => {
+    this.element?.addEventListener('timeupdate', () => {
       const { duration: total, currentTime: current } = this.element;
       const progress = parseFloat(((current / total) * 100).toFixed(2));
 
@@ -36,7 +36,7 @@ export class PlayerClass {
 
   public total: number = 0;
 
-  public element: HTMLAudioElement = new Audio();
+  public element: HTMLAudioElement = typeof Audio !== 'undefined' ? new Audio() : null;
 
   public duration: number = 0;
 
@@ -45,11 +45,11 @@ export class PlayerClass {
   };
 
   public on = (type: string, callback) => {
-    this.element.addEventListener(type, callback);
+    this.element?.addEventListener(type, callback);
   };
 
   public off = (type: string, callback) => {
-    this.element.removeEventListener(type, callback);
+    this.element?.removeEventListener(type, callback);
   };
 
   public load = () => {

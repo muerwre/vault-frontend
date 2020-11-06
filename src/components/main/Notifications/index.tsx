@@ -3,7 +3,7 @@ import { Icon } from '~/components/input/Icon';
 import styles from './styles.module.scss';
 import { connect } from 'react-redux';
 import { selectAuthUpdates, selectAuthUser } from '~/redux/auth/selectors';
-import pick from 'ramda/es/pick';
+import { pick } from 'ramda';
 import classNames from 'classnames';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { NotificationBubble } from '../../notifications/NotificationBubble';

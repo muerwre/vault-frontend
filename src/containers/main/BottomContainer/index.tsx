@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import { PlayerBar } from '~/components/bars/PlayerBar';
 import { SubmitBar } from '~/components/bars/SubmitBar';
 import { selectUser } from '~/redux/auth/selectors';
-import pick from 'ramda/es/pick';
+import { pick } from 'ramda';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => pick(['is_user'], selectUser(state));

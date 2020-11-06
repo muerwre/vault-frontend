@@ -17,7 +17,7 @@ import { selectFlowNodes, selectFlow } from './selectors';
 import { reqWrapper } from '../auth/sagas';
 import { postCellView, getSearchResults } from './api';
 import { IFlowState } from './reducer';
-import uniq from 'ramda/es/uniq';
+import { uniq } from 'ramda';
 
 function hideLoader() {
   document.getElementById('main_loader').style.display = 'none';

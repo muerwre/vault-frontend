@@ -3,7 +3,7 @@ import { Textarea } from '~/components/input/Textarea';
 import styles from './styles.module.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
-import assocPath from 'ramda/es/assocPath';
+import { assocPath } from 'ramda';
 import { IFile, IFileWithUUID, InputHandler } from '~/redux/types';
 import { connect } from 'react-redux';
 import * as NODE_ACTIONS from '~/redux/node/actions';
