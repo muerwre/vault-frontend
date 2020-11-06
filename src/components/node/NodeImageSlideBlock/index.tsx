@@ -250,16 +250,6 @@ const NodeImageSlideBlock: FC<IProps> = ({
     <div className={styles.wrap}>
       <div className={classNames(styles.cutter, { [styles.is_loading]: is_loading })} ref={wrap}>
         <div
-          className={classNames(styles.placeholder, {
-            [styles.is_loading]: is_loading,
-          })}
-        >
-          <div>
-            <LoaderCircle size={96} />
-          </div>
-        </div>
-
-        <div
           className={classNames(styles.image_container, { [styles.is_dragging]: is_dragging })}
           style={{
             height,
