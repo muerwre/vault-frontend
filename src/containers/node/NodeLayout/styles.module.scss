@@ -1,3 +1,5 @@
+@import "src/styles/variables";
+
 .content {
   align-items: stretch !important;
   @include vertical_at_tablet;
@@ -25,7 +27,7 @@
   min-width: 0;
   position: relative;
   z-index: 10;
-  
+
   @media (max-width: 1024px) {
     padding-left: 0;
     padding-top: $comment_height / 2;

@@ -1,3 +1,5 @@
+@import "src/styles/variables";
+
 $secondary_color: darken(desaturate($blue, 100%), 30%);
 $vk_color: $secondary_color;
 

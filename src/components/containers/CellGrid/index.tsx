@@ -1,7 +1,7 @@
 import React, { FC, HTMLAttributes } from 'react';
 import styles from './styles.module.scss';
 
-import classNames = require('classnames');
+import classNames from 'classnames';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   children: any;

@@ -16,7 +16,7 @@ import { URLS } from '~/constants/urls';
 import { createPortal } from 'react-dom';
 import classNames from 'classnames';
 
-import * as style from './style.scss';
+import styles from './styles.module.scss';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IState } from '~/redux/store';
@@ -75,24 +75,24 @@ const HeaderUnconnected: FC<IProps> = memo(
     );
 
     return createPortal(
-      <div className={classNames(style.wrap, { [style.is_scrolled]: is_scrolled })}>
-        <div className={style.container}>
+      <div className={classNames(styles.wrap, { [styles.is_scrolled]: is_scrolled })}>
+        <div className={styles.container}>
           <Logo />
 
           <Filler />
 
-          <div className={style.plugs}>
+          <div className={styles.plugs}>
             <Link
-              className={classNames(style.item, { [style.is_active]: pathname === URLS.BASE })}
+              className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
               to={URLS.BASE}
             >
               ФЛОУ
             </Link>
 
             <Link
-              className={classNames(style.item, {
-                [style.is_active]: pathname === URLS.BORIS,
-                [style.has_dot]: hasBorisUpdates,
+              className={classNames(styles.item, {
+                [styles.is_active]: pathname === URLS.BORIS,
+                [styles.has_dot]: hasBorisUpdates,
               })}
               to={URLS.BORIS}
             >
@@ -100,7 +100,7 @@ const HeaderUnconnected: FC<IProps> = memo(
             </Link>
 
             {is_user && (
-              <div className={style.item}>
+              <div className={styles.item}>
                 <Notifications />
               </div>
             )}
@@ -111,7 +111,7 @@ const HeaderUnconnected: FC<IProps> = memo(
           )}
 
           {!is_user && (
-            <Group horizontal className={style.user_button} onClick={onLogin}>
+            <Group horizontal className={styles.user_button} onClick={onLogin}>
               <div>ВДОХ</div>
             </Group>
           )}

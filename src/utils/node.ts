@@ -1,5 +1,5 @@
 import { USER_ROLES } from '~/redux/auth/constants';
-import { INode, IComment, ICommentGroup } from '~/redux/types';
+import { ICommentGroup, INode } from '~/redux/types';
 import { IUser } from '~/redux/auth/types';
 import path from 'ramda/es/path';
 import { NODE_TYPES } from '~/redux/node/constants';

@@ -1,3 +1,5 @@
+@import "src/styles/variables";
+
 @mixin button {
   margin: 0 $gap;
   cursor: pointer;
