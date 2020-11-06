@@ -109,25 +109,11 @@
   }
 }
 
-// .title {
-//   flex: 0;
-//   height: 48px;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   padding: 0 $gap 0 0;
-//   background: red;
-//   border-radius: $radius;
-//   font: $font_hero_title;
-//   text-transform: uppercase;
-// }
-
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 48px;
-  // background: rgba(0, 0, 0, 0.7);
   flex-direction: row;
   width: 96px;
   border-radius: $radius;
@@ -146,7 +132,6 @@
   }
 }
 
-// new
 .loaders {
   position: absolute;
   top: 0;
@@ -159,6 +144,5 @@
     position: absolute;
     left: 0;
     top: 0;
-
   }
 }
