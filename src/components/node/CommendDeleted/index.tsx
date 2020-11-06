@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from 'react';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Button } from '~/components/input/Button';
 import { nodeLockComment } from '~/redux/node/actions';
 import { IComment } from '~/redux/types';

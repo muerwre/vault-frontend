@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { Button } from '~/components/input/Button';

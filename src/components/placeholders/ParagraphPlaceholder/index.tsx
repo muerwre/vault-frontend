@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Placeholder } from '~/components/placeholders/Placeholder';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 
 const ParagraphPlaceholder = ({}) => (

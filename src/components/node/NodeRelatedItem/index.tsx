@@ -1,5 +1,5 @@
 import React, { FC, memo, useCallback, useState, useMemo } from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { INode } from '~/redux/types';
 import { URLS, PRESETS } from '~/constants/urls';

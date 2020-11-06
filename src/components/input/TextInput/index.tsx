@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 
 interface ITextInputProps {
   type?: 'text' | 'password';

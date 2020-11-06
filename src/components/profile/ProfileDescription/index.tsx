@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { formatText } from '~/utils/dom';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { connect } from 'react-redux';
 import { selectAuthProfile } from '~/redux/auth/selectors';
 import { ProfileLoader } from '~/containers/profile/ProfileLoader';

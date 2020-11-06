@@ -4,7 +4,7 @@ import { INode, IFile } from '~/redux/types';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {

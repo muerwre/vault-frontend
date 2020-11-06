@@ -1,0 +1,25 @@
+@keyframes appear {
+  0% { opacity: 0 }
+  100% { opacity: 100 }
+}
+
+$row_height: 24px;
+
+.window {
+  box-shadow: transparentize(white, 0.9) 0 0 0 1px;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: calc(100vw - 15px);
+  max-width: 300px;
+  background: darken($content_bg, 2%);
+  z-index: 10;
+  border-radius: 4px;
+  animation: appear 0.25s forwards;
+}
+
+.scroll {
+  overflow: hidden;
+  padding: 0 0 $gap / 2;
+  border-radius: 4px;
+}

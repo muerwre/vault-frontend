@@ -3,4 +3,8 @@
   align-items: flex-start;
   justify-content: flex-start;
   flex-wrap: wrap;
+
+  &> * {
+    margin: 0 $gap $gap 0;
+  }
 }

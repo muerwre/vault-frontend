@@ -1,7 +1,7 @@
 import React, { FC, HTMLAttributes } from 'react';
 import classNames from 'classnames';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Card } from '../Card';
 import { IUser } from '~/redux/auth/types';
 import { getURL } from '~/utils/dom';

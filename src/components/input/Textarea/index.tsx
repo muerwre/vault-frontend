@@ -11,7 +11,7 @@ import React, {
 import classNames from 'classnames';
 import autosize from 'autosize';
 
-import * as styles from '~/styles/inputs.scss';
+import * as styles from '~/styles/common/inputs.module.scss';
 import { Icon } from '../Icon';
 
 type IProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { createPortal } from 'react-dom';
 import { GodRays } from '~/components/main/GodRays';
 

@@ -7,7 +7,7 @@ import { AudioGrid } from '../AudioGrid';
 import { selectUploads } from '~/redux/uploads/selectors';
 
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {

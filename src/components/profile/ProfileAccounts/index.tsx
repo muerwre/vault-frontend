@@ -1,6 +1,6 @@
 import React, { FC, Fragment, useCallback, useEffect } from 'react';
 import { ISocialProvider } from '~/redux/auth/types';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { Icon } from '~/components/input/Icon';
 import { Button } from '~/components/input/Button';

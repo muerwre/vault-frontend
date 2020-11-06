@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useRef, useState, memo } from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { INode } from '~/redux/types';
 import { createPortal } from 'react-dom';
 import { NodePanelInner } from '~/components/node/NodePanelInner';

@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { ButtonHTMLAttributes, DetailedHTMLProps, FC, createElement, memo } from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { IIcon } from '~/redux/types';
 

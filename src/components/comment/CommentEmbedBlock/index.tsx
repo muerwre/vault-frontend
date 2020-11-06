@@ -1,6 +1,6 @@
 import React, { FC, memo, useMemo, useEffect } from 'react';
 import { ICommentBlockProps } from '~/constants/comment';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { getYoutubeThumb } from '~/utils/dom';
 import { selectPlayer } from '~/redux/player/selectors';
 import { connect } from 'react-redux';

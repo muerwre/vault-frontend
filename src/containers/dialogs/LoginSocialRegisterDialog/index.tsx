@@ -6,7 +6,7 @@ import { Padder } from '~/components/containers/Padder';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
 import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { selectAuthRegisterSocial } from '~/redux/auth/selectors';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { useCloseOnEscape } from '~/utils/hooks';

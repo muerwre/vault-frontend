@@ -1,5 +1,5 @@
-import React, { FC, createElement, useEffect, useCallback, useState, useMemo, memo } from 'react';
-import { RouteComponentProps } from 'react-router';
+import React, { createElement, FC, memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { RouteComponentProps, useHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { canEditNode, canLikeNode, canStarNode } from '~/utils/node';
 import { selectNode } from '~/redux/node/selectors';
@@ -12,12 +12,7 @@ import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
-import {
-  NODE_COMPONENTS,
-  NODE_INLINES,
-  NODE_HEADS,
-  INodeComponentProps,
-} from '~/redux/node/constants';
+import { INodeComponentProps, NODE_COMPONENTS, NODE_HEADS, NODE_INLINES, } from '~/redux/node/constants';
 import { selectUser } from '~/redux/auth/selectors';
 import pick from 'ramda/es/pick';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
@@ -25,12 +20,16 @@ import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { Sticky } from '~/components/containers/Sticky';
 import { Footer } from '~/components/main/Footer';
+import { Link } from 'react-router-dom';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { IState } from '~/redux/store';
 import { selectModal } from '~/redux/modal/selectors';
+import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import { ITag } from '~/redux/types';
+import { URLS } from '~/constants/urls';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -86,6 +85,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     modalShowPhotoswipe,
   }) => {
     const [layout, setLayout] = useState({});
+    const history = useHistory();
 
     const updateLayout = useCallback(() => setLayout({}), []);
 
@@ -99,6 +99,13 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
         nodeUpdateTags(node.id, tags);
       },
       [node, nodeUpdateTags]
+    );
+
+    const onTagClick = useCallback(
+      (tag: Partial<ITag>) => {
+        history.push(URLS.NODE_TAG_URL(node.id, encodeURIComponent(tag.title)));
+      },
+      [history, node.id]
     );
 
     const can_edit = useMemo(() => canEditNode(node, user), [node, user]);
@@ -197,6 +204,7 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                             is_editable={is_user}
                             tags={node.tags}
                             onChange={onTagsChange}
+                            onTagClick={onTagClick}
                           />
                         )}
 
@@ -209,7 +217,11 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                             .filter(album => related.albums[album].length > 0)
                             .map(album => (
                               <NodeRelated
-                                title={album}
+                                title={
+                                  <Link to={URLS.NODE_TAG_URL(node.id, encodeURIComponent(album))}>
+                                    {album}
+                                  </Link>
+                                }
                                 items={related.albums[album]}
                                 key={album}
                               />
@@ -231,6 +243,8 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
 
           <Footer />
         </Card>
+
+        <SidebarRouter prefix="/post:id" />
       </>
     );
   }

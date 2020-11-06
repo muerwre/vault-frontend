@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 import { SortEnd } from 'react-sortable-hoc';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { IFile } from '~/redux/types';
 import { IUploadStatus } from '~/redux/uploads/reducer';
 import { moveArrItem } from '~/utils/fn';

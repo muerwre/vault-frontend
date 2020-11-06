@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { ProfilePageLeft } from '../ProfilePageLeft';
 import { Switch, Route, RouteComponentProps } from 'react-router';
 import { IState } from '~/redux/store';

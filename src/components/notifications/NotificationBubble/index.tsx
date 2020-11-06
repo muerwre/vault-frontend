@@ -1,6 +1,6 @@
 import React, { FC, createElement } from 'react';
 import { INotification, NOTIFICATION_TYPES } from '~/redux/types';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { NotificationMessage } from '../NotificationMessage';
 import { Icon } from '~/components/input/Icon';
 import { getRandomPhrase } from '~/constants/phrases';

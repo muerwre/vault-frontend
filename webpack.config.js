@@ -176,6 +176,7 @@ module.exports = () => {
       contentBase: 'dist',
       publicPath: '/',
       hot: true,
+      open: false,
     },
   };
 };

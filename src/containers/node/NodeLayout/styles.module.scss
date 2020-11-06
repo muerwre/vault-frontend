@@ -23,7 +23,9 @@
   justify-content: flex-start;
   padding-left: $gap / 2;
   min-width: 0;
-
+  position: relative;
+  z-index: 10;
+  
   @media (max-width: 1024px) {
     padding-left: 0;
     padding-top: $comment_height / 2;
