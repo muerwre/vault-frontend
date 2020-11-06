@@ -2,7 +2,7 @@ import React, { FC, MouseEventHandler } from 'react';
 import { Button } from '~/components/input/Button';
 import { Grid } from '~/components/containers/Grid';
 import { Group } from '~/components/containers/Group';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 
 interface IProps {
   openOauthWindow: (provider: string) => MouseEventHandler;

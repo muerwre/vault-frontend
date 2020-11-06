@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { INode } from '~/redux/types';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import path from 'ramda/es/path';
 import { getURL } from '~/utils/dom';

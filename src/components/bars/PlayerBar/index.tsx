@@ -1,7 +1,6 @@
-import React, { FC, useCallback, useState, useEffect } from 'react';
-import * as styles from './styles.scss';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
-import { Filler } from '~/components/containers/Filler';
 import { PLAYER_STATES } from '~/redux/player/constants';
 import { connect } from 'react-redux';
 import pick from 'ramda/es/pick';

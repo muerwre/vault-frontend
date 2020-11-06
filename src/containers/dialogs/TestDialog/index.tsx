@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { BetterScrollDialog } from '../BetterScrollDialog';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 
 interface IProps {}
 

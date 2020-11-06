@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { describeArc } from '~/utils/dom';
 
 interface IProps {

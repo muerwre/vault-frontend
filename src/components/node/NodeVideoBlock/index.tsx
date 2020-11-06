@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import path from 'ramda/es/path';
 import { INodeComponentProps } from '~/redux/node/constants';
 

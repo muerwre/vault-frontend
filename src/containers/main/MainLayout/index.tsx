@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Header } from '~/components/main/Header';
 
 export const MainLayout = ({ children }) => (

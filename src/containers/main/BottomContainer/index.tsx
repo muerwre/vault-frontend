@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { PlayerBar } from '~/components/bars/PlayerBar';
 import { SubmitBar } from '~/components/bars/SubmitBar';
 import { selectUser } from '~/redux/auth/selectors';

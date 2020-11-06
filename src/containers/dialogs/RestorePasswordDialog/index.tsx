@@ -5,7 +5,7 @@ import { BetterScrollDialog } from '../BetterScrollDialog';
 import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
 import { Button } from '~/components/input/Button';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import pick from 'ramda/es/pick';

@@ -4,7 +4,7 @@ import { selectNode } from '~/redux/node/selectors';
 import { selectUser } from '~/redux/auth/selectors';
 import { connect } from 'react-redux';
 import { NodeComments } from '~/components/node/NodeComments';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
 import { NodeNoComments } from '~/components/node/NodeNoComments';

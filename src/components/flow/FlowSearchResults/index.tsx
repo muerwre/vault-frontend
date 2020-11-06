@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from 'react';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { IFlowState } from '~/redux/flow/reducer';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { FlowRecentItem } from '../FlowRecentItem';

@@ -2,7 +2,7 @@ import React, { FC, useState, useCallback, useEffect, useRef, useMemo } from 're
 import { IFlowState } from '~/redux/flow/reducer';
 import classNames from 'classnames';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { getURL } from '~/utils/dom';
 import { withRouter, RouteComponentProps, useHistory } from 'react-router';
 import { URLS, PRESETS } from '~/constants/urls';

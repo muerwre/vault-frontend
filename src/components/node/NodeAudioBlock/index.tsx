@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react';
 import { INode } from '~/redux/types';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { INodeComponentProps } from '~/redux/node/constants';
 
 interface IProps extends INodeComponentProps {}

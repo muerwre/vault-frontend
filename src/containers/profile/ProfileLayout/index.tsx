@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useRouteMatch, withRouter, RouteComponentProps } from 'react-router';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { Grid } from '~/components/containers/Grid';
 import { CommentForm } from '~/components/node/CommentForm';

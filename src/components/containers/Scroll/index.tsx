@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { Scrollbars } from 'tt-react-custom-scrollbars';
 import classNames from 'classnames';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 
 interface IProps {
   children: Element | React.ReactChild;

@@ -7,7 +7,7 @@ import * as FLOW_ACTIONS from '~/redux/flow/actions';
 import pick from 'ramda/es/pick';
 import { selectUser } from '~/redux/auth/selectors';
 import { FlowHero } from '~/components/flow/FlowHero';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { IState } from '~/redux/store';
 import { FlowStamp } from '~/components/flow/FlowStamp';
 

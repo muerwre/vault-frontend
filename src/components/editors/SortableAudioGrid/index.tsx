@@ -1,7 +1,7 @@
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { AudioUpload } from '~/components/upload/AudioUpload';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { SortableAudioGridItem } from '~/components/editors/SortableAudioGridItem';
 import { IFile } from '~/redux/types';
 import { IUploadStatus } from '~/redux/uploads/reducer';

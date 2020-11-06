@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { connect } from 'react-redux';
 import { selectAuthProfile, selectAuthUser } from '~/redux/auth/selectors';
 import { Textarea } from '~/components/input/Textarea';

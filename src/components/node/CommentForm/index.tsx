@@ -1,6 +1,6 @@
 import React, { FC, KeyboardEventHandler, memo, useCallback, useEffect, useMemo } from 'react';
 import { Textarea } from '~/components/input/Textarea';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import assocPath from 'ramda/es/assocPath';

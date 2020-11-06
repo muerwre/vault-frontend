@@ -1,5 +1,5 @@
 import React, { FC, memo } from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { createPortal } from 'react-dom';
 import { selectNode } from '~/redux/node/selectors';
 import { connect } from 'react-redux';

@@ -6,7 +6,7 @@ import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
 import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { selectNode } from '~/redux/node/selectors';
 import { EditorPanel } from '~/components/editors/EditorPanel';
 import * as NODE_ACTIONS from '~/redux/node/actions';

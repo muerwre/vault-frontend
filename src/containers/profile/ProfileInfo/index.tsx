@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react';
 import { IUser } from '~/redux/auth/types';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { getPrettyDate } from '~/utils/dom';

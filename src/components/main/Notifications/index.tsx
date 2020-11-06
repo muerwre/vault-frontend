@@ -1,6 +1,6 @@
 import React, { FC, useMemo, useState, useCallback, useEffect } from 'react';
 import { Icon } from '~/components/input/Icon';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { connect } from 'react-redux';
 import { selectAuthUpdates, selectAuthUser } from '~/redux/auth/selectors';
 import pick from 'ramda/es/pick';

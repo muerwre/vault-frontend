@@ -1,7 +1,7 @@
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { ImageUpload } from '~/components/upload/ImageUpload';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { SortableImageGridItem } from '~/components/editors/SortableImageGridItem';
 import { IFile } from '~/redux/types';
 import { IUploadStatus } from '~/redux/uploads/reducer';

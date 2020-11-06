@@ -3,7 +3,7 @@ import { IComment, IFile } from '~/redux/types';
 import path from 'ramda/es/path';
 import { formatCommentText, getURL, getPrettyDate } from '~/utils/dom';
 import { Group } from '~/components/containers/Group';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import assocPath from 'ramda/es/assocPath';
 import append from 'ramda/es/append';

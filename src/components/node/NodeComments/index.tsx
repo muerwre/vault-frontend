@@ -2,7 +2,7 @@ import React, { FC, useMemo, memo } from 'react';
 import { Comment } from '../Comment';
 import { Filler } from '~/components/containers/Filler';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { ICommentGroup, IComment } from '~/redux/types';
 import { groupCommentsByUser } from '~/utils/fn';
 import { IUser } from '~/redux/auth/types';

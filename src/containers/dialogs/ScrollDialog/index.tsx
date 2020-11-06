@@ -4,7 +4,7 @@ import React, {
 // import { DialogPanel } from '~/components/panels/DialogPanel';
 import classNames from 'classnames';
 import { Scroll } from '~/components/containers/Scroll';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 
 interface IProps {
   children: React.ReactChild;

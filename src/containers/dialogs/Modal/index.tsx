@@ -1,7 +1,7 @@
 import React, { Attributes, FC, useCallback } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { IState } from '~/redux/store';
 import * as ACTIONS from '~/redux/modal/actions';
 import { DIALOG_CONTENT } from '~/constants/dialogs';

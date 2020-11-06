@@ -2,7 +2,7 @@ import React, { FC, HTMLAttributes, memo } from 'react';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import { ICommentGroup, IComment } from '~/redux/types';
 import { CommentContent } from '~/components/node/CommentContent';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { nodeLockComment, nodeEditComment } from '~/redux/node/actions';
 import { INodeState } from '~/redux/node/reducer';
 import { CommentForm } from '../CommentForm';

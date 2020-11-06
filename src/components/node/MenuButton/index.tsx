@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { Filler } from '~/components/containers/Filler';
 

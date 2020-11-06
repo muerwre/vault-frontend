@@ -1,5 +1,5 @@
 import React, { FC, KeyboardEventHandler, useCallback, useMemo, useState } from 'react';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Textarea } from '~/components/input/Textarea';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';

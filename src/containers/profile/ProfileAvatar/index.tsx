@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import styles from "./styles.scss";
+import styles from "./styles.module.scss";
 import { connect } from "react-redux";
 import { getURL } from "~/utils/dom";
 import pick from "ramda/es/pick";
