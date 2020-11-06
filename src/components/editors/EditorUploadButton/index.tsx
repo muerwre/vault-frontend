@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect } from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { IFileWithUUID, INode, IFile } from '~/redux/types';
 import uuid from 'uuid4';

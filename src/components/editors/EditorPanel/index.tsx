@@ -1,5 +1,5 @@
 import React, { FC, createElement } from 'react';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { INode } from '~/redux/types';
 import { NODE_PANEL_COMPONENTS } from '~/redux/node/constants';
 

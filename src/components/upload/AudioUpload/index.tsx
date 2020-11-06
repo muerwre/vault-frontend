@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 import classNames from 'classnames';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { ArcProgress } from '~/components/input/ArcProgress';
 import { IFile } from '~/redux/types';
 import { Icon } from '~/components/input/Icon';

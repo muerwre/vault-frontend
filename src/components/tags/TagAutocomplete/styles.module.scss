@@ -6,7 +6,7 @@
 $row_height: 24px;
 
 .window {
-  box-shadow: transparentize(white, 0.9) 0 0 0 1px, transparentize(black, 0.7) 4px 4px;
+  box-shadow: transparentize(white, 0.9) 0 0 0 1px;
   position: absolute;
   top: -2px;
   right: -2px;
@@ -14,24 +14,12 @@ $row_height: 24px;
   max-width: 300px;
   background: darken($content_bg, 2%);
   z-index: 10;
-  border-radius: 3px;
-  padding: $tag_height + 4px 0 0;
+  border-radius: 4px;
   animation: appear 0.25s forwards;
-
-  &.top {
-    bottom: -2px;
-    top: auto;
-    padding: 0 0 $tag_height + 4px;
-  }
-
-  &.left {
-    right: auto;
-    left: -2px;
-  }
 }
 
 .scroll {
-  overflow: auto;
-  max-height: 7 * $row_height + $tag_height;
+  overflow: hidden;
   padding: 0 0 $gap / 2;
+  border-radius: 4px;
 }

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import classNames from 'classnames';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 
 type IProps = React.HTMLAttributes<HTMLDivElement> & {
   horizontal?: boolean;

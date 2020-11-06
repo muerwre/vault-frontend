@@ -1,6 +1,6 @@
 import React, { FC, useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { ImageSwitcher } from '../ImageSwitcher';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { INode } from '~/redux/types';
 import classNames from 'classnames';
 import { getURL } from '~/utils/dom';

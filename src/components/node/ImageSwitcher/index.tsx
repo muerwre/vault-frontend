@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import range from 'ramda/es/range';
 import classNames from 'classnames';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 
 interface IProps {
   total: number;

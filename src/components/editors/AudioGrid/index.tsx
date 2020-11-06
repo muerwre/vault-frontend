@@ -5,7 +5,7 @@ import { IUploadStatus } from '~/redux/uploads/reducer';
 import { moveArrItem } from '~/utils/fn';
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 
 interface IProps {
   files: IFile[];

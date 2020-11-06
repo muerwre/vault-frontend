@@ -22,7 +22,7 @@ import { Sticky } from '~/components/containers/Sticky';
 import { Footer } from '~/components/main/Footer';
 import { Link } from 'react-router-dom';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { IState } from '~/redux/store';

@@ -4,7 +4,7 @@ import { Icon } from '~/components/input/Icon';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { DIALOGS } from '~/redux/modal/constants';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { NODE_TYPES } from '~/redux/node/constants';
 
 const mapStateToProps = null;

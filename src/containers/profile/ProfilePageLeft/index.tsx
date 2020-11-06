@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { IAuthState } from '~/redux/auth/types';
 import { getURL } from '~/utils/dom';
 import { PRESETS, URLS } from '~/constants/urls';

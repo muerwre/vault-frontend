@@ -10,7 +10,7 @@ import { selectModal } from '~/redux/modal/selectors';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import classNames from 'classnames';
 
 const mapStateToProps = (state: IState) => ({

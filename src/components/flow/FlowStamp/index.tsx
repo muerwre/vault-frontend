@@ -4,7 +4,7 @@ import { InputText } from '~/components/input/InputText';
 import { FlowRecent } from '../FlowRecent';
 import classnames from 'classnames';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import * as FLOW_ACTIONS from '~/redux/flow/actions';
 import { FlowSearchResults } from '../FlowSearchResults';
 import { Icon } from '~/components/input/Icon';

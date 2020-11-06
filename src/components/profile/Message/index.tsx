@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 import { IMessage } from '~/redux/types';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { formatText, getPrettyDate, getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import classNames from 'classnames';

@@ -2,7 +2,7 @@ import React, {
   FC, LegacyRef, ReactChild, useCallback, useEffect, useState
 } from 'react';
 import classNames from 'classnames';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 
 interface IProps {

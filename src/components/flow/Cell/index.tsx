@@ -3,7 +3,7 @@ import { INode } from '~/redux/types';
 import { formatCellText, getURL } from '~/utils/dom';
 import classNames from 'classnames';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { flowSetCellView } from '~/redux/flow/actions';
 import { PRESETS } from '~/constants/urls';

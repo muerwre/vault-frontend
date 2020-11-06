@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { INode } from '~/redux/types';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { URLS } from '~/constants/urls';
 import { NodeRelatedItem } from '~/components/node/NodeRelatedItem';
 import { getPrettyDate } from '~/utils/dom';

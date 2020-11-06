@@ -39,18 +39,6 @@
     transition: none;
   }
 
-  .image {
-    max-width: 100%;
-    opacity: 1;
-    border-radius: $radius;
-    box-shadow: transparentize($color: white, $amount: 0.95) 0 -1px,
-      transparentize($color: #000000, $amount: 0.6) 0 2px 5px;
-
-    @include tablet {
-      border-radius: 0;
-    }
-  }
-
   &.is_dragging {
     transition: none;
   }
@@ -67,7 +55,7 @@
   padding: 0 $gap / 2;
   position: relative;
 
-  &:global(.is_active) {
+  &.is_active {
     opacity: 1;
   }
 
@@ -155,7 +143,6 @@
   align-items: center;
   justify-content: center;
   background: $content_bg;
-  z-index: 0;
   pointer-events: none;
   touch-action: none;
   transition: opacity 2s;
@@ -169,5 +156,30 @@
   svg {
     opacity: 0.025;
     fill: white;
+  }
+}
+
+.image, .preview {
+  max-width: 100%;
+  border-radius: $radius;
+
+  @include tablet {
+    border-radius: 0;
+  }
+}
+
+.image {
+  position: absolute;
+  opacity: 0;
+
+  &.is_loaded {
+    opacity: 1;
+    position: static;
+  }
+}
+
+.preview {
+  &.is_loaded {
+    display: none;
   }
 }

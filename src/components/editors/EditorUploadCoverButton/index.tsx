@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { IFileWithUUID } from '~/redux/types';
 import uuid from 'uuid4';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS, UPLOAD_TYPES } from '~/redux/uploads/constants';
 import path from 'ramda/es/path';
 import { connect } from 'react-redux';

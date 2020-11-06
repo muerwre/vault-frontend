@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 import { INode } from '~/redux/types';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Textarea } from '~/components/input/Textarea';
 import path from 'ramda/es/path';
 

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState, } from 'react';
+import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TagAutocomplete } from '~/components/tags/TagAutocomplete';
 import { TagWrapper } from '~/components/tags/TagWrapper';
 import styles from './styles.module.scss';
@@ -48,8 +48,8 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
     [setInput]
   );
 
-  const onKeyUp = useCallback(
-    ({ key }: KeyboardEvent) => {
+  const onKeyDown = useCallback(
+    ({ key }) => {
       if (key === 'Escape' && ref.current) {
         setInput('');
         ref.current.blur();
@@ -105,7 +105,6 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
 
   useEffect(() => {
     document.addEventListener('click', onBlur);
-
     return () => document.removeEventListener('click', onBlur);
   }, [onBlur]);
 
@@ -119,7 +118,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
           placeholder={placeholder}
           maxLength={24}
           onChange={onInput}
-          onKeyDown={onKeyUp}
+          onKeyDown={onKeyDown}
           onFocus={onFocus}
           ref={ref}
         />

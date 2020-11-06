@@ -6,7 +6,7 @@ import { IFile } from '~/redux/types';
 import { PLAYER_STATES } from '~/redux/player/constants';
 import { Player, IPlayerProgress } from '~/utils/player';
 import classNames from 'classnames';
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { InputText } from '~/components/input/InputText';
 

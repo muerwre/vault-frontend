@@ -6,6 +6,7 @@ import * as TAG_ACTIONS from '~/redux/tag/actions';
 import { selectTagAutocomplete } from '~/redux/tag/selectors';
 import { separateTagOptions } from '~/utils/tag';
 import { TagAutocompleteRow } from '~/components/tags/TagAutocompleteRow';
+import { usePopper } from 'react-popper';
 
 const mapStateToProps = selectTagAutocomplete;
 const mapDispatchToProps = {
@@ -30,20 +31,33 @@ const TagAutocompleteUnconnected: FC<Props> = ({
   tagLoadAutocomplete,
   options,
 }) => {
-  const [top, setTop] = useState(false);
-  const [left, setLeft] = useState(false);
-
   const [selected, setSelected] = useState(-1);
   const [categories, tags] = useMemo(
     () =>
-      separateTagOptions(options.filter(option => option !== search && !exclude.includes(option))),
+      separateTagOptions(
+        options.slice(0, 7).filter(option => option !== search && !exclude.includes(option))
+      ),
     [options, search, exclude]
   );
   const scroll = useRef<HTMLDivElement>(null);
+  const wrapper = useRef<HTMLDivElement>(null);
+
+  const pop = usePopper(wrapper?.current?.parentElement, wrapper.current, {
+    placement: 'bottom-end',
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 4],
+        },
+      },
+    ],
+  });
 
   const onKeyDown = useCallback(
     event => {
       const all = [...categories, ...tags];
+
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault();
@@ -60,17 +74,6 @@ const TagAutocompleteUnconnected: FC<Props> = ({
     },
     [setSelected, selected, categories, tags, onSelect, search]
   );
-
-  const onScroll = useCallback(() => {
-    if (!scroll.current) return;
-    const { y, height, x, width } = scroll.current.getBoundingClientRect();
-
-    const newTop = window.innerHeight - y - height <= (top ? 120 : 10);
-    if (top !== newTop) setTop(newTop);
-
-    const newLeft = x <= 0;
-    if (newLeft !== left) setLeft(newLeft);
-  }, [scroll.current, top, left]);
 
   useEffect(() => {
     input.addEventListener('keydown', onKeyDown, false);
@@ -98,25 +101,29 @@ const TagAutocompleteUnconnected: FC<Props> = ({
     }
   }, [selected, scroll.current]);
 
-  useEffect(() => {
-    onScroll();
-
-    window.addEventListener('resize', onScroll);
-    window.addEventListener('scroll', onScroll);
-
-    return () => {
-      window.removeEventListener('resize', onScroll);
-      window.removeEventListener('scroll', onScroll);
-    };
-  }, [options]);
-
   return (
-    <div className={classNames(styles.window, { [styles.top]: top, [styles.left]: left })}>
+    <div
+      className={classNames(styles.window)}
+      ref={wrapper}
+      style={pop.styles.popper}
+      {...pop.attributes.popper}
+    >
       <div className={styles.scroll} ref={scroll}>
-        <TagAutocompleteRow selected={selected === -1} title={search} type="enter" />
+        <TagAutocompleteRow
+          selected={selected === -1}
+          title={search}
+          type="enter"
+          onSelect={onSelect}
+        />
 
         {categories.map((item, i) => (
-          <TagAutocompleteRow selected={selected === i} title={item} type="right" key={item} />
+          <TagAutocompleteRow
+            selected={selected === i}
+            title={item}
+            type="right"
+            key={item}
+            onSelect={onSelect}
+          />
         ))}
 
         {tags.map((item, i) => (
@@ -125,6 +132,7 @@ const TagAutocompleteUnconnected: FC<Props> = ({
             title={item}
             type="tag"
             key={item}
+            onSelect={onSelect}
           />
         ))}
       </div>

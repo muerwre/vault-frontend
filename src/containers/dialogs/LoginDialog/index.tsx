@@ -10,7 +10,7 @@ import { selectAuthLogin } from '~/redux/auth/selectors';
 import { API } from '~/constants/api';
 import { BetterScrollDialog } from '../BetterScrollDialog';
 
-import * as styles from './styles.scss';
+import styles from './styles.module.scss';
 import * as ACTIONS from '~/redux/auth/actions';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { ISocialProvider } from '~/redux/auth/types';
