@@ -55,8 +55,6 @@ const CommentFormUnconnected: FC<IProps> = memo(
 
     const onUpload = useCallback(
       (files: File[]) => {
-        console.log(files);
-
         const items: IFileWithUUID[] = files.map(
           (file: File): IFileWithUUID => ({
             file,
