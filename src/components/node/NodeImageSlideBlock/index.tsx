@@ -77,8 +77,8 @@ const NodeImageSlideBlock: FC<IProps> = ({
   ]);
 
   // update outside hooks
-  useEffect(() => updateLayout(), [loaded, height, images]);
-  useEffect(() => updateSizes(), [refs, current, loaded, images]);
+  useEffect(updateLayout, [loaded, height, images]);
+  useEffect(updateSizes, [refs, current, loaded, images]);
 
   useEffect(() => {
     const timeout = setTimeout(updateLayout, 300);
@@ -272,7 +272,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
       <div className={classNames(styles.cutter, { [styles.is_loading]: is_loading })} ref={wrap}>
         <div
           className={classNames(styles.placeholder, {
-            [styles.is_loading]: is_loading || !loaded[current],
+            [styles.is_loading]: is_loading,
           })}
         >
           <div>
@@ -295,13 +295,57 @@ const NodeImageSlideBlock: FC<IProps> = ({
             images.map((file, index) => (
               <div
                 className={classNames(styles.image_wrap, {
-                  is_active: index === current && loaded[index],
+                  [styles.is_active]: index === current,
                 })}
                 ref={setRef(index)}
                 key={node.updated_at + file.id}
               >
+                <svg
+                  viewBox={`0 0 ${file.metadata.width} ${file.metadata.height}`}
+                  className={classNames(styles.preview, { [styles.is_loaded]: loaded[index] })}
+                  style={{
+                    maxHeight: max_height,
+                    width: '100%',
+                  }}
+                >
+                  <defs>
+                    <filter id="f1" x="0" y="0">
+                      <feBlend
+                        mode="multiply"
+                        x="0%"
+                        y="0%"
+                        width="100%"
+                        height="100%"
+                        in="SourceGraphic"
+                        in2="SourceGraphic"
+                        result="blend"
+                      />
+
+                      <feGaussianBlur
+                        stdDeviation="15 15"
+                        x="0%"
+                        y="0%"
+                        width="100%"
+                        height="100%"
+                        in="blend"
+                        edgeMode="none"
+                        result="blur2"
+                      />
+                    </filter>
+                  </defs>
+
+                  <rect fill="#242222" width="100%" height="100%" stroke="none" rx="8" ry="8" />
+
+                  <image
+                    xlinkHref={getURL(file, PRESETS['300'])}
+                    width="100%"
+                    height="100%"
+                    filter="url(#f1)"
+                  />
+                </svg>
+
                 <img
-                  className={styles.image}
+                  className={classNames(styles.image, { [styles.is_loaded]: loaded[index] })}
                   src={getURL(file, PRESETS['1600'])}
                   alt=""
                   key={file.id}
