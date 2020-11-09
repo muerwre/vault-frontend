@@ -11,23 +11,26 @@ const SortableAudioGrid = SortableContainer(
   ({
     items,
     locked,
-    onDrop,
+    onDelete,
     onTitleChange,
   }: {
     items: IFile[];
     locked: IUploadStatus[];
-    onDrop: (file_id: IFile['id']) => void;
+    onDelete: (file_id: IFile['id']) => void;
     onTitleChange: (file_id: IFile['id'], title: IFile['metadata']['title']) => void;
   }) => {
-    console.log(locked);
-
     return (
       <div className={styles.grid}>
         {items
           .filter(file => file && file.id)
           .map((file, index) => (
             <SortableAudioGridItem key={file.id} index={index} collection={0}>
-              <AudioPlayer file={file} onDrop={onDrop} onTitleChange={onTitleChange} isEditing />
+              <AudioPlayer
+                file={file}
+                onDelete={onDelete}
+                onTitleChange={onTitleChange}
+                isEditing
+              />
             </SortableAudioGridItem>
           ))}
 

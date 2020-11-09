@@ -5,7 +5,7 @@ import { formatText, getPrettyDate, getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import classNames from 'classnames';
 import { Group } from '~/components/containers/Group';
-import { CommentMenu } from '~/components/node/CommentMenu';
+import { CommentMenu } from '~/components/comment/CommentMenu';
 import { MessageForm } from '~/components/profile/MessageForm';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
