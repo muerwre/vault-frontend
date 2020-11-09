@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import assocPath from 'ramda/es/assocPath';
-import { IFile, IFileWithUUID, InputHandler } from '~/redux/types';
+import { IComment, IFile, IFileWithUUID, InputHandler } from '~/redux/types';
 import { connect } from 'react-redux';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
@@ -23,6 +23,8 @@ import { SortEnd } from 'react-sortable-hoc';
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
 import { getRandomPhrase } from '~/constants/phrases';
 import { ERROR_LITERAL } from '~/constants/errors';
+import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
+import { CommentFormButtons } from '~/components/comment/CommentFormButtons';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -53,13 +55,9 @@ const CommentFormUnconnected: FC<IProps> = memo(
     uploadUploadFiles,
     nodeCancelCommentEdit,
   }) => {
-    const onInputChange = useCallback(
-      event => {
-        event.preventDefault();
-
-        if (!event.target.files || !event.target.files.length) return;
-
-        const items: IFileWithUUID[] = Array.from(event.target.files).map(
+    const onUpload = useCallback(
+      (files: File[]) => {
+        const items: IFileWithUUID[] = files.map(
           (file: File): IFileWithUUID => ({
             file,
             temp_id: uuid(),
@@ -109,7 +107,7 @@ const CommentFormUnconnected: FC<IProps> = memo(
       }
     }, [statuses, files]);
 
-    const comment = comment_data[id];
+    const comment = useMemo(() => comment_data[id], [comment_data, id]);
 
     const is_uploading_files = useMemo(() => comment.temp_ids.length > 0, [comment.temp_ids]);
 
@@ -156,87 +154,11 @@ const CommentFormUnconnected: FC<IProps> = memo(
       [statuses, comment.temp_ids]
     );
 
-    const onFileDrop = useCallback(
-      (fileId: IFile['id']) => {
-        nodeSetCommentData(
-          id,
-          assocPath(
-            ['files'],
-            comment.files.filter(file => file.id != fileId),
-            comment_data[id]
-          )
-        );
-      },
-      [comment_data, id, nodeSetCommentData]
-    );
-
-    const onTitleChange = useCallback(
-      (fileId: IFile['id'], title: IFile['metadata']['title']) => {
-        nodeSetCommentData(
-          id,
-          assocPath(
-            ['files'],
-            comment.files.map(file =>
-              file.id === fileId ? { ...file, metadata: { ...file.metadata, title } } : file
-            ),
-            comment_data[id]
-          )
-        );
-      },
-      [comment_data, id, nodeSetCommentData]
-    );
-
-    const onImageMove = useCallback(
-      ({ oldIndex, newIndex }: SortEnd) => {
-        nodeSetCommentData(
-          id,
-          assocPath(
-            ['files'],
-            [
-              ...audios,
-              ...(moveArrItem(
-                oldIndex,
-                newIndex,
-                images.filter(file => !!file)
-              ) as IFile[]),
-            ],
-            comment_data[id]
-          )
-        );
-      },
-      [images, audios, comment_data, nodeSetCommentData]
-    );
-
-    const onAudioMove = useCallback(
-      ({ oldIndex, newIndex }: SortEnd) => {
-        nodeSetCommentData(
-          id,
-          assocPath(
-            ['files'],
-            [
-              ...images,
-              ...(moveArrItem(
-                oldIndex,
-                newIndex,
-                audios.filter(file => !!file)
-              ) as IFile[]),
-            ],
-            comment_data[id]
-          )
-        );
-      },
-      [images, audios, comment_data, nodeSetCommentData]
-    );
-
     const onCancelEdit = useCallback(() => {
       nodeCancelCommentEdit(id);
     }, [nodeCancelCommentEdit, comment.id]);
 
     const placeholder = getRandomPhrase('SIMPLE');
-
-    const hasImageAttaches = images.length > 0 || locked_images.length > 0;
-    const hasAudioAttaches = audios.length > 0 || locked_audios.length > 0;
-    const hasAttaches = hasImageAttaches || hasAudioAttaches;
 
     const clearError = useCallback(() => nodeSetCommentData(id, { error: '' }), [
       id,
@@ -246,6 +168,13 @@ const CommentFormUnconnected: FC<IProps> = memo(
     useEffect(() => {
       if (comment.error) clearError();
     }, [comment.files, comment.text]);
+
+    const setData = useCallback(
+      (data: Partial<IComment>) => {
+        nodeSetCommentData(id, data);
+      },
+      [nodeSetCommentData, id]
+    );
 
     return (
       <form onSubmit={onSubmit} className={styles.wrap}>
@@ -266,46 +195,17 @@ const CommentFormUnconnected: FC<IProps> = memo(
           )}
         </div>
 
-        {hasAttaches && (
-          <div className={styles.attaches}>
-            {hasImageAttaches && (
-              <SortableImageGrid
-                onDrop={onFileDrop}
-                onSortEnd={onImageMove}
-                axis="xy"
-                items={images}
-                locked={locked_images}
-                pressDelay={50}
-                helperClass={styles.helper}
-                size={120}
-              />
-            )}
-
-            {hasAudioAttaches && (
-              <SortableAudioGrid
-                items={audios}
-                onDrop={onFileDrop}
-                onTitleChange={onTitleChange}
-                onSortEnd={onAudioMove}
-                axis="y"
-                locked={locked_audios}
-                pressDelay={50}
-                helperClass={styles.helper}
-              />
-            )}
-          </div>
-        )}
+        <CommentFormAttaches
+          images={images}
+          audios={audios}
+          locked_audios={locked_audios}
+          locked_images={locked_images}
+          comment={comment}
+          setComment={setData}
+        />
 
         <Group horizontal className={styles.buttons}>
-          <ButtonGroup>
-            <Button iconLeft="photo" size="small" color="gray" iconOnly>
-              <input type="file" onInput={onInputChange} multiple accept="image/*" />
-            </Button>
-
-            <Button iconRight="audio" size="small" color="gray" iconOnly>
-              <input type="file" onInput={onInputChange} multiple accept="audio/*" />
-            </Button>
-          </ButtonGroup>
+          <CommentFormButtons onUpload={onUpload} />
 
           <Filler />
 

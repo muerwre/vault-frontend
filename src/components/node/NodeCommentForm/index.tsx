@@ -13,7 +13,7 @@ import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { IState } from '~/redux/store';
 import { selectUser, selectAuthUser } from '~/redux/auth/selectors';
-import { CommentForm } from '../CommentForm';
+import { CommentForm } from '../../comment/CommentForm';
 
 const mapStateToProps = state => ({
   user: selectAuthUser(state),

@@ -12,12 +12,12 @@ const SortableImageGrid = SortableContainer(
   ({
     items,
     locked,
-    onDrop,
+    onDelete,
     size = 200,
   }: {
     items: IFile[];
     locked: IUploadStatus[];
-    onDrop: (file_id: IFile['id']) => void;
+    onDelete: (file_id: IFile['id']) => void;
     size?: number;
   }) => (
     <div
@@ -28,7 +28,7 @@ const SortableImageGrid = SortableContainer(
         .filter(file => file && file.id)
         .map((file, index) => (
           <SortableImageGridItem key={file.id} index={index} collection={0}>
-            <ImageUpload id={file.id} thumb={getURL(file, PRESETS.cover)} onDrop={onDrop} />
+            <ImageUpload id={file.id} thumb={getURL(file, PRESETS.cover)} onDrop={onDelete} />
           </SortableImageGridItem>
         ))}
 

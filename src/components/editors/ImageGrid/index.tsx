@@ -15,7 +15,13 @@ interface IProps {
 const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
   const onMove = useCallback(
     ({ oldIndex, newIndex }: SortEnd) => {
-      setFiles(moveArrItem(oldIndex, newIndex, files.filter(file => !!file)) as IFile[]);
+      setFiles(
+        moveArrItem(
+          oldIndex,
+          newIndex,
+          files.filter(file => !!file)
+        ) as IFile[]
+      );
     },
     [setFiles, files]
   );
@@ -29,7 +35,7 @@ const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
 
   return (
     <SortableImageGrid
-      onDrop={onDrop}
+      onDelete={onDrop}
       onSortEnd={onMove}
       axis="xy"
       items={files}
