@@ -20,6 +20,7 @@ import { getRandomPhrase } from '~/constants/phrases';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
 import { CommentFormAttachButtons } from '~/components/comment/CommentFormButtons';
+import { CommentFormDropzone } from '~/components/comment/CommentFormDropzone';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -50,8 +51,12 @@ const CommentFormUnconnected: FC<IProps> = memo(
     uploadUploadFiles,
     nodeCancelCommentEdit,
   }) => {
+    const comment = useMemo(() => comment_data[id], [comment_data, id]);
+
     const onUpload = useCallback(
       (files: File[]) => {
+        console.log(files);
+
         const items: IFileWithUUID[] = files.map(
           (file: File): IFileWithUUID => ({
             file,
@@ -64,28 +69,25 @@ const CommentFormUnconnected: FC<IProps> = memo(
 
         const temps = items.map(file => file.temp_id);
 
-        nodeSetCommentData(
-          id,
-          assocPath(['temp_ids'], [...comment_data[id].temp_ids, ...temps], comment_data[id])
-        );
+        nodeSetCommentData(id, assocPath(['temp_ids'], [...comment.temp_ids, ...temps], comment));
         uploadUploadFiles(items);
       },
-      [uploadUploadFiles, comment_data, id, nodeSetCommentData]
+      [uploadUploadFiles, comment, id, nodeSetCommentData]
     );
 
     const onInput = useCallback<InputHandler>(
       text => {
-        nodeSetCommentData(id, assocPath(['text'], text, comment_data[id]));
+        nodeSetCommentData(id, assocPath(['text'], text, comment));
       },
-      [nodeSetCommentData, comment_data, id]
+      [nodeSetCommentData, comment, id]
     );
 
     useEffect(() => {
-      const temp_ids = (comment_data && comment_data[id] && comment_data[id].temp_ids) || [];
+      const temp_ids = (comment && comment.temp_ids) || [];
       const added_files = temp_ids
         .map(temp_uuid => statuses[temp_uuid] && statuses[temp_uuid].uuid)
         .map(el => !!el && files[el])
-        .filter(el => !!el && !comment_data[id].files.some(file => file && file.id === el.id));
+        .filter(el => !!el && !comment.files.some(file => file && file.id === el.id));
 
       const filtered_temps = temp_ids.filter(
         temp_id =>
@@ -95,25 +97,23 @@ const CommentFormUnconnected: FC<IProps> = memo(
 
       if (added_files.length) {
         nodeSetCommentData(id, {
-          ...comment_data[id],
+          ...comment,
           temp_ids: filtered_temps,
-          files: [...comment_data[id].files, ...added_files],
+          files: [...comment.files, ...added_files],
         });
       }
     }, [statuses, files]);
 
-    const comment = useMemo(() => comment_data[id], [comment_data, id]);
-
-    const is_uploading_files = useMemo(() => comment.temp_ids.length > 0, [comment.temp_ids]);
+    const isUploadingNow = useMemo(() => comment.temp_ids.length > 0, [comment.temp_ids]);
 
     const onSubmit = useCallback(
       event => {
         if (event) event.preventDefault();
-        if (is_uploading_files || is_sending_comment) return;
+        if (isUploadingNow || is_sending_comment) return;
 
         nodePostComment(id, is_before);
       },
-      [nodePostComment, id, is_before, is_uploading_files, is_sending_comment]
+      [nodePostComment, id, is_before, isUploadingNow, is_sending_comment]
     );
 
     const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
@@ -172,56 +172,59 @@ const CommentFormUnconnected: FC<IProps> = memo(
     );
 
     return (
-      <form onSubmit={onSubmit} className={styles.wrap}>
-        <div className={styles.input}>
-          <Textarea
-            value={comment.text}
-            handler={onInput}
-            onKeyDown={onKeyDown}
-            disabled={is_sending_comment}
-            placeholder={placeholder}
-            minRows={2}
+      <CommentFormDropzone onUpload={onUpload}>
+        <form onSubmit={onSubmit} className={styles.wrap}>
+          <div className={styles.input}>
+            <Textarea
+              value={comment.text}
+              handler={onInput}
+              onKeyDown={onKeyDown}
+              disabled={is_sending_comment}
+              placeholder={placeholder}
+              minRows={2}
+            />
+
+            {comment.error && (
+              <div className={styles.error} onClick={clearError}>
+                {ERROR_LITERAL[comment.error] || comment.error}
+              </div>
+            )}
+          </div>
+
+          <CommentFormAttaches
+            images={images}
+            audios={audios}
+            locked_audios={locked_audios}
+            locked_images={locked_images}
+            comment={comment}
+            setComment={setData}
+            onUpload={onUpload}
           />
 
-          {comment.error && (
-            <div className={styles.error} onClick={clearError}>
-              {ERROR_LITERAL[comment.error] || comment.error}
-            </div>
-          )}
-        </div>
+          <Group horizontal className={styles.buttons}>
+            <CommentFormAttachButtons onUpload={onUpload} />
 
-        <CommentFormAttaches
-          images={images}
-          audios={audios}
-          locked_audios={locked_audios}
-          locked_images={locked_images}
-          comment={comment}
-          setComment={setData}
-        />
+            <Filler />
 
-        <Group horizontal className={styles.buttons}>
-          <CommentFormAttachButtons onUpload={onUpload} />
+            {(is_sending_comment || isUploadingNow) && <LoaderCircle size={20} />}
 
-          <Filler />
+            {id !== 0 && (
+              <Button size="small" color="link" type="button" onClick={onCancelEdit}>
+                Отмена
+              </Button>
+            )}
 
-          {(is_sending_comment || is_uploading_files) && <LoaderCircle size={20} />}
-
-          {id !== 0 && (
-            <Button size="small" color="link" type="button" onClick={onCancelEdit}>
-              Отмена
+            <Button
+              size="small"
+              color="gray"
+              iconRight={id === 0 ? 'enter' : 'check'}
+              disabled={is_sending_comment || isUploadingNow}
+            >
+              {id === 0 ? 'Сказать' : 'Сохранить'}
             </Button>
-          )}
-
-          <Button
-            size="small"
-            color="gray"
-            iconRight={id === 0 ? 'enter' : 'check'}
-            disabled={is_sending_comment || is_uploading_files}
-          >
-            {id === 0 ? 'Сказать' : 'Сохранить'}
-          </Button>
-        </Group>
-      </form>
+          </Group>
+        </form>
+      </CommentFormDropzone>
     );
   }
 );

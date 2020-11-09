@@ -7,6 +7,8 @@ import { IUploadStatus } from '~/redux/uploads/reducer';
 import { SortEnd } from 'react-sortable-hoc';
 import assocPath from 'ramda/es/assocPath';
 import { moveArrItem } from '~/utils/fn';
+import { useDropZone } from '~/utils/hooks';
+import { COMMENT_FILE_TYPES } from '~/redux/uploads/constants';
 
 interface IProps {
   images: IFile[];
@@ -15,6 +17,7 @@ interface IProps {
   locked_audios: IUploadStatus[];
   comment: IComment;
   setComment: (data: IComment) => void;
+  onUpload: (files: File[]) => void;
 }
 
 const CommentFormAttaches: FC<IProps> = ({
@@ -24,7 +27,10 @@ const CommentFormAttaches: FC<IProps> = ({
   locked_audios,
   comment,
   setComment,
+  onUpload,
 }) => {
+  const onDrop = useDropZone(onUpload, COMMENT_FILE_TYPES);
+
   const hasImageAttaches = images.length > 0 || locked_images.length > 0;
   const hasAudioAttaches = audios.length > 0 || locked_audios.length > 0;
   const hasAttaches = hasImageAttaches || hasAudioAttaches;
@@ -99,7 +105,7 @@ const CommentFormAttaches: FC<IProps> = ({
 
   return (
     hasAttaches && (
-      <div className={styles.attaches}>
+      <div className={styles.attaches} onDropCapture={onDrop}>
         {hasImageAttaches && (
           <SortableImageGrid
             onDelete={onFileDelete}

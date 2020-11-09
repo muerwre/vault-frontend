@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { ImageUpload } from '~/components/upload/ImageUpload';
 import styles from './styles.module.scss';
@@ -19,26 +19,31 @@ const SortableImageGrid = SortableContainer(
     locked: IUploadStatus[];
     onDelete: (file_id: IFile['id']) => void;
     size?: number;
-  }) => (
-    <div
-      className={styles.grid}
-      style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${size}px, 1fr))` }}
-    >
-      {items
-        .filter(file => file && file.id)
-        .map((file, index) => (
-          <SortableImageGridItem key={file.id} index={index} collection={0}>
-            <ImageUpload id={file.id} thumb={getURL(file, PRESETS.cover)} onDrop={onDelete} />
+  }) => {
+    const preventEvent = useCallback(event => event.preventDefault(), []);
+
+    return (
+      <div
+        className={styles.grid}
+        style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${size}px, 1fr))` }}
+        onDropCapture={preventEvent}
+      >
+        {items
+          .filter(file => file && file.id)
+          .map((file, index) => (
+            <SortableImageGridItem key={file.id} index={index} collection={0}>
+              <ImageUpload id={file.id} thumb={getURL(file, PRESETS.cover)} onDrop={onDelete} />
+            </SortableImageGridItem>
+          ))}
+
+        {locked.map((item, index) => (
+          <SortableImageGridItem key={item.temp_id} index={index} collection={1} disabled>
+            <ImageUpload thumb={item.preview} progress={item.progress} is_uploading />
           </SortableImageGridItem>
         ))}
-
-      {locked.map((item, index) => (
-        <SortableImageGridItem key={item.temp_id} index={index} collection={1} disabled>
-          <ImageUpload thumb={item.preview} progress={item.progress} is_uploading />
-        </SortableImageGridItem>
-      ))}
-    </div>
-  )
+      </div>
+    );
+  }
 );
 
 export { SortableImageGrid };

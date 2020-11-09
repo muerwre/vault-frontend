@@ -69,3 +69,8 @@ export const FILE_MIMES = {
   [UPLOAD_TYPES.AUDIO]: ['audio/mpeg3', 'audio/mpeg', 'audio/mp3'],
   [UPLOAD_TYPES.OTHER]: [],
 };
+
+export const COMMENT_FILE_TYPES = [
+  ...FILE_MIMES[UPLOAD_TYPES.IMAGE],
+  ...FILE_MIMES[UPLOAD_TYPES.AUDIO],
+];
