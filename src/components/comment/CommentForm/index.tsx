@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import assocPath from 'ramda/es/assocPath';
-import { IComment, IFile, IFileWithUUID, InputHandler } from '~/redux/types';
+import { IComment, IFileWithUUID, InputHandler } from '~/redux/types';
 import { connect } from 'react-redux';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import { selectNode } from '~/redux/node/selectors';
@@ -16,15 +16,10 @@ import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { IState } from '~/redux/store';
 import { getFileType } from '~/utils/uploader';
-import { ButtonGroup } from '~/components/input/ButtonGroup';
-import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
-import { moveArrItem } from '~/utils/fn';
-import { SortEnd } from 'react-sortable-hoc';
-import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
 import { getRandomPhrase } from '~/constants/phrases';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
-import { CommentFormButtons } from '~/components/comment/CommentFormButtons';
+import { CommentFormAttachButtons } from '~/components/comment/CommentFormButtons';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -205,7 +200,7 @@ const CommentFormUnconnected: FC<IProps> = memo(
         />
 
         <Group horizontal className={styles.buttons}>
-          <CommentFormButtons onUpload={onUpload} />
+          <CommentFormAttachButtons onUpload={onUpload} />
 
           <Filler />
 
