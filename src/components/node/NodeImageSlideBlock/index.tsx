@@ -8,6 +8,7 @@ import { PRESETS } from '~/constants/urls';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { throttle } from 'throttle-debounce';
 import { Icon } from '~/components/input/Icon';
+import { useArrows } from '~/utils/hooks/keys';
 
 interface IProps extends INodeComponentProps {}
 
@@ -239,29 +240,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
     images,
   ]);
 
-  const onKeyDown = useCallback(
-    event => {
-      if (
-        (event.target.tagName && ['TEXTAREA', 'INPUT'].includes(event.target.tagName)) ||
-        is_modal_shown
-      )
-        return;
-
-      switch (event.key) {
-        case 'ArrowLeft':
-          return onPrev();
-        case 'ArrowRight':
-          return onNext();
-      }
-    },
-    [onNext, onPrev, is_modal_shown]
-  );
-
-  useEffect(() => {
-    window.addEventListener('keydown', onKeyDown);
-
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [onKeyDown]);
+  useArrows(onNext, onPrev, is_modal_shown);
 
   useEffect(() => {
     setOffset(0);
@@ -270,16 +249,6 @@ const NodeImageSlideBlock: FC<IProps> = ({
   return (
     <div className={styles.wrap}>
       <div className={classNames(styles.cutter, { [styles.is_loading]: is_loading })} ref={wrap}>
-        <div
-          className={classNames(styles.placeholder, {
-            [styles.is_loading]: is_loading,
-          })}
-        >
-          <div>
-            <LoaderCircle size={96} />
-          </div>
-        </div>
-
         <div
           className={classNames(styles.image_container, { [styles.is_dragging]: is_dragging })}
           style={{
