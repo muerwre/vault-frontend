@@ -1,0 +1,13 @@
+kind: pipeline
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build-test
+  image: node:10.13
+  commands:
+  - yarn
+  - yarn install
