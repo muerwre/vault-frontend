@@ -7,7 +7,20 @@ platform:
   arch: amd64
 
 steps:
-  - name: copy-env-develop
+  - name: build-master
+    image: node:10.13
+    when:
+      branch: master
+    environment:
+      ENV_CONTENT:
+        from_secret: env_content_master
+    commands:
+      - echo -en $${ENV_CONTENT} > ./.env
+      - yarn
+      - yarn build
+      - rm -rf ./app.tar.bz2
+      - tar -cjf ./app.tar.bz2 -C ./dist .
+  - name: build-develop
     image: node:10.13
     when:
       branch: develop
@@ -16,14 +29,8 @@ steps:
         from_secret: env_content_develop
     commands:
       - echo -en $${ENV_CONTENT} > ./.env
-  - name: build
-    image: node:10.13
-    commands:
       - yarn
       - yarn build
-  - name: compress
-    image: alpine
-    commands:
       - rm -rf ./app.tar.bz2
       - tar -cjf ./app.tar.bz2 -C ./dist .
   - name: upload
