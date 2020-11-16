@@ -11,7 +11,7 @@ steps:
     image: alpine
     commands:
       - rm -rf ./app.tar.bz2
-      - tar -cjf ./app.tar.bz2 -C ./dist .
+      - tar -cjf ./app.tar.bz2 -C ./ .
   - name: upload
     image: drillster/drone-rsync
     when:
