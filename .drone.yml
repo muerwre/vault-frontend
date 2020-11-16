@@ -50,7 +50,7 @@ steps:
         - "app.tar.bz2"
       exclude:
         - "*"
-  - name: build
+  - name: deploy
     image: appleboy/drone-ssh
     when:
       branch:
