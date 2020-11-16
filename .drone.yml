@@ -8,7 +8,7 @@ platform:
 
 steps:
   - name: copy-env-develop
-    image: alpine
+    image: node:10.13
     when:
       branch: develop
     environment:
@@ -16,11 +16,16 @@ steps:
         from_secret: env_content_develop
     commands:
       - echo -en $${ENV_CONTENT} > ./.env_develop
+  - name: build
+    image: node:10.13
+    commands:
+      - yarn
+      - yarn build
   - name: compress
     image: alpine
     commands:
       - rm -rf ./app.tar.bz2
-      - tar -cjf ./app.tar.bz2 -C ./ .
+      - tar -cjf ./app.tar.bz2 -C ./dist .
   - name: upload
     image: drillster/drone-rsync
     when:
@@ -68,11 +73,9 @@ steps:
       script:
         - mkdir -p $${BUILD_PATH}/${DRONE_BRANCH}
         - cd $${BUILD_PATH}/${DRONE_BRANCH}
-        - rm -rf ./dist
+        - rm -rf ./*
         - tar -xjf /tmp/vault-frontend-${DRONE_BRANCH}/app.tar.bz2 -C ./
         - cp -a $${ENV_PATH}/${DRONE_BRANCH}/. $${BUILD_PATH}/${DRONE_BRANCH}
-        - yarn
-        - yarn build
   - name: telgram_notify
     image: appleboy/drone-telegram
     when:
