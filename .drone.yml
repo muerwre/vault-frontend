@@ -15,7 +15,7 @@ steps:
       ENV_CONTENT:
         from_secret: env_content_develop
     commands:
-      - echo -en $${ENV_CONTENT} > ./.env_dev
+      - echo -en $${ENV_CONTENT} > ./.env
   - name: build
     image: node:10.13
     commands:
