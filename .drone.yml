@@ -7,32 +7,11 @@ platform:
   arch: amd64
 
 steps:
-  - name: build-master
-    image: node:10.13
-    when:
-      branch: master
-    environment:
-      ENV_CONTENT:
-        from_secret: env_content_master
+  - name: compress
+    image: alpine
     commands:
-      - echo -en $${ENV_CONTENT} > ./.env
-      - yarn
-      - yarn build
       - rm -rf ./app.tar.bz2
-      - tar -cjf ./app.tar.bz2 -C ./dist .
-  - name: build-develop
-    image: node:10.13
-    when:
-      branch: develop
-    environment:
-      ENV_CONTENT:
-        from_secret: env_content_develop
-    commands:
-      - echo -en $${ENV_CONTENT} > ./.env
-      - yarn
-      - yarn build
-      - rm -rf ./app.tar.bz2
-      - tar -cjf ./app.tar.bz2 -C ./dist .
+      - tar -cjf ./app.tar.bz2 -C ./ .
   - name: upload
     image: drillster/drone-rsync
     when:
@@ -57,7 +36,7 @@ steps:
         - "app.tar.bz2"
       exclude:
         - "*"
-  - name: deploy
+  - name: build
     image: appleboy/drone-ssh
     when:
       branch:
@@ -80,9 +59,11 @@ steps:
       script:
         - mkdir -p $${BUILD_PATH}/${DRONE_BRANCH}
         - cd $${BUILD_PATH}/${DRONE_BRANCH}
-        - rm -rf ./*
+        - rm -rf ./dist
         - tar -xjf /tmp/vault-frontend-${DRONE_BRANCH}/app.tar.bz2 -C ./
         - cp -a $${ENV_PATH}/${DRONE_BRANCH}/. $${BUILD_PATH}/${DRONE_BRANCH}
+        - yarn
+        - yarn build
   - name: telgram_notify
     image: appleboy/drone-telegram
     when:
