@@ -15,9 +15,7 @@ steps:
       ENV_CONTENT:
         from_secret: env_content_develop
     commands:
-      - echo $${ENV_CONTENT} > ./.env_1
-      - echo ${ENV_CONTENT} > ./.env_2
-      - echo $env_content_develop > ./.env_3
+      - echo -en $${ENV_CONTENT} > ./.env_develop
   - name: compress
     image: alpine
     commands:
