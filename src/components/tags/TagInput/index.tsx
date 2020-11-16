@@ -104,9 +104,11 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
   const feature = useMemo(() => (input?.substr(0, 1) === '/' ? 'green' : ''), [input]);
 
   useEffect(() => {
+    if (!focused) return;
+
     document.addEventListener('click', onBlur);
     return () => document.removeEventListener('click', onBlur);
-  }, [onBlur]);
+  }, [onBlur, focused]);
 
   return (
     <div className={styles.wrap} ref={wrapper}>
