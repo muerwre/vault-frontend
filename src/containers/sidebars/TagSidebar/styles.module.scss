@@ -1,12 +1,5 @@
 .wrap {
-  height: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex: 0 1 400px;
-  max-width: 100vw;
-  position: relative;
-
-  @include sidebar_content;
+  @include sidebar_content(400px);
 }
 
 .content {

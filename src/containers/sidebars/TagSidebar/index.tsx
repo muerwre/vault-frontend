@@ -31,6 +31,7 @@ const TagSidebarUnconnected: FC<Props> = ({ nodes, tagLoadNodes, tagSetNodes }) 
   const history = useHistory();
 
   const basePath = url.replace(new RegExp(`\/tag\/${tag}$`), '');
+  const onClose = useCallback(() => history.push(basePath), [basePath]);
 
   useEffect(() => {
     tagLoadNodes(tag);
@@ -45,7 +46,6 @@ const TagSidebarUnconnected: FC<Props> = ({ nodes, tagLoadNodes, tagSetNodes }) 
   const title = useMemo(() => decodeURIComponent(tag), [tag]);
   const progress = nodes.count > 0 ? `${(nodes.list.length / nodes.count) * 100}%` : '0';
 
-  const onClose = useCallback(() => history.push(basePath), [basePath]);
   const hasMore = nodes.count > nodes.list.length;
 
   return (

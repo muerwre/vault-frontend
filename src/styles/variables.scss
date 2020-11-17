@@ -78,6 +78,7 @@ $input_shadow_error: inset $red 0 0 0 1px;
 $input_shadow_filled: $input_shadow;
 
 $login_dialog_padding: $gap $gap 30px $gap;
+$sidebar_border: transparentize(white, 0.95);
 
 @mixin outer_shadow() {
   box-shadow: inset transparentize(white, 0.95) 0 1px, transparentize(black, 0.8) -1px -1px;
@@ -196,7 +197,15 @@ $login_dialog_padding: $gap $gap 30px $gap;
   }
 }
 
-@mixin sidebar_content {
+@mixin sidebar_content(
+  $width: 400px,
+) {
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 400px;
+  max-width: 100vw;
+  position: relative;
   background: transparentize($content_bg, 0.4);
   box-shadow: transparentize(white, 0.95) -1px 0;
 }

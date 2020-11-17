@@ -1,0 +1,42 @@
+.wrap {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 $gap;
+  box-sizing: border-box;
+  box-shadow: $sidebar_border 0 0 0 1px;
+  border-radius: $radius;
+  background-color: transparentize(black, 0.9)
+}
+
+.row {
+  padding: $gap;
+  font: $font_18_semibold;
+  box-shadow: $sidebar_border 0 -1px;
+  cursor: pointer;
+  background-color: transparentize(black, 1);
+  transition: all 250ms;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 30px;
+  opacity: 0.5;
+
+  &:hover {
+    background-color: transparentize($wisegreen, 0.5);
+    opacity: 1;
+  }
+
+  &:first-child {
+    border-radius: $radius $radius 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 $radius $radius;
+  }
+
+  svg {
+    margin-right: $gap * 1.2;
+  }
+}
