@@ -7,18 +7,22 @@ interface IProps {
   path: string;
 }
 
-const ProfileSidebarMenu: FC<IProps> = ({ path }) => (
-  <div className={styles.wrap}>
-    <Link className={styles.row} to={`${path}/settings`}>
-      <Icon icon="settings" />
-      <span>Настройки</span>
-    </Link>
+const ProfileSidebarMenu: FC<IProps> = ({ path }) => {
+  const cleaned = path.replace(/\/$/, '');
 
-    <div className={styles.row}>
-      <Icon icon="messages" />
-      <span>Сообщения</span>
+  return (
+    <div className={styles.wrap}>
+      <Link className={styles.row} to={`${cleaned}/settings`}>
+        <Icon icon="settings" />
+        <span>Настройки</span>
+      </Link>
+
+      <div className={styles.row}>
+        <Icon icon="messages" />
+        <span>Сообщения</span>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export { ProfileSidebarMenu };

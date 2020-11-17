@@ -20,19 +20,11 @@
   overflow: hidden;
   animation: appear 0.25s forwards;
 
-  @include sidebar
-}
+  @include sidebar;
 
-.content {
-  height: 100%;
-  overflow: auto;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  animation: slideIn 0.5s 0.1s forwards;
-  transform: translate(100%, 0);
-  position: relative;
-  z-index: 2;
+  & > * {
+    z-index: 4;
+  }
 }
 
 .clicker {
