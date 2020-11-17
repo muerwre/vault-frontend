@@ -1,0 +1,24 @@
+.wrap {
+  @include sidebar_content(600px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 4;
+}
+
+.scroller {
+  flex: 1;
+  overflow: auto;
+  padding: $gap;
+}
+
+.buttons {
+  width: 100%;
+  padding: $gap;
+  box-shadow: $sidebar_border 0 -1px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  grid-column-gap: $gap;
+}

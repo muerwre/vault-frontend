@@ -21,11 +21,9 @@ const SidebarWrapper: FC<IProps> = ({ children, onClose }) => {
   }, [ref.current]);
 
   return createPortal(
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} ref={ref}>
       <div className={styles.clicker} onClick={onClose} />
-      <div className={styles.content} ref={ref}>
-        {children}
-      </div>
+      {children}
     </div>,
     document.body
   );

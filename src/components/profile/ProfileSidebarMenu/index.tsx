@@ -1,15 +1,18 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
+import { Link } from 'react-router-dom';
 
-interface IProps {}
+interface IProps {
+  path: string;
+}
 
-const ProfileSidebarMenu: FC<IProps> = () => (
+const ProfileSidebarMenu: FC<IProps> = ({ path }) => (
   <div className={styles.wrap}>
-    <div className={styles.row}>
+    <Link className={styles.row} to={`${path}/settings`}>
       <Icon icon="settings" />
       <span>Настройки</span>
-    </div>
+    </Link>
 
     <div className={styles.row}>
       <Icon icon="messages" />

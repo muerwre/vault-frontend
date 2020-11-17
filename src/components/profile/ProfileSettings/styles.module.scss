@@ -3,6 +3,7 @@ $pad_usual: mix(white, $content_bg, 10%);
 
 .wrap {
   padding: $gap;
+  z-index: 4;
 }
 
 .pad {
