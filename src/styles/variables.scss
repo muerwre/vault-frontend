@@ -185,3 +185,18 @@ $login_dialog_padding: $gap $gap 30px $gap;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
 }
+
+@mixin sidebar {
+  background: transparentize($content_bg, 0.15);
+
+  @include can_backdrop {
+    background: transparentize($content_bg, 0.3);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+  }
+}
+
+@mixin sidebar_content {
+  background: transparentize($content_bg, 0.4);
+  box-shadow: transparentize(white, 0.95) -1px 0;
+}
