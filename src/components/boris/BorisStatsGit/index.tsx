@@ -30,7 +30,10 @@ const BorisStatsGit: FC<IProps> = ({ stats }) => {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.stats__title}>КОММИТС</div>
+      <div className={styles.stats__title}>
+        <span>КОММИТС</span>
+        <img src="https://jenkins.vault48.org/api/badges/muerwre/vault-golang/status.svg" />
+      </div>
 
       {stats.git
         .filter(data => data.commit && data.timestamp && data.subject)
