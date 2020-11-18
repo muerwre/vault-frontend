@@ -5,14 +5,12 @@
   flex: 0 1 400px;
   max-width: 100vw;
   position: relative;
-  padding: 10px;
+
+  @include sidebar_content;
 }
 
 .content {
-  @include outer_shadow;
-
   border-radius: $radius;
-  background: $content_bg;
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
@@ -28,7 +26,7 @@
   align-items: center;
   justify-content: center;
   padding: $gap;
-  background: lighten($content_bg, 2%);
+  box-shadow: transparentize(white, 0.95) 0 1px;
 }
 
 .tag {
