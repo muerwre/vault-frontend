@@ -69,13 +69,13 @@ export const getURLFromString = (
 ): string => {
   if (size) {
     return url
-      .replace('REMOTE_CURRENT://', `${process.env.REMOTE_CURRENT}cache/${size}/`)
-      .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
+      .replace('REMOTE_CURRENT://', `${process.env.REACT_APP_REMOTE_CURRENT}cache/${size}/`)
+      .replace('REMOTE_OLD://', process.env.REACT_APP_REMOTE_OLD);
   }
 
   return url
-    .replace('REMOTE_CURRENT://', process.env.REMOTE_CURRENT)
-    .replace('REMOTE_OLD://', process.env.REMOTE_OLD);
+    .replace('REMOTE_CURRENT://', process.env.REACT_APP_REMOTE_CURRENT)
+    .replace('REMOTE_OLD://', process.env.REACT_APP_REMOTE_OLD);
 };
 
 export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof PRESETS]) => {

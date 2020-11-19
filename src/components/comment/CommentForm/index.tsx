@@ -16,7 +16,7 @@ import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { IState } from '~/redux/store';
 import { getFileType } from '~/utils/uploader';
-import { getRandomPhrase } from '~/constants/phrases';
+import { useRandomPhrase } from '~/constants/phrases';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
 import { CommentFormAttachButtons } from '~/components/comment/CommentFormButtons';
@@ -153,7 +153,7 @@ const CommentFormUnconnected: FC<IProps> = memo(
       nodeCancelCommentEdit(id);
     }, [nodeCancelCommentEdit, comment.id]);
 
-    const placeholder = getRandomPhrase('SIMPLE');
+    const placeholder = useRandomPhrase('SIMPLE');
 
     const clearError = useCallback(() => nodeSetCommentData(id, { error: '' }), [
       id,

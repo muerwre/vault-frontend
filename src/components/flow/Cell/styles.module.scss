@@ -42,7 +42,7 @@
 .text {
   font: $font_18_regular;
   line-height: 22px;
-  background: transparentize($color: $content_bg, $amount: 0.3) url('~/sprites/stripes.svg');
+  background: transparentize($color: $content_bg, $amount: 0.3) url('../../../sprites/stripes.svg');
   padding: $gap;
   box-sizing: border-box;
   border-radius: $radius;

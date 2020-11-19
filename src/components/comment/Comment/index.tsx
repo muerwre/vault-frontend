@@ -12,7 +12,7 @@ import * as MODAL_ACTIONS from '~/redux/modal/actions';
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
   is_loading?: boolean;
-  comment_group?: ICommentGroup;
+  comment_group: ICommentGroup;
   comment_data: INodeState['comment_data'];
   is_same?: boolean;
   can_edit?: boolean;
@@ -58,7 +58,7 @@ const Comment: FC<IProps> = memo(
               <CommentContent
                 comment={comment}
                 key={comment.id}
-                can_edit={can_edit}
+                can_edit={!!can_edit}
                 onDelete={onDelete}
                 onEdit={onEdit}
                 modalShowPhotoswipe={modalShowPhotoswipe}
