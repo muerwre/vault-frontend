@@ -1,5 +1,5 @@
 # stage1 as builder
-FROM node:10.13 as builder
+FROM node:dubnium-alpine as builder
 COPY package.json yarn.lock ./
 RUN yarn
 COPY . .
