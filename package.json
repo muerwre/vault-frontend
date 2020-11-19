@@ -52,7 +52,7 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      ">1%",
       "not dead",
       "not op_mini all"
     ],
@@ -68,7 +68,7 @@
     "@types/ramda": "^0.26.33",
     "@types/react-redux": "^7.1.11",
     "@types/react-transition-group": "^4.4.0",
-    "craco": "^0.0.3",
+    "@craco/craco": "5.8.0",
     "craco-alias": "^2.1.1",
     "prettier": "^1.18.2"
   }
