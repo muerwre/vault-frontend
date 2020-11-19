@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, Fragment } from 'react';
 import { Cell } from '~/components/flow/Cell';
 
 import { IFlowState } from '~/redux/flow/reducer';
@@ -14,7 +14,7 @@ type IProps = Partial<IFlowState> & {
 };
 
 export const FlowGrid: FC<IProps> = ({ user, nodes, onSelect, onChangeCellView }) => (
-  <>
+  <Fragment>
     {nodes.map(node => (
       <Cell
         key={node.id}
@@ -24,5 +24,5 @@ export const FlowGrid: FC<IProps> = ({ user, nodes, onSelect, onChangeCellView }
         onChangeCellView={onChangeCellView}
       />
     ))}
-  </>
+  </Fragment>
 );

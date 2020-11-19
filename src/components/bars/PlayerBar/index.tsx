@@ -3,11 +3,11 @@ import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { PLAYER_STATES } from '~/redux/player/constants';
 import { connect } from 'react-redux';
-import pick from 'ramda/es/pick';
+import { pick } from 'ramda';
 import { selectPlayer } from '~/redux/player/selectors';
 import * as PLAYER_ACTIONS from '~/redux/player/actions';
 import { IPlayerProgress, Player } from '~/utils/player';
-import path from 'ramda/es/path';
+import { path } from 'ramda';
 import { IFile } from '~/redux/types';
 
 const mapStateToProps = state => pick(['status', 'file'], selectPlayer(state));

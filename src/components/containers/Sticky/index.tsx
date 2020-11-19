@@ -1,4 +1,4 @@
-import React, { FC, ReactComponentElement, DetailsHTMLAttributes, useEffect, useRef } from 'react';
+import React, { DetailsHTMLAttributes, FC, useEffect, useRef } from 'react';
 import styles from './styles.module.scss';
 import StickySidebar from 'sticky-sidebar';
 import classnames from 'classnames';

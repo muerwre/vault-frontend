@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { hot } from 'react-hot-loader';
 import { ConnectedRouter } from 'connected-react-router';
 import { history } from '~/redux/store';
 import { MainLayout } from '~/containers/main/MainLayout';
@@ -40,4 +39,4 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(hot(module)(Component));
+export default connect(mapStateToProps, mapDispatchToProps)(Component);

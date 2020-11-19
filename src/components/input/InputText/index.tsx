@@ -1,6 +1,6 @@
 import React, { FC, ChangeEvent, useCallback, useState, useEffect, LegacyRef } from 'react';
 import classNames from 'classnames';
-import * as styles from '~/styles/common/inputs.module.scss';
+import styles from '~/styles/common/inputs.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { IInputTextProps } from '~/redux/types';
 import { LoaderCircle } from '~/components/input/LoaderCircle';

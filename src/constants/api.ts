@@ -2,11 +2,11 @@ import { IComment, INode } from '~/redux/types';
 import { ISocialProvider } from '~/redux/auth/types';
 
 export const API = {
-  BASE: process.env.API_HOST,
+  BASE: process.env.REACT_APP_API_HOST,
   USER: {
     LOGIN: '/user/login',
     OAUTH_WINDOW: (provider: ISocialProvider) =>
-      `${process.env.API_HOST}oauth/${provider}/redirect`,
+      `${process.env.RACT_APP_API_HOST}oauth/${provider}/redirect`,
     ME: '/user/',
     PROFILE: (username: string) => `/user/user/${username}/profile`,
     MESSAGES: (username: string) => `/user/user/${username}/messages`,

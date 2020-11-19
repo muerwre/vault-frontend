@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { getRandomPhrase } from '~/constants/phrases';
+import { useRandomPhrase } from '~/constants/phrases';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 
 import * as NODE_ACTIONS from '~/redux/node/actions';
@@ -19,7 +19,6 @@ import isBefore from 'date-fns/isBefore';
 import { Card } from '~/components/containers/Card';
 import { Footer } from '~/components/main/Footer';
 import { Sticky } from '~/components/containers/Sticky';
-import { Placeholder } from '~/components/placeholders/Placeholder';
 import { selectBorisStats } from '~/redux/boris/selectors';
 import { BorisStats } from '~/components/boris/BorisStats';
 
@@ -58,7 +57,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
   borisLoadStats,
   stats,
 }) => {
-  const title = getRandomPhrase('BORIS_TITLE');
+  const title = useRandomPhrase('BORIS_TITLE');
 
   useEffect(() => {
     const last_comment = comments[0];

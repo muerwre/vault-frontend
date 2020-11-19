@@ -1,9 +1,9 @@
-import curry from 'ramda/es/curry';
-import insert from 'ramda/es/insert';
-import nth from 'ramda/es/nth';
-import remove from 'ramda/es/remove';
+import { curry } from 'ramda';
+import { insert } from 'ramda';
+import { nth } from 'ramda';
+import { remove } from 'ramda';
 import { ICommentGroup, IComment } from '~/redux/types';
-import path from 'ramda/es/path';
+import { path } from 'ramda';
 
 export const moveArrItem = curry((at, to, list) => insert(to, nth(at, list), remove(at, 1, list)));
 export const objFromArray = (array: any[], key: string) =>

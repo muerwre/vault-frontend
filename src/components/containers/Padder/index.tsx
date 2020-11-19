@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
 
-import classNames = require('classnames');
+import classNames from 'classnames';
 
 type IProps = React.HTMLAttributes<HTMLDivElement> & {
   padding?: number;

@@ -4,7 +4,7 @@ import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import styles from './styles.module.scss';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
-import assocPath from 'ramda/es/assocPath';
+import { assocPath } from 'ramda';
 import { InputHandler, IFileWithUUID, IFile } from '~/redux/types';
 import { connect } from 'react-redux';
 import * as NODE_ACTIONS from '~/redux/node/actions';

@@ -14,7 +14,7 @@ import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
 import { INodeComponentProps, NODE_COMPONENTS, NODE_HEADS, NODE_INLINES, } from '~/redux/node/constants';
 import { selectUser } from '~/redux/auth/selectors';
-import pick from 'ramda/es/pick';
+import { pick } from 'ramda';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';

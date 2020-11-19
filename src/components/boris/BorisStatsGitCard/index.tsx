@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { getPrettyDate } from '~/utils/dom';
 
 interface IProps {
-  data: IStatGitRow;
+  data: Partial<IStatGitRow>;
 }
 
 const BorisStatsGitCard: FC<IProps> = ({ data: { timestamp, subject } }) => {

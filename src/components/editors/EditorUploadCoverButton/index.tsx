@@ -3,7 +3,7 @@ import { IFileWithUUID } from '~/redux/types';
 import uuid from 'uuid4';
 import styles from './styles.module.scss';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS, UPLOAD_TYPES } from '~/redux/uploads/constants';
-import path from 'ramda/es/path';
+import { path } from 'ramda';
 import { connect } from 'react-redux';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';

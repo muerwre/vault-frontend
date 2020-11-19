@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import classNames = require('classnames');
+import classNames from 'classnames';
 
 const style = require('./style.scss');
 

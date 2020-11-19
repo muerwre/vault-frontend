@@ -1,12 +1,12 @@
-import React, { FC, useMemo, memo, createElement, useCallback, useState } from 'react';
+import React, { FC, useMemo, memo, createElement, useCallback, Fragment } from 'react';
 import { IComment, IFile } from '~/redux/types';
-import path from 'ramda/es/path';
+import { path } from 'ramda';
 import { formatCommentText, getURL, getPrettyDate } from '~/utils/dom';
 import { Group } from '~/components/containers/Group';
 import styles from './styles.module.scss';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
-import assocPath from 'ramda/es/assocPath';
-import append from 'ramda/es/append';
+import { assocPath } from 'ramda';
+import { append } from 'ramda';
 import reduce from 'ramda/es/reduce';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import classnames from 'classnames';
@@ -84,7 +84,7 @@ const CommentContent: FC<IProps> = memo(
         )}
 
         {groupped.audio && groupped.audio.length > 0 && (
-          <>
+          <Fragment>
             {groupped.audio.map(file => (
               <div className={classnames(styles.block, styles.block_audio)} key={file.id}>
                 {menu}
@@ -94,7 +94,7 @@ const CommentContent: FC<IProps> = memo(
                 <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
               </div>
             ))}
-          </>
+          </Fragment>
         )}
       </div>
     );

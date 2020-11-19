@@ -1,6 +1,6 @@
 import { takeLatest, call, put, select, delay, all, takeLeading } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import omit from 'ramda/es/omit';
+import { omit } from 'ramda';
 
 import {
   NODE_ACTIONS,

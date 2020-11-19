@@ -8,7 +8,7 @@ import { ProfileMessages } from '~/containers/profile/ProfileMessages';
 import { ProfileDescription } from '~/components/profile/ProfileDescription';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IAuthState } from '~/redux/auth/types';
-import pick from 'ramda/es/pick';
+import { pick } from 'ramda';
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { ProfileSettings } from '~/components/profile/ProfileSettings';
 import { ProfileAccounts } from '~/components/profile/ProfileAccounts';

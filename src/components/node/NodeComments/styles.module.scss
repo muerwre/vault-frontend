@@ -1,3 +1,5 @@
+@import "src/styles/variables";
+
 .wrap {
   & > div {
     margin: 0 0 $gap 0;
@@ -22,7 +24,7 @@
   cursor: pointer;
   transition: all 0.25s;
   user-select: none;
-  background: url('~/sprites/stripes.svg');
+  background: url('../../../sprites/stripes.svg');
   position: relative;
 
   &:hover {

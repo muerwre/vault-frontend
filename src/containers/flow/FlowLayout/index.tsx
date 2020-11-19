@@ -4,7 +4,7 @@ import { FlowGrid } from '~/components/flow/FlowGrid';
 import { selectFlow } from '~/redux/flow/selectors';
 import * as NODE_ACTIONS from '~/redux/node/actions';
 import * as FLOW_ACTIONS from '~/redux/flow/actions';
-import pick from 'ramda/es/pick';
+import { pick } from 'ramda';
 import { selectUser } from '~/redux/auth/selectors';
 import { FlowHero } from '~/components/flow/FlowHero';
 import styles from './styles.module.scss';

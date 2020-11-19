@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { INode } from '~/redux/types';
-import path from 'ramda/es/path';
+import { path } from 'ramda';
 import { formatTextParagraphs } from '~/utils/dom';
 import styles from './styles.module.scss';
 import { INodeComponentProps } from '~/redux/node/constants';
