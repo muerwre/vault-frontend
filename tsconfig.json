@@ -1,6 +1,7 @@
 {
   "allowSyntheticDefaultImports": true,
   "compilerOptions": {
+    "incremental": true,
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": false,

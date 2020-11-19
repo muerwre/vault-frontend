@@ -16,7 +16,13 @@ interface IProps {
 const AudioGrid: FC<IProps> = ({ files, setFiles, locked }) => {
   const onMove = useCallback(
     ({ oldIndex, newIndex }: SortEnd) => {
-      setFiles(moveArrItem(oldIndex, newIndex, files.filter(file => !!file)) as IFile[]);
+      setFiles(
+        moveArrItem(
+          oldIndex,
+          newIndex,
+          files.filter(file => !!file)
+        ) as IFile[]
+      );
     },
     [setFiles, files]
   );
@@ -41,7 +47,7 @@ const AudioGrid: FC<IProps> = ({ files, setFiles, locked }) => {
 
   return (
     <SortableAudioGrid
-      onDrop={onDrop}
+      onDelete={onDrop}
       onTitleChange={onTitleChange}
       onSortEnd={onMove}
       axis="xy"

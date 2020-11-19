@@ -1,5 +1,7 @@
 This is [vault48.org](https://vault48.org) frontend.
 
+[![Build Status](https://jenkins.vault48.org/api/badges/muerwre/vault-frontend/status.svg)](https://vault48.org/)
+
 ### Installation
 1. Clone this repo `git clone git@github.com:muerwre/vault-frontend.git`
 2. Run `yarn install`

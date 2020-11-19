@@ -25,14 +25,14 @@ type Props = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & {
     file: IFile;
     isEditing?: boolean;
-    onDrop?: (id: IFile['id']) => void;
+    onDelete?: (id: IFile['id']) => void;
     onTitleChange?: (file_id: IFile['id'], title: IFile['metadata']['title']) => void;
   };
 
 const AudioPlayerUnconnected = memo(
   ({
     file,
-    onDrop,
+    onDelete,
     isEditing,
     onTitleChange,
     player: { file: current, status },
@@ -78,10 +78,10 @@ const AudioPlayerUnconnected = memo(
     );
 
     const onDropClick = useCallback(() => {
-      if (!onDrop) return;
+      if (!onDelete) return;
 
-      onDrop(file.id);
-    }, [file, onDrop]);
+      onDelete(file.id);
+    }, [file, onDelete]);
 
     const title = useMemo(
       () =>
@@ -111,7 +111,7 @@ const AudioPlayerUnconnected = memo(
 
     return (
       <div onClick={onPlay} className={classNames(styles.wrap, { playing })}>
-        {onDrop && (
+        {onDelete && (
           <div className={styles.drop} onMouseDown={onDropClick}>
             <Icon icon="close" />
           </div>
@@ -149,7 +149,4 @@ const AudioPlayerUnconnected = memo(
   }
 );
 
-export const AudioPlayer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AudioPlayerUnconnected);
+export const AudioPlayer = connect(mapStateToProps, mapDispatchToProps)(AudioPlayerUnconnected);

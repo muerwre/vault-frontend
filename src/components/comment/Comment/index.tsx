@@ -1,12 +1,12 @@
 import React, { FC, HTMLAttributes, memo } from 'react';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
-import { ICommentGroup, IComment } from '~/redux/types';
-import { CommentContent } from '~/components/node/CommentContent';
+import { ICommentGroup } from '~/redux/types';
+import { CommentContent } from '~/components/comment/CommentContent';
 import styles from './styles.module.scss';
-import { nodeLockComment, nodeEditComment } from '~/redux/node/actions';
+import { nodeEditComment, nodeLockComment } from '~/redux/node/actions';
 import { INodeState } from '~/redux/node/reducer';
 import { CommentForm } from '../CommentForm';
-import { CommendDeleted } from '../CommendDeleted';
+import { CommendDeleted } from '../../node/CommendDeleted';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {

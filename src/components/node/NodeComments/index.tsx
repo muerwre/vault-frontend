@@ -1,5 +1,5 @@
 import React, { FC, useMemo, memo } from 'react';
-import { Comment } from '../Comment';
+import { Comment } from '../../comment/Comment';
 import { Filler } from '~/components/containers/Filler';
 
 import styles from './styles.module.scss';

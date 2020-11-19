@@ -4,7 +4,14 @@
   &__title {
     font: $font_12_semibold;
     text-transform: uppercase;
-    opacity: 0.3;
     margin: $gap * 2 0 $gap;
+
+    span {
+      opacity: 0.3;
+    }
+
+    img {
+      float: right;
+    }
   }
 }
