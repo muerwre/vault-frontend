@@ -1,0 +1,110 @@
+@import "src/styles/variables";
+
+html {
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+body {
+  background: darken($main_bg_color, 12%);
+  min-height: 100vh;
+  background: url('../../src/sprites/noise.png') $main_bg_color;
+  color: $main_text_color;
+  font: $font_16_regular;
+  -webkit-font-smoothing: antialiased;
+  fill: white;
+  stroke: white;
+
+  &::before {
+    content: '';
+    position: absolute;
+    height: 600px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background: url('../../src/sprites/noise_top.png') 0% 0%;
+    background-size: 600px 600px;
+    pointer-events: none;
+  }
+}
+
+#app {
+  min-height: 100vh;
+
+  & > div {
+    min-height: 100vh;
+  }
+}
+
+.grey {
+  color: #555555;
+}
+
+.todo, .done {
+  color: #333333;
+  border-radius: 3px;
+  padding: 0 2px;
+  font: $font_14_semibold;
+  text-transform: uppercase;
+}
+
+.todo {
+  background-color: $red;
+}
+
+.done {
+  background-color: $green;
+}
+
+h2 {
+  font: $font_24_bold;
+}
+
+.username {
+  background: transparentize($color: #000000, $amount: 0.8);
+  padding: 2px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: $wisegreen;
+  font-weight: bold;
+}
+
+a {
+  color: $primary;
+  text-decoration: underline;
+}
+
+::-webkit-scrollbar {
+  width: 18px;
+  height: 18px;
+}
+
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #999999;
+  border: 4px solid $content_bg;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: lighten(#999999, 4%);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: lighten(#999999, 8%);
+}
+
+::-webkit-scrollbar-track {
+  background: $content_bg;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
