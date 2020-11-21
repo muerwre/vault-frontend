@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef } from 'react';
 import styles from './styles.module.scss';
 import { createPortal } from 'react-dom';
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { useCloseOnEscape } from '~/utils/hooks';
 
 interface IProps {
@@ -17,7 +17,7 @@ const SidebarWrapper: FC<IProps> = ({ children, onClose }) => {
     if (!ref.current) return;
     disableBodyScroll(ref.current, { reserveScrollBarGap: true });
 
-    return () => enableBodyScroll(ref.current);
+    return () => clearAllBodyScrollLocks();
   }, [ref.current]);
 
   return createPortal(

@@ -3,6 +3,7 @@ import styles from "./styles.module.scss";
 import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
 import { Icon } from "~/components/input/Icon";
 import { LoaderCircle } from "~/components/input/LoaderCircle";
+import { useCloseOnEscape } from "~/utils/hooks";
 
 interface IProps {
   children: React.ReactChild;
@@ -38,6 +39,8 @@ const BetterScrollDialog: FC<IProps> = ({
 
     return () => clearAllBodyScrollLocks();
   }, [ref]);
+
+  useCloseOnEscape(onClose);
 
   return (
     <div className={styles.wrap} ref={ref}>
