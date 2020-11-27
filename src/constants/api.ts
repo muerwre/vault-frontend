@@ -6,7 +6,7 @@ export const API = {
   USER: {
     LOGIN: '/user/login',
     OAUTH_WINDOW: (provider: ISocialProvider) =>
-      `${process.env.RACT_APP_API_HOST}oauth/${provider}/redirect`,
+      `${process.env.REACT_APP_API_HOST}oauth/${provider}/redirect`,
     ME: '/user/',
     PROFILE: (username: string) => `/user/user/${username}/profile`,
     MESSAGES: (username: string) => `/user/user/${username}/messages`,

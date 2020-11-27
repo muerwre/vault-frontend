@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { DIALOGS, IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
@@ -16,7 +16,7 @@ import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { ISocialProvider } from '~/redux/auth/types';
 import { pick } from 'ramda';
 import { LoginDialogButtons } from '~/containers/dialogs/LoginDialogButtons';
-import { IOAuthEvent, OAUTH_EVENT_TYPES } from '~/redux/types';
+import { OAUTH_EVENT_TYPES } from '~/redux/types';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
 
 const mapStateToProps = state => ({
@@ -63,6 +63,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
   const openOauthWindow = useCallback(
     (provider: ISocialProvider) => () => {
+      console.log(API.USER.OAUTH_WINDOW(provider));
       window.open(API.USER.OAUTH_WINDOW(provider), '', 'width=600,height=400');
     },
     []
