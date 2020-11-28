@@ -1,14 +1,16 @@
-import React, { FC, memo, useCallback, useState, useMemo } from 'react';
-import styles from './styles.module.scss';
-import classNames from 'classnames';
-import { INode } from '~/redux/types';
-import { URLS, PRESETS } from '~/constants/urls';
-import { RouteComponentProps, withRouter } from 'react-router';
-import { getURL, stringToColour } from '~/utils/dom';
+import React, { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import styles from "./styles.module.scss";
+import classNames from "classnames";
+import { INode } from "~/redux/types";
+import { PRESETS, URLS } from "~/constants/urls";
+import { RouteComponentProps, withRouter } from "react-router";
+import { getURL, stringToColour } from "~/utils/dom";
 
 type IProps = RouteComponentProps & {
   item: Partial<INode>;
 };
+
+type CellSize = 'small' | 'medium' | 'large'
 
 const getTitleLetters = (title: string): string => {
   const words = (title && title.split(' ')) || [];
@@ -26,6 +28,8 @@ const getTitleLetters = (title: string): string => {
 
 const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
   const [is_loaded, setIsLoaded] = useState(false);
+  const [width, setWidth] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
   const onClick = useCallback(() => history.push(URLS.NODE_URL(item.id)), [item, history]);
 
   const thumb = useMemo(
@@ -37,11 +41,26 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
     []
   );
 
+  useEffect(() => {
+    if (!ref.current) return;
+    const cb = () => setWidth(ref.current.getBoundingClientRect().width)
+    window.addEventListener('resize', cb);
+    cb();
+    return () => window.removeEventListener('resize', cb);
+  }, [ref.current])
+
+  const size = useMemo<CellSize>(() => {
+    if (width > 90) return 'large';
+    if (width > 76) return 'medium';
+    return 'small';
+  }, [width])
+
   return (
     <div
-      className={classNames(styles.item, { [styles.is_loaded]: is_loaded })}
+      className={classNames(styles.item, styles[size], { [styles.is_loaded]: is_loaded })}
       key={item.id}
       onClick={onClick}
+      ref={ref}
     >
       <div
         className={styles.thumb}
@@ -50,9 +69,15 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
         }}
       />
 
-      {!item.thumbnail && (
+      {!item.thumbnail && size === 'small' && (
         <div className={styles.letters} style={{ backgroundColor }}>
           {getTitleLetters(item.title)}
+        </div>
+      )}
+
+      {!item.thumbnail && size !== 'small' && (
+        <div className={styles.title} style={{ backgroundColor }}>
+          {item.title}
         </div>
       )}
 
