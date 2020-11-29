@@ -44,8 +44,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -61,12 +60,13 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "5.8.0",
     "@types/classnames": "^2.2.7",
     "@types/node": "^11.13.22",
     "@types/ramda": "^0.26.33",
     "@types/react-redux": "^7.1.11",
-    "@craco/craco": "5.8.0",
     "craco-alias": "^2.1.1",
+    "craco-fast-refresh": "^1.0.2",
     "prettier": "^1.18.2"
   }
 }
