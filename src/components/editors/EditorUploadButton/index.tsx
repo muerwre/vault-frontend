@@ -1,15 +1,15 @@
 import React, { FC, useCallback, useEffect } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
-import { IFileWithUUID, INode, IFile } from '~/redux/types';
+import { IFile, IFileWithUUID } from '~/redux/types';
 import uuid from 'uuid4';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS, UPLOAD_TYPES } from '~/redux/uploads/constants';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
-import { assocPath } from 'ramda';
-import { append } from 'ramda';
+import { append, assocPath } from 'ramda';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { connect } from 'react-redux';
 import { NODE_SETTINGS } from '~/redux/node/constants';
+import { IEditorComponentProps } from '~/redux/node/types';
 
 const mapStateToProps = state => {
   const { statuses, files } = selectUploads(state);
@@ -22,12 +22,7 @@ const mapDispatchToProps = {
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps & {
-    data: INode;
-    setData: (val: INode) => void;
-    temp: string[];
-    setTemp: (val: string[]) => void;
-
+  typeof mapDispatchToProps & IEditorComponentProps & {
     accept?: string;
     icon?: string;
     type?: typeof UPLOAD_TYPES[keyof typeof UPLOAD_TYPES];
@@ -78,18 +73,6 @@ const EditorUploadButtonUnconnected: FC<IProps> = ({
     },
     [data, setData]
   );
-
-  // const onDrop = useCallback(
-  //   (event: React.DragEvent<HTMLDivElement>) => {
-  //     event.preventDefault();
-
-  //     if (!event.dataTransfer || !event.dataTransfer.files || !event.dataTransfer.files.length)
-  //       return;
-
-  //     onUpload(Array.from(event.dataTransfer.files));
-  //   },
-  //   [onUpload]
-  // );
 
   useEffect(() => {
     window.addEventListener('dragover', eventPreventer, false);

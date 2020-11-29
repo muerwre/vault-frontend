@@ -15,6 +15,7 @@ import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverB
 import { modalShowPhotoswipe } from '../modal/actions';
 import { IEditorComponentProps } from '~/redux/node/types';
 import { EditorFiller } from '~/components/editors/EditorFiller';
+import { EditorPublicSwitch } from '~/components/editors/EditorPublicSwitch';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -63,6 +64,8 @@ export const EMPTY_NODE: INode = {
 
   blocks: [],
   tags: [],
+  is_public: true,
+  is_promoted: true,
 
   flow: {
     display: 'single',
@@ -120,14 +123,20 @@ export const NODE_EDITORS = {
 };
 
 export const NODE_PANEL_COMPONENTS: Record<string, FC<IEditorComponentProps>[]> = {
-  [NODE_TYPES.TEXT]: [EditorFiller, EditorUploadCoverButton],
-  [NODE_TYPES.VIDEO]: [EditorFiller, EditorUploadCoverButton],
-  [NODE_TYPES.IMAGE]: [EditorImageUploadButton, EditorFiller, EditorUploadCoverButton],
+  [NODE_TYPES.TEXT]: [EditorFiller, EditorUploadCoverButton, EditorPublicSwitch],
+  [NODE_TYPES.VIDEO]: [EditorFiller, EditorUploadCoverButton, EditorPublicSwitch],
+  [NODE_TYPES.IMAGE]: [
+    EditorImageUploadButton,
+    EditorFiller,
+    EditorUploadCoverButton,
+    EditorPublicSwitch,
+  ],
   [NODE_TYPES.AUDIO]: [
     EditorAudioUploadButton,
     EditorImageUploadButton,
     EditorFiller,
     EditorUploadCoverButton,
+    EditorPublicSwitch,
   ],
 };
 

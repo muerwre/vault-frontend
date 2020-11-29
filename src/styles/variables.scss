@@ -209,3 +209,13 @@ $sidebar_border: transparentize(white, 0.95);
   background: transparentize($content_bg, 0.4);
   box-shadow: transparentize(white, 0.95) -1px 0;
 }
+
+@mixin editor_round_button {
+  width: $upload_button_height;
+  height: $upload_button_height;
+  border-radius: ($upload_button_height / 2) !important;
+  flex: 0 0 $upload_button_height;
+  position: relative;
+  border-radius: $radius;
+  cursor: pointer;
+}

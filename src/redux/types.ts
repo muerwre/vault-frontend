@@ -124,6 +124,8 @@ export interface INode {
   description?: string;
   is_liked?: boolean;
   is_heroic?: boolean;
+  is_promoted?: boolean;
+  is_public?: boolean;
   like_count?: number;
 
   flow: {
