@@ -1,9 +1,9 @@
-import React, {ChangeEvent, FC, useCallback, useEffect, useState} from 'react';
+import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import styles from '~/styles/common/inputs.module.scss';
-import {Icon} from '~/components/input/Icon';
-import {IInputTextProps} from '~/redux/types';
-import {LoaderCircle} from '~/components/input/LoaderCircle';
+import { Icon } from '~/components/input/Icon';
+import { IInputTextProps } from '~/redux/types';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
 
 const InputText: FC<IInputTextProps> = ({
   wrapperClassName,

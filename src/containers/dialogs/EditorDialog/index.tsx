@@ -1,21 +1,21 @@
-import React, {createElement, FC, FormEvent, useCallback, useEffect, useState} from 'react';
-import {connect} from 'react-redux';
-import {IDialogProps} from '~/redux/modal/constants';
-import {useCloseOnEscape} from '~/utils/hooks';
-import {Group} from '~/components/containers/Group';
-import {InputText} from '~/components/input/InputText';
-import {Button} from '~/components/input/Button';
-import {Padder} from '~/components/containers/Padder';
+import React, { createElement, FC, FormEvent, useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { IDialogProps } from '~/redux/modal/constants';
+import { useCloseOnEscape } from '~/utils/hooks';
+import { Group } from '~/components/containers/Group';
+import { InputText } from '~/components/input/InputText';
+import { Button } from '~/components/input/Button';
+import { Padder } from '~/components/containers/Padder';
 import styles from './styles.module.scss';
-import {selectNode} from '~/redux/node/selectors';
-import {EditorPanel} from '~/components/editors/EditorPanel';
+import { selectNode } from '~/redux/node/selectors';
+import { EditorPanel } from '~/components/editors/EditorPanel';
 import * as NODE_ACTIONS from '~/redux/node/actions';
-import {selectUploads} from '~/redux/uploads/selectors';
-import {ERROR_LITERAL} from '~/constants/errors';
-import {EMPTY_NODE, NODE_EDITORS} from '~/redux/node/constants';
-import {BetterScrollDialog} from '../BetterScrollDialog';
-import {CoverBackdrop} from '~/components/containers/CoverBackdrop';
-import {IEditorComponentProps} from '~/redux/node/types';
+import { selectUploads } from '~/redux/uploads/selectors';
+import { ERROR_LITERAL } from '~/constants/errors';
+import { EMPTY_NODE, NODE_EDITORS } from '~/redux/node/constants';
+import { BetterScrollDialog } from '../BetterScrollDialog';
+import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
+import { IEditorComponentProps } from '~/redux/node/types';
 
 const mapStateToProps = state => {
   const { editor, errors } = selectNode(state);

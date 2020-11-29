@@ -99,6 +99,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
           error={error}
           onClose={onRequestClose}
           footer={<LoginDialogButtons openOauthWindow={openOauthWindow} />}
+          backdrop={<div className={styles.backdrop} />}
         >
           <Padder>
             <div className={styles.wrap}>
