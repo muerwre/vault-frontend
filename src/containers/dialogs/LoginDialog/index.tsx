@@ -63,7 +63,6 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
   const openOauthWindow = useCallback(
     (provider: ISocialProvider) => () => {
-      console.log(API.USER.OAUTH_WINDOW(provider));
       window.open(API.USER.OAUTH_WINDOW(provider), '', 'width=600,height=400');
     },
     []
