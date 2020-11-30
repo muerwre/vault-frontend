@@ -1,11 +1,10 @@
-import React, { FC, useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { INodeComponentProps } from '~/redux/node/constants';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { throttle } from 'throttle-debounce';
 import { Icon } from '~/components/input/Icon';
 import { useArrows } from '~/utils/hooks/keys';
@@ -279,19 +278,8 @@ const NodeImageSlideBlock: FC<IProps> = ({
                 >
                   <defs>
                     <filter id="f1" x="0" y="0">
-                      <feBlend
-                        mode="multiply"
-                        x="0%"
-                        y="0%"
-                        width="100%"
-                        height="100%"
-                        in="SourceGraphic"
-                        in2="SourceGraphic"
-                        result="blend"
-                      />
-
                       <feGaussianBlur
-                        stdDeviation="15 15"
+                        stdDeviation="5 5"
                         x="0%"
                         y="0%"
                         width="100%"
