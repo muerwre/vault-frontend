@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useCallback, useMemo, useRef, useState } from 'react';
 import { INode } from '~/redux/types';
 import { formatCellText, getURL } from '~/utils/dom';
 import classNames from 'classnames';
@@ -7,7 +7,6 @@ import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { flowSetCellView } from '~/redux/flow/actions';
 import { PRESETS } from '~/constants/urls';
-import { debounce } from 'throttle-debounce';
 import { NODE_TYPES } from '~/redux/node/constants';
 import { Group } from '~/components/containers/Group';
 import { Link } from 'react-router-dom';
@@ -33,43 +32,43 @@ const Cell: FC<IProps> = ({
 }) => {
   const ref = useRef(null);
   const [is_loaded, setIsLoaded] = useState(false);
-  const [is_visible, setIsVisible] = useState(false);
+  const [is_visible, setIsVisible] = useState(true);
 
-  const checkIfVisible = useCallback(() => {
-    if (!ref.current) return;
+  // const checkIfVisible = useCallback(() => {
+  //   if (!ref.current) return;
+  //
+  //   const { top, height } = ref.current.getBoundingClientRect();
+  //
+  //   // const visibility = top + height > -window.innerHeight && top < window.innerHeight * 2;
+  //   const visibility = top + height > -600 && top < window.innerHeight + 600;
+  //   if (visibility !== is_visible) setIsVisible(visibility);
+  // }, [ref, is_visible, setIsVisible]);
+  //
+  // const checkIfVisibleDebounced = useCallback(debounce(Math.random() * 100 + 100, checkIfVisible), [
+  //   checkIfVisible,
+  // ]);
 
-    const { top, height } = ref.current.getBoundingClientRect();
+  // useEffect(() => {
+  //   checkIfVisibleDebounced();
+  // }, []);
 
-    // const visibility = top + height > -window.innerHeight && top < window.innerHeight * 2;
-    const visibility = top + height > -600 && top < window.innerHeight + 600;
-    if (visibility !== is_visible) setIsVisible(visibility);
-  }, [ref, is_visible, setIsVisible]);
+  // useEffect(() => {
+  // recalc visibility of other elements
+  // window.dispatchEvent(new CustomEvent('scroll'));
+  // }, [flow]);
 
-  const checkIfVisibleDebounced = useCallback(debounce(Math.random() * 100 + 100, checkIfVisible), [
-    checkIfVisible,
-  ]);
-
-  useEffect(() => {
-    checkIfVisibleDebounced();
-  }, []);
-
-  useEffect(() => {
-    // recalc visibility of other elements
-    window.dispatchEvent(new CustomEvent('scroll'));
-  }, [flow]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', checkIfVisibleDebounced);
-
-    return () => window.removeEventListener('scroll', checkIfVisibleDebounced);
-  }, [checkIfVisibleDebounced]);
+  // useEffect(() => {
+  //   window.addEventListener('scroll', checkIfVisibleDebounced);
+  //
+  //   return () => window.removeEventListener('scroll', checkIfVisibleDebounced);
+  // }, [checkIfVisibleDebounced]);
 
   const onImageLoad = useCallback(() => {
     setIsLoaded(true);
   }, [setIsLoaded]);
 
   // Replaced it with <Link>, maybe, you can remove it completely with NodeSelect action
-  const onClick = useCallback(() => onSelect(id, type), [onSelect, id, type]);
+  // const onClick = useCallback(() => onSelect(id, type), [onSelect, id, type]);
   const has_description = description && description.length > 32;
 
   const text =
