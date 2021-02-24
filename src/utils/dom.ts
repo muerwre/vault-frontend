@@ -122,7 +122,7 @@ export const splitCommentByBlocks = (text: string): ICommentBlock[] =>
   }));
 
 export const formatCommentText = (author: string, text: string): ICommentBlock[] =>
-  text ? splitCommentByBlocks(formatText(text)) : null;
+  text ? splitCommentByBlocks(text) : null;
 
 export const formatCellText = (text: string): string => formatTextParagraphs(text);
 

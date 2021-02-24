@@ -1,4 +1,4 @@
-import { flatten } from 'ramda';
+import { flatten, isEmpty } from 'ramda';
 
 export const splitTextByYoutube = (strings: string[]): string[] =>
   flatten(
@@ -8,4 +8,4 @@ export const splitTextByYoutube = (strings: string[]): string[] =>
   );
 
 export const splitTextOmitEmpty = (strings: string[]): string[] =>
-  strings.filter(el => !!el.trim());
+  strings.map(el => el.trim()).filter(el => !isEmpty(el));

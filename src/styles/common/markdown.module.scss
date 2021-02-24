@@ -9,8 +9,16 @@
     }
     font-family: monospace;
     font-size: 13px;
-    padding: $gap;
     border-radius: $radius;
+    width: 100%;
+    overflow: auto;
+    padding: $gap;
+    box-sizing: border-box;
+  }
+
+  img {
+    max-width: 100%;
+    margin-bottom: $gap;
   }
 
   p {
