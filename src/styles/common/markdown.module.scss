@@ -43,10 +43,10 @@ $margin: 1em;
 
   p, li {
     code {
-      background-color: darken($comment_bg, 4%);
-      padding: 2px 0.5em;
+      background-color: transparentize($blue, 0.9);
+      padding: 2px 4px;
       border-radius: 0.3em;
-      color: transparentize(white, 0.5);
+      color: transparentize($wisegreen, 0.1);
       font-size: 0.9em;
     }
   }
