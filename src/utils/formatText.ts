@@ -1,4 +1,5 @@
 import marked from 'marked';
+import { stripHTMLTags } from '~/utils/stripHTMLTags';
 
 /**
  * Cleans youtube urls
@@ -12,8 +13,7 @@ export const formatTextSanitizeYoutube = (text: string): string =>
 /**
  * Removes HTML tags
  */
-export const formatTextSanitizeTags = (text: string): string =>
-  text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+export const formatTextSanitizeTags = (text: string): string => stripHTMLTags(text);
 
 /**
  * Returns clickable usernames
