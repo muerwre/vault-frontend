@@ -3,6 +3,23 @@
 $margin: 1em;
 
 .wrapper {
+  blockquote {
+    border-left: 4px solid $wisegreen;
+    padding: $margin / 2 0;
+    margin-bottom: $margin;
+    color: $wisegreen;
+    font-size: 0.9em;
+    background-color: transparentize($wisegreen, 0.9);
+
+    p {
+      margin: 0 $margin;
+    }
+
+    &+blockquote {
+      margin-top: -$margin;
+    }
+  }
+
   pre {
     background-color: darken($comment_bg, 2%);
     border: {
