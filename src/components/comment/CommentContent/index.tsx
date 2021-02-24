@@ -54,7 +54,7 @@ const CommentContent: FC<IProps> = memo(
         !!comment.text.trim()
           ? formatCommentText(path(['user', 'username'], comment), comment.text)
           : [],
-      [comment]
+      [comment.text]
     );
 
     return (
