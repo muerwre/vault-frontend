@@ -19,6 +19,7 @@ import {
   formatTextSanitizeYoutube,
   formatTextTodos,
 } from '~/utils/formatText';
+import { splitTextByYoutube, splitTextOmitEmpty } from '~/utils/splitText';
 
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -112,12 +113,13 @@ export const findBlockType = (line: string): ValueOf<typeof COMMENT_BLOCK_TYPES>
 };
 
 export const splitCommentByBlocks = (text: string): ICommentBlock[] =>
-  text
-    .split(/(https?:\/\/(?:www\.)(?:youtube\.com|youtu\.be)\/(?:watch)(?:\?v=)[\w\-\&\=]+)/)
-    .map(line => ({
-      type: findBlockType(line),
-      content: line,
-    }));
+  pipe(
+    splitTextByYoutube,
+    splitTextOmitEmpty
+  )([text]).map(line => ({
+    type: findBlockType(line),
+    content: line,
+  }));
 
 export const formatCommentText = (author: string, text: string): ICommentBlock[] =>
   text ? splitCommentByBlocks(formatText(text)) : null;
