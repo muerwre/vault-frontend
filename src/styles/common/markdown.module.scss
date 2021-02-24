@@ -21,14 +21,14 @@ $margin: 1em;
   }
 
   pre {
-    background-color: darken($comment_bg, 2%);
+    background-color: transparentize($blue, 0.9);
     border: {
-      left: 4px solid $red;
-      right: 4px solid $red;
+      left: 4px solid transparentize($blue, 0.9);
+      right: 4px solid transparentize($blue, 0.9);
     }
     font-family: monospace;
     font-size: 0.9em;
-    border-radius: $radius;
+    border-radius: 2px;
     width: 100%;
     overflow: auto;
     padding: $gap;
@@ -36,7 +36,7 @@ $margin: 1em;
     margin-bottom: $margin;
 
     code {
-      color: transparentize(white, 0.5);
+      color: transparentize($wisegreen, 0.1);
       font-family: monospace;
     }
   }
