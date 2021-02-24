@@ -94,8 +94,8 @@ export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof 
 };
 
 export const formatText = pipe(
-  formatTextSanitizeYoutube,
   formatTextSanitizeTags,
+  formatTextSanitizeYoutube,
   formatTextClickableUsernames,
   formatTextComments,
   formatTextTodos,
@@ -112,10 +112,12 @@ export const findBlockType = (line: string): ValueOf<typeof COMMENT_BLOCK_TYPES>
 };
 
 export const splitCommentByBlocks = (text: string): ICommentBlock[] =>
-  text.split('\n').map(line => ({
-    type: findBlockType(line),
-    content: line,
-  }));
+  text
+    .split(/(https?:\/\/(?:www\.)(?:youtube\.com|youtu\.be)\/(?:watch)(?:\?v=)[\w\-\&\=]+)/)
+    .map(line => ({
+      type: findBlockType(line),
+      content: line,
+    }));
 
 export const formatCommentText = (author: string, text: string): ICommentBlock[] =>
   text ? splitCommentByBlocks(formatText(text)) : null;
