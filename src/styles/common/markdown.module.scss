@@ -5,7 +5,7 @@
     background-color: darken($comment_bg, 2%);
     border: {
       left: 4px solid $red;
-     right: 4px solid $red;
+      right: 4px solid $red;
     }
     font-family: monospace;
     font-size: 13px;
@@ -59,6 +59,15 @@
     li {
       margin: 5px 0;
     }
+  }
+
+  strong {
+    font-weight: bold;
+    color: white;
+  }
+
+  em {
+    font-style: italic;
   }
 
   :global(.grey) {
