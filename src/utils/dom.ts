@@ -97,12 +97,12 @@ export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof 
 export const formatText = pipe(
   formatTextSanitizeTags,
   formatTextSanitizeYoutube,
-  formatTextClickableUsernames,
   formatTextComments,
   formatTextTodos,
   formatExclamations,
   formatTextDash,
-  formatTextMarkdown
+  formatTextMarkdown,
+  formatTextClickableUsernames
 );
 
 export const formatTextParagraphs = (text: string): string => (text && formatText(text)) || null;
