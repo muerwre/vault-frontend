@@ -8,6 +8,17 @@ import Axios from 'axios';
 import { PRESETS } from '~/constants/urls';
 import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/constants/comment';
 import format from 'date-fns/format';
+import { pipe } from 'ramda';
+import {
+  formatDash,
+  formatExclamations,
+  formatMarkdown,
+  formatTextClickableUsernames,
+  formatTextComments,
+  formatTextSanitizeTags,
+  formatTextSanitizeYoutube,
+  formatTextTodos,
+} from '~/utils/formatText';
 
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -82,50 +93,18 @@ export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof 
   return file?.url ? getURLFromString(file.url, size) : null;
 };
 
-export const formatText = (text: string): string =>
-  !text
-    ? ''
-    : text
-        .replace(
-          /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-\&\=]+)/gim,
-          '\n$1\n'
-        )
-        .replace(/\n{1,}/gim, '\n')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(
-          /~([\wа-яА-Я-]+)/giu,
-          '<span class="username" onClick="window.postMessage({ type: \'username\', username: \'$1\'});">~$1</span>'
-        )
-        .replace(/:\/\//gim, ':|--|')
-        .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
-        .replace(/\/\/\s*(todo|туду):?\s*([^\n]+)/gim, '// <span class="todo">$1</span> $2')
-        .replace(
-          /\/\/\s*(done|сделано|сделал|готово|fixed|пофикшено|фиксед):?\s*([^\n]+)/gim,
-          '// <span class="done">$1</span> $2'
-        )
-        .replace(/(\*\*[\s\S]*?\*\*)/gim, '<b class="bold white">$1</b>')
-        .replace(/(\_\_[\s\S]*?\_\_)/gim, '<i>$1</i>')
-        .replace(/(\!\![\s\S]*?(\!\!|\n|$))/gim, '<span class="green">$1</span>')
-        .replace(/(\/\*[\s\S]*?\*\/)/gim, '<span class="grey">$1</span>')
-        .replace(/([=|-]{5,})/gim, '<hr />')
-        .replace(/:\|--\|/gim, '://')
-        .replace(
-          /(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)([-A-Z0-9+&@#%?\/=~_|!:,.;]*)[-A-Z0-9+&@#\/%=~_|])/gi,
-          '<a href="$1" target="blank" rel="nofollow">$1</a>'
-        )
-        .replace(' -- ', ' — ')
-        .split('\n')
-        .filter(el => el.trim().length)
-        .join('\n');
+export const formatText = pipe(
+  formatTextSanitizeYoutube,
+  formatTextSanitizeTags,
+  formatTextClickableUsernames,
+  formatTextComments,
+  formatTextTodos,
+  formatExclamations,
+  formatDash,
+  formatMarkdown
+);
 
-export const formatTextParagraphs = (text: string): string =>
-  (text &&
-    formatText(text)
-      .split('\n')
-      .map(str => `<p>${str}</p>`)
-      .join('\n')) ||
-  null;
+export const formatTextParagraphs = (text: string): string => (text && formatText(text)) || null;
 
 export const findBlockType = (line: string): ValueOf<typeof COMMENT_BLOCK_TYPES> => {
   const match = Object.values(COMMENT_BLOCK_DETECTORS).find(detector => line.match(detector.test));
