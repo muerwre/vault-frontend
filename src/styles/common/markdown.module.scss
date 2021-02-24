@@ -1,0 +1,79 @@
+@import "../variables";
+
+.wrapper {
+  pre {
+    background-color: darken($comment_bg, 2%);
+    border: {
+      left: 4px solid $red;
+      right: 4px solid $red;
+    }
+    font-family: monospace;
+    font-size: 0.9em;
+    border-radius: $radius;
+    width: 100%;
+    overflow: auto;
+    padding: $gap;
+    box-sizing: border-box;
+    margin-bottom: 0.3em;
+  }
+
+  img {
+    max-width: 100%;
+    margin-bottom: 0.3em;
+  }
+
+  p {
+    margin-bottom: 0.3em;
+  }
+
+  h5, h4, h3, h2, h1 {
+    color: white;
+    font-weight: 800;
+    line-height: 1.2em;
+    margin-bottom: 0.3em;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.8em;
+  }
+
+  h3 {
+    font-size: 1.6em;
+  }
+
+  h4 {
+    font-size: 1.4em;
+  }
+
+  h5 {
+    font-size: 1.2em;
+  }
+
+  ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-bottom: 0.3em;
+
+    li {
+      margin: 0.1em 0;
+    }
+  }
+
+  strong {
+    font-weight: bold;
+    color: white;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  :global(.grey) {
+    color: #555555;
+    white-space: pre-line;
+  }
+}

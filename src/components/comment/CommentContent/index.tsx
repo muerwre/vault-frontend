@@ -49,6 +49,14 @@ const CommentContent: FC<IProps> = memo(
       [can_edit, comment, onEditClick, onLockClick]
     );
 
+    const blocks = useMemo(
+      () =>
+        !!comment.text.trim()
+          ? formatCommentText(path(['user', 'username'], comment), comment.text)
+          : [],
+      [comment.text]
+    );
+
     return (
       <div className={styles.wrap}>
         {comment.text && (
@@ -56,7 +64,7 @@ const CommentContent: FC<IProps> = memo(
             {menu}
 
             <Group className={styles.renderers}>
-              {formatCommentText(path(['user', 'username'], comment), comment.text).map(
+              {blocks.map(
                 (block, key) =>
                   COMMENT_BLOCK_RENDERERS[block.type] &&
                   createElement(COMMENT_BLOCK_RENDERERS[block.type], { block, key })

@@ -4,6 +4,7 @@ import { formatCellText, getURL } from '~/utils/dom';
 import classNames from 'classnames';
 
 import styles from './styles.module.scss';
+import markdown from '~/styles/common/markdown.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { flowSetCellView } from '~/redux/flow/actions';
 import { PRESETS } from '~/constants/urls';
@@ -118,6 +119,8 @@ const Cell: FC<IProps> = ({
     }
   }, [title]);
 
+  const cellText = useMemo(() => formatCellText(text), [text]);
+
   return (
     <div className={classNames(styles.cell, styles[(flow && flow.display) || 'single'])} ref={ref}>
       {is_visible && (
@@ -149,7 +152,10 @@ const Cell: FC<IProps> = ({
                 <div className={styles.text}>
                   {title && <div className={styles.text_title}>{title}</div>}
 
-                  <Group dangerouslySetInnerHTML={{ __html: formatCellText(text) }} />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: cellText }}
+                    className={markdown.wrapper}
+                  />
                 </div>
               )}
 
@@ -157,7 +163,10 @@ const Cell: FC<IProps> = ({
                 <div className={styles.text_only}>
                   {title && <div className={styles.text_title}>{title}</div>}
 
-                  <Group dangerouslySetInnerHTML={{ __html: formatCellText(text) }} />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: cellText }}
+                    className={markdown.wrapper}
+                  />
                 </div>
               )}
             </div>
