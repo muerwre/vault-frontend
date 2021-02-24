@@ -10,9 +10,9 @@ import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/c
 import format from 'date-fns/format';
 import { pipe } from 'ramda';
 import {
-  formatDash,
+  formatTextDash,
   formatExclamations,
-  formatMarkdown,
+  formatTextMarkdown,
   formatTextClickableUsernames,
   formatTextComments,
   formatTextSanitizeTags,
@@ -101,8 +101,8 @@ export const formatText = pipe(
   formatTextComments,
   formatTextTodos,
   formatExclamations,
-  formatDash,
-  formatMarkdown
+  formatTextDash,
+  formatTextMarkdown
 );
 
 export const formatTextParagraphs = (text: string): string => (text && formatText(text)) || null;

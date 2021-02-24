@@ -49,7 +49,7 @@ export const formatTextTodos = (text: string): string =>
  * Formats !!exclamation messages with green color
  */
 export const formatExclamations = (text: string): string =>
-  text.replace(/(\!\![\s\S]*?(\!\!|\n|$))/gim, '<span class="green">$1</span>');
+  text.replace(/(\!\![\s\S]*?(\!\!|\n|$))/gim, '<span class="green">$1$2</span>');
 
 /**
  * Formats links
@@ -63,9 +63,9 @@ export const formatLinks = (text: string): string =>
 /**
  * Replaces -- with dash
  */
-export const formatDash = (text: string): string => text.replace(' -- ', ' — ');
+export const formatTextDash = (text: string): string => text.replace(' -- ', ' — ');
 
 /**
  * Formats with markdown
  */
-export const formatMarkdown = (text: string): string => marked(text);
+export const formatTextMarkdown = (text: string): string => marked(text);
