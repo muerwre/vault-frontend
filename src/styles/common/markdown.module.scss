@@ -22,10 +22,6 @@ $margin: 1em;
 
   pre {
     background-color: transparentize($blue, 0.9);
-    border: {
-      left: 4px solid transparentize($blue, 0.9);
-      right: 4px solid transparentize($blue, 0.9);
-    }
     font-family: monospace;
     font-size: 0.8em;
     border-radius: 2px;
