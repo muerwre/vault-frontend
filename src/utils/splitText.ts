@@ -3,7 +3,7 @@ import { flatten, isEmpty } from 'ramda';
 export const splitTextByYoutube = (strings: string[]): string[] =>
   flatten(
     strings.map(str =>
-      str.split(/(https?:\/\/(?:www\.)(?:youtube\.com|youtu\.be)\/(?:watch)(?:\?v=)[\w\-\&\=]+)/)
+      str.split(/(https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?[\w\-\&\=]+)/)
     )
   );
 
