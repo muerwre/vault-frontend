@@ -1,6 +1,6 @@
 import React, {
   ChangeEvent,
-  LegacyRef,
+  DetailedHTMLProps,
   memo,
   TextareaHTMLAttributes,
   useCallback,
@@ -14,7 +14,10 @@ import autosize from 'autosize';
 import styles from '~/styles/common/inputs.module.scss';
 import { Icon } from '../Icon';
 
-type IProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+type IProps = DetailedHTMLProps<
+  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  HTMLTextAreaElement
+> & {
   value: string;
   placeholder?: string;
   rows?: number;
@@ -26,6 +29,7 @@ type IProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   status?: 'error' | 'success' | '';
   title?: string;
   seamless?: boolean;
+  setRef?: (r: HTMLTextAreaElement) => void;
 };
 
 const Textarea = memo<IProps>(
@@ -40,12 +44,12 @@ const Textarea = memo<IProps>(
     status = '',
     seamless,
     value,
+    setRef,
     ...props
   }) => {
     const [rows, setRows] = useState(minRows || 1);
     const [focused, setFocused] = useState(false);
-
-    const textarea: LegacyRef<HTMLTextAreaElement> = useRef(null);
+    const ref = useRef<HTMLTextAreaElement>();
 
     const onInput = useCallback(
       ({ target }: ChangeEvent<HTMLTextAreaElement>) => handler(target.value),
@@ -56,12 +60,13 @@ const Textarea = memo<IProps>(
     const onBlur = useCallback(() => setFocused(false), [setFocused]);
 
     useEffect(() => {
-      if (!textarea.current) return;
+      if (!ref.current) return;
 
-      autosize(textarea.current);
+      autosize(ref.current);
+      setRef(ref.current);
 
-      return () => autosize.destroy(textarea.current);
-    }, [textarea.current]);
+      return () => autosize.destroy(ref.current);
+    }, [ref.current]);
 
     return (
       <div
@@ -80,7 +85,7 @@ const Textarea = memo<IProps>(
             placeholder={placeholder}
             className={classNames(styles.textarea, className)}
             onChange={onInput}
-            ref={textarea}
+            ref={ref}
             onFocus={onFocus}
             onBlur={onBlur}
             style={{

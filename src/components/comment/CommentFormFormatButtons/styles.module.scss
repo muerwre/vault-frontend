@@ -1,0 +1,8 @@
+@import "~/styles/variables.scss";
+
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  height: 32px;
+  overflow: hidden;
+}

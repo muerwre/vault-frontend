@@ -1,4 +1,12 @@
-import React, { FC, KeyboardEventHandler, memo, useCallback, useEffect, useMemo } from 'react';
+import React, {
+  FC,
+  KeyboardEventHandler,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Textarea } from '~/components/input/Textarea';
 import styles from './styles.module.scss';
 import { Filler } from '~/components/containers/Filler';
@@ -19,8 +27,9 @@ import { getFileType } from '~/utils/uploader';
 import { useRandomPhrase } from '~/constants/phrases';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
-import { CommentFormAttachButtons } from '~/components/comment/CommentFormButtons';
+import { CommentFormAttachButtons } from '~/components/comment/CommentFormAttachButtons';
 import { CommentFormDropzone } from '~/components/comment/CommentFormDropzone';
+import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormatButtons';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -51,12 +60,11 @@ const CommentFormUnconnected: FC<IProps> = memo(
     uploadUploadFiles,
     nodeCancelCommentEdit,
   }) => {
+    const [textarea, setTextarea] = useState<HTMLTextAreaElement>();
     const comment = useMemo(() => comment_data[id], [comment_data, id]);
 
     const onUpload = useCallback(
       (files: File[]) => {
-        console.log(files);
-
         const items: IFileWithUUID[] = files.map(
           (file: File): IFileWithUUID => ({
             file,
@@ -182,6 +190,7 @@ const CommentFormUnconnected: FC<IProps> = memo(
               disabled={is_sending_comment}
               placeholder={placeholder}
               minRows={2}
+              setRef={setTextarea}
             />
 
             {comment.error && (
@@ -203,6 +212,7 @@ const CommentFormUnconnected: FC<IProps> = memo(
 
           <Group horizontal className={styles.buttons}>
             <CommentFormAttachButtons onUpload={onUpload} />
+            <CommentFormFormatButtons element={textarea} handler={onInput} />
 
             <Filler />
 
