@@ -101,8 +101,8 @@ export const formatText = pipe(
   formatExclamations,
   formatTextDash,
   formatTextMarkdown,
-  formatTextClickableUsernames,
-  formatTextSanitizeTags
+  formatTextSanitizeTags,
+  formatTextClickableUsernames
 );
 
 export const formatTextParagraphs = (text: string): string => (text && formatText(text)) || null;
