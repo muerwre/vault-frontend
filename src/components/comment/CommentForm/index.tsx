@@ -30,6 +30,7 @@ import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
 import { CommentFormAttachButtons } from '~/components/comment/CommentFormAttachButtons';
 import { CommentFormDropzone } from '~/components/comment/CommentFormDropzone';
 import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormatButtons';
+import { LocalCommentForm } from '~/components/comment/LocalCommentForm';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -180,61 +181,65 @@ const CommentFormUnconnected: FC<IProps> = memo(
     );
 
     return (
-      <CommentFormDropzone onUpload={onUpload}>
-        <form onSubmit={onSubmit} className={styles.wrap}>
-          <div className={styles.input}>
-            <Textarea
-              value={comment.text}
-              handler={onInput}
-              onKeyDown={onKeyDown}
-              disabled={is_sending_comment}
-              placeholder={placeholder}
-              minRows={2}
-              setRef={setTextarea}
+      <>
+        <CommentFormDropzone onUpload={onUpload}>
+          <form onSubmit={onSubmit} className={styles.wrap}>
+            <div className={styles.input}>
+              <Textarea
+                value={comment.text}
+                handler={onInput}
+                onKeyDown={onKeyDown}
+                disabled={is_sending_comment}
+                placeholder={placeholder}
+                minRows={2}
+                setRef={setTextarea}
+              />
+
+              {comment.error && (
+                <div className={styles.error} onClick={clearError}>
+                  {ERROR_LITERAL[comment.error] || comment.error}
+                </div>
+              )}
+            </div>
+
+            <CommentFormAttaches
+              images={images}
+              audios={audios}
+              locked_audios={locked_audios}
+              locked_images={locked_images}
+              comment={comment}
+              setComment={setData}
+              onUpload={onUpload}
             />
 
-            {comment.error && (
-              <div className={styles.error} onClick={clearError}>
-                {ERROR_LITERAL[comment.error] || comment.error}
-              </div>
-            )}
-          </div>
+            <Group horizontal className={styles.buttons}>
+              <CommentFormAttachButtons onUpload={onUpload} />
+              <CommentFormFormatButtons element={textarea} handler={onInput} />
 
-          <CommentFormAttaches
-            images={images}
-            audios={audios}
-            locked_audios={locked_audios}
-            locked_images={locked_images}
-            comment={comment}
-            setComment={setData}
-            onUpload={onUpload}
-          />
+              <Filler />
 
-          <Group horizontal className={styles.buttons}>
-            <CommentFormAttachButtons onUpload={onUpload} />
-            <CommentFormFormatButtons element={textarea} handler={onInput} />
+              {(is_sending_comment || isUploadingNow) && <LoaderCircle size={20} />}
 
-            <Filler />
+              {id !== 0 && (
+                <Button size="small" color="link" type="button" onClick={onCancelEdit}>
+                  Отмена
+                </Button>
+              )}
 
-            {(is_sending_comment || isUploadingNow) && <LoaderCircle size={20} />}
-
-            {id !== 0 && (
-              <Button size="small" color="link" type="button" onClick={onCancelEdit}>
-                Отмена
+              <Button
+                size="small"
+                color="gray"
+                iconRight={id === 0 ? 'enter' : 'check'}
+                disabled={is_sending_comment || isUploadingNow}
+              >
+                {id === 0 ? 'Сказать' : 'Сохранить'}
               </Button>
-            )}
+            </Group>
+          </form>
+        </CommentFormDropzone>
 
-            <Button
-              size="small"
-              color="gray"
-              iconRight={id === 0 ? 'enter' : 'check'}
-              disabled={is_sending_comment || isUploadingNow}
-            >
-              {id === 0 ? 'Сказать' : 'Сохранить'}
-            </Button>
-          </Group>
-        </form>
-      </CommentFormDropzone>
+        <LocalCommentForm />
+      </>
     );
   }
 );
