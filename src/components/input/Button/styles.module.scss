@@ -10,6 +10,7 @@
 }
 
 .button {
+  position: relative;
   height: $input_height;
   border: none;
   box-sizing: border-box;
@@ -234,4 +235,22 @@
   margin-left: $gap / 2 !important;
   width: 20px;
   height: 20px;
+}
+
+.tooltip {
+  padding: 5px 10px;
+  background-color: darken($content_bg, 4%);
+  z-index: 2;
+  border-radius: $input_radius;
+  text-transform: none;
+  opacity: 0;
+  pointer-events: none;
+  touch-action: none;
+  transition: opacity 0.1s;
+  border: 1px solid transparentize(white, 0.9);
+
+  .button:hover & {
+    opacity: 1;
+    font: $font_14_semibold;
+  }
 }

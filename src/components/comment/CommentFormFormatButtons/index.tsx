@@ -24,6 +24,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         color="gray"
         iconOnly
         type="button"
+        label="Жирный"
       />
 
       <Button
@@ -33,6 +34,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         color="gray"
         iconOnly
         type="button"
+        label="Наклонный"
       />
 
       <Button
@@ -42,6 +44,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         color="gray"
         iconOnly
         type="button"
+        label="Заголовок"
       />
 
       <Button
@@ -51,7 +54,19 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         color="gray"
         iconOnly
         type="button"
+        label="Ссылка"
       />
+
+      <Button
+        onClick={wrap('// ')}
+        size="small"
+        color="gray"
+        iconOnly
+        type="button"
+        label="Коммент"
+      >
+        {`/ /`}
+      </Button>
     </ButtonGroup>
   );
 };
