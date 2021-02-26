@@ -8,8 +8,8 @@ interface IProps {
   setRef?: (r: HTMLTextAreaElement) => void;
 }
 
-const LocalCommentFormTextarea: FC<IProps> = ({ isLoading, setRef }) => {
-  const { values, handleChange, handleSubmit } = useCommentFormContext();
+const LocalCommentFormTextarea: FC<IProps> = ({ setRef }) => {
+  const { values, handleChange, handleSubmit, isSubmitting } = useCommentFormContext();
 
   const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
     ({ ctrlKey, key }) => {
@@ -25,7 +25,7 @@ const LocalCommentFormTextarea: FC<IProps> = ({ isLoading, setRef }) => {
       value={values.text}
       handler={handleChange('text')}
       onKeyDown={onKeyDown}
-      disabled={isLoading}
+      disabled={isSubmitting}
       placeholder={placeholder}
       minRows={2}
       setRef={setRef}
