@@ -83,12 +83,7 @@ const Button: FC<IButtonProps> = memo(
         title ? <span>{title}</span> : children || null,
         iconRight && <Icon icon={iconRight} size={20} key={2} className={styles.icon_right} />,
         !!label && (
-          <span
-            ref={tooltip}
-            className={styles.tooltip}
-            style={pop.styles.popper}
-            {...pop.attributes.popper}
-          >
+          <span ref={tooltip} className={styles.tooltip} style={pop.styles.popper} key="tooltip">
             {label}
           </span>
         ),
