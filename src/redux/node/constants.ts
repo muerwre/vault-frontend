@@ -42,6 +42,7 @@ export const NODE_ACTIONS = {
   SET_EDITOR: `${prefix}SET_EDITOR`,
 
   POST_COMMENT: `${prefix}POST_COMMENT`,
+  POST_LOCAL_COMMENT: `${prefix}POST_LOCAL_COMMENT`,
   SET_COMMENTS: `${prefix}SET_COMMENTS`,
   SET_RELATED: `${prefix}SET_RELATED`,
 

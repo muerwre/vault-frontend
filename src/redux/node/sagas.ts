@@ -1,59 +1,54 @@
-import { takeLatest, call, put, select, delay, all, takeLeading } from 'redux-saga/effects';
+import { all, call, delay, put, select, takeLatest, takeLeading } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { omit } from 'ramda';
 
+import { COMMENTS_DISPLAY, EMPTY_COMMENT, EMPTY_NODE, NODE_ACTIONS, NODE_EDITOR_DATA } from './constants';
 import {
-  NODE_ACTIONS,
-  EMPTY_NODE,
-  EMPTY_COMMENT,
-  NODE_EDITOR_DATA,
-  COMMENTS_DISPLAY,
-} from './constants';
-import {
-  nodeSave,
-  nodeSetSaveErrors,
-  nodeLoadNode,
-  nodeSetLoading,
-  nodeSetCurrent,
-  nodeSetLoadingComments,
-  nodePostComment,
-  nodeSetSendingComment,
-  nodeSetComments,
-  nodeSetCommentData,
-  nodeUpdateTags,
-  nodeSetTags,
+  nodeCancelCommentEdit,
   nodeCreate,
-  nodeSetEditor,
   nodeEdit,
-  nodeLike,
-  nodeSetRelated,
+  nodeEditComment,
   nodeGotoNode,
+  nodeLike,
+  nodeLoadNode,
   nodeLock,
   nodeLockComment,
-  nodeEditComment,
+  nodePostComment,
+  nodePostLocalComment,
+  nodeSave,
   nodeSet,
-  nodeCancelCommentEdit,
+  nodeSetCommentData,
+  nodeSetComments,
+  nodeSetCurrent,
+  nodeSetEditor,
+  nodeSetLoading,
+  nodeSetLoadingComments,
+  nodeSetRelated,
+  nodeSetSaveErrors,
+  nodeSetSendingComment,
+  nodeSetTags,
+  nodeUpdateTags
 } from './actions';
 import {
-  postNode,
   getNode,
-  postNodeComment,
   getNodeComments,
-  updateNodeTags,
-  postNodeLike,
-  postNodeStar,
   getNodeRelated,
+  postNode,
+  postNodeComment,
+  postNodeLike,
   postNodeLock,
   postNodeLockComment,
+  postNodeStar,
+  updateNodeTags
 } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes, flowSetUpdated } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
 import { modalSetShown, modalShowDialog } from '../modal/actions';
-import { selectFlowNodes, selectFlow } from '../flow/selectors';
+import { selectFlow, selectFlowNodes } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
-import { IResultWithStatus, INode, Unwrap } from '../types';
+import { INode, IResultWithStatus, Unwrap } from '../types';
 import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
 import { DIALOGS } from '~/redux/modal/constants';
 import { INodeState } from './reducer';
@@ -229,6 +224,43 @@ function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
   }
 }
 
+function* onPostLocalComment({
+  nodeId,
+  comment,
+  callback,
+}: ReturnType<typeof nodePostLocalComment>) {
+  const { data, error }: Unwrap<ReturnType<typeof postNodeComment>> = yield call(
+    reqWrapper,
+    postNodeComment,
+    {
+      data: comment,
+      id: nodeId,
+    }
+  );
+
+  if (error || !data.comment) {
+    return callback(error);
+  }
+
+  const { current }: ReturnType<typeof selectNode> = yield select(selectNode);
+
+  if (current?.id === nodeId) {
+    const { comments } = yield select(selectNode);
+
+    if (!comment.id) {
+      yield put(nodeSetComments([data.comment, ...comments]));
+    } else {
+      yield put(
+        nodeSet({
+          comments: comments.map(item => (item.id === comment.id ? data.comment : item)),
+        })
+      );
+    }
+
+    callback();
+  }
+}
+
 function* onCancelCommentEdit({ id }: ReturnType<typeof nodeCancelCommentEdit>) {
   const { comment_data } = yield select(selectNode);
 
@@ -358,6 +390,7 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
+  yield takeLatest(NODE_ACTIONS.POST_LOCAL_COMMENT, onPostLocalComment);
   yield takeLatest(NODE_ACTIONS.CANCEL_COMMENT_EDIT, onCancelCommentEdit);
   yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
   yield takeLatest(NODE_ACTIONS.CREATE, onCreateSaga);

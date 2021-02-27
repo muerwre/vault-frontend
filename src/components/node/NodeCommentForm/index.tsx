@@ -19,7 +19,7 @@ const NodeCommentFormUnconnected: FC<IProps> = ({ user, isBefore, nodeId }) => {
   return (
     <CommentWrapper user={user}>
       <CommentForm id={0} is_before={isBefore} />
-      <LocalCommentForm isBefore={isBefore} nodeId={nodeId} />
+      <LocalCommentForm nodeId={nodeId} />
     </CommentWrapper>
   );
 };

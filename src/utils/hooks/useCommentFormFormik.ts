@@ -3,21 +3,13 @@ import { useCallback, useRef } from 'react';
 import { FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { array, object, string } from 'yup';
 import { FileUploader } from '~/utils/hooks/fileUploader';
+import { useDispatch } from 'react-redux';
+import { nodePostLocalComment } from '~/redux/node/actions';
 
 const validationSchema = object().shape({
   text: string(),
   files: array(),
 });
-
-const submitComment = (
-  id: INode['id'],
-  values: IComment,
-  isBefore: boolean,
-  callback: (e?: string) => void
-) => {
-  console.log('Submitting', id, values);
-  new Promise(resolve => setTimeout(resolve, 500)).then(() => callback());
-};
 
 const onSuccess = ({ resetForm, setStatus, setSubmitting }: FormikHelpers<IComment>) => (
   e: string
@@ -38,25 +30,26 @@ export const useCommentFormFormik = (
   values: IComment,
   nodeId: INode['id'],
   uploader: FileUploader,
-  stopEditing?: () => void,
-  isBefore: boolean = false
+  stopEditing?: () => void
 ) => {
+  const dispatch = useDispatch();
   const { current: initialValues } = useRef(values);
 
   const onSubmit = useCallback(
     (values: IComment, helpers: FormikHelpers<IComment>) => {
       helpers.setSubmitting(true);
-      submitComment(
-        nodeId,
-        {
-          ...values,
-          files: uploader.files,
-        },
-        isBefore,
-        onSuccess(helpers)
+      dispatch(
+        nodePostLocalComment(
+          nodeId,
+          {
+            ...values,
+            files: uploader.files,
+          },
+          onSuccess(helpers)
+        )
       );
     },
-    [isBefore, nodeId, uploader.files]
+    [dispatch, nodeId, uploader.files]
   );
 
   const onReset = useCallback(() => {

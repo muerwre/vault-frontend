@@ -1,5 +1,5 @@
-import { INode, IValidationErrors, IComment, ITag, IFile } from '../types';
-import { NODE_ACTIONS, NODE_TYPES } from './constants';
+import { IComment, IFile, INode, ITag, IValidationErrors } from '../types';
+import { NODE_ACTIONS } from './constants';
 import { INodeState } from './reducer';
 
 export const nodeSet = (node: Partial<INodeState>) => ({
@@ -48,6 +48,17 @@ export const nodePostComment = (id: number, is_before: boolean) => ({
   id,
   is_before,
   type: NODE_ACTIONS.POST_COMMENT,
+});
+
+export const nodePostLocalComment = (
+  nodeId: INode['id'],
+  comment: IComment,
+  callback: (e?: string) => void
+) => ({
+  nodeId,
+  comment,
+  callback,
+  type: NODE_ACTIONS.POST_LOCAL_COMMENT,
 });
 
 export const nodeCancelCommentEdit = (id: number) => ({

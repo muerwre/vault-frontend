@@ -15,20 +15,13 @@ import { EMPTY_COMMENT } from '~/redux/node/constants';
 interface IProps {
   comment?: IComment;
   nodeId: INode['id'];
-  isBefore?: boolean;
   onCancelEdit?: () => void;
 }
 
-const LocalCommentForm: FC<IProps> = ({ comment, nodeId, isBefore, onCancelEdit }) => {
+const LocalCommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
   const [textarea, setTextarea] = useState<HTMLTextAreaElement>();
   const uploader = useFileUploader(UPLOAD_SUBJECTS.COMMENT, UPLOAD_TARGETS.COMMENTS);
-  const formik = useCommentFormFormik(
-    comment || EMPTY_COMMENT,
-    nodeId,
-    uploader,
-    onCancelEdit,
-    isBefore
-  );
+  const formik = useCommentFormFormik(comment || EMPTY_COMMENT, nodeId, uploader, onCancelEdit);
   const isLoading = formik.isSubmitting || uploader.isUploading;
   const isEditing = !!comment?.id;
 
@@ -51,6 +44,7 @@ const LocalCommentForm: FC<IProps> = ({ comment, nodeId, isBefore, onCancelEdit 
           )}
 
           <Button
+            type="submit"
             size="small"
             color="gray"
             iconRight={!isEditing ? 'enter' : 'check'}
