@@ -45,7 +45,7 @@ type IProps = ReturnType<typeof mapStateToProps> &
 const id = 696;
 
 const BorisLayoutUnconnected: FC<IProps> = ({
-  node: { is_loading, is_loading_comments, comments = [], comment_data, comment_count },
+  node: { is_loading, is_loading_comments, comments = [], comment_data, comment_count, id },
   user,
   user: { is_user, last_seen_boris },
   nodeLoadNode,
@@ -92,7 +92,7 @@ const BorisLayoutUnconnected: FC<IProps> = ({
       <div className={styles.container}>
         <Card className={styles.content}>
           <Group className={styles.grid}>
-            {is_user && <NodeCommentForm is_before />}
+            {is_user && <NodeCommentForm isBefore nodeId={id} />}
 
             {is_loading_comments ? (
               <NodeNoComments is_loading count={7} />

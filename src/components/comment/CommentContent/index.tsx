@@ -1,112 +1,116 @@
-import React, { FC, useMemo, memo, createElement, useCallback, Fragment } from 'react';
+import React, { createElement, FC, Fragment, memo, useCallback, useMemo, useState } from 'react';
 import { IComment, IFile } from '~/redux/types';
-import { path } from 'ramda';
-import { formatCommentText, getURL, getPrettyDate } from '~/utils/dom';
+import { append, assocPath, path } from 'ramda';
+import { formatCommentText, getPrettyDate, getURL } from '~/utils/dom';
 import { Group } from '~/components/containers/Group';
 import styles from './styles.module.scss';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
-import { assocPath } from 'ramda';
-import { append } from 'ramda';
 import reduce from 'ramda/es/reduce';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import classnames from 'classnames';
 import { PRESETS } from '~/constants/urls';
 import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
-import { nodeLockComment, nodeEditComment } from '~/redux/node/actions';
+import { nodeLockComment } from '~/redux/node/actions';
 import { CommentMenu } from '../CommentMenu';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import { LocalCommentForm } from '~/components/comment/LocalCommentForm';
+import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { selectNode } from '~/redux/node/selectors';
 
 interface IProps {
   comment: IComment;
   can_edit: boolean;
   onDelete: typeof nodeLockComment;
-  onEdit: typeof nodeEditComment;
   modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
 }
 
-const CommentContent: FC<IProps> = memo(
-  ({ comment, can_edit, onDelete, onEdit, modalShowPhotoswipe }) => {
-    const groupped = useMemo<Record<keyof typeof UPLOAD_TYPES, IFile[]>>(
-      () =>
-        reduce(
-          (group, file) => assocPath([file.type], append(file, group[file.type]), group),
-          {},
-          comment.files
-        ),
-      [comment]
-    );
+const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, modalShowPhotoswipe }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const { current } = useShallowSelect(selectNode);
 
-    const onLockClick = useCallback(() => {
-      onDelete(comment.id, !comment.deleted_at);
-    }, [comment, onDelete]);
+  const startEditing = useCallback(() => setIsEditing(true), [setIsEditing]);
+  const stopEditing = useCallback(() => setIsEditing(false), [setIsEditing]);
 
-    const onEditClick = useCallback(() => {
-      onEdit(comment.id);
-    }, [comment, onEdit]);
+  const groupped = useMemo<Record<keyof typeof UPLOAD_TYPES, IFile[]>>(
+    () =>
+      reduce(
+        (group, file) => assocPath([file.type], append(file, group[file.type]), group),
+        {},
+        comment.files
+      ),
+    [comment]
+  );
 
-    const menu = useMemo(
-      () => can_edit && <CommentMenu onDelete={onLockClick} onEdit={onEditClick} />,
-      [can_edit, comment, onEditClick, onLockClick]
-    );
+  const onLockClick = useCallback(() => {
+    onDelete(comment.id, !comment.deleted_at);
+  }, [comment, onDelete]);
 
-    const blocks = useMemo(
-      () =>
-        !!comment.text.trim()
-          ? formatCommentText(path(['user', 'username'], comment), comment.text)
-          : [],
-      [comment.text]
-    );
+  const menu = useMemo(
+    () => can_edit && <CommentMenu onDelete={onLockClick} onEdit={startEditing} />,
+    [can_edit, startEditing, onLockClick]
+  );
 
-    return (
-      <div className={styles.wrap}>
-        {comment.text && (
-          <Group className={classnames(styles.block, styles.block_text)}>
-            {menu}
+  const blocks = useMemo(
+    () =>
+      !!comment.text.trim()
+        ? formatCommentText(path(['user', 'username'], comment), comment.text)
+        : [],
+    [comment]
+  );
 
-            <Group className={styles.renderers}>
-              {blocks.map(
-                (block, key) =>
-                  COMMENT_BLOCK_RENDERERS[block.type] &&
-                  createElement(COMMENT_BLOCK_RENDERERS[block.type], { block, key })
-              )}
-            </Group>
+  if (isEditing) {
+    return <LocalCommentForm nodeId={current.id} comment={comment} onCancelEdit={stopEditing} />;
+  }
 
-            <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
+  return (
+    <div className={styles.wrap}>
+      {comment.text && (
+        <Group className={classnames(styles.block, styles.block_text)}>
+          {menu}
+
+          <Group className={styles.renderers}>
+            {blocks.map(
+              (block, key) =>
+                COMMENT_BLOCK_RENDERERS[block.type] &&
+                createElement(COMMENT_BLOCK_RENDERERS[block.type], { block, key })
+            )}
           </Group>
-        )}
 
-        {groupped.image && groupped.image.length > 0 && (
-          <div className={classnames(styles.block, styles.block_image)}>
-            {menu}
+          <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
+        </Group>
+      )}
 
-            <div className={styles.images}>
-              {groupped.image.map((file, index) => (
-                <div key={file.id} onClick={() => modalShowPhotoswipe(groupped.image, index)}>
-                  <img src={getURL(file, PRESETS['600'])} alt={file.name} />
-                </div>
-              ))}
-            </div>
+      {groupped.image && groupped.image.length > 0 && (
+        <div className={classnames(styles.block, styles.block_image)}>
+          {menu}
 
-            <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
-          </div>
-        )}
-
-        {groupped.audio && groupped.audio.length > 0 && (
-          <Fragment>
-            {groupped.audio.map(file => (
-              <div className={classnames(styles.block, styles.block_audio)} key={file.id}>
-                {menu}
-
-                <AudioPlayer file={file} />
-
-                <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
+          <div className={styles.images}>
+            {groupped.image.map((file, index) => (
+              <div key={file.id} onClick={() => modalShowPhotoswipe(groupped.image, index)}>
+                <img src={getURL(file, PRESETS['600'])} alt={file.name} />
               </div>
             ))}
-          </Fragment>
-        )}
-      </div>
-    );
-  }
-);
+          </div>
+
+          <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
+        </div>
+      )}
+
+      {groupped.audio && groupped.audio.length > 0 && (
+        <Fragment>
+          {groupped.audio.map(file => (
+            <div className={classnames(styles.block, styles.block_audio)} key={file.id}>
+              {menu}
+
+              <AudioPlayer file={file} />
+
+              <div className={styles.date}>{getPrettyDate(comment.created_at)}</div>
+            </div>
+          ))}
+        </Fragment>
+      )}
+    </div>
+  );
+});
 
 export { CommentContent };

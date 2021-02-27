@@ -1,64 +1,77 @@
-import { IComment, IFile } from '~/redux/types';
+import { IComment, INode } from '~/redux/types';
 import { useCallback, useRef } from 'react';
 import { FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { array, object, string } from 'yup';
-
-export interface CommentFormValues {
-  text: string;
-  images: IFile[];
-  songs: IFile[];
-}
+import { FileUploader } from '~/utils/hooks/fileUploader';
 
 const validationSchema = object().shape({
   text: string(),
-  images: array(),
-  songs: array(),
+  files: array(),
 });
 
-const submitComment = async (
-  id: IComment['id'],
-  values: CommentFormValues,
-  callback: (e: string) => void
+const submitComment = (
+  id: INode['id'],
+  values: IComment,
+  isBefore: boolean,
+  callback: (e?: string) => void
 ) => {
-  await new Promise(resolve => setTimeout(resolve, 500));
-  callback('wrong');
+  console.log('Submitting', id, values);
+  new Promise(resolve => setTimeout(resolve, 500)).then(() => callback());
 };
 
-export const useCommentFormFormik = (values: CommentFormValues) => {
+const onSuccess = ({ resetForm, setStatus, setSubmitting }: FormikHelpers<IComment>) => (
+  e: string
+) => {
+  setSubmitting(false);
+
+  if (e) {
+    setStatus(e);
+    return;
+  }
+
+  if (resetForm) {
+    resetForm();
+  }
+};
+
+export const useCommentFormFormik = (
+  values: IComment,
+  nodeId: INode['id'],
+  uploader: FileUploader,
+  stopEditing?: () => void,
+  isBefore: boolean = false
+) => {
   const { current: initialValues } = useRef(values);
 
-  const onSuccess = useCallback(
-    ({ resetForm, setStatus, setSubmitting }: FormikHelpers<CommentFormValues>) => (e: string) => {
-      setSubmitting(false);
-
-      if (e) {
-        setStatus(e);
-        return;
-      }
-
-      if (resetForm) {
-        resetForm();
-      }
-    },
-    []
-  );
-
   const onSubmit = useCallback(
-    (values: CommentFormValues, helpers: FormikHelpers<CommentFormValues>) => {
+    (values: IComment, helpers: FormikHelpers<IComment>) => {
       helpers.setSubmitting(true);
-      submitComment(0, values, onSuccess(helpers));
+      submitComment(
+        nodeId,
+        {
+          ...values,
+          files: uploader.files,
+        },
+        isBefore,
+        onSuccess(helpers)
+      );
     },
-    [values, onSuccess]
+    [isBefore, nodeId, uploader.files]
   );
 
-  const formik = useFormik({
+  const onReset = useCallback(() => {
+    uploader.setFiles([]);
+
+    if (stopEditing) stopEditing();
+  }, [uploader, stopEditing]);
+
+  return useFormik({
     initialValues,
     validationSchema,
     onSubmit,
     initialStatus: '',
+    onReset,
   });
-
-  return { formik };
 };
 
-export const useCommentFormContext = () => useFormikContext<CommentFormValues>();
+export const useCommentFormContext = () => useFormikContext<IComment>();

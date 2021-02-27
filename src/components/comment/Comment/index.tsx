@@ -5,7 +5,6 @@ import { CommentContent } from '~/components/comment/CommentContent';
 import styles from './styles.module.scss';
 import { nodeEditComment, nodeLockComment } from '~/redux/node/actions';
 import { INodeState } from '~/redux/node/reducer';
-import { CommentForm } from '../CommentForm';
 import { CommendDeleted } from '../../node/CommendDeleted';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 
@@ -50,17 +49,12 @@ const Comment: FC<IProps> = memo(
               return <CommendDeleted id={comment.id} onDelete={onDelete} key={comment.id} />;
             }
 
-            if (Object.prototype.hasOwnProperty.call(comment_data, comment.id)) {
-              return <CommentForm id={comment.id} key={comment.id} />;
-            }
-
             return (
               <CommentContent
                 comment={comment}
                 key={comment.id}
                 can_edit={!!can_edit}
                 onDelete={onDelete}
-                onEdit={onEdit}
                 modalShowPhotoswipe={modalShowPhotoswipe}
               />
             );

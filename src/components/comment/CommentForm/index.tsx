@@ -1,12 +1,4 @@
-import React, {
-  FC,
-  KeyboardEventHandler,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { FC, KeyboardEventHandler, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Textarea } from '~/components/input/Textarea';
 import styles from './styles.module.scss';
 import { Filler } from '~/components/containers/Filler';
@@ -30,7 +22,6 @@ import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
 import { CommentFormAttachButtons } from '~/components/comment/CommentFormAttachButtons';
 import { CommentFormDropzone } from '~/components/comment/CommentFormDropzone';
 import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormatButtons';
-import { LocalCommentForm } from '~/components/comment/LocalCommentForm';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -237,8 +228,6 @@ const CommentFormUnconnected: FC<IProps> = memo(
             </Group>
           </form>
         </CommentFormDropzone>
-
-        <LocalCommentForm />
       </>
     );
   }
