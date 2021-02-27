@@ -25,7 +25,7 @@ import {
   nodeSetRelated,
   nodeSetSaveErrors,
   nodeSetTags,
-  nodeUpdateTags
+  nodeUpdateTags,
 } from './actions';
 import {
   getNode,
@@ -37,7 +37,7 @@ import {
   postNodeLock,
   postNodeLockComment,
   postNodeStar,
-  updateNodeTags
+  updateNodeTags,
 } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes, flowSetUpdated } from '../flow/actions';
