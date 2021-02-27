@@ -142,11 +142,8 @@ export interface INode {
 export interface IComment {
   id: number;
   text: string;
-  temp_ids?: string[];
   files: IFile[];
-  is_private: boolean;
   user: IUser;
-  error?: string;
 
   created_at?: string;
   update_at?: string;

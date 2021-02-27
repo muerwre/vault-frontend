@@ -106,10 +106,7 @@ export const EMPTY_COMMENT: IComment = {
   id: null,
   text: '',
   files: [],
-  temp_ids: [],
-  is_private: false,
   user: null,
-  error: '',
 };
 
 export const NODE_EDITORS = {
