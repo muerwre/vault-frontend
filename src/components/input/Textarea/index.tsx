@@ -60,13 +60,20 @@ const Textarea = memo<IProps>(
     const onBlur = useCallback(() => setFocused(false), [setFocused]);
 
     useEffect(() => {
+      const target = ref?.current;
+      if (!target) return;
+
+      autosize(target);
+      setRef(target);
+
+      return () => autosize.destroy(target);
+    }, [ref, setRef]);
+
+    useEffect(() => {
       if (!ref.current) return;
 
-      autosize(ref.current);
-      setRef(ref.current);
-
-      return () => autosize.destroy(ref.current);
-    }, [ref.current]);
+      autosize.update(ref.current);
+    }, [value]);
 
     return (
       <div
@@ -89,7 +96,7 @@ const Textarea = memo<IProps>(
             onFocus={onFocus}
             onBlur={onBlur}
             style={{
-              maxHeight: maxRows * 20,
+              // maxHeight: maxRows * 20,
               minHeight: minRows * 20,
             }}
             {...props}

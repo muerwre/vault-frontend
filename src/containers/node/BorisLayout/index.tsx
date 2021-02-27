@@ -1,8 +1,7 @@
 import React, { FC, useEffect } from 'react';
-import { RouteComponentProps } from 'react-router';
-import { selectNode } from '~/redux/node/selectors';
+import { selectNode, selectNodeComments } from '~/redux/node/selectors';
 import { selectUser } from '~/redux/auth/selectors';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { NodeComments } from '~/components/node/NodeComments';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
@@ -10,72 +9,49 @@ import boris from '~/sprites/boris_robot.svg';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { useRandomPhrase } from '~/constants/phrases';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
-
-import * as NODE_ACTIONS from '~/redux/node/actions';
-import * as AUTH_ACTIONS from '~/redux/auth/actions';
-import * as MODAL_ACTIONS from '~/redux/modal/actions';
-import * as BORIS_ACTIONS from '~/redux/boris/actions';
 import isBefore from 'date-fns/isBefore';
 import { Card } from '~/components/containers/Card';
 import { Footer } from '~/components/main/Footer';
 import { Sticky } from '~/components/containers/Sticky';
-import { selectBorisStats } from '~/redux/boris/selectors';
 import { BorisStats } from '~/components/boris/BorisStats';
+import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { selectBorisStats } from '~/redux/boris/selectors';
+import { authSetUser } from '~/redux/auth/actions';
+import { nodeLoadNode } from '~/redux/node/actions';
+import { borisLoadStats } from '~/redux/boris/actions';
 
-const mapStateToProps = state => ({
-  node: selectNode(state),
-  user: selectUser(state),
-  stats: selectBorisStats(state),
-});
+type IProps = {};
 
-const mapDispatchToProps = {
-  nodeLoadNode: NODE_ACTIONS.nodeLoadNode,
-  nodeLockComment: NODE_ACTIONS.nodeLockComment,
-  nodeEditComment: NODE_ACTIONS.nodeEditComment,
-  nodeLoadMoreComments: NODE_ACTIONS.nodeLoadMoreComments,
-  authSetUser: AUTH_ACTIONS.authSetUser,
-  modalShowPhotoswipe: MODAL_ACTIONS.modalShowPhotoswipe,
-  borisLoadStats: BORIS_ACTIONS.borisLoadStats,
-};
-
-type IProps = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps &
-  RouteComponentProps<{ id: string }> & {};
-
-const id = 696;
-
-const BorisLayoutUnconnected: FC<IProps> = ({
-  node: { is_loading, is_loading_comments, comments = [], comment_data, comment_count },
-  user,
-  user: { is_user, last_seen_boris },
-  nodeLoadNode,
-  nodeLockComment,
-  nodeEditComment,
-  nodeLoadMoreComments,
-  modalShowPhotoswipe,
-  authSetUser,
-  borisLoadStats,
-  stats,
-}) => {
+const BorisLayout: FC<IProps> = () => {
   const title = useRandomPhrase('BORIS_TITLE');
+  const dispatch = useDispatch();
+  const node = useShallowSelect(selectNode);
+  const user = useShallowSelect(selectUser);
+  const stats = useShallowSelect(selectBorisStats);
+  const comments = useShallowSelect(selectNodeComments);
 
   useEffect(() => {
     const last_comment = comments[0];
+
     if (!last_comment) return;
-    if (last_seen_boris && !isBefore(new Date(last_seen_boris), new Date(last_comment.created_at)))
+
+    if (
+      user.last_seen_boris &&
+      !isBefore(new Date(user.last_seen_boris), new Date(last_comment.created_at))
+    )
       return;
 
-    authSetUser({ last_seen_boris: last_comment.created_at });
-  }, [comments, last_seen_boris]);
+    dispatch(authSetUser({ last_seen_boris: last_comment.created_at }));
+  }, [user.last_seen_boris, dispatch, comments]);
 
   useEffect(() => {
-    if (is_loading) return;
-    nodeLoadNode(id, 'DESC');
-  }, [nodeLoadNode, id]);
+    if (node.is_loading) return;
+    dispatch(nodeLoadNode(696, 'DESC'));
+  }, [dispatch]);
 
   useEffect(() => {
-    borisLoadStats();
-  }, [borisLoadStats]);
+    dispatch(borisLoadStats());
+  }, [dispatch]);
 
   return (
     <div className={styles.wrap}>
@@ -92,20 +68,15 @@ const BorisLayoutUnconnected: FC<IProps> = ({
       <div className={styles.container}>
         <Card className={styles.content}>
           <Group className={styles.grid}>
-            {is_user && <NodeCommentForm is_before />}
+            {user.is_user && <NodeCommentForm isBefore nodeId={node.current.id} />}
 
-            {is_loading_comments ? (
+            {node.is_loading_comments ? (
               <NodeNoComments is_loading count={7} />
             ) : (
               <NodeComments
                 comments={comments}
-                comment_data={comment_data}
-                comment_count={comment_count}
+                count={node.comment_count}
                 user={user}
-                onDelete={nodeLockComment}
-                onEdit={nodeEditComment}
-                onLoadMore={nodeLoadMoreComments}
-                modalShowPhotoswipe={modalShowPhotoswipe}
                 order="ASC"
               />
             )}
@@ -138,7 +109,5 @@ const BorisLayoutUnconnected: FC<IProps> = ({
     </div>
   );
 };
-
-const BorisLayout = connect(mapStateToProps, mapDispatchToProps)(BorisLayoutUnconnected);
 
 export { BorisLayout };

@@ -41,7 +41,7 @@ export const NODE_ACTIONS = {
   SET_COMMENT_DATA: `${prefix}SET_COMMENT_DATA`,
   SET_EDITOR: `${prefix}SET_EDITOR`,
 
-  POST_COMMENT: `${prefix}POST_COMMENT`,
+  POST_COMMENT: `${prefix}POST_LOCAL_COMMENT`,
   SET_COMMENTS: `${prefix}SET_COMMENTS`,
   SET_RELATED: `${prefix}SET_RELATED`,
 
@@ -106,10 +106,7 @@ export const EMPTY_COMMENT: IComment = {
   id: null,
   text: '',
   files: [],
-  temp_ids: [],
-  is_private: false,
   user: null,
-  error: '',
 };
 
 export const NODE_EDITORS = {

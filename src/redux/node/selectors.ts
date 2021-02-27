@@ -1,10 +1,5 @@
 import { IState } from '../store';
-import { INodeState } from './reducer';
-import { IResultWithStatus, INode } from '../types';
 
-export const selectNode = (state: IState): INodeState => state.node;
-
-// export const catchNodeErrors = (data: IResultWithStatus<INode>): IResultWithStatus<INode> => ({
-// data,
-// errors: data.errors,
-// })
+export const selectNode = (state: IState) => state.node;
+export const selectNodeComments = (state: IState) => state.node.comments;
+export const selectNodeCurrent = (state: IState) => state.node.current;

@@ -1,59 +1,52 @@
-import { takeLatest, call, put, select, delay, all, takeLeading } from 'redux-saga/effects';
+import { all, call, delay, put, select, takeLatest, takeLeading } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { omit } from 'ramda';
 
+import { COMMENTS_DISPLAY, EMPTY_COMMENT, EMPTY_NODE, NODE_ACTIONS, NODE_EDITOR_DATA } from './constants';
 import {
-  NODE_ACTIONS,
-  EMPTY_NODE,
-  EMPTY_COMMENT,
-  NODE_EDITOR_DATA,
-  COMMENTS_DISPLAY,
-} from './constants';
-import {
-  nodeSave,
-  nodeSetSaveErrors,
-  nodeLoadNode,
-  nodeSetLoading,
-  nodeSetCurrent,
-  nodeSetLoadingComments,
-  nodePostComment,
-  nodeSetSendingComment,
-  nodeSetComments,
-  nodeSetCommentData,
-  nodeUpdateTags,
-  nodeSetTags,
+  nodeCancelCommentEdit,
   nodeCreate,
-  nodeSetEditor,
   nodeEdit,
-  nodeLike,
-  nodeSetRelated,
+  nodeEditComment,
   nodeGotoNode,
+  nodeLike,
+  nodeLoadNode,
   nodeLock,
   nodeLockComment,
-  nodeEditComment,
+  nodePostLocalComment,
+  nodeSave,
   nodeSet,
-  nodeCancelCommentEdit,
+  nodeSetCommentData,
+  nodeSetComments,
+  nodeSetCurrent,
+  nodeSetEditor,
+  nodeSetLoading,
+  nodeSetLoadingComments,
+  nodeSetRelated,
+  nodeSetSaveErrors,
+  nodeSetTags,
+  nodeUpdateTags,
 } from './actions';
 import {
-  postNode,
   getNode,
-  postNodeComment,
   getNodeComments,
-  updateNodeTags,
-  postNodeLike,
-  postNodeStar,
   getNodeRelated,
+  postNode,
+  postNodeComment,
+  postNodeLike,
   postNodeLock,
   postNodeLockComment,
+  postNodeStar,
+  updateNodeTags,
 } from './api';
 import { reqWrapper } from '../auth/sagas';
 import { flowSetNodes, flowSetUpdated } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
 import { modalSetShown, modalShowDialog } from '../modal/actions';
-import { selectFlowNodes, selectFlow } from '../flow/selectors';
+import { selectFlow, selectFlowNodes } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
-import { IResultWithStatus, INode, Unwrap } from '../types';
+import { INode, IResultWithStatus, Unwrap } from '../types';
 import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
 import { DIALOGS } from '~/redux/modal/constants';
 import { INodeState } from './reducer';
@@ -196,36 +189,36 @@ function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
   return;
 }
 
-function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
-  const { current, comment_data } = yield select(selectNode);
+function* onPostComment({ nodeId, comment, callback }: ReturnType<typeof nodePostLocalComment>) {
+  const { data, error }: Unwrap<ReturnType<typeof postNodeComment>> = yield call(
+    reqWrapper,
+    postNodeComment,
+    {
+      data: comment,
+      id: nodeId,
+    }
+  );
 
-  yield put(nodeSetSendingComment(true));
-  const {
-    data: { comment },
-    error,
-  } = yield call(reqWrapper, postNodeComment, { data: comment_data[id], id: current.id });
-  yield put(nodeSetSendingComment(false));
-
-  if (error || !comment) {
-    return yield put(nodeSetCommentData(id, { error }));
+  if (error || !data.comment) {
+    return callback(error);
   }
 
-  const { current: current_node } = yield select(selectNode);
+  const { current }: ReturnType<typeof selectNode> = yield select(selectNode);
 
-  if (current_node && current_node.id === current.id) {
-    const { comments, comment_data: current_comment_data } = yield select(selectNode);
+  if (current?.id === nodeId) {
+    const { comments } = yield select(selectNode);
 
-    if (id === 0) {
-      yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
-      yield put(nodeSetComments([comment, ...comments]));
+    if (!comment.id) {
+      yield put(nodeSetComments([data.comment, ...comments]));
     } else {
       yield put(
         nodeSet({
-          comment_data: omit([id.toString()], current_comment_data),
-          comments: comments.map(item => (item.id === id ? comment : item)),
+          comments: comments.map(item => (item.id === comment.id ? data.comment : item)),
         })
       );
     }
+
+    callback();
   }
 }
 

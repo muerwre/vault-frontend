@@ -1,12 +1,11 @@
 import React, { FC, useCallback } from 'react';
 import styles from './styles.module.scss';
 import { Button } from '~/components/input/Button';
-import { nodeLockComment } from '~/redux/node/actions';
 import { IComment } from '~/redux/types';
 
 interface IProps {
   id: IComment['id'];
-  onDelete: typeof nodeLockComment;
+  onDelete: (id: IComment['id'], isLocked: boolean) => void;
 }
 
 const CommendDeleted: FC<IProps> = ({ id, onDelete }) => {
