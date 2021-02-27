@@ -10,12 +10,13 @@ import { selectUploads } from '~/redux/uploads/selectors';
 
 export const useFileUploader = (
   subject: typeof UPLOAD_SUBJECTS[keyof typeof UPLOAD_SUBJECTS],
-  target: typeof UPLOAD_TARGETS[keyof typeof UPLOAD_TARGETS]
+  target: typeof UPLOAD_TARGETS[keyof typeof UPLOAD_TARGETS],
+  initialFiles?: IFile[]
 ) => {
   const dispatch = useDispatch();
   const { files: uploadedFiles, statuses } = useShallowSelect(selectUploads);
 
-  const [files, setFiles] = useState<IFile[]>([]);
+  const [files, setFiles] = useState<IFile[]>(initialFiles || []);
   const [pendingIDs, setPendingIDs] = useState<string[]>([]);
 
   const uploadFiles = useCallback(

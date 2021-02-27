@@ -1,5 +1,5 @@
 import { IComment, INode } from '~/redux/types';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { array, object, string } from 'yup';
 import { FileUploader } from '~/utils/hooks/fileUploader';
@@ -58,13 +58,22 @@ export const useCommentFormFormik = (
     if (stopEditing) stopEditing();
   }, [uploader, stopEditing]);
 
-  return useFormik({
+  const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit,
     initialStatus: '',
     onReset,
+    validateOnChange: true,
   });
+
+  useEffect(() => {
+    if (formik.status) {
+      formik.setStatus('');
+    }
+  }, [formik.values.text]);
+
+  return formik;
 };
 
 export const useCommentFormContext = () => useFormikContext<IComment>();
