@@ -1,10 +1,8 @@
 import React, { FC, HTMLAttributes, memo } from 'react';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
-import { ICommentGroup } from '~/redux/types';
+import { IComment, ICommentGroup } from '~/redux/types';
 import { CommentContent } from '~/components/comment/CommentContent';
 import styles from './styles.module.scss';
-import { nodeEditComment, nodeLockComment } from '~/redux/node/actions';
-import { INodeState } from '~/redux/node/reducer';
 import { CommendDeleted } from '../../node/CommendDeleted';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 
@@ -12,25 +10,21 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
   is_loading?: boolean;
   comment_group: ICommentGroup;
-  comment_data: INodeState['comment_data'];
   is_same?: boolean;
   can_edit?: boolean;
-  onDelete: typeof nodeLockComment;
-  onEdit: typeof nodeEditComment;
+  onDelete: (id: IComment['id'], isLocked: boolean) => void;
   modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
 };
 
 const Comment: FC<IProps> = memo(
   ({
     comment_group,
-    comment_data,
     is_empty,
     is_same,
     is_loading,
     className,
     can_edit,
     onDelete,
-    onEdit,
     modalShowPhotoswipe,
     ...props
   }) => {

@@ -13,7 +13,6 @@ import {
   nodeLoadNode,
   nodeLock,
   nodeLockComment,
-  nodePostComment,
   nodePostLocalComment,
   nodeSave,
   nodeSet,
@@ -25,7 +24,6 @@ import {
   nodeSetLoadingComments,
   nodeSetRelated,
   nodeSetSaveErrors,
-  nodeSetSendingComment,
   nodeSetTags,
   nodeUpdateTags
 } from './actions';
@@ -191,44 +189,7 @@ function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
   return;
 }
 
-function* onPostComment({ id }: ReturnType<typeof nodePostComment>) {
-  const { current, comment_data } = yield select(selectNode);
-
-  yield put(nodeSetSendingComment(true));
-  const {
-    data: { comment },
-    error,
-  } = yield call(reqWrapper, postNodeComment, { data: comment_data[id], id: current.id });
-  yield put(nodeSetSendingComment(false));
-
-  if (error || !comment) {
-    return yield put(nodeSetCommentData(id, { error }));
-  }
-
-  const { current: current_node } = yield select(selectNode);
-
-  if (current_node && current_node.id === current.id) {
-    const { comments, comment_data: current_comment_data } = yield select(selectNode);
-
-    if (id === 0) {
-      yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
-      yield put(nodeSetComments([comment, ...comments]));
-    } else {
-      yield put(
-        nodeSet({
-          comment_data: omit([id.toString()], current_comment_data),
-          comments: comments.map(item => (item.id === id ? comment : item)),
-        })
-      );
-    }
-  }
-}
-
-function* onPostLocalComment({
-  nodeId,
-  comment,
-  callback,
-}: ReturnType<typeof nodePostLocalComment>) {
+function* onPostComment({ nodeId, comment, callback }: ReturnType<typeof nodePostLocalComment>) {
   const { data, error }: Unwrap<ReturnType<typeof postNodeComment>> = yield call(
     reqWrapper,
     postNodeComment,
@@ -390,7 +351,6 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
-  yield takeLatest(NODE_ACTIONS.POST_LOCAL_COMMENT, onPostLocalComment);
   yield takeLatest(NODE_ACTIONS.CANCEL_COMMENT_EDIT, onCancelCommentEdit);
   yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
   yield takeLatest(NODE_ACTIONS.CREATE, onCreateSaga);

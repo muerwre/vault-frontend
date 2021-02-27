@@ -44,12 +44,6 @@ export const nodeSetCurrent = (current: INodeState['current']) => ({
   type: NODE_ACTIONS.SET_CURRENT,
 });
 
-export const nodePostComment = (id: number, is_before: boolean) => ({
-  id,
-  is_before,
-  type: NODE_ACTIONS.POST_COMMENT,
-});
-
 export const nodePostLocalComment = (
   nodeId: INode['id'],
   comment: IComment,
@@ -58,7 +52,7 @@ export const nodePostLocalComment = (
   nodeId,
   comment,
   callback,
-  type: NODE_ACTIONS.POST_LOCAL_COMMENT,
+  type: NODE_ACTIONS.POST_COMMENT,
 });
 
 export const nodeCancelCommentEdit = (id: number) => ({

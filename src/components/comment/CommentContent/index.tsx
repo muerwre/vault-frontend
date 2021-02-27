@@ -10,17 +10,16 @@ import { AudioPlayer } from '~/components/media/AudioPlayer';
 import classnames from 'classnames';
 import { PRESETS } from '~/constants/urls';
 import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
-import { nodeLockComment } from '~/redux/node/actions';
 import { CommentMenu } from '../CommentMenu';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
-import { LocalCommentForm } from '~/components/comment/LocalCommentForm';
+import { CommentForm } from '~/components/comment/CommentForm';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectNode } from '~/redux/node/selectors';
 
 interface IProps {
   comment: IComment;
   can_edit: boolean;
-  onDelete: typeof nodeLockComment;
+  onDelete: (id: IComment['id'], isLocked: boolean) => void;
   modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
 }
 
@@ -59,7 +58,7 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, modalSho
   );
 
   if (isEditing) {
-    return <LocalCommentForm nodeId={current.id} comment={comment} onCancelEdit={stopEditing} />;
+    return <CommentForm nodeId={current.id} comment={comment} onCancelEdit={stopEditing} />;
   }
 
   return (

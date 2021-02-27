@@ -181,14 +181,9 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                       <NodeNoComments is_loading={is_loading_comments || is_loading} />
                     ) : (
                       <NodeComments
+                        count={comment_count}
                         comments={comments}
-                        comment_data={comment_data}
-                        comment_count={comment_count}
                         user={user}
-                        onDelete={nodeLockComment}
-                        onEdit={nodeEditComment}
-                        onLoadMore={nodeLoadMoreComments}
-                        modalShowPhotoswipe={modalShowPhotoswipe}
                         order="DESC"
                       />
                     )}
