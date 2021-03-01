@@ -80,18 +80,17 @@ export const getURLFromString = (
   size?: typeof PRESETS[keyof typeof PRESETS]
 ): string => {
   if (size) {
-    return url
-      .replace('REMOTE_CURRENT://', `${process.env.REACT_APP_REMOTE_CURRENT}cache/${size}/`)
-      .replace('REMOTE_OLD://', process.env.REACT_APP_REMOTE_OLD);
+    return url.replace(
+      'REMOTE_CURRENT://',
+      `${process.env.REACT_APP_REMOTE_CURRENT}cache/${size}/`
+    );
   }
 
-  return url
-    .replace('REMOTE_CURRENT://', process.env.REACT_APP_REMOTE_CURRENT)
-    .replace('REMOTE_OLD://', process.env.REACT_APP_REMOTE_OLD);
+  return url.replace('REMOTE_CURRENT://', process.env.REACT_APP_REMOTE_CURRENT);
 };
 
 export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof PRESETS]) => {
-  return file?.url ? getURLFromString(file.url, size) : null;
+  return file?.url ? getURLFromString(file.url, size) : '';
 };
 
 export const formatText = pipe(
@@ -105,7 +104,7 @@ export const formatText = pipe(
   formatTextClickableUsernames
 );
 
-export const formatTextParagraphs = (text: string): string => (text && formatText(text)) || null;
+export const formatTextParagraphs = (text: string): string => (text && formatText(text)) || '';
 
 export const findBlockType = (line: string): ValueOf<typeof COMMENT_BLOCK_TYPES> => {
   const match = Object.values(COMMENT_BLOCK_DETECTORS).find(detector => line.match(detector.test));
@@ -121,12 +120,16 @@ export const splitCommentByBlocks = (text: string): ICommentBlock[] =>
     content: line,
   }));
 
-export const formatCommentText = (author: string, text: string): ICommentBlock[] =>
-  text ? splitCommentByBlocks(text) : null;
+export const formatCommentText = (author?: string, text?: string): ICommentBlock[] =>
+  author && text ? splitCommentByBlocks(text) : [];
 
 export const formatCellText = (text: string): string => formatTextParagraphs(text);
 
-export const getPrettyDate = (date: string): string => {
+export const getPrettyDate = (date?: string): string => {
+  if (!date) {
+    return '';
+  }
+
   if (differenceInMonths(new Date(), new Date(date)) >= 3) {
     return format(new Date(date), 'd MMMM yyyy', { locale: ru });
   }

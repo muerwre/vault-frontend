@@ -49,7 +49,7 @@ const Textarea = memo<IProps>(
   }) => {
     const [rows, setRows] = useState(minRows || 1);
     const [focused, setFocused] = useState(false);
-    const ref = useRef<HTMLTextAreaElement>();
+    const ref = useRef<HTMLTextAreaElement>(null);
 
     const onInput = useCallback(
       ({ target }: ChangeEvent<HTMLTextAreaElement>) => handler(target.value),
@@ -64,7 +64,10 @@ const Textarea = memo<IProps>(
       if (!target) return;
 
       autosize(target);
-      setRef(target);
+
+      if (setRef) {
+        setRef(target);
+      }
 
       return () => autosize.destroy(target);
     }, [ref, setRef]);

@@ -9,6 +9,7 @@ import { CommentMenu } from '~/components/comment/CommentMenu';
 import { MessageForm } from '~/components/profile/MessageForm';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
+import markdown from '~/styles/common/markdown.module.scss';
 
 interface IProps {
   message: IMessage;
@@ -66,7 +67,10 @@ const Message: FC<IProps> = ({
       ) : (
         <div className={styles.text}>
           {!incoming && <CommentMenu onEdit={onEditClicked} onDelete={onDeleteClicked} />}
-          <Group dangerouslySetInnerHTML={{ __html: formatText(message.text) }} />
+          <Group
+            dangerouslySetInnerHTML={{ __html: formatText(message.text) }}
+            className={markdown.wrapper}
+          />
         </div>
       )}
 

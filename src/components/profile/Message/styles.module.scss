@@ -9,6 +9,7 @@ $outgoing_color: $comment_bg;
   flex-direction: row;
   padding: 0 0 0 42px;
   position: relative;
+  word-break: break-word;
 
   .avatar {
     // margin: 0 0 0 10px;
