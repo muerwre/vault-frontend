@@ -160,7 +160,9 @@ function* getUpdates() {
 
     const modal: ReturnType<typeof selectModal> = yield select(selectModal);
     const profile: ReturnType<typeof selectAuthProfile> = yield select(selectAuthProfile);
-    const { last, boris_commented_at }: IAuthState['updates'] = yield select(selectAuthUpdates);
+    const { last, boris_commented_at }: ReturnType<typeof selectAuthUpdates> = yield select(
+      selectAuthUpdates
+    );
     const exclude_dialogs =
       modal.is_shown && modal.dialog === DIALOGS.PROFILE && profile.user?.id ? profile.user.id : 0;
 
@@ -259,7 +261,7 @@ function* restorePassword({ password }: ReturnType<typeof authRestorePassword>) 
     if (!password) return;
 
     yield put(authSetRestore({ is_loading: true }));
-    const { code } = yield select(selectAuthRestore);
+    const { code }: ReturnType<typeof selectAuthRestore> = yield select(selectAuthRestore);
 
     if (!code) {
       return yield put(authSetRestore({ error: ERRORS.CODE_IS_INVALID, is_loading: false }));
@@ -376,7 +378,7 @@ function* authRegisterSocial({ username, password }: ReturnType<typeof authSendR
   try {
     yield put(authSetRegisterSocial({ error: '' }));
 
-    const { token }: Unwrap<typeof selectAuthRegisterSocial> = yield select(
+    const { token }: ReturnType<typeof selectAuthRegisterSocial> = yield select(
       selectAuthRegisterSocial
     );
 
@@ -397,8 +399,8 @@ function* authRegisterSocial({ username, password }: ReturnType<typeof authSendR
       yield put(modalSetShown(false));
       return;
     }
-  } catch (e) {
-    yield put(authSetRegisterSocial({ error: e.message }));
+  } catch (error) {
+    yield put(authSetRegisterSocial({ error }));
   }
 }
 
