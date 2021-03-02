@@ -1,9 +1,10 @@
-import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils/api';
+import { api, configWithToken, resultMiddleware, errorMiddleware, cleanResult } from '~/utils/api';
 import { INode, IResultWithStatus, IComment } from '../types';
 import { API } from '~/constants/api';
 import { nodeUpdateTags, nodeLike, nodeStar, nodeLock, nodeLockComment } from './actions';
 import { INodeState } from './reducer';
 import { COMMENTS_DISPLAY } from './constants';
+import { GetNodeDiffRequest, GetNodeDiffResult } from '~/redux/node/types';
 
 export const postNode = ({
   access,
@@ -18,7 +19,7 @@ export const postNode = ({
     .catch(errorMiddleware);
 
 export const getNodes = ({
-  from = null,
+  from,
   access,
 }: {
   from?: string;
@@ -30,41 +31,27 @@ export const getNodes = ({
     .catch(errorMiddleware);
 
 export const getNodeDiff = ({
-  start = null,
-  end = null,
+  start,
+  end,
   take,
   with_heroes,
   with_updated,
   with_recent,
   with_valid,
-  access,
-}: {
-  start?: string;
-  end?: string;
-  take?: number;
-  access: string;
-  with_heroes: boolean;
-  with_updated: boolean;
-  with_recent: boolean;
-  with_valid: boolean;
-}): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
+}: GetNodeDiffRequest) =>
   api
-    .get(
-      API.NODE.GET_DIFF,
-      configWithToken(access, {
-        params: {
-          start,
-          end,
-          take,
-          with_heroes,
-          with_updated,
-          with_recent,
-          with_valid,
-        },
-      })
-    )
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .get<GetNodeDiffResult>(API.NODE.GET_DIFF, {
+      params: {
+        start,
+        end,
+        take,
+        with_heroes,
+        with_updated,
+        with_recent,
+        with_valid,
+      },
+    })
+    .then(cleanResult);
 
 export const getNode = ({
   id,
@@ -73,10 +60,7 @@ export const getNode = ({
   id: string | number;
   access: string;
 }): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
-  api
-    .get(API.NODE.GET_NODE(id), configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+  api.get(API.NODE.GET_NODE(id), configWithToken(access)).then(cleanResult);
 
 export const postNodeComment = ({
   id,
