@@ -5,14 +5,9 @@ import {
   selectAuthProfileUsername,
   selectAuthUpdates,
 } from '~/redux/auth/selectors';
-import {
-  apiMessagesDeleteMessage,
-  apiMessagesGetUserMessages,
-  apiMessagesSendMessage,
-} from '~/redux/messages/api';
+import { apiDeleteMessage, apiGetUserMessages, apiSendMessage } from '~/redux/messages/api';
 import { ERRORS } from '~/constants/errors';
 import { IMessageNotification, Unwrap } from '~/redux/types';
-import { wrap } from '~/redux/auth/sagas';
 import {
   messagesDeleteMessage,
   messagesGetMessages,
@@ -25,185 +20,188 @@ import { selectMessages } from '~/redux/messages/selectors';
 import { sortCreatedAtDesc } from '~/utils/date';
 
 function* getMessages({ username }: ReturnType<typeof messagesGetMessages>) {
-  const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
+  try {
+    const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
 
-  yield put(
-    messagesSet({
-      is_loading_messages: true,
-      messages:
-        messages &&
-        messages.length > 0 &&
-        (messages[0].to.username === username || messages[0].from.username === username)
-          ? messages
-          : [],
-    })
-  );
-
-  const { error, data }: Unwrap<typeof apiMessagesGetUserMessages> = yield call(
-    wrap,
-    apiMessagesGetUserMessages,
-    { username }
-  );
-
-  if (error || !data.messages) {
-    return yield put(
+    yield put(
       messagesSet({
-        is_loading_messages: false,
-        error: ERRORS.EMPTY_RESPONSE,
+        is_loading_messages: true,
+        messages:
+          messages &&
+          messages.length > 0 &&
+          (messages[0].to.username === username || messages[0].from.username === username)
+            ? messages
+            : [],
       })
     );
-  }
 
-  yield put(messagesSet({ is_loading_messages: false, messages: data.messages }));
+    const data: Unwrap<typeof apiGetUserMessages> = yield call(apiGetUserMessages, {
+      username,
+    });
 
-  const { notifications }: ReturnType<typeof selectAuthUpdates> = yield select(selectAuthUpdates);
+    yield put(messagesSet({ is_loading_messages: false, messages: data.messages }));
 
-  // clear viewed message from notifcation list
-  const filtered = notifications.filter(
-    notification =>
-      notification.type !== 'message' ||
-      (notification as IMessageNotification).content.from.username !== username
-  );
+    const { notifications }: ReturnType<typeof selectAuthUpdates> = yield select(selectAuthUpdates);
 
-  if (filtered.length !== notifications.length) {
-    yield put(authSetUpdates({ notifications: filtered }));
+    // clear viewed message from notifcation list
+    const filtered = notifications.filter(
+      notification =>
+        notification.type !== 'message' ||
+        (notification as IMessageNotification)?.content?.from?.username !== username
+    );
+
+    if (filtered.length !== notifications.length) {
+      yield put(authSetUpdates({ notifications: filtered }));
+    }
+  } catch (error) {
+    messagesSet({
+      error: error || ERRORS.EMPTY_RESPONSE,
+    });
+  } finally {
+    yield put(
+      messagesSet({
+        is_loading_messages: false,
+      })
+    );
   }
 }
 
 function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMessage>) {
-  const username: ReturnType<typeof selectAuthProfileUsername> = yield select(
-    selectAuthProfileUsername
-  );
+  try {
+    const username: ReturnType<typeof selectAuthProfileUsername> = yield select(
+      selectAuthProfileUsername
+    );
 
-  if (!username) return;
+    if (!username) return;
 
-  yield put(messagesSet({ is_sending_messages: true, error: null }));
+    yield put(messagesSet({ is_sending_messages: true, error: '' }));
 
-  const { error, data }: Unwrap<typeof apiMessagesSendMessage> = yield call(
-    wrap,
-    apiMessagesSendMessage,
-    {
+    const data: Unwrap<typeof apiSendMessage> = yield call(apiSendMessage, {
       username,
       message,
+    });
+
+    const { user }: ReturnType<typeof selectAuthProfile> = yield select(selectAuthProfile);
+
+    if (user?.username !== username) {
+      return yield put(messagesSet({ is_sending_messages: false }));
     }
-  );
 
-  if (error || !data.message) {
-    return yield put(
-      messagesSet({
-        is_sending_messages: false,
-        error: error || ERRORS.EMPTY_RESPONSE,
-      })
-    );
-  }
+    const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
 
-  const { user }: ReturnType<typeof selectAuthProfile> = yield select(selectAuthProfile);
+    if (message.id && message.id > 0) {
+      // modified
+      yield put(
+        messagesSet({
+          is_sending_messages: false,
+          messages: messages.map(item => (item.id === message.id ? data.message : item)),
+        })
+      );
+    } else {
+      // created
+      yield put(
+        messagesSet({
+          is_sending_messages: false,
+          messages: [data.message, ...messages],
+        })
+      );
+    }
 
-  if (user.username !== username) {
-    return yield put(messagesSet({ is_sending_messages: false }));
-  }
-
-  const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
-
-  if (message.id > 0) {
-    // modified
+    onSuccess();
+  } catch (error) {
+    messagesSet({
+      error: error || ERRORS.EMPTY_RESPONSE,
+    });
+  } finally {
     yield put(
       messagesSet({
-        is_sending_messages: false,
-        messages: messages.map(item => (item.id === message.id ? data.message : item)),
-      })
-    );
-  } else {
-    // created
-    yield put(
-      messagesSet({
-        is_sending_messages: false,
-        messages: [data.message, ...messages],
+        is_loading_messages: false,
       })
     );
   }
-
-  onSuccess();
 }
 
 function* deleteMessage({ id, is_locked }: ReturnType<typeof messagesDeleteMessage>) {
-  const username: ReturnType<typeof selectAuthProfileUsername> = yield select(
-    selectAuthProfileUsername
-  );
+  try {
+    const username: ReturnType<typeof selectAuthProfileUsername> = yield select(
+      selectAuthProfileUsername
+    );
 
-  if (!username) return;
+    if (!username) return;
 
-  yield put(messagesSet({ is_sending_messages: true, error: null }));
+    yield put(messagesSet({ is_sending_messages: true, error: '' }));
 
-  const { error, data }: Unwrap<typeof apiMessagesDeleteMessage> = yield call(
-    wrap,
-    apiMessagesDeleteMessage,
-    {
+    const data: Unwrap<typeof apiDeleteMessage> = yield call(apiDeleteMessage, {
       username,
       id,
       is_locked,
-    }
-  );
+    });
 
-  if (error || !data.message) {
-    return yield put(
+    const currentUsername: ReturnType<typeof selectAuthProfileUsername> = yield select(
+      selectAuthProfileUsername
+    );
+
+    if (currentUsername !== username) {
+      return yield put(messagesSet({ is_sending_messages: false }));
+    }
+
+    const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
+
+    yield put(
       messagesSet({
         is_sending_messages: false,
+        messages: messages.map(item => (item.id === id ? data.message : item)),
+      })
+    );
+  } catch (error) {
+    messagesSet({
+      error: error || ERRORS.EMPTY_RESPONSE,
+    });
+  } finally {
+    yield put(
+      messagesSet({
+        is_loading_messages: false,
       })
     );
   }
-
-  const currentUsername: ReturnType<typeof selectAuthProfileUsername> = yield select(
-    selectAuthProfileUsername
-  );
-
-  if (currentUsername !== username) {
-    return yield put(messagesSet({ is_sending_messages: false }));
-  }
-
-  const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
-
-  yield put(
-    messagesSet({
-      is_sending_messages: false,
-      messages: messages.map(item => (item.id === id ? data.message : item)),
-    })
-  );
 }
 
 function* refreshMessages({}: ReturnType<typeof messagesRefreshMessages>) {
-  const username: ReturnType<typeof selectAuthProfileUsername> = yield select(
-    selectAuthProfileUsername
-  );
+  try {
+    const username: ReturnType<typeof selectAuthProfileUsername> = yield select(
+      selectAuthProfileUsername
+    );
 
-  if (!username) return;
+    if (!username) return;
 
-  const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
+    const { messages }: ReturnType<typeof selectMessages> = yield select(selectMessages);
 
-  yield put(messagesSet({ is_loading_messages: true }));
+    yield put(messagesSet({ is_loading_messages: true }));
 
-  const after = messages.length > 0 ? messages[0].created_at : undefined;
+    const after = messages.length > 0 ? messages[0].created_at : undefined;
 
-  const { data, error }: Unwrap<typeof apiMessagesGetUserMessages> = yield call(
-    wrap,
-    apiMessagesGetUserMessages,
-    { username, after }
-  );
+    const data: Unwrap<typeof apiGetUserMessages> = yield call(apiGetUserMessages, {
+      username,
+      after,
+    });
 
-  yield put(messagesSet({ is_loading_messages: false }));
+    yield put(messagesSet({ is_loading_messages: false }));
 
-  if (error) {
-    return yield put(
+    if (!data.messages || !data.messages.length) return;
+
+    const newMessages = [...data.messages, ...messages].sort(sortCreatedAtDesc);
+    yield put(messagesSet({ messages: newMessages }));
+  } catch (error) {
+    messagesSet({
+      error: error || ERRORS.EMPTY_RESPONSE,
+    });
+  } finally {
+    yield put(
       messagesSet({
-        error: error || ERRORS.EMPTY_RESPONSE,
+        is_loading_messages: false,
       })
     );
   }
-
-  if (!data.messages || !data.messages.length) return;
-
-  const newMessages = [...data.messages, ...messages].sort(sortCreatedAtDesc);
-  yield put(messagesSet({ messages: newMessages }));
 }
 
 export default function*() {
