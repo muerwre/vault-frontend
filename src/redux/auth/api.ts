@@ -1,55 +1,46 @@
-import { api, configWithToken, errorMiddleware, resultMiddleware } from '~/utils/api';
+import { api, cleanResult, errorMiddleware, resultMiddleware } from '~/utils/api';
 import { API } from '~/constants/api';
-import { INotification, IResultWithStatus } from '~/redux/types';
-import { userLoginTransform } from '~/redux/auth/transforms';
-import { ISocialAccount, IUser } from './types';
+import { IResultWithStatus } from '~/redux/types';
+import {
+  ApiAttachSocialRequest,
+  ApiAttachSocialResult,
+  ApiAuthGetUpdatesRequest,
+  ApiAuthGetUpdatesResult,
+  ApiAuthGetUserProfileRequest,
+  ApiAuthGetUserProfileResult,
+  ApiAuthGetUserResult,
+  ApiCheckRestoreCodeRequest,
+  ApiCheckRestoreCodeResult,
+  ApiDropSocialRequest,
+  ApiDropSocialResult,
+  ApiGetSocialsResult,
+  ApiLoginWithSocialRequest,
+  ApiLoginWithSocialResult,
+  ApiRestoreCodeRequest,
+  ApiRestoreCodeResult,
+  ApiUpdateUserRequest,
+  ApiUpdateUserResult,
+  ApiUserLoginRequest,
+  ApiUserLoginResult,
+} from './types';
 
-export const apiUserLogin = ({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}): Promise<IResultWithStatus<{ token: string; status?: number }>> =>
+export const apiUserLogin = ({ username, password }: ApiUserLoginRequest) =>
   api
-    .post(API.USER.LOGIN, { username, password })
-    .then(resultMiddleware)
-    .catch(errorMiddleware)
-    .then(userLoginTransform);
+    .post<ApiUserLoginResult>(API.USER.LOGIN, { username, password })
+    .then(cleanResult);
 
-export const apiAuthGetUser = ({ access }): Promise<IResultWithStatus<{ user: IUser }>> =>
-  api
-    .get(API.USER.ME, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiAuthGetUser = () => api.get<ApiAuthGetUserResult>(API.USER.ME).then(cleanResult);
 
-export const apiAuthGetUserProfile = ({
-  access,
-  username,
-}): Promise<IResultWithStatus<{ user: IUser }>> =>
-  api
-    .get(API.USER.PROFILE(username), configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiAuthGetUserProfile = ({ username }: ApiAuthGetUserProfileRequest) =>
+  api.get<ApiAuthGetUserProfileResult>(API.USER.PROFILE(username)).then(cleanResult);
 
-export const apiAuthGetUpdates = ({
-  access,
-  exclude_dialogs,
-  last,
-}): Promise<IResultWithStatus<{
-  notifications: INotification[];
-  boris: { commented_at: string };
-}>> =>
+export const apiAuthGetUpdates = ({ exclude_dialogs, last }: ApiAuthGetUpdatesRequest) =>
   api
-    .get(API.USER.GET_UPDATES, configWithToken(access, { params: { exclude_dialogs, last } }))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .get<ApiAuthGetUpdatesResult>(API.USER.GET_UPDATES, { params: { exclude_dialogs, last } })
+    .then(cleanResult);
 
-export const apiUpdateUser = ({ access, user }): Promise<IResultWithStatus<{ user: IUser }>> =>
-  api
-    .patch(API.USER.ME, user, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiUpdateUser = ({ user }: ApiUpdateUserRequest) =>
+  api.patch<ApiUpdateUserResult>(API.USER.ME, user).then(cleanResult);
 
 export const apiRequestRestoreCode = ({ field }): Promise<IResultWithStatus<{}>> =>
   api
@@ -57,75 +48,26 @@ export const apiRequestRestoreCode = ({ field }): Promise<IResultWithStatus<{}>>
     .then(resultMiddleware)
     .catch(errorMiddleware);
 
-export const apiCheckRestoreCode = ({ code }): Promise<IResultWithStatus<{}>> =>
-  api
-    .get(API.USER.REQUEST_CODE(code))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiCheckRestoreCode = ({ code }: ApiCheckRestoreCodeRequest) =>
+  api.get<ApiCheckRestoreCodeResult>(API.USER.REQUEST_CODE(code)).then(cleanResult);
 
-export const apiRestoreCode = ({ code, password }): Promise<IResultWithStatus<{}>> =>
+export const apiRestoreCode = ({ code, password }: ApiRestoreCodeRequest) =>
   api
-    .post(API.USER.REQUEST_CODE(code), { password })
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .post<ApiRestoreCodeResult>(API.USER.REQUEST_CODE(code), { password })
+    .then(cleanResult);
 
-export const apiGetSocials = ({
-  access,
-}: {
-  access: string;
-}): Promise<IResultWithStatus<{
-  accounts: ISocialAccount[];
-}>> =>
-  api
-    .get(API.USER.GET_SOCIALS, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiGetSocials = () =>
+  api.get<ApiGetSocialsResult>(API.USER.GET_SOCIALS).then(cleanResult);
 
-export const apiDropSocial = ({
-  access,
-  id,
-  provider,
-}: {
-  access: string;
-  id: string;
-  provider: string;
-}): Promise<IResultWithStatus<{
-  accounts: ISocialAccount[];
-}>> =>
-  api
-    .delete(API.USER.DROP_SOCIAL(provider, id), configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiDropSocial = ({ id, provider }: ApiDropSocialRequest) =>
+  api.delete<ApiDropSocialResult>(API.USER.DROP_SOCIAL(provider, id)).then(cleanResult);
 
-export const apiAttachSocial = ({
-  access,
-  token,
-}: {
-  access: string;
-  token: string;
-}): Promise<IResultWithStatus<{
-  account: ISocialAccount;
-}>> =>
+export const apiAttachSocial = ({ token }: ApiAttachSocialRequest) =>
   api
-    .post(API.USER.ATTACH_SOCIAL, { token }, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .post<ApiAttachSocialResult>(API.USER.ATTACH_SOCIAL, { token })
+    .then(cleanResult);
 
-export const apiLoginWithSocial = ({
-  token,
-  username,
-  password,
-}: {
-  token: string;
-  username?: string;
-  password?: string;
-}): Promise<IResultWithStatus<{
-  token: string;
-  error: string;
-  errors: Record<string, string>;
-  needs_register: boolean;
-}>> =>
+export const apiLoginWithSocial = ({ token, username, password }: ApiLoginWithSocialRequest) =>
   api
-    .post(API.USER.LOGIN_WITH_SOCIAL, { token, username, password })
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .post<ApiLoginWithSocialResult>(API.USER.LOGIN_WITH_SOCIAL, { token, username, password })
+    .then(cleanResult);

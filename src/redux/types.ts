@@ -192,7 +192,13 @@ export type INodeNotification = {
 
 export type INotification = IMessageNotification | ICommentNotification;
 
-export type Unwrap<T> = T extends Promise<infer U> ? U : T;
+export type Unwrap<T> = T extends (...args: any) => Promise<any>
+  ? T extends (...args: any) => Promise<infer U>
+    ? U
+    : T
+  : T extends () => Iterator<any, infer U, any>
+  ? U
+  : any;
 
 export interface IEmbed {
   provider: string;

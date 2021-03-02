@@ -26,7 +26,7 @@ import playerSaga from '~/redux/player/sagas';
 import modal, { IModalState } from '~/redux/modal';
 import { modalSaga } from './modal/sagas';
 
-import { authOpenProfile, gotAuthPostMessage } from './auth/actions';
+import { authLogout, authOpenProfile, gotAuthPostMessage } from './auth/actions';
 
 import boris, { IBorisState } from './boris/reducer';
 import borisSaga from './boris/sagas';
@@ -36,6 +36,9 @@ import messagesSaga from './messages/sagas';
 
 import tag, { ITagState } from './tag';
 import tagSaga from './tag/sagas';
+import { AxiosError } from 'axios';
+import { api } from '~/utils/api';
+import { assocPath } from 'ramda';
 
 const authPersistConfig: PersistConfig = {
   key: 'auth',
@@ -115,6 +118,29 @@ export function configureStore(): {
   });
 
   const persistor = persistStore(store);
+
+  // Pass token to axios
+  api.interceptors.request.use(options => {
+    const token = store.getState().auth.token;
+
+    if (!token) {
+      return options;
+    }
+
+    return assocPath(['headers', 'authorization'], `Bearer ${token}`, options);
+  });
+
+  // Logout on 401
+  api.interceptors.response.use(undefined, (error: AxiosError<{ message: string }>) => {
+    if (error.response?.status === 401) {
+      store.dispatch(authLogout());
+    }
+
+    console.log('Вот что случилось на сервере:', error);
+    throw new Error(
+      error?.response?.data?.message || error?.message || error?.response?.statusText
+    );
+  });
 
   return { store, persistor };
 }

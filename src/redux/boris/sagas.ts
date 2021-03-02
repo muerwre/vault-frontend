@@ -8,10 +8,8 @@ function* loadStats() {
   yield put(borisSetStats({ is_loading: true }));
 
   try {
-    const git: Unwrap<ReturnType<typeof getBorisGitStats>> = yield call(getBorisGitStats);
-    const backend: Unwrap<ReturnType<typeof getBorisBackendStats>> = yield call(
-      getBorisBackendStats
-    );
+    const git: Unwrap<typeof getBorisGitStats> = yield call(getBorisGitStats);
+    const backend: Unwrap<typeof getBorisBackendStats> = yield call(getBorisBackendStats);
 
     yield put(borisSetStats({ git, backend: backend.data, is_loading: false }));
   } catch (e) {

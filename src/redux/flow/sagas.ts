@@ -14,7 +14,7 @@ import {
 } from './actions';
 import { IResultWithStatus, INode, Unwrap } from '../types';
 import { selectFlowNodes, selectFlow } from './selectors';
-import { reqWrapper } from '../auth/sagas';
+import { wrap } from '../auth/sagas';
 import { postCellView, getSearchResults } from './api';
 import { IFlowState } from './reducer';
 import { uniq } from 'ramda';
@@ -47,7 +47,7 @@ function* onGetFlow() {
     recent: IFlowState['recent'];
     updated: IFlowState['updated'];
     valid: INode['id'][];
-  }> = yield call(reqWrapper, getNodeDiff, {
+  }> = yield call(wrap, getNodeDiff, {
     start: new Date().toISOString(),
     end: new Date().toISOString(),
     with_heroes: true,
@@ -71,7 +71,7 @@ function* onSetCellView({ id, flow }: ReturnType<typeof flowSetCellView>) {
   const nodes = yield select(selectFlowNodes);
   yield put(flowSetNodes(nodes.map(node => (node.id === id ? { ...node, flow } : node))));
 
-  const { data, error } = yield call(reqWrapper, postCellView, { id, flow });
+  const { data, error } = yield call(wrap, postCellView, { id, flow });
 
   // TODO: error handling
 }
@@ -83,7 +83,7 @@ function* getMore() {
   const start = nodes && nodes[0] && nodes[0].created_at;
   const end = nodes && nodes[nodes.length - 1] && nodes[nodes.length - 1].created_at;
 
-  const { error, data } = yield call(reqWrapper, getNodeDiff, {
+  const { error, data } = yield call(wrap, getNodeDiff, {
     start,
     end,
     with_heroes: false,
@@ -124,13 +124,9 @@ function* changeSearch({ search }: ReturnType<typeof flowChangeSearch>) {
 
   yield delay(500);
 
-  const { data, error }: Unwrap<ReturnType<typeof getSearchResults>> = yield call(
-    reqWrapper,
-    getSearchResults,
-    {
-      ...search,
-    }
-  );
+  const { data, error }: Unwrap<typeof getSearchResults> = yield call(wrap, getSearchResults, {
+    ...search,
+  });
 
   if (error) {
     yield put(flowSetSearch({ is_loading: false, results: [], total: 0 }));
@@ -155,11 +151,8 @@ function* loadMoreSearch() {
 
   const { search }: ReturnType<typeof selectFlow> = yield select(selectFlow);
 
-  const {
-    result,
-    delay,
-  }: { result: Unwrap<ReturnType<typeof getSearchResults>>; delay: any } = yield race({
-    result: call(reqWrapper, getSearchResults, {
+  const { result, delay }: { result: Unwrap<typeof getSearchResults>; delay: any } = yield race({
+    result: call(wrap, getSearchResults, {
       ...search,
       skip: search.results.length,
     }),

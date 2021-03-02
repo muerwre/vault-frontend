@@ -1,7 +1,12 @@
 import { TAG_ACTIONS } from '~/redux/tag/constants';
 import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
-import { tagLoadAutocomplete, tagLoadNodes, tagSetAutocomplete, tagSetNodes, } from '~/redux/tag/actions';
-import { reqWrapper } from '~/redux/auth/sagas';
+import {
+  tagLoadAutocomplete,
+  tagLoadNodes,
+  tagSetAutocomplete,
+  tagSetNodes,
+} from '~/redux/tag/actions';
+import { wrap } from '~/redux/auth/sagas';
 import { selectTagNodes } from '~/redux/tag/selectors';
 import { getTagAutocomplete, getTagNodes } from '~/redux/tag/api';
 import { Unwrap } from '~/redux/types';
@@ -11,11 +16,11 @@ function* loadTagNodes({ tag }: ReturnType<typeof tagLoadNodes>) {
 
   try {
     const { list }: ReturnType<typeof selectTagNodes> = yield select(selectTagNodes);
-    const { data, error }: Unwrap<ReturnType<typeof getTagNodes>> = yield call(
-      reqWrapper,
-      getTagNodes,
-      { tag, limit: 18, offset: list.length }
-    );
+    const { data, error }: Unwrap<typeof getTagNodes> = yield call(wrap, getTagNodes, {
+      tag,
+      limit: 18,
+      offset: list.length,
+    });
 
     if (error) throw new Error(error);
 
@@ -33,8 +38,8 @@ function* loadAutocomplete({ search, exclude }: ReturnType<typeof tagLoadAutocom
     yield put(tagSetAutocomplete({ isLoading: true }));
     yield delay(100);
 
-    const { data, error }: Unwrap<ReturnType<typeof getTagAutocomplete>> = yield call(
-      reqWrapper,
+    const { data, error }: Unwrap<typeof getTagAutocomplete> = yield call(
+      wrap,
       getTagAutocomplete,
       { search, exclude }
     );

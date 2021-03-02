@@ -2,7 +2,13 @@ import { all, call, delay, put, select, takeLatest, takeLeading } from 'redux-sa
 import { push } from 'connected-react-router';
 import { omit } from 'ramda';
 
-import { COMMENTS_DISPLAY, EMPTY_COMMENT, EMPTY_NODE, NODE_ACTIONS, NODE_EDITOR_DATA } from './constants';
+import {
+  COMMENTS_DISPLAY,
+  EMPTY_COMMENT,
+  EMPTY_NODE,
+  NODE_ACTIONS,
+  NODE_EDITOR_DATA,
+} from './constants';
 import {
   nodeCancelCommentEdit,
   nodeCreate,
@@ -39,7 +45,7 @@ import {
   postNodeStar,
   updateNodeTags,
 } from './api';
-import { reqWrapper } from '../auth/sagas';
+import { wrap } from '../auth/sagas';
 import { flowSetNodes, flowSetUpdated } from '../flow/actions';
 import { ERRORS } from '~/constants/errors';
 import { modalSetShown, modalShowDialog } from '../modal/actions';
@@ -77,7 +83,7 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
   const {
     error,
     data: { errors, node: result },
-  } = yield call(reqWrapper, postNode, { node });
+  } = yield call(wrap, postNode, { node });
 
   if (errors && Object.values(errors).length > 0) {
     return yield put(nodeSetSaveErrors(errors));
@@ -117,15 +123,11 @@ function* onNodeLoadMoreComments() {
     comments,
   }: ReturnType<typeof selectNode> = yield select(selectNode);
 
-  const { data, error }: Unwrap<ReturnType<typeof getNodeComments>> = yield call(
-    reqWrapper,
-    getNodeComments,
-    {
-      id,
-      take: COMMENTS_DISPLAY,
-      skip: comments.length,
-    }
-  );
+  const { data, error }: Unwrap<typeof getNodeComments> = yield call(wrap, getNodeComments, {
+    id,
+    take: COMMENTS_DISPLAY,
+    skip: comments.length,
+  });
 
   const current: ReturnType<typeof selectNode> = yield select(selectNode);
 
@@ -147,7 +149,7 @@ function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
 
   const {
     data: { node, error },
-  } = yield call(reqWrapper, getNode, { id });
+  } = yield call(wrap, getNode, { id });
 
   if (error || !node || !node.id) {
     yield put(push(URLS.ERRORS.NOT_FOUND));
@@ -166,8 +168,8 @@ function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
       data: { related },
     },
   } = yield all({
-    comments: call(reqWrapper, getNodeComments, { id, take: COMMENTS_DISPLAY, skip: 0 }),
-    related: call(reqWrapper, getNodeRelated, { id }),
+    comments: call(wrap, getNodeComments, { id, take: COMMENTS_DISPLAY, skip: 0 }),
+    related: call(wrap, getNodeRelated, { id }),
   });
 
   yield put(
@@ -190,14 +192,10 @@ function* onNodeLoad({ id, order = 'ASC' }: ReturnType<typeof nodeLoadNode>) {
 }
 
 function* onPostComment({ nodeId, comment, callback }: ReturnType<typeof nodePostLocalComment>) {
-  const { data, error }: Unwrap<ReturnType<typeof postNodeComment>> = yield call(
-    reqWrapper,
-    postNodeComment,
-    {
-      data: comment,
-      id: nodeId,
-    }
-  );
+  const { data, error }: Unwrap<typeof postNodeComment> = yield call(wrap, postNodeComment, {
+    data: comment,
+    id: nodeId,
+  });
 
   if (error || !data.comment) {
     return callback(error);
@@ -237,7 +235,7 @@ function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
 
   const {
     data: { node },
-  }: IResultWithStatus<{ node: INode }> = yield call(reqWrapper, updateNodeTags, { id, tags });
+  }: IResultWithStatus<{ node: INode }> = yield call(wrap, updateNodeTags, { id, tags });
 
   const { current } = yield select(selectNode);
 
@@ -259,7 +257,7 @@ function* onEditSaga({ id }: ReturnType<typeof nodeEdit>) {
   const {
     data: { node },
     error,
-  } = yield call(reqWrapper, getNode, { id });
+  } = yield call(wrap, getNode, { id });
 
   if (error || !node || !node.type || !NODE_EDITOR_DIALOGS[node.type])
     return yield put(modalSetShown(false));
@@ -282,7 +280,7 @@ function* onLikeSaga({ id }: ReturnType<typeof nodeLike>) {
     like_count: is_liked ? Math.max(like_count - 1, 0) : like_count + 1,
   });
 
-  const { data, error } = yield call(reqWrapper, postNodeLike, { id });
+  const { data, error } = yield call(wrap, postNodeLike, { id });
 
   if (!error || data.is_liked === !is_liked) return; // ok and matches
 
@@ -297,7 +295,7 @@ function* onStarSaga({ id }: ReturnType<typeof nodeLike>) {
 
   yield call(updateNodeEverywhere, { ...current, is_heroic: !is_heroic });
 
-  const { data, error } = yield call(reqWrapper, postNodeStar, { id });
+  const { data, error } = yield call(wrap, postNodeStar, { id });
 
   if (!error || data.is_heroic === !is_heroic) return; // ok and matches
 
@@ -315,7 +313,7 @@ function* onLockSaga({ id, is_locked }: ReturnType<typeof nodeLock>) {
     deleted_at: is_locked ? new Date().toISOString() : null,
   });
 
-  const { error } = yield call(reqWrapper, postNodeLock, { id, is_locked });
+  const { error } = yield call(wrap, postNodeLock, { id, is_locked });
 
   if (error) return yield call(updateNodeEverywhere, { ...current, deleted_at });
 }
@@ -333,7 +331,7 @@ function* onLockCommentSaga({ id, is_locked }: ReturnType<typeof nodeLockComment
     )
   );
 
-  yield call(reqWrapper, postNodeLockComment, { current: current.id, id, is_locked });
+  yield call(wrap, postNodeLockComment, { current: current.id, id, is_locked });
 }
 
 function* onEditCommentSaga({ id }: ReturnType<typeof nodeEditComment>) {

@@ -57,7 +57,7 @@ function* getYoutubeInfo() {
     }
 
     if (ticker || ids.length > 25) {
-      const result: Unwrap<ReturnType<typeof getEmbedYoutube>> = yield call(getEmbedYoutube, ids);
+      const result: Unwrap<typeof getEmbedYoutube> = yield call(getEmbedYoutube, ids);
 
       if (!result.error && result.data.items && Object.keys(result.data.items).length) {
         const { youtubes }: ReturnType<typeof selectPlayer> = yield select(selectPlayer);

@@ -8,7 +8,7 @@ import {
   uploadDropStatus,
   uploadAddFile,
 } from './actions';
-import { reqWrapper } from '../auth/sagas';
+import { wrap } from '../auth/sagas';
 import { createUploader, uploadGetThumb } from '~/utils/uploader';
 import { HTTP_RESPONSES } from '~/utils/api';
 import { IFileWithUUID, IFile, IUploadProgressHandler } from '../types';
@@ -20,7 +20,7 @@ function* uploadCall({
   type,
   onProgress,
 }: IFileWithUUID & { onProgress: IUploadProgressHandler }) {
-  return yield call(reqWrapper, postUploadFile, {
+  return yield call(wrap, postUploadFile, {
     file,
     temp_id,
     type,

@@ -14,7 +14,7 @@ export interface IModalState {
 
 const INITIAL_STATE: IModalState = {
   is_shown: false,
-  dialog: null,
+  dialog: '',
   photoswipe: {
     images: [],
     index: 0,

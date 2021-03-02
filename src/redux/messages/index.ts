@@ -12,7 +12,7 @@ export interface IMessagesState {
 const INITIAL_STATE: IMessagesState = {
   is_loading_messages: true,
   is_sending_messages: false,
-  error: null,
+  error: '',
   messages: [],
 };
 

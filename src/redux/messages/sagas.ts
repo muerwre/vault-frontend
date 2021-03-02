@@ -12,7 +12,7 @@ import {
 } from '~/redux/messages/api';
 import { ERRORS } from '~/constants/errors';
 import { IMessageNotification, Unwrap } from '~/redux/types';
-import { reqWrapper } from '~/redux/auth/sagas';
+import { wrap } from '~/redux/auth/sagas';
 import {
   messagesDeleteMessage,
   messagesGetMessages,
@@ -39,11 +39,8 @@ function* getMessages({ username }: ReturnType<typeof messagesGetMessages>) {
     })
   );
 
-  const {
-    error,
-    data,
-  }: Unwrap<ReturnType<typeof apiMessagesGetUserMessages>> = yield call(
-    reqWrapper,
+  const { error, data }: Unwrap<typeof apiMessagesGetUserMessages> = yield call(
+    wrap,
     apiMessagesGetUserMessages,
     { username }
   );
@@ -82,8 +79,8 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMess
 
   yield put(messagesSet({ is_sending_messages: true, error: null }));
 
-  const { error, data }: Unwrap<ReturnType<typeof apiMessagesSendMessage>> = yield call(
-    reqWrapper,
+  const { error, data }: Unwrap<typeof apiMessagesSendMessage> = yield call(
+    wrap,
     apiMessagesSendMessage,
     {
       username,
@@ -138,8 +135,8 @@ function* deleteMessage({ id, is_locked }: ReturnType<typeof messagesDeleteMessa
 
   yield put(messagesSet({ is_sending_messages: true, error: null }));
 
-  const { error, data }: Unwrap<ReturnType<typeof apiMessagesDeleteMessage>> = yield call(
-    reqWrapper,
+  const { error, data }: Unwrap<typeof apiMessagesDeleteMessage> = yield call(
+    wrap,
     apiMessagesDeleteMessage,
     {
       username,
@@ -187,11 +184,8 @@ function* refreshMessages({}: ReturnType<typeof messagesRefreshMessages>) {
 
   const after = messages.length > 0 ? messages[0].created_at : undefined;
 
-  const {
-    data,
-    error,
-  }: Unwrap<ReturnType<typeof apiMessagesGetUserMessages>> = yield call(
-    reqWrapper,
+  const { data, error }: Unwrap<typeof apiMessagesGetUserMessages> = yield call(
+    wrap,
     apiMessagesGetUserMessages,
     { username, after }
   );

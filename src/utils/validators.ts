@@ -3,13 +3,13 @@ import { IMAGE_MIME_TYPES } from '~/utils/uploader';
 
 const isValidEmail = (email: string): boolean =>
   !!email &&
-  String(email) &&
+  !!String(email) &&
   !!String(email).match(
     /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
   );
 
 const isLikeEmail = (email: string): boolean =>
-  !!email && String(email) && !!String(email).match(/^([^\@]+)@([^\@]+)\.([^\@]+)$$/);
+  !!email && !!String(email) && !!String(email).match(/^([^\@]+)@([^\@]+)\.([^\@]+)$$/);
 
 const isNonEmpty = (value: string): boolean => !!value && value.trim().length > 0;
 const isLikePhone = isNonEmpty;
