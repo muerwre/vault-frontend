@@ -5,15 +5,17 @@ import { getBorisGitStats, getBorisBackendStats } from './api';
 import { Unwrap } from '../types';
 
 function* loadStats() {
-  yield put(borisSetStats({ is_loading: true }));
-
   try {
+    yield put(borisSetStats({ is_loading: true }));
+
     const git: Unwrap<typeof getBorisGitStats> = yield call(getBorisGitStats);
     const backend: Unwrap<typeof getBorisBackendStats> = yield call(getBorisBackendStats);
 
-    yield put(borisSetStats({ git, backend: backend.data, is_loading: false }));
+    yield put(borisSetStats({ git, backend }));
   } catch (e) {
-    yield put(borisSetStats({ git: [], backend: null, is_loading: false }));
+    yield put(borisSetStats({ git: [], backend: undefined }));
+  } finally {
+    yield put(borisSetStats({ is_loading: false }));
   }
 }
 
