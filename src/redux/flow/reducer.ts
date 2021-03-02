@@ -31,7 +31,7 @@ const INITIAL_STATE: IFlowState = {
     is_loading_more: false,
   },
   is_loading: false,
-  error: null,
+  error: '',
 };
 
 export default createReducer(INITIAL_STATE, FLOW_HANDLERS);
