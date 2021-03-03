@@ -1,33 +1,18 @@
-import { INode, IResultWithStatus } from '~/redux/types';
-import { api, configWithToken, errorMiddleware, resultMiddleware } from '~/utils/api';
+import { api, cleanResult } from '~/utils/api';
 import { API } from '~/constants/api';
+import {
+  ApiGetNodesOfTagRequest,
+  ApiGetNodesOfTagResult,
+  ApiGetTagSuggestionsRequest,
+  ApiGetTagSuggestionsResult,
+} from '~/redux/tag/types';
 
-export const getTagNodes = ({
-  access,
-  tag,
-  offset,
-  limit,
-}: {
-  access: string;
-  tag: string;
-  offset: number;
-  limit: number;
-}): Promise<IResultWithStatus<{ nodes: INode[]; count: number }>> =>
+export const apiGetNodesOfTag = ({ tag, offset, limit }: ApiGetNodesOfTagRequest) =>
   api
-    .get(API.TAG.NODES, configWithToken(access, { params: { name: tag, offset, limit } }))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .get<ApiGetNodesOfTagResult>(API.TAG.NODES, { params: { name: tag, offset, limit } })
+    .then(cleanResult);
 
-export const getTagAutocomplete = ({
-  search,
-  exclude,
-  access,
-}: {
-  access: string;
-  search: string;
-  exclude: string[];
-}): Promise<IResultWithStatus<{ tags: string[] }>> =>
+export const apiGetTagSuggestions = ({ search, exclude }: ApiGetTagSuggestionsRequest) =>
   api
-    .get(API.TAG.AUTOCOMPLETE, configWithToken(access, { params: { search, exclude } }))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .get<ApiGetTagSuggestionsResult>(API.TAG.AUTOCOMPLETE, { params: { search, exclude } })
+    .then(cleanResult);

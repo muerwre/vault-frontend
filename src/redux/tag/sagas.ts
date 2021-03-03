@@ -6,48 +6,43 @@ import {
   tagSetAutocomplete,
   tagSetNodes,
 } from '~/redux/tag/actions';
-import { wrap } from '~/redux/auth/sagas';
 import { selectTagNodes } from '~/redux/tag/selectors';
-import { getTagAutocomplete, getTagNodes } from '~/redux/tag/api';
+import { apiGetTagSuggestions, apiGetNodesOfTag } from '~/redux/tag/api';
 import { Unwrap } from '~/redux/types';
 
 function* loadTagNodes({ tag }: ReturnType<typeof tagLoadNodes>) {
-  yield put(tagSetNodes({ isLoading: true }));
+  yield put(tagSetNodes({ isLoading: true, list: [] }));
 
   try {
     const { list }: ReturnType<typeof selectTagNodes> = yield select(selectTagNodes);
-    const { data, error }: Unwrap<typeof getTagNodes> = yield call(wrap, getTagNodes, {
+    const data: Unwrap<typeof apiGetNodesOfTag> = yield call(apiGetNodesOfTag, {
       tag,
       limit: 18,
       offset: list.length,
     });
 
-    if (error) throw new Error(error);
-
-    yield put(tagSetNodes({ isLoading: false, list: [...list, ...data.nodes], count: data.count }));
-  } catch (e) {
-    console.log(e);
+    yield put(tagSetNodes({ list: [...list, ...data.nodes], count: data.count }));
+  } catch {
+  } finally {
     yield put(tagSetNodes({ isLoading: false }));
   }
 }
 
 function* loadAutocomplete({ search, exclude }: ReturnType<typeof tagLoadAutocomplete>) {
-  if (search.length < 3) return;
+  if (search.length < 2) return;
 
   try {
     yield put(tagSetAutocomplete({ isLoading: true }));
-    yield delay(100);
+    yield delay(200);
 
-    const { data, error }: Unwrap<typeof getTagAutocomplete> = yield call(
-      wrap,
-      getTagAutocomplete,
-      { search, exclude }
-    );
+    const data: Unwrap<typeof apiGetTagSuggestions> = yield call(apiGetTagSuggestions, {
+      search,
+      exclude,
+    });
 
-    if (error) throw new Error(error);
-
-    yield put(tagSetAutocomplete({ options: data.tags, isLoading: false }));
-  } catch (e) {
+    yield put(tagSetAutocomplete({ options: data.tags }));
+  } catch {
+  } finally {
     yield put(tagSetAutocomplete({ isLoading: false }));
   }
 }

@@ -1,17 +1,17 @@
-import { takeEvery, all, spawn, call, put, take, fork, race } from 'redux-saga/effects';
-import { postUploadFile } from './api';
-import { UPLOAD_ACTIONS, FILE_MIMES } from '~/redux/uploads/constants';
+import { SagaIterator } from 'redux-saga';
+import { all, call, fork, put, race, spawn, take, takeEvery } from 'redux-saga/effects';
+import { apiUploadFile } from './api';
+import { FILE_MIMES, UPLOAD_ACTIONS } from '~/redux/uploads/constants';
 import {
-  uploadUploadFiles,
-  uploadSetStatus,
+  uploadAddFile,
   uploadAddStatus,
   uploadDropStatus,
-  uploadAddFile,
+  uploadSetStatus,
+  uploadUploadFiles,
 } from './actions';
-import { wrap } from '../auth/sagas';
 import { createUploader, uploadGetThumb } from '~/utils/uploader';
 import { HTTP_RESPONSES } from '~/utils/api';
-import { IFileWithUUID, IFile, IUploadProgressHandler } from '../types';
+import { IFileWithUUID, IUploadProgressHandler, Unwrap } from '../types';
 
 function* uploadCall({
   file,
@@ -20,13 +20,15 @@ function* uploadCall({
   type,
   onProgress,
 }: IFileWithUUID & { onProgress: IUploadProgressHandler }) {
-  return yield call(wrap, postUploadFile, {
+  const data: Unwrap<typeof apiUploadFile> = yield call(apiUploadFile, {
     file,
     temp_id,
     type,
     target,
     onProgress,
   });
+
+  return data;
 }
 
 function* onUploadProgress(chan) {
@@ -46,7 +48,12 @@ function* uploadCancelWorker(id) {
   return true;
 }
 
-function* uploadWorker({ file, temp_id, target, type }: IFileWithUUID) {
+function* uploadWorker({
+  file,
+  temp_id,
+  target,
+  type,
+}: IFileWithUUID): SagaIterator<Unwrap<typeof uploadCall>> {
   const [promise, chan] = createUploader<Partial<IFileWithUUID>, Partial<IFileWithUUID>>(
     uploadCall,
     { temp_id, target, type }
@@ -63,77 +70,74 @@ function* uploadWorker({ file, temp_id, target, type }: IFileWithUUID) {
 }
 
 function* uploadFile({ file, temp_id, type, target, onSuccess, onFail }: IFileWithUUID) {
-  if (!file.type || !FILE_MIMES[type] || !FILE_MIMES[type].includes(file.type)) {
-    return {
-      error: 'File_Not_Image',
-      status: HTTP_RESPONSES.BAD_REQUEST,
-      data: {},
-    };
-  }
+  if (!temp_id) return;
 
-  const preview = yield call(uploadGetThumb, file);
+  try {
+    if (!file.type || !FILE_MIMES[type] || !FILE_MIMES[type].includes(file.type)) {
+      return {
+        error: 'File_Not_Image',
+        status: HTTP_RESPONSES.BAD_REQUEST,
+        data: {},
+      };
+    }
 
-  yield put(
-    uploadAddStatus(
-      // replace with the one, what adds file upload status
-      temp_id,
-      {
-        preview,
+    const preview: Unwrap<typeof uploadGetThumb> = yield call(uploadGetThumb, file);
+
+    yield put(
+      uploadAddStatus(temp_id, {
+        preview: preview.toString(),
         is_uploading: true,
         temp_id,
         type,
         name: file.name,
-      }
-    )
-  );
+      })
+    );
 
-  const { result, cancel, cancel_editing } = yield race({
-    result: call(uploadWorker, {
-      file,
-      temp_id,
-      target,
-      type,
-    }),
-    cancel: call(uploadCancelWorker, temp_id),
-  });
+    const [result, cancel]: [
+      Unwrap<typeof uploadCall>,
+      Unwrap<typeof uploadCancelWorker>
+    ] = yield race([
+      call(uploadWorker, {
+        file,
+        temp_id,
+        target,
+        type,
+      }),
+      call(uploadCancelWorker, temp_id),
+    ]);
 
-  if (cancel || cancel_editing) {
-    if (onFail) onFail();
-    return yield put(uploadDropStatus(temp_id));
-  }
+    if (cancel || !result) {
+      if (onFail) onFail();
+      return yield put(uploadDropStatus(temp_id));
+    }
 
-  const { data, error }: { data: IFile & { detail: string }; error: string } = result;
+    yield put(
+      uploadSetStatus(temp_id, {
+        is_uploading: false,
+        error: '',
+        uuid: result.id,
+        url: result.full_path,
+        type,
+        thumbnail_url: result.full_path,
+        progress: 1,
+        name: file.name,
+      })
+    );
 
-  if (error) {
+    yield put(uploadAddFile(result));
+
+    if (onSuccess) onSuccess(result);
+  } catch (error) {
     if (onFail) onFail();
 
     return yield put(
       uploadSetStatus(temp_id, {
         is_uploading: false,
-        error: data.detail || error,
+        error,
         type,
       })
     );
   }
-
-  yield put(
-    uploadSetStatus(temp_id, {
-      is_uploading: false,
-      error: null,
-      uuid: data.id,
-      url: data.full_path,
-      type,
-      thumbnail_url: data.full_path,
-      progress: 1,
-      name: file.name,
-    })
-  );
-
-  yield put(uploadAddFile(data));
-
-  if (onSuccess) onSuccess(data);
-
-  return { error: null, status: HTTP_RESPONSES.CREATED, data: {} }; // add file here as data
 }
 
 function* uploadFiles({ files }: ReturnType<typeof uploadUploadFiles>) {
