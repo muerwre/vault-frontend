@@ -10,7 +10,7 @@ import {
 import { Player } from '~/utils/player';
 import { getURL } from '~/utils/dom';
 import { Unwrap } from '../types';
-import { getEmbedYoutube } from './api';
+import { apiGetEmbedYoutube } from './api';
 import { selectPlayer } from './selectors';
 
 function* setFileAndPlaySaga({ file }: ReturnType<typeof playerSetFile>) {
@@ -67,7 +67,7 @@ function* getYoutubeInfo() {
     }
 
     try {
-      const data: Unwrap<typeof getEmbedYoutube> = yield call(getEmbedYoutube, ids);
+      const data: Unwrap<typeof apiGetEmbedYoutube> = yield call(apiGetEmbedYoutube, ids);
 
       if (data.items && Object.keys(data.items).length) {
         const { youtubes }: ReturnType<typeof selectPlayer> = yield select(selectPlayer);
