@@ -71,7 +71,7 @@ export interface IFile {
   url: string;
   size: number;
 
-  type: IUploadType;
+  type?: IUploadType;
   mime: string;
   metadata?: {
     id3title?: string;
@@ -92,7 +92,7 @@ export interface IFileWithUUID {
   file: File;
   subject?: string;
   target: string;
-  type: string;
+  type?: string;
   onSuccess?: (file: IFile) => void;
   onFail?: () => void;
 }
@@ -111,13 +111,13 @@ export type IBlock = IBlockText | IBlockEmbed;
 
 export interface INode {
   id?: number;
-  user: Partial<IUser>;
+  user?: Partial<IUser>;
 
   title: string;
   files: IFile[];
 
-  cover: IFile;
-  type: string;
+  cover?: IFile;
+  type?: string;
 
   blocks: IBlock[];
   thumbnail?: string;
@@ -143,7 +143,7 @@ export interface IComment {
   id: number;
   text: string;
   files: IFile[];
-  user: IUser;
+  user?: IUser;
 
   created_at?: string;
   update_at?: string;

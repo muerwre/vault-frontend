@@ -15,9 +15,9 @@ export const UPLOAD_ACTIONS = {
 };
 
 export const EMPTY_FILE: IFile = {
-  id: null,
-  user_id: null,
-  node_id: null,
+  id: undefined,
+  user_id: undefined,
+  node_id: undefined,
 
   name: '',
   orig_name: '',
@@ -25,21 +25,21 @@ export const EMPTY_FILE: IFile = {
   full_path: '',
   url: '',
   size: 0,
-  type: null,
+  type: undefined,
   mime: '',
 };
 
 export const EMPTY_UPLOAD_STATUS: IUploadStatus = {
   is_uploading: false,
-  preview: null,
-  error: null,
-  uuid: null,
-  url: null,
+  preview: '',
+  error: '',
+  uuid: 0,
+  url: '',
   progress: 0,
-  thumbnail_url: null,
-  type: null,
-  temp_id: null,
-  name: null,
+  thumbnail_url: '',
+  type: '',
+  temp_id: '',
+  name: '',
 };
 
 // for targeted cancellation

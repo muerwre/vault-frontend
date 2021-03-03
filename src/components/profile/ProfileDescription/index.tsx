@@ -17,15 +17,15 @@ const ProfileDescriptionUnconnected: FC<IProps> = ({ profile: { user, is_loading
 
   return (
     <div className={styles.wrap}>
-      {user.description && (
+      {!!user?.description && (
         <Group
           className={styles.content}
           dangerouslySetInnerHTML={{ __html: formatText(user.description) }}
         />
       )}
-      {!user.description && (
+      {!user?.description && (
         <div className={styles.placeholder}>
-          {user.fullname || user.username} пока ничего не рассказал о себе
+          {user?.fullname || user?.username} пока ничего не рассказал о себе
         </div>
       )}
     </div>

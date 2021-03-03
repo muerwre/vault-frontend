@@ -1,3 +1,5 @@
+import { INode } from '~/redux/types';
+
 export const URLS = {
   BASE: '/',
   BORIS: '/boris',
@@ -12,7 +14,7 @@ export const URLS = {
     NOT_FOUND: '/lost',
     BACKEND_DOWN: '/oopsie',
   },
-  NODE_URL: (id: number | string) => `/post${id}`,
+  NODE_URL: (id: INode['id'] | string) => `/post${id}`,
   NODE_TAG_URL: (id: number, tagName: string) => `/post${id}/tag/${tagName}`,
   PROFILE: (username: string) => `/~${username}`,
   PROFILE_PAGE: (username: string) => `/profile/${username}`,

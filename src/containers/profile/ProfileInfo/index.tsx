@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import { IUser } from '~/redux/auth/types';
+import { IAuthState, IUser } from '~/redux/auth/types';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { Placeholder } from '~/components/placeholders/Placeholder';
@@ -14,7 +14,7 @@ interface IProps {
   is_loading?: boolean;
   is_own?: boolean;
 
-  setTab?: (tab: string) => void;
+  setTab?: (tab: IAuthState['profile']['tab']) => void;
 
   content?: ReactNode;
 }
@@ -26,16 +26,16 @@ const ProfileInfo: FC<IProps> = ({ user, tab, is_loading, is_own, setTab, conten
 
       <div className={styles.field}>
         <div className={styles.name}>
-          {is_loading ? <Placeholder width="80%" /> : user.fullname || user.username}
+          {is_loading ? <Placeholder width="80%" /> : user?.fullname || user?.username}
         </div>
 
         <div className={styles.description}>
-          {is_loading ? <Placeholder /> : getPrettyDate(user.last_seen)}
+          {is_loading ? <Placeholder /> : getPrettyDate(user?.last_seen)}
         </div>
       </div>
     </Group>
 
-    <ProfileTabs tab={tab} is_own={is_own} setTab={setTab} />
+    <ProfileTabs tab={tab} is_own={!!is_own} setTab={setTab} />
 
     {content}
   </div>

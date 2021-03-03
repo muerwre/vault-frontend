@@ -43,7 +43,7 @@ const RestoreRequestDialogUnconnected: FC<IProps> = ({
 
   useEffect(() => {
     if (error || is_succesfull) {
-      authSetRestore({ error: null, is_succesfull: false });
+      authSetRestore({ error: '', is_succesfull: false });
     }
   }, [field]);
 
@@ -72,7 +72,9 @@ const RestoreRequestDialogUnconnected: FC<IProps> = ({
             Отлично!
           </Button>
         </Group>
-      ) : null,
+      ) : (
+        undefined
+      ),
     [is_succesfull]
   );
 

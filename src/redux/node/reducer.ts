@@ -8,12 +8,12 @@ export type INodeState = Readonly<{
   current: INode;
   comments: IComment[];
   related: {
-    albums: Record<string, Partial<INode[]>>;
-    similar: Partial<INode[]>;
+    albums: Record<string, INode[]>;
+    similar: INode[];
   };
   comment_data: Record<number, IComment>;
   comment_count: number;
-  current_cover_image: IFile;
+  current_cover_image?: IFile;
 
   error: string;
   errors: Record<string, string>;
@@ -38,14 +38,17 @@ const INITIAL_STATE: INodeState = {
   },
   comment_count: 0,
   comments: [],
-  related: null,
-  current_cover_image: null,
+  related: {
+    albums: {},
+    similar: [],
+  },
+  current_cover_image: undefined,
 
   is_loading: false,
   is_loading_comments: false,
   is_sending_comment: false,
 
-  error: null,
+  error: '',
   errors: {},
 };
 

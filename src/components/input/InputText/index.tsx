@@ -20,10 +20,16 @@ const InputText: FC<IInputTextProps> = ({
   ...props
 }) => {
   const [focused, setFocused] = useState(false);
-  const [inner_ref, setInnerRef] = useState<HTMLInputElement>(null);
+  const [inner_ref, setInnerRef] = useState<HTMLInputElement | null>(null);
 
   const onInput = useCallback(
-    ({ target }: ChangeEvent<HTMLInputElement>) => handler(target.value),
+    ({ target }: ChangeEvent<HTMLInputElement>) => {
+      if (!handler) {
+        return;
+      }
+
+      handler(target.value);
+    },
     [handler]
   );
 

@@ -67,7 +67,13 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
 
             <Group horizontal className={styles.buttons}>
               <CommentFormAttachButtons onUpload={uploader.uploadFiles} />
-              <CommentFormFormatButtons element={textarea} handler={formik.handleChange('text')} />
+
+              {!!textarea && (
+                <CommentFormFormatButtons
+                  element={textarea}
+                  handler={formik.handleChange('text')}
+                />
+              )}
 
               {isLoading && <LoaderCircle size={20} />}
 

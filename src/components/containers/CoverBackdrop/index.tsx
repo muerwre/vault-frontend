@@ -1,16 +1,16 @@
-import React, { FC, useState, useCallback, useEffect, useRef } from "react";
-import { IUser } from "~/redux/auth/types";
+import React, { FC, useState, useCallback, useEffect, useRef } from 'react';
+import { IUser } from '~/redux/auth/types';
 import styles from './styles.module.scss';
-import { getURL } from "~/utils/dom";
-import { PRESETS } from "~/constants/urls";
-import classNames from "classnames";
+import { getURL } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
+import classNames from 'classnames';
 
 interface IProps {
-  cover: IUser["cover"];
+  cover: IUser['cover'];
 }
 
 const CoverBackdrop: FC<IProps> = ({ cover }) => {
-  const ref = useRef<HTMLImageElement>();
+  const ref = useRef<HTMLImageElement>(null);
 
   const [is_loaded, setIsLoaded] = useState(false);
 
@@ -21,7 +21,7 @@ const CoverBackdrop: FC<IProps> = ({ cover }) => {
   useEffect(() => {
     if (!cover || !cover.url || !ref || !ref.current) return;
 
-    ref.current.src = "";
+    ref.current.src = '';
     setIsLoaded(false);
     ref.current.src = getURL(cover, PRESETS.cover);
   }, [cover]);

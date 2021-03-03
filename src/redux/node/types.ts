@@ -83,3 +83,9 @@ export type ApiLockCommentRequest = {
 export type ApiLockcommentResult = {
   deleted_at: string;
 };
+export type NodeEditorProps = {
+  data: INode;
+  setData: (val: INode) => void;
+  temp: string[];
+  setTemp: (val: string[]) => void;
+};

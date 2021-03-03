@@ -37,6 +37,7 @@ const BorisLayout: FC<IProps> = () => {
 
     if (
       user.last_seen_boris &&
+      last_comment.created_at &&
       !isBefore(new Date(user.last_seen_boris), new Date(last_comment.created_at))
     )
       return;

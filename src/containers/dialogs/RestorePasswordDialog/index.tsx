@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo, useCallback, useEffect } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { IDialogProps } from '~/redux/types';
 import { connect } from 'react-redux';
 import { BetterScrollDialog } from '../BetterScrollDialog';
@@ -49,7 +49,7 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
 
   useEffect(() => {
     if (error || is_succesfull) {
-      authSetRestore({ error: null, is_succesfull: false });
+      authSetRestore({ error: '', is_succesfull: false });
     }
   }, [password, password_again]);
 
@@ -69,7 +69,7 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
           <Icon icon="check" size={64} />
 
           <div>Пароль обновлен</div>
-          <div>Добро пожаловать домой, ~{user.username}!</div>
+          <div>Добро пожаловать домой, ~{user?.username}!</div>
 
           <div />
 
@@ -77,14 +77,16 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
             Ура!
           </Button>
         </Group>
-      ) : null,
+      ) : (
+        undefined
+      ),
     [is_succesfull]
   );
 
-  const not_ready = useMemo(() => (is_loading && !user ? <div className={styles.shade} /> : null), [
-    is_loading,
-    user,
-  ]);
+  const not_ready = useMemo(
+    () => (is_loading && !user ? <div className={styles.shade} /> : undefined),
+    [is_loading, user]
+  );
 
   const invalid_code = useMemo(
     () =>
@@ -100,7 +102,9 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
             Очень жаль
           </Button>
         </Group>
-      ) : null,
+      ) : (
+        undefined
+      ),
     [is_loading, user, error]
   );
 
@@ -135,7 +139,7 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
               type="password"
               value={password_again}
               handler={setPasswordAgain}
-              error={password_again && doesnt_match && ERROR_LITERAL[ERRORS.DOESNT_MATCH]}
+              error={password_again && doesnt_match ? ERROR_LITERAL[ERRORS.DOESNT_MATCH] : ''}
             />
 
             <Group className={styles.text}>

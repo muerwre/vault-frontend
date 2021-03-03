@@ -51,6 +51,7 @@ import { selectNode } from './selectors';
 import { Unwrap } from '../types';
 import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
 import { DIALOGS } from '~/redux/modal/constants';
+import { has } from 'ramda';
 
 export function* updateNodeEverywhere(node) {
   const {
@@ -103,6 +104,9 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
 }
 
 function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
+  if (!id) {
+    return;
+  }
   if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
 
   yield put(nodeLoadNode(id));
@@ -224,7 +228,7 @@ function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
 }
 
 function* onCreateSaga({ node_type: type }: ReturnType<typeof nodeCreate>) {
-  if (!NODE_EDITOR_DIALOGS[type]) return;
+  if (!type || !has(type, NODE_EDITOR_DIALOGS)) return;
 
   yield put(nodeSetEditor({ ...EMPTY_NODE, ...(NODE_EDITOR_DATA[type] || {}), type }));
   yield put(modalShowDialog(NODE_EDITOR_DIALOGS[type]));
@@ -239,6 +243,8 @@ function* onEditSaga({ id }: ReturnType<typeof nodeEdit>) {
     yield put(modalShowDialog(DIALOGS.LOADING));
 
     const { node }: Unwrap<typeof apiGetNode> = yield call(apiGetNode, { id });
+
+    if (!node.type || !has(node.type, NODE_EDITOR_DIALOGS)) return;
 
     if (!NODE_EDITOR_DIALOGS[node?.type]) {
       throw new Error('Unknown node type');

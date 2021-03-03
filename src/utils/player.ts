@@ -32,15 +32,12 @@ export class PlayerClass {
     });
   }
 
-  public current: number = 0;
+  public current = 0;
+  public total = 0;
+  public element = new Audio();
+  public duration = 0;
 
-  public total: number = 0;
-
-  public element: HTMLAudioElement = typeof Audio !== 'undefined' ? new Audio() : null;
-
-  public duration: number = 0;
-
-  public set = (src: string): void => {
+  public set = (src: string) => {
     this.element.src = src;
   };
 

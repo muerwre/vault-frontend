@@ -73,7 +73,7 @@ function* uploadFile({ file, temp_id, type, target, onSuccess, onFail }: IFileWi
   if (!temp_id) return;
 
   try {
-    if (!file.type || !FILE_MIMES[type] || !FILE_MIMES[type].includes(file.type)) {
+    if (!file.type || !type || !FILE_MIMES[type] || !FILE_MIMES[type].includes(file.type)) {
       return {
         error: 'File_Not_Image',
         status: HTTP_RESPONSES.BAD_REQUEST,

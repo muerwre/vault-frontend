@@ -5,19 +5,14 @@ import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
 import styles from './styles.module.scss';
+import { NodeEditorProps } from '~/redux/node/types';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
   uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
 };
 
-type IProps = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps & {
-    data: INode;
-    setData: (val: INode) => void;
-    temp: string[];
-    setTemp: (val: string[]) => void;
-  };
+type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & NodeEditorProps;
 
 const ImageEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) => {
   const pending_files = useMemo(() => temp.filter(id => !!statuses[id]).map(id => statuses[id]), [
@@ -34,9 +29,6 @@ const ImageEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) =
   );
 };
 
-const ImageEditor = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ImageEditorUnconnected);
+const ImageEditor = connect(mapStateToProps, mapDispatchToProps)(ImageEditorUnconnected);
 
 export { ImageEditor };

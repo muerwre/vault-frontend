@@ -119,7 +119,7 @@ const Cell: FC<IProps> = ({
     }
   }, [title]);
 
-  const cellText = useMemo(() => formatCellText(text), [text]);
+  const cellText = useMemo(() => formatCellText(text || ''), [text]);
 
   return (
     <div className={classNames(styles.cell, styles[(flow && flow.display) || 'single'])} ref={ref}>

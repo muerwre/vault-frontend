@@ -24,7 +24,7 @@ const ModalUnconnected: FC<IProps> = ({
 }) => {
   const onRequestClose = useCallback(() => {
     modalSetShown(false);
-    modalSetDialog(null);
+    modalSetDialog('');
   }, [modalSetShown, modalSetDialog]);
 
   if (!dialog || !DIALOG_CONTENT[dialog] || !is_shown) return null;
@@ -43,10 +43,7 @@ const ModalUnconnected: FC<IProps> = ({
   );
 };
 
-const Modal = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ModalUnconnected);
+const Modal = connect(mapStateToProps, mapDispatchToProps)(ModalUnconnected);
 
 export { ModalUnconnected, Modal };
 

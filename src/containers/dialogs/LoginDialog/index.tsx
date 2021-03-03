@@ -80,7 +80,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
   );
 
   useEffect(() => {
-    if (error) userSetLoginError(null);
+    if (error) userSetLoginError('');
   }, [username, password]);
 
   useEffect(() => {

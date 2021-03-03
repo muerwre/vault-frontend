@@ -96,7 +96,9 @@ const NodePanelInner: FC<IProps> = memo(
                   <Icon icon="heart" size={24} onClick={onLike} />
                 )}
 
-                {like_count > 0 && <div className={styles.like_count}>{like_count}</div>}
+                {!!like_count && like_count > 0 && (
+                  <div className={styles.like_count}>{like_count}</div>
+                )}
               </div>
             )}
           </div>

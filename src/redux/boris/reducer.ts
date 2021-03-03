@@ -31,7 +31,7 @@ export type IStatBackend = {
 export type IBorisState = Readonly<{
   stats: {
     git: Partial<IStatGitRow>[];
-    backend: IStatBackend;
+    backend?: IStatBackend;
     is_loading: boolean;
   };
 }>;
@@ -39,7 +39,7 @@ export type IBorisState = Readonly<{
 const BORIS_INITIAL_STATE: IBorisState = {
   stats: {
     git: [],
-    backend: null,
+    backend: undefined,
     is_loading: false,
   },
 };

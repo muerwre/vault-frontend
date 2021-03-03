@@ -33,7 +33,8 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, modalSho
   const groupped = useMemo<Record<keyof typeof UPLOAD_TYPES, IFile[]>>(
     () =>
       reduce(
-        (group, file) => assocPath([file.type], append(file, group[file.type]), group),
+        (group, file) =>
+          file.type ? assocPath([file.type], append(file, group[file.type]), group) : group,
         {},
         comment.files
       ),

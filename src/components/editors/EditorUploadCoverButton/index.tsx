@@ -33,16 +33,16 @@ const EditorUploadCoverButtonUnconnected: FC<IProps> = ({
   statuses,
   uploadUploadFiles,
 }) => {
-  const [cover_temp, setCoverTemp] = useState<string>(null);
+  const [coverTemp, setCoverTemp] = useState<string>('');
 
   useEffect(() => {
     Object.entries(statuses).forEach(([id, status]) => {
-      if (cover_temp === id && !!status.uuid && files[status.uuid]) {
+      if (coverTemp === id && !!status.uuid && files[status.uuid]) {
         setData({ ...data, cover: files[status.uuid] });
-        setCoverTemp(null);
+        setCoverTemp('');
       }
     });
-  }, [statuses, files, cover_temp, setData, data]);
+  }, [statuses, files, coverTemp, setData, data]);
 
   const onUpload = useCallback(
     (uploads: File[]) => {
@@ -56,7 +56,7 @@ const EditorUploadCoverButtonUnconnected: FC<IProps> = ({
         })
       );
 
-      setCoverTemp(path([0, 'temp_id'], items));
+      setCoverTemp(path([0, 'temp_id'], items) || '');
       uploadUploadFiles(items);
     },
     [uploadUploadFiles, setCoverTemp]
@@ -73,11 +73,11 @@ const EditorUploadCoverButtonUnconnected: FC<IProps> = ({
     [onUpload]
   );
   const onDropCover = useCallback(() => {
-    setData({ ...data, cover: null });
+    setData({ ...data, cover: undefined });
   }, [setData, data]);
 
   const background = data.cover ? getURL(data.cover, PRESETS['300']) : null;
-  const status = cover_temp && path([cover_temp], statuses);
+  const status = coverTemp && path([coverTemp], statuses);
   const preview = status && path(['preview'], status);
 
   return (

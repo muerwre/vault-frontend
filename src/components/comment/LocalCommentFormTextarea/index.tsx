@@ -13,7 +13,7 @@ const LocalCommentFormTextarea: FC<IProps> = ({ setRef }) => {
 
   const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
     ({ ctrlKey, key }) => {
-      if (!!ctrlKey && key === 'Enter') handleSubmit(null);
+      if (ctrlKey && key === 'Enter') handleSubmit(undefined);
     },
     [handleSubmit]
   );
