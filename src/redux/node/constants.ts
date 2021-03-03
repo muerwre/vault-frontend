@@ -29,7 +29,6 @@ export const NODE_ACTIONS = {
   LOCK: `${prefix}LOCK`,
   LOCK_COMMENT: `${prefix}LOCK_COMMENT`,
   EDIT_COMMENT: `${prefix}EDIT_COMMENT`,
-  CANCEL_COMMENT_EDIT: `${prefix}CANCEL_COMMENT_EDIT`,
   CREATE: `${prefix}CREATE`,
   LOAD_MORE_COMMENTS: `${prefix}LOAD_MORE_COMMENTS`,
 
