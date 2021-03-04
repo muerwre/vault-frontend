@@ -258,9 +258,9 @@ function* onEditSaga({ id }: ReturnType<typeof nodeEdit>) {
 }
 
 function* onLikeSaga({ id }: ReturnType<typeof nodeLike>) {
-  try {
-    const { current }: ReturnType<typeof selectNode> = yield select(selectNode);
+  const { current }: ReturnType<typeof selectNode> = yield select(selectNode);
 
+  try {
     const count = current.like_count || 0;
 
     yield call(updateNodeEverywhere, {
@@ -274,6 +274,7 @@ function* onLikeSaga({ id }: ReturnType<typeof nodeLike>) {
     yield call(updateNodeEverywhere, {
       ...current,
       is_liked: data.is_liked,
+      like_count: data.is_liked ? count + 1 : Math.max(count - 1, 0),
     });
   } catch {}
 }
