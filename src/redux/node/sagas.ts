@@ -99,7 +99,7 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
 
     return yield put(modalSetShown(false));
   } catch (error) {
-    yield put(nodeSetSaveErrors({ error: error || ERRORS.CANT_SAVE_NODE }));
+    yield put(nodeSetSaveErrors({ error: error.message || ERRORS.CANT_SAVE_NODE }));
   }
 }
 
@@ -214,7 +214,7 @@ function* onPostComment({ nodeId, comment, callback }: ReturnType<typeof nodePos
       callback();
     }
   } catch (error) {
-    return callback(error);
+    return callback(error.message);
   }
 }
 

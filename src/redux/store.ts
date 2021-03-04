@@ -131,15 +131,12 @@ export function configureStore(): {
   });
 
   // Logout on 401
-  api.interceptors.response.use(undefined, (error: AxiosError<{ message: string }>) => {
+  api.interceptors.response.use(undefined, (error: AxiosError<{ error: string }>) => {
     if (error.response?.status === 401) {
       store.dispatch(authLogout());
     }
 
-    console.log('Вот что случилось на сервере:', error);
-    throw new Error(
-      error?.response?.data?.message || error?.message || error?.response?.statusText
-    );
+    throw new Error(error?.response?.data?.error || error?.message || error?.response?.statusText);
   });
 
   return { store, persistor };

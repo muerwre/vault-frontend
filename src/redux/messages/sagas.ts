@@ -55,7 +55,7 @@ function* getMessages({ username }: ReturnType<typeof messagesGetMessages>) {
     }
   } catch (error) {
     messagesSet({
-      error: error || ERRORS.EMPTY_RESPONSE,
+      error: error.message || ERRORS.EMPTY_RESPONSE,
     });
   } finally {
     yield put(
@@ -110,7 +110,7 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMess
     onSuccess();
   } catch (error) {
     messagesSet({
-      error: error || ERRORS.EMPTY_RESPONSE,
+      error: error.message || ERRORS.EMPTY_RESPONSE,
     });
   } finally {
     yield put(
@@ -155,7 +155,7 @@ function* deleteMessage({ id, is_locked }: ReturnType<typeof messagesDeleteMessa
     );
   } catch (error) {
     messagesSet({
-      error: error || ERRORS.EMPTY_RESPONSE,
+      error: error.message || ERRORS.EMPTY_RESPONSE,
     });
   } finally {
     yield put(
@@ -193,7 +193,7 @@ function* refreshMessages({}: ReturnType<typeof messagesRefreshMessages>) {
     yield put(messagesSet({ messages: newMessages }));
   } catch (error) {
     messagesSet({
-      error: error || ERRORS.EMPTY_RESPONSE,
+      error: error.message || ERRORS.EMPTY_RESPONSE,
     });
   } finally {
     yield put(

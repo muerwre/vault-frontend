@@ -133,7 +133,7 @@ function* uploadFile({ file, temp_id, type, target, onSuccess, onFail }: IFileWi
     return yield put(
       uploadSetStatus(temp_id, {
         is_uploading: false,
-        error,
+        error: error.message,
         type,
       })
     );

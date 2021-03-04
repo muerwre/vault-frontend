@@ -234,7 +234,7 @@ function* requestRestoreCode({ field }: ReturnType<typeof authRequestRestoreCode
 
     yield put(authSetRestore({ is_loading: false, is_succesfull: true }));
   } catch (error) {
-    return yield put(authSetRestore({ is_loading: false, error }));
+    return yield put(authSetRestore({ is_loading: false, error: error.message }));
   }
 }
 
@@ -251,7 +251,9 @@ function* showRestoreModal({ code }: ReturnType<typeof authShowRestoreModal>) {
     yield put(authSetRestore({ user: data.user, code, is_loading: false }));
     yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
   } catch (error) {
-    yield put(authSetRestore({ is_loading: false, error: error || ERRORS.CODE_IS_INVALID }));
+    yield put(
+      authSetRestore({ is_loading: false, error: error.message || ERRORS.CODE_IS_INVALID })
+    );
     yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
   }
 }
@@ -276,7 +278,9 @@ function* restorePassword({ password }: ReturnType<typeof authRestorePassword>) 
 
     yield call(refreshUser);
   } catch (error) {
-    return yield put(authSetRestore({ is_loading: false, error: error || ERRORS.CODE_IS_INVALID }));
+    return yield put(
+      authSetRestore({ is_loading: false, error: error.message || ERRORS.CODE_IS_INVALID })
+    );
   }
 }
 
@@ -286,7 +290,7 @@ function* getSocials() {
     const data: Unwrap<typeof apiGetSocials> = yield call(apiGetSocials);
     yield put(authSetSocials({ accounts: data.accounts }));
   } catch (error) {
-    yield put(authSetSocials({ error }));
+    yield put(authSetSocials({ error: error.message }));
   } finally {
     yield put(authSetSocials({ is_loading: false }));
   }
@@ -303,7 +307,7 @@ function* dropSocial({ provider, id }: ReturnType<typeof authDropSocial>) {
 
     yield call(getSocials);
   } catch (error) {
-    yield put(authSetSocials({ error }));
+    yield put(authSetSocials({ error: error.message }));
   }
 }
 
@@ -355,7 +359,7 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
       return;
     }
   } catch (error) {
-    yield put(userSetLoginError(error));
+    yield put(userSetLoginError(error.message));
   }
 }
 
@@ -400,7 +404,7 @@ function* authRegisterSocial({ username, password }: ReturnType<typeof authSendR
       return;
     }
   } catch (error) {
-    yield put(authSetRegisterSocial({ error }));
+    yield put(authSetRegisterSocial({ error: error.message }));
   }
 }
 
