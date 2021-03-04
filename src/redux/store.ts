@@ -136,7 +136,9 @@ export function configureStore(): {
       store.dispatch(authLogout());
     }
 
-    throw new Error(error?.response?.data?.error || error?.message || error?.response?.statusText);
+    error.message = error?.response?.data?.error || error?.response?.statusText || error.message;
+
+    throw error;
   });
 
   return { store, persistor };

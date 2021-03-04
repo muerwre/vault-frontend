@@ -50,14 +50,13 @@ import {
   selectAuthUser,
 } from './selectors';
 import { OAUTH_EVENT_TYPES, Unwrap } from '../types';
-import { IAuthState } from './types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { selectModal } from '~/redux/modal/selectors';
-import { IModalState } from '~/redux/modal';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 import { messagesSet } from '~/redux/messages/actions';
 import { SagaIterator } from 'redux-saga';
+import { isEmpty } from 'ramda';
 
 function* setTokenSaga({ token }: ReturnType<typeof authSetToken>) {
   localStorage.setItem('token', token);
@@ -207,19 +206,16 @@ function* patchUser(payload: ReturnType<typeof authPatchUser>) {
   const me: ReturnType<typeof selectAuthUser> = yield select(selectAuthUser);
 
   try {
-    const { user, errors }: Unwrap<typeof apiUpdateUser> = yield call(apiUpdateUser, {
+    const { user }: Unwrap<typeof apiUpdateUser> = yield call(apiUpdateUser, {
       user: payload.user,
     });
-
-    if (errors && Object.keys(errors).length) {
-      yield put(authSetProfile({ patch_errors: errors }));
-      return;
-    }
 
     yield put(authSetUser({ ...me, ...user }));
     yield put(authSetProfile({ user: { ...me, ...user }, tab: 'profile' }));
   } catch (error) {
-    return;
+    if (isEmpty(error.response.data.errors)) return;
+
+    yield put(authSetProfile({ patch_errors: error.response.data.errors }));
   }
 }
 
