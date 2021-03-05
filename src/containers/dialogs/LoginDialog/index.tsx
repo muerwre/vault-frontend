@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
+import React, { FC, FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { DIALOGS, IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
@@ -18,6 +18,8 @@ import { pick } from 'ramda';
 import { LoginDialogButtons } from '~/containers/dialogs/LoginDialogButtons';
 import { OAUTH_EVENT_TYPES } from '~/redux/types';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
+import { ERROR_LITERAL } from '~/constants/errors';
+import { useTranslatedError } from '~/utils/hooks/useTranslatedError';
 
 const mapStateToProps = state => ({
   ...pick(['error', 'is_registering'], selectAuthLogin(state)),
@@ -63,7 +65,6 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
   const openOauthWindow = useCallback(
     (provider: ISocialProvider) => () => {
-      console.log(API.USER.OAUTH_WINDOW(provider));
       window.open(API.USER.OAUTH_WINDOW(provider), '', 'width=600,height=400');
     },
     []
@@ -81,7 +82,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
   );
 
   useEffect(() => {
-    if (error) userSetLoginError(null);
+    if (error) userSetLoginError('');
   }, [username, password]);
 
   useEffect(() => {
@@ -91,14 +92,17 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
   useCloseOnEscape(onRequestClose);
 
+  const translatedError = useTranslatedError(error);
+
   return (
     <form onSubmit={onSubmit}>
       <div>
         <BetterScrollDialog
           width={300}
-          error={error}
+          error={translatedError}
           onClose={onRequestClose}
           footer={<LoginDialogButtons openOauthWindow={openOauthWindow} />}
+          backdrop={<div className={styles.backdrop} />}
         >
           <Padder>
             <div className={styles.wrap}>

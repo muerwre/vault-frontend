@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { INode } from '~/redux/types';
 import { connect } from 'react-redux';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { ImageGrid } from '../ImageGrid';
@@ -8,19 +7,14 @@ import { selectUploads } from '~/redux/uploads/selectors';
 
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import styles from './styles.module.scss';
+import { NodeEditorProps } from '~/redux/node/types';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
   uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
 };
 
-type IProps = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps & {
-    data: INode;
-    setData: (val: INode) => void;
-    temp: string[];
-    setTemp: (val: string[]) => void;
-  };
+type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & NodeEditorProps;
 
 const AudioEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) => {
   const images = useMemo(
@@ -69,9 +63,6 @@ const AudioEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) =
   );
 };
 
-const AudioEditor = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AudioEditorUnconnected);
+const AudioEditor = connect(mapStateToProps, mapDispatchToProps)(AudioEditorUnconnected);
 
 export { AudioEditor };

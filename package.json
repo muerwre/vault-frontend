@@ -8,12 +8,15 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "autosize": "^4.0.2",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "body-scroll-lock": "^2.6.4",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.5.2",
     "date-fns": "^2.4.1",
     "flexbin": "^0.2.0",
+    "formik": "^2.2.6",
+    "insane": "^2.6.2",
+    "marked": "^2.0.0",
     "node-sass": "4.14.1",
     "photoswipe": "^4.1.3",
     "raleway-cyrillic": "^4.0.2",
@@ -21,7 +24,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-popper": "^2.2.3",
-    "react-redux": "^6.0.1",
+    "react-redux": "^7.2.2",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.4",
@@ -34,18 +37,18 @@
     "throttle-debounce": "^2.1.0",
     "typescript": "^4.0.5",
     "uuid4": "^1.1.4",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "yup": "^0.32.9"
   },
   "scripts": {
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "craco eject"
+    "ts-check": "tsc -p tsconfig.json --noEmit"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -61,12 +64,15 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "5.8.0",
     "@types/classnames": "^2.2.7",
+    "@types/marked": "^1.2.2",
     "@types/node": "^11.13.22",
     "@types/ramda": "^0.26.33",
     "@types/react-redux": "^7.1.11",
-    "@craco/craco": "5.8.0",
+    "@types/yup": "^0.29.11",
     "craco-alias": "^2.1.1",
+    "craco-fast-refresh": "^1.0.2",
     "prettier": "^1.18.2"
   }
 }

@@ -1,8 +1,8 @@
-import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils/api';
+import { api, cleanResult, configWithToken } from '~/utils/api';
 import { INode, IResultWithStatus } from '../types';
 import { API } from '~/constants/api';
-import { flowSetCellView } from '~/redux/flow/actions';
-import { IFlowState } from './reducer';
+import { PostCellViewRequest, PostCellViewResult } from '~/redux/node/types';
+import { GetSearchResultsRequest, GetSearchResultsResult } from '~/redux/flow/types';
 
 export const postNode = ({
   access,
@@ -11,32 +11,14 @@ export const postNode = ({
   access: string;
   node: INode;
 }): Promise<IResultWithStatus<INode>> =>
-  api
-    .post(API.NODE.SAVE, { node }, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+  api.post(API.NODE.SAVE, { node }, configWithToken(access)).then(cleanResult);
 
-export const postCellView = ({
-  id,
-  flow,
-  access,
-}: ReturnType<typeof flowSetCellView> & { access: string }): Promise<IResultWithStatus<{
-  is_liked: INode['is_liked'];
-}>> =>
+export const postCellView = ({ id, flow }: PostCellViewRequest) =>
   api
-    .post(API.NODE.SET_CELL_VIEW(id), { flow }, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .post<PostCellViewResult>(API.NODE.SET_CELL_VIEW(id), { flow })
+    .then(cleanResult);
 
-export const getSearchResults = ({
-  access,
-  text,
-  skip = 0,
-}: IFlowState['search'] & {
-  access: string;
-  skip: number;
-}): Promise<IResultWithStatus<{ nodes: INode[]; total: number }>> =>
+export const getSearchResults = ({ text, skip = 0 }: GetSearchResultsRequest) =>
   api
-    .get(API.SEARCH.NODES, configWithToken(access, { params: { text, skip } }))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .get<GetSearchResultsResult>(API.SEARCH.NODES, { params: { text, skip } })
+    .then(cleanResult);

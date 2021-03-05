@@ -59,7 +59,10 @@ const EditorUploadButtonUnconnected: FC<IProps> = ({
         })
       );
 
-      const temps = items.map(file => file.temp_id).slice(0, limit);
+      const temps = items
+        .filter(file => file?.temp_id)
+        .map(file => file.temp_id!)
+        .slice(0, limit);
 
       setTemp([...temp, ...temps]);
       uploadUploadFiles(items);

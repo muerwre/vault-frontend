@@ -1,8 +1,16 @@
 import classnames from 'classnames';
-import React, { ButtonHTMLAttributes, DetailedHTMLProps, FC, createElement, memo } from 'react';
+import React, {
+  ButtonHTMLAttributes,
+  DetailedHTMLProps,
+  FC,
+  createElement,
+  memo,
+  useRef,
+} from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { IIcon } from '~/redux/types';
+import { usePopper } from 'react-popper';
 
 type IButtonProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -19,6 +27,7 @@ type IButtonProps = DetailedHTMLProps<
   is_loading?: boolean;
   stretchy?: boolean;
   iconOnly?: boolean;
+  label?: string;
 };
 
 const Button: FC<IButtonProps> = memo(
@@ -37,9 +46,24 @@ const Button: FC<IButtonProps> = memo(
     stretchy,
     disabled,
     iconOnly,
+    label,
+    ref,
     ...props
-  }) =>
-    createElement(
+  }) => {
+    const tooltip = useRef<HTMLSpanElement | null>(null);
+    const pop = usePopper(tooltip?.current?.parentElement, tooltip.current, {
+      placement: 'top',
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 5],
+          },
+        },
+      ],
+    });
+
+    return createElement(
       seamless || non_submitting ? 'div' : 'button',
       {
         className: classnames(styles.button, className, styles[size], styles[color], {
@@ -58,8 +82,14 @@ const Button: FC<IButtonProps> = memo(
         iconLeft && <Icon icon={iconLeft} size={20} key={0} className={styles.icon_left} />,
         title ? <span>{title}</span> : children || null,
         iconRight && <Icon icon={iconRight} size={20} key={2} className={styles.icon_right} />,
+        !!label && (
+          <span ref={tooltip} className={styles.tooltip} style={pop.styles.popper} key="tooltip">
+            {label}
+          </span>
+        ),
       ]
-    )
+    );
+  }
 );
 
 export { Button };

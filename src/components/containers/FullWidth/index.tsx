@@ -16,7 +16,7 @@ const FullWidth: FC<IProps> = ({ children, onRefresh }) => {
     const { width } = sample.current.getBoundingClientRect();
     const { clientWidth } = document.documentElement;
 
-    onRefresh(clientWidth);
+    if (onRefresh) onRefresh(clientWidth);
 
     return {
       width: clientWidth,

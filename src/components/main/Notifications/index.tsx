@@ -42,8 +42,12 @@ const NotificationsUnconnected: FC<IProps> = ({
     (notification: INotification) => {
       switch (notification.type) {
         case 'message':
+          if (!(notification as IMessageNotification)?.content?.from?.username) {
+            return;
+          }
+
           return authOpenProfile(
-            (notification as IMessageNotification).content.from.username,
+            (notification as IMessageNotification).content.from!.username,
             'messages'
           );
         default:
@@ -78,9 +82,6 @@ const NotificationsUnconnected: FC<IProps> = ({
   );
 };
 
-const Notifications = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NotificationsUnconnected);
+const Notifications = connect(mapStateToProps, mapDispatchToProps)(NotificationsUnconnected);
 
 export { Notifications };

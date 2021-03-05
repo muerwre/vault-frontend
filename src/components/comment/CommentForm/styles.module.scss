@@ -19,12 +19,15 @@
 .buttons {
   @include outer_shadow();
 
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: row;
   background: transparentize(black, 0.8);
   padding: $gap / 2;
   border-radius: 0 0 $radius $radius;
   flex-wrap: wrap;
+
 }
 
 .uploads {

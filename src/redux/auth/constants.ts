@@ -53,26 +53,26 @@ export const USER_ROLES = {
 };
 
 export const EMPTY_TOKEN: IToken = {
-  access: null,
-  refresh: null,
+  access: '',
+  refresh: '',
 };
 
 export const EMPTY_USER: IUser = {
-  id: null,
+  id: 0,
   role: USER_ROLES.GUEST,
-  email: null,
-  name: null,
-  username: null,
-  photo: null,
-  cover: null,
+  email: '',
+  name: '',
+  username: '',
+  photo: undefined,
+  cover: undefined,
   is_activated: false,
   is_user: false,
-  fullname: null,
-  description: null,
+  fullname: '',
+  description: '',
 
-  last_seen: null,
-  last_seen_messages: null,
-  last_seen_boris: null,
+  last_seen: '',
+  last_seen_messages: '',
+  last_seen_boris: '',
 };
 
 export interface IApiUser {

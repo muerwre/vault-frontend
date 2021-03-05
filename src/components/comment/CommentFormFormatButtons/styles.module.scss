@@ -1,0 +1,12 @@
+@import '~/styles/variables.scss';
+
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  height: 32px;
+  flex: 1;
+
+  @media(max-width: 480px) {
+    display: none;
+  }
+}

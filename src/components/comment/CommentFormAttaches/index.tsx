@@ -1,138 +1,116 @@
-import React, { FC, useCallback } from 'react';
-import styles from '~/components/comment/CommentForm/styles.module.scss';
+import React, { FC, useCallback, useMemo } from 'react';
+import styles from './styles.module.scss';
 import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
-import { IComment, IFile } from '~/redux/types';
-import { IUploadStatus } from '~/redux/uploads/reducer';
+import { IFile } from '~/redux/types';
 import { SortEnd } from 'react-sortable-hoc';
-import assocPath from 'ramda/es/assocPath';
 import { moveArrItem } from '~/utils/fn';
 import { useDropZone } from '~/utils/hooks';
-import { COMMENT_FILE_TYPES } from '~/redux/uploads/constants';
+import { COMMENT_FILE_TYPES, UPLOAD_TYPES } from '~/redux/uploads/constants';
+import { useFileUploaderContext } from '~/utils/hooks/fileUploader';
 
-interface IProps {
-  images: IFile[];
-  audios: IFile[];
-  locked_images: IUploadStatus[];
-  locked_audios: IUploadStatus[];
-  comment: IComment;
-  setComment: (data: IComment) => void;
-  onUpload: (files: File[]) => void;
-}
+const CommentFormAttaches: FC = () => {
+  const uploader = useFileUploaderContext();
+  const { files, pending, setFiles, uploadFiles } = uploader!;
 
-const CommentFormAttaches: FC<IProps> = ({
-  images,
-  audios,
-  locked_images,
-  locked_audios,
-  comment,
-  setComment,
-  onUpload,
-}) => {
-  const onDrop = useDropZone(onUpload, COMMENT_FILE_TYPES);
+  const images = useMemo(() => files.filter(file => file && file.type === UPLOAD_TYPES.IMAGE), [
+    files,
+  ]);
 
-  const hasImageAttaches = images.length > 0 || locked_images.length > 0;
-  const hasAudioAttaches = audios.length > 0 || locked_audios.length > 0;
+  const pendingImages = useMemo(() => pending.filter(item => item.type === UPLOAD_TYPES.IMAGE), [
+    pending,
+  ]);
+
+  const audios = useMemo(() => files.filter(file => file && file.type === UPLOAD_TYPES.AUDIO), [
+    files,
+  ]);
+
+  const pendingAudios = useMemo(() => pending.filter(item => item.type === UPLOAD_TYPES.AUDIO), [
+    pending,
+  ]);
+
+  const onDrop = useDropZone(uploadFiles, COMMENT_FILE_TYPES);
+
+  const hasImageAttaches = images.length > 0 || pendingImages.length > 0;
+  const hasAudioAttaches = audios.length > 0 || pendingAudios.length > 0;
   const hasAttaches = hasImageAttaches || hasAudioAttaches;
 
   const onImageMove = useCallback(
     ({ oldIndex, newIndex }: SortEnd) => {
-      setComment(
-        assocPath(
-          ['files'],
-          [
-            ...audios,
-            ...(moveArrItem(
-              oldIndex,
-              newIndex,
-              images.filter(file => !!file)
-            ) as IFile[]),
-          ],
-          comment
-        )
-      );
+      setFiles([
+        ...audios,
+        ...(moveArrItem(
+          oldIndex,
+          newIndex,
+          images.filter(file => !!file)
+        ) as IFile[]),
+      ]);
     },
-    [images, audios, comment, setComment]
-  );
-
-  const onFileDelete = useCallback(
-    (fileId: IFile['id']) => {
-      setComment(
-        assocPath(
-          ['files'],
-          comment.files.filter(file => file.id != fileId),
-          comment
-        )
-      );
-    },
-    [setComment, comment]
-  );
-
-  const onTitleChange = useCallback(
-    (fileId: IFile['id'], title: IFile['metadata']['title']) => {
-      setComment(
-        assocPath(
-          ['files'],
-          comment.files.map(file =>
-            file.id === fileId ? { ...file, metadata: { ...file.metadata, title } } : file
-          ),
-          comment
-        )
-      );
-    },
-    [comment, setComment]
+    [images, audios, setFiles]
   );
 
   const onAudioMove = useCallback(
     ({ oldIndex, newIndex }: SortEnd) => {
-      setComment(
-        assocPath(
-          ['files'],
-          [
-            ...images,
-            ...(moveArrItem(
-              oldIndex,
-              newIndex,
-              audios.filter(file => !!file)
-            ) as IFile[]),
-          ],
-          comment
+      setFiles([
+        ...images,
+        ...(moveArrItem(
+          oldIndex,
+          newIndex,
+          audios.filter(file => !!file)
+        ) as IFile[]),
+      ]);
+    },
+    [images, audios, setFiles]
+  );
+
+  const onFileDelete = useCallback(
+    (fileId: IFile['id']) => {
+      setFiles(files.filter(file => file.id !== fileId));
+    },
+    [setFiles, files]
+  );
+
+  const onAudioTitleChange = useCallback(
+    (fileId: IFile['id'], title: string) => {
+      setFiles(
+        files.map(file =>
+          file.id === fileId ? { ...file, metadata: { ...file.metadata, title } } : file
         )
       );
     },
-    [images, audios, comment, setComment]
+    [files, setFiles]
   );
 
-  return (
-    hasAttaches && (
-      <div className={styles.attaches} onDropCapture={onDrop}>
-        {hasImageAttaches && (
-          <SortableImageGrid
-            onDelete={onFileDelete}
-            onSortEnd={onImageMove}
-            axis="xy"
-            items={images}
-            locked={locked_images}
-            pressDelay={50}
-            helperClass={styles.helper}
-            size={120}
-          />
-        )}
+  if (!hasAttaches) return null;
 
-        {hasAudioAttaches && (
-          <SortableAudioGrid
-            items={audios}
-            onDelete={onFileDelete}
-            onTitleChange={onTitleChange}
-            onSortEnd={onAudioMove}
-            axis="y"
-            locked={locked_audios}
-            pressDelay={50}
-            helperClass={styles.helper}
-          />
-        )}
-      </div>
-    )
+  return (
+    <div className={styles.attaches} onDropCapture={onDrop}>
+      {hasImageAttaches && (
+        <SortableImageGrid
+          onDelete={onFileDelete}
+          onSortEnd={onImageMove}
+          axis="xy"
+          items={images}
+          locked={pendingImages}
+          pressDelay={50}
+          helperClass={styles.helper}
+          size={120}
+        />
+      )}
+
+      {hasAudioAttaches && (
+        <SortableAudioGrid
+          items={audios}
+          onDelete={onFileDelete}
+          onTitleChange={onAudioTitleChange}
+          onSortEnd={onAudioMove}
+          axis="y"
+          locked={pendingAudios}
+          pressDelay={50}
+          helperClass={styles.helper}
+        />
+      )}
+    </div>
   );
 };
 

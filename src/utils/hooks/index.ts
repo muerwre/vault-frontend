@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react';
 
-export const useCloseOnEscape = (onRequestClose: () => void, ignore_inputs = false) => {
+export const useCloseOnEscape = (onRequestClose?: () => void, ignore_inputs = false) => {
   const onEscape = useCallback(
     event => {
-      if (event.key !== 'Escape') return;
+      if (event.key !== 'Escape' || !onRequestClose) return;
       if (
         ignore_inputs &&
         (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA')

@@ -1,0 +1,114 @@
+@import "../variables";
+
+$margin: 1em;
+
+.wrapper {
+  blockquote {
+    border-left: 4px solid $wisegreen;
+    padding: $margin / 2 0;
+    margin-bottom: $margin;
+    color: $wisegreen;
+    font-size: 0.9em;
+    background-color: transparentize($wisegreen, 0.9);
+
+    p {
+      margin: 0 $margin;
+    }
+
+    &+blockquote {
+      margin-top: -$margin;
+    }
+  }
+
+  pre {
+    background-color: transparentize($blue, 0.9);
+    font-family: monospace;
+    font-size: 0.8em;
+    border-radius: 2px;
+    width: 100%;
+    overflow: auto;
+    padding: $gap;
+    box-sizing: border-box;
+    margin-bottom: $margin;
+
+    code {
+      color: transparentize($wisegreen, 0.1);
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  }
+
+  p, li {
+    code {
+      background-color: transparentize($blue, 0.9);
+      padding: 2px 4px;
+      border-radius: 0.3em;
+      color: transparentize($wisegreen, 0.1);
+      font-size: 0.8em;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    margin-bottom: $margin;
+  }
+
+  p {
+    margin-bottom: $margin;
+  }
+
+  h5, h4, h3, h2, h1 {
+    color: white;
+    font-weight: 800;
+    line-height: 1.2em;
+    margin: $margin * 1.5 0 $margin / 2;
+
+    &:first-child {
+      margin-top: $margin / 4;
+    }
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.8em;
+  }
+
+  h3 {
+    font-size: 1.6em;
+  }
+
+  h4 {
+    font-size: 1.4em;
+  }
+
+  h5 {
+    font-size: 1.2em;
+  }
+
+  ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-bottom: $margin;
+
+    li {
+      margin: $margin/3 0;
+    }
+  }
+
+  strong {
+    font-weight: bold;
+    color: white;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  :global(.grey) {
+    color: #555555;
+    white-space: pre-line;
+  }
+}

@@ -1,0 +1,9 @@
+@import "src/styles/variables";
+
+.attaches {
+  @include outer_shadow();
+}
+
+.helper {
+  z-index: 10000 !important;
+}

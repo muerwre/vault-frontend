@@ -78,7 +78,9 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
 
   useEffect(() => {
     window.location.hash = 'preview';
-    return () => (window.location.hash = '');
+    return () => {
+      window.location.hash = '';
+    };
   }, []);
 
   return (

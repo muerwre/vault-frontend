@@ -31,7 +31,7 @@ const ProfileMessagesUnconnected: FC<IProps> = ({
   messagesRefreshMessages,
 }) => {
   const wasAtBottom = useRef(true);
-  const [wrap, setWrap] = useState<HTMLDivElement>(null);
+  const [wrap, setWrap] = useState<HTMLDivElement | undefined>(undefined);
   const [editingMessageId, setEditingMessageId] = useState(0);
 
   const onEditMessage = useCallback((id: number) => setEditingMessageId(id), [setEditingMessageId]);
@@ -95,31 +95,33 @@ const ProfileMessagesUnconnected: FC<IProps> = ({
   if (!messages.messages.length || profile.is_loading)
     return <NodeNoComments is_loading={messages.is_loading_messages || profile.is_loading} />;
 
-  return (
-    messages.messages.length > 0 && (
-      <div className={styles.messages} ref={storeRef}>
-        {messages.messages
-          .filter(message => !!message.text)
-          .map((
-            message // TODO: show files / memo
-          ) => (
-            <Message
-              message={message}
-              incoming={id !== message.from.id}
-              key={message.id}
-              onEdit={onEditMessage}
-              onDelete={onDeleteMessage}
-              isEditing={editingMessageId === message.id}
-              onCancelEdit={onCancelEdit}
-              onRestore={onRestoreMessage}
-            />
-          ))}
+  if (messages.messages.length <= 0) {
+    return null;
+  }
 
-        {!messages.is_loading_messages && messages.messages.length > 0 && (
-          <div className={styles.placeholder}>Когда-нибудь здесь будут еще сообщения</div>
-        )}
-      </div>
-    )
+  return (
+    <div className={styles.messages} ref={storeRef}>
+      {messages.messages
+        .filter(message => !!message.text)
+        .map((
+          message // TODO: show files / memo
+        ) => (
+          <Message
+            message={message}
+            incoming={id !== message.from.id}
+            key={message.id}
+            onEdit={onEditMessage}
+            onDelete={onDeleteMessage}
+            isEditing={editingMessageId === message.id}
+            onCancelEdit={onCancelEdit}
+            onRestore={onRestoreMessage}
+          />
+        ))}
+
+      {!messages.is_loading_messages && messages.messages.length > 0 && (
+        <div className={styles.placeholder}>Когда-нибудь здесь будут еще сообщения</div>
+      )}
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactElement } from 'react';
 import { IComment, INode, ValueOf } from '../types';
 import { NodeImageSlideBlock } from '~/components/node/NodeImageSlideBlock';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
@@ -13,7 +13,7 @@ import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadB
 import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadButton';
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
 import { modalShowPhotoswipe } from '../modal/actions';
-import { IEditorComponentProps } from '~/redux/node/types';
+import { IEditorComponentProps, NodeEditorProps } from '~/redux/node/types';
 import { EditorFiller } from '~/components/editors/EditorFiller';
 import { EditorPublicSwitch } from '~/components/editors/EditorPublicSwitch';
 
@@ -30,7 +30,6 @@ export const NODE_ACTIONS = {
   LOCK: `${prefix}LOCK`,
   LOCK_COMMENT: `${prefix}LOCK_COMMENT`,
   EDIT_COMMENT: `${prefix}EDIT_COMMENT`,
-  CANCEL_COMMENT_EDIT: `${prefix}CANCEL_COMMENT_EDIT`,
   CREATE: `${prefix}CREATE`,
   LOAD_MORE_COMMENTS: `${prefix}LOAD_MORE_COMMENTS`,
 
@@ -42,7 +41,7 @@ export const NODE_ACTIONS = {
   SET_COMMENT_DATA: `${prefix}SET_COMMENT_DATA`,
   SET_EDITOR: `${prefix}SET_EDITOR`,
 
-  POST_COMMENT: `${prefix}POST_COMMENT`,
+  POST_COMMENT: `${prefix}POST_LOCAL_COMMENT`,
   SET_COMMENTS: `${prefix}SET_COMMENTS`,
   SET_RELATED: `${prefix}SET_RELATED`,
 
@@ -52,15 +51,13 @@ export const NODE_ACTIONS = {
 };
 
 export const EMPTY_NODE: INode = {
-  id: null,
-
-  user: null,
-
+  id: 0,
+  user: undefined,
   title: '',
   files: [],
 
-  cover: null,
-  type: null,
+  cover: undefined,
+  type: undefined,
 
   blocks: [],
   tags: [],
@@ -106,16 +103,16 @@ export const NODE_INLINES: INodeComponents = {
 };
 
 export const EMPTY_COMMENT: IComment = {
-  id: null,
+  id: 0,
   text: '',
   files: [],
-  temp_ids: [],
-  is_private: false,
-  user: null,
-  error: '',
+  user: undefined,
 };
 
-export const NODE_EDITORS = {
+export const NODE_EDITORS: Record<
+  typeof NODE_TYPES[keyof typeof NODE_TYPES],
+  FC<NodeEditorProps>
+> = {
   [NODE_TYPES.IMAGE]: ImageEditor,
   [NODE_TYPES.TEXT]: TextEditor,
   [NODE_TYPES.VIDEO]: VideoEditor,

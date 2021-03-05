@@ -1,89 +1,73 @@
-import React, { FC, useMemo, memo } from 'react';
+import React, { FC, memo, useCallback, useMemo } from 'react';
 import { Comment } from '../../comment/Comment';
-import { Filler } from '~/components/containers/Filler';
 
 import styles from './styles.module.scss';
-import { ICommentGroup, IComment } from '~/redux/types';
+import { IComment, ICommentGroup, IFile } from '~/redux/types';
 import { groupCommentsByUser } from '~/utils/fn';
 import { IUser } from '~/redux/auth/types';
 import { canEditComment } from '~/utils/node';
-import { nodeLockComment, nodeEditComment, nodeLoadMoreComments } from '~/redux/node/actions';
+import { nodeLoadMoreComments, nodeLockComment } from '~/redux/node/actions';
 import { INodeState } from '~/redux/node/reducer';
 import { COMMENTS_DISPLAY } from '~/redux/node/constants';
 import { plural } from '~/utils/dom';
-import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import { modalShowPhotoswipe } from '~/redux/modal/actions';
+import { useDispatch } from 'react-redux';
 
 interface IProps {
-  comments?: IComment[];
-  comment_data: INodeState['comment_data'];
-  comment_count: INodeState['comment_count'];
+  comments: IComment[];
+  count: INodeState['comment_count'];
   user: IUser;
-  onDelete: typeof nodeLockComment;
-  onEdit: typeof nodeEditComment;
-  onLoadMore: typeof nodeLoadMoreComments;
   order?: 'ASC' | 'DESC';
-  modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
 }
 
-const NodeComments: FC<IProps> = memo(
-  ({
-    comments,
-    comment_data,
-    user,
-    onDelete,
-    onEdit,
-    onLoadMore,
-    comment_count = 0,
-    order = 'DESC',
-    modalShowPhotoswipe,
-  }) => {
-    const comments_left = useMemo(() => Math.max(0, comment_count - comments.length), [
-      comments,
-      comment_count,
-    ]);
+const NodeComments: FC<IProps> = memo(({ comments, user, count = 0, order = 'DESC' }) => {
+  const dispatch = useDispatch();
+  const left = useMemo(() => Math.max(0, count - comments.length), [comments, count]);
 
-    const groupped: ICommentGroup[] = useMemo(
-      () => (order === 'DESC' ? [...comments].reverse() : comments).reduce(groupCommentsByUser, []),
-      [comments, order]
-    );
+  const groupped: ICommentGroup[] = useMemo(
+    () => (order === 'DESC' ? [...comments].reverse() : comments).reduce(groupCommentsByUser, []),
+    [comments, order]
+  );
 
-    const more = useMemo(
-      () =>
-        comments_left > 0 && (
-          <div className={styles.more} onClick={onLoadMore}>
-            Показать ещё{' '}
-            {plural(
-              Math.min(comments_left, COMMENTS_DISPLAY),
-              'комментарий',
-              'комментария',
-              'комментариев'
-            )}
-            {comments_left > COMMENTS_DISPLAY ? ` из ${comments_left} оставшихся` : ''}
-          </div>
-        ),
-      [comments_left, onLoadMore, COMMENTS_DISPLAY]
-    );
+  const onDelete = useCallback(
+    (id: IComment['id'], locked: boolean) => dispatch(nodeLockComment(id, locked)),
+    [dispatch]
+  );
+  const onLoadMoreComments = useCallback(() => dispatch(nodeLoadMoreComments()), [dispatch]);
+  const onShowPhotoswipe = useCallback(
+    (images: IFile[], index: number) => dispatch(modalShowPhotoswipe(images, index)),
+    [dispatch]
+  );
 
-    return (
-      <div className={styles.wrap}>
-        {order === 'DESC' && more}
+  const more = useMemo(
+    () =>
+      left > 0 && (
+        <div className={styles.more} onClick={onLoadMoreComments}>
+          Показать ещё{' '}
+          {plural(Math.min(left, COMMENTS_DISPLAY), 'комментарий', 'комментария', 'комментариев')}
+          {left > COMMENTS_DISPLAY ? ` из ${left} оставшихся` : ''}
+        </div>
+      ),
+    [left, onLoadMoreComments]
+  );
 
-        {groupped.map(group => (
-          <Comment
-            key={group.ids.join()}
-            comment_group={group}
-            comment_data={comment_data}
-            can_edit={canEditComment(group, user)}
-            onDelete={onDelete}
-            onEdit={onEdit}
-            modalShowPhotoswipe={modalShowPhotoswipe}
-          />
-        ))}
+  return (
+    <div className={styles.wrap}>
+      {order === 'DESC' && more}
 
-        {order === 'ASC' && more}
-      </div>
-    );
-  }
-);
+      {groupped.map(group => (
+        <Comment
+          key={group.ids.join()}
+          comment_group={group}
+          can_edit={canEditComment(group, user)}
+          onDelete={onDelete}
+          modalShowPhotoswipe={onShowPhotoswipe}
+        />
+      ))}
+
+      {order === 'ASC' && more}
+    </div>
+  );
+});
 
 export { NodeComments };

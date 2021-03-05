@@ -26,7 +26,7 @@ type Props = ReturnType<typeof mapStateToProps> &
     file: IFile;
     isEditing?: boolean;
     onDelete?: (id: IFile['id']) => void;
-    onTitleChange?: (file_id: IFile['id'], title: IFile['metadata']['title']) => void;
+    onTitleChange?: (file_id: IFile['id'], title: string) => void;
   };
 
 const AudioPlayerUnconnected = memo(
@@ -93,14 +93,18 @@ const AudioPlayerUnconnected = memo(
       [file.metadata]
     );
 
-    const onRename = useCallback((val: string) => onTitleChange(file.id, val), [
-      onTitleChange,
-      file.id,
-    ]);
+    const onRename = useCallback(
+      (val: string) => {
+        if (!onTitleChange) return;
+
+        onTitleChange(file.id, val);
+      },
+      [onTitleChange, file.id]
+    );
 
     useEffect(() => {
       const active = current && current.id === file.id;
-      setPlaying(current && current.id === file.id);
+      setPlaying(!!current && current.id === file.id);
 
       if (active) Player.on('playprogress', onProgress);
 

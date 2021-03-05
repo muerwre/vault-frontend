@@ -28,15 +28,4 @@
   :global(.green) {
     color: $wisegreen;
   }
-
-  &:last-child {
-    p {
-      &::after {
-        content: '';
-        display: inline-flex;
-        height: 1em;
-        width: 150px;
-      }
-    }
-  }
 }

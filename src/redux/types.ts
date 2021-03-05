@@ -71,7 +71,7 @@ export interface IFile {
   url: string;
   size: number;
 
-  type: IUploadType;
+  type?: IUploadType;
   mime: string;
   metadata?: {
     id3title?: string;
@@ -92,7 +92,7 @@ export interface IFileWithUUID {
   file: File;
   subject?: string;
   target: string;
-  type: string;
+  type?: string;
   onSuccess?: (file: IFile) => void;
   onFail?: () => void;
 }
@@ -111,13 +111,13 @@ export type IBlock = IBlockText | IBlockEmbed;
 
 export interface INode {
   id?: number;
-  user: Partial<IUser>;
+  user?: Partial<IUser>;
 
   title: string;
   files: IFile[];
 
-  cover: IFile;
-  type: string;
+  cover?: IFile;
+  type?: string;
 
   blocks: IBlock[];
   thumbnail?: string;
@@ -144,11 +144,8 @@ export interface INode {
 export interface IComment {
   id: number;
   text: string;
-  temp_ids?: string[];
   files: IFile[];
-  is_private: boolean;
-  user: IUser;
-  error?: string;
+  user?: IUser;
 
   created_at?: string;
   update_at?: string;
@@ -197,7 +194,13 @@ export type INodeNotification = {
 
 export type INotification = IMessageNotification | ICommentNotification;
 
-export type Unwrap<T> = T extends Promise<infer U> ? U : T;
+export type Unwrap<T> = T extends (...args: any) => Promise<any>
+  ? T extends (...args: any) => Promise<infer U>
+    ? U
+    : T
+  : T extends () => Iterator<any, infer U, any>
+  ? U
+  : any;
 
 export interface IEmbed {
   provider: string;

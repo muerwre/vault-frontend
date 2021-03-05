@@ -31,9 +31,9 @@ export const API = {
     RELATED: (id: INode['id']) => `/node/${id}/related`,
     UPDATE_TAGS: (id: INode['id']) => `/node/${id}/tags`,
     POST_LIKE: (id: INode['id']) => `/node/${id}/like`,
-    POST_STAR: (id: INode['id']) => `/node/${id}/heroic`,
+    POST_HEROIC: (id: INode['id']) => `/node/${id}/heroic`,
     POST_LOCK: (id: INode['id']) => `/node/${id}/lock`,
-    POST_LOCK_COMMENT: (id: INode['id'], comment_id: IComment['id']) =>
+    LOCK_COMMENT: (id: INode['id'], comment_id: IComment['id']) =>
       `/node/${id}/comment/${comment_id}/lock`,
     SET_CELL_VIEW: (id: INode['id']) => `/node/${id}/cell-view`,
   },

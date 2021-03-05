@@ -6,6 +6,7 @@ import { selectPlayer } from '~/redux/player/selectors';
 import { connect } from 'react-redux';
 import * as PLAYER_ACTIONS from '~/redux/player/actions';
 import { Icon } from '~/components/input/Icon';
+import { path } from 'ramda';
 
 const mapStateToProps = state => ({
   youtubes: selectPlayer(state).youtubes,
@@ -21,30 +22,32 @@ type Props = ReturnType<typeof mapStateToProps> &
 
 const CommentEmbedBlockUnconnected: FC<Props> = memo(
   ({ block, youtubes, playerGetYoutubeInfo }) => {
-    const link = useMemo(
-      () =>
-        block.content.match(
-          /https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?([\w\-\=]+)/
-        ),
-      [block.content]
-    );
+    const id = useMemo(() => {
+      const match = block.content.match(
+        /https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?([\w\-\=]+)/
+      );
+
+      return (match && match[1]) || '';
+    }, [block.content]);
 
     const preview = useMemo(() => getYoutubeThumb(block.content), [block.content]);
 
     useEffect(() => {
-      if (!link[5] || youtubes[link[5]]) return;
-      playerGetYoutubeInfo(link[5]);
-    }, [link, playerGetYoutubeInfo]);
+      if (!id) return;
+      playerGetYoutubeInfo(id);
+    }, [id, playerGetYoutubeInfo]);
 
-    const title = useMemo(
-      () =>
-        (youtubes[link[5]] && youtubes[link[5]].metadata && youtubes[link[5]].metadata.title) || '',
-      [link, youtubes]
-    );
+    const title = useMemo<string>(() => {
+      if (!id) {
+        return block.content;
+      }
+
+      return path([id, 'metadata', 'title'], youtubes) || block.content;
+    }, [id, youtubes, block.content]);
 
     return (
       <div className={styles.embed}>
-        <a href={link[0]} target="_blank" />
+        <a href={id[0]} target="_blank" />
 
         <div className={styles.preview}>
           <div style={{ backgroundImage: `url("${preview}")` }}>
@@ -53,7 +56,7 @@ const CommentEmbedBlockUnconnected: FC<Props> = memo(
                 <Icon icon="play" size={32} />
               </div>
 
-              <div className={styles.title}>{title || link[0]}</div>
+              <div className={styles.title}>{title}</div>
             </div>
           </div>
         </div>

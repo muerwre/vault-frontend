@@ -15,10 +15,12 @@ interface IProps {
 
 const UserButton: FC<IProps> = ({ user: { username, photo }, authOpenProfile, onLogout }) => {
   const onProfileOpen = useCallback(() => {
+    if (!username) return;
     authOpenProfile(username, 'profile');
   }, [authOpenProfile, username]);
 
   const onSettingsOpen = useCallback(() => {
+    if (!username) return;
     authOpenProfile(username, 'settings');
   }, [authOpenProfile, username]);
 

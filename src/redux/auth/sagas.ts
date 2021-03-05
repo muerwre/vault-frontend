@@ -1,5 +1,5 @@
 import { call, delay, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
-import { AUTH_USER_ACTIONS, EMPTY_USER, USER_ERRORS, USER_ROLES } from '~/redux/auth/constants';
+import { AUTH_USER_ACTIONS, EMPTY_USER, USER_ROLES } from '~/redux/auth/constants';
 import {
   authAttachSocial,
   authDropSocial,
@@ -48,49 +48,37 @@ import {
   selectAuthRestore,
   selectAuthUpdates,
   selectAuthUser,
-  selectToken,
 } from './selectors';
-import { IResultWithStatus, OAUTH_EVENT_TYPES, Unwrap } from '../types';
-import { IAuthState, IUser } from './types';
+import { OAUTH_EVENT_TYPES, Unwrap } from '../types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { selectModal } from '~/redux/modal/selectors';
-import { IModalState } from '~/redux/modal';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 import { messagesSet } from '~/redux/messages/actions';
+import { SagaIterator } from 'redux-saga';
+import { isEmpty } from 'ramda';
+import { AxiosError } from 'axios';
 
-export function* reqWrapper(requestAction, props = {}): ReturnType<typeof requestAction> {
-  const access = yield select(selectToken);
-
-  const result = yield call(requestAction, { access, ...props });
-
-  if (result && result.status === 401) {
-    return { error: USER_ERRORS.UNAUTHORIZED, data: {} };
-  }
-
-  return result;
+function* setTokenSaga({ token }: ReturnType<typeof authSetToken>) {
+  localStorage.setItem('token', token);
 }
 
 function* sendLoginRequestSaga({ username, password }: ReturnType<typeof userSendLoginRequest>) {
   if (!username || !password) return;
 
-  const {
-    error,
-    data: { token, user },
-  }: IResultWithStatus<{ token: string; user: IUser }> = yield call(apiUserLogin, {
-    username,
-    password,
-  });
+  try {
+    const { token, user }: Unwrap<typeof apiUserLogin> = yield call(apiUserLogin, {
+      username,
+      password,
+    });
 
-  if (error) {
-    yield put(userSetLoginError(error));
-    return;
+    yield put(authSetToken(token));
+    yield put(authSetUser({ ...user, is_user: true }));
+    yield put(authLoggedIn());
+    yield put(modalSetShown(false));
+  } catch (error) {
+    yield put(userSetLoginError(error.message));
   }
-
-  yield put(authSetToken(token));
-  yield put(authSetUser({ ...user, is_user: true }));
-  yield put(authLoggedIn());
-  yield put(modalSetShown(false));
 }
 
 function* refreshUser() {
@@ -98,23 +86,18 @@ function* refreshUser() {
 
   if (!token) return;
 
-  const {
-    error,
-    data: { user },
-  }: IResultWithStatus<{ user: IUser }> = yield call(reqWrapper, apiAuthGetUser);
+  try {
+    const { user }: Unwrap<typeof apiAuthGetUser> = yield call(apiAuthGetUser);
 
-  if (error) {
+    yield put(authSetUser({ ...user, is_user: true }));
+  } catch (e) {
     yield put(
       authSetUser({
         ...EMPTY_USER,
         is_user: false,
       })
     );
-
-    return;
   }
-
-  yield put(authSetUser({ ...user, is_user: true }));
 }
 
 function* checkUserSaga({ key }: RehydrateAction) {
@@ -126,44 +109,43 @@ function* gotPostMessageSaga({ token }: ReturnType<typeof gotAuthPostMessage>) {
   yield put(authSetToken(token));
   yield call(refreshUser);
 
-  const { is_shown, dialog }: IModalState = yield select(selectModal);
+  const { is_shown, dialog }: ReturnType<typeof selectModal> = yield select(selectModal);
 
   if (is_shown && dialog === DIALOGS.LOGIN) yield put(modalSetShown(false));
 }
 
 function* logoutSaga() {
-  yield put(authSetToken(null));
+  yield put(authSetToken(''));
   yield put(authSetUser({ ...EMPTY_USER }));
   yield put(
     authSetUpdates({
-      last: null,
+      last: '',
       notifications: [],
     })
   );
 }
 
-function* loadProfile({ username }: ReturnType<typeof authLoadProfile>) {
+function* loadProfile({ username }: ReturnType<typeof authLoadProfile>): SagaIterator<boolean> {
   yield put(authSetProfile({ is_loading: true }));
 
-  const {
-    error,
-    data: { user },
-  } = yield call(reqWrapper, apiAuthGetUserProfile, { username });
+  try {
+    const { user }: Unwrap<typeof apiAuthGetUserProfile> = yield call(apiAuthGetUserProfile, {
+      username,
+    });
 
-  if (error || !user) {
+    yield put(authSetProfile({ is_loading: false, user }));
+    yield put(messagesSet({ messages: [] }));
+    return true;
+  } catch (error) {
     return false;
   }
-
-  yield put(authSetProfile({ is_loading: false, user }));
-  yield put(messagesSet({ messages: [] }));
-  return true;
 }
 
 function* openProfile({ username, tab = 'profile' }: ReturnType<typeof authOpenProfile>) {
   yield put(modalShowDialog(DIALOGS.PROFILE));
   yield put(authSetProfile({ tab }));
 
-  const success: boolean = yield call(loadProfile, authLoadProfile(username));
+  const success: Unwrap<typeof loadProfile> = yield call(loadProfile, authLoadProfile(username));
 
   if (!success) {
     return yield put(modalSetShown(false));
@@ -171,42 +153,41 @@ function* openProfile({ username, tab = 'profile' }: ReturnType<typeof authOpenP
 }
 
 function* getUpdates() {
-  const user: ReturnType<typeof selectAuthUser> = yield select(selectAuthUser);
+  try {
+    const user: ReturnType<typeof selectAuthUser> = yield select(selectAuthUser);
 
-  if (!user || !user.is_user || user.role === USER_ROLES.GUEST || !user.id) return;
+    if (!user || !user.is_user || user.role === USER_ROLES.GUEST || !user.id) return;
 
-  const modal: IModalState = yield select(selectModal);
-  const profile: IAuthState['profile'] = yield select(selectAuthProfile);
-  const { last, boris_commented_at }: IAuthState['updates'] = yield select(selectAuthUpdates);
-  const exclude_dialogs =
-    modal.is_shown && modal.dialog === DIALOGS.PROFILE && profile.user.id ? profile.user.id : null;
-
-  const { error, data }: Unwrap<ReturnType<typeof apiAuthGetUpdates>> = yield call(
-    reqWrapper,
-    apiAuthGetUpdates,
-    { exclude_dialogs, last: last || user.last_seen_messages }
-  );
-
-  if (error || !data) {
-    return;
-  }
-
-  if (data.notifications && data.notifications.length) {
-    yield put(
-      authSetUpdates({
-        last: data.notifications[0].created_at,
-        notifications: data.notifications,
-      })
+    const modal: ReturnType<typeof selectModal> = yield select(selectModal);
+    const profile: ReturnType<typeof selectAuthProfile> = yield select(selectAuthProfile);
+    const { last, boris_commented_at }: ReturnType<typeof selectAuthUpdates> = yield select(
+      selectAuthUpdates
     );
-  }
+    const exclude_dialogs =
+      modal.is_shown && modal.dialog === DIALOGS.PROFILE && profile.user?.id ? profile.user.id : 0;
 
-  if (data.boris && data.boris.commented_at && boris_commented_at !== data.boris.commented_at) {
-    yield put(
-      authSetUpdates({
-        boris_commented_at: data.boris.commented_at,
-      })
-    );
-  }
+    const data: Unwrap<typeof apiAuthGetUpdates> = yield call(apiAuthGetUpdates, {
+      exclude_dialogs,
+      last: last || user.last_seen_messages,
+    });
+
+    if (data.notifications && data.notifications.length) {
+      yield put(
+        authSetUpdates({
+          last: data.notifications[0].created_at,
+          notifications: data.notifications,
+        })
+      );
+    }
+
+    if (data.boris && data.boris.commented_at && boris_commented_at !== data.boris.commented_at) {
+      yield put(
+        authSetUpdates({
+          boris_commented_at: data.boris.commented_at,
+        })
+      );
+    }
+  } catch (error) {}
 }
 
 function* startPollingSaga() {
@@ -219,148 +200,137 @@ function* startPollingSaga() {
 function* setLastSeenMessages({ last_seen_messages }: ReturnType<typeof authSetLastSeenMessages>) {
   if (!Date.parse(last_seen_messages)) return;
 
-  yield call(reqWrapper, apiUpdateUser, { user: { last_seen_messages } });
+  yield call(apiUpdateUser, { user: { last_seen_messages } });
 }
 
-function* patchUser({ user }: ReturnType<typeof authPatchUser>) {
-  const me = yield select(selectAuthUser);
+function* patchUser(payload: ReturnType<typeof authPatchUser>) {
+  const me: ReturnType<typeof selectAuthUser> = yield select(selectAuthUser);
 
-  const { error, data } = yield call(reqWrapper, apiUpdateUser, { user });
+  try {
+    const { user }: Unwrap<typeof apiUpdateUser> = yield call(apiUpdateUser, {
+      user: payload.user,
+    });
 
-  if (error || !data.user || data.errors) {
-    return yield put(authSetProfile({ patch_errors: data.errors }));
+    yield put(authSetUser({ ...me, ...user }));
+    yield put(authSetProfile({ user: { ...me, ...user }, tab: 'profile' }));
+  } catch (error) {
+    if (isEmpty(error.response.data.errors)) return;
+
+    yield put(authSetProfile({ patch_errors: error.response.data.errors }));
   }
-
-  yield put(authSetUser({ ...me, ...data.user }));
-  yield put(authSetProfile({ user: { ...me, ...data.user }, tab: 'profile' }));
 }
 
 function* requestRestoreCode({ field }: ReturnType<typeof authRequestRestoreCode>) {
   if (!field) return;
 
-  yield put(authSetRestore({ error: null, is_loading: true }));
-  const { error, data } = yield call(apiRequestRestoreCode, { field });
+  try {
+    yield put(authSetRestore({ error: '', is_loading: true }));
+    yield call(apiRequestRestoreCode, {
+      field,
+    });
 
-  if (data.error || error) {
-    return yield put(authSetRestore({ is_loading: false, error: data.error || error }));
+    yield put(authSetRestore({ is_loading: false, is_succesfull: true }));
+  } catch (error) {
+    return yield put(authSetRestore({ is_loading: false, error: error.message }));
   }
-
-  yield put(authSetRestore({ is_loading: false, is_succesfull: true }));
 }
 
 function* showRestoreModal({ code }: ReturnType<typeof authShowRestoreModal>) {
-  if (!code && !code.length) {
-    return yield put(authSetRestore({ error: ERRORS.CODE_IS_INVALID, is_loading: false }));
-  }
+  try {
+    if (!code && !code.length) {
+      return yield put(authSetRestore({ error: ERRORS.CODE_IS_INVALID, is_loading: false }));
+    }
 
-  yield put(authSetRestore({ user: null, is_loading: true }));
+    yield put(authSetRestore({ user: undefined, is_loading: true }));
 
-  const { error, data } = yield call(apiCheckRestoreCode, { code });
+    const data: Unwrap<typeof apiCheckRestoreCode> = yield call(apiCheckRestoreCode, { code });
 
-  if (data.error || error || !data.user) {
+    yield put(authSetRestore({ user: data.user, code, is_loading: false }));
+    yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
+  } catch (error) {
     yield put(
-      authSetRestore({ is_loading: false, error: data.error || error || ERRORS.CODE_IS_INVALID })
+      authSetRestore({ is_loading: false, error: error.message || ERRORS.CODE_IS_INVALID })
     );
-
-    return yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
+    yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
   }
-
-  yield put(authSetRestore({ user: data.user, code, is_loading: false }));
-  yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
 }
 
 function* restorePassword({ password }: ReturnType<typeof authRestorePassword>) {
-  if (!password) return;
+  try {
+    if (!password) return;
 
-  yield put(authSetRestore({ is_loading: true }));
-  const { code } = yield select(selectAuthRestore);
+    yield put(authSetRestore({ is_loading: true }));
+    const { code }: ReturnType<typeof selectAuthRestore> = yield select(selectAuthRestore);
 
-  if (!code) {
-    return yield put(authSetRestore({ error: ERRORS.CODE_IS_INVALID, is_loading: false }));
-  }
+    if (!code) {
+      return yield put(authSetRestore({ error: ERRORS.CODE_IS_INVALID, is_loading: false }));
+    }
 
-  const { error, data } = yield call(apiRestoreCode, { code, password });
+    const data: Unwrap<typeof apiRestoreCode> = yield call(apiRestoreCode, { code, password });
 
-  if (data.error || error || !data.user || !data.token) {
+    yield put(authSetToken(data.token));
+    yield put(authSetUser(data.user));
+
+    yield put(authSetRestore({ is_loading: false, is_succesfull: true, error: '' }));
+
+    yield call(refreshUser);
+  } catch (error) {
     return yield put(
-      authSetRestore({ is_loading: false, error: data.error || error || ERRORS.CODE_IS_INVALID })
+      authSetRestore({ is_loading: false, error: error.message || ERRORS.CODE_IS_INVALID })
     );
   }
-
-  yield put(authSetToken(data.token));
-  yield put(authSetUser(data.user));
-
-  yield put(authSetRestore({ is_loading: false, is_succesfull: true, error: null }));
-
-  yield call(refreshUser);
 }
 
 function* getSocials() {
-  yield put(authSetSocials({ is_loading: true, error: '' }));
-
   try {
-    const { data, error }: Unwrap<ReturnType<typeof apiGetSocials>> = yield call(
-      reqWrapper,
-      apiGetSocials,
-      {}
-    );
-
-    if (error) {
-      throw new Error(error);
-    }
-
-    yield put(authSetSocials({ is_loading: false, accounts: data.accounts, error: '' }));
-  } catch (e) {
-    yield put(authSetSocials({ is_loading: false, error: e.toString() }));
+    yield put(authSetSocials({ is_loading: true, error: '' }));
+    const data: Unwrap<typeof apiGetSocials> = yield call(apiGetSocials);
+    yield put(authSetSocials({ accounts: data.accounts }));
+  } catch (error) {
+    yield put(authSetSocials({ error: error.message }));
+  } finally {
+    yield put(authSetSocials({ is_loading: false }));
   }
 }
 
+// TODO: start from here
 function* dropSocial({ provider, id }: ReturnType<typeof authDropSocial>) {
   try {
     yield put(authSetSocials({ error: '' }));
-    const { error }: Unwrap<ReturnType<typeof apiDropSocial>> = yield call(
-      reqWrapper,
-      apiDropSocial,
-      { id, provider }
-    );
-
-    if (error) {
-      throw new Error(error);
-    }
+    yield call(apiDropSocial, {
+      id,
+      provider,
+    });
 
     yield call(getSocials);
-  } catch (e) {
-    yield put(authSetSocials({ error: e.message }));
+  } catch (error) {
+    yield put(authSetSocials({ error: error.message }));
   }
 }
 
 function* attachSocial({ token }: ReturnType<typeof authAttachSocial>) {
-  if (!token) return;
-
   try {
+    if (!token) return;
+
     yield put(authSetSocials({ error: '', is_loading: true }));
 
-    const { data, error }: Unwrap<ReturnType<typeof apiAttachSocial>> = yield call(
-      reqWrapper,
-      apiAttachSocial,
-      { token }
-    );
-
-    if (error) {
-      throw new Error(error);
-    }
+    const data: Unwrap<typeof apiAttachSocial> = yield call(apiAttachSocial, {
+      token,
+    });
 
     const {
       socials: { accounts },
     }: ReturnType<typeof selectAuthProfile> = yield select(selectAuthProfile);
 
     if (accounts.some(it => it.id === data.account.id && it.provider === data.account.provider)) {
-      yield put(authSetSocials({ is_loading: false }));
-    } else {
-      yield put(authSetSocials({ is_loading: false, accounts: [...accounts, data.account] }));
+      return;
     }
+
+    yield put(authSetSocials({ accounts: [...accounts, data.account] }));
   } catch (e) {
-    yield put(authSetSocials({ is_loading: false, error: e.message }));
+    yield put(authSetSocials({ error: e.message }));
+  } finally {
+    yield put(authSetSocials({ is_loading: false }));
   }
 }
 
@@ -368,21 +338,9 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
   try {
     yield put(userSetLoginError(''));
 
-    const {
-      data,
-      error,
-    }: Unwrap<ReturnType<typeof apiLoginWithSocial>> = yield call(apiLoginWithSocial, { token });
-
-    // Backend asks us for account registration
-    if (data?.needs_register) {
-      yield put(authSetRegisterSocial({ token }));
-      yield put(modalShowDialog(DIALOGS.LOGIN_SOCIAL_REGISTER));
-      return;
-    }
-
-    if (error) {
-      throw new Error(error);
-    }
+    const data: Unwrap<typeof apiLoginWithSocial> = yield call(apiLoginWithSocial, {
+      token,
+    });
 
     if (data.token) {
       yield put(authSetToken(data.token));
@@ -390,8 +348,21 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
       yield put(modalSetShown(false));
       return;
     }
-  } catch (e) {
-    yield put(userSetLoginError(e.message));
+  } catch (error) {
+    const { dialog }: ReturnType<typeof selectModal> = yield select(selectModal);
+    const data = (error as AxiosError<{
+      needs_register: boolean;
+      errors: Record<'username' | 'password', string>;
+    }>).response?.data;
+
+    // Backend asks us for account registration
+    if (dialog !== DIALOGS.LOGIN_SOCIAL_REGISTER && data?.needs_register) {
+      yield put(authSetRegisterSocial({ token }));
+      yield put(modalShowDialog(DIALOGS.LOGIN_SOCIAL_REGISTER));
+      return;
+    }
+
+    yield put(userSetLoginError(error.message));
   }
 }
 
@@ -414,24 +385,15 @@ function* authRegisterSocial({ username, password }: ReturnType<typeof authSendR
   try {
     yield put(authSetRegisterSocial({ error: '' }));
 
-    const { token }: Unwrap<ReturnType<typeof selectAuthRegisterSocial>> = yield select(
+    const { token }: ReturnType<typeof selectAuthRegisterSocial> = yield select(
       selectAuthRegisterSocial
     );
 
-    const { data, error }: Unwrap<ReturnType<typeof apiLoginWithSocial>> = yield call(
-      apiLoginWithSocial,
-      {
-        token,
-        username,
-        password,
-      }
-    );
-
-    if (data?.errors) {
-      yield put(authSetRegisterSocialErrors(data.errors));
-    } else if (data?.error) {
-      throw new Error(error);
-    }
+    const data: Unwrap<typeof apiLoginWithSocial> = yield call(apiLoginWithSocial, {
+      token,
+      username,
+      password,
+    });
 
     if (data.token) {
       yield put(authSetToken(data.token));
@@ -439,8 +401,18 @@ function* authRegisterSocial({ username, password }: ReturnType<typeof authSendR
       yield put(modalSetShown(false));
       return;
     }
-  } catch (e) {
-    yield put(authSetRegisterSocial({ error: e.message }));
+  } catch (error) {
+    const data = (error as AxiosError<{
+      needs_register: boolean;
+      errors: Record<'username' | 'password', string>;
+    }>).response?.data;
+
+    if (data?.errors) {
+      yield put(authSetRegisterSocialErrors(data.errors));
+      return;
+    }
+
+    yield put(authSetRegisterSocial({ error: error.message }));
   }
 }
 
@@ -449,6 +421,7 @@ function* authSaga() {
   yield takeLatest([REHYDRATE, AUTH_USER_ACTIONS.LOGGED_IN], startPollingSaga);
 
   yield takeLatest(AUTH_USER_ACTIONS.LOGOUT, logoutSaga);
+  yield takeLatest(AUTH_USER_ACTIONS.SET_TOKEN, setTokenSaga);
   yield takeLatest(AUTH_USER_ACTIONS.SEND_LOGIN_REQUEST, sendLoginRequestSaga);
   yield takeLatest(AUTH_USER_ACTIONS.GOT_AUTH_POST_MESSAGE, gotPostMessageSaga);
   yield takeLatest(AUTH_USER_ACTIONS.OPEN_PROFILE, openProfile);

@@ -1,181 +1,102 @@
-import { api, configWithToken, resultMiddleware, errorMiddleware } from '~/utils/api';
-import { INode, IResultWithStatus, IComment } from '../types';
+import { api, cleanResult, configWithToken, errorMiddleware, resultMiddleware } from '~/utils/api';
+import { IComment, INode, IResultWithStatus } from '../types';
 import { API } from '~/constants/api';
-import { nodeUpdateTags, nodeLike, nodeStar, nodeLock, nodeLockComment } from './actions';
-import { INodeState } from './reducer';
 import { COMMENTS_DISPLAY } from './constants';
+import {
+  ApiGetNodeRelatedRequest,
+  ApiGetNodeRelatedResult,
+  ApiGetNodeRequest,
+  ApiGetNodeResult,
+  ApiLockCommentRequest,
+  ApiLockcommentResult,
+  ApiLockNodeRequest,
+  ApiLockNodeResult,
+  ApiPostCommentRequest,
+  ApiPostCommentResult,
+  ApiPostNodeHeroicRequest,
+  ApiPostNodeHeroicResponse,
+  ApiPostNodeLikeRequest,
+  ApiPostNodeLikeResult,
+  ApiPostNodeTagsRequest,
+  ApiPostNodeTagsResult,
+  GetNodeDiffRequest,
+  GetNodeDiffResult,
+} from '~/redux/node/types';
 
-export const postNode = ({
-  access,
-  node,
-}: {
-  access: string;
+export type ApiPostNodeRequest = { node: INode };
+export type ApiPostNodeResult = {
   node: INode;
-}): Promise<IResultWithStatus<INode>> =>
-  api
-    .post(API.NODE.SAVE, node, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+  errors: Record<string, string>;
+};
 
-export const getNodes = ({
-  from = null,
-  access,
-}: {
-  from?: string;
-  access: string;
-}): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
-  api
-    .get(API.NODE.GET, configWithToken(access, { params: { from } }))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export type ApiGetNodeCommentsRequest = {
+  id: number;
+  take?: number;
+  skip?: number;
+};
+export type ApiGetNodeCommentsResponse = { comments: IComment[]; comment_count: number };
+
+export const apiPostNode = ({ node }: ApiPostNodeRequest) =>
+  api.post<ApiPostNodeResult>(API.NODE.SAVE, node).then(cleanResult);
 
 export const getNodeDiff = ({
-  start = null,
-  end = null,
+  start,
+  end,
   take,
   with_heroes,
   with_updated,
   with_recent,
   with_valid,
-  access,
-}: {
-  start?: string;
-  end?: string;
-  take?: number;
-  access: string;
-  with_heroes: boolean;
-  with_updated: boolean;
-  with_recent: boolean;
-  with_valid: boolean;
-}): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
+}: GetNodeDiffRequest) =>
   api
-    .get(
-      API.NODE.GET_DIFF,
-      configWithToken(access, {
-        params: {
-          start,
-          end,
-          take,
-          with_heroes,
-          with_updated,
-          with_recent,
-          with_valid,
-        },
-      })
-    )
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .get<GetNodeDiffResult>(API.NODE.GET_DIFF, {
+      params: {
+        start,
+        end,
+        take,
+        with_heroes,
+        with_updated,
+        with_recent,
+        with_valid,
+      },
+    })
+    .then(cleanResult);
 
-export const getNode = ({
-  id,
-  access,
-}: {
-  id: string | number;
-  access: string;
-}): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
-  api
-    .get(API.NODE.GET_NODE(id), configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiGetNode = ({ id }: ApiGetNodeRequest) =>
+  api.get<ApiGetNodeResult>(API.NODE.GET_NODE(id)).then(cleanResult);
 
-export const postNodeComment = ({
-  id,
-  data,
-  access,
-}: {
-  access: string;
-  id: number;
-  data: IComment;
-}): Promise<IResultWithStatus<{ comment: Comment }>> =>
-  api
-    .post(API.NODE.COMMENT(id), data, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiPostComment = ({ id, data }: ApiPostCommentRequest) =>
+  api.post<ApiPostCommentResult>(API.NODE.COMMENT(id), data).then(cleanResult);
 
-export const getNodeComments = ({
+export const apiGetNodeComments = ({
   id,
-  access,
   take = COMMENTS_DISPLAY,
   skip = 0,
-}: {
-  id: number;
-  access: string;
-  take?: number;
-  skip?: number;
-}): Promise<IResultWithStatus<{ comments: IComment[]; comment_count: number }>> =>
+}: ApiGetNodeCommentsRequest) =>
   api
-    .get(API.NODE.COMMENT(id), configWithToken(access, { params: { take, skip } }))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .get<ApiGetNodeCommentsResponse>(API.NODE.COMMENT(id), { params: { take, skip } })
+    .then(cleanResult);
 
-export const getNodeRelated = ({
-  id,
-  access,
-}: {
-  id: number;
-  access: string;
-}): Promise<IResultWithStatus<{ related: INodeState['related'] }>> =>
-  api
-    .get(API.NODE.RELATED(id), configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiGetNodeRelated = ({ id }: ApiGetNodeRelatedRequest) =>
+  api.get<ApiGetNodeRelatedResult>(API.NODE.RELATED(id)).then(cleanResult);
 
-export const updateNodeTags = ({
-  id,
-  tags,
-  access,
-}: ReturnType<typeof nodeUpdateTags> & { access: string }): Promise<IResultWithStatus<{
-  node: INode;
-}>> =>
+export const apiPostNodeTags = ({ id, tags }: ApiPostNodeTagsRequest) =>
   api
-    .post(API.NODE.UPDATE_TAGS(id), { tags }, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .post<ApiPostNodeTagsResult>(API.NODE.UPDATE_TAGS(id), { tags })
+    .then(cleanResult);
 
-export const postNodeLike = ({
-  id,
-  access,
-}: ReturnType<typeof nodeLike> & { access: string }): Promise<IResultWithStatus<{
-  is_liked: INode['is_liked'];
-}>> =>
-  api
-    .post(API.NODE.POST_LIKE(id), {}, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiPostNodeLike = ({ id }: ApiPostNodeLikeRequest) =>
+  api.post<ApiPostNodeLikeResult>(API.NODE.POST_LIKE(id)).then(cleanResult);
 
-export const postNodeStar = ({
-  id,
-  access,
-}: ReturnType<typeof nodeStar> & { access: string }): Promise<IResultWithStatus<{
-  is_liked: INode['is_liked'];
-}>> =>
-  api
-    .post(API.NODE.POST_STAR(id), {}, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+export const apiPostNodeHeroic = ({ id }: ApiPostNodeHeroicRequest) =>
+  api.post<ApiPostNodeHeroicResponse>(API.NODE.POST_HEROIC(id)).then(cleanResult);
 
-export const postNodeLock = ({
-  id,
-  is_locked,
-  access,
-}: ReturnType<typeof nodeLock> & { access: string }): Promise<IResultWithStatus<{
-  deleted_at: INode['deleted_at'];
-}>> =>
+export const apiLockNode = ({ id, is_locked }: ApiLockNodeRequest) =>
   api
-    .post(API.NODE.POST_LOCK(id), { is_locked }, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .post<ApiLockNodeResult>(API.NODE.POST_LOCK(id), { is_locked })
+    .then(cleanResult);
 
-export const postNodeLockComment = ({
-  id,
-  is_locked,
-  current,
-  access,
-}: ReturnType<typeof nodeLockComment> & {
-  access: string;
-  current: INode['id'];
-}): Promise<IResultWithStatus<{ deleted_at: INode['deleted_at'] }>> =>
+export const apiLockComment = ({ id, is_locked, current }: ApiLockCommentRequest) =>
   api
-    .post(API.NODE.POST_LOCK_COMMENT(current, id), { is_locked }, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .post<ApiLockcommentResult>(API.NODE.LOCK_COMMENT(current, id), { is_locked })
+    .then(cleanResult);

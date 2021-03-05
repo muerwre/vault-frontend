@@ -10,16 +10,20 @@ export const objFromArray = (array: any[], key: string) =>
   array.reduce((obj, el) => (key && el[key] ? { ...obj, [el[key]]: el } : obj), {});
 
 export const groupCommentsByUser = (
-  result: ICommentGroup[],
+  grouppedComments: ICommentGroup[],
   comment: IComment
 ): ICommentGroup[] => {
-  const last: ICommentGroup = path([result.length - 1], result) || null;
+  const last: ICommentGroup | undefined = path([grouppedComments.length - 1], grouppedComments);
+
+  if (!comment.user) {
+    return grouppedComments;
+  }
 
   return [
     ...(!last || path(['user', 'id'], last) !== path(['user', 'id'], comment)
       ? [
           // add new group
-          ...result,
+          ...grouppedComments,
           {
             user: comment.user,
             comments: [comment],
@@ -28,7 +32,7 @@ export const groupCommentsByUser = (
         ]
       : [
           // append to last group
-          ...result.slice(0, result.length - 1),
+          ...grouppedComments.slice(0, grouppedComments.length - 1),
           {
             ...last,
             comments: [...last.comments, comment],
@@ -37,6 +41,3 @@ export const groupCommentsByUser = (
         ]),
   ];
 };
-
-// const isSameComment = (comments, index) =>
-//   comments[index - 1] && comments[index - 1].user.id === comments[index].user.id;

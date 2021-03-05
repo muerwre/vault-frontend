@@ -3,7 +3,7 @@ import { ITag } from '~/redux/types';
 import { TagWrapper } from '~/components/tags/TagWrapper';
 
 const getTagFeature = (tag: Partial<ITag>) => {
-  if (tag.title.substr(0, 1) === '/') return 'green';
+  if (tag?.title?.substr(0, 1) === '/') return 'green';
 
   return '';
 };

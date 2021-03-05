@@ -42,6 +42,7 @@ export const ERRORS = {
   CANT_RESTORE_COMMENT: 'CantRestoreComment',
   MESSAGE_NOT_FOUND: 'MessageNotFound',
   COMMENT_TOO_LONG: 'CommentTooLong',
+  NETWORK_ERROR: 'Network Error',
 };
 
 export const ERROR_LITERAL = {
@@ -89,4 +90,5 @@ export const ERROR_LITERAL = {
   [ERRORS.CANT_RESTORE_COMMENT]: 'Не удалось восстановить комментарий',
   [ERRORS.MESSAGE_NOT_FOUND]: 'Сообщение не найдено',
   [ERRORS.COMMENT_TOO_LONG]: 'Комментарий слишком длинный',
+  [ERRORS.NETWORK_ERROR]: 'Подключение не удалось',
 };

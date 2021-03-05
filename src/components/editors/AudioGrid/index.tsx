@@ -35,7 +35,7 @@ const AudioGrid: FC<IProps> = ({ files, setFiles, locked }) => {
   );
 
   const onTitleChange = useCallback(
-    (changeId: IFile['id'], title: IFile['metadata']['title']) => {
+    (changeId: IFile['id'], title: string) => {
       setFiles(
         files.map(file =>
           file && file.id === changeId ? { ...file, metadata: { ...file.metadata, title } } : file

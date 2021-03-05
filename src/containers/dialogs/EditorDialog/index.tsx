@@ -1,4 +1,12 @@
-import React, { createElement, FC, FormEvent, useCallback, useEffect, useState } from 'react';
+import React, {
+  createElement,
+  FC,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { connect } from 'react-redux';
 import { IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
@@ -16,6 +24,7 @@ import { EMPTY_NODE, NODE_EDITORS } from '~/redux/node/constants';
 import { BetterScrollDialog } from '../BetterScrollDialog';
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { IEditorComponentProps } from '~/redux/node/types';
+import { has, values } from 'ramda';
 
 const mapStateToProps = state => {
   const { editor, errors } = selectNode(state);
@@ -32,7 +41,7 @@ const mapDispatchToProps = {
 type IProps = IDialogProps &
   ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & {
-    type: keyof typeof NODE_EDITORS;
+    type: string;
   };
 
 const EditorDialogUnconnected: FC<IProps> = ({
@@ -44,7 +53,7 @@ const EditorDialogUnconnected: FC<IProps> = ({
   type,
 }) => {
   const [data, setData] = useState(EMPTY_NODE);
-  const [temp, setTemp] = useState([]);
+  const [temp, setTemp] = useState<string[]>([]);
 
   useEffect(() => setData(editor), [editor]);
 
@@ -78,7 +87,13 @@ const EditorDialogUnconnected: FC<IProps> = ({
       <EditorPanel data={data} setData={setData} temp={temp} setTemp={setTemp} />
 
       <Group horizontal>
-        <InputText title="Название" value={data.title} handler={setTitle} autoFocus />
+        <InputText
+          title="Название"
+          value={data.title}
+          handler={setTitle}
+          autoFocus
+          maxLength={256}
+        />
 
         <Button title="Сохранить" iconRight="check" />
       </Group>
@@ -87,9 +102,18 @@ const EditorDialogUnconnected: FC<IProps> = ({
 
   useCloseOnEscape(onRequestClose);
 
-  const error = errors && Object.values(errors)[0];
+  const error = values(errors)[0];
+  const component = useMemo(() => {
+    if (!has(type, NODE_EDITORS)) {
+      return undefined;
+    }
 
-  if (!Object.prototype.hasOwnProperty.call(NODE_EDITORS, type)) return null;
+    return NODE_EDITORS[type];
+  }, [type]);
+
+  if (!component) {
+    return null;
+  }
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
@@ -101,7 +125,7 @@ const EditorDialogUnconnected: FC<IProps> = ({
         onClose={onRequestClose}
       >
         <div className={styles.editor}>
-          {createElement(NODE_EDITORS[type], {
+          {createElement(component, {
             data,
             setData,
             temp,

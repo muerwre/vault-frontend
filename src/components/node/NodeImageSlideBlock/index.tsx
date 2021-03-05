@@ -1,11 +1,10 @@
-import React, { FC, useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { INodeComponentProps } from '~/redux/node/constants';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { throttle } from 'throttle-debounce';
 import { Icon } from '~/components/input/Icon';
 import { useArrows } from '~/utils/hooks/keys';
@@ -37,8 +36,8 @@ const NodeImageSlideBlock: FC<IProps> = ({
   const [is_dragging, setIsDragging] = useState(false);
   const [drag_start, setDragStart] = useState(0);
 
-  const slide = useRef<HTMLDivElement>();
-  const wrap = useRef<HTMLDivElement>();
+  const slide = useRef<HTMLDivElement>(null);
+  const wrap = useRef<HTMLDivElement>(null);
 
   const setHeightThrottled = useCallback(throttle(100, setHeight), [setHeight]);
 
@@ -222,6 +221,8 @@ const NodeImageSlideBlock: FC<IProps> = ({
 
   const changeCurrent = useCallback(
     (item: number) => {
+      if (!wrap.current) return;
+
       const { width } = wrap.current.getBoundingClientRect();
       setOffset(-1 * item * width);
     },
@@ -267,10 +268,10 @@ const NodeImageSlideBlock: FC<IProps> = ({
                   [styles.is_active]: index === current,
                 })}
                 ref={setRef(index)}
-                key={node.updated_at + file.id}
+                key={`${node?.updated_at || ''} + ${file?.id || ''} + ${index}`}
               >
                 <svg
-                  viewBox={`0 0 ${file.metadata.width} ${file.metadata.height}`}
+                  viewBox={`0 0 ${file?.metadata?.width || 0} ${file?.metadata?.height || 0}`}
                   className={classNames(styles.preview, { [styles.is_loaded]: loaded[index] })}
                   style={{
                     maxHeight: max_height,
@@ -279,19 +280,8 @@ const NodeImageSlideBlock: FC<IProps> = ({
                 >
                   <defs>
                     <filter id="f1" x="0" y="0">
-                      <feBlend
-                        mode="multiply"
-                        x="0%"
-                        y="0%"
-                        width="100%"
-                        height="100%"
-                        in="SourceGraphic"
-                        in2="SourceGraphic"
-                        result="blend"
-                      />
-
                       <feGaussianBlur
-                        stdDeviation="15 15"
+                        stdDeviation="5 5"
                         x="0%"
                         y="0%"
                         width="100%"

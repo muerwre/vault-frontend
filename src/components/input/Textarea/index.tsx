@@ -1,6 +1,6 @@
 import React, {
   ChangeEvent,
-  LegacyRef,
+  DetailedHTMLProps,
   memo,
   TextareaHTMLAttributes,
   useCallback,
@@ -14,7 +14,10 @@ import autosize from 'autosize';
 import styles from '~/styles/common/inputs.module.scss';
 import { Icon } from '../Icon';
 
-type IProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+type IProps = DetailedHTMLProps<
+  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  HTMLTextAreaElement
+> & {
   value: string;
   placeholder?: string;
   rows?: number;
@@ -26,6 +29,7 @@ type IProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   status?: 'error' | 'success' | '';
   title?: string;
   seamless?: boolean;
+  setRef?: (r: HTMLTextAreaElement) => void;
 };
 
 const Textarea = memo<IProps>(
@@ -40,12 +44,12 @@ const Textarea = memo<IProps>(
     status = '',
     seamless,
     value,
+    setRef,
     ...props
   }) => {
     const [rows, setRows] = useState(minRows || 1);
     const [focused, setFocused] = useState(false);
-
-    const textarea: LegacyRef<HTMLTextAreaElement> = useRef(null);
+    const ref = useRef<HTMLTextAreaElement>(null);
 
     const onInput = useCallback(
       ({ target }: ChangeEvent<HTMLTextAreaElement>) => handler(target.value),
@@ -56,12 +60,23 @@ const Textarea = memo<IProps>(
     const onBlur = useCallback(() => setFocused(false), [setFocused]);
 
     useEffect(() => {
-      if (!textarea.current) return;
+      const target = ref?.current;
+      if (!target) return;
 
-      autosize(textarea.current);
+      autosize(target);
 
-      return () => autosize.destroy(textarea.current);
-    }, [textarea.current]);
+      if (setRef) {
+        setRef(target);
+      }
+
+      return () => autosize.destroy(target);
+    }, [ref, setRef]);
+
+    useEffect(() => {
+      if (!ref.current) return;
+
+      autosize.update(ref.current);
+    }, [value]);
 
     return (
       <div
@@ -80,11 +95,11 @@ const Textarea = memo<IProps>(
             placeholder={placeholder}
             className={classNames(styles.textarea, className)}
             onChange={onInput}
-            ref={textarea}
+            ref={ref}
             onFocus={onFocus}
             onBlur={onBlur}
             style={{
-              maxHeight: maxRows * 20,
+              // maxHeight: maxRows * 20,
               minHeight: minRows * 20,
             }}
             {...props}

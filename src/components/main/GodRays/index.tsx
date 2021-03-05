@@ -34,6 +34,10 @@ export class GodRays extends React.Component<IGodRaysProps> {
 
     const ctx = this.canvas.getContext('2d');
 
+    if (!ctx) {
+      return;
+    }
+
     ctx.globalCompositeOperation = 'luminosity';
     ctx.clearRect(0, 0, width, height + 100); // clear canvas
     ctx.save();
@@ -123,7 +127,7 @@ export class GodRays extends React.Component<IGodRaysProps> {
     );
   }
 
-  canvas: HTMLCanvasElement;
+  canvas: HTMLCanvasElement | null | undefined;
 
   inc;
 }

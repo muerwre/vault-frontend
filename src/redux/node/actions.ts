@@ -1,5 +1,5 @@
-import { INode, IValidationErrors, IComment, ITag, IFile } from '../types';
-import { NODE_ACTIONS, NODE_TYPES } from './constants';
+import { IComment, IFile, INode, ITag, IValidationErrors } from '../types';
+import { NODE_ACTIONS } from './constants';
 import { INodeState } from './reducer';
 
 export const nodeSet = (node: Partial<INodeState>) => ({
@@ -17,7 +17,7 @@ export const nodeSetSaveErrors = (errors: IValidationErrors) => ({
   type: NODE_ACTIONS.SET_SAVE_ERRORS,
 });
 
-export const nodeGotoNode = (id: number, node_type: INode['type']) => ({
+export const nodeGotoNode = (id: INode['id'], node_type: INode['type']) => ({
   id,
   node_type,
   type: NODE_ACTIONS.GOTO_NODE,
@@ -44,15 +44,15 @@ export const nodeSetCurrent = (current: INodeState['current']) => ({
   type: NODE_ACTIONS.SET_CURRENT,
 });
 
-export const nodePostComment = (id: number, is_before: boolean) => ({
-  id,
-  is_before,
+export const nodePostLocalComment = (
+  nodeId: INode['id'],
+  comment: IComment,
+  callback: (e?: string) => void
+) => ({
+  nodeId,
+  comment,
+  callback,
   type: NODE_ACTIONS.POST_COMMENT,
-});
-
-export const nodeCancelCommentEdit = (id: number) => ({
-  id,
-  type: NODE_ACTIONS.CANCEL_COMMENT_EDIT,
 });
 
 export const nodeSetSendingComment = (is_sending_comment: boolean) => ({

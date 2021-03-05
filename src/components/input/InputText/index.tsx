@@ -1,9 +1,10 @@
-import React, { FC, ChangeEvent, useCallback, useState, useEffect, LegacyRef } from 'react';
+import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import styles from '~/styles/common/inputs.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { IInputTextProps } from '~/redux/types';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { useTranslatedError } from '~/utils/hooks/useTranslatedError';
 
 const InputText: FC<IInputTextProps> = ({
   wrapperClassName,
@@ -20,15 +21,23 @@ const InputText: FC<IInputTextProps> = ({
   ...props
 }) => {
   const [focused, setFocused] = useState(false);
-  const [inner_ref, setInnerRef] = useState<HTMLInputElement>(null);
+  const [inner_ref, setInnerRef] = useState<HTMLInputElement | null>(null);
 
   const onInput = useCallback(
-    ({ target }: ChangeEvent<HTMLInputElement>) => handler(target.value),
+    ({ target }: ChangeEvent<HTMLInputElement>) => {
+      if (!handler) {
+        return;
+      }
+
+      handler(target.value);
+    },
     [handler]
   );
 
   const onFocus = useCallback(() => setFocused(true), []);
   const onBlur = useCallback(() => setFocused(false), []);
+
+  const translatedError = useTranslatedError(error);
 
   useEffect(() => {
     if (onRef) onRef(inner_ref);
@@ -80,9 +89,9 @@ const InputText: FC<IInputTextProps> = ({
         </div>
       )}
 
-      {error && (
+      {!!translatedError && (
         <div className={styles.error}>
-          <span>{error}</span>
+          <span>{translatedError}</span>
         </div>
       )}
 

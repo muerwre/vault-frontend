@@ -11,7 +11,7 @@ interface IProps extends DetailsHTMLAttributes<HTMLDivElement> {}
 
 const Sticky: FC<IProps> = ({ children }) => {
   const ref = useRef(null);
-  let sb = null;
+  let sb;
 
   useEffect(() => {
     if (!ref.current) return;

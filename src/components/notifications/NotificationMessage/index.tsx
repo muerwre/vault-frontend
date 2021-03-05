@@ -21,7 +21,7 @@ const NotificationMessage: FC<IProps> = ({
     <div className={styles.item} onMouseDown={onMouseDown}>
       <div className={styles.item_head}>
         <Icon icon="message" />
-        <div className={styles.item_title}>Сообщение от ~{from.username}:</div>
+        <div className={styles.item_title}>Сообщение от ~{from?.username}:</div>
       </div>
       <div className={styles.item_text}>{text}</div>
     </div>

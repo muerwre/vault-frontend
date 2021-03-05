@@ -1,31 +1,20 @@
-import {
- IResultWithStatus, IFile, IUploadProgressHandler, IFileWithUUID,
-} from '~/redux/types';
-import {
- api, configWithToken, resultMiddleware, errorMiddleware,
-} from '~/utils/api';
+import { api, cleanResult } from '~/utils/api';
 
 import { API } from '~/constants/api';
+import { ApiUploadFileRequest, ApiUploadFIleResult } from '~/redux/uploads/types';
 
-export const postUploadFile = ({
-  access,
+export const apiUploadFile = ({
   file,
   target = 'others',
   type = 'image',
   onProgress,
-}: IFileWithUUID & {
-  access: string;
-  onProgress: IUploadProgressHandler;
-}): Promise<IResultWithStatus<IFile>> => {
+}: ApiUploadFileRequest) => {
   const data = new FormData();
   data.append('file', file);
 
   return api
-    .post(
-      API.USER.UPLOAD(target, type),
-      data,
-      configWithToken(access, { onUploadProgress: onProgress })
-    )
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .post<ApiUploadFIleResult>(API.USER.UPLOAD(target, type), data, {
+      onUploadProgress: onProgress,
+    })
+    .then(cleanResult);
 };

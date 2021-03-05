@@ -1,7 +1,7 @@
 import uuid from 'uuid4';
-import { eventChannel, END, EventChannel } from 'redux-saga';
+import { END, eventChannel, EventChannel } from 'redux-saga';
 import { VALIDATORS } from '~/utils/validators';
-import { IResultWithStatus, IFile } from '~/redux/types';
+import { IFile, IResultWithStatus } from '~/redux/types';
 import { HTTP_RESPONSES } from './api';
 import { EMPTY_FILE, FILE_MIMES, UPLOAD_TYPES } from '~/redux/uploads/constants';
 
@@ -33,13 +33,11 @@ export function createUploader<T extends {}, R extends {}>(
 export const uploadGetThumb = async file => {
   if (!file.type || !VALIDATORS.IS_IMAGE_MIME(file.type)) return '';
 
-  const thumb = await new Promise(resolve => {
+  return new Promise<string | ArrayBuffer>(resolve => {
     const reader = new FileReader();
     reader.onloadend = () => resolve(reader.result || '');
     reader.readAsDataURL(file);
   });
-
-  return thumb;
 };
 
 export const fakeUploader = ({
@@ -73,9 +71,6 @@ export const fakeUploader = ({
   });
 };
 
-export const getFileType = (file: File): keyof typeof UPLOAD_TYPES => {
-  return (
-    (file.type && Object.keys(FILE_MIMES).find(mime => FILE_MIMES[mime].includes(file.type))) ||
-    null
-  );
-};
+export const getFileType = (file: File): keyof typeof UPLOAD_TYPES | undefined =>
+  (file.type && Object.keys(FILE_MIMES).find(mime => FILE_MIMES[mime].includes(file.type))) ||
+  undefined;

@@ -8,6 +8,18 @@ import Axios from 'axios';
 import { PRESETS } from '~/constants/urls';
 import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/constants/comment';
 import format from 'date-fns/format';
+import { pipe } from 'ramda';
+import {
+  formatTextDash,
+  formatExclamations,
+  formatTextMarkdown,
+  formatTextClickableUsernames,
+  formatTextComments,
+  formatTextSanitizeTags,
+  formatTextSanitizeYoutube,
+  formatTextTodos,
+} from '~/utils/formatText';
+import { splitTextByYoutube, splitTextOmitEmpty } from '~/utils/splitText';
 
 export const getStyle = (oElm: any, strCssRule: string) => {
   if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -68,64 +80,34 @@ export const getURLFromString = (
   size?: typeof PRESETS[keyof typeof PRESETS]
 ): string => {
   if (size) {
-    return url
-      .replace('REMOTE_CURRENT://', `${process.env.REACT_APP_REMOTE_CURRENT}cache/${size}/`)
-      .replace('REMOTE_OLD://', process.env.REACT_APP_REMOTE_OLD);
+    return url.replace(
+      'REMOTE_CURRENT://',
+      `${process.env.REACT_APP_REMOTE_CURRENT}cache/${size}/`
+    );
   }
 
-  return url
-    .replace('REMOTE_CURRENT://', process.env.REACT_APP_REMOTE_CURRENT)
-    .replace('REMOTE_OLD://', process.env.REACT_APP_REMOTE_OLD);
+  return url.replace('REMOTE_CURRENT://', process.env.REACT_APP_REMOTE_CURRENT);
 };
 
-export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof PRESETS]) => {
-  return file?.url ? getURLFromString(file.url, size) : null;
+export const getURL = (
+  file: Partial<IFile> | undefined,
+  size?: typeof PRESETS[keyof typeof PRESETS]
+) => {
+  return file?.url ? getURLFromString(file.url, size) : '';
 };
 
-export const formatText = (text: string): string =>
-  !text
-    ? ''
-    : text
-        .replace(
-          /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-\&\=]+)/gim,
-          '\n$1\n'
-        )
-        .replace(/\n{1,}/gim, '\n')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(
-          /~([\wа-яА-Я-]+)/giu,
-          '<span class="username" onClick="window.postMessage({ type: \'username\', username: \'$1\'});">~$1</span>'
-        )
-        .replace(/:\/\//gim, ':|--|')
-        .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
-        .replace(/\/\/\s*(todo|туду):?\s*([^\n]+)/gim, '// <span class="todo">$1</span> $2')
-        .replace(
-          /\/\/\s*(done|сделано|сделал|готово|fixed|пофикшено|фиксед):?\s*([^\n]+)/gim,
-          '// <span class="done">$1</span> $2'
-        )
-        .replace(/(\*\*[\s\S]*?\*\*)/gim, '<b class="bold white">$1</b>')
-        .replace(/(\_\_[\s\S]*?\_\_)/gim, '<i>$1</i>')
-        .replace(/(\!\![\s\S]*?(\!\!|\n|$))/gim, '<span class="green">$1</span>')
-        .replace(/(\/\*[\s\S]*?\*\/)/gim, '<span class="grey">$1</span>')
-        .replace(/([=|-]{5,})/gim, '<hr />')
-        .replace(/:\|--\|/gim, '://')
-        .replace(
-          /(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)([-A-Z0-9+&@#%?\/=~_|!:,.;]*)[-A-Z0-9+&@#\/%=~_|])/gi,
-          '<a href="$1" target="blank" rel="nofollow">$1</a>'
-        )
-        .replace(' -- ', ' — ')
-        .split('\n')
-        .filter(el => el.trim().length)
-        .join('\n');
+export const formatText = pipe(
+  formatTextSanitizeYoutube,
+  formatTextComments,
+  formatTextTodos,
+  formatExclamations,
+  formatTextDash,
+  formatTextMarkdown,
+  formatTextSanitizeTags,
+  formatTextClickableUsernames
+);
 
-export const formatTextParagraphs = (text: string): string =>
-  (text &&
-    formatText(text)
-      .split('\n')
-      .map(str => `<p>${str}</p>`)
-      .join('\n')) ||
-  null;
+export const formatTextParagraphs = (text: string): string => (text && formatText(text)) || '';
 
 export const findBlockType = (line: string): ValueOf<typeof COMMENT_BLOCK_TYPES> => {
   const match = Object.values(COMMENT_BLOCK_DETECTORS).find(detector => line.match(detector.test));
@@ -133,17 +115,24 @@ export const findBlockType = (line: string): ValueOf<typeof COMMENT_BLOCK_TYPES>
 };
 
 export const splitCommentByBlocks = (text: string): ICommentBlock[] =>
-  text.split('\n').map(line => ({
+  pipe(
+    splitTextByYoutube,
+    splitTextOmitEmpty
+  )([text]).map(line => ({
     type: findBlockType(line),
     content: line,
   }));
 
-export const formatCommentText = (author: string, text: string): ICommentBlock[] =>
-  text ? splitCommentByBlocks(formatText(text)) : null;
+export const formatCommentText = (author?: string, text?: string): ICommentBlock[] =>
+  author && text ? splitCommentByBlocks(text) : [];
 
 export const formatCellText = (text: string): string => formatTextParagraphs(text);
 
-export const getPrettyDate = (date: string): string => {
+export const getPrettyDate = (date?: string): string => {
+  if (!date) {
+    return '';
+  }
+
   if (differenceInMonths(new Date(), new Date(date)) >= 3) {
     return format(new Date(date), 'd MMMM yyyy', { locale: ru });
   }

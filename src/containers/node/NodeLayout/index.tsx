@@ -12,9 +12,14 @@ import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
-import { INodeComponentProps, NODE_COMPONENTS, NODE_HEADS, NODE_INLINES, } from '~/redux/node/constants';
+import {
+  INodeComponentProps,
+  NODE_COMPONENTS,
+  NODE_HEADS,
+  NODE_INLINES,
+} from '~/redux/node/constants';
 import { selectUser } from '~/redux/auth/selectors';
-import { pick } from 'ramda';
+import { path, pick, prop } from 'ramda';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
@@ -30,6 +35,7 @@ import { selectModal } from '~/redux/modal/selectors';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { ITag } from '~/redux/types';
 import { URLS } from '~/constants/urls';
+import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -60,15 +66,6 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     match: {
       params: { id },
     },
-    node: {
-      is_loading,
-      is_loading_comments,
-      comments = [],
-      current: node,
-      related,
-      comment_data,
-      comment_count,
-    },
     modal: { is_shown: is_modal_shown },
     user,
     user: { is_user },
@@ -79,14 +76,18 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     nodeStar,
     nodeLock,
     nodeSetCoverImage,
-    nodeLockComment,
-    nodeEditComment,
-    nodeLoadMoreComments,
     modalShowPhotoswipe,
   }) => {
     const [layout, setLayout] = useState({});
     const history = useHistory();
-
+    const {
+      is_loading,
+      is_loading_comments,
+      comments = [],
+      current: node,
+      related,
+      comment_count,
+    } = useShallowSelect(selectNode);
     const updateLayout = useCallback(() => setLayout({}), []);
 
     useEffect(() => {
@@ -103,6 +104,10 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
 
     const onTagClick = useCallback(
       (tag: Partial<ITag>) => {
+        if (!node?.id || !tag?.title) {
+          return;
+        }
+
         history.push(URLS.NODE_TAG_URL(node.id, encodeURIComponent(tag.title)));
       },
       [history, node.id]
@@ -112,9 +117,9 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
     const can_like = useMemo(() => canLikeNode(node, user), [node, user]);
     const can_star = useMemo(() => canStarNode(node, user), [node, user]);
 
-    const head = node && node.type && NODE_HEADS[node.type];
-    const block = node && node.type && NODE_COMPONENTS[node.type];
-    const inline = node && node.type && NODE_INLINES[node.type];
+    const head = useMemo(() => node?.type && prop(node?.type, NODE_HEADS), [node.type]);
+    const block = useMemo(() => node?.type && prop(node?.type, NODE_COMPONENTS), [node.type]);
+    const inline = useMemo(() => node?.type && prop(node?.type, NODE_INLINES), [node.type]);
 
     const onEdit = useCallback(() => nodeEdit(node.id), [nodeEdit, node]);
     const onLike = useCallback(() => nodeLike(node.id), [nodeLike, node]);
@@ -147,10 +152,10 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
 
     return (
       <>
-        {createNodeBlock(head)}
+        {!!head && createNodeBlock(head)}
 
         <Card className={styles.node} seamless>
-          {createNodeBlock(block)}
+          {!!block && createNodeBlock(block)}
 
           <NodePanel
             node={pick(
@@ -181,19 +186,14 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                       <NodeNoComments is_loading={is_loading_comments || is_loading} />
                     ) : (
                       <NodeComments
+                        count={comment_count}
                         comments={comments}
-                        comment_data={comment_data}
-                        comment_count={comment_count}
                         user={user}
-                        onDelete={nodeLockComment}
-                        onEdit={nodeEditComment}
-                        onLoadMore={nodeLoadMoreComments}
-                        modalShowPhotoswipe={modalShowPhotoswipe}
                         order="DESC"
                       />
                     )}
 
-                    {is_user && !is_loading && <NodeCommentForm />}
+                    {is_user && !is_loading && <NodeCommentForm nodeId={node.id} />}
                   </Group>
 
                   <div className={styles.panel}>
@@ -213,12 +213,13 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
                         {!is_loading &&
                           related &&
                           related.albums &&
+                          !!node?.id &&
                           Object.keys(related.albums)
                             .filter(album => related.albums[album].length > 0)
                             .map(album => (
                               <NodeRelated
                                 title={
-                                  <Link to={URLS.NODE_TAG_URL(node.id, encodeURIComponent(album))}>
+                                  <Link to={URLS.NODE_TAG_URL(node.id!, encodeURIComponent(album))}>
                                     {album}
                                   </Link>
                                 }

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { push } from 'connected-react-router';
 import { API } from '~/constants/api';
 import { store } from '~/redux/store';
@@ -50,3 +50,5 @@ export const configWithToken = (
   ...config,
   headers: { ...(config.headers || {}), Authorization: `Bearer ${access}` },
 });
+
+export const cleanResult = <T extends any>(response: AxiosResponse<T>): T => response?.data;
