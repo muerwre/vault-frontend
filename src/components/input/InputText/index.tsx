@@ -4,6 +4,7 @@ import styles from '~/styles/common/inputs.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { IInputTextProps } from '~/redux/types';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { useTranslatedError } from '~/utils/hooks/useTranslatedError';
 
 const InputText: FC<IInputTextProps> = ({
   wrapperClassName,
@@ -35,6 +36,8 @@ const InputText: FC<IInputTextProps> = ({
 
   const onFocus = useCallback(() => setFocused(true), []);
   const onBlur = useCallback(() => setFocused(false), []);
+
+  const translatedError = useTranslatedError(error);
 
   useEffect(() => {
     if (onRef) onRef(inner_ref);
@@ -86,9 +89,9 @@ const InputText: FC<IInputTextProps> = ({
         </div>
       )}
 
-      {error && (
+      {!!translatedError && (
         <div className={styles.error}>
-          <span>{error}</span>
+          <span>{translatedError}</span>
         </div>
       )}
 

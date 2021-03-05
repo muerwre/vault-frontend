@@ -349,10 +349,14 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
       return;
     }
   } catch (error) {
-    const data = (error as AxiosError<{ needs_register: boolean }>).response?.data;
+    const { dialog }: ReturnType<typeof selectModal> = yield select(selectModal);
+    const data = (error as AxiosError<{
+      needs_register: boolean;
+      errors: Record<'username' | 'password', string>;
+    }>).response?.data;
 
     // Backend asks us for account registration
-    if (data?.needs_register) {
+    if (dialog !== DIALOGS.LOGIN_SOCIAL_REGISTER && data?.needs_register) {
       yield put(authSetRegisterSocial({ token }));
       yield put(modalShowDialog(DIALOGS.LOGIN_SOCIAL_REGISTER));
       return;
@@ -391,11 +395,6 @@ function* authRegisterSocial({ username, password }: ReturnType<typeof authSendR
       password,
     });
 
-    if (data?.errors) {
-      yield put(authSetRegisterSocialErrors(data.errors));
-      return;
-    }
-
     if (data.token) {
       yield put(authSetToken(data.token));
       yield call(refreshUser);
@@ -403,6 +402,16 @@ function* authRegisterSocial({ username, password }: ReturnType<typeof authSendR
       return;
     }
   } catch (error) {
+    const data = (error as AxiosError<{
+      needs_register: boolean;
+      errors: Record<'username' | 'password', string>;
+    }>).response?.data;
+
+    if (data?.errors) {
+      yield put(authSetRegisterSocialErrors(data.errors));
+      return;
+    }
+
     yield put(authSetRegisterSocial({ error: error.message }));
   }
 }
