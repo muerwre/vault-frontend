@@ -39,18 +39,6 @@ export type ApiGetNodeCommentsResponse = { comments: IComment[]; comment_count: 
 export const apiPostNode = ({ node }: ApiPostNodeRequest) =>
   api.post<ApiPostNodeResult>(API.NODE.SAVE, node).then(cleanResult);
 
-export const getNodes = ({
-  from,
-  access,
-}: {
-  from?: string;
-  access: string;
-}): Promise<IResultWithStatus<{ nodes: INode[] }>> =>
-  api
-    .get(API.NODE.GET, configWithToken(access, { params: { from } }))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
-
 export const getNodeDiff = ({
   start,
   end,

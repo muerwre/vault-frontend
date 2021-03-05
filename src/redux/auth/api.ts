@@ -42,11 +42,10 @@ export const apiAuthGetUpdates = ({ exclude_dialogs, last }: ApiAuthGetUpdatesRe
 export const apiUpdateUser = ({ user }: ApiUpdateUserRequest) =>
   api.patch<ApiUpdateUserResult>(API.USER.ME, user).then(cleanResult);
 
-export const apiRequestRestoreCode = ({ field }): Promise<IResultWithStatus<{}>> =>
+export const apiRequestRestoreCode = ({ field }: { field: string }) =>
   api
-    .post(API.USER.REQUEST_CODE(), { field })
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .post<{}>(API.USER.REQUEST_CODE(), { field })
+    .then(cleanResult);
 
 export const apiCheckRestoreCode = ({ code }: ApiCheckRestoreCodeRequest) =>
   api.get<ApiCheckRestoreCodeResult>(API.USER.REQUEST_CODE(code)).then(cleanResult);

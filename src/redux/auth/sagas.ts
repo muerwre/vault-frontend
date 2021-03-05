@@ -75,8 +75,8 @@ function* sendLoginRequestSaga({ username, password }: ReturnType<typeof userSen
     yield put(authSetUser({ ...user, is_user: true }));
     yield put(authLoggedIn());
     yield put(modalSetShown(false));
-  } catch (e) {
-    yield put(userSetLoginError(e));
+  } catch (error) {
+    yield put(userSetLoginError(error.message));
   }
 }
 
