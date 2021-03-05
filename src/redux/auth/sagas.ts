@@ -57,6 +57,7 @@ import { ERRORS } from '~/constants/errors';
 import { messagesSet } from '~/redux/messages/actions';
 import { SagaIterator } from 'redux-saga';
 import { isEmpty } from 'ramda';
+import { AxiosError } from 'axios';
 
 function* setTokenSaga({ token }: ReturnType<typeof authSetToken>) {
   localStorage.setItem('token', token);
@@ -341,13 +342,6 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
       token,
     });
 
-    // Backend asks us for account registration
-    if (data?.needs_register) {
-      yield put(authSetRegisterSocial({ token }));
-      yield put(modalShowDialog(DIALOGS.LOGIN_SOCIAL_REGISTER));
-      return;
-    }
-
     if (data.token) {
       yield put(authSetToken(data.token));
       yield call(refreshUser);
@@ -355,6 +349,15 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
       return;
     }
   } catch (error) {
+    const data = (error as AxiosError<{ needs_register: boolean }>).response?.data;
+
+    // Backend asks us for account registration
+    if (data?.needs_register) {
+      yield put(authSetRegisterSocial({ token }));
+      yield put(modalShowDialog(DIALOGS.LOGIN_SOCIAL_REGISTER));
+      return;
+    }
+
     yield put(userSetLoginError(error.message));
   }
 }
