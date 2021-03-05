@@ -65,7 +65,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         color="gray"
         iconOnly
         type="button"
-        label="Жирный"
+        label="Жирный Ctrl+B"
       />
 
       <Button
@@ -75,7 +75,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         color="gray"
         iconOnly
         type="button"
-        label="Наклонный"
+        label="Наклонный Ctrl+I"
       />
 
       <Button
