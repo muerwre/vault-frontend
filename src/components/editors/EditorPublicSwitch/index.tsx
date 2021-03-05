@@ -1,9 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef } from 'react';
-import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
 import { IEditorComponentProps } from '~/redux/node/types';
-import classNames from 'classnames';
 import { usePopper } from 'react-popper';
+import { Button } from '~/components/input/Button';
 
 interface IProps extends IEditorComponentProps {}
 
@@ -29,20 +27,19 @@ const EditorPublicSwitch: FC<IProps> = ({ data, setData }) => {
   useEffect(() => console.log(pop), [pop]);
 
   return (
-    <div
-      className={classNames(styles.wrap, { [styles.promoted]: data.is_promoted })}
-      onClick={onChange}
-    >
-      <div className={styles.tooltip} ref={tooltip}>
-        {data.is_promoted
+    <Button
+      color={data.is_promoted ? 'primary' : 'secondary'}
+      type="button"
+      iconLeft={data.is_promoted ? 'waves' : 'lab'}
+      size="giant"
+      label={
+        data.is_promoted
           ? 'Доступно всем на главной странице'
-          : 'Видно только сотрудникам в лаборатории'}
-      </div>
-
-      <div className={styles.icon}>
-        {data.is_promoted ? <Icon size={24} icon="waves" /> : <Icon size={24} icon="lab" />}
-      </div>
-    </div>
+          : 'Видно только сотрудникам в лаборатории'
+      }
+      onClick={onChange}
+      round
+    />
   );
 };
 
