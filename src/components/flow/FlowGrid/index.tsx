@@ -13,16 +13,22 @@ type IProps = Partial<IFlowState> & {
   onChangeCellView: typeof flowSetCellView;
 };
 
-export const FlowGrid: FC<IProps> = ({ user, nodes, onSelect, onChangeCellView }) => (
-  <Fragment>
-    {nodes.map(node => (
-      <Cell
-        key={node.id}
-        node={node}
-        onSelect={onSelect}
-        can_edit={canEditNode(node, user)}
-        onChangeCellView={onChangeCellView}
-      />
-    ))}
-  </Fragment>
-);
+export const FlowGrid: FC<IProps> = ({ user, nodes, onSelect, onChangeCellView }) => {
+  if (!nodes) {
+    return null;
+  }
+
+  return (
+    <Fragment>
+      {nodes.map(node => (
+        <Cell
+          key={node.id}
+          node={node}
+          onSelect={onSelect}
+          can_edit={canEditNode(node, user)}
+          onChangeCellView={onChangeCellView}
+        />
+      ))}
+    </Fragment>
+  );
+};

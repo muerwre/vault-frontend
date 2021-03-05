@@ -1,7 +1,7 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { ButtonGroup } from '~/components/input/ButtonGroup';
 import { Button } from '~/components/input/Button';
-import { useFormatWrapper } from '~/utils/hooks/useFormatWrapper';
+import { useFormatWrapper, wrapTextInsideInput } from '~/utils/hooks/useFormatWrapper';
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -15,16 +15,57 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
     [element, handler]
   );
 
+  const wrapBold = useCallback(
+    event => {
+      event.preventDefault();
+      wrapTextInsideInput(element, '**', '**', handler);
+    },
+    [wrap, handler]
+  );
+
+  const wrapItalic = useCallback(
+    event => {
+      event.preventDefault();
+      wrapTextInsideInput(element, '*', '*', handler);
+    },
+    [wrap, handler]
+  );
+
+  const onKeyPress = useCallback(
+    (event: KeyboardEvent) => {
+      if (!event.ctrlKey) return;
+
+      if (event.code === 'KeyB') {
+        wrapBold(event);
+      }
+
+      if (event.code === 'KeyI') {
+        wrapItalic(event);
+      }
+    },
+    [wrapBold, wrapItalic]
+  );
+
+  useEffect(() => {
+    if (!element) {
+      return;
+    }
+
+    element.addEventListener('keypress', onKeyPress);
+
+    return () => element.removeEventListener('keypress', onKeyPress);
+  }, [element, onKeyPress]);
+
   return (
     <ButtonGroup className={styles.wrap}>
       <Button
-        onClick={wrap('**', '**')}
+        onClick={wrapBold}
         iconLeft="bold"
         size="small"
         color="gray"
         iconOnly
         type="button"
-        label="Жирный"
+        label="Жирный Ctrl+B"
       />
 
       <Button
@@ -34,7 +75,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         color="gray"
         iconOnly
         type="button"
-        label="Наклонный"
+        label="Наклонный Ctrl+I"
       />
 
       <Button

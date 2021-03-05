@@ -20,10 +20,10 @@ const ProfileLayoutUnconnected: FC<IProps> = ({ history, nodeSetCoverImage }) =>
   const {
     params: { username },
   } = useRouteMatch<{ username: string }>();
-  const [user, setUser] = useState<IUser>(null);
+  const [user, setUser] = useState<IUser | undefined>(undefined);
 
   useEffect(() => {
-    if (user) setUser(null);
+    if (user) setUser(undefined);
   }, [username]);
 
   useEffect(() => {

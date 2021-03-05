@@ -5,13 +5,13 @@ import { IFile, IEmbed } from '../types';
 
 export type IPlayerState = Readonly<{
   status: typeof PLAYER_STATES[keyof typeof PLAYER_STATES];
-  file: IFile;
+  file?: IFile;
   youtubes: Record<string, IEmbed>;
 }>;
 
 const INITIAL_STATE: IPlayerState = {
   status: PLAYER_STATES.UNSET,
-  file: null,
+  file: undefined,
   youtubes: {},
 };
 

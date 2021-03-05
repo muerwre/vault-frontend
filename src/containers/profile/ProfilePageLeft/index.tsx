@@ -1,11 +1,14 @@
 import React, { FC, useMemo } from 'react';
-import styles from './styles.module.scss';
 import { IAuthState } from '~/redux/auth/types';
-import { getURL } from '~/utils/dom';
+import { formatText, getURL } from '~/utils/dom';
 import { PRESETS, URLS } from '~/constants/urls';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { Link } from 'react-router-dom';
 import { Icon } from '~/components/input/Icon';
+import classNames from 'classnames';
+
+import styles from './styles.module.scss';
+import markdown from '~/styles/common/markdown.module.scss';
 
 interface IProps {
   profile: IAuthState['profile'];
@@ -26,11 +29,11 @@ const ProfilePageLeft: FC<IProps> = ({ username, profile }) => {
       <div className={styles.region_wrap}>
         <div className={styles.region}>
           <div className={styles.name}>
-            {profile.is_loading ? <Placeholder /> : profile.user.fullname}
+            {profile.is_loading ? <Placeholder /> : profile?.user?.fullname}
           </div>
 
           <div className={styles.username}>
-            {profile.is_loading ? <Placeholder /> : `~${profile.user.username}`}
+            {profile.is_loading ? <Placeholder /> : `~${profile?.user?.username}`}
           </div>
 
           <div className={styles.menu}>
@@ -53,7 +56,9 @@ const ProfilePageLeft: FC<IProps> = ({ username, profile }) => {
       </div>
 
       {profile && profile.user && profile.user.description && false && (
-        <div className={styles.description}>{profile.user.description}</div>
+        <div className={classNames(styles.description, markdown.wrapper)}>
+          {formatText(profile?.user?.description || '')}
+        </div>
       )}
     </div>
   );

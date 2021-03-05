@@ -50,7 +50,7 @@ const Button: FC<IButtonProps> = memo(
     ref,
     ...props
   }) => {
-    const tooltip = useRef<HTMLSpanElement>();
+    const tooltip = useRef<HTMLSpanElement | null>(null);
     const pop = usePopper(tooltip?.current?.parentElement, tooltip.current, {
       placement: 'top',
       modifiers: [

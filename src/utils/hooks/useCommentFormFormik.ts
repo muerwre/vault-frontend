@@ -12,7 +12,7 @@ const validationSchema = object().shape({
 });
 
 const onSuccess = ({ resetForm, setStatus, setSubmitting }: FormikHelpers<IComment>) => (
-  e: string
+  e?: string
 ) => {
   setSubmitting(false);
 

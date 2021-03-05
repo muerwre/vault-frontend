@@ -3,11 +3,9 @@ import { INode } from '~/redux/types';
 import styles from './styles.module.scss';
 import { Textarea } from '~/components/input/Textarea';
 import { path } from 'ramda';
+import { NodeEditorProps } from '~/redux/node/types';
 
-interface IProps {
-  data: INode;
-  setData: (val: INode) => void;
-}
+type IProps = NodeEditorProps & {};
 
 const TextEditor: FC<IProps> = ({ data, setData }) => {
   const setText = useCallback(

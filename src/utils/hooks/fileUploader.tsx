@@ -1,4 +1,12 @@
-import React, { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { IFile, IFileWithUUID } from '~/redux/types';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS } from '~/redux/uploads/constants';
 import { getFileType } from '~/utils/uploader';
@@ -7,6 +15,8 @@ import { useDispatch } from 'react-redux';
 import { uploadUploadFiles } from '~/redux/uploads/actions';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectUploads } from '~/redux/uploads/selectors';
+import { has, path } from 'ramda';
+import { IUploadStatus } from '~/redux/uploads/reducer';
 
 export const useFileUploader = (
   subject: typeof UPLOAD_SUBJECTS[keyof typeof UPLOAD_SUBJECTS],
@@ -31,7 +41,7 @@ export const useFileUploader = (
         })
       );
 
-      const temps = items.map(file => file.temp_id);
+      const temps = items.filter(el => !!el.temp_id).map(file => file.temp_id!);
 
       setPendingIDs([...pendingIDs, ...temps]);
       dispatch(uploadUploadFiles(items));
@@ -41,9 +51,10 @@ export const useFileUploader = (
 
   useEffect(() => {
     const added = pendingIDs
-      .map(temp_uuid => statuses[temp_uuid] && statuses[temp_uuid].uuid)
-      .map(el => !!el && uploadedFiles[el])
-      .filter(el => !!el && !files.some(file => file && file.id === el.id));
+      .map(temp_uuid => path([temp_uuid, 'uuid'], statuses) as IUploadStatus['uuid'])
+      .filter(el => el)
+      .map(el => (path([String(el)], uploadedFiles) as IFile) || undefined)
+      .filter(el => !!el! && !files.some(file => file && file.id === el.id));
 
     const newPending = pendingIDs.filter(
       temp_id =>
@@ -68,7 +79,7 @@ export const useFileUploader = (
 };
 
 export type FileUploader = ReturnType<typeof useFileUploader>;
-const FileUploaderContext = createContext<FileUploader>(null);
+const FileUploaderContext = createContext<FileUploader | undefined>(undefined);
 
 export const FileUploaderProvider: FC<{ value: FileUploader; children }> = ({
   value,

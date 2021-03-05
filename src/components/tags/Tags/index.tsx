@@ -20,14 +20,18 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, onTagClick, 
 
   const onSubmit = useCallback(
     (last: string[]) => {
+      if (!onTagsChange) {
+        return;
+      }
+
       const exist = tags.map(tag => tag.title);
-      onTagsChange(uniq([...exist, ...data, ...last]));
+      onTagsChange(uniq([...exist, ...data, ...last]).filter(el => el) as string[]);
     },
     [data]
   );
 
   useEffect(() => {
-    setData(data.filter(title => !tags.some(tag => tag.title.trim() === title.trim())));
+    setData(data.filter(title => !tags.some(tag => tag?.title?.trim() === title.trim())));
   }, [tags]);
 
   const onAppendTag = useCallback(
@@ -44,10 +48,10 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, onTagClick, 
     return last;
   }, [data, setData]);
 
-  const exclude = useMemo(() => [...(data || []), ...(tags || []).map(({ title }) => title)], [
-    data,
-    tags,
-  ]);
+  const exclude = useMemo(
+    () => [...(data || []), ...(tags || []).filter(el => el.title).map(({ title }) => title!)],
+    [data, tags]
+  );
 
   return (
     <TagField {...props}>

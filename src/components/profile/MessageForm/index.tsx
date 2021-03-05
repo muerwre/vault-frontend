@@ -39,7 +39,7 @@ const MessageFormUnconnected: FC<IProps> = ({
   const onSuccess = useCallback(() => {
     setText('');
 
-    if (isEditing) {
+    if (isEditing && onCancel) {
       onCancel();
     }
   }, [setText, isEditing, onCancel]);
@@ -50,7 +50,7 @@ const MessageFormUnconnected: FC<IProps> = ({
 
   const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
     ({ ctrlKey, key }) => {
-      if (!!ctrlKey && key === 'Enter') onSubmit();
+      if (ctrlKey && key === 'Enter') onSubmit();
     },
     [onSubmit]
   );

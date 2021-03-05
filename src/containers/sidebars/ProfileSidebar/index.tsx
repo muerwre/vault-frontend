@@ -56,7 +56,7 @@ const ProfileSidebarUnconnected: FC<Props> = ({
       </Switch>
 
       <div className={classNames(styles.wrap, styles.secondary)}>
-        <ProfileSidebarInfo is_loading={is_loading} user={user} />
+        {!!user && <ProfileSidebarInfo is_loading={is_loading} user={user} />}
         <ProfileSidebarMenu path={url} />
         <Filler />
       </div>

@@ -1,11 +1,8 @@
-import { IResultWithStatus, IEmbed } from '../types';
-import { api, resultMiddleware, errorMiddleware } from '~/utils/api';
+import { api, cleanResult } from '~/utils/api';
 import { API } from '~/constants/api';
+import { ApiGetEmbedYoutubeResult } from '~/redux/player/types';
 
-export const getEmbedYoutube = (
-  ids: string[]
-): Promise<IResultWithStatus<{ items: Record<string, IEmbed> }>> =>
+export const apiGetEmbedYoutube = (ids: string[]) =>
   api
-    .get(API.EMBED.YOUTUBE, { params: { ids: ids.join(',') } })
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .get<ApiGetEmbedYoutubeResult>(API.EMBED.YOUTUBE, { params: { ids: ids.join(',') } })
+    .then(cleanResult);

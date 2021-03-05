@@ -17,7 +17,7 @@ const SortableAudioGrid = SortableContainer(
     items: IFile[];
     locked: IUploadStatus[];
     onDelete: (file_id: IFile['id']) => void;
-    onTitleChange: (file_id: IFile['id'], title: IFile['metadata']['title']) => void;
+    onTitleChange: (file_id: IFile['id'], title: string) => void;
   }) => {
     return (
       <div className={styles.grid}>

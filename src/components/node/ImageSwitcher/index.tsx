@@ -19,7 +19,10 @@ const ImageSwitcher: FC<IProps> = ({ total, current, onChange, loaded }) => {
       <div className={styles.switcher}>
         {range(0, total).map(item => (
           <div
-            className={classNames({ is_active: item === current, is_loaded: loaded[item] })}
+            className={classNames({
+              is_active: item === current,
+              is_loaded: loaded && loaded[item],
+            })}
             key={item}
             onClick={() => onChange(item)}
           />

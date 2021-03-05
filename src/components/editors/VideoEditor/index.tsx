@@ -5,11 +5,9 @@ import { path } from 'ramda';
 import { InputText } from '~/components/input/InputText';
 import classnames from 'classnames';
 import { getYoutubeThumb } from '~/utils/dom';
+import { NodeEditorProps } from '~/redux/node/types';
 
-interface IProps {
-  data: INode;
-  setData: (val: INode) => void;
-}
+type IProps = NodeEditorProps & {};
 
 const VideoEditor: FC<IProps> = ({ data, setData }) => {
   const setUrl = useCallback(
@@ -19,9 +17,10 @@ const VideoEditor: FC<IProps> = ({ data, setData }) => {
 
   const url = (path(['blocks', 0, 'url'], data) as string) || '';
   const preview = useMemo(() => getYoutubeThumb(url), [url]);
+  const backgroundImage = (preview && `url("${preview}")`) || '';
 
   return (
-    <div className={styles.preview} style={{ backgroundImage: preview && `url("${preview}")` }}>
+    <div className={styles.preview} style={{ backgroundImage }}>
       <div className={styles.input_wrap}>
         <div className={classnames(styles.input, { active: !!preview })}>
           <InputText value={url} handler={setUrl} placeholder="Адрес видео" />

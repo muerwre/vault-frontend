@@ -8,17 +8,17 @@ const HANDLERS = {
 };
 
 const INITIAL_STATE: IAuthState = {
-  token: null,
+  token: '',
   user: { ...EMPTY_USER },
 
   updates: {
-    last: null,
+    last: '',
     notifications: [],
-    boris_commented_at: null,
+    boris_commented_at: '',
   },
 
   login: {
-    error: null,
+    error: '',
     is_loading: false,
     is_registering: true,
   },
@@ -27,7 +27,7 @@ const INITIAL_STATE: IAuthState = {
     tab: 'profile',
     is_loading: true,
 
-    user: null,
+    user: undefined,
     patch_errors: {},
 
     socials: {
@@ -39,20 +39,19 @@ const INITIAL_STATE: IAuthState = {
 
   restore: {
     code: '',
-    user: null,
+    user: undefined,
     is_loading: false,
     is_succesfull: false,
-    error: null,
+    error: '',
   },
 
   register_social: {
     errors: {
-      username: 'and this',
-      password: 'dislike this',
+      username: '',
+      password: '',
     },
-    error: 'dont like this one',
-    token:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEYXRhIjp7IlByb3ZpZGVyIjoiZ29vZ2xlIiwiSWQiOiJma2F0dXJvdkBpY2Vyb2NrZGV2LmNvbSIsIkVtYWlsIjoiZmthdHVyb3ZAaWNlcm9ja2Rldi5jb20iLCJUb2tlbiI6InlhMjkuYTBBZkg2U01EeXFGdlRaTExXckhsQm1QdGZIOFNIVGQteWlSYTFKSXNmVXluY2F6MTZ5UGhjRmxydTlDMWFtTEg0aHlHRzNIRkhrVGU0SXFUS09hVVBEREdqR2JQRVFJbGpPME9UbUp2T2RrdEtWNDVoUGpJcTB1cHVLc003UWJLSm1oRWhkMEFVa3YyejVHWlNSMjhaM2VOZVdwTEVYSGV0MW1yNyIsIkZldGNoZWQiOnsiUHJvdmlkZXIiOiJnb29nbGUiLCJJZCI6OTIyMzM3MjAzNjg1NDc3NTgwNywiTmFtZSI6IkZlZG9yIEthdHVyb3YiLCJQaG90byI6Imh0dHBzOi8vbGg2Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8ta1VMYXh0VV9jZTAvQUFBQUFBQUFBQUkvQUFBQUFBQUFBQUEvQU1adXVjbkEycTFReU1WLUN0RUtBclRhQzgydE52NTM2QS9waG90by5qcGcifX0sIlR5cGUiOiJvYXV0aF9jbGFpbSJ9.r1MY994BC_g4qRDoDoyNmwLs0qRzBLx6_Ez-3mHQtwg',
+    error: '',
+    token: '',
     is_loading: false,
   },
 };

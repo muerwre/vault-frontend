@@ -17,7 +17,7 @@ export const nodeSetSaveErrors = (errors: IValidationErrors) => ({
   type: NODE_ACTIONS.SET_SAVE_ERRORS,
 });
 
-export const nodeGotoNode = (id: number, node_type: INode['type']) => ({
+export const nodeGotoNode = (id: INode['id'], node_type: INode['type']) => ({
   id,
   node_type,
   type: NODE_ACTIONS.GOTO_NODE,
@@ -53,11 +53,6 @@ export const nodePostLocalComment = (
   comment,
   callback,
   type: NODE_ACTIONS.POST_COMMENT,
-});
-
-export const nodeCancelCommentEdit = (id: number) => ({
-  id,
-  type: NODE_ACTIONS.CANCEL_COMMENT_EDIT,
 });
 
 export const nodeSetSendingComment = (is_sending_comment: boolean) => ({

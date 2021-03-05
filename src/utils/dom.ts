@@ -89,7 +89,10 @@ export const getURLFromString = (
   return url.replace('REMOTE_CURRENT://', process.env.REACT_APP_REMOTE_CURRENT);
 };
 
-export const getURL = (file: Partial<IFile>, size?: typeof PRESETS[keyof typeof PRESETS]) => {
+export const getURL = (
+  file: Partial<IFile> | undefined,
+  size?: typeof PRESETS[keyof typeof PRESETS]
+) => {
   return file?.url ? getURLFromString(file.url, size) : '';
 };
 

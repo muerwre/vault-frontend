@@ -14,7 +14,7 @@ import { modalShowPhotoswipe } from '~/redux/modal/actions';
 import { useDispatch } from 'react-redux';
 
 interface IProps {
-  comments?: IComment[];
+  comments: IComment[];
   count: INodeState['comment_count'];
   user: IUser;
   order?: 'ASC' | 'DESC';

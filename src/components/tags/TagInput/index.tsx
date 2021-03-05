@@ -77,6 +77,10 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
   const onFocus = useCallback(() => setFocused(true), []);
   const onBlur = useCallback(
     event => {
+      if (!wrapper.current || !ref.current) {
+        return;
+      }
+
       if (wrapper.current.contains(event.target)) {
         ref.current.focus();
         return;
@@ -126,7 +130,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
         />
       </TagWrapper>
 
-      {onInput && focused && input?.length > 0 && (
+      {onInput && focused && input?.length > 0 && ref.current && (
         <TagAutocomplete
           exclude={exclude}
           input={ref.current}

@@ -1,9 +1,9 @@
-import React, { FC, MouseEventHandler, ReactElement, useEffect, useRef } from "react";
-import styles from "./styles.module.scss";
-import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
-import { Icon } from "~/components/input/Icon";
-import { LoaderCircle } from "~/components/input/LoaderCircle";
-import { useCloseOnEscape } from "~/utils/hooks";
+import React, { FC, MouseEventHandler, ReactElement, useEffect, useRef } from 'react';
+import styles from './styles.module.scss';
+import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
+import { Icon } from '~/components/input/Icon';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { useCloseOnEscape } from '~/utils/hooks';
 
 interface IProps {
   children: React.ReactChild;
@@ -14,7 +14,7 @@ interface IProps {
   width?: number;
   error?: string;
   is_loading?: boolean;
-  overlay?: ReactElement;
+  overlay?: JSX.Element;
 
   onOverlayClick?: MouseEventHandler<HTMLDivElement>;
   onRefCapture?: (ref: any) => void;

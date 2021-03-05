@@ -24,11 +24,11 @@ const NodePanel: FC<IProps> = memo(
   ({ node, layout, can_edit, can_like, can_star, is_loading, onEdit, onLike, onStar, onLock }) => {
     const [stack, setStack] = useState(false);
 
-    const ref = useRef(null);
+    const ref = useRef<HTMLDivElement>(null);
     const getPlace = useCallback(() => {
       if (!ref.current) return;
 
-      const { bottom } = ref.current.getBoundingClientRect();
+      const { bottom } = ref.current!.getBoundingClientRect();
 
       setStack(bottom > window.innerHeight);
     }, [ref]);
@@ -75,7 +75,7 @@ const NodePanel: FC<IProps> = memo(
           can_edit={can_edit}
           can_like={can_like}
           can_star={can_star}
-          is_loading={is_loading}
+          is_loading={!!is_loading}
         />
       </div>
     );

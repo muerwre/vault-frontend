@@ -35,7 +35,10 @@ const TagSidebarUnconnected: FC<Props> = ({ nodes, tagLoadNodes, tagSetNodes }) 
 
   useEffect(() => {
     tagLoadNodes(tag);
-    return () => tagSetNodes({ list: [], count: 0 });
+
+    return () => {
+      tagSetNodes({ list: [], count: 0 });
+    };
   }, [tag]);
 
   const loadMore = useCallback(() => {

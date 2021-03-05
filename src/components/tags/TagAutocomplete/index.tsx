@@ -87,7 +87,10 @@ const TagAutocompleteUnconnected: FC<Props> = ({
 
   useEffect(() => {
     tagSetAutocomplete({ options: [] });
-    return () => tagSetAutocomplete({ options: [] });
+
+    return () => {
+      tagSetAutocomplete({ options: [] });
+    };
   }, [tagSetAutocomplete]);
 
   useEffect(() => {

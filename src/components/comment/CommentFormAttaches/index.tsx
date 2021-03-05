@@ -10,7 +10,8 @@ import { COMMENT_FILE_TYPES, UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { useFileUploaderContext } from '~/utils/hooks/fileUploader';
 
 const CommentFormAttaches: FC = () => {
-  const { files, pending, setFiles, uploadFiles } = useFileUploaderContext();
+  const uploader = useFileUploaderContext();
+  const { files, pending, setFiles, uploadFiles } = uploader!;
 
   const images = useMemo(() => files.filter(file => file && file.type === UPLOAD_TYPES.IMAGE), [
     files,
@@ -70,7 +71,7 @@ const CommentFormAttaches: FC = () => {
   );
 
   const onAudioTitleChange = useCallback(
-    (fileId: IFile['id'], title: IFile['metadata']['title']) => {
+    (fileId: IFile['id'], title: string) => {
       setFiles(
         files.map(file =>
           file.id === fileId ? { ...file, metadata: { ...file.metadata, title } } : file
@@ -80,36 +81,36 @@ const CommentFormAttaches: FC = () => {
     [files, setFiles]
   );
 
-  return (
-    hasAttaches && (
-      <div className={styles.attaches} onDropCapture={onDrop}>
-        {hasImageAttaches && (
-          <SortableImageGrid
-            onDelete={onFileDelete}
-            onSortEnd={onImageMove}
-            axis="xy"
-            items={images}
-            locked={pendingImages}
-            pressDelay={50}
-            helperClass={styles.helper}
-            size={120}
-          />
-        )}
+  if (!hasAttaches) return null;
 
-        {hasAudioAttaches && (
-          <SortableAudioGrid
-            items={audios}
-            onDelete={onFileDelete}
-            onTitleChange={onAudioTitleChange}
-            onSortEnd={onAudioMove}
-            axis="y"
-            locked={pendingAudios}
-            pressDelay={50}
-            helperClass={styles.helper}
-          />
-        )}
-      </div>
-    )
+  return (
+    <div className={styles.attaches} onDropCapture={onDrop}>
+      {hasImageAttaches && (
+        <SortableImageGrid
+          onDelete={onFileDelete}
+          onSortEnd={onImageMove}
+          axis="xy"
+          items={images}
+          locked={pendingImages}
+          pressDelay={50}
+          helperClass={styles.helper}
+          size={120}
+        />
+      )}
+
+      {hasAudioAttaches && (
+        <SortableAudioGrid
+          items={audios}
+          onDelete={onFileDelete}
+          onTitleChange={onAudioTitleChange}
+          onSortEnd={onAudioMove}
+          axis="y"
+          locked={pendingAudios}
+          pressDelay={50}
+          helperClass={styles.helper}
+        />
+      )}
+    </div>
   );
 };
 

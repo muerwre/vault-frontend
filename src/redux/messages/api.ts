@@ -1,48 +1,29 @@
-import { IMessage, IResultWithStatus } from '~/redux/types';
-import { api, configWithToken, errorMiddleware, resultMiddleware } from '~/utils/api';
+import { api, cleanResult } from '~/utils/api';
 import { API } from '~/constants/api';
+import {
+  ApiDeleteMessageRequest,
+  ApiDeleteMessageResult,
+  ApiGetUserMessagesRequest,
+  ApiGetUserMessagesResponse,
+  ApiSendMessageRequest,
+  ApiSendMessageResult,
+} from '~/redux/messages/types';
 
-export const apiMessagesGetUserMessages = ({
-  access,
-  username,
-  after,
-  before,
-}: {
-  access: string;
-  username: string;
-  after?: string;
-  before?: string;
-}): Promise<IResultWithStatus<{ messages: IMessage[] }>> =>
+export const apiGetUserMessages = ({ username, after, before }: ApiGetUserMessagesRequest) =>
   api
-    .get(API.USER.MESSAGES(username), configWithToken(access, { params: { after, before } }))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .get<ApiGetUserMessagesResponse>(API.USER.MESSAGES(username), {
+      params: { after, before },
+    })
+    .then(cleanResult);
 
-export const apiMessagesSendMessage = ({
-  access,
-  username,
-  message,
-}): Promise<IResultWithStatus<{ message: IMessage }>> =>
+export const apiSendMessage = ({ username, message }: ApiSendMessageRequest) =>
   api
-    .post(API.USER.MESSAGE_SEND(username), { message }, configWithToken(access))
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .post<ApiSendMessageResult>(API.USER.MESSAGE_SEND(username), { message })
+    .then(cleanResult);
 
-export const apiMessagesDeleteMessage = ({
-  access,
-  username,
-  id,
-  is_locked,
-}: {
-  access: string;
-  username: string;
-  id: number;
-  is_locked: boolean;
-}): Promise<IResultWithStatus<{ message: IMessage }>> =>
+export const apiDeleteMessage = ({ username, id, is_locked }: ApiDeleteMessageRequest) =>
   api
-    .delete(
-      API.USER.MESSAGE_DELETE(username, id),
-      configWithToken(access, { params: { is_locked } })
-    )
-    .then(resultMiddleware)
-    .catch(errorMiddleware);
+    .delete<ApiDeleteMessageResult>(API.USER.MESSAGE_DELETE(username, id), {
+      params: { is_locked },
+    })
+    .then(cleanResult);
