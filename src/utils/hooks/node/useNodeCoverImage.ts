@@ -13,5 +13,5 @@ export const useNodeCoverImage = (node: INode) => {
     return () => {
       nodeSetCoverImage(undefined);
     };
-  }, [dispatch, node.cover]);
+  }, [dispatch, node.cover, node.id]);
 };
