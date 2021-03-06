@@ -1,6 +1,5 @@
-import { FC, ReactElement } from 'react';
+import { FC } from 'react';
 import { IComment, INode, ValueOf } from '../types';
-import { NodeImageSlideBlock } from '~/components/node/NodeImageSlideBlock';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';
@@ -12,9 +11,9 @@ import { AudioEditor } from '~/components/editors/AudioEditor';
 import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadButton';
 import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadButton';
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
-import { modalShowPhotoswipe } from '../modal/actions';
 import { IEditorComponentProps, NodeEditorProps } from '~/redux/node/types';
 import { EditorFiller } from '~/components/editors/EditorFiller';
+import { NodeImageSwiperBlock } from '~/components/node/NodeImageSwiperBlock';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -76,17 +75,13 @@ export const NODE_TYPES = {
 
 export type INodeComponentProps = {
   node: INode;
-  is_loading: boolean;
-  is_modal_shown: boolean;
-  layout: {};
-  updateLayout: () => void;
-  modalShowPhotoswipe: typeof modalShowPhotoswipe;
+  isLoading: boolean;
 };
 
 export type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<INodeComponentProps>>;
 
 export const NODE_HEADS: INodeComponents = {
-  [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
+  [NODE_TYPES.IMAGE]: NodeImageSwiperBlock,
 };
 
 export const NODE_COMPONENTS: INodeComponents = {
