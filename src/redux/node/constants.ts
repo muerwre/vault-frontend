@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { IComment, INode, ValueOf } from '../types';
-import { NodeImageSlideBlock } from '~/components/node/NodeImageSlideBlock';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';
@@ -14,6 +13,7 @@ import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadB
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
 import { IEditorComponentProps, NodeEditorProps } from '~/redux/node/types';
 import { EditorFiller } from '~/components/editors/EditorFiller';
+import { NodeImageSwiperBlock } from '~/components/node/NodeImageSwiperBlock';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -81,7 +81,7 @@ export type INodeComponentProps = {
 export type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<INodeComponentProps>>;
 
 export const NODE_HEADS: INodeComponents = {
-  [NODE_TYPES.IMAGE]: NodeImageSlideBlock,
+  [NODE_TYPES.IMAGE]: NodeImageSwiperBlock,
 };
 
 export const NODE_COMPONENTS: INodeComponents = {

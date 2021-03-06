@@ -4,4 +4,9 @@
   width: 100%;
   max-width: $content_width;
   margin: auto;
+  padding: 0 $gap;
+
+  @include tablet {
+    padding: 0;
+  }
 }
