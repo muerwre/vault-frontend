@@ -2,8 +2,8 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { INodeComponentProps } from '~/redux/node/constants';
 import SwiperCore, { A11y, Pagination, SwiperOptions } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
+
 import 'swiper/swiper.scss';
-import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/scrollbar/scrollbar.scss';
 
@@ -12,6 +12,8 @@ import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import SwiperClass from 'swiper/types/swiper-class';
+import { modalShowPhotoswipe } from '~/redux/modal/actions';
+import { useDispatch } from 'react-redux';
 
 SwiperCore.use([Pagination, A11y]);
 
@@ -24,6 +26,7 @@ const breakpoints: SwiperOptions['breakpoints'] = {
 };
 
 const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
+  const dispatch = useDispatch();
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
 
   const images = useNodeImages(node);
@@ -38,13 +41,18 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
 
   const resetSwiper = useCallback(() => {
     if (!controlledSwiper) return;
-    controlledSwiper.slideTo(0);
+    controlledSwiper.slideTo(0, 0);
   }, [controlledSwiper]);
 
   useEffect(() => {
     updateSwiper();
     resetSwiper();
   }, [images, updateSwiper, resetSwiper]);
+
+  const onOpenPhotoSwipe = useCallback(
+    () => dispatch(modalShowPhotoswipe(images, controlledSwiper?.activeIndex || 0)),
+    [dispatch, images, controlledSwiper]
+  );
 
   if (!images?.length) {
     return null;
@@ -53,6 +61,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
   return (
     <div className={styles.wrapper}>
       <Swiper
+        initialSlide={0}
         slidesPerView="auto"
         centeredSlides
         onSwiper={setControlledSwiper}
@@ -64,6 +73,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         observeParents
         resizeObserver
         watchOverflow
+        onInit={resetSwiper}
       >
         {images.map(file => (
           <SwiperSlide className={styles.slide} key={file.id}>
@@ -72,6 +82,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
               src={getURL(file, PRESETS['1600'])}
               alt={node.title}
               onLoad={updateSwiper}
+              onClick={onOpenPhotoSwipe}
             />
           </SwiperSlide>
         ))}

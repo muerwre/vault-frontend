@@ -7,7 +7,6 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@types/swiper": "^5.4.2",
     "autosize": "^4.0.2",
     "axios": "^0.21.1",
     "body-scroll-lock": "^2.6.4",
@@ -73,6 +72,7 @@
     "@types/ramda": "^0.26.33",
     "@types/react-redux": "^7.1.11",
     "@types/yup": "^0.29.11",
+    "@types/swiper": "^5.4.2",
     "craco-alias": "^2.1.1",
     "craco-fast-refresh": "^1.0.2",
     "prettier": "^1.18.2"
