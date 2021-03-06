@@ -74,6 +74,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         resizeObserver
         watchOverflow
         onInit={resetSwiper}
+        zoom
       >
         {images.map(file => (
           <SwiperSlide className={styles.slide} key={file.id}>
