@@ -12,14 +12,9 @@ import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { NodeComments } from '~/components/node/NodeComments';
 import { NodeTags } from '~/components/node/NodeTags';
-import {
-  INodeComponentProps,
-  NODE_COMPONENTS,
-  NODE_HEADS,
-  NODE_INLINES,
-} from '~/redux/node/constants';
+import { INodeComponentProps, NODE_COMPONENTS, NODE_HEADS, NODE_INLINES } from '~/redux/node/constants';
 import { selectUser } from '~/redux/auth/selectors';
-import { path, pick, prop } from 'ramda';
+import { pick, prop } from 'ramda';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
@@ -36,6 +31,7 @@ import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { ITag } from '~/redux/types';
 import { URLS } from '~/constants/urls';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { Container } from '~/containers/main/Container';
 
 const mapStateToProps = (state: IState) => ({
   node: selectNode(state),
@@ -154,96 +150,108 @@ const NodeLayoutUnconnected: FC<IProps> = memo(
       <>
         {!!head && createNodeBlock(head)}
 
-        <Card className={styles.node} seamless>
-          {!!block && createNodeBlock(block)}
+        <Container>
+          <Card className={styles.node} seamless>
+            {!!block && createNodeBlock(block)}
 
-          <NodePanel
-            node={pick(
-              ['title', 'user', 'is_liked', 'is_heroic', 'deleted_at', 'created_at', 'like_count'],
-              node
-            )}
-            layout={layout}
-            can_edit={can_edit}
-            can_like={can_like}
-            can_star={can_star}
-            onEdit={onEdit}
-            onLike={onLike}
-            onStar={onStar}
-            onLock={onLock}
-            is_loading={is_loading}
-          />
+            <NodePanel
+              node={pick(
+                [
+                  'title',
+                  'user',
+                  'is_liked',
+                  'is_heroic',
+                  'deleted_at',
+                  'created_at',
+                  'like_count',
+                ],
+                node
+              )}
+              layout={layout}
+              can_edit={can_edit}
+              can_like={can_like}
+              can_star={can_star}
+              onEdit={onEdit}
+              onLike={onLike}
+              onStar={onStar}
+              onLock={onLock}
+              is_loading={is_loading}
+            />
 
-          {node.deleted_at ? (
-            <NodeDeletedBadge />
-          ) : (
-            <Group>
-              <Padder>
-                <Group horizontal className={styles.content}>
-                  <Group className={styles.comments}>
-                    {inline && <div className={styles.inline}>{createNodeBlock(inline)}</div>}
+            {node.deleted_at ? (
+              <NodeDeletedBadge />
+            ) : (
+              <Group>
+                <Padder>
+                  <Group horizontal className={styles.content}>
+                    <Group className={styles.comments}>
+                      {inline && <div className={styles.inline}>{createNodeBlock(inline)}</div>}
 
-                    {is_loading || is_loading_comments || (!comments.length && !inline) ? (
-                      <NodeNoComments is_loading={is_loading_comments || is_loading} />
-                    ) : (
-                      <NodeComments
-                        count={comment_count}
-                        comments={comments}
-                        user={user}
-                        order="DESC"
-                      />
-                    )}
+                      {is_loading || is_loading_comments || (!comments.length && !inline) ? (
+                        <NodeNoComments is_loading={is_loading_comments || is_loading} />
+                      ) : (
+                        <NodeComments
+                          count={comment_count}
+                          comments={comments}
+                          user={user}
+                          order="DESC"
+                        />
+                      )}
 
-                    {is_user && !is_loading && <NodeCommentForm nodeId={node.id} />}
-                  </Group>
+                      {is_user && !is_loading && <NodeCommentForm nodeId={node.id} />}
+                    </Group>
 
-                  <div className={styles.panel}>
-                    <Sticky>
-                      <Group style={{ flex: 1, minWidth: 0 }}>
-                        {!is_loading && (
-                          <NodeTags
-                            is_editable={is_user}
-                            tags={node.tags}
-                            onChange={onTagsChange}
-                            onTagClick={onTagClick}
-                          />
-                        )}
-
-                        {is_loading && <NodeRelatedPlaceholder />}
-
-                        {!is_loading &&
-                          related &&
-                          related.albums &&
-                          !!node?.id &&
-                          Object.keys(related.albums)
-                            .filter(album => related.albums[album].length > 0)
-                            .map(album => (
-                              <NodeRelated
-                                title={
-                                  <Link to={URLS.NODE_TAG_URL(node.id!, encodeURIComponent(album))}>
-                                    {album}
-                                  </Link>
-                                }
-                                items={related.albums[album]}
-                                key={album}
-                              />
-                            ))}
-
-                        {!is_loading &&
-                          related &&
-                          related.similar &&
-                          related.similar.length > 0 && (
-                            <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
+                    <div className={styles.panel}>
+                      <Sticky>
+                        <Group style={{ flex: 1, minWidth: 0 }}>
+                          {!is_loading && (
+                            <NodeTags
+                              is_editable={is_user}
+                              tags={node.tags}
+                              onChange={onTagsChange}
+                              onTagClick={onTagClick}
+                            />
                           )}
-                      </Group>
-                    </Sticky>
-                  </div>
-                </Group>
-              </Padder>
-            </Group>
-          )}
 
-          <Footer />
-        </Card>
+                          {is_loading && <NodeRelatedPlaceholder />}
+
+                          {!is_loading &&
+                            related &&
+                            related.albums &&
+                            !!node?.id &&
+                            Object.keys(related.albums)
+                              .filter(album => related.albums[album].length > 0)
+                              .map(album => (
+                                <NodeRelated
+                                  title={
+                                    <Link
+                                      to={URLS.NODE_TAG_URL(node.id!, encodeURIComponent(album))}
+                                    >
+                                      {album}
+                                    </Link>
+                                  }
+                                  items={related.albums[album]}
+                                  key={album}
+                                />
+                              ))}
+
+                          {!is_loading &&
+                            related &&
+                            related.similar &&
+                            related.similar.length > 0 && (
+                              <NodeRelated title="ПОХОЖИЕ" items={related.similar} />
+                            )}
+                        </Group>
+                      </Sticky>
+                    </div>
+                  </Group>
+                </Padder>
+              </Group>
+            )}
+
+            <Footer />
+          </Card>
+        </Container>
 
         <SidebarRouter prefix="/post:id" />
       </>

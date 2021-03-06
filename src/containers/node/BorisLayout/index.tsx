@@ -19,6 +19,7 @@ import { selectBorisStats } from '~/redux/boris/selectors';
 import { authSetUser } from '~/redux/auth/actions';
 import { nodeLoadNode } from '~/redux/node/actions';
 import { borisLoadStats } from '~/redux/boris/actions';
+import { Container } from '~/containers/main/Container';
 
 type IProps = {};
 
@@ -55,59 +56,61 @@ const BorisLayout: FC<IProps> = () => {
   }, [dispatch]);
 
   return (
-    <div className={styles.wrap}>
-      <div className={styles.cover} />
+    <Container>
+      <div className={styles.wrap}>
+        <div className={styles.cover} />
 
-      <div className={styles.image}>
-        <div className={styles.caption}>
-          <div className={styles.caption_text}>{title}</div>
+        <div className={styles.image}>
+          <div className={styles.caption}>
+            <div className={styles.caption_text}>{title}</div>
+          </div>
+
+          <img src={boris} alt="Борис" />
         </div>
 
-        <img src={boris} alt="Борис" />
-      </div>
+        <div className={styles.container}>
+          <Card className={styles.content}>
+            <Group className={styles.grid}>
+              {user.is_user && <NodeCommentForm isBefore nodeId={node.current.id} />}
 
-      <div className={styles.container}>
-        <Card className={styles.content}>
-          <Group className={styles.grid}>
-            {user.is_user && <NodeCommentForm isBefore nodeId={node.current.id} />}
-
-            {node.is_loading_comments ? (
-              <NodeNoComments is_loading count={7} />
-            ) : (
-              <NodeComments
-                comments={comments}
-                count={node.comment_count}
-                user={user}
-                order="ASC"
-              />
-            )}
-          </Group>
-
-          <Footer />
-        </Card>
-
-        <Group className={styles.stats}>
-          <Sticky>
-            <Group className={styles.stats__container}>
-              <div className={styles.stats__about}>
-                <h4>Господи-боженьки, где это я?</h4>
-
-                <p>
-                  Всё впорядке, это &mdash; главный штаб Суицидальных Роботов, строителей Убежища.
-                </p>
-                <p>Здесь мы сидим и слушаем всё, что вас беспокоит.</p>
-                <p>Все виновные будут наказаны. Невиновные, впрочем, тоже. </p>
-                <p className="grey">//&nbsp;Такова&nbsp;жизнь.</p>
-              </div>
-
-              <div className={styles.stats__wrap}>
-                <BorisStats stats={stats} />
-              </div>
+              {node.is_loading_comments ? (
+                <NodeNoComments is_loading count={7} />
+              ) : (
+                <NodeComments
+                  comments={comments}
+                  count={node.comment_count}
+                  user={user}
+                  order="ASC"
+                />
+              )}
             </Group>
-          </Sticky>
-        </Group>
+
+            <Footer />
+          </Card>
+
+          <Group className={styles.stats}>
+            <Sticky>
+              <Group className={styles.stats__container}>
+                <div className={styles.stats__about}>
+                  <h4>Господи-боженьки, где это я?</h4>
+
+                  <p>
+                    Всё впорядке, это &mdash; главный штаб Суицидальных Роботов, строителей Убежища.
+                  </p>
+                  <p>Здесь мы сидим и слушаем всё, что вас беспокоит.</p>
+                  <p>Все виновные будут наказаны. Невиновные, впрочем, тоже. </p>
+                  <p className="grey">//&nbsp;Такова&nbsp;жизнь.</p>
+                </div>
+
+                <div className={styles.stats__wrap}>
+                  <BorisStats stats={stats} />
+                </div>
+              </Group>
+            </Sticky>
+          </Group>
+        </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
