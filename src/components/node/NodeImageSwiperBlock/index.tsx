@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
 import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/scrollbar/scrollbar.scss';
+import 'swiper/components/zoom/zoom.scss';
 
 import styles from './styles.module.scss';
 import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
