@@ -129,7 +129,7 @@ export const nodeSetEditor = (editor: INode) => ({
   editor,
 });
 
-export const nodeSetCoverImage = (current_cover_image: IFile) => ({
+export const nodeSetCoverImage = (current_cover_image?: IFile) => ({
   type: NODE_ACTIONS.SET_COVER_IMAGE,
   current_cover_image,
 });

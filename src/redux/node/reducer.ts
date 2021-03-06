@@ -1,16 +1,14 @@
 import { createReducer } from '~/utils/reducer';
-import { INode, IComment, IFile } from '../types';
-import { EMPTY_NODE, EMPTY_COMMENT } from './constants';
+import { IComment, IFile, INode } from '../types';
+import { EMPTY_COMMENT, EMPTY_NODE } from './constants';
 import { NODE_HANDLERS } from './handlers';
+import { INodeRelated } from '~/redux/node/types';
 
 export type INodeState = Readonly<{
   editor: INode;
   current: INode;
   comments: IComment[];
-  related: {
-    albums: Record<string, INode[]>;
-    similar: INode[];
-  };
+  related: INodeRelated;
   comment_data: Record<number, IComment>;
   comment_count: number;
   current_cover_image?: IFile;

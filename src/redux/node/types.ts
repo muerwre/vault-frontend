@@ -89,3 +89,8 @@ export type NodeEditorProps = {
   temp: string[];
   setTemp: (val: string[]) => void;
 };
+
+export type INodeRelated = {
+  albums: Record<string, INode[]>;
+  similar: INode[];
+};

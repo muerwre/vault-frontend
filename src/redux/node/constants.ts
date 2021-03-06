@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC } from 'react';
 import { IComment, INode, ValueOf } from '../types';
 import { NodeImageSlideBlock } from '~/components/node/NodeImageSlideBlock';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
@@ -12,7 +12,6 @@ import { AudioEditor } from '~/components/editors/AudioEditor';
 import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadButton';
 import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadButton';
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
-import { modalShowPhotoswipe } from '../modal/actions';
 import { IEditorComponentProps, NodeEditorProps } from '~/redux/node/types';
 import { EditorFiller } from '~/components/editors/EditorFiller';
 
@@ -76,11 +75,7 @@ export const NODE_TYPES = {
 
 export type INodeComponentProps = {
   node: INode;
-  is_loading: boolean;
-  is_modal_shown: boolean;
-  layout: {};
-  updateLayout: () => void;
-  modalShowPhotoswipe: typeof modalShowPhotoswipe;
+  isLoading: boolean;
 };
 
 export type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<INodeComponentProps>>;
