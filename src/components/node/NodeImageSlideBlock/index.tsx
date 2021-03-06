@@ -8,21 +8,24 @@ import { PRESETS } from '~/constants/urls';
 import { throttle } from 'throttle-debounce';
 import { Icon } from '~/components/input/Icon';
 import { useArrows } from '~/utils/hooks/keys';
+import { useDispatch } from 'react-redux';
+import { modalShowPhotoswipe } from '~/redux/modal/actions';
+import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { selectModal } from '~/redux/modal/selectors';
 
-interface IProps extends INodeComponentProps {}
+interface IProps extends INodeComponentProps {
+  updateLayout?: () => void;
+}
 
 const getX = event =>
   (event.touches && event.touches.length) || (event.changedTouches && event.changedTouches.length)
     ? (event.touches.length && event.touches[0].clientX) || event.changedTouches[0].clientX
     : event.clientX;
 
-const NodeImageSlideBlock: FC<IProps> = ({
-  node,
-  is_loading,
-  is_modal_shown,
-  updateLayout,
-  modalShowPhotoswipe,
-}) => {
+const NodeImageSlideBlock: FC<IProps> = ({ node, isLoading, updateLayout = () => {} }) => {
+  const dispatch = useDispatch();
+  const { is_shown } = useShallowSelect(selectModal);
+
   const [current, setCurrent] = useState(0);
   const [height, setHeight] = useState(window.innerHeight - 143);
   const [max_height, setMaxHeight] = useState(960);
@@ -88,7 +91,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
     const { width } = wrap.current.getBoundingClientRect();
     const fallback = window.innerHeight - 143;
 
-    if (is_loading) {
+    if (isLoading) {
       setHeight(fallback);
       return () => clearTimeout(timeout);
     }
@@ -118,7 +121,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [is_dragging, wrap, offset, heights, max_height, images, is_loading, updateLayout]);
+  }, [is_dragging, wrap, offset, heights, max_height, images, isLoading, updateLayout]);
 
   const onDrag = useCallback(
     event => {
@@ -162,8 +165,8 @@ const NodeImageSlideBlock: FC<IProps> = ({
     normalizeOffset();
   }, [wrap, setMaxHeight, normalizeOffset]);
 
-  const onOpenPhotoSwipe = useCallback(() => modalShowPhotoswipe(images, current), [
-    modalShowPhotoswipe,
+  const onOpenPhotoSwipe = useCallback(() => dispatch(modalShowPhotoswipe(images, current)), [
+    dispatch,
     images,
     current,
   ]);
@@ -241,7 +244,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
     images,
   ]);
 
-  useArrows(onNext, onPrev, is_modal_shown);
+  useArrows(onNext, onPrev, is_shown);
 
   useEffect(() => {
     setOffset(0);
@@ -249,7 +252,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
 
   return (
     <div className={styles.wrap}>
-      <div className={classNames(styles.cutter, { [styles.is_loading]: is_loading })} ref={wrap}>
+      <div className={classNames(styles.cutter, { [styles.is_loading]: isLoading })} ref={wrap}>
         <div
           className={classNames(styles.image_container, { [styles.is_dragging]: is_dragging })}
           style={{
@@ -261,7 +264,7 @@ const NodeImageSlideBlock: FC<IProps> = ({
           onTouchStart={startDragging}
           ref={slide}
         >
-          {!is_loading &&
+          {!isLoading &&
             images.map((file, index) => (
               <div
                 className={classNames(styles.image_wrap, {

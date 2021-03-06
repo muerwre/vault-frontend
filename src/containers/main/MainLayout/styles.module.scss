@@ -2,24 +2,18 @@
 
 .wrapper {
   width: 100%;
-  padding: 0 $gap;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   align-items: center;
   justify-content: flex-start;
   flex: 1;
-
-  @include tablet {
-    padding: 0;
-  }
 }
 
 .content {
   flex: 1;
   position: relative;
   width: 100%;
-  max-width: $content_width;
   display: flex;
   padding-bottom: 29px;
   flex-direction: column;
