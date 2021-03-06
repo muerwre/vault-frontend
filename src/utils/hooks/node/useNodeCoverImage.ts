@@ -7,7 +7,6 @@ export const useNodeCoverImage = (node: INode) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!node.cover) return;
     dispatch(nodeSetCoverImage(node.cover));
 
     return () => {
