@@ -12,7 +12,6 @@ import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import isBefore from 'date-fns/isBefore';
 import { Card } from '~/components/containers/Card';
 import { Footer } from '~/components/main/Footer';
-import { Sticky } from '~/components/containers/Sticky';
 import { BorisStats } from '~/components/boris/BorisStats';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectBorisStats } from '~/redux/boris/selectors';
@@ -20,6 +19,7 @@ import { authSetUser } from '~/redux/auth/actions';
 import { nodeLoadNode } from '~/redux/node/actions';
 import { borisLoadStats } from '~/redux/boris/actions';
 import { Container } from '~/containers/main/Container';
+import StickyBox from 'react-sticky-box/dist/esnext';
 
 type IProps = {};
 
@@ -89,7 +89,7 @@ const BorisLayout: FC<IProps> = () => {
           </Card>
 
           <Group className={styles.stats}>
-            <Sticky>
+            <StickyBox className={styles.sticky} offsetTop={72} offsetBottom={10}>
               <Group className={styles.stats__container}>
                 <div className={styles.stats__about}>
                   <h4>Господи-боженьки, где это я?</h4>
@@ -106,7 +106,7 @@ const BorisLayout: FC<IProps> = () => {
                   <BorisStats stats={stats} />
                 </div>
               </Group>
-            </Sticky>
+            </StickyBox>
           </Group>
         </div>
       </div>
