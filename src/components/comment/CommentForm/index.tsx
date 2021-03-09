@@ -65,34 +65,40 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
 
             <CommentFormAttaches />
 
-            <Group horizontal className={styles.buttons}>
-              <CommentFormAttachButtons onUpload={uploader.uploadFiles} />
+            <div className={styles.buttons}>
+              <div className={styles.buttons_attach}>
+                <CommentFormAttachButtons onUpload={uploader.uploadFiles} />
+              </div>
 
-              {!!textarea && (
-                <CommentFormFormatButtons
-                  element={textarea}
-                  handler={formik.handleChange('text')}
-                />
-              )}
+              <div className={styles.buttons_format}>
+                {!!textarea && (
+                  <CommentFormFormatButtons
+                    element={textarea}
+                    handler={formik.handleChange('text')}
+                  />
+                )}
+              </div>
 
-              {isLoading && <LoaderCircle size={20} />}
+              <div className={styles.buttons_submit}>
+                {isLoading && <LoaderCircle size={20} />}
 
-              {isEditing && (
-                <Button size="small" color="link" type="button" onClick={onCancelEdit}>
-                  Отмена
+                {isEditing && (
+                  <Button size="small" color="link" type="button" onClick={onCancelEdit}>
+                    Отмена
+                  </Button>
+                )}
+
+                <Button
+                  type="submit"
+                  size="small"
+                  color="gray"
+                  iconRight={!isEditing ? 'enter' : 'check'}
+                  disabled={isLoading}
+                >
+                  {!isEditing ? 'Сказать' : 'Сохранить'}
                 </Button>
-              )}
-
-              <Button
-                type="submit"
-                size="small"
-                color="gray"
-                iconRight={!isEditing ? 'enter' : 'check'}
-                disabled={isLoading}
-              >
-                {!isEditing ? 'Сказать' : 'Сохранить'}
-              </Button>
-            </Group>
+              </div>
+            </div>
           </FileUploaderProvider>
         </FormikProvider>
       </form>
