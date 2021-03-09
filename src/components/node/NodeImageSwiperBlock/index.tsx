@@ -75,6 +75,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         observeParents
         resizeObserver
         watchOverflow
+        updateOnImagesReady
         onInit={resetSwiper}
         zoom
       >

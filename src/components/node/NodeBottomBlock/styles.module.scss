@@ -1,0 +1,48 @@
+@import "~/styles/variables.scss";
+
+.sticky {
+  width: 100%;
+}
+
+.content {
+  align-items: stretch !important;
+  @include vertical_at_tablet;
+}
+
+.comments {
+  flex: 3 1;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-direction: column;
+
+  @media (max-width: 1024px) {
+    flex: 2 1;
+  }
+}
+
+
+.panel {
+  flex: 1 3;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-left: $gap / 2;
+  min-width: 0;
+  position: relative;
+  z-index: 10;
+
+  @media (max-width: 1024px) {
+    padding-left: 0;
+    padding-top: $comment_height / 2;
+    flex: 1 2;
+  }
+}
+
+.buttons {
+  background: $node_buttons_bg;
+  flex: 1;
+  border-radius: $panel_radius;
+  box-shadow: $comment_shadow;
+}

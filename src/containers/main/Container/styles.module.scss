@@ -9,4 +9,8 @@
   @include tablet {
     padding: 0;
   }
+
+  @media (max-width: $content_width + $gap * 4) {
+    padding: 0;
+  }
 }

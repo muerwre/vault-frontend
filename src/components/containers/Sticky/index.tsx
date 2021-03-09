@@ -1,13 +1,15 @@
 import React, { DetailsHTMLAttributes, FC, useEffect, useRef } from 'react';
 import styles from './styles.module.scss';
-import StickySidebar from 'sticky-sidebar';
-import classnames from 'classnames';
+
 import ResizeSensor from 'resize-sensor';
+(window as any).ResizeSensor = ResizeSensor;
+
+import StickySidebar from 'sticky-sidebar';
+(window as any).StickySidebar = StickySidebar;
+
+import classnames from 'classnames';
 
 interface IProps extends DetailsHTMLAttributes<HTMLDivElement> {}
-
-(window as any).StickySidebar = StickySidebar;
-(window as any).ResizeSensor = ResizeSensor;
 
 const Sticky: FC<IProps> = ({ children }) => {
   const ref = useRef(null);
