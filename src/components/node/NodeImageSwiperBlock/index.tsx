@@ -43,6 +43,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
   const resetSwiper = useCallback(() => {
     if (!controlledSwiper) return;
     controlledSwiper.slideTo(0, 0);
+    setTimeout(() => controlledSwiper.slideTo(0, 0), 300);
   }, [controlledSwiper]);
 
   useEffect(() => {
