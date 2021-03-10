@@ -14,7 +14,7 @@ import { EMPTY_COMMENT } from '~/redux/node/constants';
 import { CommentFormDropzone } from '~/components/comment/CommentFormDropzone';
 import styles from './styles.module.scss';
 import { ERROR_LITERAL } from '~/constants/errors';
-import { Group } from '~/components/containers/Group';
+import { useInputPasteUpload } from '~/utils/hooks/useInputPasteUpload';
 
 interface IProps {
   comment?: IComment;
@@ -47,6 +47,7 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
   }, [formik]);
 
   const error = formik.status || formik.errors.text;
+  useInputPasteUpload(textarea, uploader.uploadFiles);
 
   return (
     <CommentFormDropzone onUpload={uploader.uploadFiles}>

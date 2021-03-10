@@ -74,3 +74,37 @@ export const fakeUploader = ({
 export const getFileType = (file: File): keyof typeof UPLOAD_TYPES | undefined =>
   (file.type && Object.keys(FILE_MIMES).find(mime => FILE_MIMES[mime].includes(file.type))) ||
   undefined;
+
+// getImageFromPaste returns any images from paste event
+export const getImageFromPaste = (event: ClipboardEvent): Promise<File | undefined> => {
+  const items = event.clipboardData?.items;
+
+  return new Promise(resolve => {
+    for (let index in items) {
+      const item = items[index];
+
+      if (item.kind === 'file' && item.type.match(/^image\//)) {
+        const blob = item.getAsFile();
+        const reader = new FileReader();
+        const type = item.type;
+
+        reader.onload = function(e) {
+          if (!e.target?.result) {
+            return;
+          }
+
+          resolve(
+            new File([e.target?.result], 'paste.png', {
+              type,
+              lastModified: new Date().getTime(),
+            })
+          );
+        };
+
+        reader.readAsArrayBuffer(blob);
+      }
+    }
+
+    // resolve(undefined);
+  });
+};
