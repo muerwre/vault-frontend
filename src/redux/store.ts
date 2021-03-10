@@ -75,7 +75,9 @@ export const sagaMiddleware = createSagaMiddleware();
 export const history = createBrowserHistory();
 
 const composeEnhancers =
-  typeof window === 'object' && (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  typeof window === 'object' &&
+  (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+  process.env.NODE_ENV === 'development'
     ? (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
