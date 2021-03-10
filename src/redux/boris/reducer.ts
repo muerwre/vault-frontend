@@ -1,5 +1,6 @@
 import { createReducer } from '~/utils/reducer';
 import { BORIS_HANDLERS } from './handlers';
+import { IGithubIssue } from '~/redux/boris/types';
 
 export type IStatGitRow = {
   commit: string;
@@ -31,6 +32,7 @@ export type IStatBackend = {
 export type IBorisState = Readonly<{
   stats: {
     git: Partial<IStatGitRow>[];
+    issues: IGithubIssue[];
     backend?: IStatBackend;
     is_loading: boolean;
   };
@@ -39,6 +41,7 @@ export type IBorisState = Readonly<{
 const BORIS_INITIAL_STATE: IBorisState = {
   stats: {
     git: [],
+    issues: [],
     backend: undefined,
     is_loading: false,
   },
