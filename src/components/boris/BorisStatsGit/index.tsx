@@ -9,7 +9,7 @@ interface IProps {
 }
 
 const BorisStatsGit: FC<IProps> = ({ stats }) => {
-  if (!stats.git.length) return null;
+  if (!stats.issues.length) return null;
 
   if (stats.is_loading) {
     return (
@@ -35,11 +35,12 @@ const BorisStatsGit: FC<IProps> = ({ stats }) => {
         <img src="https://jenkins.vault48.org/api/badges/muerwre/vault-golang/status.svg" />
       </div>
 
-      {stats.git
-        .filter(data => data.commit && data.timestamp && data.subject)
-        .slice(0, 5)
+      {stats.issues
+        .filter(el => !el.pull_request)
+        .slice(0, 10)
+        .sort(el => (el.state === 'open' ? 1 : -1))
         .map(data => (
-          <BorisStatsGitCard data={data} key={data.commit} />
+          <BorisStatsGitCard data={data} key={data.id} />
         ))}
     </div>
   );
