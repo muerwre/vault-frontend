@@ -38,7 +38,6 @@ const BorisStatsGit: FC<IProps> = ({ stats }) => {
       {stats.issues
         .filter(el => !el.pull_request)
         .slice(0, 10)
-        .sort(el => (el.state === 'open' ? 1 : -1))
         .map(data => (
           <BorisStatsGitCard data={data} key={data.id} />
         ))}
