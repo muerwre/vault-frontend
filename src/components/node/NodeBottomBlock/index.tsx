@@ -2,16 +2,16 @@ import React, { FC } from 'react';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
-import styles from '~/containers/node/NodeLayout/styles.module.scss';
 import { NodeCommentsBlock } from '~/components/node/NodeCommentsBlock';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
-import { Sticky } from '~/components/containers/Sticky';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
 import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
 import { IComment, INode } from '~/redux/types';
 import { useUser } from '~/utils/hooks/user/userUser';
 import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
 import { INodeRelated } from '~/redux/node/types';
+import StickyBox from 'react-sticky-box/dist/esnext';
+import styles from './styles.module.scss';
 
 interface IProps {
   node: INode;
@@ -59,12 +59,12 @@ const NodeBottomBlock: FC<IProps> = ({
           </Group>
 
           <div className={styles.panel}>
-            <Sticky>
+            <StickyBox className={styles.sticky} offsetTop={72}>
               <Group style={{ flex: 1, minWidth: 0 }}>
                 <NodeTagsBlock node={node} isLoading={isLoading} />
                 <NodeRelatedBlock isLoading={isLoading} node={node} related={related} />
               </Group>
-            </Sticky>
+            </StickyBox>
           </div>
         </Group>
       </Padder>

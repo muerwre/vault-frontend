@@ -21,13 +21,42 @@
 
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: row;
+  display: grid;
   background: transparentize(black, 0.8);
   padding: $gap / 2;
   border-radius: 0 0 $radius $radius;
   flex-wrap: wrap;
+  column-gap: $gap;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr;
+  grid-template-areas: "attach format submit";
 
+  @media(max-width: 470px) {
+    padding: $gap;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+    "attach format"
+    "submit submit";
+    row-gap: $gap;
+  }
+
+  &_attach {
+    grid-area: attach;
+  }
+
+  &_format {
+    grid-area: format;
+  }
+
+  &_submit {
+    grid-area: submit;
+    display: grid;
+    grid-auto-flow: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    column-gap: $gap / 2;
+  }
 }
 
 .uploads {

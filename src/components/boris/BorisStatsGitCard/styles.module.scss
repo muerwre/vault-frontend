@@ -12,10 +12,28 @@
 .time {
   font: $font_12_regular;
   line-height: 17px;
-  opacity: 0.3;
+  color: transparentize(white, 0.7)
 }
 
 .subject {
   font: $font_14_regular;
   word-break: break-word;
+  text-decoration: none;
+  color: inherit;
+}
+
+.icon {
+  font: $font_10_semibold;
+  margin-right: 5px;
+  border-radius: 2px;
+  padding: 2px 0;
+  text-transform: uppercase;
+
+  &.open {
+    color: $red;
+  }
+
+  &.closed {
+    color: $green;
+  }
 }

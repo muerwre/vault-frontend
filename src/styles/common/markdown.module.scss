@@ -55,6 +55,10 @@ $margin: 1em;
 
   p {
     margin-bottom: $margin;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   h5, h4, h3, h2, h1 {
