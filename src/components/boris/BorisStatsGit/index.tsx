@@ -45,11 +45,11 @@ const BorisStatsGit: FC<IProps> = ({ stats }) => {
         <img src="https://jenkins.vault48.org/api/badges/muerwre/vault-golang/status.svg" />
       </div>
 
-      {closed.map(data => (
+      {open.map(data => (
         <BorisStatsGitCard data={data} key={data.id} />
       ))}
 
-      {open.map(data => (
+      {closed.map(data => (
         <BorisStatsGitCard data={data} key={data.id} />
       ))}
     </div>
