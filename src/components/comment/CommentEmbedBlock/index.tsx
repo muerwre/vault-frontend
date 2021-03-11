@@ -30,6 +30,8 @@ const CommentEmbedBlockUnconnected: FC<Props> = memo(
       return (match && match[1]) || '';
     }, [block.content]);
 
+    const url = useMemo(() => `https://youtube.com/watch?v=${id}`, [id]);
+
     const preview = useMemo(() => getYoutubeThumb(block.content), [block.content]);
 
     useEffect(() => {
@@ -47,7 +49,7 @@ const CommentEmbedBlockUnconnected: FC<Props> = memo(
 
     return (
       <div className={styles.embed}>
-        <a href={id[0]} target="_blank" />
+        <a href={url} target="_blank" />
 
         <div className={styles.preview}>
           <div style={{ backgroundImage: `url("${preview}")` }}>
