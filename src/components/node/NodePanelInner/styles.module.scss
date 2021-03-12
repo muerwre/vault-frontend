@@ -31,8 +31,6 @@
 
 .wrap {
   display: flex;
-  align-items: center;
-  justify-content: stretch;
   position: relative;
   width: 100%;
   flex-direction: row;
@@ -88,7 +86,7 @@
   @include tablet {
     white-space: nowrap;
     padding-bottom: 0;
-    font: $font_20_semibold;
+    font: $font_16_semibold;
   }
 }
 

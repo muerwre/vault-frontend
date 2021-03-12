@@ -17,6 +17,10 @@ import nodeSaga from '~/redux/node/sagas';
 import flow, { IFlowState } from '~/redux/flow/reducer';
 import flowSaga from '~/redux/flow/sagas';
 
+import lab from '~/redux/lab';
+import labSaga from '~/redux/lab/sagas';
+import { ILabState } from '~/redux/lab/types';
+
 import uploads, { IUploadState } from '~/redux/uploads/reducer';
 import uploadSaga from '~/redux/uploads/sagas';
 
@@ -69,6 +73,7 @@ export interface IState {
   boris: IBorisState;
   messages: IMessagesState;
   tag: ITagState;
+  lab: ILabState;
 }
 
 export const sagaMiddleware = createSagaMiddleware();
@@ -93,6 +98,7 @@ export const store = createStore(
     player: persistReducer(playerPersistConfig, player),
     messages,
     tag: tag,
+    lab: lab,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
@@ -110,6 +116,7 @@ export function configureStore(): {
   sagaMiddleware.run(borisSaga);
   sagaMiddleware.run(messagesSaga);
   sagaMiddleware.run(tagSaga);
+  sagaMiddleware.run(labSaga);
 
   window.addEventListener('message', message => {
     if (message && message.data && message.data.type === 'oauth_login' && message.data.token)

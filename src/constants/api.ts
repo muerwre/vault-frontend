@@ -50,4 +50,7 @@ export const API = {
     NODES: `/tag/nodes`,
     AUTOCOMPLETE: `/tag/autocomplete`,
   },
+  LAB: {
+    NODES: `/lab/`,
+  },
 };
