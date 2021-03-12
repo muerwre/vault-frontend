@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import styles from './styles.module.scss';
-import { LabNode } from '~/containers/lab/LabNode';
+import { LabNode } from '~/components/lab/LabNode';
 import { selectLabListNodes } from '~/redux/lab/selectors';
 
 interface IProps {}
