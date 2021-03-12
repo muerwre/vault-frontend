@@ -82,6 +82,13 @@ const HeaderUnconnected: FC<IProps> = memo(
           <Filler />
 
           <div className={styles.plugs}>
+            <Link
+              className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
+              to={URLS.BASE}
+            >
+              ФЛОУ
+            </Link>
+
             {is_user && (
               <Link
                 className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
@@ -90,13 +97,6 @@ const HeaderUnconnected: FC<IProps> = memo(
                 ЛАБ
               </Link>
             )}
-
-            <Link
-              className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
-              to={URLS.BASE}
-            >
-              ФЛОУ
-            </Link>
 
             <Link
               className={classNames(styles.item, {
