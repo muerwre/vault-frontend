@@ -20,6 +20,17 @@
   :global(.swiper-container) {
     width: 100vw;
   }
+
+  :global(.swiper-button-next),
+  :global(.swiper-button-prev) {
+    color: white;
+    font-size: 10px;
+
+    &::after {
+      font-size: 32px;
+    }
+  }
+
 }
 
 .slide {

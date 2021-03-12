@@ -40,7 +40,7 @@ const NodeLayout: FC<IProps> = memo(
     const { head, block } = useNodeBlocks(current, is_loading);
 
     return (
-      <>
+      <div className={styles.wrap}>
         {head}
 
         <Container>
@@ -64,7 +64,7 @@ const NodeLayout: FC<IProps> = memo(
         </Container>
 
         <SidebarRouter prefix="/post:id" />
-      </>
+      </div>
     );
   }
 );
