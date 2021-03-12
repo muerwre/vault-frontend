@@ -2,7 +2,6 @@
 
 .content {
   align-items: stretch !important;
-  background-color: red;
 
   @include vertical_at_tablet;
 }
