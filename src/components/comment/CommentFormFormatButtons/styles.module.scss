@@ -2,11 +2,8 @@
 
 .wrap {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   height: 32px;
   flex: 1;
-
-  @media(max-width: 480px) {
-    display: none;
-  }
+  width: 100%;
 }

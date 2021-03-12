@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { IBorisState } from '~/redux/boris/reducer';
 import styles from './styles.module.scss';
 import { Placeholder } from '~/components/placeholders/Placeholder';
@@ -9,7 +9,17 @@ interface IProps {
 }
 
 const BorisStatsGit: FC<IProps> = ({ stats }) => {
-  if (!stats.git.length) return null;
+  if (!stats.issues.length) return null;
+
+  const open = useMemo(
+    () => stats.issues.filter(el => !el.pull_request && el.state === 'open').slice(0, 5),
+    [stats.issues]
+  );
+
+  const closed = useMemo(
+    () => stats.issues.filter(el => !el.pull_request && el.state === 'closed').slice(0, 5),
+    [stats.issues]
+  );
 
   if (stats.is_loading) {
     return (
@@ -35,12 +45,13 @@ const BorisStatsGit: FC<IProps> = ({ stats }) => {
         <img src="https://jenkins.vault48.org/api/badges/muerwre/vault-golang/status.svg" />
       </div>
 
-      {stats.git
-        .filter(data => data.commit && data.timestamp && data.subject)
-        .slice(0, 5)
-        .map(data => (
-          <BorisStatsGitCard data={data} key={data.commit} />
-        ))}
+      {open.map(data => (
+        <BorisStatsGitCard data={data} key={data.id} />
+      ))}
+
+      {closed.map(data => (
+        <BorisStatsGitCard data={data} key={data.id} />
+      ))}
     </div>
   );
 };

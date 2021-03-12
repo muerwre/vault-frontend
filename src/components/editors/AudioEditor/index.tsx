@@ -8,6 +8,8 @@ import { selectUploads } from '~/redux/uploads/selectors';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import styles from './styles.module.scss';
 import { NodeEditorProps } from '~/redux/node/types';
+import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
+import { useNodeAudios } from '~/utils/hooks/node/useNodeAudios';
 
 const mapStateToProps = selectUploads;
 const mapDispatchToProps = {
@@ -17,10 +19,7 @@ const mapDispatchToProps = {
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & NodeEditorProps;
 
 const AudioEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) => {
-  const images = useMemo(
-    () => data.files.filter(file => file && file.type === UPLOAD_TYPES.IMAGE),
-    [data.files]
-  );
+  const images = useNodeImages(data);
 
   const pending_images = useMemo(
     () =>
@@ -30,10 +29,7 @@ const AudioEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) =
     [temp, statuses]
   );
 
-  const audios = useMemo(
-    () => data.files.filter(file => file && file.type === UPLOAD_TYPES.AUDIO),
-    [data.files]
-  );
+  const audios = useNodeAudios(data);
 
   const pending_audios = useMemo(
     () =>

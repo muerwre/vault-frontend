@@ -1,17 +1,17 @@
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { BORIS_ACTIONS } from './constants';
 import { borisSetStats } from './actions';
-import { getBorisGitStats, getBorisBackendStats } from './api';
+import { getBorisBackendStats, getGithubIssues } from './api';
 import { Unwrap } from '../types';
 
 function* loadStats() {
   try {
     yield put(borisSetStats({ is_loading: true }));
 
-    const git: Unwrap<typeof getBorisGitStats> = yield call(getBorisGitStats);
     const backend: Unwrap<typeof getBorisBackendStats> = yield call(getBorisBackendStats);
+    const issues: Unwrap<typeof getGithubIssues> = yield call(getGithubIssues);
 
-    yield put(borisSetStats({ git, backend }));
+    yield put(borisSetStats({ issues, backend }));
   } catch (e) {
     yield put(borisSetStats({ git: [], backend: undefined }));
   } finally {

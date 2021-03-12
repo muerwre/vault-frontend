@@ -1,7 +1,5 @@
 import React, { FC, memo } from 'react';
 import styles from './styles.module.scss';
-import { Group } from '~/components/containers/Group';
-import { Filler } from '~/components/containers/Filler';
 import { Icon } from '~/components/input/Icon';
 import { INode } from '~/redux/types';
 import classNames from 'classnames';
@@ -12,11 +10,11 @@ interface IProps {
   node: Partial<INode>;
   stack?: boolean;
 
-  can_edit: boolean;
-  can_like: boolean;
-  can_star: boolean;
+  canEdit: boolean;
+  canLike: boolean;
+  canStar: boolean;
 
-  is_loading: boolean;
+  isLoading: boolean;
 
   onEdit: () => void;
   onLike: () => void;
@@ -29,11 +27,11 @@ const NodePanelInner: FC<IProps> = memo(
     node: { title, user, is_liked, is_heroic, deleted_at, created_at, like_count },
     stack,
 
-    can_star,
-    can_edit,
-    can_like,
+    canStar,
+    canEdit,
+    canLike,
 
-    is_loading,
+    isLoading,
 
     onStar,
     onEdit,
@@ -45,12 +43,12 @@ const NodePanelInner: FC<IProps> = memo(
         <div className={styles.content}>
           <div className={styles.panel}>
             <div className={styles.title}>
-              {is_loading ? <Placeholder width="40%" /> : title || '...'}
+              {isLoading ? <Placeholder width="40%" /> : title || '...'}
             </div>
 
             {user && user.username && (
               <div className={styles.name}>
-                {is_loading ? (
+                {isLoading ? (
                   <Placeholder width="100px" />
                 ) : (
                   `~${user.username.toLocaleLowerCase()}, ${getPrettyDate(created_at)}`
@@ -59,14 +57,14 @@ const NodePanelInner: FC<IProps> = memo(
             )}
           </div>
 
-          {can_edit && (
+          {canEdit && (
             <div className={styles.editor_menu}>
               <div className={styles.editor_menu_button}>
                 <Icon icon="dots-vertical" size={24} />
               </div>
 
               <div className={styles.editor_buttons}>
-                {can_star && (
+                {canStar && (
                   <div className={classNames(styles.star, { is_heroic })}>
                     {is_heroic ? (
                       <Icon icon="star_full" size={24} onClick={onStar} />
@@ -88,7 +86,7 @@ const NodePanelInner: FC<IProps> = memo(
           )}
 
           <div className={styles.buttons}>
-            {can_like && (
+            {canLike && (
               <div className={classNames(styles.like, { is_liked })}>
                 {is_liked ? (
                   <Icon icon="heart_full" size={24} onClick={onLike} />

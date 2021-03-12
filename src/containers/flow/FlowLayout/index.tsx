@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { FlowGrid } from '~/components/flow/FlowGrid';
 import { selectFlow } from '~/redux/flow/selectors';
@@ -10,6 +10,7 @@ import { FlowHero } from '~/components/flow/FlowHero';
 import styles from './styles.module.scss';
 import { IState } from '~/redux/store';
 import { FlowStamp } from '~/components/flow/FlowStamp';
+import { Container } from '~/containers/main/Container';
 
 const mapStateToProps = (state: IState) => ({
   flow: pick(['nodes', 'heroes', 'recent', 'updated', 'is_loading', 'search'], selectFlow(state)),
@@ -61,28 +62,30 @@ const FlowLayoutUnconnected: FC<IProps> = ({
   }, []);
 
   return (
-    <div className={styles.grid}>
-      <div className={styles.hero}>
-        <FlowHero heroes={heroes} />
-      </div>
+    <Container>
+      <div className={styles.grid}>
+        <div className={styles.hero}>
+          <FlowHero heroes={heroes} />
+        </div>
 
-      <div className={styles.stamp}>
-        <FlowStamp
-          recent={recent}
-          updated={updated}
-          search={search}
-          flowChangeSearch={flowChangeSearch}
-          onLoadMore={onLoadMoreSearch}
+        <div className={styles.stamp}>
+          <FlowStamp
+            recent={recent}
+            updated={updated}
+            search={search}
+            flowChangeSearch={flowChangeSearch}
+            onLoadMore={onLoadMoreSearch}
+          />
+        </div>
+
+        <FlowGrid
+          nodes={nodes}
+          user={user}
+          onSelect={nodeGotoNode}
+          onChangeCellView={flowSetCellView}
         />
       </div>
-
-      <FlowGrid
-        nodes={nodes}
-        user={user}
-        onSelect={nodeGotoNode}
-        onChangeCellView={flowSetCellView}
-      />
-    </div>
+    </Container>
   );
 };
 
