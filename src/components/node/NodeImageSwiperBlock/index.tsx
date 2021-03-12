@@ -1,12 +1,13 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { INodeComponentProps } from '~/redux/node/constants';
-import SwiperCore, { A11y, Pagination, SwiperOptions } from 'swiper';
+import SwiperCore, { A11y, Pagination, Navigation, SwiperOptions, Keyboard } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/swiper.scss';
 import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/scrollbar/scrollbar.scss';
 import 'swiper/components/zoom/zoom.scss';
+import 'swiper/components/navigation/navigation.scss';
 
 import styles from './styles.module.scss';
 import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
@@ -16,13 +17,14 @@ import SwiperClass from 'swiper/types/swiper-class';
 import { modalShowPhotoswipe } from '~/redux/modal/actions';
 import { useDispatch } from 'react-redux';
 
-SwiperCore.use([Pagination, A11y]);
+SwiperCore.use([Navigation, Pagination, A11y]);
 
 interface IProps extends INodeComponentProps {}
 
 const breakpoints: SwiperOptions['breakpoints'] = {
   599: {
     spaceBetween: 20,
+    navigation: true,
   },
 };
 
@@ -77,6 +79,10 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         watchOverflow
         updateOnImagesReady
         onInit={resetSwiper}
+        keyboard={{
+          enabled: true,
+          onlyInViewport: false,
+        }}
         zoom
       >
         {images.map(file => (
