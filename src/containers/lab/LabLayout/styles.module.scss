@@ -1,0 +1,11 @@
+@import "~/styles/variables.scss";
+
+.wrap {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  column-gap: $gap;
+}
+
+.panel {
+  margin-top: -7px;
+}

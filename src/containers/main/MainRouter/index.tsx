@@ -6,6 +6,7 @@ import { BorisLayout } from '~/containers/node/BorisLayout';
 import { ErrorNotFound } from '~/containers/pages/ErrorNotFound';
 import { ProfilePage } from '~/containers/profile/ProfilePage';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
+import { LabLayout } from '~/containers/lab/LabLayout';
 
 interface IProps {}
 
@@ -15,6 +16,7 @@ const MainRouter: FC<IProps> = () => {
   return (
     <Switch location={location}>
       <Route exact path={URLS.BASE} component={FlowLayout} />
+      <Route exact path={URLS.LAB} component={LabLayout} />
       <Route path={URLS.NODE_URL(':id')} component={NodeLayout} />
       <Route path={URLS.BORIS} component={BorisLayout} />
       <Route path={URLS.ERRORS.NOT_FOUND} component={ErrorNotFound} />

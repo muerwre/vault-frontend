@@ -82,6 +82,15 @@ const HeaderUnconnected: FC<IProps> = memo(
           <Filler />
 
           <div className={styles.plugs}>
+            {is_user && (
+              <Link
+                className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
+                to={URLS.LAB}
+              >
+                ЛАБ
+              </Link>
+            )}
+
             <Link
               className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
               to={URLS.BASE}
@@ -122,9 +131,6 @@ const HeaderUnconnected: FC<IProps> = memo(
   }
 );
 
-const Header = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(HeaderUnconnected);
+const Header = connect(mapStateToProps, mapDispatchToProps)(HeaderUnconnected);
 
 export { Header };
