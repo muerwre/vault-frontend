@@ -28,6 +28,7 @@ type IButtonProps = DetailedHTMLProps<
   stretchy?: boolean;
   iconOnly?: boolean;
   label?: string;
+  round?: boolean;
 };
 
 const Button: FC<IButtonProps> = memo(
@@ -48,6 +49,7 @@ const Button: FC<IButtonProps> = memo(
     iconOnly,
     label,
     ref,
+    round,
     ...props
   }) => {
     const tooltip = useRef<HTMLSpanElement | null>(null);
@@ -75,6 +77,7 @@ const Button: FC<IButtonProps> = memo(
           icon: ((iconLeft || iconRight) && !title && !children) || iconOnly,
           has_icon_left: !!iconLeft,
           has_icon_right: !!iconRight,
+          round,
         }),
         ...props,
       },

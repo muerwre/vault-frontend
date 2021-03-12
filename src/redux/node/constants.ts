@@ -13,6 +13,7 @@ import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadB
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
 import { IEditorComponentProps, NodeEditorProps } from '~/redux/node/types';
 import { EditorFiller } from '~/components/editors/EditorFiller';
+import { EditorPublicSwitch } from '~/components/editors/EditorPublicSwitch';
 import { NodeImageSwiperBlock } from '~/components/node/NodeImageSwiperBlock';
 
 const prefix = 'NODE.';
@@ -59,6 +60,8 @@ export const EMPTY_NODE: INode = {
 
   blocks: [],
   tags: [],
+  is_public: true,
+  is_promoted: true,
 
   flow: {
     display: 'single',
@@ -112,14 +115,20 @@ export const NODE_EDITORS: Record<
 };
 
 export const NODE_PANEL_COMPONENTS: Record<string, FC<IEditorComponentProps>[]> = {
-  [NODE_TYPES.TEXT]: [EditorFiller, EditorUploadCoverButton],
-  [NODE_TYPES.VIDEO]: [EditorFiller, EditorUploadCoverButton],
-  [NODE_TYPES.IMAGE]: [EditorImageUploadButton, EditorFiller, EditorUploadCoverButton],
+  [NODE_TYPES.TEXT]: [EditorFiller, EditorUploadCoverButton, EditorPublicSwitch],
+  [NODE_TYPES.VIDEO]: [EditorFiller, EditorUploadCoverButton, EditorPublicSwitch],
+  [NODE_TYPES.IMAGE]: [
+    EditorImageUploadButton,
+    EditorFiller,
+    EditorUploadCoverButton,
+    EditorPublicSwitch,
+  ],
   [NODE_TYPES.AUDIO]: [
     EditorAudioUploadButton,
     EditorImageUploadButton,
     EditorFiller,
     EditorUploadCoverButton,
+    EditorPublicSwitch,
   ],
 };
 
