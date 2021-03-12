@@ -11,6 +11,8 @@ import { Grid } from '~/components/containers/Grid';
 import { Group } from '~/components/containers/Group';
 import { LabHero } from '~/components/lab/LabHero';
 import { LabBanner } from '~/components/lab/LabBanner';
+import { LabHead } from '~/components/lab/LabHead';
+import { Filler } from '~/components/containers/Filler';
 
 interface IProps {}
 
@@ -25,9 +27,11 @@ const LabLayout: FC<IProps> = () => {
     <div>
       <Container>
         <div className={styles.wrap}>
-          <div className={styles.content}>
+          <Group className={styles.content}>
+            <LabHead />
             <LabGrid />
-          </div>
+          </Group>
+
           <div className={styles.panel}>
             <Sticky>
               <Group>
@@ -35,8 +39,13 @@ const LabLayout: FC<IProps> = () => {
 
                 <Card>
                   <Group>
-                    <Placeholder height={32} width="100%" />
+                    <Placeholder height={36} width="100%" />
+                    <Group horizontal>
+                      <Filler />
+                      <Placeholder height={32} width="120px" />
+                    </Group>
 
+                    <div />
                     <div />
 
                     <Placeholder height={14} width="100px" />
@@ -52,6 +61,7 @@ const LabLayout: FC<IProps> = () => {
                       <Placeholder height={20} width="64px" />
                     </div>
 
+                    <div />
                     <div />
 
                     <Placeholder height={14} width="180px" />
@@ -75,6 +85,19 @@ const LabLayout: FC<IProps> = () => {
                     </Group>
 
                     <div />
+                    <div />
+
+                    <Group>
+                      <Placeholder width="100%" height={100} />
+                      <Placeholder width="120px" height={16} />
+                    </Group>
+
+                    <div />
+
+                    <Group>
+                      <Placeholder width="100%" height={100} />
+                      <Placeholder width="120px" height={16} />
+                    </Group>
                   </Group>
                 </Card>
               </Group>
