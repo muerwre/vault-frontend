@@ -95,7 +95,11 @@ const EditorDialogUnconnected: FC<IProps> = ({
           maxLength={256}
         />
 
-        <Button title="Сохранить" iconRight="check" />
+        <Button
+          title="Сохранить"
+          iconRight="check"
+          color={data.is_promoted ? 'primary' : 'secondary'}
+        />
       </Group>
     </Padder>
   );

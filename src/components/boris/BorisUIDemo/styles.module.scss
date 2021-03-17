@@ -1,0 +1,11 @@
+.card {
+  flex: 3;
+  align-self: stretch;
+  position: relative;
+  z-index: 1;
+  padding: 20px 30px;
+}
+
+.sample {
+  flex-wrap: wrap;
+}

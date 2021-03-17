@@ -6,11 +6,15 @@ import React, {
   createElement,
   memo,
   useRef,
+  useEffect,
+  useMemo,
 } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { IIcon } from '~/redux/types';
 import { usePopper } from 'react-popper';
+import Tippy from '@tippy.js/react';
+import 'tippy.js/dist/tippy.css';
 
 type IButtonProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -23,7 +27,6 @@ type IButtonProps = DetailedHTMLProps<
   seamless?: boolean;
   transparent?: boolean;
   title?: string;
-  non_submitting?: boolean;
   is_loading?: boolean;
   stretchy?: boolean;
   iconOnly?: boolean;
@@ -41,7 +44,6 @@ const Button: FC<IButtonProps> = memo(
     children,
     seamless = false,
     transparent = false,
-    non_submitting = false,
     is_loading,
     title,
     stretchy,
@@ -52,23 +54,9 @@ const Button: FC<IButtonProps> = memo(
     round,
     ...props
   }) => {
-    const tooltip = useRef<HTMLSpanElement | null>(null);
-    const pop = usePopper(tooltip?.current?.parentElement, tooltip.current, {
-      placement: 'top',
-      modifiers: [
-        {
-          name: 'offset',
-          options: {
-            offset: [0, 5],
-          },
-        },
-      ],
-    });
-
-    return createElement(
-      seamless || non_submitting ? 'div' : 'button',
-      {
-        className: classnames(styles.button, className, styles[size], styles[color], {
+    const computedClassName = useMemo(
+      () =>
+        classnames(styles.button, className, styles[size], styles[color], {
           seamless,
           transparent,
           disabled,
@@ -79,18 +67,17 @@ const Button: FC<IButtonProps> = memo(
           has_icon_right: !!iconRight,
           round,
         }),
-        ...props,
-      },
-      [
-        iconLeft && <Icon icon={iconLeft} size={20} key={0} className={styles.icon_left} />,
-        title ? <span>{title}</span> : children || null,
-        iconRight && <Icon icon={iconRight} size={20} key={2} className={styles.icon_right} />,
-        !!label && (
-          <span ref={tooltip} className={styles.tooltip} style={pop.styles.popper} key="tooltip">
-            {label}
-          </span>
-        ),
-      ]
+      [seamless, round, disabled, className, is_loading, stretchy, iconLeft, iconRight, size, color]
+    );
+
+    return (
+      <Tippy content={label || ''} enabled={!!label}>
+        <button className={computedClassName} {...props}>
+          {iconLeft && <Icon icon={iconLeft} size={20} key={0} className={styles.icon_left} />}
+          {!!title ? <span>{title}</span> : children}
+          {iconRight && <Icon icon={iconRight} size={20} key={2} className={styles.icon_right} />}
+        </button>
+      </Tippy>
     );
   }
 );

@@ -184,32 +184,56 @@
   font: $font_12_semibold;
   padding: 0 15px;
   border-radius: $radius / 2;
+
+  &:global(.round) {
+    border-radius: 10px;
+  }
 }
 .mini {
   height: 28px;
   border-radius: $radius / 2;
+
+  &:global(.round) {
+    border-radius: 14px;
+  }
 }
 .small {
   height: 32px;
-  // border-radius: $radius / 2;
 
   svg {
     width: 24px;
     height: 24px;
   }
+
+  &:global(.round) {
+    border-radius: 16px;
+  }
 }
+
 .normal {
   height: 38px;
+
+  &:global(.round) {
+    border-radius: 19px;
+  }
 }
 
 .big {
   height: 40px;
+
+  &:global(.round) {
+    border-radius: 20px;
+  }
 }
 
 .giant {
   height: 50px;
   padding: 0 15px;
   min-width: 50px;
+
+  &:global(.round) {
+    border-radius: 25px;
+  }
 }
 
 .disabled {
@@ -234,14 +258,13 @@
   z-index: 2;
   border-radius: $input_radius;
   text-transform: none;
-  opacity: 0;
-  pointer-events: none;
   touch-action: none;
   transition: opacity 0.1s;
   border: 1px solid transparentize(white, 0.9);
+  //visibility: hidden;
 
   .button:hover & {
-    opacity: 1;
+    visibility: visible;
     font: $font_14_semibold;
   }
 }
