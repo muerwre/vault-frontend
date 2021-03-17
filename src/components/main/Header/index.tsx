@@ -89,7 +89,7 @@ const HeaderUnconnected: FC<IProps> = memo(
               ФЛОУ
             </Link>
 
-            {is_user && (
+            {is_user && process.env.REACT_APP_LAB_ENABLED === '1' && (
               <Link
                 className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
                 to={URLS.LAB}

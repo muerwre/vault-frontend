@@ -6,25 +6,14 @@ import { Button } from '~/components/input/Button';
 interface IProps extends IEditorComponentProps {}
 
 const EditorPublicSwitch: FC<IProps> = ({ data, setData }) => {
-  const tooltip = useRef<HTMLDivElement>(null);
   const onChange = useCallback(() => setData({ ...data, is_promoted: !data.is_promoted }), [
     data,
     setData,
   ]);
 
-  const pop = usePopper(tooltip?.current?.parentElement, tooltip.current, {
-    placement: 'bottom',
-    modifiers: [
-      {
-        name: 'offset',
-        options: {
-          offset: [0, 4],
-        },
-      },
-    ],
-  });
-
-  useEffect(() => console.log(pop), [pop]);
+  if (process.env.REACT_APP_LAB_ENABLED !== '1') {
+    return null;
+  }
 
   return (
     <Button
