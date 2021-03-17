@@ -1,7 +1,8 @@
-import React, { FC, useCallback, useEffect, useRef } from 'react';
+import React, { FC, useCallback } from 'react';
 import { IEditorComponentProps } from '~/redux/node/types';
-import { usePopper } from 'react-popper';
 import { Button } from '~/components/input/Button';
+import { Icon } from '~/components/input/Icon';
+import styles from './styles.module.scss';
 
 interface IProps extends IEditorComponentProps {}
 
@@ -17,9 +18,8 @@ const EditorPublicSwitch: FC<IProps> = ({ data, setData }) => {
 
   return (
     <Button
-      color={data.is_promoted ? 'primary' : 'secondary'}
+      color={data.is_promoted ? 'primary' : 'lab'}
       type="button"
-      iconLeft={data.is_promoted ? 'waves' : 'lab'}
       size="giant"
       label={
         data.is_promoted
@@ -27,8 +27,17 @@ const EditorPublicSwitch: FC<IProps> = ({ data, setData }) => {
           : 'Видно только сотрудникам в лаборатории'
       }
       onClick={onChange}
+      className={styles.button}
       round
-    />
+    >
+      {data.is_promoted ? (
+        <Icon icon="waves" size={24} />
+      ) : (
+        <div className={styles.lab_wrapper}>
+          <Icon icon="lab" size={24} />
+        </div>
+      )}
+    </Button>
   );
 };
 

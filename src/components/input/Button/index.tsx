@@ -11,7 +11,7 @@ type IButtonProps = DetailedHTMLProps<
   HTMLButtonElement
 > & {
   size?: 'mini' | 'normal' | 'big' | 'giant' | 'micro' | 'small';
-  color?: 'primary' | 'secondary' | 'outline' | 'link' | 'gray';
+  color?: 'primary' | 'secondary' | 'outline' | 'link' | 'gray' | 'lab';
   iconLeft?: IIcon;
   iconRight?: IIcon;
   title?: string;

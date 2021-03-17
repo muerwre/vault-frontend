@@ -36,7 +36,7 @@
 
   filter: grayscale(0);
 
-  transition: opacity 0.25s, filter 0.25s, box-shadow 0.25s;
+  transition: opacity 0.25s, filter 0.25s, box-shadow 0.25s, background-color 0.5s;
   opacity: 0.8;
 
   @include outer_shadow();
@@ -77,12 +77,6 @@
     }
   }
 
-  &:global(.red) {
-    fill: $red;
-    stroke: $red;
-    color: $red;
-  }
-
   &:global(.stretchy) {
     flex: 1;
   }
@@ -121,14 +115,6 @@
   &:global(.has_icon_right) {
     padding-left: $gap;
     padding-right: $gap;
-  }
-
-  &.primary {
-    background: $red_gradient;
-  }
-
-  &.secondary {
-    background: $green_gradient;
   }
 
   &.outline {
@@ -230,4 +216,16 @@
   margin-left: $gap / 2 !important;
   width: 20px;
   height: 20px;
+}
+
+.primary {
+  background: $red;
+}
+
+.secondary {
+  background: $wisegreen;
+}
+
+.lab {
+  background: $blue;
 }
