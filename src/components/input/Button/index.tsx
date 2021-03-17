@@ -1,18 +1,8 @@
 import classnames from 'classnames';
-import React, {
-  ButtonHTMLAttributes,
-  DetailedHTMLProps,
-  FC,
-  createElement,
-  memo,
-  useRef,
-  useEffect,
-  useMemo,
-} from 'react';
+import React, { ButtonHTMLAttributes, DetailedHTMLProps, FC, memo, useMemo } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { IIcon } from '~/redux/types';
-import { usePopper } from 'react-popper';
 import Tippy from '@tippy.js/react';
 import 'tippy.js/dist/tippy.css';
 
@@ -24,10 +14,7 @@ type IButtonProps = DetailedHTMLProps<
   color?: 'primary' | 'secondary' | 'outline' | 'link' | 'gray';
   iconLeft?: IIcon;
   iconRight?: IIcon;
-  seamless?: boolean;
-  transparent?: boolean;
   title?: string;
-  is_loading?: boolean;
   stretchy?: boolean;
   iconOnly?: boolean;
   label?: string;
@@ -42,9 +29,6 @@ const Button: FC<IButtonProps> = memo(
     iconLeft,
     iconRight,
     children,
-    seamless = false,
-    transparent = false,
-    is_loading,
     title,
     stretchy,
     disabled,
@@ -57,17 +41,14 @@ const Button: FC<IButtonProps> = memo(
     const computedClassName = useMemo(
       () =>
         classnames(styles.button, className, styles[size], styles[color], {
-          seamless,
-          transparent,
           disabled,
-          is_loading,
           stretchy,
           icon: ((iconLeft || iconRight) && !title && !children) || iconOnly,
           has_icon_left: !!iconLeft,
           has_icon_right: !!iconRight,
           round,
         }),
-      [seamless, round, disabled, className, is_loading, stretchy, iconLeft, iconRight, size, color]
+      [round, disabled, className, stretchy, iconLeft, iconRight, size, color]
     );
 
     return (

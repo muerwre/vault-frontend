@@ -34,8 +34,6 @@
   align-items: center;
   justify-content: center;
 
-  position: relative;
-
   filter: grayscale(0);
 
   transition: opacity 0.25s, filter 0.25s, box-shadow 0.25s;
@@ -79,24 +77,6 @@
     }
   }
 
-  &:global(.seamless) {
-    background: transparent;
-    color: black;
-    box-shadow: none;
-    fill: black;
-    stroke: black;
-    padding: 0;
-  }
-
-  &:global(.transparent) {
-    background: transparent;
-    color: white;
-    box-shadow: transparentize(black, 0.5) 0 0 4px;
-    padding: 0;
-    fill: black;
-    stroke: black;
-  }
-
   &:global(.red) {
     fill: $red;
     stroke: $red;
@@ -111,8 +91,6 @@
   &:global(.grey) {
     background: transparentize(white, 0.9);
     color: white;
-    // background: lighten(white, 0.5);
-    // filter: grayscale(100%);
   }
 
   &:global(.disabled) {
@@ -189,6 +167,7 @@
     border-radius: 10px;
   }
 }
+
 .mini {
   height: 28px;
   border-radius: $radius / 2;
@@ -197,6 +176,7 @@
     border-radius: 14px;
   }
 }
+
 .small {
   height: 32px;
 
@@ -250,21 +230,4 @@
   margin-left: $gap / 2 !important;
   width: 20px;
   height: 20px;
-}
-
-.tooltip {
-  padding: 5px 10px;
-  background-color: darken($content_bg, 4%);
-  z-index: 2;
-  border-radius: $input_radius;
-  text-transform: none;
-  touch-action: none;
-  transition: opacity 0.1s;
-  border: 1px solid transparentize(white, 0.9);
-  //visibility: hidden;
-
-  .button:hover & {
-    visibility: visible;
-    font: $font_14_semibold;
-  }
 }
