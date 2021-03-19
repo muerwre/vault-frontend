@@ -2,6 +2,8 @@ import React, { FC, useCallback } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { IAuthState } from '~/redux/auth/types';
+import { Tabs } from '~/components/dialogs/Tabs';
+import { Tab } from '~/components/dialogs/Tab';
 
 interface IProps {
   tab: string;
@@ -19,30 +21,20 @@ const ProfileTabs: FC<IProps> = ({ tab, is_own, setTab }) => {
   );
 
   return (
-    <div className={styles.wrap}>
-      <div
-        className={classNames(styles.tab, { [styles.active]: tab === 'profile' })}
-        onClick={changeTab('profile')}
-      >
+    <Tabs>
+      <Tab active={tab === 'profile'} onClick={changeTab('profile')}>
         Профиль
-      </div>
-      <div
-        className={classNames(styles.tab, { [styles.active]: tab === 'messages' })}
-        onClick={changeTab('messages')}
-      >
+      </Tab>
+
+      <Tab active={tab === 'messages'} onClick={changeTab('messages')}>
         Сообщения
-      </div>
+      </Tab>
       {is_own && (
-        <>
-          <div
-            className={classNames(styles.tab, { [styles.active]: tab === 'settings' })}
-            onClick={changeTab('settings')}
-          >
-            Настройки
-          </div>
-        </>
+        <Tab active={tab === 'settings'} onClick={changeTab('settings')}>
+          Настройки
+        </Tab>
       )}
-    </div>
+    </Tabs>
   );
 };
 

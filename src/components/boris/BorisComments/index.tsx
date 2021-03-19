@@ -21,7 +21,7 @@ const BorisComments: FC<IProps> = ({ isLoadingComments, node, commentCount, comm
   const user = useShallowSelect(selectAuthUser);
 
   return (
-    <Card className={styles.content}>
+    <>
       <Group className={styles.grid}>
         {user.is_user && <NodeCommentForm isBefore nodeId={node.id} />}
 
@@ -33,7 +33,7 @@ const BorisComments: FC<IProps> = ({ isLoadingComments, node, commentCount, comm
       </Group>
 
       <Footer />
-    </Card>
+    </>
   );
 };
 

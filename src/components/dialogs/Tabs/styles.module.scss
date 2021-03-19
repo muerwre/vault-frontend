@@ -1,0 +1,9 @@
+@import "src/styles/variables";
+
+.wrap {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: $gap * 2 0 0 0;
+  padding: 0 $gap;
+}

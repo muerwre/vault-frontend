@@ -17,9 +17,14 @@ import { Container } from '~/containers/main/Container';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import { BorisComments } from '~/components/boris/BorisComments';
 import { URLS } from '~/constants/urls';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
 import { BorisSuperpowers } from '~/components/boris/BorisSuperpowers';
+import { Superpower } from '~/components/boris/Superpower';
+import { Tabs } from '~/components/dialogs/Tabs';
+import { Tab } from '~/components/dialogs/Tab';
+import { useHistory, useLocation } from 'react-router';
+import { Card } from '~/components/containers/Card';
 
 type IProps = {};
 
@@ -63,6 +68,9 @@ const BorisLayout: FC<IProps> = () => {
     [dispatch]
   );
 
+  const history = useHistory();
+  const location = useLocation();
+
   return (
     <Container>
       <div className={styles.wrap}>
@@ -77,18 +85,38 @@ const BorisLayout: FC<IProps> = () => {
         </div>
 
         <div className={styles.container}>
-          {
-            <Switch>
-              <Route path={`${URLS.BORIS}/ui`} component={BorisUIDemo} />
+          <Card className={styles.content}>
+            <Superpower>
+              <Tabs>
+                <Tab
+                  active={location.pathname === URLS.BORIS}
+                  onClick={() => history.push(URLS.BORIS)}
+                >
+                  Комментарии
+                </Tab>
 
-              <BorisComments
-                isLoadingComments={node.is_loading_comments}
-                commentCount={node.comment_count}
-                node={node.current}
-                comments={node.comments}
-              />
-            </Switch>
-          }
+                <Tab
+                  active={location.pathname === `${URLS.BORIS}/ui`}
+                  onClick={() => history.push(`${URLS.BORIS}/ui`)}
+                >
+                  UI Demo
+                </Tab>
+              </Tabs>
+            </Superpower>
+
+            {
+              <Switch>
+                <Route path={`${URLS.BORIS}/ui`} component={BorisUIDemo} />
+
+                <BorisComments
+                  isLoadingComments={node.is_loading_comments}
+                  commentCount={node.comment_count}
+                  node={node.current}
+                  comments={node.comments}
+                />
+              </Switch>
+            }
+          </Card>
 
           <Group className={styles.stats}>
             <StickyBox className={styles.sticky} offsetTop={72} offsetBottom={10}>

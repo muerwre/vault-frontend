@@ -29,7 +29,9 @@ const ProfileLayoutUnconnected: FC<IProps> = ({ history, nodeSetCoverImage }) =>
   useEffect(() => {
     if (user && user.id && user.cover) {
       nodeSetCoverImage(user.cover);
-      return () => nodeSetCoverImage(null);
+      return () => {
+        nodeSetCoverImage(undefined);
+      };
     }
   }, [user]);
 

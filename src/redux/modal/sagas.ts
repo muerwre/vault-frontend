@@ -10,13 +10,23 @@ function* onPathChange({
   },
 }: LocationChangeAction) {
   if (pathname.match(/^\/~([\wа-яА-Я]+)/)) {
-    const [, username] = pathname.match(/^\/~([\wа-яА-Я]+)/);
-    return yield put(authOpenProfile(username));
+    const match = pathname.match(/^\/~([\wа-яА-Я]+)/);
+
+    if (!match || !match.length || !match[1]) {
+      return;
+    }
+
+    return yield put(authOpenProfile(match[1]));
   }
 
   if (pathname.match(/^\/restore\/([\w\-]+)/)) {
-    const [, code] = pathname.match(/^\/restore\/([\w\-]+)/);
-    return yield put(authShowRestoreModal(code));
+    const match = pathname.match(/^\/restore\/([\w\-]+)/);
+
+    if (!match || !match.length || !match[1]) {
+      return;
+    }
+
+    return yield put(authShowRestoreModal(match[1]));
   }
 }
 
