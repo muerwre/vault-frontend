@@ -3,6 +3,7 @@
 .toggle {
   height: 24px;
   width: 48px;
+  flex: 0 0 48px;
   border-radius: 12px;
   background-color: transparentize(white, 0.9);
   display: flex;
