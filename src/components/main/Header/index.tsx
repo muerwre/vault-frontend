@@ -21,6 +21,7 @@ import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IState } from '~/redux/store';
 import isBefore from 'date-fns/isBefore';
+import { Superpower } from '~/components/boris/Superpower';
 
 const mapStateToProps = (state: IState) => ({
   user: pick(['username', 'is_user', 'photo', 'last_seen_boris'])(selectUser(state)),
@@ -89,14 +90,14 @@ const HeaderUnconnected: FC<IProps> = memo(
               ФЛОУ
             </Link>
 
-            {is_user && process.env.REACT_APP_LAB_ENABLED === '1' && (
+            <Superpower>
               <Link
                 className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
                 to={URLS.LAB}
               >
                 ЛАБ
               </Link>
-            )}
+            </Superpower>
 
             <Link
               className={classNames(styles.item, {

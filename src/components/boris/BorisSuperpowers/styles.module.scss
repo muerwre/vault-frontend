@@ -1,0 +1,19 @@
+@import "~/styles/variables";
+
+.wrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: $gap;
+  align-items: center;
+}
+
+.title {
+  font: $font_14_semibold;
+  color: white;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font: $font_12_regular;
+  color: transparentize(white, 0.5);
+}

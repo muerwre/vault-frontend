@@ -25,6 +25,11 @@ const setUser: ActionHandler<typeof ActionCreators.authSetUser> = (state, { prof
   },
 });
 
+const setState: ActionHandler<typeof ActionCreators.authSetState> = (state, { payload }) => ({
+  ...state,
+  ...payload,
+});
+
 const setToken: ActionHandler<typeof ActionCreators.authSetToken> = (state, { token }) => ({
   ...state,
   token,
@@ -104,6 +109,7 @@ const setRegisterSocialErrors: ActionHandler<typeof ActionCreators.authSetRegist
 export const AUTH_USER_HANDLERS = {
   [AUTH_USER_ACTIONS.SET_LOGIN_ERROR]: setLoginError,
   [AUTH_USER_ACTIONS.SET_USER]: setUser,
+  [AUTH_USER_ACTIONS.SET_STATE]: setState,
   [AUTH_USER_ACTIONS.SET_TOKEN]: setToken,
   [AUTH_USER_ACTIONS.SET_PROFILE]: setProfile,
   [AUTH_USER_ACTIONS.SET_UPDATES]: setUpdates,

@@ -46,7 +46,7 @@ import { assocPath } from 'ramda';
 
 const authPersistConfig: PersistConfig = {
   key: 'auth',
-  whitelist: ['token', 'user', 'updates'],
+  whitelist: ['token', 'user', 'updates', 'is_tester'],
   storage,
 };
 

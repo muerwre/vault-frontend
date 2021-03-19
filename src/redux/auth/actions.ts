@@ -20,6 +20,11 @@ export const authSetToken = (token: IAuthState['token']) => ({
   token,
 });
 
+export const authSetState = (payload: Partial<IAuthState>) => ({
+  type: AUTH_USER_ACTIONS.SET_STATE,
+  payload,
+});
+
 export const gotAuthPostMessage = ({ token }: { token: string }) => ({
   type: AUTH_USER_ACTIONS.GOT_AUTH_POST_MESSAGE,
   token,

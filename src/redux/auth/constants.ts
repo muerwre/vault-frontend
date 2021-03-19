@@ -3,6 +3,7 @@ import { IToken, IUser } from '~/redux/auth/types';
 export const AUTH_USER_ACTIONS = {
   SEND_LOGIN_REQUEST: 'SEND_LOGIN_REQUEST',
   SET_LOGIN_ERROR: 'SET_LOGIN_ERROR',
+  SET_STATE: 'SET_STATE',
   SET_USER: 'SET_USER',
   SET_TOKEN: 'SET_TOKEN',
 

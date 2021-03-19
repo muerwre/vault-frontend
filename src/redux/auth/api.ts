@@ -1,6 +1,5 @@
-import { api, cleanResult, errorMiddleware, resultMiddleware } from '~/utils/api';
+import { api, cleanResult } from '~/utils/api';
 import { API } from '~/constants/api';
-import { IResultWithStatus } from '~/redux/types';
 import {
   ApiAttachSocialRequest,
   ApiAttachSocialResult,

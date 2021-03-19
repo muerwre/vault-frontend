@@ -1,6 +1,6 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { selectNode, selectNodeComments } from '~/redux/node/selectors';
-import { selectUser } from '~/redux/auth/selectors';
+import { selectAuthIsTester, selectUser } from '~/redux/auth/selectors';
 import { useDispatch } from 'react-redux';
 import { NodeComments } from '~/components/node/NodeComments';
 import styles from './styles.module.scss';
@@ -15,11 +15,12 @@ import { Footer } from '~/components/main/Footer';
 import { BorisStats } from '~/components/boris/BorisStats';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectBorisStats } from '~/redux/boris/selectors';
-import { authSetUser } from '~/redux/auth/actions';
+import { authSetState, authSetUser } from '~/redux/auth/actions';
 import { nodeLoadNode } from '~/redux/node/actions';
 import { borisLoadStats } from '~/redux/boris/actions';
 import { Container } from '~/containers/main/Container';
 import StickyBox from 'react-sticky-box/dist/esnext';
+import { BorisSuperpowers } from '~/components/boris/BorisSuperpowers';
 
 type IProps = {};
 
@@ -30,6 +31,7 @@ const BorisLayout: FC<IProps> = () => {
   const user = useShallowSelect(selectUser);
   const stats = useShallowSelect(selectBorisStats);
   const comments = useShallowSelect(selectNodeComments);
+  const is_tester = useShallowSelect(selectAuthIsTester);
 
   useEffect(() => {
     const last_comment = comments[0];
@@ -54,6 +56,13 @@ const BorisLayout: FC<IProps> = () => {
   useEffect(() => {
     dispatch(borisLoadStats());
   }, [dispatch]);
+
+  const setBetaTester = useCallback(
+    (is_tester: boolean) => {
+      dispatch(authSetState({ is_tester }));
+    },
+    [dispatch]
+  );
 
   return (
     <Container>
@@ -100,6 +109,10 @@ const BorisLayout: FC<IProps> = () => {
                   <p>Здесь мы сидим и слушаем всё, что вас беспокоит.</p>
                   <p>Все виновные будут наказаны. Невиновные, впрочем, тоже. </p>
                   <p className="grey">//&nbsp;Такова&nbsp;жизнь.</p>
+                </div>
+
+                <div>
+                  {user.is_user && <BorisSuperpowers active={is_tester} onChange={setBetaTester} />}
                 </div>
 
                 <div className={styles.stats__wrap}>
