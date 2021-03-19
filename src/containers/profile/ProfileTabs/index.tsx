@@ -21,20 +21,22 @@ const ProfileTabs: FC<IProps> = ({ tab, is_own, setTab }) => {
   );
 
   return (
-    <Tabs>
-      <Tab active={tab === 'profile'} onClick={changeTab('profile')}>
-        Профиль
-      </Tab>
-
-      <Tab active={tab === 'messages'} onClick={changeTab('messages')}>
-        Сообщения
-      </Tab>
-      {is_own && (
-        <Tab active={tab === 'settings'} onClick={changeTab('settings')}>
-          Настройки
+    <div className={styles.wrap}>
+      <Tabs>
+        <Tab active={tab === 'profile'} onClick={changeTab('profile')}>
+          Профиль
         </Tab>
-      )}
-    </Tabs>
+
+        <Tab active={tab === 'messages'} onClick={changeTab('messages')}>
+          Сообщения
+        </Tab>
+        {is_own && (
+          <Tab active={tab === 'settings'} onClick={changeTab('settings')}>
+            Настройки
+          </Tab>
+        )}
+      </Tabs>
+    </div>
   );
 };
 
