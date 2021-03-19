@@ -25,9 +25,9 @@ const BorisSuperpowers: FC<IProps> = ({ active, onChange }) => {
       <div className={styles.left} onClick={onToggle}>
         <div className={styles.title}>Суперспособности</div>
         {active ? (
-          <div className={styles.subtitle}>Включи, чтобы видеть будущее</div>
-        ) : (
           <div className={styles.subtitle}>Ты видишь всё, что скрыто</div>
+        ) : (
+          <div className={styles.subtitle}>Включи, чтобы видеть будущее</div>
         )}
       </div>
     </div>
