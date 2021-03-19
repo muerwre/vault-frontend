@@ -25,11 +25,26 @@
   }
 
   &.active {
-    background-color: $wisegreen;
 
     &::after {
       transform: translate(24px, 0);
       background-color: white;
+    }
+
+    &.primary {
+      background-color: $wisegreen;
+    }
+
+    &.secondary {
+      background-color: transparentize(white, 0.85);
+    }
+
+    &.lab {
+      background-color: $blue;
+    }
+
+    &.danger {
+      background-color: $red;
     }
   }
 }

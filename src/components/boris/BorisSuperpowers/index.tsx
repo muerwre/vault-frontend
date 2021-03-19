@@ -19,7 +19,7 @@ const BorisSuperpowers: FC<IProps> = ({ active, onChange }) => {
   return (
     <div className={styles.wrap}>
       <div className={styles.toggle}>
-        <Toggle value={active} handler={onChange} />
+        <Toggle value={active} handler={onChange} color="primary" />
       </div>
 
       <div className={styles.left} onClick={onToggle}>

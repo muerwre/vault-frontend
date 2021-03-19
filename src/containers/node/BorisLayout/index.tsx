@@ -2,16 +2,11 @@ import React, { FC, useCallback, useEffect } from 'react';
 import { selectNode, selectNodeComments } from '~/redux/node/selectors';
 import { selectAuthIsTester, selectUser } from '~/redux/auth/selectors';
 import { useDispatch } from 'react-redux';
-import { NodeComments } from '~/components/node/NodeComments';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
-import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { useRandomPhrase } from '~/constants/phrases';
-import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import isBefore from 'date-fns/isBefore';
-import { Card } from '~/components/containers/Card';
-import { Footer } from '~/components/main/Footer';
 import { BorisStats } from '~/components/boris/BorisStats';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectBorisStats } from '~/redux/boris/selectors';
@@ -20,6 +15,10 @@ import { nodeLoadNode } from '~/redux/node/actions';
 import { borisLoadStats } from '~/redux/boris/actions';
 import { Container } from '~/containers/main/Container';
 import StickyBox from 'react-sticky-box/dist/esnext';
+import { BorisComments } from '~/components/boris/BorisComments';
+import { URLS } from '~/constants/urls';
+import { Route, Switch } from 'react-router-dom';
+import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
 import { BorisSuperpowers } from '~/components/boris/BorisSuperpowers';
 
 type IProps = {};
@@ -78,24 +77,18 @@ const BorisLayout: FC<IProps> = () => {
         </div>
 
         <div className={styles.container}>
-          <Card className={styles.content}>
-            <Group className={styles.grid}>
-              {user.is_user && <NodeCommentForm isBefore nodeId={node.current.id} />}
+          {
+            <Switch>
+              <Route path={`${URLS.BORIS}/ui`} component={BorisUIDemo} />
 
-              {node.is_loading_comments ? (
-                <NodeNoComments is_loading count={7} />
-              ) : (
-                <NodeComments
-                  comments={comments}
-                  count={node.comment_count}
-                  user={user}
-                  order="ASC"
-                />
-              )}
-            </Group>
-
-            <Footer />
-          </Card>
+              <BorisComments
+                isLoadingComments={node.is_loading_comments}
+                commentCount={node.comment_count}
+                node={node.current}
+                comments={node.comments}
+              />
+            </Switch>
+          }
 
           <Group className={styles.stats}>
             <StickyBox className={styles.sticky} offsetTop={72} offsetBottom={10}>
