@@ -34,17 +34,14 @@
   align-items: center;
   justify-content: center;
 
-  position: relative;
-
   filter: grayscale(0);
 
-  transition: opacity 0.25s, filter 0.25s, box-shadow 0.25s;
+  transition: opacity 0.25s, filter 0.25s, box-shadow 0.25s, background-color 0.5s;
   opacity: 0.8;
 
   @include outer_shadow();
 
   input {
-    color: red;
     position: absolute;
     top: 0;
     left: 0;
@@ -80,30 +77,6 @@
     }
   }
 
-  &:global(.seamless) {
-    background: transparent;
-    color: black;
-    box-shadow: none;
-    fill: black;
-    stroke: black;
-    padding: 0;
-  }
-
-  &:global(.transparent) {
-    background: transparent;
-    color: white;
-    box-shadow: transparentize(black, 0.5) 0 0 4px;
-    padding: 0;
-    fill: black;
-    stroke: black;
-  }
-
-  &:global(.red) {
-    fill: $red;
-    stroke: $red;
-    color: $red;
-  }
-
   &:global(.stretchy) {
     flex: 1;
   }
@@ -112,8 +85,6 @@
   &:global(.grey) {
     background: transparentize(white, 0.9);
     color: white;
-    // background: lighten(white, 0.5);
-    // filter: grayscale(100%);
   }
 
   &:global(.disabled) {
@@ -144,14 +115,6 @@
   &:global(.has_icon_right) {
     padding-left: $gap;
     padding-right: $gap;
-  }
-
-  &.primary {
-    background: $red_gradient;
-  }
-
-  &.secondary {
-    background: $green_gradient;
   }
 
   &.outline {
@@ -185,31 +148,60 @@
   font: $font_12_semibold;
   padding: 0 15px;
   border-radius: $radius / 2;
+
+  &:global(.round) {
+    border-radius: 10px;
+  }
 }
+
 .mini {
   height: 28px;
   border-radius: $radius / 2;
+
+  &:global(.round) {
+    border-radius: 14px;
+  }
 }
+
 .small {
   height: 32px;
-  // border-radius: $radius / 2;
 
   svg {
     width: 24px;
     height: 24px;
   }
+
+  &:global(.round) {
+    border-radius: 16px;
+  }
 }
+
 .normal {
   height: 38px;
+
+  &:global(.round) {
+    border-radius: 19px;
+  }
 }
+
 .big {
   height: 40px;
+
+  &:global(.round) {
+    border-radius: 20px;
+  }
 }
+
 .giant {
   height: 50px;
   padding: 0 15px;
   min-width: 50px;
+
+  &:global(.round) {
+    border-radius: 25px;
+  }
 }
+
 .disabled {
   opacity: 0.5;
 }
@@ -226,20 +218,14 @@
   height: 20px;
 }
 
-.tooltip {
-  padding: 5px 10px;
-  background-color: darken($content_bg, 4%);
-  z-index: 2;
-  border-radius: $input_radius;
-  text-transform: none;
-  opacity: 0;
-  pointer-events: none;
-  touch-action: none;
-  transition: opacity 0.1s;
-  border: 1px solid transparentize(white, 0.9);
+.primary {
+  background: $red;
+}
 
-  .button:hover & {
-    opacity: 1;
-    font: $font_14_semibold;
-  }
+.secondary {
+  background: $wisegreen;
+}
+
+.lab {
+  background: $blue;
 }

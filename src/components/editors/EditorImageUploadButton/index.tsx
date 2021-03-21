@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { EditorUploadButton } from '~/components/editors/EditorUploadButton';
-import { INode } from '~/redux/types';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { IEditorComponentProps } from '~/redux/node/types';
 

@@ -1,24 +1,6 @@
 @import "src/styles/variables";
 
 .wrap {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
   margin: $gap * 2 0 0 0;
   padding: 0 $gap;
-}
-
-.tab {
-  @include outer_shadow();
-
-  padding: $gap;
-  margin-right: $gap;
-  border-radius: $radius $radius 0 0;
-  font: $font_14_semibold;
-  text-transform: uppercase;
-  cursor: pointer;
-
-  &.active {
-    background: lighten($content_bg, 4%);
-  }
 }

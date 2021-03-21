@@ -37,6 +37,8 @@ export type IAuthState = Readonly<{
   user: IUser;
   token: string;
 
+  is_tester: boolean;
+
   updates: {
     last: string;
     notifications: INotification[];

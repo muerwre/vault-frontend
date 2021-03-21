@@ -17,6 +17,10 @@ import nodeSaga from '~/redux/node/sagas';
 import flow, { IFlowState } from '~/redux/flow/reducer';
 import flowSaga from '~/redux/flow/sagas';
 
+import lab from '~/redux/lab';
+import labSaga from '~/redux/lab/sagas';
+import { ILabState } from '~/redux/lab/types';
+
 import uploads, { IUploadState } from '~/redux/uploads/reducer';
 import uploadSaga from '~/redux/uploads/sagas';
 
@@ -42,7 +46,7 @@ import { assocPath } from 'ramda';
 
 const authPersistConfig: PersistConfig = {
   key: 'auth',
-  whitelist: ['token', 'user', 'updates'],
+  whitelist: ['token', 'user', 'updates', 'is_tester'],
   storage,
 };
 
@@ -69,13 +73,16 @@ export interface IState {
   boris: IBorisState;
   messages: IMessagesState;
   tag: ITagState;
+  lab: ILabState;
 }
 
 export const sagaMiddleware = createSagaMiddleware();
 export const history = createBrowserHistory();
 
 const composeEnhancers =
-  typeof window === 'object' && (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  typeof window === 'object' &&
+  (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+  process.env.NODE_ENV === 'development'
     ? (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
@@ -91,6 +98,7 @@ export const store = createStore(
     player: persistReducer(playerPersistConfig, player),
     messages,
     tag: tag,
+    lab: lab,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
@@ -108,6 +116,7 @@ export function configureStore(): {
   sagaMiddleware.run(borisSaga);
   sagaMiddleware.run(messagesSaga);
   sagaMiddleware.run(tagSaga);
+  sagaMiddleware.run(labSaga);
 
   window.addEventListener('message', message => {
     if (message && message.data && message.data.type === 'oauth_login' && message.data.token)

@@ -11,7 +11,6 @@ const FlowRecent: FC<IProps> = ({ recent, updated }) => {
   return (
     <>
       {updated && updated.map(node => <FlowRecentItem node={node} key={node.id} has_new />)}
-
       {recent && recent.map(node => <FlowRecentItem node={node} key={node.id} />)}
     </>
   );

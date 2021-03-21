@@ -6,14 +6,12 @@ import { path } from 'ramda';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import { INodeComponentProps } from '~/redux/node/constants';
+import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
 
 interface IProps extends INodeComponentProps {}
 
 const NodeAudioImageBlock: FC<IProps> = ({ node }) => {
-  const images = useMemo(
-    () => node.files.filter(file => file && file.type === UPLOAD_TYPES.IMAGE),
-    [node.files]
-  );
+  const images = useNodeImages(node);
 
   if (images.length === 0) return null;
 

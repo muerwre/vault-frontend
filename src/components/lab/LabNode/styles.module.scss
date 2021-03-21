@@ -1,0 +1,11 @@
+@import "~/styles/variables.scss";
+
+.wrap {
+  min-width: 0;
+}
+
+.head {
+  background-color: transparentize(black, 0.9);
+  border-radius: $radius $radius 0 0;
+}
+

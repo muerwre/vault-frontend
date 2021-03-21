@@ -12,7 +12,7 @@ type IProps = RouteComponentProps & {
 
 type CellSize = 'small' | 'medium' | 'large';
 
-const getTitleLetters = (title: string): string => {
+const getTitleLetters = (title?: string): string => {
   const words = (title && title.split(' ')) || [];
 
   if (!words.length) return '';

@@ -1,0 +1,18 @@
+@import "~/styles/variables.scss";
+
+.content {
+  flex: 4;
+  z-index: 2;
+  border-radius: $radius;
+  padding: $gap;
+  background: $node_bg;
+  box-shadow: inset transparentize(mix($wisegreen, white, 60%), 0.6) 0 1px;
+
+  @include desktop {
+    flex: 2.5;
+  }
+
+  @media(max-width: 1024px) {
+    flex: 2;
+  }
+}

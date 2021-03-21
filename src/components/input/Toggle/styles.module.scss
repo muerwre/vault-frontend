@@ -1,0 +1,51 @@
+@import "~/styles/variables.scss";
+
+.toggle {
+  height: 24px;
+  width: 48px;
+  flex: 0 0 48px;
+  border-radius: 12px;
+  background-color: transparentize(white, 0.9);
+  display: flex;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+
+  &::after {
+    content: ' ';
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    height: 18px;
+    width: 18px;
+    border-radius: 11px;
+    background-color: darken(white, 50%);
+    transform: translate(0, 0);
+    transition: transform 0.25s, color 0.25s, background-color;
+  }
+
+  &.active {
+
+    &::after {
+      transform: translate(24px, 0);
+      background-color: white;
+    }
+
+    &.primary {
+      background-color: $wisegreen;
+    }
+
+    &.secondary {
+      background-color: transparentize(white, 0.85);
+    }
+
+    &.lab {
+      background-color: $blue;
+    }
+
+    &.danger {
+      background-color: $red;
+    }
+  }
+}

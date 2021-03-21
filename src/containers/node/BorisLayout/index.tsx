@@ -1,25 +1,30 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { selectNode, selectNodeComments } from '~/redux/node/selectors';
-import { selectUser } from '~/redux/auth/selectors';
+import { selectAuthIsTester, selectUser } from '~/redux/auth/selectors';
 import { useDispatch } from 'react-redux';
-import { NodeComments } from '~/components/node/NodeComments';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
-import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { useRandomPhrase } from '~/constants/phrases';
-import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import isBefore from 'date-fns/isBefore';
-import { Card } from '~/components/containers/Card';
-import { Footer } from '~/components/main/Footer';
-import { Sticky } from '~/components/containers/Sticky';
 import { BorisStats } from '~/components/boris/BorisStats';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectBorisStats } from '~/redux/boris/selectors';
-import { authSetUser } from '~/redux/auth/actions';
+import { authSetState, authSetUser } from '~/redux/auth/actions';
 import { nodeLoadNode } from '~/redux/node/actions';
 import { borisLoadStats } from '~/redux/boris/actions';
 import { Container } from '~/containers/main/Container';
+import StickyBox from 'react-sticky-box/dist/esnext';
+import { BorisComments } from '~/components/boris/BorisComments';
+import { URLS } from '~/constants/urls';
+import { Route, Switch, Link } from 'react-router-dom';
+import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
+import { BorisSuperpowers } from '~/components/boris/BorisSuperpowers';
+import { Superpower } from '~/components/boris/Superpower';
+import { Tabs } from '~/components/dialogs/Tabs';
+import { Tab } from '~/components/dialogs/Tab';
+import { useHistory, useLocation } from 'react-router';
+import { Card } from '~/components/containers/Card';
 
 type IProps = {};
 
@@ -30,6 +35,7 @@ const BorisLayout: FC<IProps> = () => {
   const user = useShallowSelect(selectUser);
   const stats = useShallowSelect(selectBorisStats);
   const comments = useShallowSelect(selectNodeComments);
+  const is_tester = useShallowSelect(selectAuthIsTester);
 
   useEffect(() => {
     const last_comment = comments[0];
@@ -55,6 +61,16 @@ const BorisLayout: FC<IProps> = () => {
     dispatch(borisLoadStats());
   }, [dispatch]);
 
+  const setBetaTester = useCallback(
+    (is_tester: boolean) => {
+      dispatch(authSetState({ is_tester }));
+    },
+    [dispatch]
+  );
+
+  const history = useHistory();
+  const location = useLocation();
+
   return (
     <Container>
       <div className={styles.wrap}>
@@ -70,26 +86,40 @@ const BorisLayout: FC<IProps> = () => {
 
         <div className={styles.container}>
           <Card className={styles.content}>
-            <Group className={styles.grid}>
-              {user.is_user && <NodeCommentForm isBefore nodeId={node.current.id} />}
+            <Superpower>
+              <Tabs>
+                <Tab
+                  active={location.pathname === URLS.BORIS}
+                  onClick={() => history.push(URLS.BORIS)}
+                >
+                  Комментарии
+                </Tab>
 
-              {node.is_loading_comments ? (
-                <NodeNoComments is_loading count={7} />
-              ) : (
-                <NodeComments
-                  comments={comments}
-                  count={node.comment_count}
-                  user={user}
-                  order="ASC"
+                <Tab
+                  active={location.pathname === `${URLS.BORIS}/ui`}
+                  onClick={() => history.push(`${URLS.BORIS}/ui`)}
+                >
+                  UI Demo
+                </Tab>
+              </Tabs>
+            </Superpower>
+
+            {
+              <Switch>
+                <Route path={`${URLS.BORIS}/ui`} component={BorisUIDemo} />
+
+                <BorisComments
+                  isLoadingComments={node.is_loading_comments}
+                  commentCount={node.comment_count}
+                  node={node.current}
+                  comments={node.comments}
                 />
-              )}
-            </Group>
-
-            <Footer />
+              </Switch>
+            }
           </Card>
 
           <Group className={styles.stats}>
-            <Sticky>
+            <StickyBox className={styles.sticky} offsetTop={72} offsetBottom={10}>
               <Group className={styles.stats__container}>
                 <div className={styles.stats__about}>
                   <h4>Господи-боженьки, где это я?</h4>
@@ -102,11 +132,15 @@ const BorisLayout: FC<IProps> = () => {
                   <p className="grey">//&nbsp;Такова&nbsp;жизнь.</p>
                 </div>
 
+                <div>
+                  {user.is_user && <BorisSuperpowers active={is_tester} onChange={setBetaTester} />}
+                </div>
+
                 <div className={styles.stats__wrap}>
                   <BorisStats stats={stats} />
                 </div>
               </Group>
-            </Sticky>
+            </StickyBox>
           </Group>
         </div>
       </div>

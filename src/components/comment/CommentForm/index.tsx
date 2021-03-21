@@ -14,7 +14,7 @@ import { EMPTY_COMMENT } from '~/redux/node/constants';
 import { CommentFormDropzone } from '~/components/comment/CommentFormDropzone';
 import styles from './styles.module.scss';
 import { ERROR_LITERAL } from '~/constants/errors';
-import { Group } from '~/components/containers/Group';
+import { useInputPasteUpload } from '~/utils/hooks/useInputPasteUpload';
 
 interface IProps {
   comment?: IComment;
@@ -47,6 +47,7 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
   }, [formik]);
 
   const error = formik.status || formik.errors.text;
+  useInputPasteUpload(textarea, uploader.uploadFiles);
 
   return (
     <CommentFormDropzone onUpload={uploader.uploadFiles}>
@@ -65,34 +66,40 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
 
             <CommentFormAttaches />
 
-            <Group horizontal className={styles.buttons}>
-              <CommentFormAttachButtons onUpload={uploader.uploadFiles} />
+            <div className={styles.buttons}>
+              <div className={styles.buttons_attach}>
+                <CommentFormAttachButtons onUpload={uploader.uploadFiles} />
+              </div>
 
-              {!!textarea && (
-                <CommentFormFormatButtons
-                  element={textarea}
-                  handler={formik.handleChange('text')}
-                />
-              )}
+              <div className={styles.buttons_format}>
+                {!!textarea && (
+                  <CommentFormFormatButtons
+                    element={textarea}
+                    handler={formik.handleChange('text')}
+                  />
+                )}
+              </div>
 
-              {isLoading && <LoaderCircle size={20} />}
+              <div className={styles.buttons_submit}>
+                {isLoading && <LoaderCircle size={20} />}
 
-              {isEditing && (
-                <Button size="small" color="link" type="button" onClick={onCancelEdit}>
-                  Отмена
+                {isEditing && (
+                  <Button size="small" color="link" type="button" onClick={onCancelEdit}>
+                    Отмена
+                  </Button>
+                )}
+
+                <Button
+                  type="submit"
+                  size="small"
+                  color="gray"
+                  iconRight={!isEditing ? 'enter' : 'check'}
+                  disabled={isLoading}
+                >
+                  {!isEditing ? 'Сказать' : 'Сохранить'}
                 </Button>
-              )}
-
-              <Button
-                type="submit"
-                size="small"
-                color="gray"
-                iconRight={!isEditing ? 'enter' : 'check'}
-                disabled={isLoading}
-              >
-                {!isEditing ? 'Сказать' : 'Сохранить'}
-              </Button>
-            </Group>
+              </div>
+            </div>
           </FileUploaderProvider>
         </FormikProvider>
       </form>

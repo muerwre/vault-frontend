@@ -10,6 +10,7 @@ const HANDLERS = {
 const INITIAL_STATE: IAuthState = {
   token: '',
   user: { ...EMPTY_USER },
+  is_tester: false,
 
   updates: {
     last: '',

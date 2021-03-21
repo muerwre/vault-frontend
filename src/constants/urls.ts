@@ -2,6 +2,7 @@ import { INode } from '~/redux/types';
 
 export const URLS = {
   BASE: '/',
+  LAB: '/lab',
   BORIS: '/boris',
   AUTH: {
     LOGIN: '/auth/login',

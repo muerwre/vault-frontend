@@ -11,6 +11,7 @@ import { selectAuthRegisterSocial } from '~/redux/auth/selectors';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { useCloseOnEscape } from '~/utils/hooks';
 import { LoginSocialRegisterButtons } from '~/containers/dialogs/LoginSocialRegisterButtons';
+import { Toggle } from '~/components/input/Toggle';
 
 const mapStateToProps = selectAuthRegisterSocial;
 const mapDispatchToProps = {
@@ -20,6 +21,12 @@ const mapDispatchToProps = {
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
+
+const phrase = [
+  'Сушёный кабачок особенно хорош в это время года, знаете ли.',
+  'Бывало, стреляешь по кабачку, или он стреляет в тебя.',
+  'Он всегда рядом, кабачок -- первый сорт! Надежда империи.',
+];
 
 const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
   onRequestClose,
@@ -32,6 +39,7 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isDryingPants, setIsDryingPants] = useState(false);
 
   const onSubmit = useCallback(
     (event: FormEvent) => {
@@ -56,7 +64,7 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
   useCloseOnEscape(onRequestClose);
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} autoComplete="new-password">
       <BetterScrollDialog
         onClose={onRequestClose}
         width={300}
@@ -73,6 +81,7 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
                 value={username}
                 title="Юзернэйм"
                 error={errors.username}
+                autoComplete="new-password"
               />
 
               <InputText
@@ -81,12 +90,18 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
                 title="Пароль"
                 type="password"
                 error={errors.password}
+                autoComplete="new-password"
               />
 
-              <label className={styles.check}>
-                <input type="checkbox" />
+              <div className={styles.check} onClick={() => setIsDryingPants(!isDryingPants)}>
+                <Toggle value={isDryingPants} color="primary" />
                 <span>Это не мои штаны сушатся на радиаторе в третьей лаборатории</span>
-              </label>
+              </div>
+
+              <div className={styles.check} onClick={() => setIsDryingPants(!isDryingPants)}>
+                <Toggle value={!isDryingPants} color="primary" />
+                <span>{phrase[Math.floor(Math.random() * phrase.length)]}</span>
+              </div>
             </Group>
           </div>
         </Padder>

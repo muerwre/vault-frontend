@@ -11,7 +11,7 @@ import { apiGetTagSuggestions, apiGetNodesOfTag } from '~/redux/tag/api';
 import { Unwrap } from '~/redux/types';
 
 function* loadTagNodes({ tag }: ReturnType<typeof tagLoadNodes>) {
-  yield put(tagSetNodes({ isLoading: true, list: [] }));
+  yield put(tagSetNodes({ isLoading: true }));
 
   try {
     const { list }: ReturnType<typeof selectTagNodes> = yield select(selectTagNodes);
