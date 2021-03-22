@@ -1,5 +1,13 @@
 @import "~/styles/variables.scss";
 
+.wrap {
+  @include lab_shadow;
+
+  border-radius: $radius;
+  background-color: $content_bg;
+  padding: $gap;
+}
+
 .group {
   display: flex;
 

@@ -9,7 +9,7 @@ import { Grid } from '~/components/containers/Grid';
 interface IProps {}
 
 const LabHead: FC<IProps> = () => (
-  <Card className={styles.wrap}>
+  <div className={styles.wrap}>
     <div className={styles.group}>
       <Group horizontal style={{ flex: '0 0 auto' }}>
         <Placeholder width="32px" height={32} />
@@ -28,7 +28,7 @@ const LabHead: FC<IProps> = () => (
 
       <Filler />
     </div>
-  </Card>
+  </div>
 );
 
 export { LabHead };

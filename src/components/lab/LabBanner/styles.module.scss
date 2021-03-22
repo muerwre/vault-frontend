@@ -1,6 +1,8 @@
 @import "~/styles/variables.scss";
 
 .wrap {
+  @include lab_shadow;
+
   background: linear-gradient(darken($dark_blue, 0%), darken($blue, 30%));
 }
 

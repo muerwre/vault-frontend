@@ -26,7 +26,7 @@ const LabStats: FC<IProps> = () => {
     <Group>
       <LabBanner />
 
-      <Card>
+      <div className={styles.card}>
         <Group>
           {isLoading ? (
             <Placeholder height={14} width="100px" />
@@ -52,7 +52,7 @@ const LabStats: FC<IProps> = () => {
             <LabHeroes nodes={heroes} isLoading={isLoading} />
           </div>
         </Group>
-      </Card>
+      </div>
     </Group>
   );
 };

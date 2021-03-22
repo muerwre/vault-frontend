@@ -15,3 +15,11 @@
 .heroes {
   margin-top: -$gap;
 }
+
+.card {
+  @include lab_shadow;
+
+  border-radius: $radius;
+  background-color: $comment_bg;
+  padding: $gap;
+}
