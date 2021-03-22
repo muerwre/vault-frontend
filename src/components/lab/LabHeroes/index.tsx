@@ -24,7 +24,7 @@ const LabHeroes: FC<IProps> = ({ nodes, isLoading }) => {
 
   return (
     <Group className={styles.heroes}>
-      {nodes.slice(0, 7).map(node => (
+      {nodes.slice(0, 10).map(node => (
         <LabHero node={node} key={node?.id} />
       ))}
     </Group>
