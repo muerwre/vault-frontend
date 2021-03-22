@@ -31,7 +31,7 @@ const LabStats: FC<IProps> = () => {
           {isLoading ? (
             <Placeholder height={14} width="100px" />
           ) : (
-            <div className={styles.title}>Тэги</div>
+            tags.length && <div className={styles.title}>Тэги</div>
           )}
 
           <div className={styles.tags}>
@@ -45,7 +45,7 @@ const LabStats: FC<IProps> = () => {
           {isLoading ? (
             <Placeholder height={14} width="100px" />
           ) : (
-            <div className={styles.title}>Важные</div>
+            heroes.length > 0 && <div className={styles.title}>Важные</div>
           )}
 
           <div className={styles.heroes}>
