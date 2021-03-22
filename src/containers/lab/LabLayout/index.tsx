@@ -14,10 +14,13 @@ import { LabBanner } from '~/components/lab/LabBanner';
 import { LabHead } from '~/components/lab/LabHead';
 import { Filler } from '~/components/containers/Filler';
 import { LabStats } from '~/containers/lab/LabStats';
+import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { selectLabList, selectLabListNodes, selectLabStatsLoading } from '~/redux/lab/selectors';
 
 interface IProps {}
 
 const LabLayout: FC<IProps> = () => {
+  const { is_loading } = useShallowSelect(selectLabList);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,7 +33,7 @@ const LabLayout: FC<IProps> = () => {
       <Container>
         <div className={styles.wrap}>
           <Group className={styles.content}>
-            <LabHead />
+            <LabHead isLoading={is_loading} />
             <LabGrid />
           </Group>
 
