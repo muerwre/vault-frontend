@@ -1,0 +1,10 @@
+@import "~/styles/variables.scss";
+
+.wrap {
+  padding: 0 $gap $gap;
+}
+
+.timestamp {
+  font: $font_12_regular;
+  color: darken(white, 40%);
+}

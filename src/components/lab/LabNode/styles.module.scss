@@ -1,11 +1,11 @@
 @import "~/styles/variables.scss";
 
 .wrap {
-  min-width: 0;
-}
+  box-shadow: transparentize(black, 0.5) 0 0 0 1px, inset transparentize(white, 0.9) 0 1px, lighten(black, 10%) 0 4px;
+  background-color: $content_bg;
+  cursor: pointer;
 
-.head {
-  background-color: transparentize(black, 0.9);
-  border-radius: $radius $radius 0 0;
+  min-width: 0;
+  border-radius: $radius;
 }
 
