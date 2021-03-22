@@ -30,7 +30,6 @@ const breakpoints: SwiperOptions['breakpoints'] = {
 };
 
 const LabImage: FC<IProps> = ({ node }) => {
-  const dispatch = useDispatch();
   const history = useHistory();
 
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
@@ -48,7 +47,6 @@ const LabImage: FC<IProps> = ({ node }) => {
   const resetSwiper = useCallback(() => {
     if (!controlledSwiper) return;
     controlledSwiper.slideTo(0, 0);
-    setTimeout(() => controlledSwiper.slideTo(0, 0), 300);
   }, [controlledSwiper]);
 
   useEffect(() => {
