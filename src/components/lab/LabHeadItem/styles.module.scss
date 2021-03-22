@@ -14,10 +14,9 @@
 
   &.active {
     color: $blue;
-
-    &:hover {
-      color: lighten($blue, 4%);
-    }
+    background-color: lighten($content_bg, 6%);
+    border-radius: $radius;
+    padding: 0 $gap;
   }
 }
 
