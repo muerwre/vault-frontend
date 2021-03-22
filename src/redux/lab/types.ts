@@ -1,4 +1,4 @@
-import { IError, INode } from '~/redux/types';
+import { IError, INode, ITag } from '~/redux/types';
 
 export type ILabState = Readonly<{
   list: {
@@ -6,6 +6,12 @@ export type ILabState = Readonly<{
     nodes: INode[];
     count: number;
     error: IError;
+  };
+  stats: {
+    is_loading: boolean;
+    heroes: Partial<INode>[];
+    tags: ITag[];
+    error?: string;
   };
 }>;
 
@@ -16,4 +22,9 @@ export type GetLabNodesRequest = {
 export type GetLabNodesResult = {
   nodes: INode[];
   count: number;
+};
+
+export type GetLabStatsResult = {
+  heroes: INode[];
+  tags: ITag[];
 };

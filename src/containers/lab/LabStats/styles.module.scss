@@ -1,0 +1,17 @@
+@import "~/styles/variables.scss";
+
+.title {
+  font: $font_14_semibold;
+  color: darken(white, 50%);
+  text-transform: uppercase;
+  padding: 0 $gap / 2;
+  padding-bottom: $gap / 2;
+}
+
+.tags.tags {
+  margin: 0 -$gap / 2;
+}
+
+.heroes {
+  margin-top: -$gap;
+}

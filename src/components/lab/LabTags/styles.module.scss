@@ -1,0 +1,10 @@
+@import "~/styles/variables.scss";
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+
+  & > * {
+    margin: $gap / 2;
+  }
+}
