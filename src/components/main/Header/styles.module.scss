@@ -48,6 +48,11 @@
   user-select: none;
   text-transform: uppercase;
   align-items: center;
+
+  @include tablet {
+    flex: 1;
+    justify-content: space-around;
+  }
 }
 
 .profile {
@@ -117,5 +122,11 @@
     &::after {
       right: 0;
     }
+  }
+}
+
+.filler {
+  @include tablet {
+    display: none;
   }
 }

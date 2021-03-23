@@ -80,7 +80,7 @@ const HeaderUnconnected: FC<IProps> = memo(
         <div className={styles.container}>
           <Logo />
 
-          <Filler />
+          <Filler className={styles.filler} />
 
           <div className={styles.plugs}>
             <Link

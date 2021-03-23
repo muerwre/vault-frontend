@@ -29,7 +29,7 @@
     color: $wisegreen;
   }
 
-  & :last-child::after {
+  & > :last-child::after {
     display: inline-block;
     content: " ";
     height: 1em;
