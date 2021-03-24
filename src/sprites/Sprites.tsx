@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-const Sprites: FC<{}> = () => (
+const Sprites: FC = () => (
   <svg width={0} height={0} viewBox="0 0 24 24">
     <defs>
       <pattern
@@ -268,6 +268,16 @@ const Sprites: FC<{}> = () => (
     <g id="search">
       <path fill="none" d="M0 0h24v24H0V0z" stroke="none" />
       <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+    </g>
+
+    <g id="comment">
+      <path fill="none" d="M0 0h24v24H0V0z" stroke="none" />
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+    </g>
+
+    <g id="comment_new">
+      <path fill="none" d="M0 0h24v24H0V0z" stroke="none" />
+      <path d="M22,6.98V16c0,1.1-0.9,2-2,2H6l-4,4V4c0-1.1,0.9-2,2-2h10.1C14.04,2.32,14,2.66,14,3c0,2.76,2.24,5,5,5 C20.13,8,21.16,7.61,22,6.98z M16,3c0,1.66,1.34,3,3,3s3-1.34,3-3s-1.34-3-3-3S16,1.34,16,3z" />
     </g>
 
     <g id="youtube" stroke="none">

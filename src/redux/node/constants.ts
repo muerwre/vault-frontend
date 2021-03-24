@@ -89,18 +89,10 @@ export type INodeComponentProps = {
 export type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<INodeComponentProps>>;
 
 export const LAB_PREVIEW_LAYOUT: Record<string, FC<INodeComponentProps>[]> = {
-  [NODE_TYPES.IMAGE]: [LabImage, LabPad, LabNodeTitle, LabBottomPanel],
-  [NODE_TYPES.VIDEO]: [NodeVideoBlock, LabPad, LabNodeTitle, LabBottomPanel],
-  [NODE_TYPES.AUDIO]: [
-    LabPad,
-    LabNodeTitle,
-    LabPad,
-    NodeAudioImageBlock,
-    NodeAudioBlock,
-    LabPad,
-    LabBottomPanel,
-  ],
-  [NODE_TYPES.TEXT]: [LabPad, LabNodeTitle, LabPad, LabText, LabPad, LabBottomPanel],
+  [NODE_TYPES.IMAGE]: [LabImage, LabPad, LabNodeTitle],
+  [NODE_TYPES.VIDEO]: [NodeVideoBlock, LabPad, LabNodeTitle],
+  [NODE_TYPES.AUDIO]: [LabPad, LabNodeTitle, LabPad, NodeAudioImageBlock, NodeAudioBlock, LabPad],
+  [NODE_TYPES.TEXT]: [LabPad, LabNodeTitle, LabPad, LabText, LabPad],
 };
 
 export const NODE_HEADS: INodeComponents = {
