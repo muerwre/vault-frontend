@@ -12,7 +12,7 @@ const LabGrid: FC<IProps> = () => {
   return (
     <div className={styles.wrap}>
       {nodes.map(node => (
-        <LabNode node={node} key={node.id} />
+        <LabNode node={node.node} key={node.node.id} />
       ))}
     </div>
   );

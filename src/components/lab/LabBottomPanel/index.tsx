@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Group } from '~/components/containers/Group';
-import { Icon } from '~/components/input/Icon';
 import { INodeComponentProps } from '~/redux/node/constants';
 import { Filler } from '~/components/containers/Filler';
 import styles from './styles.module.scss';

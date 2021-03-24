@@ -3,7 +3,7 @@ import { IError, INode, ITag } from '~/redux/types';
 export type ILabState = Readonly<{
   list: {
     is_loading: boolean;
-    nodes: INode[];
+    nodes: ILabNode[];
     count: number;
     error: IError;
   };
@@ -19,8 +19,14 @@ export type GetLabNodesRequest = {
   after?: string;
 };
 
+export interface ILabNode {
+  node: INode;
+  last_seen: string | null;
+  comment_count: number;
+}
+
 export type GetLabNodesResult = {
-  nodes: INode[];
+  nodes: ILabNode[];
   count: number;
 };
 
