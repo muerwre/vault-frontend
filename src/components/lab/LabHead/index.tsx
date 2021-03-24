@@ -6,22 +6,26 @@ interface IProps {
   isLoading?: boolean;
 }
 
-const LabHead: FC<IProps> = ({ isLoading }) => (
-  <div className={styles.wrap}>
-    <div className={styles.group}>
-      <LabHeadItem icon="recent" active isLoading={isLoading}>
-        Свежие
-      </LabHeadItem>
+const LabHead: FC<IProps> = ({ isLoading }) => {
+  return null;
 
-      <LabHeadItem icon="hot" isLoading={isLoading}>
-        Популярные
-      </LabHeadItem>
+  return (
+    <div className={styles.wrap}>
+      <div className={styles.group}>
+        <LabHeadItem icon="recent" active isLoading={isLoading}>
+          Свежие
+        </LabHeadItem>
 
-      <LabHeadItem icon="star_full" isLoading={isLoading}>
-        Важные
-      </LabHeadItem>
+        <LabHeadItem icon="hot" isLoading={isLoading}>
+          Популярные
+        </LabHeadItem>
+
+        <LabHeadItem icon="star_full" isLoading={isLoading}>
+          Важные
+        </LabHeadItem>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export { LabHead };
