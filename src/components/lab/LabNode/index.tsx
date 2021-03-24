@@ -1,30 +1,36 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { INode } from '~/redux/types';
-import { NodePanelInner } from '~/components/node/NodePanelInner';
 import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
 import styles from './styles.module.scss';
-import { Card } from '~/components/containers/Card';
-import { NodePanelLab } from '~/components/node/NodePanelLab';
+import { LabBottomPanel } from '~/components/lab/LabBottomPanel';
+import { isAfter, parseISO } from 'date-fns';
 
 interface IProps {
   node: INode;
+  lastSeen: string | null;
+  isLoading?: boolean;
+  commentCount: number;
 }
 
-const LabNode: FC<IProps> = ({ node }) => {
-  const { inline, block, head } = useNodeBlocks(node, false);
+const LabNode: FC<IProps> = ({ node, isLoading, lastSeen, commentCount }) => {
+  const { lab } = useNodeBlocks(node, false);
 
-  console.log(node.id, { inline, block, head });
+  const hasNewComments = useMemo(
+    () =>
+      !!node.commented_at && !!lastSeen && isAfter(parseISO(node.commented_at), parseISO(lastSeen)),
+    [node.commented_at, lastSeen]
+  );
 
   return (
-    <Card seamless className={styles.wrap}>
-      <div className={styles.head}>
-        <NodePanelLab node={node} />
-      </div>
-
-      {head}
-      {block}
-      {inline}
-    </Card>
+    <div className={styles.wrap}>
+      {lab}
+      <LabBottomPanel
+        node={node}
+        isLoading={!!isLoading}
+        hasNewComments={hasNewComments}
+        commentCount={commentCount}
+      />
+    </div>
   );
 };
 

@@ -215,6 +215,7 @@
   transition: fill, stroke 0.25s;
   will-change: transform;
   position: relative;
+  flex: 0 0 32px;
 
   &:global(.is_liked) {
     svg {

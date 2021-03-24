@@ -1,32 +1,31 @@
 import React, { FC } from 'react';
-import { Group } from '~/components/containers/Group';
-import { Card } from '~/components/containers/Card';
-import { Placeholder } from '~/components/placeholders/Placeholder';
-import { Filler } from '~/components/containers/Filler';
+import styles from './styles.module.scss';
+import { LabHeadItem } from '~/components/lab/LabHeadItem';
 
-interface IProps {}
+interface IProps {
+  isLoading?: boolean;
+}
 
-const LabHead: FC<IProps> = () => (
-  <Card>
-    <Group horizontal>
-      <Group horizontal style={{ flex: '0 0 auto' }}>
-        <Placeholder width="32px" height={32} />
-        <Placeholder width="96px" height={18} />
-      </Group>
+const LabHead: FC<IProps> = ({ isLoading }) => {
+  return null;
 
-      <Group horizontal style={{ flex: '0 0 auto' }}>
-        <Placeholder width="32px" height={32} />
-        <Placeholder width="126px" height={18} />
-      </Group>
+  return (
+    <div className={styles.wrap}>
+      <div className={styles.group}>
+        <LabHeadItem icon="recent" active isLoading={isLoading}>
+          Свежие
+        </LabHeadItem>
 
-      <Group horizontal style={{ flex: '0 0 auto' }}>
-        <Placeholder width="32px" height={32} />
-        <Placeholder width="96px" height={18} />
-      </Group>
+        <LabHeadItem icon="hot" isLoading={isLoading}>
+          Популярные
+        </LabHeadItem>
 
-      <Filler />
-    </Group>
-  </Card>
-);
+        <LabHeadItem icon="star_full" isLoading={isLoading}>
+          Важные
+        </LabHeadItem>
+      </div>
+    </div>
+  );
+};
 
 export { LabHead };

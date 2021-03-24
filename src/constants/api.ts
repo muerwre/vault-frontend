@@ -52,5 +52,6 @@ export const API = {
   },
   LAB: {
     NODES: `/lab/`,
+    STATS: '/lab/stats',
   },
 };

@@ -1,5 +1,21 @@
 @import "~/styles/variables.scss";
 
 .wrap {
-  background: $red_gradient_alt;
+  @include lab_shadow;
+
+  background: linear-gradient(darken($dark_blue, 0%), darken($blue, 30%));
+}
+
+.title {
+  font: $font_24_bold;
+  text-transform: uppercase;
+}
+
+.content {
+  font: $font_14_regular;
+  line-height: 19px;
+
+  strong {
+    font-weight: bold;
+  }
 }

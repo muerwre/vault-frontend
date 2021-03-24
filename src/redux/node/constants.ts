@@ -15,6 +15,11 @@ import { IEditorComponentProps, NodeEditorProps } from '~/redux/node/types';
 import { EditorFiller } from '~/components/editors/EditorFiller';
 import { EditorPublicSwitch } from '~/components/editors/EditorPublicSwitch';
 import { NodeImageSwiperBlock } from '~/components/node/NodeImageSwiperBlock';
+import { LabNodeTitle } from '~/components/lab/LabNodeTitle';
+import { LabText } from '~/components/lab/LabText';
+import { LabImage } from '~/components/lab/LabImage';
+import { LabBottomPanel } from '~/components/lab/LabBottomPanel';
+import { LabPad } from '~/components/lab/LabPad';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -82,6 +87,13 @@ export type INodeComponentProps = {
 };
 
 export type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<INodeComponentProps>>;
+
+export const LAB_PREVIEW_LAYOUT: Record<string, FC<INodeComponentProps>[]> = {
+  [NODE_TYPES.IMAGE]: [LabImage, LabPad, LabNodeTitle],
+  [NODE_TYPES.VIDEO]: [NodeVideoBlock, LabPad, LabNodeTitle],
+  [NODE_TYPES.AUDIO]: [LabPad, LabNodeTitle, LabPad, NodeAudioImageBlock, NodeAudioBlock, LabPad],
+  [NODE_TYPES.TEXT]: [LabPad, LabNodeTitle, LabPad, LabText, LabPad],
+};
 
 export const NODE_HEADS: INodeComponents = {
   [NODE_TYPES.IMAGE]: NodeImageSwiperBlock,

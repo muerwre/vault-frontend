@@ -9,12 +9,21 @@ interface IProps {}
 const LabBanner: FC<IProps> = () => (
   <Card className={styles.wrap}>
     <Group>
-      <Placeholder height={32} />
-      <Placeholder height={18} width="120px" />
-      <Placeholder height={18} width="200px" />
-      <Placeholder height={18} width="60px" />
-      <Placeholder height={18} width="180px" />
-      <Placeholder height={18} width="230px" />
+      <div className={styles.title}>Лаборатория!</div>
+
+      <Group className={styles.content}>
+        <p>
+          <strong>
+            Всё, что происходит здесь &mdash; всего лишь эксперимент, о котором не узнает никто за
+            пределами Убежища.
+          </strong>
+        </p>
+
+        <p>
+          Ловим радиоактивных жуков, приручаем утконосов-вампиров, катаемся на младшем научном
+          сотруднике Егоре Порсифоровиче (у него как раз сейчас линька).
+        </p>
+      </Group>
     </Group>
   </Card>
 );

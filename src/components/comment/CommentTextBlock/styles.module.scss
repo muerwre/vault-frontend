@@ -28,4 +28,12 @@
   :global(.green) {
     color: $wisegreen;
   }
+
+  & > :last-child::after {
+    display: inline-block;
+    content: " ";
+    height: 1em;
+    width: 120px;
+    flex: 0 0 120px;
+  }
 }

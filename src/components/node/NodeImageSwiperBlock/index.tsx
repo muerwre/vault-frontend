@@ -45,7 +45,9 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
   const resetSwiper = useCallback(() => {
     if (!controlledSwiper) return;
     controlledSwiper.slideTo(0, 0);
-    setTimeout(() => controlledSwiper.slideTo(0, 0), 300);
+
+    // TODO: replace with working one
+    // setTimeout(() => controlledSwiper.slideTo(0, 0), 300);
   }, [controlledSwiper]);
 
   useEffect(() => {
@@ -63,7 +65,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
   }
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} key={node.id}>
       <Swiper
         initialSlide={0}
         slidesPerView="auto"

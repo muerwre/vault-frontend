@@ -1,0 +1,23 @@
+@import "~/styles/variables.scss";
+
+.wrap {
+  @include lab_shadow;
+
+  border-radius: $radius;
+  background-color: $content_bg;
+  padding: $gap / 2;
+}
+
+.group {
+  display: flex;
+
+  @include tablet {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  & > * {
+    margin: $gap / 2;
+  }
+}

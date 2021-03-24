@@ -1,0 +1,25 @@
+@import "~/styles/variables.scss";
+
+.item {
+  flex: 0 0 auto;
+  padding: $gap / 2;
+  fill: currentColor;
+  color: darken(white, 50%);
+  transition: color 0.25s;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+  }
+
+  &.active {
+    color: $blue;
+    background-color: lighten($content_bg, 6%);
+    border-radius: $radius;
+    padding: 0 $gap;
+  }
+}
+
+.text {
+  font: $font_16_semibold;
+}
