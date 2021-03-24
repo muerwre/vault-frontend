@@ -9,19 +9,17 @@
   color: darken(white, 40%);
 }
 
-.comments.comments {
+.comments, .like {
   flex: 0;
-  font: $font_16_semibold;
+  font: $font_14_semibold;
   color: darken(white, 50%);
   fill: currentColor;
   stroke: none;
   column-gap: $gap / 2 !important;
+  align-items: center;
+  justify-content: center;
 
   &.active {
     color: $red;
   }
-}
-
-.like {
-
 }

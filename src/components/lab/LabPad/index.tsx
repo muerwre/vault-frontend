@@ -1,8 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import styles from './styles.module.scss';
+import { useHistory } from 'react-router';
+import { URLS } from '~/constants/urls';
+import { INodeComponentProps } from '~/redux/node/constants';
 
-interface IProps {}
+const LabPad: FC<INodeComponentProps> = ({ node }) => {
+  const history = useHistory();
+  const onClick = useCallback(() => history.push(URLS.NODE_URL(node.id)), [node.id]);
 
-const LabPad: FC<IProps> = () => <div className={styles.pad} />;
+  return <div className={styles.pad} onClick={onClick} />;
+};
 
 export { LabPad };
