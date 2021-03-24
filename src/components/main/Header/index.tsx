@@ -1,15 +1,14 @@
-import React, { FC, useCallback, memo, useState, useEffect, useMemo } from 'react';
+import React, { FC, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { push as historyPush } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import { Logo } from '~/components/main/Logo';
 
 import { Filler } from '~/components/containers/Filler';
-import { selectUser, selectAuthUpdates } from '~/redux/auth/selectors';
+import { selectAuthUpdates, selectUser } from '~/redux/auth/selectors';
 import { Group } from '~/components/containers/Group';
 import { DIALOGS } from '~/redux/modal/constants';
-import { pick } from 'ramda';
-import { path } from 'ramda';
+import { path, pick } from 'ramda';
 import { UserButton } from '../UserButton';
 import { Notifications } from '../Notifications';
 import { URLS } from '~/constants/urls';
@@ -21,7 +20,7 @@ import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IState } from '~/redux/store';
 import isBefore from 'date-fns/isBefore';
-import { Superpower } from '~/components/boris/Superpower';
+import { Authorized } from '~/components/containers/Authorized';
 
 const mapStateToProps = (state: IState) => ({
   user: pick(['username', 'is_user', 'photo', 'last_seen_boris'])(selectUser(state)),
@@ -90,14 +89,14 @@ const HeaderUnconnected: FC<IProps> = memo(
               ФЛОУ
             </Link>
 
-            <Superpower>
+            <Authorized>
               <Link
                 className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
                 to={URLS.LAB}
               >
                 ЛАБ
               </Link>
-            </Superpower>
+            </Authorized>
 
             <Link
               className={classNames(styles.item, {

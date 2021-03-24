@@ -14,29 +14,27 @@ const EditorPublicSwitch: FC<IProps> = ({ data, setData }) => {
   ]);
 
   return (
-    <Superpower>
-      <Button
-        color={data.is_promoted ? 'primary' : 'lab'}
-        type="button"
-        size="giant"
-        label={
-          data.is_promoted
-            ? 'Доступно всем на главной странице'
-            : 'Видно только сотрудникам в лаборатории'
-        }
-        onClick={onChange}
-        className={styles.button}
-        round
-      >
-        {data.is_promoted ? (
-          <Icon icon="waves" size={24} />
-        ) : (
-          <div className={styles.lab_wrapper}>
-            <Icon icon="lab" size={24} />
-          </div>
-        )}
-      </Button>
-    </Superpower>
+    <Button
+      color={data.is_promoted ? 'primary' : 'lab'}
+      type="button"
+      size="giant"
+      label={
+        data.is_promoted
+          ? 'Доступно всем на главной странице'
+          : 'Видно только сотрудникам в лаборатории'
+      }
+      onClick={onChange}
+      className={styles.button}
+      round
+    >
+      {data.is_promoted ? (
+        <Icon icon="waves" size={24} />
+      ) : (
+        <div className={styles.lab_wrapper}>
+          <Icon icon="lab" size={24} />
+        </div>
+      )}
+    </Button>
   );
 };
 
