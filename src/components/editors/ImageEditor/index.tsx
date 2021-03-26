@@ -6,29 +6,18 @@ import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
 import styles from './styles.module.scss';
 import { NodeEditorProps } from '~/redux/node/types';
+import { useFileUploaderContext } from '~/utils/hooks/fileUploader';
 
-const mapStateToProps = selectUploads;
-const mapDispatchToProps = {
-  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
-};
+type IProps = NodeEditorProps;
 
-type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & NodeEditorProps;
-
-const ImageEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) => {
-  const pending_files = useMemo(() => temp.filter(id => !!statuses[id]).map(id => statuses[id]), [
-    temp,
-    statuses,
-  ]);
-
-  const setFiles = useCallback((files: IFile[]) => setData({ ...data, files }), [data, setData]);
+const ImageEditor: FC<IProps> = () => {
+  const { pending, files, setFiles } = useFileUploaderContext()!;
 
   return (
     <div className={styles.wrap}>
-      <ImageGrid files={data.files} setFiles={setFiles} locked={pending_files} />
+      <ImageGrid files={files} setFiles={setFiles} locked={pending} />
     </div>
   );
 };
-
-const ImageEditor = connect(mapStateToProps, mapDispatchToProps)(ImageEditorUnconnected);
 
 export { ImageEditor };

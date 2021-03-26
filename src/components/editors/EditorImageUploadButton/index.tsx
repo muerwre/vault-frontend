@@ -5,16 +5,8 @@ import { IEditorComponentProps } from '~/redux/node/types';
 
 type IProps = IEditorComponentProps & {};
 
-const EditorImageUploadButton: FC<IProps> = ({ data, setData, temp, setTemp }) => (
-  <EditorUploadButton
-    data={data}
-    setData={setData}
-    temp={temp}
-    setTemp={setTemp}
-    accept="image/*"
-    icon="image"
-    type={UPLOAD_TYPES.IMAGE}
-  />
+const EditorImageUploadButton: FC<IProps> = () => (
+  <EditorUploadButton accept="image/*" icon="image" type={UPLOAD_TYPES.IMAGE} />
 );
 
 export { EditorImageUploadButton };

@@ -1,12 +1,7 @@
 import { IComment, INode } from '~/redux/types';
 import { INodeState } from '~/redux/node/reducer';
 
-export interface IEditorComponentProps {
-  data: INode;
-  setData: (data: INode) => void;
-  temp: string[];
-  setTemp: (val: string[]) => void;
-}
+export interface IEditorComponentProps {}
 
 export type GetNodeDiffRequest = {
   start?: string;
@@ -83,12 +78,7 @@ export type ApiLockCommentRequest = {
 export type ApiLockcommentResult = {
   deleted_at: string;
 };
-export type NodeEditorProps = {
-  data: INode;
-  setData: (val: INode) => void;
-  temp: string[];
-  setTemp: (val: string[]) => void;
-};
+export type NodeEditorProps = {};
 
 export type INodeRelated = {
   albums: Record<string, INode[]>;

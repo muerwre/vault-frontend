@@ -10,55 +10,36 @@ import styles from './styles.module.scss';
 import { NodeEditorProps } from '~/redux/node/types';
 import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
 import { useNodeAudios } from '~/utils/hooks/node/useNodeAudios';
+import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
+import { useFileUploaderContext } from '~/utils/hooks/fileUploader';
 
-const mapStateToProps = selectUploads;
-const mapDispatchToProps = {
-  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
-};
+type IProps = NodeEditorProps;
 
-type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & NodeEditorProps;
+const AudioEditor: FC<IProps> = () => {
+  const { values } = useNodeFormContext();
+  const { pending, setFiles } = useFileUploaderContext()!;
 
-const AudioEditorUnconnected: FC<IProps> = ({ data, setData, temp, statuses }) => {
-  const images = useNodeImages(data);
+  const images = useNodeImages(values);
+  const audios = useNodeAudios(values);
 
-  const pending_images = useMemo(
-    () =>
-      temp
-        .filter(id => !!statuses[id] && statuses[id].type === UPLOAD_TYPES.IMAGE)
-        .map(id => statuses[id]),
-    [temp, statuses]
-  );
-
-  const audios = useNodeAudios(data);
-
-  const pending_audios = useMemo(
-    () =>
-      temp
-        .filter(id => !!statuses[id] && statuses[id].type === UPLOAD_TYPES.AUDIO)
-        .map(id => statuses[id]),
-    [temp, statuses]
-  );
-
-  const setImages = useCallback(files => setData({ ...data, files: [...files, ...audios] }), [
-    setData,
-    data,
-    audios,
+  const pendingImages = useMemo(() => pending.filter(item => item.type === UPLOAD_TYPES.IMAGE), [
+    pending,
   ]);
 
-  const setAudios = useCallback(files => setData({ ...data, files: [...files, ...images] }), [
-    setData,
-    data,
-    images,
+  const pendingAudios = useMemo(() => pending.filter(item => item.type === UPLOAD_TYPES.AUDIO), [
+    pending,
   ]);
+
+  const setImages = useCallback(values => setFiles([...values, ...audios]), [setFiles, audios]);
+
+  const setAudios = useCallback(values => setFiles([...values, ...images]), [setFiles, images]);
 
   return (
     <div className={styles.wrap}>
-      <ImageGrid files={images} setFiles={setImages} locked={pending_images} />
-      <AudioGrid files={audios} setFiles={setAudios} locked={pending_audios} />
+      <ImageGrid files={images} setFiles={setImages} locked={pendingImages} />
+      <AudioGrid files={audios} setFiles={setAudios} locked={pendingAudios} />
     </div>
   );
 };
-
-const AudioEditor = connect(mapStateToProps, mapDispatchToProps)(AudioEditorUnconnected);
 
 export { AudioEditor };

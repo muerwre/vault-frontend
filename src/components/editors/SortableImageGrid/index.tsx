@@ -7,27 +7,25 @@ import { IFile } from '~/redux/types';
 import { IUploadStatus } from '~/redux/uploads/reducer';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
+import classNames from 'classnames';
 
 const SortableImageGrid = SortableContainer(
   ({
     items,
     locked,
     onDelete,
-    size = 200,
+    className,
   }: {
     items: IFile[];
     locked: IUploadStatus[];
     onDelete: (file_id: IFile['id']) => void;
     size?: number;
+    className?: string;
   }) => {
     const preventEvent = useCallback(event => event.preventDefault(), []);
 
     return (
-      <div
-        className={styles.grid}
-        style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${size}px, 1fr))` }}
-        onDropCapture={preventEvent}
-      >
+      <div className={classNames(styles.grid, className)} onDropCapture={preventEvent}>
         {items
           .filter(file => file && file.id)
           .map((file, index) => (

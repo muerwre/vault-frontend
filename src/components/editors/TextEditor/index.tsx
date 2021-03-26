@@ -4,16 +4,18 @@ import styles from './styles.module.scss';
 import { Textarea } from '~/components/input/Textarea';
 import { path } from 'ramda';
 import { NodeEditorProps } from '~/redux/node/types';
+import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
 
 type IProps = NodeEditorProps & {};
 
-const TextEditor: FC<IProps> = ({ data, setData }) => {
-  const setText = useCallback(
-    (text: string) => setData({ ...data, blocks: [{ type: 'text', text }] }),
-    [data, setData]
-  );
+const TextEditor: FC<IProps> = () => {
+  const { values, setFieldValue } = useNodeFormContext();
 
-  const text = (path(['blocks', 0, 'text'], data) as string) || '';
+  const setText = useCallback((text: string) => setFieldValue('blocks', [{ type: 'text', text }]), [
+    setFieldValue,
+  ]);
+
+  const text = (path(['blocks', 0, 'text'], values) as string) || '';
 
   return (
     <div className={styles.wrap}>

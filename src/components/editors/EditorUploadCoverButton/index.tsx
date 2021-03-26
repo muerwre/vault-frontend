@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import { IFileWithUUID } from '~/redux/types';
 import uuid from 'uuid4';
 import styles from './styles.module.scss';
@@ -11,74 +11,41 @@ import { getURL } from '~/utils/dom';
 import { Icon } from '~/components/input/Icon';
 import { PRESETS } from '~/constants/urls';
 import { IEditorComponentProps } from '~/redux/node/types';
+import { useFileUploader, useFileUploaderContext } from '~/utils/hooks/fileUploader';
+import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
+import { getFileType } from '~/utils/uploader';
 
-const mapStateToProps = state => {
-  const { statuses, files } = selectUploads(state);
+type IProps = IEditorComponentProps & {};
 
-  return { statuses, files };
-};
+const EditorUploadCoverButton: FC<IProps> = ({}) => {
+  const { values, setFieldValue } = useNodeFormContext();
+  const { uploadFiles, files } = useFileUploader(UPLOAD_SUBJECTS.EDITOR, UPLOAD_TARGETS.NODES, []);
 
-const mapDispatchToProps = {
-  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
-};
+  const background = values.cover ? getURL(values.cover, PRESETS['300']) : null;
+  const preview = status && path(['preview'], status);
 
-type IProps = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps &
-  IEditorComponentProps & {};
-
-const EditorUploadCoverButtonUnconnected: FC<IProps> = ({
-  data,
-  setData,
-  files,
-  statuses,
-  uploadUploadFiles,
-}) => {
-  const [coverTemp, setCoverTemp] = useState<string>('');
-
-  useEffect(() => {
-    Object.entries(statuses).forEach(([id, status]) => {
-      if (coverTemp === id && !!status.uuid && files[status.uuid]) {
-        setData({ ...data, cover: files[status.uuid] });
-        setCoverTemp('');
-      }
-    });
-  }, [statuses, files, coverTemp, setData, data]);
-
-  const onUpload = useCallback(
-    (uploads: File[]) => {
-      const items: IFileWithUUID[] = Array.from(uploads).map(
-        (file: File): IFileWithUUID => ({
-          file,
-          temp_id: uuid(),
-          subject: UPLOAD_SUBJECTS.EDITOR,
-          target: UPLOAD_TARGETS.NODES,
-          type: UPLOAD_TYPES.IMAGE,
-        })
-      );
-
-      setCoverTemp(path([0, 'temp_id'], items) || '');
-      uploadUploadFiles(items);
-    },
-    [uploadUploadFiles, setCoverTemp]
-  );
+  const onDropCover = useCallback(() => {
+    setFieldValue('cover', null);
+  }, [setFieldValue]);
 
   const onInputChange = useCallback(
-    event => {
-      event.preventDefault();
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(event.target.files || [])
+        .filter(file => getFileType(file) === UPLOAD_TYPES.IMAGE)
+        .slice(0, 1);
 
-      if (!event.target.files || !event.target.files.length) return;
-
-      onUpload(Array.from(event.target.files));
+      uploadFiles(files);
     },
-    [onUpload]
+    [uploadFiles]
   );
-  const onDropCover = useCallback(() => {
-    setData({ ...data, cover: undefined });
-  }, [setData, data]);
 
-  const background = data.cover ? getURL(data.cover, PRESETS['300']) : null;
-  const status = coverTemp && path([coverTemp], statuses);
-  const preview = status && path(['preview'], status);
+  useEffect(() => {
+    if (!files.length) {
+      return;
+    }
+
+    setFieldValue('cover', files[files.length - 1]);
+  }, [files, setFieldValue]);
 
   return (
     <div className={styles.wrap}>
@@ -87,11 +54,11 @@ const EditorUploadCoverButtonUnconnected: FC<IProps> = ({
         style={{ backgroundImage: `url("${preview || background}")` }}
       >
         <div className={styles.input}>
-          {!data.cover && <span>ОБЛОЖКА</span>}
+          {!values.cover && <span>ОБЛОЖКА</span>}
           <input type="file" accept="image/*" onChange={onInputChange} />
         </div>
 
-        {data.cover && (
+        {values.cover && (
           <div className={styles.button} onClick={onDropCover}>
             <Icon icon="close" />
           </div>
@@ -100,10 +67,5 @@ const EditorUploadCoverButtonUnconnected: FC<IProps> = ({
     </div>
   );
 };
-
-const EditorUploadCoverButton = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EditorUploadCoverButtonUnconnected);
 
 export { EditorUploadCoverButton };

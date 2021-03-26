@@ -6,16 +6,18 @@ import { InputText } from '~/components/input/InputText';
 import classnames from 'classnames';
 import { getYoutubeThumb } from '~/utils/dom';
 import { NodeEditorProps } from '~/redux/node/types';
+import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
 
 type IProps = NodeEditorProps & {};
 
-const VideoEditor: FC<IProps> = ({ data, setData }) => {
-  const setUrl = useCallback(
-    (url: string) => setData({ ...data, blocks: [{ type: 'video', url }] }),
-    [data, setData]
-  );
+const VideoEditor: FC<IProps> = () => {
+  const { values, setFieldValue } = useNodeFormContext();
 
-  const url = (path(['blocks', 0, 'url'], data) as string) || '';
+  const setUrl = useCallback((url: string) => setFieldValue('blocks', [{ type: 'video', url }]), [
+    setFieldValue,
+  ]);
+
+  const url = (path(['blocks', 0, 'url'], values) as string) || '';
   const preview = useMemo(() => getYoutubeThumb(url), [url]);
   const backgroundImage = (preview && `url("${preview}")`) || '';
 
