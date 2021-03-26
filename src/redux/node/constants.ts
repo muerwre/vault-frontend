@@ -20,6 +20,7 @@ import { LabText } from '~/components/lab/LabText';
 import { LabImage } from '~/components/lab/LabImage';
 import { LabBottomPanel } from '~/components/lab/LabBottomPanel';
 import { LabPad } from '~/components/lab/LabPad';
+import { NodeWebmBlock } from '~/components/node/NodeWebmBlock';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -78,6 +79,7 @@ export const NODE_TYPES = {
   IMAGE: 'image',
   AUDIO: 'audio',
   VIDEO: 'video',
+  WEBM: 'webm',
   TEXT: 'text',
 };
 
@@ -101,6 +103,7 @@ export const NODE_HEADS: INodeComponents = {
 
 export const NODE_COMPONENTS: INodeComponents = {
   [NODE_TYPES.VIDEO]: NodeVideoBlock,
+  [NODE_TYPES.WEBM]: NodeWebmBlock,
   [NODE_TYPES.AUDIO]: NodeAudioImageBlock,
 };
 
