@@ -2,6 +2,7 @@
 
 .wrap {
   padding: 0 $gap;
+  line-height: 1.3em;
 
   @include tablet {
     position: relative;
