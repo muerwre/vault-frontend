@@ -1,0 +1,11 @@
+@import "~/styles/variables.scss";
+
+.wrap {
+  @include outer_shadow;
+
+  padding: $gap * 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}

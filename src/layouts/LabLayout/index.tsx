@@ -25,6 +25,7 @@ const LabLayout: FC<IProps> = () => {
 
   return (
     <div>
+      <div className={styles.blur} />
       <Container>
         <div className={styles.wrap}>
           <Group className={styles.content}>

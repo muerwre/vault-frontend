@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from 'react';
-import { INode } from '~/redux/types';
+import { BlockType } from '~/redux/types';
 import styles from './styles.module.scss';
 import { Textarea } from '~/components/input/Textarea';
 import { path } from 'ramda';
@@ -9,7 +9,7 @@ type IProps = NodeEditorProps & {};
 
 const TextEditor: FC<IProps> = ({ data, setData }) => {
   const setText = useCallback(
-    (text: string) => setData({ ...data, blocks: [{ type: 'text', text }] }),
+    (text: string) => setData({ ...data, blocks: [{ type: BlockType.text, text }] }),
     [data, setData]
   );
 

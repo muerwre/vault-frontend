@@ -97,17 +97,18 @@ export interface IFileWithUUID {
   onFail?: () => void;
 }
 
-export interface IBlockText {
-  type: 'text';
-  text: string;
+export enum BlockType {
+  text = 'text',
+  video = 'video',
 }
 
-export interface IBlockEmbed {
-  type: 'video';
-  url: string;
+export interface IBlock {
+  type: BlockType;
+  text?: string;
+  url?: string;
 }
 
-export type IBlock = IBlockText | IBlockEmbed;
+export type IBlockComponentProps = { block: IBlock; handler: (val: IBlock) => void };
 
 export interface INode {
   id?: number;

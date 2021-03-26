@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { IComment, INode, ValueOf } from '../types';
+import { BlockType, IBlock, IBlockComponentProps, IComment, INode, ValueOf } from '../types';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';
@@ -20,6 +20,8 @@ import { LabText } from '~/components/lab/LabText';
 import { LabImage } from '~/components/lab/LabImage';
 import { LabBottomPanel } from '~/components/lab/LabBottomPanel';
 import { LabPad } from '~/components/lab/LabPad';
+import { NewEditorBlockVideo } from '~/containers/editors/NewEditorBlockVideo';
+import { NewEditorBlockText } from '~/containers/editors/NewEditorBlockText';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -126,6 +128,17 @@ export const NODE_EDITORS: Record<
   [NODE_TYPES.AUDIO]: AudioEditor,
 };
 
+export interface NodeEditorBlockConfig {
+  block: BlockType;
+  limit?: number;
+  initial?: boolean;
+}
+
+export const NODE_EDITOR_BLOCKS: Record<BlockType, FC<IBlockComponentProps>> = {
+  [BlockType.video]: NewEditorBlockVideo,
+  [BlockType.text]: NewEditorBlockText,
+};
+
 export const NODE_PANEL_COMPONENTS: Record<string, FC<IEditorComponentProps>[]> = {
   [NODE_TYPES.TEXT]: [EditorFiller, EditorUploadCoverButton, EditorPublicSwitch],
   [NODE_TYPES.VIDEO]: [EditorFiller, EditorUploadCoverButton, EditorPublicSwitch],
@@ -149,7 +162,7 @@ export const NODE_EDITOR_DATA: Record<
   Partial<INode>
 > = {
   [NODE_TYPES.TEXT]: {
-    blocks: [{ text: '', type: 'text' }],
+    blocks: [{ text: '', type: BlockType.text }],
   },
 };
 

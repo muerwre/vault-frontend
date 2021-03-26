@@ -1,0 +1,12 @@
+@import "~/styles/variables.scss";
+
+.panel {
+  flex: 0 1 400px;
+  height: 100%;
+  background: transparentize($content_bg, 0.2);
+}
+
+.content {
+  flex: 0 3 $content_width - 400;
+  background-color: transparentize($content_bg, 0.5);
+}

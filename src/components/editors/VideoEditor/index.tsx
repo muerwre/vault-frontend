@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { INode } from '~/redux/types';
+import { BlockType } from '~/redux/types';
 import styles from './styles.module.scss';
 import { path } from 'ramda';
 import { InputText } from '~/components/input/InputText';
@@ -11,7 +11,7 @@ type IProps = NodeEditorProps & {};
 
 const VideoEditor: FC<IProps> = ({ data, setData }) => {
   const setUrl = useCallback(
-    (url: string) => setData({ ...data, blocks: [{ type: 'video', url }] }),
+    (url: string) => setData({ ...data, blocks: [{ type: BlockType.video, url }] }),
     [data, setData]
   );
 

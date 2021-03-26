@@ -1,0 +1,33 @@
+@import "src/styles/variables";
+
+.wrap {
+  background-color: red;
+}
+
+.preview {
+  padding-top: 56.25%;
+  position: relative;
+  border-radius: $radius;
+  background: 50% 50% no-repeat;
+  background-size: cover;
+}
+
+.input_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input {
+  flex: 1 0 50%;
+  padding: $gap;
+  background: lighten($content_bg, 4%);
+  border-radius: $radius $radius 0 0;
+  input {
+    text-align: center;
+  }
+
+  &:global(.active) {
+    background: $red;
+  }
+}
