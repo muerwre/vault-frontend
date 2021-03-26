@@ -3,8 +3,8 @@
 .wrap {
   position: fixed;
   bottom: 0;
-  right: 50%;
-  transform: translate($content_width / 2 + $bar_height + $gap, 0);
+  left: 50%;
+  transform: translate($content_width / 2 + $gap, 0);
   z-index: 4;
 
   &:hover {
@@ -14,8 +14,8 @@
   }
 
   @media (max-width: $content_width + ($bar_height + $gap) * 2) {
-    right: 0;
-    transform: translate(0, 0);
+    left: 100%;
+    transform: translate(-$bar_height, 0);
   }
 }
 
