@@ -1,0 +1,6 @@
+@import "~/styles/variables.scss";
+
+.wrap {
+  padding: $gap;
+  background-color: transparentize($content_bg, 0.9);
+}

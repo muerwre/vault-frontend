@@ -1,0 +1,12 @@
+
+.buttons {
+  height: 0;
+  position: relative;
+
+  &_content {
+    position: absolute;
+    bottom: -10px;
+    right: 0;
+    z-index: 2;
+  }
+}

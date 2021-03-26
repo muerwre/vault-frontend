@@ -134,9 +134,21 @@ export interface NodeEditorBlockConfig {
   initial?: boolean;
 }
 
-export const NODE_EDITOR_BLOCKS: Record<BlockType, FC<IBlockComponentProps>> = {
+export const EDITOR_BLOCKS: Record<BlockType, FC<IBlockComponentProps>> = {
   [BlockType.video]: NewEditorBlockVideo,
   [BlockType.text]: NewEditorBlockText,
+};
+
+export const NODE_BLOCKS: Record<
+  string,
+  Partial<Record<BlockType, { limit?: number; initial?: boolean }>>
+> = {
+  [NODE_TYPES.TEXT]: {
+    [BlockType.text]: {
+      limit: 1,
+      initial: true,
+    },
+  },
 };
 
 export const NODE_PANEL_COMPONENTS: Record<string, FC<IEditorComponentProps>[]> = {

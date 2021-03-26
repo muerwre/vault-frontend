@@ -1,32 +1,31 @@
-import React, { createElement, FC, useCallback, useMemo } from 'react';
+import React, { FC } from 'react';
 import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
-import { NODE_EDITOR_BLOCKS } from '~/redux/node/constants';
-import { has, prop } from 'ramda';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
+import { NewEditorBlock } from '~/containers/editors/NewEditorBlock';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { IBlock } from '~/redux/types';
 
 interface IProps {}
 
-const NewEditorContent: FC<IProps> = () => {
-  const { values, setFieldValue } = useNodeFormContext();
+const SortableItem = SortableElement(({ value, index }: { value: IBlock; index: number }) => (
+  <NewEditorBlock index={index} block={value} />
+));
 
-  const onChange = useCallback(
-    (index: number) => (val: IBlock) =>
-      setFieldValue(
-        'blocks',
-        values.blocks.map((el, i) => (i === index ? val : el))
-      ),
-    [setFieldValue, values.blocks]
-  );
+const SortableList = SortableContainer(({ items }: { items: IBlock[] }) => (
+  <div>
+    {items.map((block, i) => (
+      <SortableItem key={i} index={i} value={block} />
+    ))}
+  </div>
+));
+
+const NewEditorContent: FC<IProps> = () => {
+  const { values } = useNodeFormContext();
 
   return (
     <Group className={styles.wrap}>
-      {values.blocks.map((block, i) =>
-        prop(block.type, NODE_EDITOR_BLOCKS)
-          ? createElement(prop(block.type, NODE_EDITOR_BLOCKS), { block, handler: onChange(i) })
-          : null
-      )}
+      <SortableList items={values.blocks} />
     </Group>
   );
 };
