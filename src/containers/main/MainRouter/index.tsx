@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { URLS } from '~/constants/urls';
-import { FlowLayout } from '~/containers/flow/FlowLayout';
-import { NodeLayout } from '~/containers/node/NodeLayout';
-import { BorisLayout } from '~/containers/node/BorisLayout';
+import { FlowLayout } from '~/layouts/FlowLayout';
+import { NodeLayout } from '~/layouts/NodeLayout';
+import { BorisLayout } from '~/layouts/BorisLayout';
 import { ErrorNotFound } from '~/containers/pages/ErrorNotFound';
 import { ProfilePage } from '~/containers/profile/ProfilePage';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
-import { LabLayout } from '~/containers/lab/LabLayout';
+import { LabLayout } from '~/layouts/LabLayout';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectAuthUser } from '~/redux/auth/selectors';
 

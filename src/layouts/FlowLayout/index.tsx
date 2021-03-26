@@ -11,6 +11,7 @@ import styles from './styles.module.scss';
 import { IState } from '~/redux/store';
 import { FlowStamp } from '~/components/flow/FlowStamp';
 import { Container } from '~/containers/main/Container';
+import { SidebarRouter } from '~/containers/main/SidebarRouter';
 
 const mapStateToProps = (state: IState) => ({
   flow: pick(['nodes', 'heroes', 'recent', 'updated', 'is_loading', 'search'], selectFlow(state)),
@@ -85,6 +86,8 @@ const FlowLayoutUnconnected: FC<IProps> = ({
           onChangeCellView={flowSetCellView}
         />
       </div>
+
+      <SidebarRouter prefix="/" />
     </Container>
   );
 };

@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { PlayerBar } from '~/components/bars/PlayerBar';
-import { SubmitBar } from '~/components/bars/SubmitBar';
 import { selectUser } from '~/redux/auth/selectors';
 import { pick } from 'ramda';
 import { connect } from 'react-redux';
@@ -14,8 +13,6 @@ const BottomContainerUnconnected: FC<IProps> = ({ is_user }) => (
   <div className={styles.wrap}>
     <div className={styles.content}>
       <PlayerBar />
-
-      {is_user && <SubmitBar />}
     </div>
   </div>
 );

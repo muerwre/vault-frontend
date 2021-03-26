@@ -87,9 +87,10 @@ export const nodeSetTags = (tags: ITag[]) => ({
   tags,
 });
 
-export const nodeCreate = (node_type: INode['type']) => ({
+export const nodeCreate = (node_type: INode['type'], isLab?: boolean) => ({
   type: NODE_ACTIONS.CREATE,
   node_type,
+  isLab,
 });
 
 export const nodeEdit = (id: INode['id']) => ({

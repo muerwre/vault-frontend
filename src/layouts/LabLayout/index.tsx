@@ -16,6 +16,7 @@ import { Filler } from '~/components/containers/Filler';
 import { LabStats } from '~/containers/lab/LabStats';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectLabList, selectLabListNodes, selectLabStatsLoading } from '~/redux/lab/selectors';
+import { SidebarRouter } from '~/containers/main/SidebarRouter';
 
 interface IProps {}
 
@@ -44,6 +45,8 @@ const LabLayout: FC<IProps> = () => {
           </div>
         </div>
       </Container>
+
+      <SidebarRouter prefix="/lab" isLab />
     </div>
   );
 };

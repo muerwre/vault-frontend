@@ -1,28 +1,37 @@
 import React, { FC, useCallback } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Icon } from '~/components/input/Icon';
-import * as NODE_ACTIONS from '~/redux/node/actions';
-import { DIALOGS } from '~/redux/modal/constants';
+import { nodeCreate } from '~/redux/node/actions';
 
 import styles from './styles.module.scss';
 import { NODE_TYPES } from '~/redux/node/constants';
+import classNames from 'classnames';
 
-const mapStateToProps = null;
-const mapDispatchToProps = {
-  nodeCreate: NODE_ACTIONS.nodeCreate,
-  // showDialog: MODAL_ACTIONS.modalShowDialog,
-};
+interface Props {
+  isLab?: boolean;
+}
 
-type IProps = typeof mapDispatchToProps & {};
+const SubmitBar: FC<Props> = ({ isLab }) => {
+  const dispatch = useDispatch();
 
-const SubmitBarUnconnected: FC<IProps> = ({ nodeCreate }) => {
-  const onOpenImageEditor = useCallback(() => nodeCreate(NODE_TYPES.IMAGE), [nodeCreate]);
-  const onOpenTextEditor = useCallback(() => nodeCreate(NODE_TYPES.TEXT), [nodeCreate]);
-  const onOpenVideoEditor = useCallback(() => nodeCreate(NODE_TYPES.VIDEO), [nodeCreate]);
-  const onOpenAudioEditor = useCallback(() => nodeCreate(NODE_TYPES.AUDIO), [nodeCreate]);
+  const onOpenImageEditor = useCallback(() => dispatch(nodeCreate(NODE_TYPES.IMAGE, isLab)), [
+    dispatch,
+  ]);
+
+  const onOpenTextEditor = useCallback(() => dispatch(nodeCreate(NODE_TYPES.TEXT, isLab)), [
+    dispatch,
+  ]);
+
+  const onOpenVideoEditor = useCallback(() => dispatch(nodeCreate(NODE_TYPES.VIDEO, isLab)), [
+    dispatch,
+  ]);
+
+  const onOpenAudioEditor = useCallback(() => dispatch(nodeCreate(NODE_TYPES.AUDIO, isLab)), [
+    dispatch,
+  ]);
 
   return (
-    <div className={styles.wrap}>
+    <div className={classNames(styles.wrap, { [styles.lab]: isLab })}>
       <div className={styles.panel}>
         <div onClick={onOpenImageEditor}>
           <Icon icon="image" />
@@ -47,10 +56,5 @@ const SubmitBarUnconnected: FC<IProps> = ({ nodeCreate }) => {
     </div>
   );
 };
-
-const SubmitBar = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SubmitBarUnconnected);
 
 export { SubmitBar };

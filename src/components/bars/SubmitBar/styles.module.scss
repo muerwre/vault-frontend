@@ -1,8 +1,11 @@
 @import "src/styles/variables";
 
 .wrap {
-  position: absolute;
-  right: -($bar_height + $gap);
+  position: fixed;
+  bottom: 0;
+  right: 50%;
+  transform: translate($content_width / 2 + $bar_height + $gap, 0);
+  z-index: 4;
 
   &:hover {
     .panel {
@@ -11,9 +14,8 @@
   }
 
   @media (max-width: $content_width + ($bar_height + $gap) * 2) {
-    position: relative;
     right: 0;
-    margin-left: $gap;
+    transform: translate(0, 0);
   }
 }
 
@@ -33,6 +35,10 @@
   svg {
     width: 32px;
     height: 32px;
+  }
+
+  .lab & {
+    background: $blue_gradient;
   }
 }
 

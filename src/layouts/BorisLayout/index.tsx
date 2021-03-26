@@ -17,7 +17,7 @@ import { Container } from '~/containers/main/Container';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import { BorisComments } from '~/components/boris/BorisComments';
 import { URLS } from '~/constants/urls';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
 import { BorisSuperpowers } from '~/components/boris/BorisSuperpowers';
 import { Superpower } from '~/components/boris/Superpower';
@@ -25,6 +25,7 @@ import { Tabs } from '~/components/dialogs/Tabs';
 import { Tab } from '~/components/dialogs/Tab';
 import { useHistory, useLocation } from 'react-router';
 import { Card } from '~/components/containers/Card';
+import { SidebarRouter } from '~/containers/main/SidebarRouter';
 
 type IProps = {};
 
@@ -144,6 +145,8 @@ const BorisLayout: FC<IProps> = () => {
           </Group>
         </div>
       </div>
+
+      <SidebarRouter prefix="/" />
     </Container>
   );
 };

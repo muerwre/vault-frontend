@@ -227,10 +227,18 @@ function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
   } catch {}
 }
 
-function* onCreateSaga({ node_type: type }: ReturnType<typeof nodeCreate>) {
+function* onCreateSaga({ node_type: type, isLab }: ReturnType<typeof nodeCreate>) {
   if (!type || !has(type, NODE_EDITOR_DIALOGS)) return;
 
-  yield put(nodeSetEditor({ ...EMPTY_NODE, ...(NODE_EDITOR_DATA[type] || {}), type }));
+  yield put(
+    nodeSetEditor({
+      ...EMPTY_NODE,
+      ...(NODE_EDITOR_DATA[type] || {}),
+      type,
+      is_promoted: !isLab,
+    })
+  );
+
   yield put(modalShowDialog(NODE_EDITOR_DIALOGS[type]));
 }
 
