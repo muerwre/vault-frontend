@@ -40,8 +40,6 @@ const BetterScrollDialog: FC<IProps> = ({
     return () => clearAllBodyScrollLocks();
   }, [ref]);
 
-  useCloseOnEscape(onClose);
-
   return (
     <div className={styles.wrap} ref={ref}>
       {backdrop && <div className={styles.backdrop}>{backdrop}</div>}

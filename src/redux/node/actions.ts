@@ -7,11 +7,6 @@ export const nodeSet = (node: Partial<INodeState>) => ({
   type: NODE_ACTIONS.SET,
 });
 
-export const nodeSave = (node: INode) => ({
-  node,
-  type: NODE_ACTIONS.SAVE,
-});
-
 export const nodeSetSaveErrors = (errors: IValidationErrors) => ({
   errors,
   type: NODE_ACTIONS.SET_SAVE_ERRORS,
@@ -53,6 +48,15 @@ export const nodePostLocalComment = (
   comment,
   callback,
   type: NODE_ACTIONS.POST_COMMENT,
+});
+
+export const nodeSubmitLocal = (
+  node: INode,
+  callback: (e?: string, errors?: Record<string, string>) => void
+) => ({
+  node,
+  callback,
+  type: NODE_ACTIONS.SUBMIT_LOCAL,
 });
 
 export const nodeSetSendingComment = (is_sending_comment: boolean) => ({

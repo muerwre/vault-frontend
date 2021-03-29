@@ -12,7 +12,7 @@ const EditorCreateDialog: FC = () => {
   } = useRouteMatch<{ type: string }>();
 
   const backUrl = useMemo(() => {
-    return url.replace(/\/create\/(.*)$/, '');
+    return (url && url.replace(/\/create\/(.*)$/, '')) || '/';
   }, [url]);
 
   const goBack = useCallback(() => {

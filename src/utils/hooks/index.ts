@@ -16,10 +16,10 @@ export const useCloseOnEscape = (onRequestClose?: () => void, ignore_inputs = fa
   );
 
   useEffect(() => {
-    window.addEventListener('keyup', onEscape);
+    document.addEventListener('keyup', onEscape);
 
     return () => {
-      window.removeEventListener('keyup', onEscape);
+      document.removeEventListener('keyup', onEscape);
     };
   }, [onEscape]);
 };

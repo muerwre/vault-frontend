@@ -18,12 +18,11 @@ import { NodeImageSwiperBlock } from '~/components/node/NodeImageSwiperBlock';
 import { LabNodeTitle } from '~/components/lab/LabNodeTitle';
 import { LabText } from '~/components/lab/LabText';
 import { LabImage } from '~/components/lab/LabImage';
-import { LabBottomPanel } from '~/components/lab/LabBottomPanel';
 import { LabPad } from '~/components/lab/LabPad';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
-  SAVE: `${prefix}SAVE`,
+  SUBMIT_LOCAL: `${prefix}SUBMIT_LOCAL`,
   LOAD_NODE: `${prefix}LOAD_NODE`,
   GOTO_NODE: `${prefix}GOTO_NODE`,
   SET: `${prefix}SET`,

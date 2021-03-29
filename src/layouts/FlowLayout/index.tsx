@@ -87,7 +87,7 @@ const FlowLayoutUnconnected: FC<IProps> = ({
         />
       </div>
 
-      <SidebarRouter prefix="/" />
+      <SidebarRouter prefix="" />
     </Container>
   );
 };

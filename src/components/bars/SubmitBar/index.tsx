@@ -16,22 +16,29 @@ const SubmitBar: FC<Props> = ({ isLab }) => {
   const onFocus = useCallback(() => setFocused(true), [setFocused]);
   const onBlur = useCallback(() => setFocused(false), [setFocused]);
 
+  const createUrl = useCallback(
+    (type: string) => {
+      return [url.replace(/\/$/, ''), 'create', type].join('/');
+    },
+    [url]
+  );
+
   return (
     <div className={classNames(styles.wrap, { [styles.lab]: isLab })}>
       <div className={classNames(styles.panel, { [styles.active]: focused })}>
-        <Link to={`${url}/create/image`} className={styles.link}>
+        <Link to={createUrl('image')} className={styles.link}>
           <Icon icon="image" size={32} />
         </Link>
 
-        <Link to={`${url}/create/text`} className={styles.link}>
+        <Link to={createUrl('text')} className={styles.link}>
           <Icon icon="text" size={32} />
         </Link>
 
-        <Link to={`${url}/create/video`} className={styles.link}>
+        <Link to={createUrl('video')} className={styles.link}>
           <Icon icon="video" size={32} />
         </Link>
 
-        <Link to={`${url}/create/audio`} className={styles.link}>
+        <Link to={createUrl('audio')} className={styles.link}>
           <Icon icon="audio" size={32} />
         </Link>
       </div>

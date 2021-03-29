@@ -9,7 +9,7 @@ import styles from './styles.module.scss';
 
 const EditorEditDialog: FC = () => {
   const [data, setData] = useState(EMPTY_NODE);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const history = useHistory();
 
   const {

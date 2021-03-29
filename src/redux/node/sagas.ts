@@ -17,7 +17,6 @@ import {
   nodeLock,
   nodeLockComment,
   nodePostLocalComment,
-  nodeSave,
   nodeSet,
   nodeSetCommentData,
   nodeSetComments,
@@ -26,8 +25,8 @@ import {
   nodeSetLoading,
   nodeSetLoadingComments,
   nodeSetRelated,
-  nodeSetSaveErrors,
   nodeSetTags,
+  nodeSubmitLocal,
   nodeUpdateTags,
 } from './actions';
 import {
@@ -43,7 +42,6 @@ import {
   apiPostNodeTags,
 } from './api';
 import { flowSetNodes, flowSetUpdated } from '../flow/actions';
-import { ERRORS } from '~/constants/errors';
 import { modalSetShown, modalShowDialog } from '../modal/actions';
 import { selectFlow, selectFlowNodes } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
@@ -73,14 +71,12 @@ export function* updateNodeEverywhere(node) {
   );
 }
 
-function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
+function* onNodeSubmitLocal({ node, callback }: ReturnType<typeof nodeSubmitLocal>) {
   try {
-    yield put(nodeSetSaveErrors({}));
-
     const { errors, node: result }: Unwrap<typeof apiPostNode> = yield call(apiPostNode, { node });
 
     if (errors && Object.values(errors).length > 0) {
-      yield put(nodeSetSaveErrors(errors));
+      callback('', errors);
       return;
     }
 
@@ -97,9 +93,10 @@ function* onNodeSave({ node }: ReturnType<typeof nodeSave>) {
       yield put(nodeSetCurrent(result));
     }
 
-    return yield put(modalSetShown(false));
+    callback();
+    return;
   } catch (error) {
-    yield put(nodeSetSaveErrors({ error: error.message || ERRORS.CANT_SAVE_NODE }));
+    callback(error.message);
   }
 }
 
@@ -361,7 +358,7 @@ function* onLockCommentSaga({ id, is_locked }: ReturnType<typeof nodeLockComment
 }
 
 export default function* nodeSaga() {
-  yield takeLatest(NODE_ACTIONS.SAVE, onNodeSave);
+  yield takeLatest(NODE_ACTIONS.SUBMIT_LOCAL, onNodeSubmitLocal);
   yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);

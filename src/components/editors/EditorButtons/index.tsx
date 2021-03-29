@@ -7,7 +7,7 @@ import { Padder } from '~/components/containers/Padder';
 import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
 
 const EditorButtons: FC = () => {
-  const { values, handleChange } = useNodeFormContext();
+  const { values, handleChange, isSubmitting } = useNodeFormContext();
 
   return (
     <Padder style={{ position: 'relative' }}>
@@ -20,12 +20,14 @@ const EditorButtons: FC = () => {
           handler={handleChange('title')}
           autoFocus
           maxLength={256}
+          disabled={isSubmitting}
         />
 
         <Button
           title="Сохранить"
           iconRight="check"
           color={values.is_promoted ? 'primary' : 'lab'}
+          disabled={isSubmitting}
         />
       </Group>
     </Padder>

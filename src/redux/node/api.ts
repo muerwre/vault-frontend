@@ -40,6 +40,9 @@ export type ApiGetNodeCommentsResponse = { comments: IComment[]; comment_count: 
 export const apiPostNode = ({ node }: ApiPostNodeRequest) =>
   api.post<ApiPostNodeResult>(API.NODE.SAVE, node).then(cleanResult);
 
+export const apiPostNodeLocal = ({ node }: ApiPostNodeRequest) =>
+  api.post<ApiPostNodeResult>(API.NODE.SAVE, node).then(cleanResult);
+
 export const getNodeDiff = ({
   start,
   end,
