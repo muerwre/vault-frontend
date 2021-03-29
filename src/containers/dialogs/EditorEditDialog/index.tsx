@@ -41,17 +41,17 @@ const EditorEditDialog: FC = () => {
     return () => cancel();
   }, [id]);
 
-  return (
-    <ModalWrapper onOverlayClick={console.log}>
-      {isLoading ? (
+  if (isLoading) {
+    return (
+      <ModalWrapper onOverlayClick={goBack}>
         <div className={styles.loader}>
           <LoaderCircle size={64} />
         </div>
-      ) : (
-        <EditorDialog node={data} onRequestClose={goBack} />
-      )}
-    </ModalWrapper>
-  );
+      </ModalWrapper>
+    );
+  }
+
+  return <EditorDialog node={data} onRequestClose={goBack} />;
 };
 
 export { EditorEditDialog };

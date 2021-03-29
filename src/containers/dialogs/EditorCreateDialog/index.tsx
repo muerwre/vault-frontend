@@ -3,7 +3,6 @@ import { EMPTY_NODE, NODE_TYPES } from '~/redux/node/constants';
 import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { useHistory, useRouteMatch } from 'react-router';
 import { values } from 'ramda';
-import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 
 const EditorCreateDialog: FC = () => {
   const history = useHistory();
@@ -28,11 +27,7 @@ const EditorCreateDialog: FC = () => {
     return null;
   }
 
-  return (
-    <ModalWrapper onOverlayClick={goBack}>
-      <EditorDialog node={data.current} onRequestClose={goBack} />
-    </ModalWrapper>
-  );
+  return <EditorDialog node={data.current} onRequestClose={goBack} />;
 };
 
 export { EditorCreateDialog };
