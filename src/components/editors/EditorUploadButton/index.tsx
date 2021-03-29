@@ -12,12 +12,14 @@ type IProps = IEditorComponentProps & {
   accept?: string;
   icon?: string;
   type?: typeof UPLOAD_TYPES[keyof typeof UPLOAD_TYPES];
+  label?: string;
 };
 
 const EditorUploadButton: FC<IProps> = ({
   accept = 'image/*',
   icon = 'plus',
   type = UPLOAD_TYPES.IMAGE,
+  label,
 }) => {
   const { uploadFiles } = useFileUploaderContext()!;
   const { values } = useNodeFormContext();
@@ -35,8 +37,10 @@ const EditorUploadButton: FC<IProps> = ({
     [uploadFiles]
   );
 
+  const color = values.is_promoted ? 'primary' : 'lab';
+
   return (
-    <Button type="button" round size="giant" className={styles.wrap}>
+    <Button type="button" round size="giant" className={styles.wrap} label={label} color={color}>
       <Icon icon={icon} size={24} />
       <input type="file" onChange={onInputChange} accept={accept} multiple />
     </Button>
