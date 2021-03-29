@@ -3,8 +3,9 @@
 .wrap {
   width: 100%;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
 }
 
 .content {
