@@ -1,15 +1,7 @@
 @import "src/styles/variables";
 
 .wrap {
-  @include outer_shadow();
-  @include editor_round_button();
-
-  transition: opacity 0.5s;
-  background: $red_gradient;
-
-  &:hover {
-    opacity: 1;
-  }
+  position: relative;
 
   input {
     width: 100%;

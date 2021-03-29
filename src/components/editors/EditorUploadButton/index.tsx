@@ -5,6 +5,8 @@ import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { IEditorComponentProps } from '~/redux/node/types';
 import { useFileUploaderContext } from '~/utils/hooks/fileUploader';
 import { getFileType } from '~/utils/uploader';
+import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
+import { Button } from '~/components/input/Button';
 
 type IProps = IEditorComponentProps & {
   accept?: string;
@@ -18,6 +20,7 @@ const EditorUploadButton: FC<IProps> = ({
   type = UPLOAD_TYPES.IMAGE,
 }) => {
   const { uploadFiles } = useFileUploaderContext()!;
+  const { values } = useNodeFormContext();
 
   const onInputChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -33,13 +36,10 @@ const EditorUploadButton: FC<IProps> = ({
   );
 
   return (
-    <div className={styles.wrap}>
+    <Button type="button" round size="giant" className={styles.wrap}>
+      <Icon icon={icon} size={24} />
       <input type="file" onChange={onInputChange} accept={accept} multiple />
-
-      <div className={styles.icon}>
-        <Icon size={32} icon={icon} />
-      </div>
-    </div>
+    </Button>
   );
 };
 
