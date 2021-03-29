@@ -1,5 +1,5 @@
-import { api, cleanResult, configWithToken, errorMiddleware, resultMiddleware } from '~/utils/api';
-import { IComment, INode, IResultWithStatus } from '../types';
+import { api, cleanResult } from '~/utils/api';
+import { IComment, INode } from '../types';
 import { API } from '~/constants/api';
 import { COMMENTS_DISPLAY } from './constants';
 import {
@@ -22,6 +22,7 @@ import {
   GetNodeDiffRequest,
   GetNodeDiffResult,
 } from '~/redux/node/types';
+import axios, { AxiosRequestConfig } from 'axios';
 
 export type ApiPostNodeRequest = { node: INode };
 export type ApiPostNodeResult = {
@@ -62,8 +63,20 @@ export const getNodeDiff = ({
     })
     .then(cleanResult);
 
-export const apiGetNode = ({ id }: ApiGetNodeRequest) =>
-  api.get<ApiGetNodeResult>(API.NODE.GET_NODE(id)).then(cleanResult);
+export const apiGetNode = ({ id }: ApiGetNodeRequest, config?: AxiosRequestConfig) =>
+  api.get<ApiGetNodeResult>(API.NODE.GET_NODE(id), config).then(cleanResult);
+
+export const apiGetNodeWithCancel = ({ id }: ApiGetNodeRequest) => {
+  const cancelToken = axios.CancelToken.source();
+  return {
+    request: api
+      .get<ApiGetNodeResult>(API.NODE.GET_NODE(id), {
+        cancelToken: cancelToken.token,
+      })
+      .then(cleanResult),
+    cancel: cancelToken.cancel,
+  };
+};
 
 export const apiPostComment = ({ id, data }: ApiPostCommentRequest) =>
   api.post<ApiPostCommentResult>(API.NODE.COMMENT(id), data).then(cleanResult);

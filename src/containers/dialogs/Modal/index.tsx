@@ -1,57 +1,34 @@
-import React, { Attributes, FC, useCallback } from 'react';
-import { connect } from 'react-redux';
-import ReactDOM from 'react-dom';
-import styles from './styles.module.scss';
-import { IState } from '~/redux/store';
-import * as ACTIONS from '~/redux/modal/actions';
+import React, { FC, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { DIALOG_CONTENT } from '~/constants/dialogs';
+import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { selectModal } from '~/redux/modal/selectors';
+import { modalSetDialog, modalSetShown, modalShowDialog } from '~/redux/modal/actions';
+import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 
-const mapStateToProps = ({ modal }: IState) => ({ ...modal });
-const mapDispatchToProps = {
-  modalSetShown: ACTIONS.modalSetShown,
-  modalSetDialog: ACTIONS.modalSetDialog,
-  modalShowDialog: ACTIONS.modalShowDialog,
-};
+type IProps = {};
 
-type IProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps> & {};
+const Modal: FC<IProps> = ({}) => {
+  const { is_shown, dialog } = useShallowSelect(selectModal);
+  const dispatch = useDispatch();
 
-const ModalUnconnected: FC<IProps> = ({
-  modalSetShown,
-  modalSetDialog,
-  modalShowDialog,
-  is_shown,
-  dialog,
-}) => {
   const onRequestClose = useCallback(() => {
-    modalSetShown(false);
-    modalSetDialog('');
-  }, [modalSetShown, modalSetDialog]);
+    dispatch(modalSetShown(false));
+    dispatch(modalSetDialog(''));
+  }, [dispatch]);
+
+  const onDialogChange = useCallback((val: string) => dispatch(modalShowDialog(val)), [dispatch]);
 
   if (!dialog || !DIALOG_CONTENT[dialog] || !is_shown) return null;
 
-  return ReactDOM.createPortal(
-    <div className={styles.fixed}>
-      <div className={styles.overlay} onClick={onRequestClose} />
-      <div className={styles.content}>
-        {React.createElement(DIALOG_CONTENT[dialog], {
-          onRequestClose,
-          onDialogChange: modalShowDialog,
-        })}
-      </div>
-    </div>,
-    document.body
+  return (
+    <ModalWrapper onOverlayClick={onRequestClose}>
+      {React.createElement(DIALOG_CONTENT[dialog], {
+        onRequestClose,
+        onDialogChange,
+      })}
+    </ModalWrapper>
   );
 };
 
-const Modal = connect(mapStateToProps, mapDispatchToProps)(ModalUnconnected);
-
-export { ModalUnconnected, Modal };
-
-/*
-
-  <div className={styles.content_scroller}>
-    <div className={styles.content_padder}>
-    </div>
-  </div>
-
-*/
+export { Modal };

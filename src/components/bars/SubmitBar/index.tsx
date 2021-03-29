@@ -1,58 +1,44 @@
-import React, { FC, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { FC, useCallback, useState } from 'react';
 import { Icon } from '~/components/input/Icon';
-import { nodeCreate } from '~/redux/node/actions';
-
-import styles from './styles.module.scss';
-import { NODE_TYPES } from '~/redux/node/constants';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+import { useRouteMatch } from 'react-router';
+import styles from './styles.module.scss';
 
 interface Props {
   isLab?: boolean;
 }
 
 const SubmitBar: FC<Props> = ({ isLab }) => {
-  const dispatch = useDispatch();
+  const { url } = useRouteMatch();
+  const [focused, setFocused] = useState(false);
 
-  const onOpenImageEditor = useCallback(() => dispatch(nodeCreate(NODE_TYPES.IMAGE, isLab)), [
-    dispatch,
-  ]);
-
-  const onOpenTextEditor = useCallback(() => dispatch(nodeCreate(NODE_TYPES.TEXT, isLab)), [
-    dispatch,
-  ]);
-
-  const onOpenVideoEditor = useCallback(() => dispatch(nodeCreate(NODE_TYPES.VIDEO, isLab)), [
-    dispatch,
-  ]);
-
-  const onOpenAudioEditor = useCallback(() => dispatch(nodeCreate(NODE_TYPES.AUDIO, isLab)), [
-    dispatch,
-  ]);
+  const onFocus = useCallback(() => setFocused(true), [setFocused]);
+  const onBlur = useCallback(() => setFocused(false), [setFocused]);
 
   return (
     <div className={classNames(styles.wrap, { [styles.lab]: isLab })}>
-      <div className={styles.panel}>
-        <div onClick={onOpenImageEditor}>
-          <Icon icon="image" />
-        </div>
+      <div className={classNames(styles.panel, { [styles.active]: focused })}>
+        <Link to={`${url}/create/image`} className={styles.link}>
+          <Icon icon="image" size={32} />
+        </Link>
 
-        <div onClick={onOpenTextEditor}>
-          <Icon icon="text" />
-        </div>
+        <Link to={`${url}/create/text`} className={styles.link}>
+          <Icon icon="text" size={32} />
+        </Link>
 
-        <div onClick={onOpenVideoEditor}>
-          <Icon icon="video" />
-        </div>
+        <Link to={`${url}/create/video`} className={styles.link}>
+          <Icon icon="video" size={32} />
+        </Link>
 
-        <div onClick={onOpenAudioEditor}>
-          <Icon icon="audio" />
-        </div>
+        <Link to={`${url}/create/audio`} className={styles.link}>
+          <Icon icon="audio" size={32} />
+        </Link>
       </div>
 
-      <div className={styles.button}>
+      <button className={styles.button} onFocus={onFocus} onBlur={onBlur} type="button">
         <Icon icon="plus" />
-      </div>
+      </button>
     </div>
   );
 };

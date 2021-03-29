@@ -5,6 +5,8 @@ import { INode } from '~/redux/types';
 import classNames from 'classnames';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { getPrettyDate } from '~/utils/dom';
+import { URLS } from '~/constants/urls';
+import { Link } from 'react-router-dom';
 
 interface IProps {
   node: Partial<INode>;
@@ -24,7 +26,7 @@ interface IProps {
 
 const NodePanelInner: FC<IProps> = memo(
   ({
-    node: { title, user, is_liked, is_heroic, deleted_at, created_at, like_count },
+    node: { id, title, user, is_liked, is_heroic, deleted_at, created_at, like_count },
     stack,
 
     canStar,
@@ -78,9 +80,9 @@ const NodePanelInner: FC<IProps> = memo(
                   <Icon icon={deleted_at ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
                 </div>
 
-                <div>
+                <Link to={URLS.NODE_EDIT_URL(id)}>
                   <Icon icon="edit" size={24} onClick={onEdit} />
-                </div>
+                </Link>
               </div>
             </div>
           )}

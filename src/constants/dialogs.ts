@@ -1,8 +1,4 @@
 import { NODE_TYPES } from '~/redux/node/constants';
-import { EditorDialogImage } from '~/containers/editors/EditorDialogImage';
-import { EditorDialogText } from '~/containers/editors/EditorDialogText';
-import { EditorDialogVideo } from '~/containers/editors/EditorDialogVideo';
-import { EditorDialogAudio } from '~/containers/editors/EditorDialogAudio';
 import { LoginDialog } from '~/containers/dialogs/LoginDialog';
 import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
 import { TestDialog } from '~/containers/dialogs/TestDialog';
@@ -16,10 +12,6 @@ import { IDialogProps } from '~/redux/types';
 import { FC } from 'react';
 
 export const DIALOG_CONTENT: Record<string, FC<IDialogProps>> = {
-  [DIALOGS.EDITOR_IMAGE]: EditorDialogImage,
-  [DIALOGS.EDITOR_TEXT]: EditorDialogText,
-  [DIALOGS.EDITOR_VIDEO]: EditorDialogVideo,
-  [DIALOGS.EDITOR_AUDIO]: EditorDialogAudio,
   [DIALOGS.LOGIN]: LoginDialog,
   [DIALOGS.LOGIN_SOCIAL_REGISTER]: LoginSocialRegisterDialog,
   [DIALOGS.LOADING]: LoadingDialog,

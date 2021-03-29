@@ -1,5 +1,5 @@
 import React, { FC, memo } from 'react';
-import { RouteComponentProps } from 'react-router';
+import { Route, RouteComponentProps } from 'react-router';
 import { selectNode } from '~/redux/node/selectors';
 import { Card } from '~/components/containers/Card';
 
@@ -15,6 +15,8 @@ import { NodeBottomBlock } from '~/components/node/NodeBottomBlock';
 import { useNodeCoverImage } from '~/utils/hooks/node/useNodeCoverImage';
 import { useScrollToTop } from '~/utils/hooks/useScrollToTop';
 import { useLoadNode } from '~/utils/hooks/node/useLoadNode';
+import { URLS } from '~/constants/urls';
+import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 
 type IProps = RouteComponentProps<{ id: string }> & {};
 
@@ -64,6 +66,8 @@ const NodeLayout: FC<IProps> = memo(
         </Container>
 
         <SidebarRouter prefix="/post:id" />
+
+        <Route path={URLS.NODE_EDIT_URL(':id')} component={EditorEditDialog} />
       </div>
     );
   }

@@ -5,6 +5,7 @@ import { TagSidebar } from '~/containers/sidebars/TagSidebar';
 import { ProfileSidebar } from '~/containers/sidebars/ProfileSidebar';
 import { Authorized } from '~/components/containers/Authorized';
 import { SubmitBar } from '~/components/bars/SubmitBar';
+import { EditorCreateDialog } from '~/containers/dialogs/EditorCreateDialog';
 
 interface IProps {
   prefix?: string;
@@ -15,6 +16,7 @@ const SidebarRouter: FC<IProps> = ({ prefix = '', isLab }) => {
   return createPortal(
     <>
       <Switch>
+        <Route path={`${prefix}/create/:type`} component={EditorCreateDialog} />
         <Route path={`${prefix}/tag/:tag`} component={TagSidebar} />
         <Route path={`${prefix}/~:username`} component={ProfileSidebar} />
       </Switch>

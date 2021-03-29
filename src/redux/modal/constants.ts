@@ -27,5 +27,5 @@ export const MODAL_ACTIONS = {
 
 export interface IDialogProps {
   onRequestClose: () => void;
-  onDialogChange: (dialog: ValueOf<typeof DIALOGS>) => void;
+  onDialogChange?: (dialog: ValueOf<typeof DIALOGS>) => void;
 }

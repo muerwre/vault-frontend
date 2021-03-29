@@ -11,22 +11,20 @@ import { EditorButtons } from '~/components/editors/EditorButtons';
 import { FileUploaderProvider, useFileUploader } from '~/utils/hooks/fileUploader';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS } from '~/redux/uploads/constants';
 import { FormikProvider } from 'formik';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
-import { selectNodeEditor } from '~/redux/node/selectors';
+import { INode } from '~/redux/types';
 
 interface Props extends IDialogProps {
-  type: string;
+  node: INode;
 }
 
-const EditorDialog: FC<Props> = ({ type, onRequestClose }) => {
-  const editor = useShallowSelect(selectNodeEditor);
+const EditorDialog: FC<Props> = ({ node, onRequestClose }) => {
   const uploader = useFileUploader(UPLOAD_SUBJECTS.EDITOR, UPLOAD_TARGETS.NODES, []);
-  const formik = useNodeFormFormik({ ...editor, type }, uploader, onRequestClose);
+  const formik = useNodeFormFormik(node, uploader, onRequestClose);
   const { values, handleSubmit } = formik;
 
   useCloseOnEscape(onRequestClose);
 
-  const component = useMemo(() => prop(type, NODE_EDITORS), [type]);
+  const component = useMemo(() => node.type && prop(node.type, NODE_EDITORS), [node.type]);
 
   if (!component) {
     return null;
