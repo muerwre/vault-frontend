@@ -27,7 +27,7 @@ const EditorDialog: FC<Props> = ({ node, onRequestClose }) => {
   const component = useMemo(() => node.type && prop(node.type, NODE_EDITORS), [node.type]);
 
   const onClose = useCallback(() => {
-    if (!window.confirm('Точно выйти?')) {
+    if (dirty && !window.confirm('Точно выйти?')) {
       return undefined;
     }
 
