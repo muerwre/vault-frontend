@@ -17,7 +17,7 @@ export const useNodeBlocks = (node: INode, isLoading: boolean) => {
       createElement(block, {
         node,
         isLoading,
-        key,
+        key: `${node.id}-${key}`,
       }),
     [node, isLoading]
   );

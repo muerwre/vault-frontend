@@ -65,7 +65,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
   }
 
   return (
-    <div className={styles.wrapper} key={node.id}>
+    <div className={styles.wrapper}>
       <Swiper
         initialSlide={0}
         slidesPerView="auto"
