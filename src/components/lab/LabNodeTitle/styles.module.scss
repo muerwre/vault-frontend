@@ -1,7 +1,7 @@
 @import "~/styles/variables.scss";
 
 .wrap {
-  padding: 0 $gap;
+  padding: $lab_gap - $gap $lab_gap 0;
 }
 
 .title {

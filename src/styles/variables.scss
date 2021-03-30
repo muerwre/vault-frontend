@@ -3,6 +3,7 @@
 $header_height: 64px;
 $cell: 280px;
 $gap: 10px;
+$lab_gap: $gap * 3;
 $grid_line: 5px;
 $content_width: $cell * 5 + $grid_line * 4;
 $spc: $gap * 2;

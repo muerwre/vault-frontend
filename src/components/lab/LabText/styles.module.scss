@@ -1,7 +1,7 @@
 @import "~/styles/variables.scss";
 
 .wrap {
-  padding: 0 $gap;
+  padding: 0 $lab_gap;
   line-height: 1.3em;
 
   @include tablet {

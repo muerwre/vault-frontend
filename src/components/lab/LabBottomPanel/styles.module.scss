@@ -1,7 +1,7 @@
 @import "~/styles/variables.scss";
 
 .wrap {
-  padding: 0 $gap $gap;
+  padding: $gap $lab_gap $lab_gap;
 }
 
 .timestamp {
