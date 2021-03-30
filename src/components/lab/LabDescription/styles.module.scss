@@ -1,12 +1,12 @@
 @import "~/styles/variables.scss";
 
 .wrap {
-  padding: 0 $lab_gap;
+  padding: $lab_gap $lab_gap 0;
   line-height: 1.3em;
 
   @include tablet {
     position: relative;
-    max-height: 100vh;
+    max-height: 30vh;
     overflow: hidden;
 
     &::after {

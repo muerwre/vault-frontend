@@ -23,7 +23,7 @@ const LabNodeTitle: FC<IProps> = ({ node }) => {
       {node.is_heroic && (
         <Tippy content="Важный пост">
           <div className={styles.star}>
-            <Icon icon="star_full" />
+            <Icon icon="star_full" size={24} />
           </div>
         </Tippy>
       )}

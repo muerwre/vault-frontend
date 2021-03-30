@@ -31,14 +31,14 @@ const LabBottomPanel: FC<Props> = ({ node, hasNewComments, commentCount }) => {
           horizontal
           className={classNames(styles.comments, { [styles.active]: hasNewComments })}
         >
-          <Icon icon={hasNewComments ? 'comment_new' : 'comment'} size={16} />
+          <Icon icon={hasNewComments ? 'comment_new' : 'comment'} size={24} />
           <span>{commentCount}</span>
         </Grid>
       )}
 
       {!!node.like_count && node.like_count > 0 && (
         <Grid horizontal className={classNames(styles.like)}>
-          <Icon icon={node.is_liked ? 'heart_full' : 'heart'} size={16} />
+          <Icon icon={node.is_liked ? 'heart_full' : 'heart'} size={24} />
           <span>{node.like_count}</span>
         </Grid>
       )}

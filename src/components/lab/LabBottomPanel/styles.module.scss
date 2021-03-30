@@ -11,13 +11,14 @@
 
 .comments, .like {
   flex: 0;
-  font: $font_14_semibold;
+  font: $font_16_semibold;
   color: darken(white, 50%);
   fill: currentColor;
   stroke: none;
-  column-gap: $gap / 2 !important;
+  column-gap: $gap !important;
   align-items: center;
   justify-content: center;
+  padding-left: $gap;
 
   &.active {
     color: $red;

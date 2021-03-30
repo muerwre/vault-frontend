@@ -19,6 +19,7 @@ import { LabNodeTitle } from '~/components/lab/LabNodeTitle';
 import { LabText } from '~/components/lab/LabText';
 import { LabImage } from '~/components/lab/LabImage';
 import { LabPad } from '~/components/lab/LabPad';
+import { LabDescription } from '~/components/lab/LabDescription';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
@@ -88,8 +89,8 @@ export type INodeComponentProps = {
 export type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<INodeComponentProps>>;
 
 export const LAB_PREVIEW_LAYOUT: Record<string, FC<INodeComponentProps>[]> = {
-  [NODE_TYPES.IMAGE]: [LabImage, LabPad, LabNodeTitle],
-  [NODE_TYPES.VIDEO]: [NodeVideoBlock, LabPad, LabNodeTitle],
+  [NODE_TYPES.IMAGE]: [LabImage, LabPad, LabNodeTitle, LabDescription],
+  [NODE_TYPES.VIDEO]: [NodeVideoBlock, LabPad, LabNodeTitle, LabDescription],
   [NODE_TYPES.AUDIO]: [LabPad, LabNodeTitle, LabPad, NodeAudioImageBlock, NodeAudioBlock, LabPad],
   [NODE_TYPES.TEXT]: [LabPad, LabNodeTitle, LabPad, LabText, LabPad],
 };
