@@ -22,14 +22,10 @@ const MainRouter: FC<IProps> = () => {
       <Route path={URLS.BORIS} component={BorisLayout} />
       <Route path={URLS.ERRORS.NOT_FOUND} component={ErrorNotFound} />
       <Route path={URLS.PROFILE_PAGE(':username')} component={ProfilePage} />
+
+      {is_user && <Route exact path={URLS.LAB} component={LabLayout} />}
+
       <Route path={URLS.BASE} component={FlowLayout} />
-
-      {is_user && (
-        <>
-          <Route exact path={URLS.LAB} component={LabLayout} />
-        </>
-      )}
-
       <Redirect to="/" />
     </Switch>
   );
