@@ -21,7 +21,9 @@ const EditorCreateDialog: FC = () => {
 
   const isExist = useMemo(() => values(NODE_TYPES).some(el => el === type), [type]);
 
-  const data = useRef({ ...EMPTY_NODE, type });
+  const isInLab = useMemo(() => !!url.match(/^\/lab/), [url]);
+
+  const data = useRef({ ...EMPTY_NODE, type, is_promoted: !isInLab });
 
   if (!type || !isExist) {
     return null;

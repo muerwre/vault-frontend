@@ -23,7 +23,7 @@ const MainRouter: FC<IProps> = () => {
       <Route path={URLS.ERRORS.NOT_FOUND} component={ErrorNotFound} />
       <Route path={URLS.PROFILE_PAGE(':username')} component={ProfilePage} />
 
-      {is_user && <Route exact path={URLS.LAB} component={LabLayout} />}
+      {is_user && <Route path={URLS.LAB} component={LabLayout} />}
 
       <Route path={URLS.BASE} component={FlowLayout} />
       <Redirect to="/" />

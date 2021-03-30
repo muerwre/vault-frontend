@@ -1,5 +1,14 @@
 @import "~/styles/variables.scss";
 
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .wrap {
   position: absolute;
   top: 0;
@@ -11,6 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: appear 0.25s forwards;
 
   @include can_backdrop {
     backdrop-filter: blur(15px);
