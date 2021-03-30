@@ -23,6 +23,8 @@ const SubmitBar: FC<Props> = ({ isLab }) => {
     [url]
   );
 
+  const icon = isLab ? 'lab' : 'plus';
+
   return (
     <div className={classNames(styles.wrap, { [styles.lab]: isLab })}>
       <div className={classNames(styles.panel, { [styles.active]: focused })}>
@@ -44,7 +46,7 @@ const SubmitBar: FC<Props> = ({ isLab }) => {
       </div>
 
       <button className={styles.button} onFocus={onFocus} onBlur={onBlur} type="button">
-        <Icon icon="plus" />
+        <Icon icon={icon} />
       </button>
     </div>
   );
