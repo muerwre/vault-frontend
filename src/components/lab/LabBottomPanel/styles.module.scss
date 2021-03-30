@@ -2,6 +2,10 @@
 
 .wrap {
   padding: $gap $lab_gap $lab_gap;
+
+  @include tablet {
+    padding: $gap $lab_gap_mobile $lab_gap_mobile;
+  }
 }
 
 .timestamp {

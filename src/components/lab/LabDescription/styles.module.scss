@@ -5,6 +5,7 @@
   line-height: 1.3em;
 
   @include tablet {
+    padding: $lab_gap_mobile $lab_gap_mobile 0;
     position: relative;
     max-height: 30vh;
     overflow: hidden;
