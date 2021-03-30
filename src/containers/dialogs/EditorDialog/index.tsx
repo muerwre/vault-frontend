@@ -1,4 +1,4 @@
-import React, { createElement, FC, useCallback, useEffect, useMemo } from 'react';
+import React, { createElement, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { IDialogProps } from '~/redux/modal/constants';
 import styles from './styles.module.scss';
 import { NODE_EDITORS } from '~/redux/node/constants';
@@ -14,25 +14,38 @@ import { INode } from '~/redux/types';
 import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { useTranslatedError } from '~/utils/hooks/useTranslatedError';
 import { useCloseOnEscape } from '~/utils/hooks';
+import { EditorConfirmClose } from '~/components/editors/EditorConfirmClose';
 
 interface Props extends IDialogProps {
   node: INode;
 }
 
 const EditorDialog: FC<Props> = ({ node, onRequestClose }) => {
+  const [isConfirmModalShown, setConfirmModalShown] = useState(false);
+
   const uploader = useFileUploader(UPLOAD_SUBJECTS.EDITOR, UPLOAD_TARGETS.NODES, node.files);
   const formik = useNodeFormFormik(node, uploader, onRequestClose);
   const { values, handleSubmit, dirty, status, setStatus } = formik;
 
   const component = useMemo(() => node.type && prop(node.type, NODE_EDITORS), [node.type]);
 
+  const closeConfirmModal = useCallback(() => {
+    setConfirmModalShown(false);
+  }, [setConfirmModalShown]);
+
   const onClose = useCallback(() => {
-    if (dirty && !window.confirm('Точно выйти?')) {
-      return undefined;
+    if (!dirty) {
+      onRequestClose();
+      return;
     }
 
-    onRequestClose();
-  }, [onRequestClose, dirty]);
+    if (isConfirmModalShown) {
+      closeConfirmModal();
+      return;
+    }
+
+    setConfirmModalShown(true);
+  }, [onRequestClose, dirty, isConfirmModalShown, setConfirmModalShown]);
 
   const error = useTranslatedError(status);
 
@@ -62,7 +75,12 @@ const EditorDialog: FC<Props> = ({ node, onRequestClose }) => {
               error={error}
               onClose={onClose}
             >
-              <div className={styles.editor}>{createElement(component)}</div>
+              <>
+                {isConfirmModalShown && (
+                  <EditorConfirmClose onApprove={onRequestClose} onDecline={closeConfirmModal} />
+                )}
+                <div className={styles.editor}>{createElement(component)}</div>
+              </>
             </BetterScrollDialog>
           </form>
         </FormikProvider>
