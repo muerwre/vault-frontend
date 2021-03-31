@@ -12,9 +12,8 @@ import 'swiper/components/navigation/navigation.scss';
 import styles from './styles.module.scss';
 import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
 import { getURL } from '~/utils/dom';
-import { PRESETS, URLS } from '~/constants/urls';
+import { PRESETS } from '~/constants/urls';
 import SwiperClass from 'swiper/types/swiper-class';
-import { useHistory } from 'react-router';
 import { useGotoNode } from '~/utils/hooks/node/useGotoNode';
 
 SwiperCore.use([Navigation, Pagination, A11y]);
