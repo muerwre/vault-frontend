@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { INodeComponentProps } from '~/redux/node/constants';
-import SwiperCore, { A11y, Pagination, Navigation, SwiperOptions, Keyboard } from 'swiper';
+import SwiperCore, { A11y, Navigation, Pagination, SwiperOptions } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/swiper.scss';
@@ -14,9 +14,8 @@ import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
 import { getURL } from '~/utils/dom';
 import { PRESETS, URLS } from '~/constants/urls';
 import SwiperClass from 'swiper/types/swiper-class';
-import { modalShowPhotoswipe } from '~/redux/modal/actions';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
+import { useGotoNode } from '~/utils/hooks/node/useGotoNode';
 
 SwiperCore.use([Navigation, Pagination, A11y]);
 
@@ -30,8 +29,6 @@ const breakpoints: SwiperOptions['breakpoints'] = {
 };
 
 const LabImage: FC<IProps> = ({ node }) => {
-  const history = useHistory();
-
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
 
   const images = useNodeImages(node);
@@ -54,7 +51,7 @@ const LabImage: FC<IProps> = ({ node }) => {
     resetSwiper();
   }, [images, updateSwiper, resetSwiper]);
 
-  const onClick = useCallback(() => history.push(URLS.NODE_URL(node.id)), [history, node.id]);
+  const onClick = useGotoNode(node.id);
 
   if (!images?.length) {
     return null;
