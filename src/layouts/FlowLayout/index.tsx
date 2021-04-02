@@ -53,7 +53,10 @@ const FlowLayout: FC = () => {
     [dispatch]
   );
 
-  const cumulativeUpdates = useMemo(() => [...updated, ...labUpdates], [updated, labUpdates]);
+  const cumulativeUpdates = useMemo(() => [...updated, ...labUpdates].slice(0, 10), [
+    updated,
+    labUpdates,
+  ]);
 
   useEffect(() => {
     window.addEventListener('scroll', onLoadMore);

@@ -49,7 +49,7 @@ const LabStats: FC<IProps> = () => {
             <>
               <div className={styles.title}>Новые</div>
               <Group className={styles.updates}>
-                {updates.map(node => (
+                {updates.slice(0, 10).map(node => (
                   <FlowRecentItem node={node} key={node.id} has_new />
                 ))}
               </Group>
