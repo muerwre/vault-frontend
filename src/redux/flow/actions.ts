@@ -2,6 +2,10 @@ import { FLOW_ACTIONS } from './constants';
 import { IFlowState } from './reducer';
 import { INode } from '../types';
 
+export const flowGetFlow = () => ({
+  type: FLOW_ACTIONS.GET_FLOW,
+});
+
 export const flowSetNodes = (nodes: IFlowState['nodes']) => ({
   nodes,
   type: FLOW_ACTIONS.SET_NODES,
@@ -49,4 +53,9 @@ export const flowChangeSearch = (search: Partial<IFlowState['search']>) => ({
 
 export const flowLoadMoreSearch = () => ({
   type: FLOW_ACTIONS.LOAD_MORE_SEARCH,
+});
+
+export const flowSeenNode = (nodeId: INode['id']) => ({
+  type: FLOW_ACTIONS.SEEN_NODE,
+  nodeId,
 });

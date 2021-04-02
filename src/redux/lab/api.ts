@@ -1,6 +1,11 @@
 import { api, cleanResult } from '~/utils/api';
 import { API } from '~/constants/api';
-import { GetLabNodesRequest, GetLabNodesResult, GetLabStatsResult } from '~/redux/lab/types';
+import {
+  GetLabNodesRequest,
+  GetLabNodesResult,
+  GetLabStatsResult,
+  GetLabUpdatesResult,
+} from '~/redux/lab/types';
 
 export const getLabNodes = ({ after }: GetLabNodesRequest) =>
   api
@@ -8,3 +13,4 @@ export const getLabNodes = ({ after }: GetLabNodesRequest) =>
     .then(cleanResult);
 
 export const getLabStats = () => api.get<GetLabStatsResult>(API.LAB.STATS).then(cleanResult);
+export const getLabUpdates = () => api.get<GetLabUpdatesResult>(API.LAB.UPDATES).then(cleanResult);

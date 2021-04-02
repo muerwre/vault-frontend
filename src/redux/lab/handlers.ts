@@ -1,5 +1,5 @@
 import { LAB_ACTIONS } from '~/redux/lab/constants';
-import { labSetList, labSetStats } from '~/redux/lab/actions';
+import { labSetList, labSetStats, labSetUpdates } from '~/redux/lab/actions';
 import { ILabState } from '~/redux/lab/types';
 
 type LabHandler<T extends (...args: any) => any> = (
@@ -23,7 +23,16 @@ const setStats: LabHandler<typeof labSetStats> = (state, { stats }) => ({
   },
 });
 
+const setUpdates: LabHandler<typeof labSetUpdates> = (state, { updates }) => ({
+  ...state,
+  updates: {
+    ...state.updates,
+    ...updates,
+  },
+});
+
 export const LAB_HANDLERS = {
   [LAB_ACTIONS.SET_LIST]: setList,
   [LAB_ACTIONS.SET_STATS]: setStats,
+  [LAB_ACTIONS.SET_UPDATES]: setUpdates,
 };

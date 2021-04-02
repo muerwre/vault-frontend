@@ -21,6 +21,9 @@ import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IState } from '~/redux/store';
 import isBefore from 'date-fns/isBefore';
 import { Authorized } from '~/components/containers/Authorized';
+import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { selectLabUpdates, selectLabUpdatesNodes } from '~/redux/lab/selectors';
+import { selectFlow, selectFlowUpdated } from '~/redux/flow/selectors';
 
 const mapStateToProps = (state: IState) => ({
   user: pick(['username', 'is_user', 'photo', 'last_seen_boris'])(selectUser(state)),
@@ -48,7 +51,8 @@ const HeaderUnconnected: FC<IProps> = memo(
     authOpenProfile,
   }) => {
     const [is_scrolled, setIsScrolled] = useState(false);
-
+    const labUpdates = useShallowSelect(selectLabUpdatesNodes);
+    const flowUpdates = useShallowSelect(selectFlowUpdated);
     const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
 
     const onScroll = useCallback(() => {
@@ -74,6 +78,9 @@ const HeaderUnconnected: FC<IProps> = memo(
       [boris_commented_at, last_seen_boris]
     );
 
+    const hasLabUpdates = useMemo(() => labUpdates.length > 0, [labUpdates]);
+    const hasFlowUpdates = useMemo(() => flowUpdates.length > 0, [flowUpdates]);
+
     return createPortal(
       <div className={classNames(styles.wrap, { [styles.is_scrolled]: is_scrolled })}>
         <div className={styles.container}>
@@ -83,7 +90,10 @@ const HeaderUnconnected: FC<IProps> = memo(
 
           <div className={styles.plugs}>
             <Link
-              className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
+              className={classNames(styles.item, {
+                [styles.is_active]: pathname === URLS.BASE,
+                [styles.has_dot]: hasFlowUpdates,
+              })}
               to={URLS.BASE}
             >
               ФЛОУ
@@ -91,7 +101,10 @@ const HeaderUnconnected: FC<IProps> = memo(
 
             <Authorized>
               <Link
-                className={classNames(styles.item, { [styles.is_active]: pathname === URLS.BASE })}
+                className={classNames(styles.item, styles.lab, {
+                  [styles.is_active]: pathname === URLS.LAB,
+                  [styles.has_dot]: hasLabUpdates,
+                })}
                 to={URLS.LAB}
               >
                 ЛАБ
@@ -99,7 +112,7 @@ const HeaderUnconnected: FC<IProps> = memo(
             </Authorized>
 
             <Link
-              className={classNames(styles.item, {
+              className={classNames(styles.item, styles.boris, {
                 [styles.is_active]: pathname === URLS.BORIS,
                 [styles.has_dot]: hasBorisUpdates,
               })}

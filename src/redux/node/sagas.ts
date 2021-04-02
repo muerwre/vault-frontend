@@ -177,13 +177,6 @@ function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
       })
     );
   } catch {}
-
-  // Remove current node from recently updated
-  const { updated } = yield select(selectFlow);
-
-  if (updated.some(item => item.id === id)) {
-    yield put(flowSetUpdated(updated.filter(item => item.id !== id)));
-  }
 }
 
 function* onPostComment({ nodeId, comment, callback }: ReturnType<typeof nodePostLocalComment>) {

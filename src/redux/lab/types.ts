@@ -13,6 +13,10 @@ export type ILabState = Readonly<{
     tags: ITag[];
     error?: string;
   };
+  updates: {
+    nodes: INode[];
+    isLoading: boolean;
+  };
 }>;
 
 export type GetLabNodesRequest = {
@@ -33,4 +37,8 @@ export type GetLabNodesResult = {
 export type GetLabStatsResult = {
   heroes: INode[];
   tags: ITag[];
+};
+
+export type GetLabUpdatesResult = {
+  nodes: INode[];
 };

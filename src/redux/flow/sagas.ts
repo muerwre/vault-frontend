@@ -16,6 +16,8 @@ import { Unwrap } from '../types';
 import { selectFlow, selectFlowNodes } from './selectors';
 import { getSearchResults, postCellView } from './api';
 import { uniq } from 'ramda';
+import { labSeenNode, labSetUpdates } from '~/redux/lab/actions';
+import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
 
 function hideLoader() {
   const loader = document.getElementById('main_loader');
@@ -185,10 +187,16 @@ function* loadMoreSearch() {
   }
 }
 
+function* seenNode({ nodeId }: ReturnType<typeof labSeenNode>) {
+  const { updated }: ReturnType<typeof selectFlow> = yield select(selectFlow);
+  yield put(flowSetUpdated(updated.filter(node => node.id != nodeId)));
+}
+
 export default function* nodeSaga() {
   yield takeLatest([FLOW_ACTIONS.GET_FLOW, REHYDRATE], onGetFlow);
   yield takeLatest(FLOW_ACTIONS.SET_CELL_VIEW, onSetCellView);
   yield takeLeading(FLOW_ACTIONS.GET_MORE, getMore);
   yield takeLatest(FLOW_ACTIONS.CHANGE_SEARCH, changeSearch);
   yield takeLatest(FLOW_ACTIONS.LOAD_MORE_SEARCH, loadMoreSearch);
+  yield takeLatest(FLOW_ACTIONS.SEEN_NODE, seenNode);
 }

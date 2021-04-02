@@ -6,10 +6,8 @@ import classNames from 'classnames';
 import styles from './styles.module.scss';
 import markdown from '~/styles/common/markdown.module.scss';
 import { Icon } from '~/components/input/Icon';
-import { flowSetCellView } from '~/redux/flow/actions';
 import { PRESETS } from '~/constants/urls';
 import { NODE_TYPES } from '~/redux/node/constants';
-import { Group } from '~/components/containers/Group';
 import { Link } from 'react-router-dom';
 
 const THUMBNAIL_SIZES = {
@@ -21,8 +19,8 @@ interface IProps {
   is_text?: boolean;
   can_edit?: boolean;
 
-  onSelect: (id: INode['id'], type: INode['type']) => void;
-  onChangeCellView: typeof flowSetCellView;
+  onSelect: (id: INode['id']) => void;
+  onChangeCellView: (id: INode['id'], flow: INode['flow']) => void;
 }
 
 const Cell: FC<IProps> = ({

@@ -37,6 +37,12 @@
       bottom: -2px;
     }
   }
+
+  &.lab {
+    &::after {
+      background: $blue;
+    }
+  }
 }
 
 .info {
@@ -55,8 +61,16 @@
 .comment {
   font: $font_12_regular;
   margin-top: 4px;
-  opacity: 0.5;
+  color: darken(white, 50%);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+
+  svg {
+    fill: currentColor;
+    margin-right: $gap / 2;
+    margin-top: 1px;
+  }
 }

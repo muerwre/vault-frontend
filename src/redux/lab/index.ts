@@ -16,6 +16,10 @@ const INITIAL_STATE: ILabState = {
     tags: [],
     error: undefined,
   },
+  updates: {
+    nodes: [],
+    isLoading: false,
+  },
 };
 
 export default createReducer(INITIAL_STATE, LAB_HANDLERS);

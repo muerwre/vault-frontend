@@ -1,42 +1,29 @@
-import React, { FC, useCallback, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { FC, useCallback, useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import { FlowGrid } from '~/components/flow/FlowGrid';
 import { selectFlow } from '~/redux/flow/selectors';
-import * as NODE_ACTIONS from '~/redux/node/actions';
-import * as FLOW_ACTIONS from '~/redux/flow/actions';
-import { pick } from 'ramda';
+import {
+  flowChangeSearch,
+  flowGetMore,
+  flowLoadMoreSearch,
+  flowSetCellView,
+} from '~/redux/flow/actions';
 import { selectUser } from '~/redux/auth/selectors';
 import { FlowHero } from '~/components/flow/FlowHero';
 import styles from './styles.module.scss';
-import { IState } from '~/redux/store';
 import { FlowStamp } from '~/components/flow/FlowStamp';
 import { Container } from '~/containers/main/Container';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { INode } from '~/redux/types';
+import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
 
-const mapStateToProps = (state: IState) => ({
-  flow: pick(['nodes', 'heroes', 'recent', 'updated', 'is_loading', 'search'], selectFlow(state)),
-  user: pick(['role', 'id'], selectUser(state)),
-});
+const FlowLayout: FC = () => {
+  const { nodes, heroes, recent, updated, is_loading, search } = useShallowSelect(selectFlow);
+  const labUpdates = useShallowSelect(selectLabUpdatesNodes);
+  const user = useShallowSelect(selectUser);
+  const dispatch = useDispatch();
 
-const mapDispatchToProps = {
-  nodeGotoNode: NODE_ACTIONS.nodeGotoNode,
-  flowSetCellView: FLOW_ACTIONS.flowSetCellView,
-  flowGetMore: FLOW_ACTIONS.flowGetMore,
-  flowChangeSearch: FLOW_ACTIONS.flowChangeSearch,
-  flowLoadMoreSearch: FLOW_ACTIONS.flowLoadMoreSearch,
-};
-
-type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
-
-const FlowLayoutUnconnected: FC<IProps> = ({
-  flow: { nodes, heroes, recent, updated, is_loading, search },
-  user,
-  nodeGotoNode,
-  flowSetCellView,
-  flowGetMore,
-  flowChangeSearch,
-  flowLoadMoreSearch,
-}) => {
   const onLoadMore = useCallback(() => {
     (window as any).flowScrollPos = window.scrollY;
 
@@ -44,13 +31,29 @@ const FlowLayoutUnconnected: FC<IProps> = ({
 
     if (is_loading || pos < -600) return;
 
-    flowGetMore();
-  }, [flowGetMore, is_loading]);
+    dispatch(flowGetMore());
+  }, [dispatch, is_loading]);
 
   const onLoadMoreSearch = useCallback(() => {
     if (search.is_loading_more) return;
-    flowLoadMoreSearch();
-  }, [search.is_loading_more, flowLoadMoreSearch]);
+    dispatch(flowLoadMoreSearch());
+  }, [search.is_loading_more, dispatch]);
+
+  const onChangeSearch = useCallback(
+    (text: string) => {
+      dispatch(flowChangeSearch({ text }));
+    },
+    [dispatch]
+  );
+
+  const onChangeCellView = useCallback(
+    (id: INode['id'], flow: INode['flow']) => {
+      dispatch(flowSetCellView(id, flow));
+    },
+    [dispatch]
+  );
+
+  const cumulativeUpdates = useMemo(() => [...updated, ...labUpdates], [updated, labUpdates]);
 
   useEffect(() => {
     window.addEventListener('scroll', onLoadMore);
@@ -72,19 +75,14 @@ const FlowLayoutUnconnected: FC<IProps> = ({
         <div className={styles.stamp}>
           <FlowStamp
             recent={recent}
-            updated={updated}
+            updated={cumulativeUpdates}
             search={search}
-            flowChangeSearch={flowChangeSearch}
+            onSearchChange={onChangeSearch}
             onLoadMore={onLoadMoreSearch}
           />
         </div>
 
-        <FlowGrid
-          nodes={nodes}
-          user={user}
-          onSelect={nodeGotoNode}
-          onChangeCellView={flowSetCellView}
-        />
+        <FlowGrid nodes={nodes} user={user} onChangeCellView={onChangeCellView} />
       </div>
 
       <SidebarRouter prefix="" />
@@ -92,6 +90,4 @@ const FlowLayoutUnconnected: FC<IProps> = ({
   );
 };
 
-const FlowLayout = connect(mapStateToProps, mapDispatchToProps)(FlowLayoutUnconnected);
-
-export { FlowLayout, FlowLayoutUnconnected };
+export { FlowLayout };

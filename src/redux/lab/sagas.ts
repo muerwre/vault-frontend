@@ -1,8 +1,15 @@
-import { takeLeading, call, put } from 'redux-saga/effects';
-import { labGetList, labSetList, labSetStats } from '~/redux/lab/actions';
+import { takeLeading, call, put, select } from 'redux-saga/effects';
+import {
+  labGetList,
+  labSetList,
+  labSetStats,
+  labSetUpdates,
+  labSeenNode,
+} from '~/redux/lab/actions';
 import { LAB_ACTIONS } from '~/redux/lab/constants';
 import { Unwrap } from '~/redux/types';
-import { getLabNodes, getLabStats } from '~/redux/lab/api';
+import { getLabNodes, getLabStats, getLabUpdates } from '~/redux/lab/api';
+import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
 
 function* getList({ after = '' }: ReturnType<typeof labGetList>) {
   try {
@@ -28,7 +35,28 @@ function* getStats() {
   }
 }
 
+function* getUpdates() {
+  try {
+    yield put(labSetUpdates({ isLoading: true }));
+    const { nodes }: Unwrap<typeof getLabUpdates> = yield call(getLabUpdates);
+    yield put(labSetUpdates({ nodes }));
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    yield put(labSetUpdates({ isLoading: false }));
+  }
+}
+
+function* seenNode({ nodeId }: ReturnType<typeof labSeenNode>) {
+  const nodes: ReturnType<typeof selectLabUpdatesNodes> = yield select(selectLabUpdatesNodes);
+  const newNodes = nodes.filter(node => node.id != nodeId);
+  yield put(labSetUpdates({ nodes: newNodes }));
+}
+
 export default function* labSaga() {
   yield takeLeading(LAB_ACTIONS.GET_LIST, getList);
   yield takeLeading(LAB_ACTIONS.GET_STATS, getStats);
+
+  yield takeLeading(LAB_ACTIONS.GET_UPDATES, getUpdates);
+  yield takeLeading(LAB_ACTIONS.SEEN_NODE, seenNode);
 }

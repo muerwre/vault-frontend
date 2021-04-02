@@ -13,20 +13,16 @@ interface IProps {
   recent: IFlowState['recent'];
   updated: IFlowState['updated'];
   search: IFlowState['search'];
-  flowChangeSearch: typeof FLOW_ACTIONS.flowChangeSearch;
+  onSearchChange: (text: string) => void;
   onLoadMore: () => void;
 }
 
-const FlowStamp: FC<IProps> = ({ recent, updated, search, flowChangeSearch, onLoadMore }) => {
-  const onSearchChange = useCallback((text: string) => flowChangeSearch({ text }), [
-    flowChangeSearch,
-  ]);
-
+const FlowStamp: FC<IProps> = ({ recent, updated, search, onSearchChange, onLoadMore }) => {
   const onSearchSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
   }, []);
 
-  const onClearSearch = useCallback(() => flowChangeSearch({ text: '' }), [flowChangeSearch]);
+  const onClearSearch = useCallback(() => onSearchChange(''), [onSearchChange]);
 
   const onKeyUp = useCallback(
     event => {

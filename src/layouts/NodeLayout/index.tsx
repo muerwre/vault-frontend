@@ -17,6 +17,7 @@ import { useScrollToTop } from '~/utils/hooks/useScrollToTop';
 import { useLoadNode } from '~/utils/hooks/node/useLoadNode';
 import { URLS } from '~/constants/urls';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
+import { useOnNodeSeen } from '~/utils/hooks/node/useOnNodeSeen';
 
 type IProps = RouteComponentProps<{ id: string }> & {};
 
@@ -38,6 +39,7 @@ const NodeLayout: FC<IProps> = memo(
     useNodeCoverImage(current);
     useScrollToTop([id]);
     useLoadNode(id, is_loading);
+    useOnNodeSeen(current);
 
     const { head, block } = useNodeBlocks(current, is_loading);
 

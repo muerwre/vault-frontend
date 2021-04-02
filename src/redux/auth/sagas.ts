@@ -58,6 +58,7 @@ import { messagesSet } from '~/redux/messages/actions';
 import { SagaIterator } from 'redux-saga';
 import { isEmpty } from 'ramda';
 import { AxiosError } from 'axios';
+import { labGetUpdates } from '~/redux/lab/actions';
 
 function* setTokenSaga({ token }: ReturnType<typeof authSetToken>) {
   localStorage.setItem('token', token);
@@ -193,6 +194,7 @@ function* getUpdates() {
 function* startPollingSaga() {
   while (true) {
     yield call(getUpdates);
+    yield put(labGetUpdates());
     yield delay(60000);
   }
 }

@@ -11,9 +11,11 @@ import {
   selectLabStatsHeroes,
   selectLabStatsLoading,
   selectLabStatsTags,
+  selectLabUpdatesNodes,
 } from '~/redux/lab/selectors';
 import { LabTags } from '~/components/lab/LabTags';
 import { LabHeroes } from '~/components/lab/LabHeroes';
+import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
 
 interface IProps {}
 
@@ -21,6 +23,7 @@ const LabStats: FC<IProps> = () => {
   const tags = useShallowSelect(selectLabStatsTags);
   const heroes = useShallowSelect(selectLabStatsHeroes);
   const isLoading = useShallowSelect(selectLabStatsLoading);
+  const updates = useShallowSelect(selectLabUpdatesNodes);
 
   return (
     <Group>
@@ -41,6 +44,17 @@ const LabStats: FC<IProps> = () => {
           <div />
           <div />
           <div />
+
+          {updates.length > 0 && (
+            <>
+              <div className={styles.title}>Новые</div>
+              <Group className={styles.updates}>
+                {updates.map(node => (
+                  <FlowRecentItem node={node} key={node.id} has_new />
+                ))}
+              </Group>
+            </>
+          )}
 
           {isLoading ? (
             <Placeholder height={14} width="100px" />

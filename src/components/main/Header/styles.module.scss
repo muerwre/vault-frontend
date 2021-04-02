@@ -116,6 +116,15 @@
     }
   }
 
+  &.lab::after {
+    background: lighten($blue, 10%);
+  }
+
+  &.boris::after {
+    background: lighten($wisegreen, 10%);
+  }
+
+
   @include tablet {
     padding: $gap;
 
