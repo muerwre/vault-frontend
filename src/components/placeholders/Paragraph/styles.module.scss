@@ -1,0 +1,12 @@
+@import "src/styles/variables";
+
+.para {
+  display: flex;
+  flex-wrap: wrap;
+
+  div {
+    display: inline-flex;
+    margin-right: $gap;
+    margin-top: $gap;
+  }
+}

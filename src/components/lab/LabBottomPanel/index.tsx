@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import { Grid } from '~/components/containers/Grid';
 import { useHistory } from 'react-router';
 import { URLS } from '~/constants/urls';
+import { Placeholder } from '~/components/placeholders/Placeholder';
 
 type Props = {
   node: INode;
@@ -17,31 +18,38 @@ type Props = {
   commentCount: number;
 };
 
-const LabBottomPanel: FC<Props> = ({ node, hasNewComments, commentCount }) => {
+const LabBottomPanel: FC<Props> = ({ node, hasNewComments, commentCount, isLoading }) => {
   const history = useHistory();
   const onClick = useCallback(() => history.push(URLS.NODE_URL(node.id)), [node.id]);
 
   return (
     <Group horizontal className={styles.wrap} onClick={onClick}>
-      <div className={styles.timestamp}>{getPrettyDate(node.created_at)}</div>
+      <div className={styles.timestamp}>
+        <Placeholder active={isLoading}>{getPrettyDate(node.created_at)}</Placeholder>
+      </div>
+
       <Filler />
 
-      {commentCount > 0 && (
-        <Grid
-          horizontal
-          className={classNames(styles.comments, { [styles.active]: hasNewComments })}
-        >
-          <Icon icon={hasNewComments ? 'comment_new' : 'comment'} size={24} />
-          <span>{commentCount}</span>
-        </Grid>
-      )}
+      <Placeholder active={isLoading} width="48px" height={24}>
+        {commentCount > 0 && (
+          <Grid
+            horizontal
+            className={classNames(styles.comments, { [styles.active]: hasNewComments })}
+          >
+            <Icon icon={hasNewComments ? 'comment_new' : 'comment'} size={24} />
+            <span>{commentCount}</span>
+          </Grid>
+        )}
+      </Placeholder>
 
-      {!!node.like_count && node.like_count > 0 && (
-        <Grid horizontal className={classNames(styles.like)}>
-          <Icon icon={node.is_liked ? 'heart_full' : 'heart'} size={24} />
-          <span>{node.like_count}</span>
-        </Grid>
-      )}
+      <Placeholder active={isLoading} width="48px" height={24}>
+        {!!node.like_count && node.like_count > 0 && (
+          <Grid horizontal className={classNames(styles.like)}>
+            <Icon icon={node.is_liked ? 'heart_full' : 'heart'} size={24} />
+            <span>{node.like_count}</span>
+          </Grid>
+        )}
+      </Placeholder>
     </Group>
   );
 };

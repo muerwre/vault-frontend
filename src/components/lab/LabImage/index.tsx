@@ -15,6 +15,7 @@ import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import SwiperClass from 'swiper/types/swiper-class';
 import { useGotoNode } from '~/utils/hooks/node/useGotoNode';
+import { Placeholder } from '~/components/placeholders/Placeholder';
 
 SwiperCore.use([Navigation, Pagination, A11y]);
 
@@ -27,7 +28,7 @@ const breakpoints: SwiperOptions['breakpoints'] = {
   },
 };
 
-const LabImage: FC<IProps> = ({ node }) => {
+const LabImage: FC<IProps> = ({ node, isLoading }) => {
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
 
   const images = useNodeImages(node);
@@ -52,44 +53,46 @@ const LabImage: FC<IProps> = ({ node }) => {
 
   const onClick = useGotoNode(node.id);
 
-  if (!images?.length) {
+  if (!images?.length && !isLoading) {
     return null;
   }
 
   return (
-    <div className={styles.wrapper}>
-      <Swiper
-        initialSlide={0}
-        slidesPerView={images.length > 1 ? 1.1 : 1}
-        onSwiper={setControlledSwiper}
-        spaceBetween={10}
-        grabCursor
-        autoHeight
-        breakpoints={breakpoints}
-        observeSlideChildren
-        observeParents
-        resizeObserver
-        watchOverflow
-        updateOnImagesReady
-        onInit={resetSwiper}
-        keyboard={{
-          enabled: true,
-          onlyInViewport: false,
-        }}
-      >
-        {images.map(file => (
-          <SwiperSlide className={styles.slide} key={file.id}>
-            <img
-              className={styles.image}
-              src={getURL(file, PRESETS['1600'])}
-              alt={node.title}
-              onLoad={updateSwiper}
-              onClick={onClick}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+    <Placeholder active={isLoading} width="100%" height={400}>
+      <div className={styles.wrapper}>
+        <Swiper
+          initialSlide={0}
+          slidesPerView={images.length > 1 ? 1.1 : 1}
+          onSwiper={setControlledSwiper}
+          spaceBetween={10}
+          grabCursor
+          autoHeight
+          breakpoints={breakpoints}
+          observeSlideChildren
+          observeParents
+          resizeObserver
+          watchOverflow
+          updateOnImagesReady
+          onInit={resetSwiper}
+          keyboard={{
+            enabled: true,
+            onlyInViewport: false,
+          }}
+        >
+          {images.map(file => (
+            <SwiperSlide className={styles.slide} key={file.id}>
+              <img
+                className={styles.image}
+                src={getURL(file, PRESETS['1600'])}
+                alt={node.title}
+                onLoad={updateSwiper}
+                onClick={onClick}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </Placeholder>
   );
 };
 

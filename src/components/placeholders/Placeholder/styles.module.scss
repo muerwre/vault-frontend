@@ -1,8 +1,31 @@
 @import "src/styles/variables";
 
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0.05;
+  }
+}
 .placeholder {
   height: 1em;
   width: 120px;
   background: $placeholder_bg;
   border-radius: 1em;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: ' ';
+    width: 200%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: white;
+    animation: fade 0.5s infinite alternate;
+    border-radius: 1em;
+  }
 }

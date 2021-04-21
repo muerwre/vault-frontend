@@ -13,7 +13,7 @@ interface IProps {
 }
 
 const LabNode: FC<IProps> = ({ node, isLoading, lastSeen, commentCount }) => {
-  const { lab } = useNodeBlocks(node, false);
+  const { lab } = useNodeBlocks(node, !!isLoading);
 
   const hasNewComments = useMemo(
     () =>
@@ -26,7 +26,7 @@ const LabNode: FC<IProps> = ({ node, isLoading, lastSeen, commentCount }) => {
       {lab}
       <LabBottomPanel
         node={node}
-        isLoading={!!isLoading}
+        isLoading={isLoading}
         hasNewComments={hasNewComments}
         commentCount={commentCount}
       />
