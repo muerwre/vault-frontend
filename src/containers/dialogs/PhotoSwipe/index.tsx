@@ -1,4 +1,4 @@
-import React, { FC, useRef, useEffect, useMemo, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 
 import PhotoSwipeJs from 'photoswipe/dist/photoswipe.js';
@@ -12,6 +12,7 @@ import { PRESETS } from '~/constants/urls';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
+import { useBlockBackButton } from '~/utils/hooks/useBlockBackButton';
 
 const mapStateToProps = (state: IState) => ({
   photoswipe: selectModal(state).photoswipe,
@@ -67,21 +68,7 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
     });
   }, [photoswipe.images, photoswipe.index]);
 
-  const closeOnHashChange = useCallback(() => {
-    if (window.location.hash !== '#preview') return closeModal();
-  }, [closeModal]);
-
-  useEffect(() => {
-    window.addEventListener('hashchange', closeOnHashChange);
-    return () => window.removeEventListener('hashchange', closeOnHashChange);
-  }, [closeOnHashChange]);
-
-  useEffect(() => {
-    window.location.hash = 'preview';
-    return () => {
-      window.location.hash = '';
-    };
-  }, []);
+  useBlockBackButton(closeModal);
 
   return (
     <div className="pswp" tabIndex={-1} role="dialog" aria-hidden="true" ref={ref}>
