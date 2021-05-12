@@ -31,6 +31,10 @@
     height: 96px;
     background: transparentize($content_bg, 0);
 
+    @include desktop {
+      display: none;
+    }
+
     &:global(.swiper-button-prev) {
       left: 0;
       justify-content: flex-start;
