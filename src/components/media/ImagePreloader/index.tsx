@@ -6,6 +6,7 @@ import styles from './styles.module.scss';
 import { IFile } from '~/redux/types';
 import { LoaderCircleInner } from '~/components/input/LoaderCircleInner';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { Icon } from '~/components/input/Icon';
 
 interface IProps {
   file: IFile;
@@ -17,9 +18,11 @@ interface IProps {
 const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
   const [maxHeight, setMaxHeight] = useState(window.innerHeight - 140);
   const [loaded, setLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const onImageLoad = useCallback(() => {
     setLoaded(true);
+    setHasError(false);
 
     if (onLoad) {
       onLoad();
@@ -29,6 +32,10 @@ const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
   const onResize = useCallback(() => {
     setMaxHeight(window.innerHeight - 140);
   }, [setMaxHeight]);
+
+  const onError = useCallback(() => {
+    setHasError(true);
+  }, [setHasError]);
 
   useEffect(() => {
     window.addEventListener('resize', onResize);
@@ -64,12 +71,14 @@ const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
 
         <rect fill="#242222" width="100%" height="100%" stroke="none" rx="8" ry="8" />
 
-        <image
-          xlinkHref={getURL(file, PRESETS['300'])}
-          width="100%"
-          height="100%"
-          filter="url(#f1)"
-        />
+        {!hasError && (
+          <image
+            xlinkHref={getURL(file, PRESETS['300'])}
+            width="100%"
+            height="100%"
+            filter="url(#f1)"
+          />
+        )}
       </svg>
 
       <img
@@ -80,9 +89,17 @@ const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
         onLoad={onImageLoad}
         style={{ maxHeight }}
         onClick={onClick}
+        onError={onError}
       />
 
-      {!loaded && <LoaderCircle className={styles.icon} size={64} />}
+      {!loaded && !hasError && <LoaderCircle className={styles.icon} size={64} />}
+
+      {hasError && (
+        <div className={styles.error}>
+          <div className={styles.error__text}>Не удалось получить картинку</div>
+          <Icon icon="warn" size={64} />
+        </div>
+      )}
     </>
   );
 };

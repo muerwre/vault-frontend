@@ -28,3 +28,27 @@
     fill: currentColor;
   }
 }
+
+.error {
+  position: absolute;
+  right: 30px;
+  bottom: 40px;
+  opacity: 0.4;
+  color: $orange;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    fill: $orange;
+  }
+
+  &__text {
+    max-width: 200px;
+    text-align: right;
+    margin-right: $gap;
+    font: $font_16_semibold;
+    line-height: 24px;
+  }
+}
