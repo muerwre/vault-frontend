@@ -7,7 +7,6 @@
   width: 100%;
   height: 100%;
   z-index: 2;
-  background-color: transparentize($red, 0.5);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -16,10 +15,7 @@
   box-sizing: border-box;
   border-radius: $radius;
 
-  @include can_backdrop {
-    background-color: transparentize($red, 0.5);
-    backdrop-filter: blur(10px);
-  }
+  @include blur($red);
 }
 
 .title {

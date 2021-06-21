@@ -160,6 +160,16 @@ $sidebar_border: transparentize(white, 0.95);
   }
 }
 
+@mixin blur($color: $content_bg, $radius: 15px) {
+  background: transparentize($color, 0.1);
+
+  @include can_backdrop {
+    backdrop-filter: blur($radius);
+    -webkit-backdrop-filter: blur($radius);
+    background: transparentize($color, 0.5);
+  }
+}
+
 @mixin title_with_line {
   font: $font_14_semibold;
   text-transform: uppercase;
@@ -190,13 +200,7 @@ $sidebar_border: transparentize(white, 0.95);
 }
 
 @mixin sidebar {
-  background: transparentize($content_bg, 0.15);
-
-  @include can_backdrop {
-    background: transparentize($content_bg, 0.3);
-    -webkit-backdrop-filter: blur(15px);
-    backdrop-filter: blur(15px);
-  }
+  @include blur();
 }
 
 @mixin sidebar_content(

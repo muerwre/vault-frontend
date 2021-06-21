@@ -16,15 +16,12 @@
   width: 100%;
   height: 100%;
   z-index: 21;
-  background: transparentize($color: #000000, $amount: 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   animation: appear 0.25s forwards;
 
-  @include can_backdrop {
-    backdrop-filter: blur(15px);
-  }
+  @include blur();
 }
 
 .title {

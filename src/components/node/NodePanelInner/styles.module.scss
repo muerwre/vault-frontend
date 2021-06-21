@@ -59,7 +59,6 @@
   border-radius: $radius $radius 0 0;
   box-sizing: border-box;
   padding: $gap $gap;
-  background: $node_bg;
   height: 64px;
   min-width: 0;
 
@@ -68,11 +67,6 @@
   @include tablet {
     border-radius: 0;
     height: auto;
-  }
-
-  @include can_backdrop {
-    backdrop-filter: blur(15px);
-    background: transparentize($node_bg, 0.2);
   }
 }
 
