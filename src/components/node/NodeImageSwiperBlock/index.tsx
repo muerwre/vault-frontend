@@ -8,7 +8,7 @@ import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/lazy/lazy.min.css';
 import styles from './styles.module.scss';
 
-import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions, Lazy } from 'swiper';
+import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions } from 'swiper';
 
 import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
 import SwiperClass from 'swiper/types/swiper-class';
@@ -17,8 +17,9 @@ import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
+import { ImagePreloader } from '~/components/media/ImagePreloader';
 
-SwiperCore.use([Lazy, Navigation, Pagination, Keyboard]);
+SwiperCore.use([Navigation, Pagination, Keyboard]);
 
 interface IProps extends INodeComponentProps {}
 
@@ -41,21 +42,22 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
     controlledSwiper.updateSize();
     controlledSwiper.update();
     controlledSwiper.updateAutoHeight();
+    controlledSwiper.updateProgress();
   }, [controlledSwiper]);
 
-  const resetSwiper = useCallback(() => {
-    if (!controlledSwiper) return;
-    controlledSwiper.slideTo(0, 0);
-    setTimeout(() => controlledSwiper.slideTo(0, 0), 100);
-    setTimeout(() => controlledSwiper.slideTo(0, 0), 300);
-  }, [controlledSwiper]);
+  // const resetSwiper = useCallback(() => {
+  //   if (!controlledSwiper) return;
+  //   controlledSwiper.slideTo(0, 0);
+  //   setTimeout(() => controlledSwiper.slideTo(0, 0), 100);
+  //   setTimeout(() => controlledSwiper.slideTo(0, 0), 300);
+  // }, [controlledSwiper]);
 
-  useEffect(() => {
-    updateSwiper();
-    resetSwiper();
-
-    return () => setControlledSwiper(undefined);
-  }, [images, updateSwiper, resetSwiper, setControlledSwiper]);
+  // useEffect(() => {
+  //   updateSwiper();
+  //   resetSwiper();
+  //
+  //   return () => setControlledSwiper(undefined);
+  // }, [images, updateSwiper, resetSwiper, setControlledSwiper]);
 
   const onOpenPhotoSwipe = useCallback(() => {
     dispatch(modalShowPhotoswipe(images, controlledSwiper?.activeIndex || 0));
@@ -74,13 +76,12 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         breakpoints={breakpoints}
         pagination={{ type: 'fraction' }}
         centeredSlides
-        observeSlideChildren
-        observeParents
-        resizeObserver
-        watchOverflow
-        updateOnImagesReady
-        onInit={resetSwiper}
-        lazy
+        // observeSlideChildren
+        // observeParents
+        // resizeObserver
+        // watchOverflow
+        // updateOnImagesReady
+        // onInit={resetSwiper}
         keyboard={{
           enabled: true,
           onlyInViewport: false,
@@ -92,20 +93,21 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
       >
         {images.map(file => (
           <SwiperSlide className={styles.slide} key={file.id}>
-            <img
-              className={classNames('swiper-lazy', styles.image)}
-              data-src={getURL(file, PRESETS['1600'])}
-              alt={node.title}
+            <ImagePreloader
+              file={file}
               onLoad={updateSwiper}
               onClick={onOpenPhotoSwipe}
+              className={styles.image}
             />
-
-            <div
-              className={classNames(
-                'swiper-lazy-preloader swiper-lazy-preloader-white',
-                styles.loader
-              )}
-            />
+            {/*
+              <img
+                className={classNames('swiper-lazy', styles.image)}
+                src={getURL(file, PRESETS['1600'])}
+                alt={node.title}
+                onLoad={updateSwiper}
+                onClick={onOpenPhotoSwipe}
+              />
+            */}
           </SwiperSlide>
         ))}
       </Swiper>

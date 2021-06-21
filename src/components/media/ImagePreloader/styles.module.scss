@@ -1,0 +1,30 @@
+@import "~/styles/variables.scss";
+
+.image {
+  position: absolute;
+  opacity: 0;
+
+  &.is_loaded {
+    opacity: 1;
+    position: static;
+  }
+}
+
+.preview {
+  border-radius: $radius;
+
+  &.is_loaded {
+    display: none;
+  }
+}
+
+.icon {
+  position: absolute;
+  right: 30px;
+  bottom: 40px;
+  opacity: 0.4;
+
+  svg {
+    fill: currentColor;
+  }
+}
