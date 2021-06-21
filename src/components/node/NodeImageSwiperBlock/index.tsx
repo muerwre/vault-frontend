@@ -5,18 +5,20 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
 import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/navigation/navigation.scss';
+import 'swiper/components/lazy/lazy.min.css';
 import styles from './styles.module.scss';
 
-import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions } from 'swiper';
+import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions, Lazy } from 'swiper';
 
 import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
-import { getURL } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
 import SwiperClass from 'swiper/types/swiper-class';
 import { modalShowPhotoswipe } from '~/redux/modal/actions';
 import { useDispatch } from 'react-redux';
+import classNames from 'classnames';
+import { getURL } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
 
-SwiperCore.use([Navigation, Pagination, Keyboard]);
+SwiperCore.use([Lazy, Navigation, Pagination, Keyboard]);
 
 interface IProps extends INodeComponentProps {}
 
@@ -78,6 +80,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         watchOverflow
         updateOnImagesReady
         onInit={resetSwiper}
+        lazy
         keyboard={{
           enabled: true,
           onlyInViewport: false,
@@ -90,11 +93,18 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         {images.map(file => (
           <SwiperSlide className={styles.slide} key={file.id}>
             <img
-              className={styles.image}
-              src={getURL(file, PRESETS['1600'])}
+              className={classNames('swiper-lazy', styles.image)}
+              data-src={getURL(file, PRESETS['1600'])}
               alt={node.title}
               onLoad={updateSwiper}
               onClick={onOpenPhotoSwipe}
+            />
+
+            <div
+              className={classNames(
+                'swiper-lazy-preloader swiper-lazy-preloader-white',
+                styles.loader
+              )}
             />
           </SwiperSlide>
         ))}
