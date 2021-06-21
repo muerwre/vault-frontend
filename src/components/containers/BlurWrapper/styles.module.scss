@@ -6,12 +6,4 @@
   box-sizing: border-box;
   flex-direction: column;
   min-height: 100vh;
-
-  &.is_blurred {
-    filter: blur(15px);
-
-    @include can_backdrop {
-      filter: blur(0);
-    }
-  }
 }
