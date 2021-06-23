@@ -99,3 +99,12 @@
     opacity: 0.7;
   }
 }
+
+.toggles {
+  padding: $gap;
+  font: $font_14_semibold;
+
+  &__label {
+    cursor: pointer;
+  }
+}

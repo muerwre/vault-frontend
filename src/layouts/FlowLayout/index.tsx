@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FlowGrid } from '~/components/flow/FlowGrid';
 import { selectFlow } from '~/redux/flow/selectors';
@@ -17,9 +17,17 @@ import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { INode } from '~/redux/types';
 import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
+import { usePersistedState } from '~/utils/hooks/usePersistedState';
+import classNames from 'classnames';
+
+enum Layout {
+  Fluid = 'fluid',
+  Default = 'default',
+}
 
 const FlowLayout: FC = () => {
   const { nodes, heroes, recent, updated, is_loading, search } = useShallowSelect(selectFlow);
+  const [layout, setLayout] = usePersistedState('flow_layout', Layout.Default);
   const labUpdates = useShallowSelect(selectLabUpdatesNodes);
   const user = useShallowSelect(selectUser);
   const dispatch = useDispatch();
@@ -58,6 +66,11 @@ const FlowLayout: FC = () => {
     labUpdates,
   ]);
 
+  const isFluid = layout === Layout.Fluid;
+  const toggleLayout = useCallback(() => {
+    setLayout(isFluid ? Layout.Default : Layout.Fluid);
+  }, [setLayout, isFluid]);
+
   useEffect(() => {
     window.addEventListener('scroll', onLoadMore);
 
@@ -69,7 +82,7 @@ const FlowLayout: FC = () => {
   }, []);
 
   return (
-    <Container>
+    <div className={classNames(styles.container, { [styles.fluid]: isFluid })}>
       <div className={styles.grid}>
         <div className={styles.hero}>
           <FlowHero heroes={heroes} />
@@ -80,8 +93,10 @@ const FlowLayout: FC = () => {
             recent={recent}
             updated={cumulativeUpdates}
             search={search}
+            isFluid={isFluid}
             onSearchChange={onChangeSearch}
             onLoadMore={onLoadMoreSearch}
+            toggleLayout={toggleLayout}
           />
         </div>
 
@@ -89,7 +104,7 @@ const FlowLayout: FC = () => {
       </div>
 
       <SidebarRouter prefix="" />
-    </Container>
+    </div>
   );
 };
 

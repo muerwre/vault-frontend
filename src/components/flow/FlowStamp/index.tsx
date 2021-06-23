@@ -1,23 +1,33 @@
-import React, { FC, useCallback, FormEvent, useMemo, KeyboardEvent } from 'react';
+import React, { FC, FormEvent, useCallback, useMemo } from 'react';
 import { IFlowState } from '~/redux/flow/reducer';
 import { InputText } from '~/components/input/InputText';
 import { FlowRecent } from '../FlowRecent';
-import classnames from 'classnames';
 
 import styles from './styles.module.scss';
-import * as FLOW_ACTIONS from '~/redux/flow/actions';
 import { FlowSearchResults } from '../FlowSearchResults';
 import { Icon } from '~/components/input/Icon';
+import { Group } from '~/components/containers/Group';
+import { Toggle } from '~/components/input/Toggle';
 
 interface IProps {
   recent: IFlowState['recent'];
   updated: IFlowState['updated'];
   search: IFlowState['search'];
+  isFluid: boolean;
   onSearchChange: (text: string) => void;
   onLoadMore: () => void;
+  toggleLayout: () => void;
 }
 
-const FlowStamp: FC<IProps> = ({ recent, updated, search, onSearchChange, onLoadMore }) => {
+const FlowStamp: FC<IProps> = ({
+  recent,
+  updated,
+  search,
+  onSearchChange,
+  onLoadMore,
+  isFluid,
+  toggleLayout,
+}) => {
   const onSearchSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
   }, []);
@@ -80,6 +90,13 @@ const FlowStamp: FC<IProps> = ({ recent, updated, search, onSearchChange, onLoad
             </div>
           </>
         )}
+      </div>
+
+      <div className={styles.toggles}>
+        <Group horizontal onClick={toggleLayout}>
+          <Toggle value={isFluid} />
+          <div className={styles.toggles__label}>Жидкое течение</div>
+        </Group>
       </div>
     </div>
   );

@@ -9,10 +9,29 @@
 
 $cols: $content_width / $cell;
 
+@mixin fluid {
+  @media(min-width: 640px) {
+    .fluid & {
+      @content
+    }
+  }
+}
+
+.container {
+  max-width: $content_width;
+  width: 100%;
+
+  &.fluid {
+    max-width: none;
+  }
+}
+
 .grid {
+  width: 100%;
+  box-sizing: border-box;
   display: grid;
 
-  grid-template-columns: repeat(5, 1fr); 
+  grid-template-columns: repeat(auto-fit, minmax($cell - 5, 1fr));
   grid-template-rows: 50vh $cell;
   grid-auto-rows: $cell;
 
@@ -20,41 +39,14 @@ $cols: $content_width / $cell;
   grid-column-gap: $gap;
   grid-row-gap: $gap;
 
-  @include tablet {
-    padding: 0 $gap;
+  @include fluid {
+    grid-template-rows: $cell;
   }
 
-  @media (max-width: $cell * 6) {
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: 50vh 20vw;
-    grid-auto-rows: 20vw;
-  }
-
-  @media (max-width: $cell * 5) {
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 40vh 25vw;
-    grid-auto-rows: 25vw;
-  }
-
-  @media (max-width: $cell * 4) {
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 40vh 33vw;
-    grid-auto-rows: 33vw;
-  }
-
-  @media (max-width: $cell * 3) {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 40vh 50vw;
-    grid-auto-rows: 50vw;
-    grid-column-gap: $gap / 2;
-    grid-row-gap: $gap / 2;
-    padding: 0 $gap / 2;
-  }
-
-  @media (max-width: $cell * 2) {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 40vh 50vw;
-    grid-auto-rows: 50vw;
+  @media (max-width: ($cell + 5) * 2) {
+    // rework stamp, so it will be shown as smaller one on mobiles
+    grid-template-columns: repeat(auto-fit, minmax($cell / 1.5 - 5, 1fr));
+    grid-template-rows: 50vh $cell;
   }
 }
 
@@ -64,7 +56,7 @@ $cols: $content_width / $cell;
 
 .hero {
   grid-row-start: 1;
-  grid-row-end: span 1;
+  grid-row-end: 2;
   grid-column-start: 1;
   grid-column-end: -1;
   background: darken($content_bg, 2%);
@@ -73,10 +65,19 @@ $cols: $content_width / $cell;
   align-items: center;
   justify-content: center;
   font: $font_24_semibold;
+
+  @include fluid {
+    grid-row-end: span 2;
+    grid-column-end: span 4;
+
+    @media(max-width: ($cell + 5) * 3) {
+      grid-column-end: -1;
+    }
+  }
 }
 
 .stamp {
-  grid-row-end: span 2;
+  grid-row-end: span 3;
   grid-column: -2 / -1;
   display: flex;
   align-items: stretch;
