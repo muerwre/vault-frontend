@@ -1,12 +1,12 @@
-import React, { FC, MouseEventHandler, useCallback, useEffect, useState } from 'react';
+import React, { FC, MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import { describeArc, getURL } from '~/utils/dom';
+import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import styles from './styles.module.scss';
 import { IFile } from '~/redux/types';
-import { LoaderCircleInner } from '~/components/input/LoaderCircleInner';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { Icon } from '~/components/input/Icon';
+import { useResizeHandler } from '~/utils/hooks/useResizeHandler';
 
 interface IProps {
   file: IFile;
@@ -14,6 +14,9 @@ interface IProps {
   onClick?: MouseEventHandler;
   className?: string;
 }
+
+const DEFAULT_WIDTH = 1920;
+const DEFAULT_HEIGHT = 1020;
 
 const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
   const [maxHeight, setMaxHeight] = useState(window.innerHeight - 140);
@@ -37,20 +40,21 @@ const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
     setHasError(true);
   }, [setHasError]);
 
-  useEffect(() => {
-    window.addEventListener('resize', onResize);
+  const [width, height] = useMemo(
+    () => [file?.metadata?.width || DEFAULT_WIDTH, file?.metadata?.height || DEFAULT_HEIGHT],
+    [file?.metadata]
+  );
 
-    return () => window.removeEventListener('resize', onResize);
-  }, [onResize]);
+  useResizeHandler(onResize);
 
   return (
     <>
       <svg
-        viewBox={`0 0 ${file?.metadata?.width || 0} ${file?.metadata?.height || 0}`}
+        viewBox={`0 0 ${width} ${height}`}
         className={classNames(styles.preview, { [styles.is_loaded]: loaded })}
         style={{
           maxHeight,
-          height: file?.metadata?.height || 'auto',
+          height: height,
         }}
         onClick={onClick}
       >
