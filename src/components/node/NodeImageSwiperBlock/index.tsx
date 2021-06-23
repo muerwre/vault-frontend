@@ -45,23 +45,12 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
     controlledSwiper.updateProgress();
   }, [controlledSwiper]);
 
-  // const resetSwiper = useCallback(() => {
-  //   if (!controlledSwiper) return;
-  //   controlledSwiper.slideTo(0, 0);
-  //   setTimeout(() => controlledSwiper.slideTo(0, 0), 100);
-  //   setTimeout(() => controlledSwiper.slideTo(0, 0), 300);
-  // }, [controlledSwiper]);
-
-  // useEffect(() => {
-  //   updateSwiper();
-  //   resetSwiper();
-  //
-  //   return () => setControlledSwiper(undefined);
-  // }, [images, updateSwiper, resetSwiper, setControlledSwiper]);
-
-  const onOpenPhotoSwipe = useCallback(() => {
-    dispatch(modalShowPhotoswipe(images, controlledSwiper?.activeIndex || 0));
-  }, [dispatch, images, controlledSwiper]);
+  const onOpenPhotoSwipe = useCallback(
+    (index: number) => {
+      dispatch(modalShowPhotoswipe(images, index));
+    },
+    [dispatch, images, controlledSwiper]
+  );
 
   if (!images?.length) {
     return null;
@@ -76,12 +65,11 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         breakpoints={breakpoints}
         pagination={{ type: 'fraction' }}
         centeredSlides
-        // observeSlideChildren
-        // observeParents
-        // resizeObserver
-        // watchOverflow
-        // updateOnImagesReady
-        // onInit={resetSwiper}
+        observeSlideChildren
+        observeParents
+        resizeObserver
+        watchOverflow
+        updateOnImagesReady
         keyboard={{
           enabled: true,
           onlyInViewport: false,
@@ -91,23 +79,14 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         zoom
         navigation
       >
-        {images.map(file => (
+        {images.map((file, i) => (
           <SwiperSlide className={styles.slide} key={file.id}>
             <ImagePreloader
               file={file}
               onLoad={updateSwiper}
-              onClick={onOpenPhotoSwipe}
+              onClick={() => onOpenPhotoSwipe(i)}
               className={styles.image}
             />
-            {/*
-              <img
-                className={classNames('swiper-lazy', styles.image)}
-                src={getURL(file, PRESETS['1600'])}
-                alt={node.title}
-                onLoad={updateSwiper}
-                onClick={onOpenPhotoSwipe}
-              />
-            */}
           </SwiperSlide>
         ))}
       </Swiper>
