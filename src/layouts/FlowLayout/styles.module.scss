@@ -1,5 +1,7 @@
 @import "src/styles/variables";
 
+$fluid_cell: 250px;
+
 .wrap {
   max-width: 2000px;
   padding: 0 40px 40px 40px;
@@ -40,7 +42,9 @@ $cols: $content_width / $cell;
   grid-row-gap: $gap;
 
   @include fluid {
-    grid-template-rows: $cell;
+    grid-template-columns: repeat(auto-fit, minmax($fluid_cell - 5, 1fr));
+    grid-template-rows: $fluid_cell;
+    grid-auto-rows: $fluid_cell;
   }
 
   @media (max-width: ($cell + 5) * 2) {
