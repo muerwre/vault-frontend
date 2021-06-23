@@ -24,6 +24,8 @@ $cols: $content_width / $cell;
   width: 100%;
 
   &.fluid {
+    padding: 0 $gap;
+    box-sizing: border-box;
     max-width: none;
   }
 }
