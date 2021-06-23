@@ -16,7 +16,6 @@ import { CommentForm } from '~/components/comment/CommentForm';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectNode } from '~/redux/node/selectors';
 import classNames from 'classnames';
-import 'flexbin/flexbin.scss';
 
 interface IProps {
   comment: IComment;
