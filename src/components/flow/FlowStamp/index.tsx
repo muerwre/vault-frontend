@@ -93,7 +93,7 @@ const FlowStamp: FC<IProps> = ({
       </div>
 
       <div className={styles.toggles}>
-        <Group horizontal onClick={toggleLayout}>
+        <Group horizontal onClick={toggleLayout} className={styles.fluid_toggle}>
           <Toggle value={isFluid} />
           <div className={styles.toggles__label}>Жидкое течение</div>
         </Group>

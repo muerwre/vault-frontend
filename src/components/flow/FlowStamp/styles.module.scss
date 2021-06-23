@@ -101,10 +101,19 @@
 }
 
 .toggles {
-  padding: $gap;
-  font: $font_14_semibold;
+
+  & > div {
+    padding: $gap;
+    font: $font_14_semibold;
+  }
 
   &__label {
     cursor: pointer;
+  }
+}
+
+.fluid_toggle {
+  @include desktop {
+    display: none;
   }
 }
