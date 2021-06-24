@@ -81,6 +81,7 @@ const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
             width="100%"
             height="100%"
             filter="url(#f1)"
+            onLoad={onLoad}
           />
         )}
       </svg>

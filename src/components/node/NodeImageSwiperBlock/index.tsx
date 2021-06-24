@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { INodeComponentProps } from '~/redux/node/constants';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -14,9 +14,6 @@ import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
 import SwiperClass from 'swiper/types/swiper-class';
 import { modalShowPhotoswipe } from '~/redux/modal/actions';
 import { useDispatch } from 'react-redux';
-import classNames from 'classnames';
-import { getURL } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
 import { ImagePreloader } from '~/components/media/ImagePreloader';
 
 SwiperCore.use([Navigation, Pagination, Keyboard]);
@@ -56,9 +53,23 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
     return null;
   }
 
+  if (images.length === 1) {
+    return (
+      <div className={styles.single}>
+        <ImagePreloader
+          file={images[0]}
+          onLoad={updateSwiper}
+          onClick={() => onOpenPhotoSwipe(0)}
+          className={styles.image}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.wrapper}>
       <Swiper
+        enabled={images.length > 1}
         initialSlide={0}
         slidesPerView="auto"
         onSwiper={setControlledSwiper}
