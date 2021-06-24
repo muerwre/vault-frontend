@@ -15,6 +15,7 @@ import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { CommentForm } from '~/components/comment/CommentForm';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectNode } from '~/redux/node/selectors';
+import classNames from 'classnames';
 
 interface IProps {
   comment: IComment;
@@ -84,7 +85,9 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, modalSho
         <div className={classnames(styles.block, styles.block_image)}>
           {menu}
 
-          <div className={styles.images}>
+          <div
+            className={classNames(styles.images, { [styles.multiple]: groupped.image.length > 1 })}
+          >
             {groupped.image.map((file, index) => (
               <div key={file.id} onClick={() => modalShowPhotoswipe(groupped.image, index)}>
                 <img src={getURL(file, PRESETS['600'])} alt={file.name} />
