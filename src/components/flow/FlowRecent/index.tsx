@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { IFlowState } from '~/redux/flow/reducer';
 import { FlowRecentItem } from '../FlowRecentItem';
+import styles from './styles.module.scss';
 
 interface IProps {
   recent: IFlowState['recent'];
@@ -10,8 +11,13 @@ interface IProps {
 const FlowRecent: FC<IProps> = ({ recent, updated }) => {
   return (
     <>
-      {updated && updated.map(node => <FlowRecentItem node={node} key={node.id} has_new />)}
-      {recent && recent.map(node => <FlowRecentItem node={node} key={node.id} />)}
+      <div className={styles.updates}>
+        {updated && updated.map(node => <FlowRecentItem node={node} key={node.id} has_new />)}
+      </div>
+
+      <div className={styles.recent}>
+        {recent && recent.map(node => <FlowRecentItem node={node} key={node.id} />)}
+      </div>
     </>
   );
 };

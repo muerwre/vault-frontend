@@ -24,7 +24,7 @@ const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
   const [hasError, setHasError] = useState(false);
 
   const onImageLoad = useCallback(() => {
-    setLoaded(true);
+    setLoaded(false);
     setHasError(false);
 
     if (onLoad) {

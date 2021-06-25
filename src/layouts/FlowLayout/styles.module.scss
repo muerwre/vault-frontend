@@ -1,7 +1,5 @@
 @import "src/styles/variables";
 
-$fluid_cell: 250px;
-
 .wrap {
   max-width: 2000px;
   padding: 0 40px 40px 40px;
@@ -12,7 +10,7 @@ $fluid_cell: 250px;
 $cols: $content_width / $cell;
 
 @mixin fluid {
-  @media(min-width: 640px) {
+  @media(min-width: $content_width) {
     .fluid & {
       @content
     }
@@ -49,10 +47,20 @@ $cols: $content_width / $cell;
     grid-auto-rows: $fluid_cell;
   }
 
-  @media (max-width: ($cell + 5) * 2) {
+  @media (max-width: ($cell + 10) * 3) {
+    grid-template-columns: repeat(auto-fill, minmax($fluid_cell - 20, 1fr));
+    grid-auto-rows: $fluid_cell;
+    grid-template-rows: calc(50vw - 10px) $fluid_cell;
+  }
+
+  @media (max-width: $cell_tablet) {
+    grid-template-rows: calc(50vw - 10px) auto $fluid_cell;
+  }
+
+  @media (max-width: $cell_mobile) {
     // rework stamp, so it will be shown as smaller one on mobiles
-    grid-template-columns: repeat(auto-fit, minmax($cell / 1.5 - 5, 1fr));
-    grid-template-rows: 50vh $cell;
+    grid-template-columns: repeat(auto-fill, minmax($fluid_cell*0.75, 1fr));
+    grid-template-rows: calc(100vw - 10px) auto $fluid_cell;
   }
 }
 
@@ -76,7 +84,7 @@ $cols: $content_width / $cell;
     grid-row-end: span 2;
     grid-column-end: span 4;
 
-    @media(max-width: ($cell + 5) * 3) {
+    @media(max-width: $content_width) {
       grid-column-end: -1;
     }
   }
@@ -90,4 +98,9 @@ $cols: $content_width / $cell;
   justify-content: stretch;
   overflow: hidden;
   position: relative;
+
+  @media(max-width: $flow_hide_recents) {
+    grid-column-start: 1;
+    grid-row-end: span 1;
+  }
 }

@@ -1,0 +1,11 @@
+@import "src/styles/variables";
+
+.recent {
+  @media (max-width: $flow_hide_recents) {
+    display: none;
+  }
+}
+
+.updates {
+
+}

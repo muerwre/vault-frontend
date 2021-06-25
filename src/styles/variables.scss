@@ -2,6 +2,11 @@
 
 $header_height: 64px;
 $cell: 280px;
+$fluid_cell: 250px; // smaller cell for fluid flow
+$cell_tablet: ($fluid_cell + 5) * 3 + 10; // flow breakpoint for tablet
+$cell_mobile: ($fluid_cell + 5) * 2 + 10; // flow breakpoint for mobile
+$flow_hide_recents: $cell_tablet; // breakpoint, there recents will be hidden
+
 $gap: 10px;
 $lab_gap: $gap * 3;
 $lab_gap_mobile: $gap * 2;
