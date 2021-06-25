@@ -54,7 +54,7 @@ $cols: $content_width / $cell;
   }
 
   @media (max-width: $cell_tablet) {
-    grid-template-rows: calc(50vw - 10px) auto $fluid_cell;
+    grid-template-rows: calc(66vw - 10px) auto $fluid_cell;
   }
 
   @media (max-width: $cell_mobile) {

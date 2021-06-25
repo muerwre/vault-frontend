@@ -109,6 +109,13 @@
     font: $font_32_bold;
     max-height: 3.6em;
   }
+
+  @include phone {
+    white-space: initial;
+    word-wrap: break-word;
+    font: $font_24_bold;
+    max-height: 3.6em;
+  }
 }
 
 .buttons {
