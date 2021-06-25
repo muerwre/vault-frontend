@@ -24,8 +24,17 @@
   bottom: 40px;
   opacity: 0.4;
 
+  @include tablet {
+    right: 5px;
+    bottom: 5px;
+  }
+
   svg {
     fill: currentColor;
+
+    @include tablet {
+      transform: scale(0.6);
+    }
   }
 }
 

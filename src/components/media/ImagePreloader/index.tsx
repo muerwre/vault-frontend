@@ -47,43 +47,37 @@ const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
 
   useResizeHandler(onResize);
 
+  const estimatedWidth = (width * maxHeight) / height;
+
   return (
     <>
       <svg
         viewBox={`0 0 ${width} ${height}`}
         className={classNames(styles.preview, { [styles.is_loaded]: loaded })}
         style={{
-          maxHeight,
-          height: height,
+          maxHeight: maxHeight,
+          width: estimatedWidth,
         }}
         onClick={onClick}
       >
         <defs>
           <filter id="f1" x="0" y="0">
-            <feGaussianBlur
-              stdDeviation="30 30"
-              x="0%"
-              y="0%"
-              width="100%"
-              height="100%"
-              in="blend"
-              edgeMode="none"
-              result="blur2"
-            />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="30" />
           </filter>
         </defs>
 
-        <rect fill="#242222" width="100%" height="100%" stroke="none" rx="8" ry="8" />
+        <g filter="url(#f1)">
+          <rect fill="#222222" width="100%" height="100%" stroke="none" rx="8" ry="8" />
 
-        {!hasError && (
-          <image
-            xlinkHref={getURL(file, PRESETS['300'])}
-            width="100%"
-            height="100%"
-            filter="url(#f1)"
-            onLoad={onLoad}
-          />
-        )}
+          {!hasError && (
+            <image
+              xlinkHref={getURL(file, PRESETS['300'])}
+              width="100%"
+              height="100%"
+              onLoad={onLoad}
+            />
+          )}
+        </g>
       </svg>
 
       <img
