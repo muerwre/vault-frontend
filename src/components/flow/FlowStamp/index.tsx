@@ -9,6 +9,7 @@ import { Icon } from '~/components/input/Icon';
 import { Group } from '~/components/containers/Group';
 import { Toggle } from '~/components/input/Toggle';
 import classNames from 'classnames';
+import { Superpower } from '~/components/boris/Superpower';
 
 interface IProps {
   recent: IFlowState['recent'];
@@ -93,12 +94,14 @@ const FlowStamp: FC<IProps> = ({
         )}
       </div>
 
-      <div className={styles.toggles}>
-        <Group horizontal onClick={toggleLayout} className={styles.fluid_toggle}>
-          <Toggle value={isFluid} />
-          <div className={styles.toggles__label}>Жидкое течение</div>
-        </Group>
-      </div>
+      <Superpower>
+        <div className={styles.toggles}>
+          <Group horizontal onClick={toggleLayout} className={styles.fluid_toggle}>
+            <Toggle value={isFluid} />
+            <div className={styles.toggles__label}>Жидкое течение</div>
+          </Group>
+        </div>
+      </Superpower>
     </div>
   );
 };

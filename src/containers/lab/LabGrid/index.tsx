@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import Masonry from 'react-masonry-css';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import styles from './styles.module.scss';
 import { LabNode } from '~/components/lab/LabNode';
@@ -6,7 +7,15 @@ import { selectLabList, selectLabListNodes } from '~/redux/lab/selectors';
 import { EMPTY_NODE, NODE_TYPES } from '~/redux/node/constants';
 import { values } from 'ramda';
 
-interface IProps {}
+interface IProps {
+  isFluid: boolean;
+}
+
+const breakpointColumnsObj = {
+  default: 3,
+  1100: 2,
+  700: 1,
+};
 
 const getRandomNodeType = () =>
   values(NODE_TYPES)[Math.floor(Math.random() * values(NODE_TYPES).length)];
@@ -20,7 +29,7 @@ const LoadingNode = () => (
   />
 );
 
-const LabGrid: FC<IProps> = () => {
+const LabGrid: FC<IProps> = ({ isFluid }) => {
   const nodes = useShallowSelect(selectLabListNodes);
   const { is_loading } = useShallowSelect(selectLabList);
 
@@ -36,7 +45,11 @@ const LabGrid: FC<IProps> = () => {
   }
 
   return (
-    <div className={styles.wrap}>
+    <Masonry
+      className={styles.wrap}
+      breakpointCols={isFluid ? breakpointColumnsObj : 1}
+      columnClassName={styles.column}
+    >
       {nodes.map(node => (
         <LabNode
           node={node.node}
@@ -45,7 +58,7 @@ const LabGrid: FC<IProps> = () => {
           commentCount={node.comment_count}
         />
       ))}
-    </div>
+    </Masonry>
   );
 };
 
