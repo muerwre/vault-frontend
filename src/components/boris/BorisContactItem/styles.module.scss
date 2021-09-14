@@ -1,0 +1,29 @@
+@import "~/styles/variables.scss";
+
+.item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: stretch;
+  text-decoration: none;
+  color: darken(white, 50%);
+}
+
+.icon {
+  fill: currentColor;
+  height: 32px;
+}
+
+.info {
+  flex: 1;
+  margin-left: $gap;
+}
+
+.title {
+  font: $font_16_semibold;
+}
+
+.subtitle {
+  font: $font_12_medium;
+  opacity: 0.7;
+}

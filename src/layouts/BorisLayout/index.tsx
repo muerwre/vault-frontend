@@ -26,6 +26,7 @@ import { Tab } from '~/components/dialogs/Tab';
 import { useHistory, useLocation } from 'react-router';
 import { Card } from '~/components/containers/Card';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import { BorisContactItem } from '~/components/boris/BorisContactItem';
 
 type IProps = {};
 
@@ -122,19 +123,26 @@ const BorisLayout: FC<IProps> = () => {
           <Group className={styles.stats}>
             <StickyBox className={styles.sticky} offsetTop={72} offsetBottom={10}>
               <Group className={styles.stats__container}>
-                <div className={styles.stats__about}>
-                  <h4>Господи-боженьки, где это я?</h4>
-
-                  <p>
-                    Всё впорядке, это &mdash; главный штаб Суицидальных Роботов, строителей Убежища.
-                  </p>
-                  <p>Здесь мы сидим и слушаем всё, что вас беспокоит.</p>
-                  <p>Все виновные будут наказаны. Невиновные, впрочем, тоже. </p>
-                  <p className="grey">//&nbsp;Такова&nbsp;жизнь.</p>
+                <div className={styles.super_powers}>
+                  {user.is_user && <BorisSuperpowers active={is_tester} onChange={setBetaTester} />}
                 </div>
 
-                <div>
-                  {user.is_user && <BorisSuperpowers active={is_tester} onChange={setBetaTester} />}
+                <div className={styles.contacts}>
+                  <div className={styles.contacts__title}>Где мы ещё:</div>
+
+                  <BorisContactItem
+                    icon="vk"
+                    title="Суицидальные роботы"
+                    link="https://vk.com/vault48"
+                    subtitle="паблик вконтакте"
+                  />
+
+                  <BorisContactItem
+                    icon="telegram"
+                    title="Boris[48]bot"
+                    link="https://t.me/boris48bot"
+                    subtitle="телеграм-бот"
+                  />
                 </div>
 
                 <div className={styles.stats__wrap}>

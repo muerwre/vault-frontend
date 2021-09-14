@@ -157,3 +157,25 @@
   z-index: 1;
   flex: 3;
 }
+
+.contacts {
+  display: grid;
+  grid-auto-flow: row;
+  grid-row-gap: $gap;
+  padding: 2px 2px $gap * 3 2px;
+
+  & > *:not(:last-child) {
+    border-bottom: 1px solid #333333;
+    padding-bottom: $gap * 2;
+  }
+}
+
+.contacts__title {
+  font: $font_12_semibold;
+  text-transform: uppercase;
+  opacity: 0.3;
+}
+
+.super_powers {
+  padding: $gap * 2 0;
+}
