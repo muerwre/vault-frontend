@@ -44,21 +44,12 @@ const LabLayout: FC<IProps> = () => {
         <div className={styles.wrap}>
           <Group className={styles.content}>
             <LabHead isLoading={is_loading} />
-            <LabGrid isFluid={isFluid} />
+            <LabGrid />
           </Group>
 
           <div className={styles.panel}>
             <Sticky>
               <LabStats />
-
-              <Superpower>
-                <div className={styles.toggles}>
-                  <Group horizontal onClick={toggleLayout} className={styles.fluid_toggle}>
-                    <Toggle value={isFluid} />
-                    <div className={styles.toggles__label}>Жидкая лаборатория</div>
-                  </Group>
-                </div>
-              </Superpower>
             </Sticky>
           </div>
         </div>
