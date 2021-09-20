@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useCallback } from 'react';
 import { Route, RouteComponentProps } from 'react-router';
 import { selectNode } from '~/redux/node/selectors';
 import { Card } from '~/components/containers/Card';
@@ -20,6 +20,10 @@ import { useOnNodeSeen } from '~/utils/hooks/node/useOnNodeSeen';
 
 import styles from './styles.module.scss';
 import { useNodeFetcher } from '~/utils/hooks/node/useNodeFetcher';
+import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
+import { IFile } from '~/redux/types';
+import { modalShowPhotoswipe } from '~/redux/modal/actions';
+import { useDispatch } from 'react-redux';
 
 type IProps = RouteComponentProps<{ id: string }> & {};
 
@@ -30,8 +34,16 @@ const NodeLayout: FC<IProps> = memo(
     },
   }) => {
     const { node, isLoading } = useNodeFetcher(parseInt(id, 10));
+    const {
+      comments,
+      isLoading: isLoadingComments,
+      count: commentsCount,
+      onDelete,
+      onLoadMoreComments,
+      onShowPhotoswipe,
+    } = useNodeComments(parseInt(id, 10));
 
-    const { comments, comment_count, is_loading_comments, related } = useShallowSelect(selectNode);
+    const { related } = useShallowSelect(selectNode);
 
     useNodeCoverImage(node);
     useScrollToTop([id]);
@@ -52,12 +64,15 @@ const NodeLayout: FC<IProps> = memo(
 
             <NodeBottomBlock
               node={node}
-              isLoadingComments={is_loading_comments}
               comments={comments}
               isLoading={isLoading}
-              commentsCount={comment_count}
+              isLoadingComments={isLoadingComments}
+              commentsCount={commentsCount}
               commentsOrder="DESC"
               related={related}
+              onShowPhotoswipe={onShowPhotoswipe}
+              onDeleteComment={onDelete}
+              onLoadMoreComments={onLoadMoreComments}
             />
 
             <Footer />

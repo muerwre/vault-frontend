@@ -21,7 +21,7 @@ interface IProps {
   comment: IComment;
   can_edit: boolean;
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
-  modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
+  modalShowPhotoswipe: (images: IFile[], index: number) => void;
 }
 
 const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, modalShowPhotoswipe }) => {

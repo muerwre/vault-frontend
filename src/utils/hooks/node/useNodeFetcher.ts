@@ -5,7 +5,7 @@ import { apiGetNode } from '~/redux/node/api';
 export const useNodeFetcher = (id: INode['id']) => {
   const { data, error, isValidating } = useSWR(`${id}`, apiGetNode);
   const node = data?.node;
-  const isLoading = !node && !isValidating;
+  const isLoading = !data && !isValidating;
 
   return { node, error, isLoading };
 };

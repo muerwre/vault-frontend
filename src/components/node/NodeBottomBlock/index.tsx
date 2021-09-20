@@ -6,7 +6,7 @@ import { NodeCommentsBlock } from '~/components/node/NodeCommentsBlock';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
 import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
-import { IComment, INode } from '~/redux/types';
+import { IComment, IFile, INode } from '~/redux/types';
 import { useUser } from '~/utils/hooks/user/userUser';
 import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
 import { INodeRelated } from '~/redux/node/types';
@@ -21,6 +21,9 @@ interface IProps {
   commentsCount: number;
   isLoadingComments: boolean;
   related: INodeRelated;
+  onDeleteComment: (id: IComment['id'], locked: boolean) => void;
+  onLoadMoreComments: () => void;
+  onShowPhotoswipe: (images: IFile[], index: number) => void;
 }
 
 const NodeBottomBlock: FC<IProps> = ({
@@ -31,6 +34,9 @@ const NodeBottomBlock: FC<IProps> = ({
   commentsCount,
   commentsOrder,
   related,
+  onDeleteComment,
+  onLoadMoreComments,
+  onShowPhotoswipe,
 }) => {
   const { inline } = useNodeBlocks(node, isLoading);
   const { is_user } = useUser();
@@ -53,6 +59,9 @@ const NodeBottomBlock: FC<IProps> = ({
               count={commentsCount}
               order={commentsOrder}
               node={node}
+              onDelete={onDeleteComment}
+              onLoadMoreComments={onLoadMoreComments}
+              onShowPhotoswipe={onShowPhotoswipe}
             />
 
             {is_user && !isLoading && <NodeCommentForm nodeId={node?.id} />}

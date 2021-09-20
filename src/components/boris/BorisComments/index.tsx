@@ -8,16 +8,27 @@ import { Footer } from '~/components/main/Footer';
 import { Card } from '~/components/containers/Card';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectAuthUser } from '~/redux/auth/selectors';
-import { IComment, INode } from '~/redux/types';
+import { IComment, IFile, INode } from '~/redux/types';
 
 interface IProps {
   isLoadingComments: boolean;
   commentCount: number;
   node: INode;
   comments: IComment[];
+  onDelete: (id: IComment['id'], locked: boolean) => void;
+  onLoadMoreComments: () => void;
+  onShowPhotoswipe: (images: IFile[], index: number) => void;
 }
 
-const BorisComments: FC<IProps> = ({ isLoadingComments, node, commentCount, comments }) => {
+const BorisComments: FC<IProps> = ({
+  node,
+  commentCount,
+  comments,
+  isLoadingComments,
+  onLoadMoreComments,
+  onDelete,
+  onShowPhotoswipe,
+}) => {
   const user = useShallowSelect(selectAuthUser);
 
   return (
@@ -28,7 +39,15 @@ const BorisComments: FC<IProps> = ({ isLoadingComments, node, commentCount, comm
         {isLoadingComments ? (
           <NodeNoComments is_loading count={7} />
         ) : (
-          <NodeComments comments={comments} count={commentCount} user={user} order="ASC" />
+          <NodeComments
+            comments={comments}
+            count={commentCount}
+            user={user}
+            order="ASC"
+            onLoadMoreComments={onLoadMoreComments}
+            onDelete={onDelete}
+            onShowPhotoswipe={onShowPhotoswipe}
+          />
         )}
       </Group>
 

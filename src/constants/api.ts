@@ -1,5 +1,6 @@
 import { IComment, INode } from '~/redux/types';
 import { ISocialProvider } from '~/redux/auth/types';
+import { COMMENTS_DISPLAY } from '~/redux/node/constants';
 
 export const API = {
   BASE: process.env.REACT_APP_API_HOST,
@@ -28,6 +29,8 @@ export const API = {
     GET_NODE: (id: number | string) => `/node/${id}`,
 
     COMMENT: (id: INode['id']) => `/node/${id}/comment`,
+    COMMENT_INFINITE: (id: INode['id'], skip: number) =>
+      `/node/${id}/comment?take=${COMMENTS_DISPLAY}&skip=${skip}`,
     RELATED: (id: INode['id']) => `/node/${id}/related`,
     UPDATE_TAGS: (id: INode['id']) => `/node/${id}/tags`,
     POST_LIKE: (id: INode['id']) => `/node/${id}/like`,

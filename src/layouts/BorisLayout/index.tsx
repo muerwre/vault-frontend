@@ -115,6 +115,9 @@ const BorisLayout: FC<IProps> = () => {
                   commentCount={node.comment_count}
                   node={node.current}
                   comments={node.comments}
+                  onDelete={console.log}
+                  onLoadMoreComments={console.log}
+                  onShowPhotoswipe={console.log}
                 />
               </Switch>
             }
