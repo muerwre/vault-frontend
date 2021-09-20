@@ -33,41 +33,10 @@ const Cell: FC<IProps> = ({
   const [is_loaded, setIsLoaded] = useState(false);
   const [is_visible, setIsVisible] = useState(true);
 
-  // const checkIfVisible = useCallback(() => {
-  //   if (!ref.current) return;
-  //
-  //   const { top, height } = ref.current.getBoundingClientRect();
-  //
-  //   // const visibility = top + height > -window.innerHeight && top < window.innerHeight * 2;
-  //   const visibility = top + height > -600 && top < window.innerHeight + 600;
-  //   if (visibility !== is_visible) setIsVisible(visibility);
-  // }, [ref, is_visible, setIsVisible]);
-  //
-  // const checkIfVisibleDebounced = useCallback(debounce(Math.random() * 100 + 100, checkIfVisible), [
-  //   checkIfVisible,
-  // ]);
-
-  // useEffect(() => {
-  //   checkIfVisibleDebounced();
-  // }, []);
-
-  // useEffect(() => {
-  // recalc visibility of other elements
-  // window.dispatchEvent(new CustomEvent('scroll'));
-  // }, [flow]);
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', checkIfVisibleDebounced);
-  //
-  //   return () => window.removeEventListener('scroll', checkIfVisibleDebounced);
-  // }, [checkIfVisibleDebounced]);
-
   const onImageLoad = useCallback(() => {
     setIsLoaded(true);
   }, [setIsLoaded]);
 
-  // Replaced it with <Link>, maybe, you can remove it completely with NodeSelect action
-  // const onClick = useCallback(() => onSelect(id, type), [onSelect, id, type]);
   const has_description = description && description.length > 32;
 
   const text =
@@ -82,12 +51,12 @@ const Cell: FC<IProps> = ({
   }, [id, flow, onChangeCellView]);
 
   const setViewSingle = useCallback(() => {
-    const show_description = (flow && !!flow.show_description) || false;
+    const show_description = (flow && flow.show_description) || false;
     onChangeCellView(id, { show_description, display: 'single' });
   }, [id, flow, onChangeCellView]);
 
   const setViewHorizontal = useCallback(() => {
-    const show_description = (flow && !!flow.show_description) || false;
+    const show_description = (flow && flow.show_description) || false;
     onChangeCellView(id, { show_description, display: 'horizontal' });
   }, [id, flow, onChangeCellView]);
 

@@ -47,7 +47,6 @@
   align-items: center;
   justify-content: flex-end;
   padding-bottom: 33.333%;
-  position: relative;
   width: 100%;
 
   img {
@@ -81,7 +80,6 @@
   font-size: 72px;
   line-height: 0.95em;
   flex-direction: column;
-  padding-bottom: $gap * 2;
   padding: 0 0 $gap * 2;
   transform: translate(-50%, 0);
   box-sizing: border-box;
@@ -156,24 +154,6 @@
   position: relative;
   z-index: 1;
   flex: 3;
-}
-
-.contacts {
-  display: grid;
-  grid-auto-flow: row;
-  grid-row-gap: $gap;
-  padding: 2px 2px $gap * 3 2px;
-
-  & > *:not(:last-child) {
-    border-bottom: 1px solid #333333;
-    padding-bottom: $gap * 2;
-  }
-}
-
-.contacts__title {
-  font: $font_12_semibold;
-  text-transform: uppercase;
-  opacity: 0.3;
 }
 
 .super_powers {

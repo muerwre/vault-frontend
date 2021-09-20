@@ -30,18 +30,13 @@
     .thumbnail {
       transform: scale(1.1);
     }
-
-    .title {
-      //opacity: 0;
-      //transform: translate(-3px, 3px);
-    }
   }
   @include outer_shadow();
 }
 
 .text {
   font: $font_18_regular;
-  line-height: 22px;
+  line-height: 23px;
   background: transparentize($color: $content_bg, $amount: 0.3) url('../../../sprites/stripes.svg');
   padding: $gap;
   box-sizing: border-box;

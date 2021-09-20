@@ -29,13 +29,14 @@ export type IStatBackend = {
   };
 };
 
+export interface BorisUsageStats {
+  git: Partial<IStatGitRow>[];
+  issues: IGithubIssue[];
+  backend?: IStatBackend;
+  is_loading: boolean;
+}
 export type IBorisState = Readonly<{
-  stats: {
-    git: Partial<IStatGitRow>[];
-    issues: IGithubIssue[];
-    backend?: IStatBackend;
-    is_loading: boolean;
-  };
+  stats: BorisUsageStats;
 }>;
 
 const BORIS_INITIAL_STATE: IBorisState = {

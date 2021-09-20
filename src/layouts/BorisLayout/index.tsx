@@ -27,6 +27,8 @@ import { useHistory, useLocation } from 'react-router';
 import { Card } from '~/components/containers/Card';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { BorisContactItem } from '~/components/boris/BorisContactItem';
+import { BorisContacts } from '~/components/boris/BorisContacts';
+import { BorisSidebar } from '~/components/boris/BorisSidebar';
 
 type IProps = {};
 
@@ -37,7 +39,7 @@ const BorisLayout: FC<IProps> = () => {
   const user = useShallowSelect(selectUser);
   const stats = useShallowSelect(selectBorisStats);
   const comments = useShallowSelect(selectNodeComments);
-  const is_tester = useShallowSelect(selectAuthIsTester);
+  const isTester = useShallowSelect(selectAuthIsTester);
 
   useEffect(() => {
     const last_comment = comments[0];
@@ -70,9 +72,6 @@ const BorisLayout: FC<IProps> = () => {
     [dispatch]
   );
 
-  const history = useHistory();
-  const location = useLocation();
-
   return (
     <Container>
       <div className={styles.wrap}>
@@ -88,67 +87,22 @@ const BorisLayout: FC<IProps> = () => {
 
         <div className={styles.container}>
           <Card className={styles.content}>
-            <Superpower>
-              <Tabs>
-                <Tab
-                  active={location.pathname === URLS.BORIS}
-                  onClick={() => history.push(URLS.BORIS)}
-                >
-                  Комментарии
-                </Tab>
-
-                <Tab
-                  active={location.pathname === `${URLS.BORIS}/ui`}
-                  onClick={() => history.push(`${URLS.BORIS}/ui`)}
-                >
-                  UI Demo
-                </Tab>
-              </Tabs>
-            </Superpower>
-
-            {
-              <Switch>
-                <Route path={`${URLS.BORIS}/ui`} component={BorisUIDemo} />
-
-                <BorisComments
-                  isLoadingComments={node.is_loading_comments}
-                  commentCount={node.comment_count}
-                  node={node.current}
-                  comments={node.comments}
-                />
-              </Switch>
-            }
+            <BorisComments
+              isLoadingComments={node.is_loading_comments}
+              commentCount={node.comment_count}
+              node={node.current}
+              comments={node.comments}
+            />
           </Card>
 
           <Group className={styles.stats}>
             <StickyBox className={styles.sticky} offsetTop={72} offsetBottom={10}>
-              <Group className={styles.stats__container}>
-                <div className={styles.super_powers}>
-                  {user.is_user && <BorisSuperpowers active={is_tester} onChange={setBetaTester} />}
-                </div>
-
-                <div className={styles.contacts}>
-                  <div className={styles.contacts__title}>Где мы ещё:</div>
-
-                  <BorisContactItem
-                    icon="vk"
-                    title="Суицидальные роботы"
-                    link="https://vk.com/vault48"
-                    subtitle="паблик вконтакте"
-                  />
-
-                  <BorisContactItem
-                    icon="telegram"
-                    title="Boris[48]bot"
-                    link="https://t.me/boris48bot"
-                    subtitle="телеграм-бот"
-                  />
-                </div>
-
-                <div className={styles.stats__wrap}>
-                  <BorisStats stats={stats} />
-                </div>
-              </Group>
+              <BorisSidebar
+                isTester={isTester}
+                stats={stats}
+                setBetaTester={setBetaTester}
+                user={user}
+              />
             </StickyBox>
           </Group>
         </div>
