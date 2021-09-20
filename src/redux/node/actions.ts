@@ -118,10 +118,17 @@ export const nodeLock = (id: INode['id'], is_locked: boolean) => ({
   is_locked,
 });
 
-export const nodeLockComment = (id: IComment['id'], is_locked: boolean) => ({
+export const nodeLockComment = (
+  nodeID: INode['id'],
+  commentID: IComment['id'],
+  isLocked: boolean,
+  callback: (e?: string) => void
+) => ({
   type: NODE_ACTIONS.LOCK_COMMENT,
-  id,
-  is_locked,
+  nodeID,
+  commentID,
+  callback,
+  isLocked,
 });
 
 export const nodeEditComment = (id: IComment['id']) => ({

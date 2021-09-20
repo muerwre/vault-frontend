@@ -108,10 +108,10 @@ export const apiPostNodeHeroic = ({ id }: ApiPostNodeHeroicRequest) =>
 
 export const apiLockNode = ({ id, is_locked }: ApiLockNodeRequest) =>
   api
-    .post<ApiLockNodeResult>(API.NODE.POST_LOCK(id), { is_locked })
+    .post<ApiLockNodeResult>(API.NODE.POST_LOCK(id), { isLocked: is_locked })
     .then(cleanResult);
 
-export const apiLockComment = ({ id, is_locked, current }: ApiLockCommentRequest) =>
+export const apiLockComment = ({ nodeID, isLocked, commentID }: ApiLockCommentRequest) =>
   api
-    .post<ApiLockcommentResult>(API.NODE.LOCK_COMMENT(current, id), { is_locked })
+    .post<ApiLockcommentResult>(API.NODE.LOCK_COMMENT(nodeID, commentID), { is_locked: isLocked })
     .then(cleanResult);

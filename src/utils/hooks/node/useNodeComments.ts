@@ -22,7 +22,7 @@ export const useNodeComments = (id: INode['id']) => {
     [id]
   );
 
-  const { data, error, isValidating, size, setSize } = useSWRInfinite(getKey, fetcher);
+  const { data, error, isValidating, size, setSize, mutate } = useSWRInfinite(getKey, fetcher);
 
   const comments = useMemo<IComment[]>(
     () => (data || []).reduce((acc, { comments }) => [...acc, ...comments], [] as IComment[]),
@@ -40,14 +40,37 @@ export const useNodeComments = (id: INode['id']) => {
   const isLoading = !data && !isValidating;
 
   const onDelete = useCallback(
-    (id: IComment['id'], locked: boolean) => dispatch(nodeLockComment(id, locked)),
-    [dispatch]
+    (commentID: IComment['id'], locked: boolean) => {
+      const callback = (e?: string) => {
+        if (!e && data) {
+          console.log({ data, commentID });
+
+          mutate(
+            data.map(page => ({
+              ...page,
+              comments: page.comments.map(comment =>
+                comment.id === commentID
+                  ? {
+                      ...comment,
+                      deleted_at: locked ? new Date().toISOString() : undefined,
+                    }
+                  : comment
+              ),
+            })),
+            false
+          );
+        }
+      };
+
+      dispatch(nodeLockComment(id, commentID, locked, callback));
+    },
+    [id, mutate, data]
   );
   const onLoadMoreComments = useCallback(() => setSize(size + 1), [size, setSize]);
 
   const onShowPhotoswipe = useCallback(
     (images: IFile[], index: number) => dispatch(modalShowPhotoswipe(images, index)),
-    [dispatch]
+    []
   );
 
   return { comments, count, error, isLoading, onDelete, onLoadMoreComments, onShowPhotoswipe };

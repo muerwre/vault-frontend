@@ -312,41 +312,23 @@ function* onLockSaga({ id, is_locked }: ReturnType<typeof nodeLock>) {
   }
 }
 
-function* onLockCommentSaga({ id, is_locked }: ReturnType<typeof nodeLockComment>) {
-  const { current, comments }: ReturnType<typeof selectNode> = yield select(selectNode);
-
+function* onLockCommentSaga({
+  commentID,
+  nodeID,
+  isLocked,
+  callback,
+}: ReturnType<typeof nodeLockComment>) {
   try {
-    yield put(
-      nodeSetComments(
-        comments.map(comment =>
-          comment.id === id
-            ? { ...comment, deleted_at: is_locked ? new Date().toISOString() : undefined }
-            : comment
-        )
-      )
-    );
-
-    const data: Unwrap<typeof apiLockComment> = yield call(apiLockComment, {
-      current: current.id,
-      id,
-      is_locked,
+    yield call(apiLockComment, {
+      commentID,
+      nodeID,
+      isLocked,
     });
 
-    yield put(
-      nodeSetComments(
-        comments.map(comment =>
-          comment.id === id ? { ...comment, deleted_at: data.deleted_at || undefined } : comment
-        )
-      )
-    );
-  } catch {
-    yield put(
-      nodeSetComments(
-        comments.map(comment =>
-          comment.id === id ? { ...comment, deleted_at: current.deleted_at } : comment
-        )
-      )
-    );
+    callback();
+  } catch (e) {
+    console.log(e);
+    callback(e.toString());
   }
 }
 

@@ -24,6 +24,6 @@ export const apiSendMessage = ({ username, message }: ApiSendMessageRequest) =>
 export const apiDeleteMessage = ({ username, id, is_locked }: ApiDeleteMessageRequest) =>
   api
     .delete<ApiDeleteMessageResult>(API.USER.MESSAGE_DELETE(username, id), {
-      params: { is_locked },
+      params: { isLocked: is_locked },
     })
     .then(cleanResult);

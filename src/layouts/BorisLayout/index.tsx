@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useEffect } from 'react';
-import { selectNode, selectNodeComments } from '~/redux/node/selectors';
 import { selectAuthIsTester, selectUser } from '~/redux/auth/selectors';
 import { useDispatch } from 'react-redux';
 import styles from './styles.module.scss';
@@ -11,7 +10,6 @@ import { BorisStats } from '~/components/boris/BorisStats';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectBorisStats } from '~/redux/boris/selectors';
 import { authSetState, authSetUser } from '~/redux/auth/actions';
-import { nodeLoadNode } from '~/redux/node/actions';
 import { borisLoadStats } from '~/redux/boris/actions';
 import { Container } from '~/containers/main/Container';
 import StickyBox from 'react-sticky-box/dist/esnext';

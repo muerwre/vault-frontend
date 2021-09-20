@@ -71,9 +71,9 @@ export type ApiLockNodeResult = {
 };
 
 export type ApiLockCommentRequest = {
-  id: IComment['id'];
-  current: INode['id'];
-  is_locked: boolean;
+  commentID: IComment['id'];
+  nodeID: INode['id'];
+  isLocked: boolean;
 };
 export type ApiLockcommentResult = {
   deleted_at: string;
