@@ -3,7 +3,7 @@ import { INode, IError } from '../types';
 import { FLOW_HANDLERS } from './handlers';
 
 export type IFlowState = Readonly<{
-  is_loading: boolean;
+  isLoading: boolean;
   nodes: INode[];
   heroes: Partial<INode>[];
   recent: Partial<INode>[];
@@ -30,7 +30,7 @@ const INITIAL_STATE: IFlowState = {
     is_loading: false,
     is_loading_more: false,
   },
-  is_loading: false,
+  isLoading: false,
   error: '',
 };
 

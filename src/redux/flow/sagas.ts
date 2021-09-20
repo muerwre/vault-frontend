@@ -16,8 +16,7 @@ import { Unwrap } from '../types';
 import { selectFlow, selectFlowNodes } from './selectors';
 import { getSearchResults, postCellView } from './api';
 import { uniq } from 'ramda';
-import { labSeenNode, labSetUpdates } from '~/redux/lab/actions';
-import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
+import { labSeenNode } from '~/redux/lab/actions';
 
 function hideLoader() {
   const loader = document.getElementById('main_loader');
@@ -43,7 +42,7 @@ function* onGetFlow() {
       hideLoader();
     }
 
-    yield put(flowSetFlow({ is_loading: true }));
+    yield put(flowSetFlow({ isLoading: true }));
 
     const {
       before = [],
@@ -62,7 +61,7 @@ function* onGetFlow() {
 
     const result = uniq([...(before || []), ...(after || [])]);
 
-    yield put(flowSetFlow({ is_loading: false, nodes: result }));
+    yield put(flowSetFlow({ isLoading: false, nodes: result }));
 
     if (heroes.length) yield put(flowSetHeroes(heroes));
     if (recent.length) yield put(flowSetRecent(recent));
@@ -86,7 +85,7 @@ function* onSetCellView({ id, flow }: ReturnType<typeof flowSetCellView>) {
 
 function* getMore() {
   try {
-    yield put(flowSetFlow({ is_loading: true }));
+    yield put(flowSetFlow({ isLoading: true }));
     const nodes: ReturnType<typeof selectFlowNodes> = yield select(selectFlowNodes);
 
     const start = nodes && nodes[0] && nodes[0].created_at;
@@ -109,7 +108,7 @@ function* getMore() {
 
     yield put(
       flowSetFlow({
-        is_loading: false,
+        isLoading: false,
         nodes: result,
         ...(data.recent ? { recent: data.recent } : {}),
         ...(data.updated ? { updated: data.updated } : {}),

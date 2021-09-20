@@ -19,28 +19,17 @@ import { INode } from '~/redux/types';
 import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
 import { usePersistedState } from '~/utils/hooks/usePersistedState';
 import classNames from 'classnames';
-
-enum Layout {
-  Fluid = 'fluid',
-  Default = 'default',
-}
+import { useFlowLayout } from '~/utils/hooks/flow/useFlowLayout';
+import { useFlowPagination } from '~/utils/hooks/flow/useFlowPagination';
 
 const FlowLayout: FC = () => {
-  const { nodes, heroes, recent, updated, is_loading, search } = useShallowSelect(selectFlow);
-  const [layout, setLayout] = usePersistedState('flow_layout', Layout.Default);
+  const { nodes, heroes, recent, updated, isLoading, search } = useShallowSelect(selectFlow);
+  const { isFluid, toggleLayout } = useFlowLayout();
   const labUpdates = useShallowSelect(selectLabUpdatesNodes);
   const user = useShallowSelect(selectUser);
   const dispatch = useDispatch();
 
-  const onLoadMore = useCallback(() => {
-    (window as any).flowScrollPos = window.scrollY;
-
-    const pos = window.scrollY + window.innerHeight - document.body.scrollHeight;
-
-    if (is_loading || pos < -600) return;
-
-    dispatch(flowGetMore());
-  }, [dispatch, is_loading]);
+  useFlowPagination({ isLoading });
 
   const onLoadMoreSearch = useCallback(() => {
     if (search.is_loading_more) return;
@@ -65,17 +54,6 @@ const FlowLayout: FC = () => {
     updated,
     labUpdates,
   ]);
-
-  const isFluid = layout === Layout.Fluid;
-  const toggleLayout = useCallback(() => {
-    setLayout(isFluid ? Layout.Default : Layout.Fluid);
-  }, [setLayout, isFluid]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', onLoadMore);
-
-    return () => window.removeEventListener('scroll', onLoadMore);
-  }, [onLoadMore]);
 
   useEffect(() => {
     window.scrollTo(0, (window as any).flowScrollPos || 0);
