@@ -93,8 +93,7 @@ export const apiGetNodeComments = ({
     .get<ApiGetNodeCommentsResponse>(API.NODE.COMMENT(id), { params: { take, skip } })
     .then(cleanResult);
 
-export const apiGetNodeRelated = ({ id }: ApiGetNodeRelatedRequest) =>
-  api.get<ApiGetNodeRelatedResult>(API.NODE.RELATED(id)).then(cleanResult);
+export const apiGetNodeRelated = url => api.get<ApiGetNodeRelatedResult>(url).then(cleanResult);
 
 export const apiPostNodeTags = ({ id, tags }: ApiPostNodeTagsRequest) =>
   api

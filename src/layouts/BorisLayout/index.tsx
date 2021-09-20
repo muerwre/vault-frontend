@@ -27,16 +27,27 @@ import { useHistory, useLocation } from 'react-router';
 import { Card } from '~/components/containers/Card';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { BorisContactItem } from '~/components/boris/BorisContactItem';
+import { useNode } from '~/utils/hooks/node/useNode';
+import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
 
 type IProps = {};
+
+const borisNodeID = 696;
 
 const BorisLayout: FC<IProps> = () => {
   const title = useRandomPhrase('BORIS_TITLE');
   const dispatch = useDispatch();
-  const node = useShallowSelect(selectNode);
+  const { node } = useNode(borisNodeID);
+  const {
+    comments,
+    isLoading: isLoadingComments,
+    count: commentCount,
+    onLoadMoreComments,
+    onShowPhotoswipe,
+    onDelete,
+  } = useNodeComments(borisNodeID);
   const user = useShallowSelect(selectUser);
   const stats = useShallowSelect(selectBorisStats);
-  const comments = useShallowSelect(selectNodeComments);
   const is_tester = useShallowSelect(selectAuthIsTester);
 
   useEffect(() => {
@@ -53,11 +64,6 @@ const BorisLayout: FC<IProps> = () => {
 
     dispatch(authSetUser({ last_seen_boris: last_comment.created_at }));
   }, [user.last_seen_boris, dispatch, comments]);
-
-  useEffect(() => {
-    if (node.is_loading) return;
-    dispatch(nodeLoadNode(696, 'DESC'));
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(borisLoadStats());
@@ -111,13 +117,13 @@ const BorisLayout: FC<IProps> = () => {
                 <Route path={`${URLS.BORIS}/ui`} component={BorisUIDemo} />
 
                 <BorisComments
-                  isLoadingComments={node.is_loading_comments}
-                  commentCount={node.comment_count}
-                  node={node.current}
-                  comments={node.comments}
-                  onDelete={console.log}
-                  onLoadMoreComments={console.log}
-                  onShowPhotoswipe={console.log}
+                  isLoadingComments={isLoadingComments}
+                  commentCount={commentCount}
+                  node={node}
+                  comments={comments}
+                  onDelete={onDelete}
+                  onLoadMoreComments={onLoadMoreComments}
+                  onShowPhotoswipe={onShowPhotoswipe}
                 />
               </Switch>
             }

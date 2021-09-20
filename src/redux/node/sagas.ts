@@ -165,7 +165,7 @@ function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
       Unwrap<typeof apiGetNodeRelated>
     ] = yield all([
       call(apiGetNodeComments, { id, take: COMMENTS_DISPLAY, skip: 0 }),
-      call(apiGetNodeRelated, { id }),
+      call(apiGetNodeRelated, id),
     ]);
 
     yield put(

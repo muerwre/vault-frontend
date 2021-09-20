@@ -19,8 +19,8 @@ interface IProps {
   commentsOrder: 'ASC' | 'DESC';
   comments: IComment[];
   commentsCount: number;
+  related?: INodeRelated;
   isLoadingComments: boolean;
-  related: INodeRelated;
   onDeleteComment: (id: IComment['id'], locked: boolean) => void;
   onLoadMoreComments: () => void;
   onShowPhotoswipe: (images: IFile[], index: number) => void;

@@ -13,7 +13,7 @@ import { IComment, IFile, INode } from '~/redux/types';
 interface IProps {
   isLoadingComments: boolean;
   commentCount: number;
-  node: INode;
+  node?: INode;
   comments: IComment[];
   onDelete: (id: IComment['id'], locked: boolean) => void;
   onLoadMoreComments: () => void;
@@ -34,7 +34,7 @@ const BorisComments: FC<IProps> = ({
   return (
     <>
       <Group className={styles.grid}>
-        {user.is_user && <NodeCommentForm isBefore nodeId={node.id} />}
+        {user.is_user && <NodeCommentForm isBefore nodeId={node?.id} />}
 
         {isLoadingComments ? (
           <NodeNoComments is_loading count={7} />

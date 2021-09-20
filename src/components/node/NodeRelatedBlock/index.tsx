@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 interface IProps {
   isLoading: boolean;
   node?: INode;
-  related: INodeRelated;
+  related?: INodeRelated;
 }
 
 const NodeRelatedBlock: FC<IProps> = ({ isLoading, node, related }) => {
