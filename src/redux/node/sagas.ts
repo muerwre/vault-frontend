@@ -149,7 +149,7 @@ function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
     yield put(nodeSetLoading(true));
     yield put(nodeSetLoadingComments(true));
 
-    const { node }: Unwrap<typeof apiGetNode> = yield call(apiGetNode, { id });
+    const { node }: Unwrap<typeof apiGetNode> = yield call(apiGetNode, id);
 
     yield put(nodeSetCurrent(node));
     yield put(nodeSetLoading(false));
@@ -240,7 +240,7 @@ function* onEditSaga({ id }: ReturnType<typeof nodeEdit>) {
 
     yield put(modalShowDialog(DIALOGS.LOADING));
 
-    const { node }: Unwrap<typeof apiGetNode> = yield call(apiGetNode, { id });
+    const { node }: Unwrap<typeof apiGetNode> = yield call(apiGetNode, id);
 
     if (!node.type || !has(node.type, NODE_EDITOR_DIALOGS)) return;
 

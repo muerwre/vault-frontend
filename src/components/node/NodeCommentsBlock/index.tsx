@@ -7,7 +7,7 @@ import { useUser } from '~/utils/hooks/user/userUser';
 
 interface IProps {
   order: 'ASC' | 'DESC';
-  node: INode;
+  node?: INode;
   comments: IComment[];
   count: number;
   isLoading: boolean;

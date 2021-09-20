@@ -9,7 +9,7 @@ import { URLS } from '~/constants/urls';
 import { Link } from 'react-router-dom';
 
 interface IProps {
-  node: Partial<INode>;
+  node?: Partial<INode>;
   stack?: boolean;
 
   canEdit: boolean;
@@ -26,8 +26,8 @@ interface IProps {
 
 const NodePanelInner: FC<IProps> = memo(
   ({
-    node: { id, title, user, is_liked, is_heroic, deleted_at, created_at, like_count },
     stack,
+    node,
 
     canStar,
     canEdit,
@@ -45,15 +45,15 @@ const NodePanelInner: FC<IProps> = memo(
         <div className={styles.content}>
           <div className={styles.panel}>
             <div className={styles.title}>
-              {isLoading ? <Placeholder width="40%" /> : title || '...'}
+              {isLoading ? <Placeholder width="40%" /> : node?.title || '...'}
             </div>
 
-            {user && user.username && (
+            {node?.user && node?.user.username && (
               <div className={styles.name}>
                 {isLoading ? (
                   <Placeholder width="100px" />
                 ) : (
-                  `~${user.username.toLocaleLowerCase()}, ${getPrettyDate(created_at)}`
+                  `~${node?.user.username.toLocaleLowerCase()}, ${getPrettyDate(node?.created_at)}`
                 )}
               </div>
             )}
@@ -67,8 +67,8 @@ const NodePanelInner: FC<IProps> = memo(
 
               <div className={styles.editor_buttons}>
                 {canStar && (
-                  <div className={classNames(styles.star, { is_heroic })}>
-                    {is_heroic ? (
+                  <div className={classNames(styles.star, { is_heroic: node?.is_heroic })}>
+                    {node?.is_heroic ? (
                       <Icon icon="star_full" size={24} onClick={onStar} />
                     ) : (
                       <Icon icon="star" size={24} onClick={onStar} />
@@ -77,10 +77,14 @@ const NodePanelInner: FC<IProps> = memo(
                 )}
 
                 <div>
-                  <Icon icon={deleted_at ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
+                  <Icon
+                    icon={node?.deleted_at ? 'locked' : 'unlocked'}
+                    size={24}
+                    onClick={onLock}
+                  />
                 </div>
 
-                <Link to={URLS.NODE_EDIT_URL(id)}>
+                <Link to={URLS.NODE_EDIT_URL(node?.id)}>
                   <Icon icon="edit" size={24} onClick={onEdit} />
                 </Link>
               </div>
@@ -89,15 +93,15 @@ const NodePanelInner: FC<IProps> = memo(
 
           <div className={styles.buttons}>
             {canLike && (
-              <div className={classNames(styles.like, { is_liked })}>
-                {is_liked ? (
+              <div className={classNames(styles.like, { is_liked: node?.is_liked })}>
+                {node?.is_liked ? (
                   <Icon icon="heart_full" size={24} onClick={onLike} />
                 ) : (
                   <Icon icon="heart" size={24} onClick={onLike} />
                 )}
 
-                {!!like_count && like_count > 0 && (
-                  <div className={styles.like_count}>{like_count}</div>
+                {!!node?.like_count && node.like_count > 0 && (
+                  <div className={styles.like_count}>{node.like_count}</div>
                 )}
               </div>
             )}

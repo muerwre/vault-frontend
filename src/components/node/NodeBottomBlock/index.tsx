@@ -14,7 +14,7 @@ import StickyBox from 'react-sticky-box/dist/esnext';
 import styles from './styles.module.scss';
 
 interface IProps {
-  node: INode;
+  node?: INode;
   isLoading: boolean;
   commentsOrder: 'ASC' | 'DESC';
   comments: IComment[];
@@ -35,7 +35,7 @@ const NodeBottomBlock: FC<IProps> = ({
   const { inline } = useNodeBlocks(node, isLoading);
   const { is_user } = useUser();
 
-  if (node.deleted_at) {
+  if (node?.deleted_at) {
     return <NodeDeletedBadge />;
   }
 
@@ -55,7 +55,7 @@ const NodeBottomBlock: FC<IProps> = ({
               node={node}
             />
 
-            {is_user && !isLoading && <NodeCommentForm nodeId={node.id} />}
+            {is_user && !isLoading && <NodeCommentForm nodeId={node?.id} />}
           </Group>
 
           <div className={styles.panel}>

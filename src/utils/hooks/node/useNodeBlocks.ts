@@ -10,13 +10,14 @@ import {
 } from '~/redux/node/constants';
 
 // useNodeBlocks returns head, block and inline blocks of node
-export const useNodeBlocks = (node: INode, isLoading: boolean) => {
+export const useNodeBlocks = (node?: INode, isLoading?: boolean) => {
   const createNodeBlock = useCallback(
     (block?: FC<INodeComponentProps>, key = 0) =>
+      !isNil(node) &&
       !isNil(block) &&
       createElement(block, {
         node,
-        isLoading,
+        isLoading: !!isLoading,
         key: `${node.id}-${key}`,
       }),
     [node, isLoading]

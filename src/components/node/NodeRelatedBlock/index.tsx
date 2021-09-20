@@ -8,12 +8,12 @@ import { Link } from 'react-router-dom';
 
 interface IProps {
   isLoading: boolean;
-  node: INode;
+  node?: INode;
   related: INodeRelated;
 }
 
 const NodeRelatedBlock: FC<IProps> = ({ isLoading, node, related }) => {
-  if (isLoading) {
+  if (isLoading || !node?.id) {
     return <NodeRelatedPlaceholder />;
   }
 

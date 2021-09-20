@@ -66,8 +66,8 @@ export const getNodeDiff = ({
     })
     .then(cleanResult);
 
-export const apiGetNode = ({ id }: ApiGetNodeRequest, config?: AxiosRequestConfig) =>
-  api.get<ApiGetNodeResult>(API.NODE.GET_NODE(id), config).then(cleanResult);
+export const apiGetNode = (id: INode['id']) =>
+  api.get<ApiGetNodeResult>(API.NODE.GET_NODE(id!)).then(cleanResult);
 
 export const apiGetNodeWithCancel = ({ id }: ApiGetNodeRequest) => {
   const cancelToken = axios.CancelToken.source();

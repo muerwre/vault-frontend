@@ -7,7 +7,7 @@ import { useNodeActions } from '~/utils/hooks/node/useNodeActions';
 import { shallowEqual } from 'react-redux';
 
 interface IProps {
-  node: INode;
+  node?: INode;
   isLoading: boolean;
 }
 

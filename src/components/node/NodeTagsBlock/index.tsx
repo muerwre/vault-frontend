@@ -8,8 +8,8 @@ import { NodeTags } from '~/components/node/NodeTags';
 import { useUser } from '~/utils/hooks/user/userUser';
 
 interface IProps {
-  node: INode;
-  isLoading: boolean;
+  node?: INode;
+  isLoading?: boolean;
 }
 
 const NodeTagsBlock: FC<IProps> = ({ node, isLoading }) => {
@@ -19,7 +19,7 @@ const NodeTagsBlock: FC<IProps> = ({ node, isLoading }) => {
 
   const onTagsChange = useCallback(
     (tags: string[]) => {
-      dispatch(nodeUpdateTags(node.id, tags));
+      dispatch(nodeUpdateTags(node?.id, tags));
     },
     [dispatch, node]
   );
@@ -42,7 +42,7 @@ const NodeTagsBlock: FC<IProps> = ({ node, isLoading }) => {
   return (
     <NodeTags
       is_editable={is_user}
-      tags={node.tags}
+      tags={node?.tags}
       onChange={onTagsChange}
       onTagClick={onTagClick}
     />

@@ -6,7 +6,6 @@ import { Card } from '~/components/containers/Card';
 import { NodePanel } from '~/components/node/NodePanel';
 import { Footer } from '~/components/main/Footer';
 
-import styles from './styles.module.scss';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { Container } from '~/containers/main/Container';
@@ -19,6 +18,9 @@ import { URLS } from '~/constants/urls';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 import { useOnNodeSeen } from '~/utils/hooks/node/useOnNodeSeen';
 
+import styles from './styles.module.scss';
+import { useNodeFetcher } from '~/utils/hooks/node/useNodeFetcher';
+
 type IProps = RouteComponentProps<{ id: string }> & {};
 
 const NodeLayout: FC<IProps> = memo(
@@ -27,21 +29,16 @@ const NodeLayout: FC<IProps> = memo(
       params: { id },
     },
   }) => {
-    const {
-      is_loading,
-      current,
-      comments,
-      comment_count,
-      is_loading_comments,
-      related,
-    } = useShallowSelect(selectNode);
+    const { node, isLoading } = useNodeFetcher(parseInt(id, 10));
 
-    useNodeCoverImage(current);
+    const { comments, comment_count, is_loading_comments, related } = useShallowSelect(selectNode);
+
+    useNodeCoverImage(node);
     useScrollToTop([id]);
-    useLoadNode(id, is_loading);
-    useOnNodeSeen(current);
+    useOnNodeSeen(node);
+    useLoadNode(id, isLoading);
 
-    const { head, block } = useNodeBlocks(current, is_loading);
+    const { head, block } = useNodeBlocks(node, isLoading);
 
     return (
       <div className={styles.wrap}>
@@ -51,13 +48,13 @@ const NodeLayout: FC<IProps> = memo(
           <Card className={styles.node} seamless>
             {block}
 
-            <NodePanel node={current} isLoading={is_loading} />
+            <NodePanel node={node} isLoading={isLoading} />
 
             <NodeBottomBlock
-              node={current}
+              node={node}
               isLoadingComments={is_loading_comments}
               comments={comments}
-              isLoading={is_loading}
+              isLoading={isLoading}
               commentsCount={comment_count}
               commentsOrder="DESC"
               related={related}
@@ -69,7 +66,7 @@ const NodeLayout: FC<IProps> = memo(
 
         <SidebarRouter prefix="/post:id" />
 
-        <Route path={URLS.NODE_EDIT_URL(':id')} component={EditorEditDialog} />
+        <Route path={URLS.NODE_EDIT_URL(':id')} render={() => <EditorEditDialog />} />
       </div>
     );
   }
