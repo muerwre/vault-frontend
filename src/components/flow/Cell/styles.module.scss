@@ -73,7 +73,7 @@
 
 .title,
 .text_title {
-  font: $font_cell_title;
+  font: $font_18_semibold;
   line-height: 1.25em;
 
   text-transform: uppercase;
@@ -83,7 +83,7 @@
   word-break: break-word;
 
   @media (max-width: $cell * 2) {
-    font: $font_18_semibold;
+    font: $font_16_semibold;
   }
 }
 
@@ -95,18 +95,18 @@
 
   &.small {
     @include clamp(8, 1.25em);
-    font-size: 24px;
+    font: $font_16_semibold;
   }
 
   &.medium{
     @include clamp(6, 1.25em);
-    font-size: 28px;
+    font: $font_18_semibold;
   }
 }
 
 .text_title {
+  @include clamp(3, 1.25em);
   margin-bottom: $gap / 2;
-  @include clamp(3, 1.25em)
 }
 
 .horizontal,
