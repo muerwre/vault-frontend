@@ -46,3 +46,8 @@
   border-radius: $panel_radius;
   box-shadow: $comment_shadow;
 }
+
+.left {
+  flex: 1;
+  min-width: 0;
+}

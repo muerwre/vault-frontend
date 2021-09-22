@@ -60,7 +60,7 @@ const NodeBottomBlock: FC<IProps> = ({
 
           <div className={styles.panel}>
             <StickyBox className={styles.sticky} offsetTop={72}>
-              <Group style={{ flex: 1, minWidth: 0 }}>
+              <Group className={styles.left}>
                 <NodeTagsBlock node={node} isLoading={isLoading} />
                 <NodeRelatedBlock isLoading={isLoading} node={node} related={related} />
               </Group>
