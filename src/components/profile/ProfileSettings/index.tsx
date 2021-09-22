@@ -48,16 +48,11 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
     event => {
       event.preventDefault();
 
-      const fields = reject(el => typeof el === 'undefined')({
-        email: data.email !== user.email && data.email ? data.email : undefined,
-        fullname: data.fullname !== user.fullname ? data.fullname : undefined,
-        username: data.username !== user.username && data.username ? data.username : undefined,
+      const fields = {
+        ...data,
         password: password.length > 0 && password ? password : undefined,
         new_password: new_password.length > 0 && new_password ? new_password : undefined,
-        description: data.description !== user.description ? data.description : undefined,
-      });
-
-      if (Object.values(fields).length === 0) return;
+      };
 
       authPatchUser(fields);
     },
