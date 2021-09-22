@@ -16,7 +16,7 @@
 }
 
 .buttons {
-  @include outer_shadow();
+  @include inner_shadow;
 
   position: relative;
   z-index: 1;
