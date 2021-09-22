@@ -10,13 +10,17 @@ interface Props {
 }
 
 const NodeAuthorBlock: FC<Props> = ({ node }) => {
+  const randomPhrase = useRandomPhrase('USER_DESCRIPTION');
+
+  const onOpenProfile = useCallback(() => openUserProfile(node?.user?.username), [
+    node?.user?.username,
+  ]);
+
   if (!node?.user) {
     return null;
   }
 
   const { fullname, username, description, photo } = node.user;
-
-  const onOpenProfile = useCallback(() => openUserProfile(username), [username]);
 
   return (
     <div className={styles.block} onClick={onOpenProfile}>
@@ -25,11 +29,7 @@ const NodeAuthorBlock: FC<Props> = ({ node }) => {
       <div className={styles.info}>
         <div className={styles.username}>{fullname || username}</div>
 
-        {description && (
-          <div className={styles.description}>
-            {description || useRandomPhrase('USER_DESCRIPTION')}
-          </div>
-        )}
+        <div className={styles.description}>{description || randomPhrase}</div>
       </div>
     </div>
   );
