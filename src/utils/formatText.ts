@@ -1,8 +1,5 @@
 import marked from 'marked';
 import { stripHTMLTags } from '~/utils/stripHTMLTags';
-import Typograf from 'typograf';
-
-const typograf = new Typograf({ locale: ['ru', 'en-US'] });
 
 /**
  * Cleans youtube urls
@@ -72,8 +69,3 @@ export const formatTextDash = (text: string): string => text.replace(' -- ', ' â
  * Formats with markdown
  */
 export const formatTextMarkdown = (text: string): string => marked(text);
-
-/**
- * Uses typograf.js to prettify text
- */
-export const formatTextTypograf = (text: string): string => typograf.execute(text);

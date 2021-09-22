@@ -18,7 +18,6 @@ import {
   formatTextSanitizeTags,
   formatTextSanitizeYoutube,
   formatTextTodos,
-  formatTextTypograf,
 } from '~/utils/formatText';
 import { splitTextByYoutube, splitTextOmitEmpty } from '~/utils/splitText';
 
@@ -103,7 +102,6 @@ export const formatText = pipe(
   formatTextTodos,
   formatExclamations,
   formatTextDash,
-  formatTextTypograf,
   formatTextMarkdown,
   formatTextSanitizeTags,
   formatTextClickableUsernames

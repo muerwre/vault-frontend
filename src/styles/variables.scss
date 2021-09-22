@@ -173,6 +173,8 @@ $sidebar_border: transparentize(white, 0.95);
   @media (max-width: 599px) {
     flex-direction: column !important;
 
+    @content;
+
     & > * {
       margin: $gap/2 0 !important;
 
