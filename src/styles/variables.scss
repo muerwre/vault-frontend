@@ -95,9 +95,8 @@ $sidebar_border: transparentize(white, 0.95);
 }
 
 @mixin row_shadow() {
-  &:not(last-child) {
-    box-shadow:
-            transparentize(white, 0.95) 0 1px,
+  &:not(:last-child) {
+    box-shadow: transparentize(white, 0.95) 0 1px,
             inset transparentize(black, 0.8) 0 -1px;
   }
 

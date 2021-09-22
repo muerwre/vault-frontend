@@ -7,6 +7,8 @@
   justify-content: stretch;
   text-decoration: none;
   color: darken(white, 50%);
+  padding: $gap;
+  min-height: 42px;
 }
 
 .icon {
@@ -21,9 +23,10 @@
 
 .title {
   font: $font_16_semibold;
+  line-height: 1.25em;
 }
 
 .subtitle {
   font: $font_12_medium;
-  opacity: 0.7;
+  opacity: 0.5;
 }

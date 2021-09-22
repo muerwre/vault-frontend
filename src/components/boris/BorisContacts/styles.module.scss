@@ -1,19 +1,10 @@
 @import "~/styles/variables";
 
 .contacts {
-  display: grid;
-  grid-auto-flow: row;
-  grid-row-gap: $gap;
-  padding: 2px 2px $gap * 3 2px;
+  @include inner_shadow;
+  border-radius: $radius;
 
-  & > *:not(:last-child) {
-    border-bottom: 1px solid #333333;
-    padding-bottom: $gap * 2;
+  & > * {
+    @include row_shadow;
   }
-}
-
-.contacts__title {
-  font: $font_12_semibold;
-  text-transform: uppercase;
-  opacity: 0.3;
 }

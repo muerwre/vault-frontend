@@ -6,8 +6,6 @@ interface Props {}
 
 const BorisContacts: FC<Props> = () => (
   <div className={styles.contacts}>
-    <div className={styles.contacts__title}>Где мы ещё:</div>
-
     <BorisContactItem
       icon="vk"
       title="Суицидальные роботы"
