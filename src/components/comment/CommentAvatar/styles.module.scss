@@ -1,19 +1,33 @@
-@import "~/styles/variables";
+@import "~/styles/variables.scss";
 
-.avatar {
+@keyframes appear {
+  0% { opacity: 0 }
+  100% { opacity: 1 }
+}
+
+.popper {
   @include outer_shadow;
 
-  width: $comment_height;
-  height: $comment_height;
-  background-color: transparentize(black, 0.9);
-  flex-shrink: 0;
-  overflow: hidden;
+  background-color: darken($content_bg, 4%);
+  padding: $gap;
+  box-sizing:border-box;
+  z-index: 4;
+  touch-action: none;
+  pointer-events: none;
   border-radius: $radius;
-  background-position: center;
-  background-size: cover;
-  cursor: pointer;
+  animation: appear forwards 250ms;
+}
 
-  img {
-    object-fit: cover;
-  }
+.username {
+  font: $font_18_semibold;
+  line-height: 1.25em;
+}
+
+.description {
+  @include clamp(2, 12px);
+
+  font: $font_12_regular;
+  opacity: 0.5;
+  margin-top: 3px;
+  line-height: 1.25em;
 }

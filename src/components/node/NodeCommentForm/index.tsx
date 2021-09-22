@@ -16,7 +16,7 @@ type IProps = ReturnType<typeof mapStateToProps> & {
 
 const NodeCommentFormUnconnected: FC<IProps> = ({ user, isBefore, nodeId }) => {
   return (
-    <CommentWrapper user={user}>
+    <CommentWrapper user={user} isForm>
       <CommentForm nodeId={nodeId} />
     </CommentWrapper>
   );

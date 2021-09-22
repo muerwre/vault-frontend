@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from 'react';
 import { INode } from '~/redux/types';
 import styles from './styles.module.scss';
-import { CommentAvatar } from '~/components/comment/CommentAvatar';
+import { Avatar } from '~/components/common/Avatar';
 import { openUserProfile } from '~/utils/user';
 import { useRandomPhrase } from '~/constants/phrases';
 
@@ -24,7 +24,7 @@ const NodeAuthorBlock: FC<Props> = ({ node }) => {
 
   return (
     <div className={styles.block} onClick={onOpenProfile}>
-      <CommentAvatar username={username} url={photo?.url} className={styles.avatar} />
+      <Avatar username={username} url={photo?.url} className={styles.avatar} />
 
       <div className={styles.info}>
         <div className={styles.username}>{fullname || username}</div>

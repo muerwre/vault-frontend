@@ -5,7 +5,7 @@ import { INode } from '~/redux/types';
 import { PRESETS, URLS } from '~/constants/urls';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { getURL, stringToColour } from '~/utils/dom';
-import { CommentAvatar } from '~/components/comment/CommentAvatar';
+import { Avatar } from '~/components/common/Avatar';
 
 type IProps = RouteComponentProps & {
   item: Partial<INode>;
@@ -69,7 +69,7 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
       onClick={onClick}
       ref={ref}
     >
-      <CommentAvatar
+      <Avatar
         username={item.title}
         url={item.thumbnail}
         className={classNames(styles.thumb, { [styles.is_loaded]: is_loaded })}

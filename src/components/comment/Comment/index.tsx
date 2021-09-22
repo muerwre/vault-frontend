@@ -31,10 +31,10 @@ const Comment: FC<IProps> = memo(
     return (
       <CommentWrapper
         className={className}
-        is_empty={is_empty}
-        is_loading={is_loading}
+        isEmpty={is_empty}
+        isLoading={is_loading}
         user={comment_group.user}
-        is_same={is_same}
+        isSame={is_same}
         {...props}
       >
         <div className={styles.wrap}>

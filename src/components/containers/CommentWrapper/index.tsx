@@ -1,37 +1,40 @@
-import React, { FC, HTMLAttributes } from 'react';
+import React, { FC } from 'react';
 import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 import { IUser } from '~/redux/auth/types';
 import { path } from 'ramda';
 import { CommentAvatar } from '~/components/comment/CommentAvatar';
-import { Card } from '~/components/containers/Card';
+import { DivProps } from '~/utils/types';
 
-type IProps = HTMLAttributes<HTMLDivElement> & {
+type IProps = DivProps & {
   user: IUser;
-  is_empty?: boolean;
-  is_loading?: boolean;
-  is_same?: boolean;
+  isEmpty?: boolean;
+  isLoading?: boolean;
+  isSame?: boolean;
+  isForm?: boolean;
 };
 
 const CommentWrapper: FC<IProps> = ({
-  // photo,
-  children,
-  is_empty,
-  is_loading,
-  className,
-  is_same,
   user,
+  className,
+  isEmpty,
+  isLoading,
+  isSame,
+  isForm,
+  children,
   ...props
 }) => (
-  <div className={classNames(styles.wrap, className, { is_empty, is_loading, is_same })} {...props}>
+  <div
+    className={classNames(styles.wrap, className, {
+      is_empty: isEmpty,
+      is_loading: isLoading,
+      is_same: isSame,
+    })}
+    {...props}
+  >
     <div className={styles.thumb}>
-      <CommentAvatar
-        url={path(['photo', 'url'], user)}
-        username={user.username}
-        className={styles.thumb_image}
-      />
-
+      <CommentAvatar user={user} className={styles.thumb_image} withDetails={!isForm} />
       <div className={styles.thumb_user}>~{path(['username'], user)}</div>
     </div>
 
