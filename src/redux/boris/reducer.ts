@@ -32,18 +32,39 @@ export type IStatBackend = {
 export interface BorisUsageStats {
   git: Partial<IStatGitRow>[];
   issues: IGithubIssue[];
-  backend?: IStatBackend;
+  backend: IStatBackend;
   is_loading: boolean;
 }
 export type IBorisState = Readonly<{
   stats: BorisUsageStats;
 }>;
 
+const initialBackendStats: IStatBackend = {
+  users: {
+    total: 0,
+    alive: 0,
+  },
+  nodes: {
+    images: 0,
+    audios: 0,
+    videos: 0,
+    texts: 0,
+    total: 0,
+  },
+  comments: {
+    total: 0,
+  },
+  files: {
+    count: 0,
+    size: 0,
+  },
+};
+
 const BORIS_INITIAL_STATE: IBorisState = {
   stats: {
     git: [],
     issues: [],
-    backend: undefined,
+    backend: initialBackendStats,
     is_loading: false,
   },
 };

@@ -9,6 +9,7 @@
     opacity: 0.05;
   }
 }
+
 .placeholder {
   height: 1em;
   width: 120px;
@@ -16,6 +17,7 @@
   border-radius: 1em;
   position: relative;
   overflow: hidden;
+  display: inline-flex;
 
   &::after {
     content: ' ';

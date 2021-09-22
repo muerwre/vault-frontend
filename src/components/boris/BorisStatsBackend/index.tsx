@@ -8,64 +8,95 @@ interface IProps {
   stats: IBorisState['stats'];
 }
 
-const BorisStatsBackend: FC<IProps> = ({ stats }) => {
-  if (stats.is_loading)
-    return (
+const Row: FC<{ isLoading: boolean }> = ({ isLoading, children }) => (
+  <li>
+    {isLoading ? (
       <>
-        <div className={styles.title}>
-          <Placeholder width="50%" />
-        </div>
+        <Placeholder active={isLoading} loading className={styles.label} />
+        <Placeholder active={isLoading} loading className={styles.value} width="24px" />
       </>
-    );
+    ) : (
+      children
+    )}
+  </li>
+);
 
-  if (!stats.backend) return null;
+const BorisStatsBackend: FC<IProps> = ({ stats: { is_loading, backend } }) => {
+  // const is_loading = true;
+
+  if (!backend && !is_loading) {
+    return null;
+  }
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.title}>Юнитс</div>
+      <div className={styles.title}>
+        <Placeholder active={is_loading} loading>
+          Юнитс
+        </Placeholder>
+      </div>
 
       <ul>
-        <li>
-          В сознании <span>{stats.backend.users.alive}</span>
-        </li>
+        <Row isLoading={is_loading}>
+          <span className={styles.label}>В сознании</span>
+          <span className={styles.value}>{backend.users.alive}</span>
+        </Row>
 
-        <li>
-          Криокамера <span>{stats.backend.users.total - stats.backend.users.alive}</span>
-        </li>
+        <Row isLoading={is_loading}>
+          <span className={styles.label}>Криокамера</span>
+          <span className={styles.value}>{backend.users.total - backend.users.alive}</span>
+        </Row>
       </ul>
 
-      <div className={styles.title}>Контент</div>
+      <div className={styles.title}>
+        <Placeholder active={is_loading} loading>
+          Контент
+        </Placeholder>
+      </div>
 
       <ul>
-        <li>
-          Фотографии <span>{stats.backend.nodes.images}</span>
-        </li>
+        <Row isLoading={is_loading}>
+          <span className={styles.label}>Фотографии</span>
+          <span className={styles.value}>{backend.nodes.images}</span>
+        </Row>
 
-        <li>
-          Письма <span>{stats.backend.nodes.texts}</span>
-        </li>
+        <Row isLoading={is_loading}>
+          <span className={styles.label}>Письма</span>
+          <span className={styles.value}>{backend.nodes.texts}</span>
+        </Row>
 
-        <li>
-          Видеозаписи <span>{stats.backend.nodes.videos}</span>
-        </li>
+        <Row isLoading={is_loading}>
+          <span className={styles.label}>Видеозаписи</span>
+          <span className={styles.value}>{backend.nodes.videos}</span>
+        </Row>
 
-        <li>
-          Аудиозаписи <span>{stats.backend.nodes.audios}</span>
-        </li>
+        <Row isLoading={is_loading}>
+          <span className={styles.label}>Аудиозаписи</span>
+          <span className={styles.value}>{backend.nodes.audios}</span>
+        </Row>
 
-        <li>
-          Комментарии <span>{stats.backend.comments.total}</span>
-        </li>
+        <Row isLoading={is_loading}>
+          <span className={styles.label}>Комментарии</span>
+          <span className={styles.value}>{backend.comments.total}</span>
+        </Row>
       </ul>
 
-      <div className={styles.title}>Сторедж</div>
+      <div className={styles.title}>
+        <Placeholder active={is_loading} loading>
+          Сторедж
+        </Placeholder>
+      </div>
+
       <ul>
-        <li>
-          Файлы <span>{stats.backend.files.count}</span>
-        </li>
-        <li>
-          На диске <span>{sizeOf(stats.backend.files.size)}</span>
-        </li>
+        <Row isLoading={is_loading}>
+          <span className={styles.label}>Файлы</span>
+          <span className={styles.value}>{backend.files.count}</span>
+        </Row>
+
+        <Row isLoading={is_loading}>
+          <span className={styles.label}>На диске</span>
+          <span className={styles.value}>{sizeOf(backend.files.size)}</span>
+        </Row>
       </ul>
     </div>
   );

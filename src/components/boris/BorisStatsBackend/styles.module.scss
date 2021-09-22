@@ -1,17 +1,17 @@
 @import "src/styles/variables";
 
+.value {
+  float: right;
+  color: white;
+  font: $font_12_semibold;
+  line-height: 24px;
+}
+
 .wrap {
   ul {
     font: $font_12_regular;
     line-height: 24px;
     text-transform: uppercase;
-
-    span {
-      float: right;
-      color: white;
-      font: $font_12_semibold;
-      line-height: 24px;
-    }
 
     li {
       border-bottom: 1px solid #333333;

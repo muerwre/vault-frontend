@@ -8,6 +8,7 @@ export interface PlaceholderProps {
   color?: string;
   active?: boolean;
   loading?: boolean;
+  className?: string;
 }
 
 const Placeholder: FC<PlaceholderProps> = ({
@@ -17,10 +18,11 @@ const Placeholder: FC<PlaceholderProps> = ({
   active,
   children,
   loading = true,
+  className,
 }) => {
   return active ? (
     <div
-      className={classNames(styles.placeholder, { [styles.loading]: loading })}
+      className={classNames(styles.placeholder, { [styles.loading]: loading }, className)}
       style={{ height, color, width }}
     />
   ) : (
