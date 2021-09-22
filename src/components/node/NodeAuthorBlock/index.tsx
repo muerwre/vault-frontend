@@ -3,6 +3,7 @@ import { INode } from '~/redux/types';
 import styles from './styles.module.scss';
 import { CommentAvatar } from '~/components/comment/CommentAvatar';
 import { openUserProfile } from '~/utils/user';
+import { useRandomPhrase } from '~/constants/phrases';
 
 interface Props {
   node?: INode;
@@ -23,7 +24,12 @@ const NodeAuthorBlock: FC<Props> = ({ node }) => {
 
       <div className={styles.info}>
         <div className={styles.username}>{fullname || username}</div>
-        {description && <div className={styles.description}>{description}</div>}
+
+        {description && (
+          <div className={styles.description}>
+            {description || useRandomPhrase('USER_DESCRIPTION')}
+          </div>
+        )}
       </div>
     </div>
   );
