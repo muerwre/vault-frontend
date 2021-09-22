@@ -1,7 +1,7 @@
 @import "src/styles/variables";
 
 .place {
-  // height: 72px;
+  @include row_shadow;
   position: relative;
   z-index: 3;
   margin-top: -$radius;

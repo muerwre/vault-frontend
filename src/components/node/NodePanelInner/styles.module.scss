@@ -38,7 +38,6 @@
   justify-content: center;
   box-sizing: border-box;
   min-width: 0;
-  background-color: $content_bg;
 
   &:global(.stack) {
     padding: 0 $gap;
@@ -59,11 +58,9 @@
   justify-content: stretch;
   border-radius: $radius $radius 0 0;
   box-sizing: border-box;
-  padding: $gap $gap;
+  padding: $gap;
   height: 64px;
   min-width: 0;
-
-  @include outer_shadow();
 
   @include tablet {
     border-radius: 0;

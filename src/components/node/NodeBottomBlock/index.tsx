@@ -12,6 +12,7 @@ import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
 import { INodeRelated } from '~/redux/node/types';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import styles from './styles.module.scss';
+import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
 
 interface IProps {
   node: INode;
@@ -60,10 +61,17 @@ const NodeBottomBlock: FC<IProps> = ({
 
           <div className={styles.panel}>
             <StickyBox className={styles.sticky} offsetTop={72}>
-              <Group className={styles.left}>
-                <NodeTagsBlock node={node} isLoading={isLoading} />
-                <NodeRelatedBlock isLoading={isLoading} node={node} related={related} />
-              </Group>
+              <div className={styles.left}>
+                <div className={styles.left_item}>
+                  <NodeAuthorBlock node={node} />
+                </div>
+                <div className={styles.left_item}>
+                  <NodeTagsBlock node={node} isLoading={isLoading} />
+                </div>
+                <div className={styles.left_item}>
+                  <NodeRelatedBlock isLoading={isLoading} node={node} related={related} />
+                </div>
+              </div>
             </StickyBox>
           </div>
         </Group>

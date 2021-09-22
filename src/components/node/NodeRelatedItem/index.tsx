@@ -5,6 +5,7 @@ import { INode } from '~/redux/types';
 import { PRESETS, URLS } from '~/constants/urls';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { getURL, stringToColour } from '~/utils/dom';
+import { CommentAvatar } from '~/components/comment/CommentAvatar';
 
 type IProps = RouteComponentProps & {
   item: Partial<INode>;
@@ -59,6 +60,8 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
     return 'small';
   }, [width]);
 
+  const image = useMemo(() => getURL({ url: item.thumbnail }, PRESETS.avatar), [item.thumbnail]);
+
   return (
     <div
       className={classNames(styles.item, styles[size], { [styles.is_loaded]: is_loaded })}
@@ -66,11 +69,10 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
       onClick={onClick}
       ref={ref}
     >
-      <div
-        className={styles.thumb}
-        style={{
-          backgroundImage: `url("${thumb}")`,
-        }}
+      <CommentAvatar
+        username={item.title}
+        url={item.thumbnail}
+        className={classNames(styles.thumb, { [styles.is_loaded]: is_loaded })}
       />
 
       {!item.thumbnail && size === 'small' && (
@@ -85,11 +87,7 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
         </div>
       )}
 
-      <img
-        src={getURL({ url: item.thumbnail }, PRESETS.avatar)}
-        alt="loader"
-        onLoad={() => setIsLoaded(true)}
-      />
+      <img src={image} alt="loader" onLoad={() => setIsLoaded(true)} />
     </div>
   );
 });

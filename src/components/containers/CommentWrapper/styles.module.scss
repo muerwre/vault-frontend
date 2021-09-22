@@ -1,12 +1,14 @@
 @import "src/styles/variables";
 
 .wrap {
+  @include outer_shadow;
+
   background: $comment_bg;
   min-height: $comment_height;
   display: flex;
   position: relative;
-  box-shadow: none;
   min-width: 0;
+  border-radius: $radius;
 
   &:global(.is_empty) {
     opacity: 0.5;
@@ -54,7 +56,7 @@
   }
 }
 
-.thumb_image {
+div.thumb_image {
   height: $comment_height;
   background: transparentize(white, 0.97) no-repeat 50% 50%;
   border-radius: $panel_radius 0 0 $panel_radius;
@@ -65,6 +67,7 @@
 
   @include tablet {
     height: 32px;
+    width: 32px;
     flex: 0 0 32px;
     border-radius: $panel_radius;
   }

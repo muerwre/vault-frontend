@@ -7,6 +7,6 @@
   flex-wrap: wrap;
 
   &> * {
-    margin: 0 $gap $gap 0;
+    margin: $gap / 2;
   }
 }

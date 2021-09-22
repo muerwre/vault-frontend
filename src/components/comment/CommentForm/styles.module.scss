@@ -10,10 +10,9 @@
 }
 
 .input {
-  @include outer_shadow();
   position: relative;
   flex: 1;
-  padding: ($gap / 2) ($gap / 2 + 1px);
+  padding: 5px;
 }
 
 .buttons {

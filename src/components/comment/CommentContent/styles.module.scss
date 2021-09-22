@@ -3,6 +3,7 @@
 
 .wrap {
   position: relative;
+  @include row_shadow;
 }
 
 .lock,
@@ -51,13 +52,10 @@
 
 .edit {
   top: 28px;
-  background: blue;
 }
 
 .block {
-  @include outer_shadow();
   min-height: $comment_height;
-  // box-shadow: inset rgba(255, 255, 255, 0.05) 1px 1px, inset rgba(0, 0, 0, 0.1) -1px -1px;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -108,7 +106,7 @@
 
 .date {
   position: absolute;
-  bottom: 0;
+  bottom: 1px;
   right: 0;
   font: $font_12_regular;
   color: transparentize($color: white, $amount: 0.8);

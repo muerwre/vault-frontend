@@ -1,0 +1,19 @@
+@import "~/styles/variables";
+
+.avatar {
+  @include outer_shadow;
+
+  width: $comment_height;
+  height: $comment_height;
+  background-color: transparentize(black, 0.9);
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: $radius;
+  background-position: center;
+  background-size: cover;
+  cursor: pointer;
+
+  img {
+    object-fit: cover;
+  }
+}

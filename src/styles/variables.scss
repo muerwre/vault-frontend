@@ -88,11 +88,38 @@ $login_dialog_padding: $gap $gap 30px $gap;
 $sidebar_border: transparentize(white, 0.95);
 
 @mixin outer_shadow() {
-  box-shadow: inset transparentize(white, 0.95) 0 1px, transparentize(black, 0.8) -1px -1px;
+  box-shadow:
+    inset transparentize(white, 0.95) 1px 1px,
+    transparentize(black, 0.8) 1px 1px,
+    transparentize(black, 0.6) 0 1px 5px;
+}
+
+@mixin row_shadow() {
+  &:not(last-child) {
+    box-shadow:
+            transparentize(white, 0.95) 0 1px,
+            inset transparentize(black, 0.8) 0 -1px;
+  }
+
+  &:only-child {
+    box-shadow: none;
+  }
 }
 
 @mixin inner_shadow() {
-  box-shadow: inset transparentize(white, 0.95) 0 -1px, inset transparentize(black, 0.5) 0 1px;
+  box-shadow:
+    inset transparentize(white, 0.92) -1px -1px,
+    inset transparentize(black, 0.5) 1px 1px,
+    inset transparentize(black, 0.7) 0 0 10px;
+}
+
+@mixin inner_shadow_active() {
+  @include inner_shadow;
+  transition: background-color 250ms;
+
+  &:hover {
+    background: transparentize(white, 0.95);
+  }
 }
 
 @mixin input_shadow() {
@@ -232,7 +259,8 @@ $sidebar_border: transparentize(white, 0.95);
 }
 
 @mixin lab_shadow {
-  box-shadow: transparentize(black, 0.5) 0 0 0 1px,
+  box-shadow:
+    transparentize(black, 0.5) 0 0 0 1px,
     inset transparentize(white, 0.9) 0 1px,
-    lighten(black, 10%) 0 4px;
+    lighten(black, 0.1) 0 4px;
 }

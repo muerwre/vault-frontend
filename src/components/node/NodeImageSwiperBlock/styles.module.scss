@@ -11,7 +11,7 @@
     left: 50%;
     bottom: $gap * 2;
     transform: translate(-50%, 0);
-    background: darken($comment_bg, 4%);
+    background: darken($content_bg, 4%);
     width: auto;
     padding: 5px 10px;
     border-radius: 10px;

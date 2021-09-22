@@ -5,7 +5,6 @@
   color: darken(white, 50%);
   text-transform: uppercase;
   padding: 0 $gap / 2;
-  padding-bottom: $gap / 2;
 }
 
 .tags.tags {
@@ -20,7 +19,7 @@
   @include lab_shadow;
 
   border-radius: $radius;
-  background-color: $comment_bg;
+  background: $comment_bg;
   padding: $gap;
 }
 

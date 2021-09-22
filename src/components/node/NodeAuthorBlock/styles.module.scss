@@ -1,0 +1,39 @@
+@import "~/styles/variables.scss";
+
+div.block {
+  @include inner_shadow_active;
+
+  cursor: pointer;
+  background: $inset_bg;
+  padding: $gap;
+  border-radius: $radius;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: stretch;
+}
+
+.info {
+}
+
+.username {
+  font: $font_16_semibold;
+  line-height: 21px;
+}
+
+.description {
+  @include clamp(3, 12 * 1.25);
+
+  margin-top: 3px;
+  font: $font_12_regular;
+  line-height: 1.25em;
+  opacity: 0.5;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  margin-right: 10px;
+  flex-shrink: 0;
+  align-self: flex-start;
+}

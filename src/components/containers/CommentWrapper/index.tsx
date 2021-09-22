@@ -2,14 +2,12 @@ import React, { FC, HTMLAttributes } from 'react';
 import classNames from 'classnames';
 
 import styles from './styles.module.scss';
-import { Card } from '../Card';
 import { IUser } from '~/redux/auth/types';
-import { getURL } from '~/utils/dom';
 import { path } from 'ramda';
-import { PRESETS } from '~/constants/urls';
+import { CommentAvatar } from '~/components/comment/CommentAvatar';
+import { Card } from '~/components/containers/Card';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
-  // photo?: string;
   user: IUser;
   is_empty?: boolean;
   is_loading?: boolean;
@@ -26,22 +24,19 @@ const CommentWrapper: FC<IProps> = ({
   user,
   ...props
 }) => (
-  <Card
-    className={classNames(styles.wrap, className, { is_empty, is_loading, is_same })}
-    seamless
-    {...props}
-  >
+  <div className={classNames(styles.wrap, className, { is_empty, is_loading, is_same })} {...props}>
     <div className={styles.thumb}>
-      <div
+      <CommentAvatar
+        url={path(['photo', 'url'], user)}
+        username={user.username}
         className={styles.thumb_image}
-        style={{ backgroundImage: `url("${getURL(path(['photo'], user), PRESETS.avatar)}")` }}
-        onClick={() => window.postMessage({ type: 'username', username: user.username }, '*')}
       />
+
       <div className={styles.thumb_user}>~{path(['username'], user)}</div>
     </div>
 
     <div className={styles.text}>{children}</div>
-  </Card>
+  </div>
 );
 
 export { CommentWrapper };
