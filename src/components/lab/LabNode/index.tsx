@@ -7,7 +7,7 @@ import { isAfter, parseISO } from 'date-fns';
 
 interface IProps {
   node: INode;
-  lastSeen: string | null;
+  lastSeen: string | null | undefined;
   isLoading?: boolean;
   commentCount: number;
 }

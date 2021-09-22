@@ -25,7 +25,7 @@ export type GetLabNodesRequest = {
 
 export interface ILabNode {
   node: INode;
-  last_seen: string | null;
+  last_seen: string | null | undefined;
   comment_count: number;
 }
 

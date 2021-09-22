@@ -50,6 +50,8 @@ import { Unwrap } from '../types';
 import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
 import { DIALOGS } from '~/redux/modal/constants';
 import { has } from 'ramda';
+import { selectLabListNodes } from '~/redux/lab/selectors';
+import { labSetList } from '~/redux/lab/actions';
 
 export function* updateNodeEverywhere(node) {
   const {
@@ -80,12 +82,19 @@ function* onNodeSubmitLocal({ node, callback }: ReturnType<typeof nodeSubmitLoca
       return;
     }
 
-    const nodes: ReturnType<typeof selectFlowNodes> = yield select(selectFlowNodes);
-    const updated_flow_nodes = node.id
-      ? nodes.map(item => (item.id === result.id ? result : item))
-      : [result, ...nodes];
-
-    yield put(flowSetNodes(updated_flow_nodes));
+    if (node.is_promoted) {
+      const nodes: ReturnType<typeof selectFlowNodes> = yield select(selectFlowNodes);
+      const updated_flow_nodes = node.id
+        ? nodes.map(item => (item.id === result.id ? result : item))
+        : [result, ...nodes];
+      yield put(flowSetNodes(updated_flow_nodes));
+    } else {
+      const nodes: ReturnType<typeof selectLabListNodes> = yield select(selectLabListNodes);
+      const updated_lab_nodes = node.id
+        ? nodes.map(item => (item.node.id === result.id ? { ...item, node: result } : item))
+        : [{ node: result, comment_count: 0, last_seen: node.created_at }, ...nodes];
+      yield put(labSetList({ nodes: updated_lab_nodes }));
+    }
 
     const { current } = yield select(selectNode);
 
