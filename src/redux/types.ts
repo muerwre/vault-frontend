@@ -2,6 +2,8 @@ import { DetailedHTMLProps, InputHTMLAttributes, ReactElement } from 'react';
 import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 import { IUser } from './auth/types';
+import { CallEffect } from 'redux-saga/effects';
+import { AxiosResponse } from 'axios';
 
 export interface ITag {
   id: number;
@@ -199,6 +201,10 @@ export type Unwrap<T> = T extends (...args: any) => Promise<any>
     ? U
     : T
   : T extends () => Iterator<any, infer U, any>
+  ? U
+  : T extends (...args: any) => Generator<CallEffect<AxiosResponse<infer U>>>
+  ? U
+  : T extends (...args: any) => Generator<CallEffect<infer U>>
   ? U
   : any;
 

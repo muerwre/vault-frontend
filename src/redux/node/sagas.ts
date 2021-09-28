@@ -46,12 +46,13 @@ import { modalSetShown, modalShowDialog } from '../modal/actions';
 import { selectFlow, selectFlowNodes } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
-import { Unwrap } from '../types';
+import { INode, Unwrap } from '../types';
 import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
 import { DIALOGS } from '~/redux/modal/constants';
 import { has } from 'ramda';
 import { selectLabListNodes } from '~/redux/lab/selectors';
 import { labSetList } from '~/redux/lab/actions';
+import { INodeRelated } from '~/redux/node/types';
 
 export function* updateNodeEverywhere(node) {
   const {
@@ -152,6 +153,33 @@ function* onNodeLoadMoreComments() {
   } catch (error) {}
 }
 
+function* nodeGetRelated(id: INode['id']) {
+  try {
+    const { related }: Unwrap<typeof apiGetNodeRelated> = yield call(apiGetNodeRelated, { id });
+    yield put(nodeSet({ related }));
+  } catch {}
+}
+
+function* nodeGetComments(id: INode['id']) {
+  try {
+    const { comments, comment_count }: Unwrap<typeof apiGetNodeComments> = yield call(
+      apiGetNodeComments,
+      {
+        id: id!,
+        take: COMMENTS_DISPLAY,
+        skip: 0,
+      }
+    );
+
+    yield put(
+      nodeSet({
+        comments,
+        comment_count,
+      })
+    );
+  } catch {}
+}
+
 function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
   // Get node body
   try {
@@ -169,19 +197,10 @@ function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
 
   // Comments and related
   try {
-    const [{ comments, comment_count }, { related }]: [
-      Unwrap<typeof apiGetNodeComments>,
-      Unwrap<typeof apiGetNodeRelated>
-    ] = yield all([
-      call(apiGetNodeComments, { id, take: COMMENTS_DISPLAY, skip: 0 }),
-      call(apiGetNodeRelated, { id }),
-    ]);
+    yield all([call(nodeGetComments, id), call(nodeGetRelated, id)]);
 
     yield put(
       nodeSet({
-        comments,
-        comment_count,
-        related,
         is_loading_comments: false,
       })
     );
@@ -223,6 +242,7 @@ function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
     const { current }: ReturnType<typeof selectNode> = yield select(selectNode);
     if (!node || !node.id || node.id !== current.id) return;
     yield put(nodeSetTags(node.tags));
+    yield call(nodeGetRelated, id);
   } catch {}
 }
 
