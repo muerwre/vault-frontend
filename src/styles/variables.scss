@@ -8,7 +8,7 @@ $cell_mobile: ($fluid_cell + 5) * 2 + 10; // flow breakpoint for mobile
 $flow_hide_recents: $cell_tablet; // breakpoint, there recents will be hidden
 
 $gap: 10px;
-$lab_gap: $gap * 3;
+$lab_gap: $gap * 2;
 $lab_gap_mobile: $gap * 2;
 $grid_line: 5px;
 $content_width: $cell * 5 + $grid_line * 4;
