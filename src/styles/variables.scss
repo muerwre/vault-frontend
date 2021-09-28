@@ -265,5 +265,5 @@ $sidebar_border: transparentize(white, 0.95);
 
 @mixin hero_gradient {
   $color: mix($wisegreen, $content_bg, 30%);
-  background: linear-gradient(170deg, lighten($color, 10%), $color 200px);
+  background: linear-gradient(170deg, lighten($color, 10%), $color);
 }
