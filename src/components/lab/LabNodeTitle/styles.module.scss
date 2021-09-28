@@ -14,7 +14,7 @@
   overflow: hidden;
   flex: 1;
   text-overflow: ellipsis;
-  word-break: break-all;
+  word-break: break-word;
 
   @include clamp(2, 1.2em);
 
