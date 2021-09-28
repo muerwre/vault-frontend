@@ -16,6 +16,7 @@ import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
 
 interface IProps {
   node: INode;
+  canEdit: boolean;
   isLoading: boolean;
   commentsOrder: 'ASC' | 'DESC';
   comments: IComment[];
@@ -26,6 +27,7 @@ interface IProps {
 
 const NodeBottomBlock: FC<IProps> = ({
   node,
+  canEdit,
   isLoading,
   isLoadingComments,
   comments,
@@ -66,7 +68,7 @@ const NodeBottomBlock: FC<IProps> = ({
                   <NodeAuthorBlock node={node} />
                 </div>
                 <div className={styles.left_item}>
-                  <NodeTagsBlock node={node} isLoading={isLoading} />
+                  <NodeTagsBlock node={node} canEdit={canEdit} isLoading={isLoading} />
                 </div>
                 <div className={styles.left_item}>
                   <NodeRelatedBlock isLoading={isLoading} node={node} related={related} />

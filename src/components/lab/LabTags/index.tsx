@@ -27,7 +27,7 @@ const LabTags: FC<IProps> = ({ tags, isLoading }) => {
   return (
     <div className={styles.tags}>
       {tags.slice(0, 10).map(tag => (
-        <Tag tag={tag} key={tag.id} />
+        <Tag tag={tag} key={tag.ID} />
       ))}
     </div>
   );

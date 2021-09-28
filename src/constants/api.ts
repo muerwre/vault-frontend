@@ -1,4 +1,4 @@
-import { IComment, INode } from '~/redux/types';
+import { IComment, INode, ITag } from '~/redux/types';
 import { ISocialProvider } from '~/redux/auth/types';
 
 export const API = {
@@ -30,6 +30,7 @@ export const API = {
     COMMENT: (id: INode['id']) => `/node/${id}/comment`,
     RELATED: (id: INode['id']) => `/node/${id}/related`,
     UPDATE_TAGS: (id: INode['id']) => `/node/${id}/tags`,
+    DELETE_TAG: (id: INode['id'], tagId: ITag['ID']) => `/node/${id}/tags/${tagId}`,
     POST_LIKE: (id: INode['id']) => `/node/${id}/like`,
     POST_HEROIC: (id: INode['id']) => `/node/${id}/heroic`,
     POST_LOCK: (id: INode['id']) => `/node/${id}/lock`,

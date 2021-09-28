@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from 'react';
 import { INode, ITag } from '~/redux/types';
 import { URLS } from '~/constants/urls';
-import { nodeUpdateTags } from '~/redux/node/actions';
+import { nodeDeleteTag, nodeUpdateTags } from '~/redux/node/actions';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { NodeTags } from '~/components/node/NodeTags';
@@ -9,10 +9,11 @@ import { useUser } from '~/utils/hooks/user/userUser';
 
 interface IProps {
   node: INode;
+  canEdit: boolean;
   isLoading: boolean;
 }
 
-const NodeTagsBlock: FC<IProps> = ({ node, isLoading }) => {
+const NodeTagsBlock: FC<IProps> = ({ node, canEdit, isLoading }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { is_user } = useUser();
@@ -35,6 +36,13 @@ const NodeTagsBlock: FC<IProps> = ({ node, isLoading }) => {
     [history, node]
   );
 
+  const onTagDelete = useCallback(
+    (tagId: ITag['ID']) => {
+      dispatch(nodeDeleteTag(node.id, tagId));
+    },
+    [dispatch, node.id]
+  );
+
   if (isLoading) {
     return null;
   }
@@ -42,9 +50,11 @@ const NodeTagsBlock: FC<IProps> = ({ node, isLoading }) => {
   return (
     <NodeTags
       is_editable={is_user}
+      is_deletable={canEdit}
       tags={node.tags}
       onChange={onTagsChange}
       onTagClick={onTagClick}
+      onTagDelete={onTagDelete}
     />
   );
 };

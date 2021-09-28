@@ -6,7 +6,7 @@ import { CallEffect } from 'redux-saga/effects';
 import { AxiosResponse } from 'axios';
 
 export interface ITag {
-  id: number;
+  ID: number;
   title: string;
 
   data: Record<string, string>;

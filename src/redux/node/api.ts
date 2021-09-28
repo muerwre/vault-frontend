@@ -3,6 +3,8 @@ import { IComment, INode } from '../types';
 import { API } from '~/constants/api';
 import { COMMENTS_DISPLAY } from './constants';
 import {
+  ApiDeleteNodeTagsRequest,
+  ApiDeleteNodeTagsResult,
   ApiGetNodeRelatedRequest,
   ApiGetNodeRelatedResult,
   ApiGetNodeRequest,
@@ -100,6 +102,9 @@ export const apiPostNodeTags = ({ id, tags }: ApiPostNodeTagsRequest) =>
   api
     .post<ApiPostNodeTagsResult>(API.NODE.UPDATE_TAGS(id), { tags })
     .then(cleanResult);
+
+export const apiDeleteNodeTag = ({ id, tagId }: ApiDeleteNodeTagsRequest) =>
+  api.delete<ApiDeleteNodeTagsResult>(API.NODE.DELETE_TAG(id, tagId)).then(cleanResult);
 
 export const apiPostNodeLike = ({ id }: ApiPostNodeLikeRequest) =>
   api.post<ApiPostNodeLikeResult>(API.NODE.POST_LIKE(id)).then(cleanResult);

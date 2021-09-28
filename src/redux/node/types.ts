@@ -1,4 +1,4 @@
-import { IComment, INode } from '~/redux/types';
+import { IComment, INode, ITag } from '~/redux/types';
 import { INodeState } from '~/redux/node/reducer';
 
 export interface IEditorComponentProps {}
@@ -54,6 +54,14 @@ export type ApiPostNodeTagsRequest = {
 };
 export type ApiPostNodeTagsResult = {
   node: INode;
+};
+
+export type ApiDeleteNodeTagsRequest = {
+  id: INode['id'];
+  tagId: ITag['ID'];
+};
+export type ApiDeleteNodeTagsResult = {
+  tags: ITag[];
 };
 
 export type ApiPostNodeLikeRequest = { id: INode['id'] };

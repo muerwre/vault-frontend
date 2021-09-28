@@ -18,6 +18,8 @@ import { useLoadNode } from '~/utils/hooks/node/useLoadNode';
 import { URLS } from '~/constants/urls';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 import { useOnNodeSeen } from '~/utils/hooks/node/useOnNodeSeen';
+import { canEditNode } from '~/utils/node';
+import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
 
 type IProps = RouteComponentProps<{ id: string }> & {};
 
@@ -42,6 +44,7 @@ const NodeLayout: FC<IProps> = memo(
     useOnNodeSeen(current);
 
     const { head, block } = useNodeBlocks(current, is_loading);
+    const [canEdit] = useNodePermissions(current);
 
     return (
       <div className={styles.wrap}>
@@ -54,13 +57,14 @@ const NodeLayout: FC<IProps> = memo(
             <NodePanel node={current} isLoading={is_loading} />
 
             <NodeBottomBlock
+              canEdit={canEdit}
               node={current}
-              isLoadingComments={is_loading_comments}
               comments={comments}
-              isLoading={is_loading}
               commentsCount={comment_count}
               commentsOrder="DESC"
               related={related}
+              isLoadingComments={is_loading_comments}
+              isLoading={is_loading}
             />
 
             <Footer />

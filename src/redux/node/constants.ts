@@ -52,6 +52,7 @@ export const NODE_ACTIONS = {
   SET_RELATED: `${prefix}SET_RELATED`,
 
   UPDATE_TAGS: `${prefix}UPDATE_TAGS`,
+  DELETE_TAG: `${prefix}DELETE_TAG`,
   SET_TAGS: `${prefix}SET_TAGS`,
   SET_COVER_IMAGE: `${prefix}SET_COVER_IMAGE`,
 };

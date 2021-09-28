@@ -86,6 +86,12 @@ export const nodeUpdateTags = (id: INode['id'], tags: string[]) => ({
   tags,
 });
 
+export const nodeDeleteTag = (id: INode['id'], tagId: ITag['ID']) => ({
+  type: NODE_ACTIONS.DELETE_TAG,
+  id: id!,
+  tagId,
+});
+
 export const nodeSetTags = (tags: ITag[]) => ({
   type: NODE_ACTIONS.SET_TAGS,
   tags,

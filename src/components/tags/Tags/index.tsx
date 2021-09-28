@@ -8,12 +8,22 @@ import { separateTags } from '~/utils/tag';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   tags: Partial<ITag>[];
+  is_deletable?: boolean;
   is_editable?: boolean;
   onTagsChange?: (tags: string[]) => void;
   onTagClick?: (tag: Partial<ITag>) => void;
+  onTagDelete?: (id: ITag['ID']) => void;
 };
 
-export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, onTagClick, ...props }) => {
+export const Tags: FC<IProps> = ({
+  tags,
+  is_deletable,
+  is_editable,
+  onTagsChange,
+  onTagClick,
+  onTagDelete,
+  ...props
+}) => {
   const [data, setData] = useState<string[]>([]);
 
   const [catTags, ordinaryTags] = useMemo(() => separateTags(tags), [tags]);
@@ -56,11 +66,23 @@ export const Tags: FC<IProps> = ({ tags, is_editable, onTagsChange, onTagClick, 
   return (
     <TagField {...props}>
       {catTags.map(tag => (
-        <Tag key={tag.title} tag={tag} onClick={onTagClick} />
+        <Tag
+          key={tag.title}
+          tag={tag}
+          onClick={onTagClick}
+          is_deletable={is_deletable}
+          onDelete={onTagDelete}
+        />
       ))}
 
       {ordinaryTags.map(tag => (
-        <Tag key={tag.title} tag={tag} onClick={onTagClick} />
+        <Tag
+          key={tag.title}
+          tag={tag}
+          onClick={onTagClick}
+          is_deletable={is_deletable}
+          onDelete={onTagDelete}
+        />
       ))}
 
       {data.map(title => (

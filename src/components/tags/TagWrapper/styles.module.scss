@@ -5,20 +5,20 @@ $big: 1.2;
 .tag {
   @include outer_shadow();
 
+  overflow: hidden;
   cursor: default;
   height: $tag_height;
   background: $tag_bg;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: stretch;
   border-radius: ($tag_height / 2) 3px 3px ($tag_height / 2);
   font: $font_14_semibold;
   align-self: flex-start;
   padding: 0 8px 0 0;
-  //margin: 0 $gap $gap 0;
   position: relative;
   z-index: 12;
+
+  &:hover {
+    z-index: 40;
+  }
 
   &:global(.big) {
     height: $tag_height * $big;
@@ -98,6 +98,19 @@ $big: 1.2;
   }
 }
 
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: stretch;
+  width: 100%;
+  transition: transform 250ms;
+
+  :hover:global(.deletable) > & {
+    transform: translate(-32px, 0);
+  }
+}
+
 .hole {
   width: $tag_height;
   height: $tag_height;
@@ -123,3 +136,28 @@ $big: 1.2;
   text-overflow: ellipsis;
 }
 
+button.delete {
+  @include inner_shadow;
+
+  width: 32px;
+  height: 100%;
+  z-index: 24;
+  background: $red;
+  border: none;
+  padding: 0;
+  margin: 0 0 0 -5px;
+  border-radius: 0;
+  position: absolute;
+  right: -32px;
+  top: 0;
+  transition: transform 250ms;
+  transform: translate(0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  :hover > & {
+    transform: translate(-32px, 0);
+  }
+}

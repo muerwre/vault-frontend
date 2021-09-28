@@ -10,6 +10,7 @@ import {
 } from './constants';
 import {
   nodeCreate,
+  nodeDeleteTag,
   nodeEdit,
   nodeGotoNode,
   nodeLike,
@@ -30,6 +31,7 @@ import {
   nodeUpdateTags,
 } from './actions';
 import {
+  apiDeleteNodeTag,
   apiGetNode,
   apiGetNodeComments,
   apiGetNodeRelated,
@@ -246,6 +248,13 @@ function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
   } catch {}
 }
 
+function* onDeleteTag({ id, tagId }: ReturnType<typeof nodeDeleteTag>) {
+  try {
+    const { tags }: Unwrap<typeof apiDeleteNodeTag> = yield call(apiDeleteNodeTag, { id, tagId });
+    yield put(nodeSetTags(tags));
+  } catch {}
+}
+
 function* onCreateSaga({ node_type: type, isLab }: ReturnType<typeof nodeCreate>) {
   if (!type || !has(type, NODE_EDITOR_DIALOGS)) return;
 
@@ -385,6 +394,7 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
   yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
+  yield takeLatest(NODE_ACTIONS.DELETE_TAG, onDeleteTag);
   yield takeLatest(NODE_ACTIONS.CREATE, onCreateSaga);
   yield takeLatest(NODE_ACTIONS.EDIT, onEditSaga);
   yield takeLatest(NODE_ACTIONS.LIKE, onLikeSaga);
