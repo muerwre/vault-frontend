@@ -259,9 +259,11 @@ $sidebar_border: transparentize(white, 0.95);
   cursor: pointer;
 }
 
-@mixin lab_shadow {
-  box-shadow:
-    transparentize(black, 0.5) 0 0 0 1px,
-    inset transparentize(white, 0.9) 0 1px,
-    lighten(black, 0.1) 0 4px;
+@mixin lab_gradient {
+  background: linear-gradient(darken($dark_blue, 0%), darken($blue, 30%));
+}
+
+@mixin hero_gradient {
+  $color: mix($wisegreen, $content_bg, 30%);
+  background: linear-gradient(170deg, lighten($color, 10%), $color 200px);
 }

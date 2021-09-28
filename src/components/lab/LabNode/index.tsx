@@ -4,6 +4,7 @@ import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
 import styles from './styles.module.scss';
 import { LabBottomPanel } from '~/components/lab/LabBottomPanel';
 import { isAfter, parseISO } from 'date-fns';
+import classNames from 'classnames';
 
 interface IProps {
   node: INode;
@@ -22,7 +23,7 @@ const LabNode: FC<IProps> = ({ node, isLoading, lastSeen, commentCount }) => {
   );
 
   return (
-    <div className={styles.wrap}>
+    <div className={classNames(styles.wrap, { [styles.heroic]: node.is_heroic })}>
       {lab}
       <LabBottomPanel
         node={node}

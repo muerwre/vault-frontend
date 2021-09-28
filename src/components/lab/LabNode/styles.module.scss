@@ -1,12 +1,16 @@
 @import "~/styles/variables.scss";
 
 .wrap {
-  @include lab_shadow;
+  @include outer_shadow;
 
   background-color: $lab_post_bg;
   cursor: pointer;
 
   min-width: 0;
   border-radius: $radius;
+
+  &.heroic {
+    @include hero_gradient;
+  }
 }
 

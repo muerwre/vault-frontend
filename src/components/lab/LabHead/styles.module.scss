@@ -1,7 +1,7 @@
 @import "~/styles/variables.scss";
 
 .wrap {
-  @include lab_shadow;
+  @include outer_shadow;
 
   border-radius: $radius;
   background-color: $content_bg;

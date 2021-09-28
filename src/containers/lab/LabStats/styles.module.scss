@@ -16,7 +16,7 @@
 }
 
 .card {
-  @include lab_shadow;
+  @include outer_shadow;
 
   border-radius: $radius;
   background: $comment_bg;

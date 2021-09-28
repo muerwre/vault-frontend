@@ -1,9 +1,13 @@
 @import "~/styles/variables.scss";
 
 .wrap {
-  @include lab_shadow;
+  @include outer_shadow;
+  @include lab_gradient;
 
-  background: linear-gradient(darken($dark_blue, 0%), darken($blue, 30%));
+  display: flex;
+  align-items: flex-end;
+  justify-content: stretch;
+  min-height: $cell;
 }
 
 .title {
