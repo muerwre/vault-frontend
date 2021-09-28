@@ -35,7 +35,13 @@ export const Tags: FC<IProps> = ({
       }
 
       const exist = tags.map(tag => tag.title);
-      onTagsChange(uniq([...exist, ...data, ...last]).filter(el => el) as string[]);
+      const uniqueTags = uniq([...exist, ...data, ...last]).filter(el => el) as string[];
+
+      if (uniqueTags.length === exist.length) {
+        return;
+      }
+
+      onTagsChange(uniqueTags);
     },
     [data]
   );

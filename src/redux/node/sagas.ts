@@ -252,6 +252,7 @@ function* onDeleteTag({ id, tagId }: ReturnType<typeof nodeDeleteTag>) {
   try {
     const { tags }: Unwrap<typeof apiDeleteNodeTag> = yield call(apiDeleteNodeTag, { id, tagId });
     yield put(nodeSetTags(tags));
+    yield call(nodeGetRelated, id);
   } catch {}
 }
 
