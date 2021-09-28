@@ -18,20 +18,9 @@ import classNames from 'classnames';
 
 interface IProps {}
 
-enum Layout {
-  Fluid = 'fluid',
-  Default = 'default',
-}
-
 const LabLayout: FC<IProps> = () => {
   const { is_loading } = useShallowSelect(selectLabList);
   const dispatch = useDispatch();
-  const [layout, setLayout] = usePersistedState('lab_layout', Layout.Default);
-
-  const isFluid = layout === Layout.Fluid;
-  const toggleLayout = useCallback(() => {
-    setLayout(isFluid ? Layout.Default : Layout.Fluid);
-  }, [setLayout, isFluid]);
 
   useEffect(() => {
     dispatch(labGetList());
@@ -39,8 +28,8 @@ const LabLayout: FC<IProps> = () => {
   }, [dispatch]);
 
   return (
-    <div>
-      <div className={classNames(styles.container, { [styles.fluid]: isFluid })}>
+    <Container>
+      <div className={styles.container}>
         <div className={styles.wrap}>
           <Group className={styles.content}>
             <LabHead isLoading={is_loading} />
@@ -56,7 +45,7 @@ const LabLayout: FC<IProps> = () => {
       </div>
 
       <SidebarRouter prefix="/lab" isLab />
-    </div>
+    </Container>
   );
 };
 
