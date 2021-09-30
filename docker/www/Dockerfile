@@ -2,7 +2,7 @@ FROM node:dubnium-alpine as builder
 COPY package.json yarn.lock ./
 RUN yarn
 COPY . .
-RUN yarn build
+RUN REACT_APP_API_HOST=${REACT_APP_API_HOST} REACT_APP_REMOTE_CURRENT=${REACT_APP_REMOTE_CURRENT} yarn build
 
 FROM nginx:alpine
 COPY docker/www/nginx.conf /etc/nginx/nginx.conf
