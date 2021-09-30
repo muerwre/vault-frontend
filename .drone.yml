@@ -5,4 +5,7 @@ data:
   branches:
     - master
     - develop
-
+  when:
+    branch:
+      - master
+      - develop
