@@ -11,7 +11,7 @@ steps:
     image: plugins/docker
     when:
       branch:
-        - master
+        - develop
     environment:
       - REACT_APP_API_HOST: https://pig.vault48.org/
       - REACT_APP_REMOTE_CURRENT: https://pig.vault48.org/static/
