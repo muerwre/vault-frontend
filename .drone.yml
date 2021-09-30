@@ -7,7 +7,7 @@ platform:
   arch: amd64
 
 environment:
-  REGISTRY:
+  registry:
     from_secret: global_docker_registry
 
 steps:
@@ -21,11 +21,11 @@ steps:
       tag:
         - ${DRONE_BRANCH}
       custom_labels:
-        - commit: ${DRONE_COMMIT_SHA}
+        commit: ${DRONE_COMMIT_SHA}
       username:
         from_secret: global_docker_login
       password:
         from_secret: global_docker_password
       registry:
         from_secret: global_docker_registry
-      repo: $${REGISTRY}/${DRONE_REPO_NAME}
+      repo: "${registry}/${DRONE_REPO_NAME}"
