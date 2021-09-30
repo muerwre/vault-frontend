@@ -17,6 +17,9 @@ steps:
       REACT_APP_REMOTE_CURRENT: https://pig.vault48.org/static/
     settings:
       dockerfile: docker/www/Dockerfile
+      build_args_from_env:
+        - REACT_APP_API_HOST
+        - REACT_APP_REMOTE_CURRENT
       tag:
         - ${DRONE_BRANCH}
       custom_labels:
