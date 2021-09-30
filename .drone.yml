@@ -1,31 +1,7 @@
-kind: pipeline
-name: build
-type: docker
-
-platform:
-  os: linux
-  arch: amd64
-
-environment:
+kind: template
+load: registry.yaml
+data:
   registry:
     from_secret: global_docker_registry
+  dockerfile: docker/www/Dockerfile
 
-steps:
-  - name: build
-    image: plugins/docker
-    when:
-      branch:
-        - develop
-    settings:
-      dockerfile: docker/www/Dockerfile
-      tag:
-        - ${DRONE_BRANCH}
-      custom_labels:
-        commit: ${DRONE_COMMIT_SHA}
-      username:
-        from_secret: global_docker_login
-      password:
-        from_secret: global_docker_password
-      registry:
-        from_secret: global_docker_registry
-      repo: "${registry}/${DRONE_REPO_NAME}"
