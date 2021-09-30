@@ -1,7 +1,5 @@
 kind: template
 load: registry.yaml
 data:
-  registry:
-    from_secret: global_docker_registry
+  registry: global_docker_registry
   dockerfile: docker/www/Dockerfile
-
