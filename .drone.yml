@@ -22,6 +22,6 @@ steps:
         from_secret: global_docker_login
       password:
         from_secret: global_docker_password
-      repo: $${global_docker_registry}/$${project_name}
       registry:
         from_secret: global_docker_registry
+      repo: ${global_docker_registry}/${DRONE_REPO_NAME}
