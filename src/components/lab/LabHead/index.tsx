@@ -7,8 +7,6 @@ interface IProps {
 }
 
 const LabHead: FC<IProps> = ({ isLoading }) => {
-  return null;
-
   return (
     <div className={styles.wrap}>
       <div className={styles.group}>

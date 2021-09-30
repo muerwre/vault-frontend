@@ -40,4 +40,15 @@
 
 .content {
   min-width: 0;
+  margin-left: -$gap / 2;
+
+  @include tablet {
+    margin-left: 0;
+    padding-bottom: $gap / 2;
+  }
+}
+
+.head {
+  padding: 0 $gap / 2;
+  display: none;
 }

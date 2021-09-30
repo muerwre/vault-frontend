@@ -162,6 +162,7 @@ $sidebar_border: transparentize(white, 0.95);
     @content;
   }
 }
+
 @mixin desktop {
   @media (max-width: $content_width) {
     @content;

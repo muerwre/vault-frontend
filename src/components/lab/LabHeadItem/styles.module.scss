@@ -13,10 +13,7 @@
   }
 
   &.active {
-    color: $blue;
-    background-color: lighten($content_bg, 6%);
-    border-radius: $radius;
-    padding: 0 $gap;
+    color: $wisegreen;
   }
 }
 

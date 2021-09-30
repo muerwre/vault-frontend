@@ -11,6 +11,10 @@ div.wrap {
   box-sizing: border-box;
   padding: 0 $gap / 2;
 
+  @include tablet {
+    padding: 0;
+  }
+
   & > div {
     margin-bottom: $gap;
   }

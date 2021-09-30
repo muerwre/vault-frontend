@@ -32,7 +32,10 @@ const LabLayout: FC<IProps> = () => {
       <div className={styles.container}>
         <div className={styles.wrap}>
           <Group className={styles.content}>
-            <LabHead isLoading={is_loading} />
+            <div className={styles.head}>
+              <LabHead isLoading={is_loading} />
+            </div>
+
             <LabGrid />
           </Group>
 
