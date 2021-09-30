@@ -2,4 +2,3 @@ kind: template
 load: registry.yaml
 data:
   dockerfile: docker/www/Dockerfile
-
