@@ -11,6 +11,7 @@ import { FlowGrid } from '~/components/flow/FlowGrid';
 import { FlowLayout } from '~/layouts/FlowLayout';
 import { Sticky } from '~/components/containers/Sticky';
 import { selectFlow } from '~/redux/flow/selectors';
+import { ProfilePageStats } from '~/containers/profile/ProfilePageStats';
 
 type Props = RouteComponentProps<{ username: string }> & {};
 
@@ -34,7 +35,12 @@ const ProfileLayout: FC<Props> = ({
     <Container className={styles.wrap}>
       <div className={styles.left}>
         <Sticky>
-          <ProfilePageLeft profile={profile} username={username} />
+          <div className={styles.row}>
+            <ProfilePageLeft profile={profile} username={username} />
+          </div>
+          <div className={styles.row}>
+            <ProfilePageStats />
+          </div>
         </Sticky>
       </div>
 
