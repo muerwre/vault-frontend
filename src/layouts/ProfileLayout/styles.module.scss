@@ -1,20 +1,16 @@
 @import "src/styles/variables";
 
 .wrap {
-  flex: 1;
-  display: flex;
-  align-items: stretch;
-  justify-content: stretch;
-  border-radius: $radius;
+  display: grid;
+  grid-template-columns: $cell auto;
+  grid-column-gap: $gap;
 }
 
+.grid {
+  @include flow_grid;
+}
 .left {
-  flex: 1;
-  background: darken($content_bg, 2%);
-  border-radius: 0 $radius $radius 0;
-  box-sizing: border-box;
 }
 
 .right {
-  flex: 4;
 }

@@ -6,7 +6,7 @@ import { selectUploads } from '~/redux/uploads/selectors';
 import { ImageGrid } from '~/components/editors/ImageGrid';
 import styles from './styles.module.scss';
 import { NodeEditorProps } from '~/redux/node/types';
-import { useFileUploaderContext } from '~/utils/hooks/fileUploader';
+import { useFileUploaderContext } from '~/utils/hooks/useFileUploader';
 
 type IProps = NodeEditorProps;
 

@@ -11,7 +11,7 @@ import { getURL } from '~/utils/dom';
 import { Icon } from '~/components/input/Icon';
 import { PRESETS } from '~/constants/urls';
 import { IEditorComponentProps } from '~/redux/node/types';
-import { useFileUploader, useFileUploaderContext } from '~/utils/hooks/fileUploader';
+import { useFileUploader, useFileUploaderContext } from '~/utils/hooks/useFileUploader';
 import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
 import { getFileType } from '~/utils/uploader';
 

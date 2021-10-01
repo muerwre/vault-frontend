@@ -7,7 +7,7 @@ import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { prop } from 'ramda';
 import { useNodeFormFormik } from '~/utils/hooks/useNodeFormFormik';
 import { EditorButtons } from '~/components/editors/EditorButtons';
-import { FileUploaderProvider, useFileUploader } from '~/utils/hooks/fileUploader';
+import { FileUploaderProvider, useFileUploader } from '~/utils/hooks/useFileUploader';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS } from '~/redux/uploads/constants';
 import { FormikProvider } from 'formik';
 import { INode } from '~/redux/types';

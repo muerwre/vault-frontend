@@ -9,66 +9,15 @@
 
 $cols: $content_width / $cell;
 
-@mixin fluid {
-  @media(min-width: $content_width) {
-    .fluid & {
-      @content
-    }
-  }
-}
-
 .container {
   max-width: $content_width;
   width: 100%;
-
-  &.fluid {
-    padding: 0 $gap;
-    box-sizing: border-box;
-    max-width: none;
-  }
 }
 
 .grid {
-  width: 100%;
-  box-sizing: border-box;
-  display: grid;
-
-  grid-template-columns: repeat(auto-fit, minmax($cell - 5, 1fr));
   grid-template-rows: 50vh $cell;
-  grid-auto-rows: $cell;
 
-  grid-auto-flow: row dense;
-  grid-column-gap: $gap;
-  grid-row-gap: $gap;
-
-  @include fluid {
-    grid-template-columns: repeat(auto-fit, minmax($fluid_cell - 5, 1fr));
-    grid-template-rows: $fluid_cell;
-    grid-auto-rows: $fluid_cell;
-  }
-
-  @media (max-width: ($cell + 10) * 3) {
-    grid-template-columns: repeat(auto-fill, minmax($fluid_cell - 20, 1fr));
-    grid-auto-rows: $fluid_cell;
-    grid-template-rows: calc(50vw - 10px) $fluid_cell;
-  }
-
-  @media (max-width: $cell_tablet) {
-    grid-template-rows: calc(66vw - 10px) auto $fluid_cell;
-  }
-
-  @media (max-width: $cell_mobile) {
-    // rework stamp, so it will be shown as smaller one on mobiles
-    grid-template-columns: repeat(auto-fill, minmax(calc(50vw - 20px), 1fr));
-    grid-template-rows: calc(80vw - 10px) auto 50vw;
-    grid-auto-rows: 50vw;
-  }
-
-  @media (max-width: ($fluid_cell + 5) * 1.5 + 20) {
-    grid-template-columns: repeat(auto-fill, minmax(calc(50vw - 20px), 1fr));
-    grid-template-rows: calc(80vw - 10px) auto 50vw;
-    grid-auto-rows: 50vw;
-  }
+  @include flow_grid;
 }
 
 .pad_last {
@@ -86,15 +35,6 @@ $cols: $content_width / $cell;
   align-items: center;
   justify-content: center;
   font: $font_24_semibold;
-
-  @include fluid {
-    grid-row-end: span 2;
-    grid-column-end: span 4;
-
-    @media(max-width: $content_width) {
-      grid-column-end: -1;
-    }
-  }
 }
 
 .stamp {

@@ -4,9 +4,13 @@ import { Route, RouteComponentProps, Switch } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { authLoadProfile } from '~/redux/auth/actions';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
-import { selectAuthProfile } from '~/redux/auth/selectors';
+import { selectAuthProfile, selectUser } from '~/redux/auth/selectors';
 import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
 import { Container } from '~/containers/main/Container';
+import { FlowGrid } from '~/components/flow/FlowGrid';
+import { FlowLayout } from '~/layouts/FlowLayout';
+import { Sticky } from '~/components/containers/Sticky';
+import { selectFlow } from '~/redux/flow/selectors';
 
 type Props = RouteComponentProps<{ username: string }> & {};
 
@@ -15,6 +19,9 @@ const ProfileLayout: FC<Props> = ({
     params: { username },
   },
 }) => {
+  const { nodes } = useShallowSelect(selectFlow);
+  const user = useShallowSelect(selectUser);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,7 +32,15 @@ const ProfileLayout: FC<Props> = ({
 
   return (
     <Container className={styles.wrap}>
-      <ProfilePageLeft profile={profile} username={username} />
+      <div className={styles.left}>
+        <Sticky>
+          <ProfilePageLeft profile={profile} username={username} />
+        </Sticky>
+      </div>
+
+      <div className={styles.grid}>
+        <FlowGrid nodes={nodes} user={user} onChangeCellView={console.log} />
+      </div>
     </Container>
   );
 };

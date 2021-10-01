@@ -7,7 +7,7 @@ import { SortEnd } from 'react-sortable-hoc';
 import { moveArrItem } from '~/utils/fn';
 import { useDropZone } from '~/utils/hooks';
 import { COMMENT_FILE_TYPES, UPLOAD_TYPES } from '~/redux/uploads/constants';
-import { useFileUploaderContext } from '~/utils/hooks/fileUploader';
+import { useFileUploaderContext } from '~/utils/hooks/useFileUploader';
 
 const CommentFormAttaches: FC = () => {
   const uploader = useFileUploaderContext();

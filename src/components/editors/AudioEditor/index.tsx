@@ -11,7 +11,7 @@ import { NodeEditorProps } from '~/redux/node/types';
 import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
 import { useNodeAudios } from '~/utils/hooks/node/useNodeAudios';
 import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
-import { useFileUploaderContext } from '~/utils/hooks/fileUploader';
+import { useFileUploaderContext } from '~/utils/hooks/useFileUploader';
 
 type IProps = NodeEditorProps;
 

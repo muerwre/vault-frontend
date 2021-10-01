@@ -3,7 +3,7 @@ import { useCommentFormFormik } from '~/utils/hooks/useCommentFormFormik';
 import { FormikProvider } from 'formik';
 import { LocalCommentFormTextarea } from '~/components/comment/LocalCommentFormTextarea';
 import { Button } from '~/components/input/Button';
-import { FileUploaderProvider, useFileUploader } from '~/utils/hooks/fileUploader';
+import { FileUploaderProvider, useFileUploader } from '~/utils/hooks/useFileUploader';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS } from '~/redux/uploads/constants';
 import { CommentFormAttachButtons } from '~/components/comment/CommentFormAttachButtons';
 import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormatButtons';
