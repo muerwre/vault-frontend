@@ -24,6 +24,7 @@
   padding: $gap;
   box-sizing: border-box;
   height: 100%;
+  position: relative;
 }
 
 .counter {
@@ -40,4 +41,13 @@
   text-align: center;
   word-wrap: break-word;
   opacity: 0.5;
+}
+
+.icon {
+  position: absolute;
+  opacity: 0.5;
+  top: 5px;
+  left: 5px;
+  fill: transparentize(black, 0.5);
+  stroke: none;
 }
