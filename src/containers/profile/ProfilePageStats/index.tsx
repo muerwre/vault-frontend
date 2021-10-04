@@ -1,27 +1,35 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
+import { StatsRow } from '~/components/common/StatsRow';
+import { SubTitle } from '~/components/common/SubTitle';
 
 interface Props {}
 
 const Row: FC<{ count: number; title: string; icon?: string }> = ({ count, title, icon }) => (
   <div className={styles.row}>
-    {icon && (
-      <div className={styles.icon}>
-        <Icon icon={icon} size={24} />
-      </div>
-    )}
-    <div className={styles.counter}>{count > 999 ? '999+' : count}</div>
     <div className={styles.title}>{title}</div>
+    <div className={styles.counter}>{count > 999 ? '999+' : count}</div>
   </div>
 );
 
 const ProfilePageStats: FC<Props> = () => (
   <div className={styles.wrap}>
-    <Row count={9} title="лет в бункере" />
-    <Row count={99} title="постов" />
-    <Row count={99999} title="комментариев" icon="comment" />
-    <Row count={99} title="лайков" icon="heart_full" />
+    <SubTitle>Ачивментс</SubTitle>
+
+    <ul>
+      <StatsRow isLoading={false} label="лет в бункере">
+        9
+      </StatsRow>
+      <StatsRow isLoading={false} label="постов">
+        99
+      </StatsRow>
+      <StatsRow isLoading={false} label="комментариев">
+        999+
+      </StatsRow>
+      <StatsRow isLoading={false} label="лайков">
+        99
+      </StatsRow>
+    </ul>
   </div>
 );
 

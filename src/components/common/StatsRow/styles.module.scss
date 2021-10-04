@@ -1,0 +1,23 @@
+@import '~/styles/variables.scss';
+
+.row {
+  @include row_shadow;
+  color: #aaaaaa;
+  display: flex;
+  flex-direction: row;
+  font: $font_12_regular;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+
+.label {
+  flex: 1;
+  margin-right: $gap;
+}
+
+.value {
+  float: right;
+  color: white;
+  font: $font_12_semibold;
+  line-height: 24px;
+}

@@ -12,9 +12,12 @@
 .left {
 }
 
-.right {
-}
-
 .row {
   margin-bottom: $gap;
+}
+
+.description {
+  font: $font_14_semibold;
+  text-align: center;
+  padding: $gap * 2 $gap;
 }
