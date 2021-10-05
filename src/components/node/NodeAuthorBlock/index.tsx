@@ -3,24 +3,24 @@ import { INode } from '~/redux/types';
 import styles from './styles.module.scss';
 import { Avatar } from '~/components/common/Avatar';
 import { openUserProfile } from '~/utils/user';
-import { useRandomPhrase } from '~/constants/phrases';
+import { useUserDescription } from '~/utils/hooks/user/useUserDescription';
 
 interface Props {
   node?: INode;
 }
 
 const NodeAuthorBlock: FC<Props> = ({ node }) => {
-  const randomPhrase = useRandomPhrase('USER_DESCRIPTION');
-
   const onOpenProfile = useCallback(() => openUserProfile(node?.user?.username), [
     node?.user?.username,
   ]);
+
+  const description = useUserDescription(node?.user);
 
   if (!node?.user) {
     return null;
   }
 
-  const { fullname, username, description, photo } = node.user;
+  const { fullname, username, photo } = node.user;
 
   return (
     <div className={styles.block} onClick={onOpenProfile}>
@@ -28,8 +28,7 @@ const NodeAuthorBlock: FC<Props> = ({ node }) => {
 
       <div className={styles.info}>
         <div className={styles.username}>{fullname || username}</div>
-
-        <div className={styles.description}>{description || randomPhrase}</div>
+        <div className={styles.description}>{description}</div>
       </div>
     </div>
   );

@@ -1,0 +1,1 @@
+export const INACTIVE_ACCOUNT_DAYS = 40;
