@@ -20,7 +20,7 @@ import { useLabPagination } from '~/utils/hooks/lab/useLabPagination';
 interface IProps {}
 
 const LabLayout: FC<IProps> = () => {
-  const { is_loading } = useShallowSelect(selectLabList);
+  const { is_loading, nodes } = useShallowSelect(selectLabList);
   const dispatch = useDispatch();
 
   useLabPagination({ isLoading: is_loading });
@@ -30,16 +30,18 @@ const LabLayout: FC<IProps> = () => {
     dispatch(labGetStats());
   }, [dispatch]);
 
+  const isInitialLoading = is_loading && !nodes.length;
+
   return (
     <Container>
       <div className={styles.container}>
         <div className={styles.wrap}>
           <Group className={styles.content}>
             <div className={styles.head}>
-              <LabHead isLoading={is_loading} />
+              <LabHead isLoading={isInitialLoading} />
             </div>
 
-            <LabGrid />
+            <LabGrid nodes={nodes} isLoading={isInitialLoading} />
           </Group>
 
           <div className={styles.panel}>

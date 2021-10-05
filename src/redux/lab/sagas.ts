@@ -62,12 +62,11 @@ function* getMore() {
       return;
     }
 
-    const last = list.nodes[list.nodes.length];
+    const last = list.nodes[list.nodes.length - 1];
 
     if (!last) {
       return;
     }
-
     const after = last.node.created_at;
     const { nodes, count }: Unwrap<typeof getLabNodes> = yield call(getLabNodes, { after });
     const newNodes = [...list.nodes, ...nodes];

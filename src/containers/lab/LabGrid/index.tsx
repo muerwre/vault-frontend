@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
 import Masonry from 'react-masonry-css';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import styles from './styles.module.scss';
 import { LabNode } from '~/components/lab/LabNode';
-import { selectLabList, selectLabListNodes } from '~/redux/lab/selectors';
 import { EMPTY_NODE, NODE_TYPES } from '~/redux/node/constants';
 import { values } from 'ramda';
+import { ILabNode } from '~/redux/lab/types';
 
-interface IProps {}
+interface IProps {
+  isLoading: boolean;
+  nodes: ILabNode[];
+}
 
 const breakpointCols = {
   default: 2,
@@ -26,11 +28,8 @@ const LoadingNode = () => (
   />
 );
 
-const LabGrid: FC<IProps> = () => {
-  const nodes = useShallowSelect(selectLabListNodes);
-  const { is_loading } = useShallowSelect(selectLabList);
-
-  if (is_loading) {
+const LabGrid: FC<IProps> = ({ isLoading, nodes }) => {
+  if (isLoading) {
     return (
       <Masonry
         className={styles.wrap}
