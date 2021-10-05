@@ -17,5 +17,5 @@ export const useUserDescription = (user?: Partial<IUser>) => {
     return 'Юнит деактивирован';
   }
 
-  return randomPhrase;
+  return user.description || randomPhrase;
 };
