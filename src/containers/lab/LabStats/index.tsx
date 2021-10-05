@@ -16,6 +16,7 @@ import {
 import { LabTags } from '~/components/lab/LabTags';
 import { LabHeroes } from '~/components/lab/LabHeroes';
 import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
+import { SubTitle } from '~/components/common/SubTitle';
 
 interface IProps {}
 
@@ -31,10 +32,10 @@ const LabStats: FC<IProps> = () => {
 
       <div className={styles.card}>
         <Group>
-          {isLoading ? (
-            <Placeholder height={14} width="100px" />
-          ) : (
-            tags.length && <div className={styles.title}>Тэги</div>
+          {(!!tags.length || isLoading) && (
+            <SubTitle isLoading={isLoading} className={styles.title}>
+              Тэги
+            </SubTitle>
           )}
 
           <div className={styles.tags}>
@@ -56,10 +57,10 @@ const LabStats: FC<IProps> = () => {
             </>
           )}
 
-          {isLoading ? (
-            <Placeholder height={14} width="100px" />
-          ) : (
-            heroes.length > 0 && <div className={styles.title}>Важные</div>
+          {(!!heroes.length || isLoading) && (
+            <SubTitle isLoading={isLoading} className={styles.title}>
+              Важные
+            </SubTitle>
           )}
 
           <div className={styles.heroes}>
