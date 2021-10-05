@@ -195,7 +195,6 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(5deg, transparentize($content_bg, 0), transparentize($content_bg, 1));
   z-index: 2;
   border-radius: $cell_radius;
   padding: $gap / 2;

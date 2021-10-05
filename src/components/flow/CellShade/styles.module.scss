@@ -1,0 +1,12 @@
+@import "~/styles/variables";
+
+.shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(5deg, transparentize($content_bg, 0), transparentize($content_bg, 1));
+  pointer-events: none;
+  touch-action: none;
+}

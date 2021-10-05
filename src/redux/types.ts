@@ -133,6 +133,7 @@ export interface INode {
   flow: {
     display: 'single' | 'vertical' | 'horizontal' | 'quadro';
     show_description: boolean;
+    dominant_color?: string;
   };
 
   tags: ITag[];

@@ -1,0 +1,1 @@
+export const DEFAULT_DOMINANT_COLOR = '#000000';
