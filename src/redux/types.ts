@@ -83,6 +83,7 @@ export interface IFile {
     duration?: number;
     width?: number;
     height?: number;
+    dominant_color?: string;
   };
 
   createdAt?: string;

@@ -7,9 +7,11 @@ import { IFile } from '~/redux/types';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { Icon } from '~/components/input/Icon';
 import { useResizeHandler } from '~/utils/hooks/useResizeHandler';
+import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
 
 interface IProps {
   file: IFile;
+  color?: string;
   onLoad?: () => void;
   onClick?: MouseEventHandler;
   className?: string;
@@ -18,7 +20,7 @@ interface IProps {
 const DEFAULT_WIDTH = 1920;
 const DEFAULT_HEIGHT = 1020;
 
-const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
+const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className }) => {
   const [maxHeight, setMaxHeight] = useState(window.innerHeight - 140);
   const [loaded, setLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -48,6 +50,7 @@ const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
   useResizeHandler(onResize);
 
   const estimatedWidth = (width * maxHeight) / height;
+  const fill = color && color !== DEFAULT_DOMINANT_COLOR ? color : '#222222';
 
   return (
     <>
@@ -67,7 +70,7 @@ const ImagePreloader: FC<IProps> = ({ file, onLoad, onClick, className }) => {
         </defs>
 
         <g filter="url(#f1)">
-          <rect fill="#222222" width="100%" height="100%" stroke="none" rx="8" ry="8" />
+          <rect fill={fill} width="100%" height="100%" stroke="none" rx="8" ry="8" />
 
           {!hasError && (
             <image
