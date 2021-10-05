@@ -15,7 +15,7 @@ const CellShade: FC<Props> = ({ color, ...rest }) => {
       return undefined;
     }
 
-    return `linear-gradient(10deg, ${color} 30px, ${convertHexToRGBA(color, 0.2)} 200px)`;
+    return `linear-gradient(10deg, ${color} 30px, ${convertHexToRGBA(color, 0.3)} 200px)`;
   }, [color]);
 
   return (
