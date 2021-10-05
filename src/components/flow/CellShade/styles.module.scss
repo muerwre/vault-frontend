@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   top: 0;
-  background: linear-gradient(5deg, transparentize($content_bg, 0), transparentize($content_bg, 1));
+  background: linear-gradient(7deg, transparentize($content_bg, 0.05) 30px, transparentize($content_bg, 1) 250px);
   pointer-events: none;
   touch-action: none;
 
