@@ -4,3 +4,5 @@ export type DivProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 >;
+
+export type SVGProps = React.SVGProps<SVGSVGElement>;

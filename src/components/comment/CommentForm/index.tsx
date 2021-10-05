@@ -11,7 +11,7 @@ import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { IComment, INode } from '~/redux/types';
 import { EMPTY_COMMENT } from '~/redux/node/constants';
-import { CommentFormDropzone } from '~/components/comment/CommentFormDropzone';
+import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import styles from './styles.module.scss';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { useInputPasteUpload } from '~/utils/hooks/useInputPasteUpload';
@@ -50,7 +50,7 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
   useInputPasteUpload(textarea, uploader.uploadFiles);
 
   return (
-    <CommentFormDropzone onUpload={uploader.uploadFiles}>
+    <UploadDropzone onUpload={uploader.uploadFiles}>
       <form onSubmit={formik.handleSubmit} className={styles.wrap}>
         <FormikProvider value={formik}>
           <FileUploaderProvider value={uploader}>
@@ -103,7 +103,7 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
           </FileUploaderProvider>
         </FormikProvider>
       </form>
-    </CommentFormDropzone>
+    </UploadDropzone>
   );
 };
 

@@ -1,0 +1,8 @@
+@keyframes bounce {
+  0% { transform: translate(0, -5%); }
+  100% { transform: translate(0, 5%); }
+}
+
+.arrow {
+  animation: bounce alternate infinite 0.25s;
+}

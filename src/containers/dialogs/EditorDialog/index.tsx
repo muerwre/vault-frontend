@@ -15,6 +15,7 @@ import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { useTranslatedError } from '~/utils/hooks/useTranslatedError';
 import { useCloseOnEscape } from '~/utils/hooks';
 import { EditorConfirmClose } from '~/components/editors/EditorConfirmClose';
+import { UploadDropzone } from '~/components/upload/UploadDropzone';
 
 interface Props extends IDialogProps {
   node: INode;

@@ -39,10 +39,12 @@ export const useDelayedReady = (setReady: (val: boolean) => void, delay: number 
  * @param onUpload -- upload callback
  * @param allowedTypes -- list of allowed types
  */
-export const useDropZone = (onUpload: (file: File[]) => void, allowedTypes?: string[]) => {
+export const useFileDropZone = (onUpload: (file: File[]) => void, allowedTypes?: string[]) => {
   return useCallback(
     event => {
       event.preventDefault();
+      event.stopPropagation();
+
       const files: File[] = Array.from((event.dataTransfer?.files as File[]) || []).filter(
         (file: File) => file?.type && (!allowedTypes || allowedTypes.includes(file.type))
       );

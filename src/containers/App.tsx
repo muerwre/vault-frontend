@@ -10,6 +10,7 @@ import { BlurWrapper } from '~/components/containers/BlurWrapper';
 import { PageCover } from '~/components/containers/PageCover';
 import { BottomContainer } from '~/containers/main/BottomContainer';
 import { MainRouter } from '~/containers/main/MainRouter';
+import { DragDetectorProvider } from '~/utils/hooks/useDragDetector';
 
 const mapStateToProps = state => ({
   modal: selectModal(state),
@@ -21,7 +22,7 @@ type IProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps> & {
 const Component: FC<IProps> = ({ modal: { is_shown } }) => {
   return (
     <ConnectedRouter history={history}>
-      <div>
+      <DragDetectorProvider>
         <BlurWrapper is_blurred={is_shown}>
           <PageCover />
 
@@ -32,9 +33,8 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
             <MainRouter />
           </MainLayout>
         </BlurWrapper>
-
         <BottomContainer />
-      </div>
+      </DragDetectorProvider>
     </ConnectedRouter>
   );
 };
