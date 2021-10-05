@@ -34,3 +34,7 @@ export const labSeenNode = (nodeId: INode['id']) => ({
   type: LAB_ACTIONS.SEEN_NODE,
   nodeId,
 });
+
+export const labGetMore = () => ({
+  type: LAB_ACTIONS.GET_MORE,
+});

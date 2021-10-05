@@ -15,12 +15,15 @@ import { Superpower } from '~/components/boris/Superpower';
 import { Toggle } from '~/components/input/Toggle';
 import { usePersistedState } from '~/utils/hooks/usePersistedState';
 import classNames from 'classnames';
+import { useLabPagination } from '~/utils/hooks/lab/useLabPagination';
 
 interface IProps {}
 
 const LabLayout: FC<IProps> = () => {
   const { is_loading } = useShallowSelect(selectLabList);
   const dispatch = useDispatch();
+
+  useLabPagination({ isLoading: is_loading });
 
   useEffect(() => {
     dispatch(labGetList());

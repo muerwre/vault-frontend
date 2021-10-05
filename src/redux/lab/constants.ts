@@ -10,4 +10,5 @@ export const LAB_ACTIONS = {
   SET_UPDATES: `${prefix}SET_UPDATES`,
   GET_UPDATES: `${prefix}GET_UPDATES`,
   SEEN_NODE: `${prefix}SET_UPDATE_SEEN`,
+  GET_MORE: `${prefix}GET_MORE`,
 };
