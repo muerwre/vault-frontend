@@ -24,6 +24,7 @@ import { Authorized } from '~/components/containers/Authorized';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectLabUpdates, selectLabUpdatesNodes } from '~/redux/lab/selectors';
 import { selectFlow, selectFlowUpdated } from '~/redux/flow/selectors';
+import { Button } from '~/components/input/Button';
 
 const mapStateToProps = (state: IState) => ({
   user: pick(['username', 'is_user', 'photo', 'last_seen_boris'])(selectUser(state)),
@@ -84,22 +85,24 @@ const HeaderUnconnected: FC<IProps> = memo(
     return createPortal(
       <div className={classNames(styles.wrap, { [styles.is_scrolled]: is_scrolled })}>
         <div className={styles.container}>
-          <Logo />
+          <div className={classNames(styles.logo_wrapper, { [styles.logged_in]: is_user })}>
+            <Logo />
+          </div>
 
           <Filler className={styles.filler} />
 
           <div className={styles.plugs}>
-            <Link
-              className={classNames(styles.item, {
-                [styles.is_active]: pathname === URLS.BASE,
-                [styles.has_dot]: hasFlowUpdates,
-              })}
-              to={URLS.BASE}
-            >
-              ФЛОУ
-            </Link>
-
             <Authorized>
+              <Link
+                className={classNames(styles.item, {
+                  [styles.is_active]: pathname === URLS.BASE,
+                  [styles.has_dot]: hasFlowUpdates,
+                })}
+                to={URLS.BASE}
+              >
+                ФЛОУ
+              </Link>
+
               <Link
                 className={classNames(styles.item, styles.lab, {
                   [styles.is_active]: pathname === URLS.LAB,
@@ -109,20 +112,20 @@ const HeaderUnconnected: FC<IProps> = memo(
               >
                 ЛАБ
               </Link>
+
+              <Link
+                className={classNames(styles.item, styles.boris, {
+                  [styles.is_active]: pathname === URLS.BORIS,
+                  [styles.has_dot]: hasBorisUpdates,
+                })}
+                to={URLS.BORIS}
+              >
+                БОРИС
+              </Link>
             </Authorized>
 
-            <Link
-              className={classNames(styles.item, styles.boris, {
-                [styles.is_active]: pathname === URLS.BORIS,
-                [styles.has_dot]: hasBorisUpdates,
-              })}
-              to={URLS.BORIS}
-            >
-              БОРИС
-            </Link>
-
             {is_user && (
-              <div className={styles.item}>
+              <div className={classNames(styles.item, styles.notifications)}>
                 <Notifications />
               </div>
             )}
@@ -133,9 +136,9 @@ const HeaderUnconnected: FC<IProps> = memo(
           )}
 
           {!is_user && (
-            <Group horizontal className={styles.user_button} onClick={onLogin}>
-              <div>ВДОХ</div>
-            </Group>
+            <Button className={styles.user_button} onClick={onLogin} round color="secondary">
+              ВДОХ
+            </Button>
           )}
         </div>
       </div>,

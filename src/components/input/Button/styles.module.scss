@@ -219,11 +219,13 @@
 }
 
 .primary {
-  background: $red;
+  @include outer_shadow;
+  background: $red_gradient_alt;
 }
 
 .secondary {
-  background: $wisegreen;
+  @include outer_shadow;
+  background: $green_gradient;
 }
 
 .lab {
