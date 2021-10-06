@@ -19,7 +19,6 @@ import {
   nodeLockComment,
   nodePostLocalComment,
   nodeSet,
-  nodeSetCommentData,
   nodeSetComments,
   nodeSetCurrent,
   nodeSetEditor,
@@ -43,9 +42,9 @@ import {
   apiPostNodeLike,
   apiPostNodeTags,
 } from './api';
-import { flowSetNodes, flowSetUpdated } from '../flow/actions';
+import { flowSetNodes } from '../flow/actions';
 import { modalSetShown, modalShowDialog } from '../modal/actions';
-import { selectFlow, selectFlowNodes } from '../flow/selectors';
+import { selectFlowNodes } from '../flow/selectors';
 import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
 import { INode, Unwrap } from '../types';
@@ -54,7 +53,6 @@ import { DIALOGS } from '~/redux/modal/constants';
 import { has } from 'ramda';
 import { selectLabListNodes } from '~/redux/lab/selectors';
 import { labSetList } from '~/redux/lab/actions';
-import { INodeRelated } from '~/redux/node/types';
 
 export function* updateNodeEverywhere(node) {
   const {
@@ -119,7 +117,6 @@ function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
   if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
 
   yield put(nodeLoadNode(id));
-  yield put(nodeSetCommentData(0, { ...EMPTY_COMMENT }));
   yield put(nodeSetRelated({ albums: {}, similar: [] }));
 }
 
@@ -188,9 +185,9 @@ function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
     yield put(nodeSetLoading(true));
     yield put(nodeSetLoadingComments(true));
 
-    const { node }: Unwrap<typeof apiGetNode> = yield call(apiGetNode, { id });
+    const { node, last_seen }: Unwrap<typeof apiGetNode> = yield call(apiGetNode, { id });
 
-    yield put(nodeSetCurrent(node));
+    yield put(nodeSet({ current: node, lastSeenCurrent: last_seen }));
     yield put(nodeSetLoading(false));
   } catch (error) {
     yield put(push(URLS.ERRORS.NOT_FOUND));

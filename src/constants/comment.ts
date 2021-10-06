@@ -36,3 +36,5 @@ export const COMMENT_BLOCK_RENDERERS = {
   [COMMENT_BLOCK_TYPES.MARK]: CommentTextBlock,
   [COMMENT_BLOCK_TYPES.EMBED]: CommentEmbedBlock,
 };
+
+export const NEW_COMMENT_CLASSNAME = 'newComment';

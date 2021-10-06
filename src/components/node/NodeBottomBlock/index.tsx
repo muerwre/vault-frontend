@@ -23,6 +23,7 @@ interface IProps {
   commentsCount: number;
   isLoadingComments: boolean;
   related: INodeRelated;
+  lastSeenCurrent?: string;
 }
 
 const NodeBottomBlock: FC<IProps> = ({
@@ -34,6 +35,7 @@ const NodeBottomBlock: FC<IProps> = ({
   commentsCount,
   commentsOrder,
   related,
+  lastSeenCurrent,
 }) => {
   const { inline } = useNodeBlocks(node, isLoading);
   const { is_user } = useUser();
@@ -50,6 +52,7 @@ const NodeBottomBlock: FC<IProps> = ({
             {inline && <div className={styles.inline}>{inline}</div>}
 
             <NodeCommentsBlock
+              lastSeenCurrent={lastSeenCurrent}
               isLoading={isLoading}
               isLoadingComments={isLoadingComments}
               comments={comments}

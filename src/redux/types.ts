@@ -165,6 +165,7 @@ export interface ICommentGroup {
   user: IUser;
   comments: IComment[];
   ids: IComment['id'][];
+  hasNew: boolean;
 }
 
 export type IUploadProgressHandler = (progress: ProgressEvent) => void;

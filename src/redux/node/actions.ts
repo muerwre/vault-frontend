@@ -74,12 +74,6 @@ export const nodeSetRelated = (related: INodeState['related']) => ({
   type: NODE_ACTIONS.SET_RELATED,
 });
 
-export const nodeSetCommentData = (id: number, comment: Partial<IComment>) => ({
-  id,
-  comment,
-  type: NODE_ACTIONS.SET_COMMENT_DATA,
-});
-
 export const nodeUpdateTags = (id: INode['id'], tags: string[]) => ({
   type: NODE_ACTIONS.UPDATE_TAGS,
   id,

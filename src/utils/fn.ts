@@ -4,12 +4,28 @@ import { nth } from 'ramda';
 import { remove } from 'ramda';
 import { ICommentGroup, IComment } from '~/redux/types';
 import { path } from 'ramda';
+import { isAfter, isValid, parseISO } from 'date-fns';
 
 export const moveArrItem = curry((at, to, list) => insert(to, nth(at, list), remove(at, 1, list)));
 export const objFromArray = (array: any[], key: string) =>
   array.reduce((obj, el) => (key && el[key] ? { ...obj, [el[key]]: el } : obj), {});
 
-export const groupCommentsByUser = (
+const compareCommentDates = (commentDateValue?: string, lastSeenDateValue?: string) => {
+  if (!commentDateValue || !lastSeenDateValue) {
+    return false;
+  }
+
+  const commentDate = parseISO(commentDateValue);
+  const lastSeenDate = parseISO(lastSeenDateValue);
+
+  if (!isValid(commentDate) || !isValid(lastSeenDate)) {
+    return false;
+  }
+
+  return isAfter(commentDate, lastSeenDate);
+};
+
+export const groupCommentsByUser = (lastSeen?: string) => (
   grouppedComments: ICommentGroup[],
   comment: IComment
 ): ICommentGroup[] => {
@@ -28,6 +44,7 @@ export const groupCommentsByUser = (
             user: comment.user,
             comments: [comment],
             ids: [comment.id],
+            hasNew: compareCommentDates(comment.created_at, lastSeen),
           },
         ]
       : [
@@ -37,6 +54,7 @@ export const groupCommentsByUser = (
             ...last,
             comments: [...last.comments, comment],
             ids: [...last.ids, comment.id],
+            hasNew: last.hasNew || compareCommentDates(comment.created_at, lastSeen),
           },
         ]),
   ];

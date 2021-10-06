@@ -8,7 +8,7 @@ import {
   ApiGetNodeRelatedRequest,
   ApiGetNodeRelatedResult,
   ApiGetNodeRequest,
-  ApiGetNodeResult,
+  ApiGetNodeResponse,
   ApiLockCommentRequest,
   ApiLockcommentResult,
   ApiLockNodeRequest,
@@ -69,13 +69,13 @@ export const getNodeDiff = ({
     .then(cleanResult);
 
 export const apiGetNode = ({ id }: ApiGetNodeRequest, config?: AxiosRequestConfig) =>
-  api.get<ApiGetNodeResult>(API.NODE.GET_NODE(id), config).then(cleanResult);
+  api.get<ApiGetNodeResponse>(API.NODE.GET_NODE(id), config).then(cleanResult);
 
 export const apiGetNodeWithCancel = ({ id }: ApiGetNodeRequest) => {
   const cancelToken = axios.CancelToken.source();
   return {
     request: api
-      .get<ApiGetNodeResult>(API.NODE.GET_NODE(id), {
+      .get<ApiGetNodeResponse>(API.NODE.GET_NODE(id), {
         cancelToken: cancelToken.token,
       })
       .then(cleanResult),

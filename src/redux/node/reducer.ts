@@ -9,7 +9,7 @@ export type INodeState = Readonly<{
   current: INode;
   comments: IComment[];
   related: INodeRelated;
-  comment_data: Record<number, IComment>;
+  lastSeenCurrent?: string;
   comment_count: number;
   current_cover_image?: IFile;
 
@@ -29,11 +29,6 @@ const INITIAL_STATE: INodeState = {
     files: [],
   },
   current: { ...EMPTY_NODE },
-  comment_data: {
-    0: {
-      ...EMPTY_COMMENT,
-    },
-  },
   comment_count: 0,
   comments: [],
   related: {

@@ -1,5 +1,13 @@
 @import "src/styles/variables";
 
+@keyframes highlight {
+  0% { opacity: 0.75; }
+  25% { opacity: 0.5; }
+  50% { opacity: 0.75; }
+  75% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
 .wrap {
   @include outer_shadow;
 
@@ -10,13 +18,25 @@
   min-width: 0;
   border-radius: $radius;
 
-  &:global(.is_empty) {
+  &.is_empty {
     opacity: 0.5;
   }
 
-  &:global(.is_same) {
+  &.is_same {
     margin: 0 !important;
     border-radius: 0;
+  }
+
+  &.is_new::after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation: highlight 1s 0.5s forwards;
+    background: transparentize($wisegreen, 0.7);
+    border-radius: $radius;
   }
 
   @include tablet {
