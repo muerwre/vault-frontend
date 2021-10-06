@@ -7,6 +7,7 @@
   background: $content_bg;
   border-radius: $cell_radius;
   overflow: hidden;
+  user-select: none;
 
   &::after {
     content: ' ';
@@ -90,6 +91,8 @@
   z-index: 5;
   flex-direction: row;
   align-items: flex-end;
+  pointer-events: none;
+  touch-action: none;
 }
 
 .title_wrap {
@@ -126,6 +129,8 @@
   flex-direction: row;
   width: 96px;
   border-radius: $radius;
+  pointer-events: all;
+  touch-action: auto;
 
   .button {
     cursor: pointer;
