@@ -40,7 +40,7 @@ const NodeLayout: FC<IProps> = memo(
     } = useShallowSelect(selectNode);
 
     useNodeCoverImage(current);
-    useScrollToTop([id, comments, is_loading_comments]);
+    useScrollToTop([id, is_loading_comments]);
     useLoadNode(id, is_loading);
     useOnNodeSeen(current);
 
