@@ -1,13 +1,7 @@
 import { all, call, put, select, takeLatest, takeLeading } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
-import {
-  COMMENTS_DISPLAY,
-  EMPTY_COMMENT,
-  EMPTY_NODE,
-  NODE_ACTIONS,
-  NODE_EDITOR_DATA,
-} from './constants';
+import { COMMENTS_DISPLAY, EMPTY_NODE, NODE_ACTIONS, NODE_EDITOR_DATA } from './constants';
 import {
   nodeCreate,
   nodeDeleteTag,
