@@ -5,6 +5,8 @@ import { CommentContent } from '~/components/comment/CommentContent';
 import styles from './styles.module.scss';
 import { CommendDeleted } from '../../node/CommendDeleted';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
+import classNames from 'classnames';
+import { NEW_COMMENT_CLASSNAME } from '~/constants/comment';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
@@ -30,11 +32,14 @@ const Comment: FC<IProps> = memo(
   }) => {
     return (
       <CommentWrapper
-        className={className}
+        className={classNames(className, {
+          [NEW_COMMENT_CLASSNAME]: comment_group.hasNew,
+        })}
         isEmpty={is_empty}
         isLoading={is_loading}
         user={comment_group.user}
         isSame={is_same}
+        isNew={comment_group.hasNew}
         {...props}
       >
         <div className={styles.wrap}>

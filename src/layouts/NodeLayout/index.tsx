@@ -36,10 +36,11 @@ const NodeLayout: FC<IProps> = memo(
       comment_count,
       is_loading_comments,
       related,
+      lastSeenCurrent,
     } = useShallowSelect(selectNode);
 
     useNodeCoverImage(current);
-    useScrollToTop([id]);
+    useScrollToTop([id, comments, is_loading_comments]);
     useLoadNode(id, is_loading);
     useOnNodeSeen(current);
 
@@ -65,6 +66,7 @@ const NodeLayout: FC<IProps> = memo(
               related={related}
               isLoadingComments={is_loading_comments}
               isLoading={is_loading}
+              lastSeenCurrent={lastSeenCurrent}
             />
 
             <Footer />

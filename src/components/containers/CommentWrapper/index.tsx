@@ -13,6 +13,7 @@ type IProps = DivProps & {
   isLoading?: boolean;
   isSame?: boolean;
   isForm?: boolean;
+  isNew?: boolean;
 };
 
 const CommentWrapper: FC<IProps> = ({
@@ -23,13 +24,15 @@ const CommentWrapper: FC<IProps> = ({
   isSame,
   isForm,
   children,
+  isNew,
   ...props
 }) => (
   <div
     className={classNames(styles.wrap, className, {
-      is_empty: isEmpty,
-      is_loading: isLoading,
-      is_same: isSame,
+      [styles.is_empty]: isEmpty,
+      [styles.is_loading]: isLoading,
+      [styles.is_same]: isSame,
+      [styles.is_new]: isNew,
     })}
     {...props}
   >
