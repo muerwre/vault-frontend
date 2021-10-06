@@ -11,6 +11,9 @@ export const useScrollToTop = (deps?: any[]) => {
     }
 
     const bounds = targetElement.getBoundingClientRect();
-    window.scrollTo(0, bounds.y - 100);
+    window.scrollTo({
+      top: bounds.top - 100,
+      behavior: 'smooth',
+    });
   }, deps || []);
 };
