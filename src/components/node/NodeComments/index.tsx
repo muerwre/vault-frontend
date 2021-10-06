@@ -58,10 +58,11 @@ const NodeComments: FC<IProps> = memo(
         {groupped.map(group => (
           <Comment
             key={group.ids.join()}
-            comment_group={group}
-            can_edit={canEditComment(group, user)}
+            group={group}
+            canEdit={canEditComment(group, user)}
             onDelete={onDelete}
             modalShowPhotoswipe={onShowPhotoswipe}
+            isSame={group.user.id === user.id}
           />
         ))}
 

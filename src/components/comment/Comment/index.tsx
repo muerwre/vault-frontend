@@ -11,21 +11,21 @@ import { NEW_COMMENT_CLASSNAME } from '~/constants/comment';
 type IProps = HTMLAttributes<HTMLDivElement> & {
   is_empty?: boolean;
   is_loading?: boolean;
-  comment_group: ICommentGroup;
-  is_same?: boolean;
-  can_edit?: boolean;
+  group: ICommentGroup;
+  isSame?: boolean;
+  canEdit?: boolean;
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
   modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
 };
 
 const Comment: FC<IProps> = memo(
   ({
-    comment_group,
+    group,
     is_empty,
-    is_same,
+    isSame,
     is_loading,
     className,
-    can_edit,
+    canEdit,
     onDelete,
     modalShowPhotoswipe,
     ...props
@@ -33,17 +33,16 @@ const Comment: FC<IProps> = memo(
     return (
       <CommentWrapper
         className={classNames(className, {
-          [NEW_COMMENT_CLASSNAME]: comment_group.hasNew,
+          [NEW_COMMENT_CLASSNAME]: group.hasNew,
         })}
         isEmpty={is_empty}
         isLoading={is_loading}
-        user={comment_group.user}
-        isSame={is_same}
-        isNew={comment_group.hasNew}
+        user={group.user}
+        isNew={group.hasNew && !isSame}
         {...props}
       >
         <div className={styles.wrap}>
-          {comment_group.comments.map(comment => {
+          {group.comments.map(comment => {
             if (comment.deleted_at) {
               return <CommendDeleted id={comment.id} onDelete={onDelete} key={comment.id} />;
             }
@@ -52,7 +51,7 @@ const Comment: FC<IProps> = memo(
               <CommentContent
                 comment={comment}
                 key={comment.id}
-                can_edit={!!can_edit}
+                can_edit={!!canEdit}
                 onDelete={onDelete}
                 modalShowPhotoswipe={modalShowPhotoswipe}
               />
