@@ -44,7 +44,7 @@
 
   @include tablet {
     flex: 1;
-    justify-content: space-around;
+    justify-content: flex-start;
   }
 }
 
@@ -56,7 +56,6 @@
 
 .user_button {
   flex: 0;
-  padding-left: $gap / 2;
   cursor: pointer;
 }
 
@@ -121,6 +120,13 @@
   @include tablet {
     padding: $gap;
 
+    &.notifications {
+      flex: 1;
+      justify-content: flex-end;
+      align-items: center;
+      margin-right: $gap;
+    }
+
     &::after {
       right: 0;
     }
@@ -130,5 +136,14 @@
 .filler {
   @include tablet {
     display: none;
+  }
+}
+
+.logo_wrapper {
+
+  @include tablet {
+    &.logged_in {
+      display: none;
+    }
   }
 }

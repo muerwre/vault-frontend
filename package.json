@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "body-scroll-lock": "^2.6.4",
     "classnames": "^2.2.6",
+    "color2k": "^1.2.4",
     "connected-react-router": "^6.5.2",
     "date-fns": "^2.4.1",
     "flexbin": "^0.2.0",
@@ -70,13 +71,13 @@
     ]
   },
   "devDependencies": {
-    "@types/throttle-debounce": "^2.1.0",
     "@craco/craco": "5.8.0",
     "@types/classnames": "^2.2.7",
     "@types/marked": "^1.2.2",
     "@types/node": "^11.13.22",
     "@types/ramda": "^0.26.33",
     "@types/react-redux": "^7.1.11",
+    "@types/throttle-debounce": "^2.1.0",
     "@types/yup": "^0.29.11",
     "craco-alias": "^2.1.1",
     "craco-fast-refresh": "^1.0.2",

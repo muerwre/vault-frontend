@@ -11,9 +11,7 @@ interface IProps {
 
 const LoginDialogButtons: FC<IProps> = ({ openOauthWindow }) => (
   <Group className={styles.footer}>
-    <Button>
-      <span>Войти</span>
-    </Button>
+    <Button>Войти</Button>
 
     <Grid columns="repeat(2, 1fr)">
       <Button color="outline" iconLeft="google" type="button" onClick={openOauthWindow('google')}>

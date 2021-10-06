@@ -1,6 +1,8 @@
 import { IComment, INode, ITag } from '~/redux/types';
 import { ISocialProvider } from '~/redux/auth/types';
 
+console.log('base at ', process.env.REACT_APP_API_HOST);
+
 export const API = {
   BASE: process.env.REACT_APP_API_HOST,
   USER: {
