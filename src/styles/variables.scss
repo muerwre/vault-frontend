@@ -268,3 +268,39 @@ $sidebar_border: transparentize(white, 0.95);
   $color: mix($wisegreen, $content_bg, 30%);
   background: linear-gradient(170deg, lighten($color, 10%), $color);
 }
+
+@mixin flow_grid {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax($cell - 5, 1fr));
+  grid-auto-rows: $cell;
+
+  grid-auto-flow: row dense;
+  grid-column-gap: $gap;
+  grid-row-gap: $gap;
+
+  @media (max-width: ($cell + 10) * 3) {
+    grid-template-columns: repeat(auto-fill, minmax($fluid_cell - 20, 1fr));
+    grid-auto-rows: $fluid_cell;
+    grid-template-rows: calc(50vw - 10px) $fluid_cell;
+  }
+
+  @media (max-width: $cell_tablet) {
+    grid-template-rows: calc(66vw - 10px) auto $fluid_cell;
+  }
+
+  @media (max-width: $cell_mobile) {
+    // rework stamp, so it will be shown as smaller one on mobiles
+    grid-template-columns: repeat(auto-fill, minmax(calc(50vw - 20px), 1fr));
+    grid-template-rows: calc(80vw - 10px) auto 50vw;
+    grid-auto-rows: 50vw;
+  }
+
+  @media (max-width: ($fluid_cell + 5) * 1.5 + 20) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(50vw - 20px), 1fr));
+    grid-template-rows: calc(80vw - 10px) auto 50vw;
+    grid-auto-rows: 50vw;
+  }
+}

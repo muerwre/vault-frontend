@@ -9,7 +9,7 @@ import {
 import { LAB_ACTIONS } from '~/redux/lab/constants';
 import { Unwrap } from '~/redux/types';
 import { getLabNodes, getLabStats, getLabUpdates } from '~/redux/lab/api';
-import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
+import { selectLabList, selectLabUpdatesNodes } from '~/redux/lab/selectors';
 
 function* getList({ after = '' }: ReturnType<typeof labGetList>) {
   try {
@@ -53,10 +53,38 @@ function* seenNode({ nodeId }: ReturnType<typeof labSeenNode>) {
   yield put(labSetUpdates({ nodes: newNodes }));
 }
 
+function* getMore() {
+  try {
+    yield put(labSetList({ is_loading: true }));
+
+    const list: ReturnType<typeof selectLabList> = yield select(selectLabList);
+    if (list.nodes.length === list.count) {
+      return;
+    }
+
+    const last = list.nodes[list.nodes.length - 1];
+
+    if (!last) {
+      return;
+    }
+    const after = last.node.commented_at || last.node.created_at;
+    const { nodes, count }: Unwrap<typeof getLabNodes> = yield call(getLabNodes, { after });
+    const newNodes = [...list.nodes, ...nodes];
+
+    yield put(labSetList({ nodes: newNodes, count }));
+  } catch (error) {
+    yield put(labSetList({ error: error.message }));
+  } finally {
+    yield put(labSetList({ is_loading: false }));
+  }
+}
+
 export default function* labSaga() {
   yield takeLeading(LAB_ACTIONS.GET_LIST, getList);
   yield takeLeading(LAB_ACTIONS.GET_STATS, getStats);
 
   yield takeLeading(LAB_ACTIONS.GET_UPDATES, getUpdates);
   yield takeLeading(LAB_ACTIONS.SEEN_NODE, seenNode);
+
+  yield takeLeading(LAB_ACTIONS.GET_MORE, getMore);
 }

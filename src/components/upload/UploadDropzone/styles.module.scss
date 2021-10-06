@@ -1,0 +1,34 @@
+@import '~/styles/variables';
+
+.zone {
+  position: relative;
+  z-index: 1;
+  outline: none;
+}
+
+.helper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparentize($wisegreen, 0.7);
+  border-radius: $radius;
+  z-index: 10;
+  box-shadow: inset $wisegreen 0 0 0 2px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  touch-action: none;
+
+  &.active, :global(.dragging) & {
+    display: flex;
+  }
+}
+
+svg.icon {
+  width: auto;
+  height: 72px;
+  fill: $wisegreen;
+}

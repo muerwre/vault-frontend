@@ -1,0 +1,43 @@
+@import "~/styles/variables";
+
+.wrap {
+  @include outer_shadow;
+
+  padding: $gap;
+  background: $content_bg;
+  border-radius: $radius;
+  display: grid;
+  grid-column-gap: $gap;
+  grid-auto-flow: row;
+  grid-row-gap: $gap;
+
+  & > .row:not(:last-child) {
+    margin-bottom: $gap;
+  }
+}
+
+.row {
+  width: 100%;
+  border-radius: $radius;
+  box-sizing: border-box;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font: $font_16_semibold;
+}
+
+.title {
+  font: $font_12_semibold;
+  text-align: left;
+  word-wrap: break-word;
+  opacity: 0.5;
+  flex: 1;
+}

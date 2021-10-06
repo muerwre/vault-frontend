@@ -50,7 +50,7 @@ const NodeLayout: FC<IProps> = memo(
       <div className={styles.wrap}>
         {head}
 
-        <Container>
+        <Container className={styles.content}>
           <Card className={styles.node} seamless>
             {block}
 

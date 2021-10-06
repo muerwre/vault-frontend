@@ -1,102 +1,73 @@
 import React, { FC } from 'react';
 import { IBorisState } from '~/redux/boris/reducer';
 import styles from './styles.module.scss';
-import { Placeholder } from '~/components/placeholders/Placeholder';
 import { sizeOf } from '~/utils/dom';
+import { StatsRow } from '~/components/common/StatsRow';
+import { SubTitle } from '~/components/common/SubTitle';
 
 interface IProps {
   stats: IBorisState['stats'];
 }
 
-const Row: FC<{ isLoading: boolean }> = ({ isLoading, children }) => (
-  <li>
-    {isLoading ? (
-      <>
-        <Placeholder active={isLoading} loading className={styles.label} />
-        <Placeholder active={isLoading} loading className={styles.value} width="24px" />
-      </>
-    ) : (
-      children
-    )}
-  </li>
-);
-
 const BorisStatsBackend: FC<IProps> = ({ stats: { is_loading, backend } }) => {
-  // const is_loading = true;
-
   if (!backend && !is_loading) {
     return null;
   }
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.title}>
-        <Placeholder active={is_loading} loading>
-          Юнитс
-        </Placeholder>
-      </div>
+      <SubTitle isLoading={is_loading} className={styles.title}>
+        Юнитс
+      </SubTitle>
 
       <ul>
-        <Row isLoading={is_loading}>
-          <span className={styles.label}>В сознании</span>
-          <span className={styles.value}>{backend.users.alive}</span>
-        </Row>
+        <StatsRow isLoading={is_loading} label="В сознании">
+          {backend.users.alive}
+        </StatsRow>
 
-        <Row isLoading={is_loading}>
-          <span className={styles.label}>Криокамера</span>
-          <span className={styles.value}>{backend.users.total - backend.users.alive}</span>
-        </Row>
+        <StatsRow isLoading={is_loading} label="Криокамера">
+          {backend.users.total - backend.users.alive}
+        </StatsRow>
       </ul>
 
-      <div className={styles.title}>
-        <Placeholder active={is_loading} loading>
-          Контент
-        </Placeholder>
-      </div>
+      <SubTitle isLoading={is_loading} className={styles.title}>
+        Контент
+      </SubTitle>
 
       <ul>
-        <Row isLoading={is_loading}>
-          <span className={styles.label}>Фотографии</span>
-          <span className={styles.value}>{backend.nodes.images}</span>
-        </Row>
+        <StatsRow isLoading={is_loading} label="Фотографии">
+          {backend.nodes.images}
+        </StatsRow>
 
-        <Row isLoading={is_loading}>
-          <span className={styles.label}>Письма</span>
-          <span className={styles.value}>{backend.nodes.texts}</span>
-        </Row>
+        <StatsRow isLoading={is_loading} label="Письма">
+          {backend.nodes.texts}
+        </StatsRow>
 
-        <Row isLoading={is_loading}>
-          <span className={styles.label}>Видеозаписи</span>
-          <span className={styles.value}>{backend.nodes.videos}</span>
-        </Row>
+        <StatsRow isLoading={is_loading} label="Видеозаписи">
+          {backend.nodes.videos}
+        </StatsRow>
 
-        <Row isLoading={is_loading}>
-          <span className={styles.label}>Аудиозаписи</span>
-          <span className={styles.value}>{backend.nodes.audios}</span>
-        </Row>
+        <StatsRow isLoading={is_loading} label="Аудиозаписи">
+          {backend.nodes.audios}
+        </StatsRow>
 
-        <Row isLoading={is_loading}>
-          <span className={styles.label}>Комментарии</span>
-          <span className={styles.value}>{backend.comments.total}</span>
-        </Row>
+        <StatsRow isLoading={is_loading} label="Комментарии">
+          {backend.comments.total}
+        </StatsRow>
       </ul>
 
-      <div className={styles.title}>
-        <Placeholder active={is_loading} loading>
-          Сторедж
-        </Placeholder>
-      </div>
+      <SubTitle isLoading={is_loading} className={styles.title}>
+        Сторедж
+      </SubTitle>
 
       <ul>
-        <Row isLoading={is_loading}>
-          <span className={styles.label}>Файлы</span>
-          <span className={styles.value}>{backend.files.count}</span>
-        </Row>
+        <StatsRow isLoading={is_loading} label="Файлы">
+          {backend.files.count}
+        </StatsRow>
 
-        <Row isLoading={is_loading}>
-          <span className={styles.label}>На диске</span>
-          <span className={styles.value}>{sizeOf(backend.files.size)}</span>
-        </Row>
+        <StatsRow isLoading={is_loading} label="На диске">
+          {sizeOf(backend.files.size)}
+        </StatsRow>
       </ul>
     </div>
   );

@@ -3,6 +3,7 @@ import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { INode } from '~/redux/types';
 import { NodeRelatedItem } from '~/components/node/NodeRelatedItem';
+import { SubTitle } from '~/components/common/SubTitle';
 
 interface IProps {
   title: ReactElement | string;
@@ -12,9 +13,7 @@ interface IProps {
 const NodeRelated: FC<IProps> = ({ title, items }) => {
   return (
     <Group className={styles.wrap}>
-      <div className={styles.title}>
-        <div className={styles.text}>{title}</div>
-      </div>
+      <SubTitle className={styles.title}>{title}</SubTitle>
 
       <div className={styles.grid}>
         {items.map(item => (

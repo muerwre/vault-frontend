@@ -15,17 +15,22 @@ import { Superpower } from '~/components/boris/Superpower';
 import { Toggle } from '~/components/input/Toggle';
 import { usePersistedState } from '~/utils/hooks/usePersistedState';
 import classNames from 'classnames';
+import { useLabPagination } from '~/utils/hooks/lab/useLabPagination';
 
 interface IProps {}
 
 const LabLayout: FC<IProps> = () => {
-  const { is_loading } = useShallowSelect(selectLabList);
+  const { is_loading, nodes } = useShallowSelect(selectLabList);
   const dispatch = useDispatch();
+
+  useLabPagination({ isLoading: is_loading });
 
   useEffect(() => {
     dispatch(labGetList());
     dispatch(labGetStats());
   }, [dispatch]);
+
+  const isInitialLoading = is_loading && !nodes.length;
 
   return (
     <Container>
@@ -33,10 +38,10 @@ const LabLayout: FC<IProps> = () => {
         <div className={styles.wrap}>
           <Group className={styles.content}>
             <div className={styles.head}>
-              <LabHead isLoading={is_loading} />
+              <LabHead isLoading={isInitialLoading} />
             </div>
 
-            <LabGrid />
+            <LabGrid nodes={nodes} isLoading={isInitialLoading} />
           </Group>
 
           <div className={styles.panel}>

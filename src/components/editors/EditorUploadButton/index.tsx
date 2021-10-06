@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { IEditorComponentProps } from '~/redux/node/types';
-import { useFileUploaderContext } from '~/utils/hooks/fileUploader';
+import { useFileUploaderContext } from '~/utils/hooks/useFileUploader';
 import { getFileType } from '~/utils/uploader';
 import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
 import { Button } from '~/components/input/Button';

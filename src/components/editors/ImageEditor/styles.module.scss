@@ -1,6 +1,9 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   min-height: 200px;
   padding-bottom: $upload_button_height + $gap;
+}
+
+div.dropzone {
 }

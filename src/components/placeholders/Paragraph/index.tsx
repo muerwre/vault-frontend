@@ -17,12 +17,10 @@ const Paragraph: FC<Props> = ({ lines = 3, wordsLimit = 12, ...props }) => {
     [lines, wordsLimit]
   );
 
-  console.log({ iters });
-
   return (
     <Group>
-      {iters.map(words => (
-        <div className={styles.para}>
+      {iters.map((words, i) => (
+        <div className={styles.para} key={i}>
           {words.map(word => (
             <Placeholder key={word} width={`${Math.round(Math.random() * 120) + 60}px`} active />
           ))}

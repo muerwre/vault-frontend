@@ -9,9 +9,8 @@
 }
 
 .content {
-  align-items: stretch !important;
-
-  @include vertical_at_tablet;
+  position: relative;
+  z-index: 3;
 }
 
 .comments {

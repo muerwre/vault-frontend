@@ -10,11 +10,20 @@ interface Props extends DivProps {
   url?: string;
   username?: string;
   size?: number;
+  preset?: typeof PRESETS[keyof typeof PRESETS];
   innerRef?: React.Ref<any>;
 }
 
-const Avatar: FC<Props> = ({ url, username, size, className, innerRef, ...rest }) => {
-  const backgroundImage = !!url ? `url('${getURLFromString(url, PRESETS.avatar)}')` : undefined;
+const Avatar: FC<Props> = ({
+  url,
+  username,
+  size,
+  className,
+  innerRef,
+  preset = PRESETS.avatar,
+  ...rest
+}) => {
+  const backgroundImage = !!url ? `url('${getURLFromString(url, preset)}')` : undefined;
   const onOpenProfile = useCallback(() => openUserProfile(username), [username]);
 
   return (

@@ -9,6 +9,7 @@ import { Icon } from '~/components/input/Icon';
 import { PRESETS } from '~/constants/urls';
 import { NODE_TYPES } from '~/redux/node/constants';
 import { Link } from 'react-router-dom';
+import { CellShade } from '~/components/flow/CellShade';
 
 const THUMBNAIL_SIZES = {
   horizontal: PRESETS.small_hero,
@@ -26,7 +27,6 @@ interface IProps {
 const Cell: FC<IProps> = ({
   node: { id, title, thumbnail, type, flow, description },
   can_edit,
-  onSelect,
   onChangeCellView,
 }) => {
   const ref = useRef(null);
@@ -112,6 +112,8 @@ const Cell: FC<IProps> = ({
           )}
 
           <Link className={classNames(styles.face)} to={`/post${id}`}>
+            <CellShade color={flow.dominant_color} />
+
             <div className={styles.face_content}>
               {!text && <div className={classNames(styles.title, titleSize)}>{title || '...'}</div>}
 

@@ -83,6 +83,7 @@ export interface IFile {
     duration?: number;
     width?: number;
     height?: number;
+    dominant_color?: string;
   };
 
   createdAt?: string;
@@ -133,6 +134,7 @@ export interface INode {
   flow: {
     display: 'single' | 'vertical' | 'horizontal' | 'quadro';
     show_description: boolean;
+    dominant_color?: string;
   };
 
   tags: ITag[];

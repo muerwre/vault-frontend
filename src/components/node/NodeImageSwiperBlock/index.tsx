@@ -97,6 +97,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
               onLoad={updateSwiper}
               onClick={() => onOpenPhotoSwipe(i)}
               className={styles.image}
+              color={file?.metadata?.dominant_color}
             />
           </SwiperSlide>
         ))}

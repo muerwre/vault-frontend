@@ -11,13 +11,14 @@ import { NodeEditorProps } from '~/redux/node/types';
 import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
 import { useNodeAudios } from '~/utils/hooks/node/useNodeAudios';
 import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
-import { useFileUploaderContext } from '~/utils/hooks/fileUploader';
+import { useFileUploaderContext } from '~/utils/hooks/useFileUploader';
+import { UploadDropzone } from '~/components/upload/UploadDropzone';
 
 type IProps = NodeEditorProps;
 
 const AudioEditor: FC<IProps> = () => {
   const { values } = useNodeFormContext();
-  const { pending, setFiles } = useFileUploaderContext()!;
+  const { pending, setFiles, uploadFiles } = useFileUploaderContext()!;
 
   const images = useNodeImages(values);
   const audios = useNodeAudios(values);
@@ -35,10 +36,12 @@ const AudioEditor: FC<IProps> = () => {
   const setAudios = useCallback(values => setFiles([...values, ...images]), [setFiles, images]);
 
   return (
-    <div className={styles.wrap}>
-      <ImageGrid files={images} setFiles={setImages} locked={pendingImages} />
-      <AudioGrid files={audios} setFiles={setAudios} locked={pendingAudios} />
-    </div>
+    <UploadDropzone onUpload={uploadFiles} helperClassName={styles.dropzone}>
+      <div className={styles.wrap}>
+        <ImageGrid files={images} setFiles={setImages} locked={pendingImages} />
+        <AudioGrid files={audios} setFiles={setAudios} locked={pendingAudios} />
+      </div>
+    </UploadDropzone>
   );
 };
 

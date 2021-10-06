@@ -21,7 +21,7 @@
 }
 
 .title {
-  @include title_with_line();
+  padding-left: 5px;
 
   a {
     text-decoration: none;

@@ -1,34 +1,10 @@
 @import "src/styles/variables";
 
-.value {
-  float: right;
-  color: white;
-  font: $font_12_semibold;
-  line-height: 24px;
+.title {
+  margin: $gap * 2 0 $gap;
 }
 
 .wrap {
-  ul {
-    font: $font_12_regular;
-    line-height: 24px;
-    text-transform: uppercase;
-
-    li {
-      border-bottom: 1px solid #333333;
-      color: #aaaaaa;
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-}
-
-.title {
-  font: $font_12_semibold;
-  text-transform: uppercase;
-  opacity: 0.3;
-  margin: $gap * 2 0 $gap;
 }
 
 .subtitle {

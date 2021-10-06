@@ -19,6 +19,13 @@ const BorisContacts: FC<Props> = () => (
       link="https://t.me/boris48bot"
       subtitle="телеграм-бот"
     />
+
+    <BorisContactItem
+      icon="github"
+      title="Github"
+      link="https://github.com/muerwre?tab=repositories&q=vault"
+      subtitle="исходники Убежища"
+    />
   </div>
 );
 

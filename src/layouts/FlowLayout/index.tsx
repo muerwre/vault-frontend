@@ -55,10 +55,6 @@ const FlowLayout: FC = () => {
     labUpdates,
   ]);
 
-  useEffect(() => {
-    window.scrollTo(0, (window as any).flowScrollPos || 0);
-  }, []);
-
   return (
     <div className={classNames(styles.container, { [styles.fluid]: isFluid })}>
       <div className={styles.grid}>

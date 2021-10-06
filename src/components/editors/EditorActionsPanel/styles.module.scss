@@ -11,9 +11,13 @@
   z-index: 10;
   display: flex;
   flex-direction: row;
+  pointer-events: none;
+  touch-action: none;
 
   & > * {
     margin: 0 $gap / 2;
+    pointer-events: all;
+    touch-action: auto;
 
     &:first-child {
       margin-left: 0;
