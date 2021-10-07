@@ -100,7 +100,8 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
         speed={3000}
         className={styles.swiper}
         lazy={{
-          loadPrevNextAmount: 3,
+          loadPrevNextAmount: 5,
+          checkInView: false,
         }}
         loop
         slidesPerView={1}
@@ -122,7 +123,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
           .map(node => (
             <SwiperSlide key={node.id}>
               <img
-                data-src={getURLFromString(node.thumbnail!, preset)}
+                src={getURLFromString(node.thumbnail!, preset)}
                 alt=""
                 className={classNames(styles.preview, 'swiper-lazy')}
               />
