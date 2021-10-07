@@ -6,3 +6,8 @@ export type DivProps = React.DetailedHTMLProps<
 >;
 
 export type SVGProps = React.SVGProps<SVGSVGElement>;
+
+export type IMGProps = React.DetailedHTMLProps<
+  React.ImgHTMLAttributes<HTMLImageElement>,
+  HTMLImageElement
+>;

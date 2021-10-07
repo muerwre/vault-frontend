@@ -111,6 +111,7 @@ export interface IBlockEmbed {
 }
 
 export type IBlock = IBlockText | IBlockEmbed;
+export type FlowDisplayVariant = 'single' | 'vertical' | 'horizontal' | 'quadro';
 
 export interface INode {
   id?: number;
@@ -132,7 +133,7 @@ export interface INode {
   like_count?: number;
 
   flow: {
-    display: 'single' | 'vertical' | 'horizontal' | 'quadro';
+    display: FlowDisplayVariant;
     show_description: boolean;
     dominant_color?: string;
   };
