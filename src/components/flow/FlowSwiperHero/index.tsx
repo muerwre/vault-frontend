@@ -13,6 +13,7 @@ import { PRESETS, URLS } from '~/constants/urls';
 import SwiperClass from 'swiper/types/swiper-class';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { useHistory } from 'react-router';
+import classNames from 'classnames';
 
 SwiperCore.use([EffectFade, Lazy, Autoplay, Navigation]);
 
@@ -98,7 +99,9 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
         effect="fade"
         speed={3000}
         className={styles.swiper}
-        lazy
+        lazy={{
+          loadPrevNextAmount: 3,
+        }}
         loop
         slidesPerView={1}
         autoplay={{
@@ -119,9 +122,9 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
           .map(node => (
             <SwiperSlide key={node.id}>
               <img
-                src={getURLFromString(node.thumbnail!, preset)}
+                data-src={getURLFromString(node.thumbnail!, preset)}
                 alt=""
-                className={styles.preview}
+                className={classNames(styles.preview, 'swiper-lazy')}
               />
             </SwiperSlide>
           ))}

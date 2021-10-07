@@ -111,10 +111,10 @@ img.preview {
   word-break: break-word;
 
   @include tablet {
-    @include clamp(3, 1.2 * 32px);
+    @include clamp(3, 3.6em);
     white-space: initial;
     word-wrap: break-word;
-    font: $font_32_bold;
+    font: $font_24_bold;
     max-height: 3.6em;
   }
 
