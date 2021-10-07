@@ -1,7 +1,7 @@
 import { darken, desaturate, parseToHsla } from 'color2k';
 import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
 
-export const normalizeBrightColor = (color?: string) => {
+export const normalizeBrightColor = (color?: string, saturationExp = 3, lightnessExp = 3) => {
   if (!color) {
     return undefined;
   }
@@ -10,6 +10,6 @@ export const normalizeBrightColor = (color?: string) => {
   const saturation = hsla[1];
   const lightness = hsla[2];
 
-  const desaturated = desaturate(color, saturation ** 3);
-  return darken(desaturated, lightness ** 3);
+  const desaturated = desaturate(color, saturation ** saturationExp);
+  return darken(desaturated, lightness ** lightnessExp);
 };
