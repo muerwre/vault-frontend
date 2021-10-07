@@ -23,7 +23,7 @@ const LabNode: FC<IProps> = ({ node, isLoading, lastSeen, commentCount }) => {
     [node.commented_at, lastSeen]
   );
 
-  const background = useColorGradientFromString(node.is_heroic ? node.title : '', 3, 2);
+  const background = useColorGradientFromString(!node.thumbnail ? node.title : '', 3, 2);
 
   return (
     <div className={classNames(styles.wrap)} style={{ background }}>
