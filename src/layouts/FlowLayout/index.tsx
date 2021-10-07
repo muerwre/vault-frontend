@@ -21,6 +21,7 @@ import { usePersistedState } from '~/utils/hooks/usePersistedState';
 import classNames from 'classnames';
 import { useFlowLayout } from '~/utils/hooks/flow/useFlowLayout';
 import { useFlowPagination } from '~/utils/hooks/flow/useFlowPagination';
+import { FlowSwiperHero } from '~/components/flow/FlowSwiperHero';
 
 const FlowLayout: FC = () => {
   const { nodes, heroes, recent, updated, isLoading, search } = useShallowSelect(selectFlow);
@@ -59,7 +60,7 @@ const FlowLayout: FC = () => {
     <div className={classNames(styles.container, { [styles.fluid]: isFluid })}>
       <div className={styles.grid}>
         <div className={styles.hero}>
-          <FlowHero heroes={heroes} />
+          <FlowSwiperHero heroes={heroes} />
         </div>
 
         <div className={styles.stamp}>

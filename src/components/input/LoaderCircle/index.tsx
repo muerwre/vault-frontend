@@ -3,14 +3,15 @@ import styles from './styles.module.scss';
 import { describeArc } from '~/utils/dom';
 import classNames from 'classnames';
 import { LoaderCircleInner } from '~/components/input/LoaderCircleInner';
+import { SVGProps } from '~/utils/types';
 
-interface IProps {
+interface IProps extends SVGProps {
   size?: number;
   className?: string;
 }
 
-export const LoaderCircle: FC<IProps> = ({ size = 24, className }) => (
-  <div className={classNames(styles.wrap, 'loader-circle', className)}>
-    <LoaderCircleInner size={size} />
+export const LoaderCircle: FC<IProps> = ({ size = 24, ...rest }) => (
+  <div className={classNames(styles.wrap, 'loader-circle', rest.className)}>
+    <LoaderCircleInner {...rest} size={size} />
   </div>
 );
