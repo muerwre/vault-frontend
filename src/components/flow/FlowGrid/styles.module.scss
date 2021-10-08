@@ -1,0 +1,19 @@
+@import "~/styles/variables";
+
+@mixin mobile {
+  @media (max-width: $cell * 2) {
+    @content;
+  }
+}
+
+.cell {
+  &.horizontal,
+  &.quadro {
+    grid-column-end: span 2;
+  }
+
+  &.vertical,
+  &.quadro {
+    grid-row-end: span 2;
+  }
+}

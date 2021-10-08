@@ -23,7 +23,6 @@ interface IProps extends INodeComponentProps {}
 
 const breakpoints: SwiperOptions['breakpoints'] = {
   599: {
-    spaceBetween: 20,
     navigation: true,
   },
 };
@@ -64,7 +63,6 @@ const LabImage: FC<IProps> = ({ node, isLoading }) => {
           initialSlide={0}
           slidesPerView={images.length > 1 ? 1.1 : 1}
           onSwiper={setControlledSwiper}
-          spaceBetween={10}
           grabCursor
           autoHeight
           breakpoints={breakpoints}

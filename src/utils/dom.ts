@@ -76,17 +76,17 @@ export const describeArc = (
 };
 
 export const getURLFromString = (
-  url: string,
+  url?: string,
   size?: typeof PRESETS[keyof typeof PRESETS]
 ): string => {
   if (size) {
-    return url.replace(
+    return (url || '').replace(
       'REMOTE_CURRENT://',
       `${process.env.REACT_APP_REMOTE_CURRENT}cache/${size}/`
     );
   }
 
-  return url.replace('REMOTE_CURRENT://', process.env.REACT_APP_REMOTE_CURRENT);
+  return (url || '').replace('REMOTE_CURRENT://', process.env.REACT_APP_REMOTE_CURRENT);
 };
 
 export const getURL = (

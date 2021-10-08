@@ -1,21 +1,26 @@
 import React, { FC, useMemo } from 'react';
 import styles from './styles.module.scss';
 import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
-import { convertHexToRGBA } from '~/utils/color';
 import { DivProps } from '~/utils/types';
 import classNames from 'classnames';
+import { transparentize } from 'color2k';
+import { normalizeBrightColor } from '~/utils/color';
 
 interface Props extends DivProps {
   color?: string;
+  size?: number;
 }
 
-const CellShade: FC<Props> = ({ color, ...rest }) => {
+const CellShade: FC<Props> = ({ color, size = 50, ...rest }) => {
   const background = useMemo(() => {
-    if (!color || color === DEFAULT_DOMINANT_COLOR) {
+    const normalized = normalizeBrightColor(color);
+
+    if (!color || color === DEFAULT_DOMINANT_COLOR || !normalized) {
       return undefined;
     }
 
-    return `linear-gradient(7deg, ${color} 50px, ${convertHexToRGBA(color, 0.3)} 250px)`;
+    return `linear-gradient(7deg, ${normalized} ${size}px, ${transparentize(normalized, 1)} ${size *
+      5}px)`;
   }, [color]);
 
   return (

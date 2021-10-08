@@ -1,13 +1,15 @@
-export const convertHexToRGBA = (hexCode, opacity) => {
-  let hex = hexCode.replace('#', '');
+import { darken, desaturate, parseToHsla } from 'color2k';
+import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
 
-  if (hex.length === 3) {
-    hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+export const normalizeBrightColor = (color?: string, saturationExp = 3, lightnessExp = 3) => {
+  if (!color) {
+    return '';
   }
 
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
+  const hsla = parseToHsla(color || DEFAULT_DOMINANT_COLOR);
+  const saturation = hsla[1];
+  const lightness = hsla[2];
 
-  return `rgba(${r},${g},${b},${opacity})`;
+  const desaturated = desaturate(color, saturation ** saturationExp);
+  return darken(desaturated, lightness ** lightnessExp);
 };

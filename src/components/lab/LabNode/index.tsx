@@ -5,6 +5,7 @@ import styles from './styles.module.scss';
 import { LabBottomPanel } from '~/components/lab/LabBottomPanel';
 import { isAfter, parseISO } from 'date-fns';
 import classNames from 'classnames';
+import { useColorGradientFromString } from '~/utils/hooks/useColorGradientFromString';
 
 interface IProps {
   node: INode;
@@ -22,8 +23,10 @@ const LabNode: FC<IProps> = ({ node, isLoading, lastSeen, commentCount }) => {
     [node.commented_at, lastSeen]
   );
 
+  const background = useColorGradientFromString(node.title, 3, 2);
+
   return (
-    <div className={classNames(styles.wrap, { [styles.heroic]: node.is_heroic })}>
+    <div className={classNames(styles.wrap)} style={{ background }}>
       {lab}
       <LabBottomPanel
         node={node}

@@ -15,6 +15,7 @@ import SwiperClass from 'swiper/types/swiper-class';
 import { modalShowPhotoswipe } from '~/redux/modal/actions';
 import { useDispatch } from 'react-redux';
 import { ImagePreloader } from '~/components/media/ImagePreloader';
+import { normalizeBrightColor } from '~/utils/color';
 
 SwiperCore.use([Navigation, Pagination, Keyboard]);
 
@@ -97,7 +98,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
               onLoad={updateSwiper}
               onClick={() => onOpenPhotoSwipe(i)}
               className={styles.image}
-              color={file?.metadata?.dominant_color}
+              color={normalizeBrightColor(file?.metadata?.dominant_color)}
             />
           </SwiperSlide>
         ))}

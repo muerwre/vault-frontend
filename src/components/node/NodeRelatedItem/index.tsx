@@ -6,6 +6,9 @@ import { PRESETS, URLS } from '~/constants/urls';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { getURL, stringToColour } from '~/utils/dom';
 import { Avatar } from '~/components/common/Avatar';
+import { normalizeBrightColor } from '~/utils/color';
+import { adjustHue } from 'color2k';
+import { useColorGradientFromString } from '~/utils/hooks/useColorGradientFromString';
 
 type IProps = RouteComponentProps & {
   item: Partial<INode>;
@@ -37,10 +40,8 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
     () => (item.thumbnail ? getURL({ url: item.thumbnail }, PRESETS.avatar) : ''),
     [item]
   );
-  const backgroundColor = useMemo(
-    () => (!thumb && item.title && stringToColour(item.title)) || '',
-    []
-  );
+
+  const background = useColorGradientFromString(!thumb ? item.title : '');
 
   useEffect(() => {
     if (!ref.current) return;
@@ -76,13 +77,13 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
       />
 
       {!item.thumbnail && size === 'small' && (
-        <div className={styles.letters} style={{ backgroundColor }}>
+        <div className={styles.letters} style={{ background }}>
           {getTitleLetters(item.title)}
         </div>
       )}
 
       {!item.thumbnail && size !== 'small' && (
-        <div className={styles.title} style={{ backgroundColor }}>
+        <div className={styles.title} style={{ background }}>
           {item.title}
         </div>
       )}

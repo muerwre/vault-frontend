@@ -43,11 +43,6 @@ div.thumb {
   font: $font_24_semibold;
   color: transparentize(white, 0.5);
   border-radius: $cell_radius;
-  background-image: linear-gradient(
-    180deg,
-    transparentize($content_bg, 0.4),
-    transparentize($content_bg, 0.4)
-  );
 }
 
 .title {

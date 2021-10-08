@@ -1,12 +1,13 @@
-import React, { FC, Fragment, useCallback } from 'react';
-import { Cell } from '~/components/flow/Cell';
+import React, { FC, Fragment } from 'react';
 
 import { IFlowState } from '~/redux/flow/reducer';
 import { INode } from '~/redux/types';
-import { canEditNode } from '~/utils/node';
 import { IUser } from '~/redux/auth/types';
-import { useHistory } from 'react-router';
-import { URLS } from '~/constants/urls';
+import { PRESETS, URLS } from '~/constants/urls';
+import { FlowCell } from '~/components/flow/FlowCell';
+import classNames from 'classnames';
+import styles from './styles.module.scss';
+import { getURLFromString } from '~/utils/dom';
 
 type IProps = Partial<IFlowState> & {
   user: Partial<IUser>;
@@ -14,9 +15,6 @@ type IProps = Partial<IFlowState> & {
 };
 
 export const FlowGrid: FC<IProps> = ({ user, nodes, onChangeCellView }) => {
-  const history = useHistory();
-  const onSelect = useCallback((id: INode['id']) => history.push(URLS.NODE_URL(id)), [history]);
-
   if (!nodes) {
     return null;
   }
@@ -24,13 +22,16 @@ export const FlowGrid: FC<IProps> = ({ user, nodes, onChangeCellView }) => {
   return (
     <Fragment>
       {nodes.map(node => (
-        <Cell
-          key={node.id}
-          node={node}
-          onSelect={onSelect}
-          can_edit={canEditNode(node, user)}
-          onChangeCellView={onChangeCellView}
-        />
+        <div className={classNames(styles.cell, styles[node.flow.display])} key={node.id}>
+          <FlowCell
+            color={node.flow.dominant_color}
+            to={URLS.NODE_URL(node.id)}
+            image={getURLFromString(node.thumbnail, PRESETS.cover)}
+            display={node.flow.display}
+            text={node.flow.show_description ? node.description : ''}
+            title={node.title}
+          />
+        </div>
       ))}
     </Fragment>
   );

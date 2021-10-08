@@ -194,13 +194,13 @@ $sidebar_border: transparentize(white, 0.95);
   }
 }
 
-@mixin blur($color: $content_bg, $radius: 15px) {
-  background: transparentize($color, 0.1);
+@mixin blur($color: $content_bg, $radius: 15px, $opacity: 0.5) {
+  background: transparentize($color, $opacity / 2);
 
   @include can_backdrop {
     backdrop-filter: blur($radius);
     -webkit-backdrop-filter: blur($radius);
-    background: transparentize($color, 0.5);
+    background: transparentize($color, $opacity);
   }
 }
 
