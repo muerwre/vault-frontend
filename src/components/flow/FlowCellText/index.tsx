@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactElement } from 'react';
 import { Markdown } from '~/components/containers/Markdown';
 import { DivProps } from '~/utils/types';
 import classNames from 'classnames';
@@ -7,12 +7,12 @@ import { formatText } from '~/utils/dom';
 
 interface Props extends DivProps {
   children: string;
-  title: string;
+  heading: string | ReactElement;
 }
 
-const FlowCellText: FC<Props> = ({ children, title, ...rest }) => (
+const FlowCellText: FC<Props> = ({ children, heading, ...rest }) => (
   <div {...rest} className={classNames(styles.text, rest.className)}>
-    {title && <h4 className={styles.title}>{title}</h4>}
+    {heading && <div className={styles.heading}>{heading}</div>}
     <Markdown
       className={styles.description}
       dangerouslySetInnerHTML={{ __html: formatText(children) }}

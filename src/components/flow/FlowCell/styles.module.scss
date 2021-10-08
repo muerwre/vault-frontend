@@ -32,6 +32,7 @@
 
 .shade {
   @include outer_shadow;
+
   position: absolute;
   top: 0;
   left: 0;
@@ -42,15 +43,26 @@
 
 .text {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
+  bottom: 5px;
+  left: 5px;
   z-index: 1;
   overflow: hidden;
   border-radius: $radius;
-  max-height: calc(100% - 20px);
-  max-width: calc(100% - 20px);
+  max-height: calc(100% - 10px);
+  max-width: calc(100% - 10px);
   box-sizing: border-box;
+  font: $font_16_regular;
 
+  @include tablet {
+    font: $font_14_regular;
+    left: 5px;
+    bottom: 5px;
+  }
+
+  & :global(.grey) {
+    color: inherit;
+    opacity: 0.5;
+  }
 
   .quadro &,
   .horizontal & {
@@ -65,13 +77,21 @@
   }
 }
 
-.title {
-  font: $font_cell_title;
-  position: absolute;
+.title_wrapper {
   bottom: 0;
   left: 0;
   width: 100%;
   z-index: 10;
   padding: $gap;
+  position: absolute;
+}
+
+.title {
+  font: $font_cell_title;
   text-transform: uppercase;
+  word-break: break-word;
+
+  @include tablet {
+    font: $font_18_semibold;
+  }
 }

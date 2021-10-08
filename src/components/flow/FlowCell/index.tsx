@@ -22,7 +22,7 @@ const FlowCell: FC<Props> = ({ color, to, image, display = 'single', text, title
   return (
     <NavLink className={classNames(styles.cell, styles[display || 'single'])} to={to}>
       {withText && (
-        <FlowCellText className={styles.text} title={title}>
+        <FlowCellText className={styles.text} heading={<h4 className={styles.title}>{title}</h4>}>
           {text!}
         </FlowCellText>
       )}
@@ -37,7 +37,12 @@ const FlowCell: FC<Props> = ({ color, to, image, display = 'single', text, title
       )}
 
       <CellShade color={color} className={styles.shade} size={withText ? 15 : 50} />
-      {!withText && <h4 className={styles.title}>{title}</h4>}
+
+      {!withText && (
+        <div className={styles.title_wrapper}>
+          <h4 className={styles.title}>{title}</h4>
+        </div>
+      )}
     </NavLink>
   );
 };
