@@ -3,7 +3,7 @@ import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
 
 export const normalizeBrightColor = (color?: string, saturationExp = 3, lightnessExp = 3) => {
   if (!color) {
-    return undefined;
+    return '';
   }
 
   const hsla = parseToHsla(color || DEFAULT_DOMINANT_COLOR);
