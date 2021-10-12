@@ -1,10 +1,10 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import styles from './styles.module.scss';
 import { Sticky } from '~/components/containers/Sticky';
 import { Container } from '~/containers/main/Container';
 import { LabGrid } from '~/containers/lab/LabGrid';
 import { useDispatch } from 'react-redux';
-import { labGetList, labGetStats } from '~/redux/lab/actions';
+import { labGetList, labGetMore, labGetStats } from '~/redux/lab/actions';
 import { Group } from '~/components/containers/Group';
 import { LabHead } from '~/components/lab/LabHead';
 import { LabStats } from '~/containers/lab/LabStats';
@@ -20,15 +20,21 @@ import { useLabPagination } from '~/utils/hooks/lab/useLabPagination';
 interface IProps {}
 
 const LabLayout: FC<IProps> = () => {
-  const { is_loading, nodes } = useShallowSelect(selectLabList);
+  const { is_loading, nodes, count } = useShallowSelect(selectLabList);
   const dispatch = useDispatch();
-
-  useLabPagination({ isLoading: is_loading });
 
   useEffect(() => {
     dispatch(labGetList());
     dispatch(labGetStats());
   }, [dispatch]);
+
+  const onLoadMore = useCallback(() => {
+    if (nodes.length >= count) {
+      return;
+    }
+
+    dispatch(labGetMore());
+  }, [nodes, count]);
 
   const isInitialLoading = is_loading && !nodes.length;
 
@@ -41,7 +47,7 @@ const LabLayout: FC<IProps> = () => {
               <LabHead isLoading={isInitialLoading} />
             </div>
 
-            <LabGrid nodes={nodes} isLoading={isInitialLoading} />
+            <LabGrid nodes={nodes} isLoading={isInitialLoading} onLoadMore={onLoadMore} />
           </Group>
 
           <div className={styles.panel}>

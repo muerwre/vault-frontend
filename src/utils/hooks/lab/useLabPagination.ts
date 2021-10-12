@@ -1,21 +1,44 @@
-import { useDispatch } from 'react-redux';
-import { useCallback } from 'react';
-import { useInfiniteLoader } from '~/utils/hooks/useInfiniteLoader';
-import { labGetMore } from '~/redux/lab/actions';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
-import { selectLabList } from '~/redux/lab/selectors';
+import { useCallback, useEffect, useMemo } from 'react';
 
-export const useLabPagination = ({ isLoading }) => {
-  const { nodes, count } = useShallowSelect(selectLabList);
+export const useLabPagination = (
+  isLoading: boolean,
+  columns: Element[],
+  onLoadMore: () => void
+) => {
+  const loadOnIntersection = useCallback<IntersectionObserverCallback>(
+    entries => {
+      const isVisible = entries.some(entry => entry.intersectionRatio > 0);
 
-  const dispatch = useDispatch();
-  const loadMore = useCallback(() => {
-    if (nodes.length >= count) {
+      if (!isVisible) {
+        return;
+      }
+
+      onLoadMore();
+    },
+    [onLoadMore]
+  );
+
+  const observer = useMemo(
+    () =>
+      new IntersectionObserver(loadOnIntersection, {
+        threshold: [0],
+      }),
+    [loadOnIntersection]
+  );
+
+  useEffect(() => {
+    if (isLoading) {
       return;
     }
 
-    dispatch(labGetMore());
-  }, [nodes, count]);
+    const lastItems = Array.from(columns)
+      .map(col => col.children.item(col.childNodes.length - 1))
+      .filter(el => el) as Element[];
 
-  useInfiniteLoader(loadMore, isLoading);
+    lastItems.forEach(item => observer.observe(item));
+
+    return () => {
+      lastItems.forEach(item => observer.unobserve(item));
+    };
+  }, [observer, columns]);
 };

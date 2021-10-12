@@ -1,14 +1,16 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import Masonry from 'react-masonry-css';
 import styles from './styles.module.scss';
 import { LabNode } from '~/components/lab/LabNode';
 import { EMPTY_NODE, NODE_TYPES } from '~/redux/node/constants';
 import { values } from 'ramda';
 import { ILabNode } from '~/redux/lab/types';
+import { useLabPagination } from '~/utils/hooks/lab/useLabPagination';
 
 interface IProps {
   isLoading: boolean;
   nodes: ILabNode[];
+  onLoadMore: () => void;
 }
 
 const breakpointCols = {
@@ -28,7 +30,14 @@ const LoadingNode = () => (
   />
 );
 
-const LabGrid: FC<IProps> = ({ isLoading, nodes }) => {
+const LabGrid: FC<IProps> = ({ isLoading, nodes, onLoadMore }) => {
+  const columns = useMemo(() => Array.from(document.querySelectorAll(`.${styles.column}`)), [
+    isLoading,
+    nodes,
+  ]);
+
+  useLabPagination(isLoading, columns, onLoadMore);
+
   if (isLoading) {
     return (
       <Masonry
