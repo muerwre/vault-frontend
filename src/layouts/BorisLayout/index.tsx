@@ -29,6 +29,7 @@ import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { BorisContactItem } from '~/components/boris/BorisContactItem';
 import { BorisContacts } from '~/components/boris/BorisContacts';
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
 
 type IProps = {};
 
