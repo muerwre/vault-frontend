@@ -10,6 +10,6 @@ export const normalizeBrightColor = (color?: string, saturationExp = 3, lightnes
   const saturation = hsla[1];
   const lightness = hsla[2];
 
-  const desaturated = desaturate(color, saturation ** saturationExp);
-  return darken(desaturated, lightness ** lightnessExp);
+  const desaturated = saturationExp > 1 ? desaturate(color, saturation ** saturationExp) : color;
+  return lightnessExp > 1 ? darken(desaturated, lightness ** lightnessExp) : desaturated;
 };

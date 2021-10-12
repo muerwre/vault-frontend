@@ -3,6 +3,7 @@
 .wrap {
   @include outer_shadow;
 
+  position: relative;
   background-color: $lab_post_bg;
   cursor: pointer;
 
