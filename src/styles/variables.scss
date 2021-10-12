@@ -94,6 +94,14 @@ $sidebar_border: transparentize(white, 0.95);
     transparentize(black, 0.6) 0 1px 5px;
 }
 
+// same as outer shadow, but higher
+@mixin dropdown_shadow {
+  box-shadow:
+          inset transparentize(white, 0.95) 1px 1px,
+          transparentize(black, 0.8) 1px 1px,
+          transparentize(black, 0.6) 5px 5px 10px;
+}
+
 @mixin row_shadow() {
   &:not(:last-child) {
     box-shadow: transparentize(white, 0.95) 0 1px,

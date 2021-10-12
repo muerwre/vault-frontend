@@ -6,19 +6,9 @@
   position: relative;
   overflow: hidden;
   border-radius: $radius;
-  display: flex;
   width: 100%;
   height: 100%;
   background: $content_bg;
-  flex-direction: row;
-  color: inherit;
-  text-decoration: inherit;
-  font: inherit;
-  line-height: inherit;
-
-  &.vertical {
-    flex-direction: column-reverse;
-  }
 }
 
 .thumb {
@@ -93,5 +83,27 @@
 
   @include tablet {
     font: $font_18_semibold;
+  }
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 6;
+}
+
+.link {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: row;
+  color: inherit;
+  text-decoration: inherit;
+  font: inherit;
+  line-height: inherit;
+
+  &.vertical {
+    flex-direction: column-reverse;
   }
 }

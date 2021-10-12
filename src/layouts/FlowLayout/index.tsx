@@ -15,7 +15,7 @@ import { FlowStamp } from '~/components/flow/FlowStamp';
 import { Container } from '~/containers/main/Container';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
-import { INode } from '~/redux/types';
+import { FlowDisplay, INode } from '~/redux/types';
 import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
 import { usePersistedState } from '~/utils/hooks/usePersistedState';
 import classNames from 'classnames';
@@ -44,17 +44,15 @@ const FlowLayout: FC = () => {
     [dispatch]
   );
 
-  const onChangeCellView = useCallback(
-    (id: INode['id'], flow: INode['flow']) => {
-      dispatch(flowSetCellView(id, flow));
-    },
-    [dispatch]
-  );
-
   const cumulativeUpdates = useMemo(() => [...updated, ...labUpdates].slice(0, 10), [
     updated,
     labUpdates,
   ]);
+
+  const onChangeCellView = useCallback(
+    (id: INode['id'], val: FlowDisplay) => dispatch(flowSetCellView(id, val)),
+    []
+  );
 
   return (
     <div className={classNames(styles.container, { [styles.fluid]: isFluid })}>

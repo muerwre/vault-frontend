@@ -38,7 +38,6 @@ const Cell: FC<IProps> = ({
   }, [setIsLoaded]);
 
   const has_description = description && description.length > 32;
-
   const text =
     (type === NODE_TYPES.TEXT && description) ||
     (flow && flow.show_description && has_description && description) ||
