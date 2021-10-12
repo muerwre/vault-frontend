@@ -69,7 +69,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
   if (!heroes.length) {
     return (
       <div className={styles.loader}>
-        <LoaderCircle size={100} fill="currentColor" />
+        <LoaderCircle size={200} fill="currentColor" />
       </div>
     );
   }

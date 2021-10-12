@@ -64,6 +64,7 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes }) => {
             src={getURL({ url: hero.thumbnail }, preset)}
             key={hero.id}
             onLoad={() => onLoad(i)}
+            alt=""
           />
         ))}
       </div>
