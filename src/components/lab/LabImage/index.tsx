@@ -16,6 +16,8 @@ import { PRESETS } from '~/constants/urls';
 import SwiperClass from 'swiper/types/swiper-class';
 import { useGotoNode } from '~/utils/hooks/node/useGotoNode';
 import { Placeholder } from '~/components/placeholders/Placeholder';
+import { normalizeBrightColor } from '~/utils/color';
+import { ImagePreloader } from '~/components/media/ImagePreloader';
 
 SwiperCore.use([Navigation, Pagination, A11y]);
 
@@ -79,12 +81,12 @@ const LabImage: FC<IProps> = ({ node, isLoading }) => {
         >
           {images.map(file => (
             <SwiperSlide className={styles.slide} key={file.id}>
-              <img
-                className={styles.image}
-                src={getURL(file, PRESETS['1600'])}
-                alt={node.title}
+              <ImagePreloader
+                file={file}
                 onLoad={updateSwiper}
                 onClick={onClick}
+                className={styles.image}
+                color={normalizeBrightColor(file?.metadata?.dominant_color)}
               />
             </SwiperSlide>
           ))}
