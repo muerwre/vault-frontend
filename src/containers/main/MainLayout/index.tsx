@@ -6,7 +6,6 @@ export const MainLayout = ({ children }) => (
   <div className={styles.wrapper}>
     <div className={styles.content}>
       <Header />
-
       {children}
     </div>
   </div>

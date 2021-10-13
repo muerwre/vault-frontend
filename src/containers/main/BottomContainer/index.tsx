@@ -5,17 +5,16 @@ import { selectUser } from '~/redux/auth/selectors';
 import { pick } from 'ramda';
 import { connect } from 'react-redux';
 
-const mapStateToProps = state => pick(['is_user'], selectUser(state));
+type IProps = {};
 
-type IProps = ReturnType<typeof mapStateToProps> & {};
-
-const BottomContainerUnconnected: FC<IProps> = ({ is_user }) => (
+const BottomContainer: FC<IProps> = () => (
   <div className={styles.wrap}>
     <div className={styles.content}>
-      <PlayerBar />
+      <div className={styles.padder}>
+        <PlayerBar />
+      </div>
     </div>
   </div>
 );
 
-const BottomContainer = connect(mapStateToProps)(BottomContainerUnconnected);
 export { BottomContainer };

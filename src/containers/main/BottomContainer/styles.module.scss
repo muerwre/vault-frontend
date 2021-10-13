@@ -1,8 +1,7 @@
 @import "src/styles/variables";
 
 .wrap {
-  position: fixed;
-  transform: translateZ(0);
+  position: sticky;
   bottom: 0;
   pointer-events: none;
   touch-action: none;
@@ -13,8 +12,9 @@
   left: 0;
   align-items: center;
   justify-content: center;
-  padding: 0 $gap;
+  //padding: 0 calc(min(100vw, #{$content_width}) - 64px) 0 $gap;
   box-sizing: border-box;
+  padding: 0;
 }
 
 .content {
@@ -23,10 +23,17 @@
   height: $bar_height;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+}
+
+.padder {
+  display: flex;
+  flex-basis: calc(min(100vw - 94px, #{$content_width}));
+  align-items: center;
   justify-content: flex-end;
 
   & > div {
     pointer-events: all;
-    touch-action: all;
+    touch-action: auto;
   }
 }
