@@ -232,13 +232,11 @@ $sidebar_border: transparentize(white, 0.95);
 }
 
 @mixin clamp($lines, $line: 1em) {
-  max-height: $line * $lines;
-  overflow: hidden;
-  -webkit-line-clamp: $lines;
-  line-clamp: $lines;
   display: -webkit-box;
+  line-clamp: $lines;
+  -webkit-line-clamp: $lines;
   -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 @mixin sidebar {

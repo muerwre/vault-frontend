@@ -5,9 +5,10 @@
   line-height: 1.3em;
 
   @include tablet {
-    @include clamp(10, 1.3 * 16);
-    font: $font_16_regular;
+    @include clamp(10, 1.3*16px);
     line-height: 1.3em;
-    padding: $lab_gap_mobile / 2 $lab_gap_mobile;
+    font: $font_16_regular;
+    padding: 0 $lab_gap_mobile;
+    margin: $lab_gap_mobile / 2 0;
   }
 }
