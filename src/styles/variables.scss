@@ -312,3 +312,12 @@ $sidebar_border: transparentize(white, 0.95);
     grid-auto-rows: 50vw;
   }
 }
+
+@mixin appear {
+  @keyframes __appear {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  animation: __appear 0.25s forwards;
+}

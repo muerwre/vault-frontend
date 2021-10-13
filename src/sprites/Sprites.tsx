@@ -14,27 +14,92 @@ const Sprites: FC = () => (
       </pattern>
     </defs>
 
-    <g id="cell-single" stroke="none" transform="translate(2 2)">
-      <path d="M0,0 L9,0 L9,9 L0,9 L0,0 Z" fill="url(#pattern_stripes)" />
-      <path d="M11,0 L20,0 L20,9 L11,9 L11,0 Z M12,1 L12,8 L19,8 L19,1 L12,1 Z" />
-      <path d="M11,11 L20,11 L20,20 L11,20 L11,11 Z M12,12 L12,19 L19,19 L19,12 L12,12 Z" />
-      <path d="M0,11 L9,11 L9,20 L0,20 L0,11 Z M1,12 L1,19 L8,19 L8,12 L1,12 Z" />
+    <g id="cell-single" stroke="none">
+      <rect x="13.5" y="2.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect x="13.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect x="2.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 2C2.89543 2 2 2.89543 2 4V9C2 10.1046 2.89543 11 4 11H9C10.1046 11 11 10.1046 11 9V4C11 2.89543 10.1046 2 9 2H4ZM4 8H7C7.55228 8 8 8.44772 8 9C8 9.55228 7.55228 10 7 10H4C3.44772 10 3 9.55228 3 9C3 8.44772 3.44772 8 4 8Z"
+        fill="currentColor"
+        stroke="none"
+      />
     </g>
 
-    <g id="cell-double-h" stroke="none" transform="translate(2 2)">
-      <path d="M0,0 L19,0 L19,9 L0,9 L0,0 Z" fill="url(#pattern_stripes)" />
-      <path d="M11,11 L20,11 L20,20 L11,20 L11,11 Z M12,12 L12,19 L19,19 L19,12 L12,12 Z" />
-      <path d="M0,11 L9,11 L9,20 L0,20 L0,11 Z M1,12 L1,19 L8,19 L8,12 L1,12 Z" />
+    <g id="cell-double-h" stroke="none">
+      <rect x="13.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect x="2.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 2C2.89543 2 2 2.89543 2 4V9C2 10.1046 2.89543 11 4 11H20C21.1046 11 22 10.1046 22 9V4C22 2.89543 21.1046 2 20 2H4ZM4 8C3.44772 8 3 8.44772 3 9C3 9.55228 3.44772 10 4 10H7C7.55228 10 8 9.55228 8 9C8 8.44772 7.55228 8 7 8H4Z"
+        fill="currentColor"
+        stroke="none"
+      />
     </g>
 
-    <g id="cell-double-v" stroke="none" transform="translate(2 2)">
-      <path d="M0,0 L9,0 L9,19 L0,19 L0,0 Z" fill="url(#pattern_stripes)" />
-      <path d="M11,0 L20,0 L20,9 L11,9 L11,0 Z M12,1 L12,8 L19,8 L19,1 L12,1 Z" />
-      <path d="M11,11 L20,11 L20,20 L11,20 L11,11 Z M12,12 L12,19 L19,19 L19,12 L12,12 Z" />
+    <g id="cell-double-h-text" stroke="none">
+      <rect x="13.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect x="2.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 2C2.89543 2 2 2.89543 2 4V9C2 10.1046 2.89543 11 4 11H20C21.1046 11 22 10.1046 22 9V4C22 2.89543 21.1046 2 20 2H4ZM4 3C3.44772 3 3 3.44772 3 4V9C3 9.55228 3.44772 10 4 10H10C10.5523 10 11 9.55228 11 9V4C11 3.44772 10.5523 3 10 3H4Z"
+        fill="currentColor"
+        stroke="none"
+      />
+      <rect x="4" y="4" width="5" height="1" rx="0.5" fill="currentColor" stroke="none" />
+      <rect x="4" y="6" width="6" height="1" rx="0.5" fill="currentColor" stroke="none" />
+      <rect x="4" y="8" width="6" height="1" rx="0.5" fill="currentColor" stroke="none" />
     </g>
 
-    <g id="cell-quadro" stroke="none" transform="translate(2 2)">
-      <path d="M0,0 L19,0 L19,19 L0,19 L0,0 Z" fill="url(#pattern_stripes)" />
+    <g id="cell-double-v" stroke="none">
+      <rect x="13.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect x="13.5" y="2.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 2C2.89543 2 2 2.89543 2 4V20C2 21.1046 2.89543 22 4 22H9C10.1046 22 11 21.1046 11 20V4C11 2.89543 10.1046 2 9 2H4ZM4 19C3.44772 19 3 19.4477 3 20C3 20.5523 3.44772 21 4 21H7C7.55228 21 8 20.5523 8 20C8 19.4477 7.55228 19 7 19H4Z"
+        fill="currentColor"
+        stroke="none"
+      />
+    </g>
+    <g id="cell-double-v-text" stroke="none">
+      <rect x="13.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect x="13.5" y="2.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 2C2.89543 2 2 2.89543 2 4V20C2 21.1046 2.89543 22 4 22H9C10.1046 22 11 21.1046 11 20V4C11 2.89543 10.1046 2 9 2H4ZM4 14C3.44772 14 3 14.4477 3 15V20C3 20.5523 3.44772 21 4 21H9C9.55228 21 10 20.5523 10 20V15C10 14.4477 9.55228 14 9 14H4Z"
+        fill="currentColor"
+        stroke="none"
+      />
+      <rect x="4" y="15" width="3" height="1" rx="0.5" fill="currentColor" stroke="none" />
+      <rect x="4" y="17" width="5" height="1" rx="0.5" fill="currentColor" stroke="none" />
+      <rect x="4" y="19" width="5" height="1" rx="0.5" fill="currentColor" stroke="none" />
+    </g>
+
+    <g id="cell-quadro" stroke="none">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 2C2.89543 2 2 2.89543 2 4V20C2 21.1046 2.89543 22 4 22H20C21.1046 22 22 21.1046 22 20V4C22 2.89543 21.1046 2 20 2H4ZM4 19C3.44772 19 3 19.4477 3 20C3 20.5523 3.44772 21 4 21H12C12.5523 21 13 20.5523 13 20C13 19.4477 12.5523 19 12 19H4Z"
+        fill="currentColor"
+        stroke="none"
+      />
+    </g>
+    <g id="cell-quadro-text" stroke="none">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 2C2.89543 2 2 2.89543 2 4V20C2 21.1046 2.89543 22 4 22H20C21.1046 22 22 21.1046 22 20V4C22 2.89543 21.1046 2 20 2H4ZM4 14C3.44772 14 3 14.4477 3 15V20C3 20.5523 3.44772 21 4 21H10C10.5523 21 11 20.5523 11 20V15C11 14.4477 10.5523 14 10 14H4Z"
+        fill="currentColor"
+        stroke="none"
+      />
+      <rect x="4" y="15" width="4" height="1" rx="0.5" fill="currentColor" stroke="none" />
+      <rect x="4" y="17" width="6" height="1" rx="0.5" fill="currentColor" stroke="none" />
+      <rect x="4" y="19" width="6" height="1" rx="0.5" fill="currentColor" stroke="none" />
     </g>
 
     <g id="play">

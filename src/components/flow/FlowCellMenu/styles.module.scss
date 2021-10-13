@@ -1,53 +1,16 @@
 @import "~/styles/variables";
 
-.button {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  fill: white;
-  padding: 5px;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-
-.dots {
-  @include blur($content_bg, 5px, 0.7);
-
-  padding: 5px 0 0 0;
-  background: $content_bg;
-  border-radius: $radius;
-  width: 20px;
-  height: 32px;
-  position: relative;
-
-  svg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    opacity: 0.5;
-    transition: opacity 0.25s;
-
-    :hover > & {
-      opacity: 1;
-    }
-  }
-}
-
 .dropdown {
-  @include dropdown_shadow;
+  @include outer_shadow;
   @include blur($red, 15px, 0.3);
 
+  width: 100%;
+  height: 100%;
   border-radius: $radius;
   padding: $gap;
-  visibility: hidden;
-
-  &.active {
-    visibility: visible;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menu {
@@ -66,4 +29,36 @@
 .sep {
   @include outer_shadow;
   height: 1px;
+}
+
+.display {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-row-gap: $gap;
+  grid-column-gap: $gap;
+}
+
+.description {
+  margin-top: $gap;
+  font: $font_12_semibold;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: row;
+  padding: 0 4px;
+
+  span {
+    flex: 1;
+    text-align: right;
+  }
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -30,7 +30,7 @@ export const FlowGrid: FC<IProps> = ({ user, nodes, onChangeCellView }) => {
             to={URLS.NODE_URL(node.id)}
             image={getURLFromString(node.thumbnail, PRESETS.cover)}
             flow={node.flow}
-            text={node.flow.show_description ? node.description : ''}
+            text={node.description}
             title={node.title}
             canEdit={canEditNode(node, user)}
             onChangeCellView={onChangeCellView}

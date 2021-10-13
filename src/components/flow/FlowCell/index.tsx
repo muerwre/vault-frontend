@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styles from './styles.module.scss';
 import { NavLink } from 'react-router-dom';
 import { CellShade } from '~/components/flow/CellShade';
@@ -8,6 +8,10 @@ import { FlowCellText } from '~/components/flow/FlowCellText';
 import classNames from 'classnames';
 import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
 import { useFlowCellControls } from '~/utils/hooks/flow/useFlowCellControls';
+import { Icon } from '~/components/input/Icon';
+import { useFocusEvent } from '~/utils/hooks/useFocusEvent';
+import { useClickOutsideFocus } from '~/utils/hooks/useClickOutsideFocus';
+import { MenuDots } from '~/components/common/MenuDots';
 
 interface Props {
   id: INode['id'];
@@ -29,10 +33,11 @@ const FlowCell: FC<Props> = ({
   flow,
   text,
   title,
-  canEdit,
+  canEdit = false,
   onChangeCellView,
 }) => {
-  const withText = ((!!flow.display && flow.display !== 'single') || !image) && !!text;
+  const withText =
+    ((!!flow.display && flow.display !== 'single') || !image) && flow.show_description && !!text;
   const {
     hasDescription,
     setViewHorizontal,
@@ -41,12 +46,22 @@ const FlowCell: FC<Props> = ({
     setViewSingle,
     toggleViewDescription,
   } = useFlowCellControls(id, text, flow, onChangeCellView);
+  const { isActive: isMenuActive, activate, ref, deactivate } = useClickOutsideFocus();
 
   return (
-    <div className={classNames(styles.cell, styles[flow.display || 'single'])}>
-      {canEdit && (
+    <div className={classNames(styles.cell, styles[flow.display || 'single'])} ref={ref as any}>
+      {canEdit && !isMenuActive && (
         <div className={styles.menu}>
+          <MenuDots onClick={activate} />
+        </div>
+      )}
+
+      {canEdit && isMenuActive && (
+        <div className={styles.display_modal}>
           <FlowCellMenu
+            onClose={deactivate}
+            currentView={flow.display}
+            descriptionEnabled={flow.show_description}
             hasDescription={hasDescription}
             setViewHorizontal={setViewHorizontal}
             setViewQuadro={setViewQuadro}
@@ -56,6 +71,7 @@ const FlowCell: FC<Props> = ({
           />
         </div>
       )}
+
       <NavLink className={styles.link} to={to}>
         {withText && (
           <FlowCellText className={styles.text} heading={<h4 className={styles.title}>{title}</h4>}>

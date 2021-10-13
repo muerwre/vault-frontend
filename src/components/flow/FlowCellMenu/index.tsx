@@ -1,12 +1,15 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
-import { Manager, Popper, Reference } from 'react-popper';
-import { useFocusEvent } from '~/utils/hooks/useFocusEvent';
 import classNames from 'classnames';
-import { usePopperModifiers } from '~/utils/hooks/usePopperModifiers';
+import { Toggle } from '~/components/input/Toggle';
+import { Group } from '~/components/containers/Group';
+import { FlowDisplayVariant } from '~/redux/types';
 
 interface Props {
+  onClose: () => void;
+  currentView: FlowDisplayVariant;
+  descriptionEnabled: boolean;
   hasDescription: boolean;
   toggleViewDescription: () => void;
   setViewSingle: () => void;
@@ -16,51 +19,51 @@ interface Props {
 }
 
 const FlowCellMenu: FC<Props> = ({
+  onClose,
   hasDescription,
   toggleViewDescription,
+  descriptionEnabled,
   setViewSingle,
   setViewHorizontal,
   setViewVertical,
   setViewQuadro,
 }) => {
-  const { onFocus, onBlur, focused } = useFocusEvent();
-  const modifiers = usePopperModifiers(0, 10);
-
   return (
-    <Manager>
-      <button className={styles.button} onFocus={onFocus} onBlur={onBlur}>
-        <Reference>
-          {({ ref }) => (
-            <div className={styles.dots} ref={ref}>
-              <Icon icon="menu" size={24} />
-            </div>
-          )}
-        </Reference>
-      </button>
+    <div className={classNames(styles.dropdown)}>
+      {onClose && (
+        <button className={styles.close} onClick={onClose} type="button">
+          <Icon icon="close" size={24} />
+        </button>
+      )}
 
-      <Popper placement="bottom" strategy="fixed" modifiers={modifiers}>
-        {({ ref, style }) => (
-          <div
-            ref={ref}
-            style={style}
-            className={classNames(styles.dropdown, { [styles.active]: focused })}
-          >
-            <div className={styles.menu}>
-              {hasDescription && (
-                <>
-                  <Icon icon="text" onMouseDown={toggleViewDescription} size={32} />
-                  <div className={styles.sep} />
-                </>
-              )}
-              <Icon icon="cell-single" onMouseDown={setViewSingle} size={32} />
-              <Icon icon="cell-double-h" onMouseDown={setViewHorizontal} size={32} />
-              <Icon icon="cell-double-v" onMouseDown={setViewVertical} size={32} />
-              <Icon icon="cell-quadro" onMouseDown={setViewQuadro} size={32} />
-            </div>
-          </div>
+      <div className={styles.menu}>
+        <div className={styles.display}>
+          <Icon icon="cell-single" onMouseDown={setViewSingle} size={48} />
+          <Icon
+            icon={descriptionEnabled ? 'cell-double-h-text' : 'cell-double-h'}
+            onMouseDown={setViewHorizontal}
+            size={48}
+          />
+          <Icon
+            icon={descriptionEnabled ? 'cell-double-v-text' : 'cell-double-v'}
+            onMouseDown={setViewVertical}
+            size={48}
+          />
+          <Icon
+            icon={descriptionEnabled ? 'cell-quadro-text' : 'cell-quadro'}
+            onMouseDown={setViewQuadro}
+            size={48}
+          />
+        </div>
+
+        {hasDescription && (
+          <Group className={styles.description} horizontal onClick={toggleViewDescription}>
+            <Toggle color="white" value={descriptionEnabled} />
+            <span>Текст</span>
+          </Group>
         )}
-      </Popper>
-    </Manager>
+      </div>
+    </div>
   );
 };
 

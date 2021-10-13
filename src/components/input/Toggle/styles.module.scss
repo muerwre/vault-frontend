@@ -12,6 +12,19 @@
   cursor: pointer;
   position: relative;
 
+  &.white {
+    box-shadow: inset white 0 0 0 2px;
+
+    &::after {
+      width: 14px;
+      height: 14px;
+      top: 5px;
+      left: 5px;
+      background: none;
+      box-shadow: inset white 0 0 0 2px;
+    }
+  }
+
   &::after {
     content: ' ';
     position: absolute;
@@ -26,7 +39,6 @@
   }
 
   &.active {
-
     &::after {
       transform: translate(24px, 0);
       background-color: white;
@@ -46,6 +58,10 @@
 
     &.danger {
       background-color: $red;
+    }
+
+    &.monochrome {
+      background-color: white;
     }
   }
 }

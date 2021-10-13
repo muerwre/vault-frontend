@@ -9,7 +9,7 @@ export const useFlowCellControls = (
 ) => {
   const onChange = useCallback(
     (value: Partial<FlowDisplay>) => onChangeCellView(id, { ...flow, ...value }),
-    []
+    [flow, onChangeCellView]
   );
 
   const hasDescription = !!description && description.length > 32;
@@ -17,23 +17,23 @@ export const useFlowCellControls = (
   const toggleViewDescription = useCallback(() => {
     const show_description = !(flow && flow.show_description);
     onChange({ show_description });
-  }, [id, flow, onChange]);
+  }, [flow, onChange]);
 
   const setViewSingle = useCallback(() => {
     onChange({ display: 'single' });
-  }, [id, flow, onChange]);
+  }, [onChange]);
 
   const setViewHorizontal = useCallback(() => {
     onChange({ display: 'horizontal' });
-  }, [id, flow, onChange]);
+  }, [onChange]);
 
   const setViewVertical = useCallback(() => {
     onChange({ display: 'vertical' });
-  }, [id, flow]);
+  }, [onChange]);
 
   const setViewQuadro = useCallback(() => {
     onChange({ display: 'quadro' });
-  }, [id, flow, onChange]);
+  }, [onChange]);
 
   return {
     hasDescription,
