@@ -55,7 +55,9 @@ const NodeLayout: FC<IProps> = memo(
           <Card className={styles.node} seamless>
             {block}
 
-            <NodePanel node={current} isLoading={is_loading} />
+            <div className={styles.panel}>
+              <NodePanel node={current} isLoading={is_loading} />
+            </div>
 
             <NodeBottomBlock
               canEdit={canEdit}

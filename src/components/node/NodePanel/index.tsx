@@ -1,5 +1,4 @@
 import React, { FC, memo } from 'react';
-import styles from './styles.module.scss';
 import { INode } from '~/redux/types';
 import { NodePanelInner } from '~/components/node/NodePanelInner';
 import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
@@ -16,19 +15,17 @@ const NodePanel: FC<IProps> = memo(({ node, isLoading }) => {
   const { onEdit, onLike, onStar, onLock } = useNodeActions(node);
 
   return (
-    <div className={styles.place}>
-      <NodePanelInner
-        node={node}
-        onEdit={onEdit}
-        onLike={onLike}
-        onStar={onStar}
-        onLock={onLock}
-        canEdit={can_edit}
-        canLike={can_like}
-        canStar={can_star}
-        isLoading={!!isLoading}
-      />
-    </div>
+    <NodePanelInner
+      node={node}
+      onEdit={onEdit}
+      onLike={onLike}
+      onStar={onStar}
+      onLock={onLock}
+      canEdit={can_edit}
+      canLike={can_like}
+      canStar={can_star}
+      isLoading={!!isLoading}
+    />
   );
 }, shallowEqual);
 

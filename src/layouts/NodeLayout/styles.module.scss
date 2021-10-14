@@ -49,3 +49,12 @@
   border-radius: $panel_radius;
   box-shadow: $comment_shadow;
 }
+
+.panel {
+  @include row_shadow;
+
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: stretch;
+}

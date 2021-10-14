@@ -1,8 +1,0 @@
-@import "src/styles/variables";
-
-.place {
-  @include row_shadow;
-  position: relative;
-  z-index: 3;
-  margin-top: -$radius;
-}
