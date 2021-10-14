@@ -45,6 +45,11 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
 
   const onOpenPhotoSwipe = useCallback(
     (index: number) => {
+      if (index !== controlledSwiper?.activeIndex && controlledSwiper?.slideTo) {
+        controlledSwiper.slideTo(index, 300);
+        return;
+      }
+
       dispatch(modalShowPhotoswipe(images, index));
     },
     [dispatch, images, controlledSwiper]
