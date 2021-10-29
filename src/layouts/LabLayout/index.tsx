@@ -34,7 +34,7 @@ const LabLayout: FC<IProps> = () => {
     }
 
     dispatch(labGetMore());
-  }, [nodes, count]);
+  }, [nodes, count, dispatch]);
 
   const isInitialLoading = is_loading && !nodes.length;
 
