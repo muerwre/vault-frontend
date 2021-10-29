@@ -3,11 +3,12 @@ import styles from './styles.module.scss';
 import { Card } from '~/components/containers/Card';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { Group } from '~/components/containers/Group';
+import { Square } from '~/components/containers/Square';
 
 interface IProps {}
 
 const LabBanner: FC<IProps> = () => (
-  <Card className={styles.wrap}>
+  <Square className={styles.wrap}>
     <Group>
       <div className={styles.title}>Лаборатория!</div>
 
@@ -18,14 +19,9 @@ const LabBanner: FC<IProps> = () => (
             пределами Убежища.
           </strong>
         </p>
-
-        <p>
-          Ловим радиоактивных жуков, приручаем утконосов-вампиров, катаемся на младшем научном
-          сотруднике Егоре Порсифоровиче (у него как раз сейчас линька).
-        </p>
       </Group>
     </Group>
-  </Card>
+  </Square>
 );
 
 export { LabBanner };

@@ -2,12 +2,14 @@
 
 .wrap {
   @include outer_shadow;
-  @include lab_gradient;
 
+  background: url('../../../sprites/boris_lab.svg') 50% 50% no-repeat;
+  background-size: cover;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: stretch;
-  min-height: $cell;
+  border-radius: $radius;
+  padding: $gap;
 }
 
 .title {
@@ -18,8 +20,4 @@
 .content {
   font: $font_14_regular;
   line-height: 19px;
-
-  strong {
-    font-weight: bold;
-  }
 }
