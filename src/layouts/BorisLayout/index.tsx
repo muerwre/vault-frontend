@@ -1,13 +1,12 @@
 import React, { FC, useCallback, useEffect } from 'react';
 import { selectNode, selectNodeComments } from '~/redux/node/selectors';
-import { selectAuthIsTester, selectUser } from '~/redux/auth/selectors';
+import { selectAuthIsTester } from '~/redux/auth/selectors';
 import { useDispatch } from 'react-redux';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
 import { useRandomPhrase } from '~/constants/phrases';
 import isBefore from 'date-fns/isBefore';
-import { BorisStats } from '~/components/boris/BorisStats';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectBorisStats } from '~/redux/boris/selectors';
 import { authSetState, authSetUser } from '~/redux/auth/actions';
@@ -16,20 +15,12 @@ import { borisLoadStats } from '~/redux/boris/actions';
 import { Container } from '~/containers/main/Container';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import { BorisComments } from '~/components/boris/BorisComments';
-import { URLS } from '~/constants/urls';
-import { Route, Switch } from 'react-router-dom';
-import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
-import { BorisSuperpowers } from '~/components/boris/BorisSuperpowers';
-import { Superpower } from '~/components/boris/Superpower';
-import { Tabs } from '~/components/dialogs/Tabs';
-import { Tab } from '~/components/dialogs/Tab';
-import { useHistory, useLocation } from 'react-router';
 import { Card } from '~/components/containers/Card';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
-import { BorisContactItem } from '~/components/boris/BorisContactItem';
-import { BorisContacts } from '~/components/boris/BorisContacts';
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { useImageModal } from '~/utils/hooks/useImageModal';
+import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
+import { useUser } from '~/utils/hooks/user/userUser';
 
 type IProps = {};
 
@@ -37,10 +28,10 @@ const BorisLayout: FC<IProps> = () => {
   const title = useRandomPhrase('BORIS_TITLE');
   const dispatch = useDispatch();
   const node = useShallowSelect(selectNode);
-  const user = useShallowSelect(selectUser);
   const stats = useShallowSelect(selectBorisStats);
   const comments = useShallowSelect(selectNodeComments);
   const isTester = useShallowSelect(selectAuthIsTester);
+  const user = useUser();
 
   useEffect(() => {
     const last_comment = comments[0];
@@ -73,6 +64,9 @@ const BorisLayout: FC<IProps> = () => {
     [dispatch]
   );
 
+  const onShowImageModal = useImageModal();
+  const { onLoadMoreComments, onDelete: onDeleteComment } = useNodeComments('696');
+
   return (
     <Container>
       <div className={styles.wrap}>
@@ -89,10 +83,14 @@ const BorisLayout: FC<IProps> = () => {
         <div className={styles.container}>
           <Card className={styles.content}>
             <BorisComments
-              isLoadingComments={node.is_loading_comments}
-              commentCount={node.comment_count}
               node={node.current}
+              user={user}
               comments={node.comments}
+              commentCount={node.comment_count}
+              isLoadingComments={node.is_loading_comments}
+              onLoadMoreComments={onLoadMoreComments}
+              onShowImageModal={onShowImageModal}
+              onDeleteComment={onDeleteComment}
             />
           </Card>
 

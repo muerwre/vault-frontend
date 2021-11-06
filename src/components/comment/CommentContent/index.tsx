@@ -8,23 +8,22 @@ import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import reduce from 'ramda/es/reduce';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import classnames from 'classnames';
+import classNames from 'classnames';
 import { PRESETS } from '~/constants/urls';
 import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
 import { CommentMenu } from '../CommentMenu';
-import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { CommentForm } from '~/components/comment/CommentForm';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectNode } from '~/redux/node/selectors';
-import classNames from 'classnames';
 
 interface IProps {
   comment: IComment;
   can_edit: boolean;
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
-  modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
+  onShowImageModal: (images: IFile[], index: number) => void;
 }
 
-const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, modalShowPhotoswipe }) => {
+const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, onShowImageModal }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { current } = useShallowSelect(selectNode);
 
@@ -89,7 +88,7 @@ const CommentContent: FC<IProps> = memo(({ comment, can_edit, onDelete, modalSho
             className={classNames(styles.images, { [styles.multiple]: groupped.image.length > 1 })}
           >
             {groupped.image.map((file, index) => (
-              <div key={file.id} onClick={() => modalShowPhotoswipe(groupped.image, index)}>
+              <div key={file.id} onClick={() => onShowImageModal(groupped.image, index)}>
                 <img src={getURL(file, PRESETS['600'])} alt={file.name} />
               </div>
             ))}

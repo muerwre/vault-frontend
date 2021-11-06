@@ -1,10 +1,9 @@
 import React, { FC, HTMLAttributes, memo } from 'react';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
-import { IComment, ICommentGroup } from '~/redux/types';
+import { IComment, ICommentGroup, IFile } from '~/redux/types';
 import { CommentContent } from '~/components/comment/CommentContent';
 import styles from './styles.module.scss';
 import { CommendDeleted } from '../../node/CommendDeleted';
-import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import classNames from 'classnames';
 import { NEW_COMMENT_CLASSNAME } from '~/constants/comment';
 
@@ -15,7 +14,7 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
   isSame?: boolean;
   canEdit?: boolean;
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
-  modalShowPhotoswipe: typeof MODAL_ACTIONS.modalShowPhotoswipe;
+  onShowImageModal: (images: IFile[], index: number) => void;
 };
 
 const Comment: FC<IProps> = memo(
@@ -27,7 +26,7 @@ const Comment: FC<IProps> = memo(
     className,
     canEdit,
     onDelete,
-    modalShowPhotoswipe,
+    onShowImageModal,
     ...props
   }) => {
     return (
@@ -53,7 +52,7 @@ const Comment: FC<IProps> = memo(
                 key={comment.id}
                 can_edit={!!canEdit}
                 onDelete={onDelete}
-                modalShowPhotoswipe={modalShowPhotoswipe}
+                onShowImageModal={onShowImageModal}
               />
             );
           })}

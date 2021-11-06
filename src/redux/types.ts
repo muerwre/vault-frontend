@@ -118,9 +118,12 @@ export interface FlowDisplay {
   dominant_color?: string;
 }
 
+// TODO: Pick<>
+export type INodeUser = Partial<IUser>;
+
 export interface INode {
   id?: number;
-  user?: Partial<IUser>;
+  user?: INodeUser;
 
   title: string;
   files: IFile[];

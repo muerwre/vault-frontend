@@ -5,21 +5,30 @@ import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeComments } from '~/components/node/NodeComments';
 import { Footer } from '~/components/main/Footer';
-import { Card } from '~/components/containers/Card';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
-import { selectAuthUser } from '~/redux/auth/selectors';
-import { IComment, INode } from '~/redux/types';
+import { IComment, IFile, INode } from '~/redux/types';
+import { IUser } from '~/redux/auth/types';
 
 interface IProps {
-  isLoadingComments: boolean;
-  commentCount: number;
   node: INode;
+  user: IUser;
+  commentCount: number;
   comments: IComment[];
+  isLoadingComments: boolean;
+  onShowImageModal: (images: IFile[], index: number) => void;
+  onLoadMoreComments: () => void;
+  onDeleteComment: (id: IComment['id'], isLocked: boolean) => void;
 }
 
-const BorisComments: FC<IProps> = ({ isLoadingComments, node, commentCount, comments }) => {
-  const user = useShallowSelect(selectAuthUser);
-
+const BorisComments: FC<IProps> = ({
+  node,
+  user,
+  isLoadingComments,
+  commentCount,
+  comments,
+  onLoadMoreComments,
+  onDeleteComment,
+  onShowImageModal,
+}) => {
   return (
     <>
       <Group className={styles.grid}>
@@ -28,7 +37,15 @@ const BorisComments: FC<IProps> = ({ isLoadingComments, node, commentCount, comm
         {isLoadingComments ? (
           <NodeNoComments is_loading count={7} />
         ) : (
-          <NodeComments comments={comments} count={commentCount} user={user} order="ASC" />
+          <NodeComments
+            comments={comments}
+            count={commentCount}
+            user={user}
+            order="ASC"
+            onDeleteComment={onDeleteComment}
+            onLoadMoreComments={onLoadMoreComments}
+            onShowImageModal={onShowImageModal}
+          />
         )}
       </Group>
 

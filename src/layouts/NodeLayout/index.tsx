@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC } from 'react';
 import { Route } from 'react-router';
 import { Card } from '~/components/containers/Card';
 
@@ -13,62 +13,84 @@ import { useNodeCoverImage } from '~/utils/hooks/node/useNodeCoverImage';
 import { URLS } from '~/constants/urls';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
-import { IComment, INode } from '~/redux/types';
+import { IComment, IFile, INode } from '~/redux/types';
 import { INodeRelated } from '~/redux/node/types';
 
 import styles from './styles.module.scss';
+import { IUser } from '~/redux/auth/types';
 
 type IProps = {
   node: INode;
+  user: IUser;
   lastSeenCurrent?: string;
   related: INodeRelated;
   comments: IComment[];
   commentsCount: number;
+  isUser: boolean;
   isLoading: boolean;
   isLoadingComments: boolean;
+  onShowImageModal: (images: IFile[], index: number) => void;
+  onLoadMoreComments: () => void;
+  onDeleteComment: (id: IComment['id'], isLocked: boolean) => void;
 };
 
-const NodeLayout: FC<IProps> = memo(
-  ({ node, comments, commentsCount, related, lastSeenCurrent, isLoading, isLoadingComments }) => {
-    useNodeCoverImage(node);
+const NodeLayout: FC<IProps> = ({
+  node,
+  user,
+  comments,
+  commentsCount,
+  related,
+  lastSeenCurrent,
+  isUser,
+  isLoading,
+  isLoadingComments,
+  onLoadMoreComments,
+  onDeleteComment,
+  onShowImageModal,
+}) => {
+  useNodeCoverImage(node);
 
-    const { head, block } = useNodeBlocks(node, isLoading);
-    const [canEdit] = useNodePermissions(node);
+  const { head, block } = useNodeBlocks(node, isLoading);
+  const [canEdit] = useNodePermissions(node);
 
-    return (
-      <div className={styles.wrap}>
-        {head}
+  return (
+    <div className={styles.wrap}>
+      {head}
 
-        <Container className={styles.content}>
-          <Card className={styles.node} seamless>
-            {block}
+      <Container className={styles.content}>
+        <Card className={styles.node} seamless>
+          {block}
 
-            <div className={styles.panel}>
-              <NodePanel node={node} isLoading={isLoading} />
-            </div>
+          <div className={styles.panel}>
+            <NodePanel node={node} isLoading={isLoading} />
+          </div>
 
-            <NodeBottomBlock
-              canEdit={canEdit}
-              node={node}
-              comments={comments}
-              commentsCount={commentsCount}
-              commentsOrder="DESC"
-              related={related}
-              isLoadingComments={isLoadingComments}
-              isLoading={isLoading}
-              lastSeenCurrent={lastSeenCurrent}
-            />
+          <NodeBottomBlock
+            isUser={isUser}
+            user={user}
+            node={node}
+            canEdit={canEdit}
+            comments={comments}
+            commentsCount={commentsCount}
+            commentsOrder="DESC"
+            related={related}
+            isLoadingComments={isLoadingComments}
+            isLoading={isLoading}
+            lastSeenCurrent={lastSeenCurrent}
+            onShowImageModal={onShowImageModal}
+            onLoadMoreComments={onLoadMoreComments}
+            onDeleteComment={onDeleteComment}
+          />
 
-            <Footer />
-          </Card>
-        </Container>
+          <Footer />
+        </Card>
+      </Container>
 
-        <SidebarRouter prefix="/post:id" />
+      <SidebarRouter prefix="/post:id" />
 
-        <Route path={URLS.NODE_EDIT_URL(':id')} component={EditorEditDialog} />
-      </div>
-    );
-  }
-);
+      <Route path={URLS.NODE_EDIT_URL(':id')} component={EditorEditDialog} />
+    </div>
+  );
+};
 
 export { NodeLayout };

@@ -1,26 +1,24 @@
 import React, { FC, useCallback } from 'react';
-import { INode } from '~/redux/types';
 import styles from './styles.module.scss';
 import { Avatar } from '~/components/common/Avatar';
 import { openUserProfile } from '~/utils/user';
 import { useUserDescription } from '~/utils/hooks/user/useUserDescription';
+import { INodeUser } from '~/redux/types';
 
 interface Props {
-  node?: INode;
+  user?: INodeUser;
 }
 
-const NodeAuthorBlock: FC<Props> = ({ node }) => {
-  const onOpenProfile = useCallback(() => openUserProfile(node?.user?.username), [
-    node?.user?.username,
-  ]);
+const NodeAuthorBlock: FC<Props> = ({ user }) => {
+  const onOpenProfile = useCallback(() => openUserProfile(user?.username), [user?.username]);
 
-  const description = useUserDescription(node?.user);
+  const description = useUserDescription(user);
 
-  if (!node?.user) {
+  if (!user) {
     return null;
   }
 
-  const { fullname, username, photo } = node.user;
+  const { fullname, username, photo } = user;
 
   return (
     <div className={styles.block} onClick={onOpenProfile}>
