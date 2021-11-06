@@ -9,7 +9,7 @@ interface Props extends IMGProps {
 }
 
 const FlowCellImage: FC<Props> = ({ className, children, ...rest }) => (
-  <LazyLoad once className={classNames(styles.wrapper, className)}>
+  <LazyLoad once offset={600} className={classNames(styles.wrapper, className)}>
     <img {...rest} src={rest.src} alt="" />
     {children}
   </LazyLoad>

@@ -1,15 +1,13 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { NavLink } from 'react-router-dom';
 import { CellShade } from '~/components/flow/CellShade';
 import { FlowCellImage } from '~/components/flow/FlowCellImage';
-import { FlowDisplay, FlowDisplayVariant, INode } from '~/redux/types';
+import { FlowDisplay, INode } from '~/redux/types';
 import { FlowCellText } from '~/components/flow/FlowCellText';
 import classNames from 'classnames';
 import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
 import { useFlowCellControls } from '~/utils/hooks/flow/useFlowCellControls';
-import { Icon } from '~/components/input/Icon';
-import { useFocusEvent } from '~/utils/hooks/useFocusEvent';
 import { useClickOutsideFocus } from '~/utils/hooks/useClickOutsideFocus';
 import { MenuDots } from '~/components/common/MenuDots';
 
@@ -19,6 +17,7 @@ interface Props {
   title: string;
   image?: string;
   color?: string;
+
   text?: string;
   flow: FlowDisplay;
   canEdit?: boolean;
