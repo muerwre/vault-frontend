@@ -1,5 +1,4 @@
 import React, { FC, FormEvent, useCallback, useMemo } from 'react';
-import { IFlowState } from '~/redux/flow/reducer';
 import { InputText } from '~/components/input/InputText';
 import { FlowRecent } from '../FlowRecent';
 
@@ -11,25 +10,34 @@ import { Toggle } from '~/components/input/Toggle';
 import classNames from 'classnames';
 import { Superpower } from '~/components/boris/Superpower';
 import { experimentalFeatures } from '~/constants/features';
+import { IFlowNode, INode } from '~/redux/types';
 
 interface IProps {
-  recent: IFlowState['recent'];
-  updated: IFlowState['updated'];
-  search: IFlowState['search'];
-  isFluid: boolean;
+  searchText: string;
+  searchTotal: number;
+  searchIsLoading: boolean;
+  searchResults: INode[];
   onSearchChange: (text: string) => void;
-  onLoadMore: () => void;
-  toggleLayout: () => void;
+  onSearchLoadMore: () => void;
+
+  recent: IFlowNode[];
+  updated: IFlowNode[];
+  isFluid: boolean;
+  onToggleLayout: () => void;
 }
 
 const FlowStamp: FC<IProps> = ({
+  searchText,
+  searchIsLoading,
+  searchTotal,
+  searchResults,
+  onSearchChange,
+  onSearchLoadMore,
+
   recent,
   updated,
-  search,
-  onSearchChange,
-  onLoadMore,
   isFluid,
-  toggleLayout,
+  onToggleLayout,
 }) => {
   const onSearchSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
@@ -48,12 +56,12 @@ const FlowStamp: FC<IProps> = ({
 
   const after = useMemo(
     () =>
-      search.text ? (
+      searchText ? (
         <Icon icon="close" size={24} className={styles.close_icon} onClick={onClearSearch} />
       ) : (
         <Icon icon="search" size={24} className={styles.search_icon} />
       ),
-    [search.text]
+    [searchText]
   );
 
   return (
@@ -61,7 +69,7 @@ const FlowStamp: FC<IProps> = ({
       <form className={styles.search} onSubmit={onSearchSubmit}>
         <InputText
           title="Поиск"
-          value={search.text}
+          value={searchText}
           handler={onSearchChange}
           after={after}
           onKeyUp={onKeyUp}
@@ -69,16 +77,20 @@ const FlowStamp: FC<IProps> = ({
       </form>
 
       <div className={styles.grid}>
-        {search.text ? (
+        {searchText ? (
           <>
             <div className={styles.label}>
               <span className={styles.label_text}>Результаты поиска</span>
               <span className="line" />
-              <span>{!search.is_loading && search.total}</span>
+              <span>{!searchIsLoading && searchTotal}</span>
             </div>
 
             <div className={styles.items}>
-              <FlowSearchResults search={search} onLoadMore={onLoadMore} />
+              <FlowSearchResults
+                isLoading={searchIsLoading}
+                results={searchResults}
+                onLoadMore={onSearchLoadMore}
+              />
             </div>
           </>
         ) : (
@@ -98,7 +110,7 @@ const FlowStamp: FC<IProps> = ({
       {experimentalFeatures.liquidFlow && (
         <Superpower>
           <div className={styles.toggles}>
-            <Group horizontal onClick={toggleLayout} className={styles.fluid_toggle}>
+            <Group horizontal onClick={onToggleLayout} className={styles.fluid_toggle}>
               <Toggle value={isFluid} />
               <div className={styles.toggles__label}>Жидкое течение</div>
             </Group>

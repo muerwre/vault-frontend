@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { URLS } from '~/constants/urls';
-import { FlowLayout } from '~/layouts/FlowLayout';
 import { NodeLayout } from '~/layouts/NodeLayout';
 import { BorisLayout } from '~/layouts/BorisLayout';
 import { ErrorNotFound } from '~/containers/pages/ErrorNotFound';
@@ -9,6 +8,7 @@ import { LabLayout } from '~/layouts/LabLayout';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectAuthUser } from '~/redux/auth/selectors';
 import { ProfileLayout } from '~/layouts/ProfileLayout';
+import FlowPage from '~/pages';
 
 interface IProps {}
 
@@ -25,7 +25,7 @@ const MainRouter: FC<IProps> = () => {
 
       {is_user && <Route path={URLS.LAB} component={LabLayout} />}
 
-      <Route path={URLS.BASE} component={FlowLayout} />
+      <Route path={URLS.BASE} component={FlowPage} />
       <Redirect to="/" />
     </Switch>
   );

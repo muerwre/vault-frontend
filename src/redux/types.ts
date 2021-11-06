@@ -147,6 +147,11 @@ export interface INode {
   commented_at?: string;
 }
 
+export type IFlowNode = Pick<
+  INode,
+  'id' | 'flow' | 'description' | 'title' | 'thumbnail' | 'created_at'
+>;
+
 export interface IComment {
   id: number;
   text: string;

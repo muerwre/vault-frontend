@@ -1,13 +1,13 @@
 import { createReducer } from '~/utils/reducer';
-import { INode, IError } from '../types';
+import { IError, IFlowNode, INode } from '../types';
 import { FLOW_HANDLERS } from './handlers';
 
 export type IFlowState = Readonly<{
   isLoading: boolean;
-  nodes: INode[];
-  heroes: Partial<INode>[];
-  recent: Partial<INode>[];
-  updated: Partial<INode>[];
+  nodes: IFlowNode[];
+  heroes: IFlowNode[];
+  recent: IFlowNode[];
+  updated: IFlowNode[];
   search: {
     text: string;
     results: INode[];

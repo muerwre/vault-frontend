@@ -1,16 +1,17 @@
 import React, { FC, useCallback } from 'react';
 import styles from './styles.module.scss';
-import { IFlowState } from '~/redux/flow/reducer';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { FlowRecentItem } from '../FlowRecentItem';
 import { Icon } from '~/components/input/Icon';
+import { INode } from '~/redux/types';
 
 interface IProps {
-  search: IFlowState['search'];
+  isLoading: boolean;
+  results: INode[];
   onLoadMore: () => void;
 }
 
-const FlowSearchResults: FC<IProps> = ({ search, onLoadMore }) => {
+const FlowSearchResults: FC<IProps> = ({ results, isLoading, onLoadMore }) => {
   const onScroll = useCallback(
     event => {
       const el = event.target;
@@ -23,7 +24,7 @@ const FlowSearchResults: FC<IProps> = ({ search, onLoadMore }) => {
     [onLoadMore]
   );
 
-  if (search.is_loading) {
+  if (isLoading) {
     return (
       <div className={styles.loading}>
         <LoaderCircle size={64} />
@@ -31,7 +32,7 @@ const FlowSearchResults: FC<IProps> = ({ search, onLoadMore }) => {
     );
   }
 
-  if (!search.results.length) {
+  if (!results.length) {
     return (
       <div className={styles.loading}>
         <Icon size={96} icon="search" />
@@ -42,7 +43,7 @@ const FlowSearchResults: FC<IProps> = ({ search, onLoadMore }) => {
 
   return (
     <div className={styles.wrap} onScroll={onScroll}>
-      {search.results.map(node => (
+      {results.map(node => (
         <FlowRecentItem node={node} key={node.id} />
       ))}
     </div>

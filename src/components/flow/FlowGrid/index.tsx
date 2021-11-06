@@ -1,7 +1,5 @@
 import React, { FC, Fragment } from 'react';
-
-import { IFlowState } from '~/redux/flow/reducer';
-import { FlowDisplay, INode } from '~/redux/types';
+import { FlowDisplay, IFlowNode, INode } from '~/redux/types';
 import { IUser } from '~/redux/auth/types';
 import { PRESETS, URLS } from '~/constants/urls';
 import { FlowCell } from '~/components/flow/FlowCell';
@@ -10,7 +8,8 @@ import styles from './styles.module.scss';
 import { getURLFromString } from '~/utils/dom';
 import { canEditNode } from '~/utils/node';
 
-type IProps = Partial<IFlowState> & {
+type IProps = {
+  nodes: IFlowNode[];
   user: Partial<IUser>;
   onChangeCellView: (id: INode['id'], flow: FlowDisplay) => void;
 };
