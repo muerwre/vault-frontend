@@ -8,13 +8,13 @@ import styles from './styles.module.scss';
 import { getURLFromString } from '~/utils/dom';
 import { canEditNode } from '~/utils/node';
 
-type IProps = {
+interface Props {
   nodes: IFlowNode[];
   user: Partial<IUser>;
   onChangeCellView: (id: INode['id'], flow: FlowDisplay) => void;
-};
+}
 
-export const FlowGrid: FC<IProps> = ({ user, nodes, onChangeCellView }) => {
+export const FlowGrid: FC<Props> = ({ user, nodes, onChangeCellView }) => {
   if (!nodes) {
     return null;
   }

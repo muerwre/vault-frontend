@@ -1,51 +1,39 @@
 import React, { FC, memo } from 'react';
-import { Route, RouteComponentProps } from 'react-router';
-import { selectNode } from '~/redux/node/selectors';
+import { Route } from 'react-router';
 import { Card } from '~/components/containers/Card';
 
 import { NodePanel } from '~/components/node/NodePanel';
 import { Footer } from '~/components/main/Footer';
 
-import styles from './styles.module.scss';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { Container } from '~/containers/main/Container';
 import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
 import { NodeBottomBlock } from '~/components/node/NodeBottomBlock';
 import { useNodeCoverImage } from '~/utils/hooks/node/useNodeCoverImage';
-import { useScrollToTop } from '~/utils/hooks/useScrollToTop';
-import { useLoadNode } from '~/utils/hooks/node/useLoadNode';
 import { URLS } from '~/constants/urls';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
-import { useOnNodeSeen } from '~/utils/hooks/node/useOnNodeSeen';
-import { canEditNode } from '~/utils/node';
 import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
+import { IComment, INode } from '~/redux/types';
+import { INodeRelated } from '~/redux/node/types';
 
-type IProps = RouteComponentProps<{ id: string }> & {};
+import styles from './styles.module.scss';
+
+type IProps = {
+  node: INode;
+  lastSeenCurrent?: string;
+  related: INodeRelated;
+  comments: IComment[];
+  commentsCount: number;
+  isLoading: boolean;
+  isLoadingComments: boolean;
+};
 
 const NodeLayout: FC<IProps> = memo(
-  ({
-    match: {
-      params: { id },
-    },
-  }) => {
-    const {
-      is_loading,
-      current,
-      comments,
-      comment_count,
-      is_loading_comments,
-      related,
-      lastSeenCurrent,
-    } = useShallowSelect(selectNode);
+  ({ node, comments, commentsCount, related, lastSeenCurrent, isLoading, isLoadingComments }) => {
+    useNodeCoverImage(node);
 
-    useNodeCoverImage(current);
-    useScrollToTop([id, is_loading_comments]);
-    useLoadNode(id, is_loading);
-    useOnNodeSeen(current);
-
-    const { head, block } = useNodeBlocks(current, is_loading);
-    const [canEdit] = useNodePermissions(current);
+    const { head, block } = useNodeBlocks(node, isLoading);
+    const [canEdit] = useNodePermissions(node);
 
     return (
       <div className={styles.wrap}>
@@ -56,18 +44,18 @@ const NodeLayout: FC<IProps> = memo(
             {block}
 
             <div className={styles.panel}>
-              <NodePanel node={current} isLoading={is_loading} />
+              <NodePanel node={node} isLoading={isLoading} />
             </div>
 
             <NodeBottomBlock
               canEdit={canEdit}
-              node={current}
+              node={node}
               comments={comments}
-              commentsCount={comment_count}
+              commentsCount={commentsCount}
               commentsOrder="DESC"
               related={related}
-              isLoadingComments={is_loading_comments}
-              isLoading={is_loading}
+              isLoadingComments={isLoadingComments}
+              isLoading={isLoading}
               lastSeenCurrent={lastSeenCurrent}
             />
 
