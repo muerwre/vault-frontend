@@ -6,6 +6,7 @@ import { useFullNode } from '~/utils/hooks/node/useFullNode';
 import { useImageModal } from '~/utils/hooks/useImageModal';
 import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
 import { useUser } from '~/utils/hooks/user/userUser';
+import { useNodeTags } from '~/utils/hooks/node/useNodeTags';
 
 type Props = RouteComponentProps<{ id: string }> & {};
 
@@ -25,7 +26,10 @@ const NodePage: FC<Props> = ({
   } = useFullNode(id);
 
   const onShowImageModal = useImageModal();
-  const { onLoadMoreComments, onDelete: onDeleteComment } = useNodeComments(id);
+  const { onLoadMoreComments, onDelete: onDeleteComment } = useNodeComments(parseInt(id, 10));
+  const { onDelete: onTagDelete, onChange: onTagsChange, onClick: onTagClick } = useNodeTags(
+    parseInt(id, 10)
+  );
   const user = useUser();
   useScrollToTop([id, isLoadingComments]);
 
@@ -43,6 +47,9 @@ const NodePage: FC<Props> = ({
       onShowImageModal={onShowImageModal}
       onLoadMoreComments={onLoadMoreComments}
       onDeleteComment={onDeleteComment}
+      onTagDelete={onTagDelete}
+      onTagClick={onTagClick}
+      onTagsChange={onTagsChange}
     />
   );
 };

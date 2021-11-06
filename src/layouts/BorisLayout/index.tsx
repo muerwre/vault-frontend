@@ -65,7 +65,7 @@ const BorisLayout: FC<IProps> = () => {
   );
 
   const onShowImageModal = useImageModal();
-  const { onLoadMoreComments, onDelete: onDeleteComment } = useNodeComments('696');
+  const { onLoadMoreComments, onDelete: onDeleteComment } = useNodeComments(696);
 
   return (
     <Container>

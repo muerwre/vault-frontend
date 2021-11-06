@@ -6,7 +6,7 @@ import { NodeCommentsBlock } from '~/components/node/NodeCommentsBlock';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
 import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
-import { IComment, IFile, INode } from '~/redux/types';
+import { IComment, IFile, INode, ITag } from '~/redux/types';
 import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
 import { INodeRelated } from '~/redux/node/types';
 import StickyBox from 'react-sticky-box/dist/esnext';
@@ -29,6 +29,9 @@ interface IProps {
   onShowImageModal: (images: IFile[], index: number) => void;
   onLoadMoreComments: () => void;
   onDeleteComment: (id: IComment['id'], isLocked: boolean) => void;
+  onTagsChange: (tags: string[]) => void;
+  onTagClick: (tag: Partial<ITag>) => void;
+  onTagDelete: (id: ITag['ID']) => void;
 }
 
 const NodeBottomBlock: FC<IProps> = ({
@@ -46,6 +49,9 @@ const NodeBottomBlock: FC<IProps> = ({
   onLoadMoreComments,
   onDeleteComment,
   onShowImageModal,
+  onTagsChange,
+  onTagClick,
+  onTagDelete,
 }) => {
   const { inline } = useNodeBlocks(node, isLoading);
 
@@ -84,7 +90,15 @@ const NodeBottomBlock: FC<IProps> = ({
                   <NodeAuthorBlock user={node?.user} />
                 </div>
                 <div className={styles.left_item}>
-                  <NodeTagsBlock node={node} canEdit={canEdit} isLoading={isLoading} />
+                  <NodeTagsBlock
+                    tags={node.tags}
+                    canDelete={canEdit}
+                    canAppend={isUser}
+                    isLoading={isLoading}
+                    onChange={onTagsChange}
+                    onTagClick={onTagClick}
+                    onTagDelete={onTagDelete}
+                  />
                 </div>
                 <div className={styles.left_item}>
                   <NodeRelatedBlock isLoading={isLoading} node={node} related={related} />

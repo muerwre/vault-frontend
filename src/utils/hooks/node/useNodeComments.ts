@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { nodeLoadMoreComments, nodeLockComment } from '~/redux/node/actions';
-import { IComment } from '~/redux/types';
+import { IComment, INode } from '~/redux/types';
 import { useDispatch } from 'react-redux';
 
-export const useNodeComments = (id: string) => {
+export const useNodeComments = (id: INode['id']) => {
   const dispatch = useDispatch();
 
   const onLoadMoreComments = useCallback(() => dispatch(nodeLoadMoreComments()), [dispatch]);

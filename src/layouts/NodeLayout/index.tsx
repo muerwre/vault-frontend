@@ -13,7 +13,7 @@ import { useNodeCoverImage } from '~/utils/hooks/node/useNodeCoverImage';
 import { URLS } from '~/constants/urls';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
-import { IComment, IFile, INode } from '~/redux/types';
+import { IComment, IFile, INode, ITag } from '~/redux/types';
 import { INodeRelated } from '~/redux/node/types';
 
 import styles from './styles.module.scss';
@@ -32,6 +32,9 @@ type IProps = {
   onShowImageModal: (images: IFile[], index: number) => void;
   onLoadMoreComments: () => void;
   onDeleteComment: (id: IComment['id'], isLocked: boolean) => void;
+  onTagsChange: (tags: string[]) => void;
+  onTagClick: (tag: Partial<ITag>) => void;
+  onTagDelete: (id: ITag['ID']) => void;
 };
 
 const NodeLayout: FC<IProps> = ({
@@ -47,6 +50,9 @@ const NodeLayout: FC<IProps> = ({
   onLoadMoreComments,
   onDeleteComment,
   onShowImageModal,
+  onTagsChange,
+  onTagClick,
+  onTagDelete,
 }) => {
   useNodeCoverImage(node);
 
@@ -80,6 +86,9 @@ const NodeLayout: FC<IProps> = ({
             onShowImageModal={onShowImageModal}
             onLoadMoreComments={onLoadMoreComments}
             onDeleteComment={onDeleteComment}
+            onTagsChange={onTagsChange}
+            onTagClick={onTagClick}
+            onTagDelete={onTagDelete}
           />
 
           <Footer />
