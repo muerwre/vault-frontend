@@ -130,7 +130,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
         />
       </TagWrapper>
 
-      {onInput && focused && input?.length > 0 && ref.current && (
+      {focused && input?.length > 0 && ref.current && (
         <TagAutocomplete
           exclude={exclude}
           input={ref.current}
