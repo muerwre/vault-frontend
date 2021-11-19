@@ -44,7 +44,7 @@ const BorisComments: FC<IProps> = ({
             onDeleteComment={onDeleteComment}
             onLoadMoreComments={onLoadMoreComments}
             onShowImageModal={onShowImageModal}
-            isLoadingComments={isLoadingComments}
+            isLoading={isLoadingComments}
           >
             <NodeComments order="ASC" />
           </CommentProvider>

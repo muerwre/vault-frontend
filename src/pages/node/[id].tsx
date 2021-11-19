@@ -11,6 +11,7 @@ import { NodeProvider } from '~/utils/providers/NodeProvider';
 import { CommentProvider } from '~/utils/providers/CommentProvider';
 import { TagProvider } from '~/utils/providers/TagProvider';
 import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
+import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
 
 type Props = RouteComponentProps<{ id: string }> & {};
 
@@ -40,28 +41,30 @@ const NodePage: FC<Props> = ({
   useScrollToTop([id, isLoadingComments]);
 
   return (
-    <NodeProvider node={node} related={related} isLoading={isLoading}>
-      <CommentProvider
-        comments={comments}
-        count={commentsCount}
-        lastSeenCurrent={lastSeenCurrent}
-        isLoadingComments={isLoadingComments}
-        onShowImageModal={onShowImageModal}
-        onLoadMoreComments={onLoadMoreComments}
-        onDeleteComment={onDeleteComment}
-      >
-        <TagProvider
-          tags={node.tags}
-          canAppend={user.is_user}
-          canDelete={canEdit}
-          isLoading={isLoading}
-          onChange={onTagsChange}
-          onTagClick={onTagClick}
-          onTagDelete={onTagDelete}
+    <NodeProvider node={node} isLoading={isLoading}>
+      <NodeRelatedProvider related={related} isLoading={isLoading}>
+        <CommentProvider
+          comments={comments}
+          count={commentsCount}
+          lastSeenCurrent={lastSeenCurrent}
+          isLoading={isLoadingComments}
+          onShowImageModal={onShowImageModal}
+          onLoadMoreComments={onLoadMoreComments}
+          onDeleteComment={onDeleteComment}
         >
-          <NodeLayout />
-        </TagProvider>
-      </CommentProvider>
+          <TagProvider
+            tags={node.tags}
+            canAppend={user.is_user}
+            canDelete={canEdit}
+            isLoading={isLoading}
+            onChange={onTagsChange}
+            onTagClick={onTagClick}
+            onTagDelete={onTagDelete}
+          >
+            <NodeLayout />
+          </TagProvider>
+        </CommentProvider>
+      </NodeRelatedProvider>
     </NodeProvider>
   );
 };

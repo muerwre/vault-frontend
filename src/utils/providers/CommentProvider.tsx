@@ -6,7 +6,7 @@ export interface CommentProviderProps {
   comments: IComment[];
   count: number;
   lastSeenCurrent?: string;
-  isLoadingComments: boolean;
+  isLoading: boolean;
   onShowImageModal: (images: IFile[], index: number) => void;
   onLoadMoreComments: () => void;
   onDeleteComment: (id: IComment['id'], isLocked: boolean) => void;
@@ -17,7 +17,7 @@ const CommentContext = createContext<CommentProviderProps>({
   comments: [],
   count: 0,
   lastSeenCurrent: undefined,
-  isLoadingComments: false,
+  isLoading: false,
   onShowImageModal: () => {},
   onLoadMoreComments: () => {},
   onDeleteComment: () => {},

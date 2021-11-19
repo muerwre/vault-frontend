@@ -14,6 +14,7 @@ import { useCommentContext } from '~/utils/providers/CommentProvider';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeComments } from '~/views/node/NodeComments';
 import { useUserContext } from '~/utils/providers/UserProvider';
+import { useNodeRelatedContext } from '~/utils/providers/NodeRelatedProvider';
 
 interface IProps {
   commentsOrder: 'ASC' | 'DESC';
@@ -21,8 +22,9 @@ interface IProps {
 
 const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
   const { is_user: isUser } = useUserContext();
-  const { node, related, isLoading } = useNodeContext();
-  const { comments, isLoadingComments } = useCommentContext();
+  const { node, isLoading } = useNodeContext();
+  const { comments, isLoading: isLoadingComments } = useCommentContext();
+  const { related, isLoading: isLoadingRelated } = useNodeRelatedContext();
   const { inline } = useNodeBlocks(node, isLoading);
 
   if (node.deleted_at) {
@@ -56,7 +58,7 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
                   <NodeTagsBlock />
                 </div>
                 <div className={styles.left_item}>
-                  <NodeRelatedBlock isLoading={isLoading} node={node} related={related} />
+                  <NodeRelatedBlock isLoading={isLoadingRelated} node={node} related={related} />
                 </div>
               </div>
             </StickyBox>
