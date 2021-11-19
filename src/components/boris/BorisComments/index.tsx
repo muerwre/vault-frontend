@@ -5,46 +5,39 @@ import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeComments } from '~/views/node/NodeComments';
 import { Footer } from '~/components/main/Footer';
-import { IComment, IFile, INode } from '~/redux/types';
-import { IUser } from '~/redux/auth/types';
-import { CommentProvider } from '~/utils/providers/CommentProvider';
+import { CommentProvider, useCommentContext } from '~/utils/providers/CommentProvider';
+import { useUserContext } from '~/utils/providers/UserProvider';
+import { useNodeContext } from '~/utils/providers/NodeProvider';
 
-interface IProps {
-  node: INode;
-  user: IUser;
-  commentCount: number;
-  comments: IComment[];
-  isLoadingComments: boolean;
-  onShowImageModal: (images: IFile[], index: number) => void;
-  onLoadMoreComments: () => void;
-  onDeleteComment: (id: IComment['id'], isLocked: boolean) => void;
-}
+interface IProps {}
 
-const BorisComments: FC<IProps> = ({
-  node,
-  user,
-  isLoadingComments,
-  commentCount,
-  comments,
-  onLoadMoreComments,
-  onDeleteComment,
-  onShowImageModal,
-}) => {
+const BorisComments: FC<IProps> = () => {
+  const user = useUserContext();
+  const {
+    isLoading,
+    comments,
+    onLoadMoreComments,
+    onDeleteComment,
+    onShowImageModal,
+    count,
+  } = useCommentContext();
+  const { node } = useNodeContext();
+
   return (
     <>
       <Group className={styles.grid}>
         {user.is_user && <NodeCommentForm isBefore nodeId={node.id} />}
 
-        {isLoadingComments ? (
+        {isLoading ? (
           <NodeNoComments is_loading count={7} />
         ) : (
           <CommentProvider
             comments={comments}
-            count={commentCount}
+            count={count}
             onDeleteComment={onDeleteComment}
             onLoadMoreComments={onLoadMoreComments}
             onShowImageModal={onShowImageModal}
-            isLoading={isLoadingComments}
+            isLoading={isLoading}
           >
             <NodeComments order="ASC" />
           </CommentProvider>

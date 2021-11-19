@@ -1,71 +1,25 @@
-import React, { FC, useCallback, useEffect } from 'react';
-import { selectNode, selectNodeComments } from '~/redux/node/selectors';
-import { selectAuthIsTester } from '~/redux/auth/selectors';
-import { useDispatch } from 'react-redux';
+import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
-import { useRandomPhrase } from '~/constants/phrases';
-import isBefore from 'date-fns/isBefore';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
-import { selectBorisStats } from '~/redux/boris/selectors';
-import { authSetState, authSetUser } from '~/redux/auth/actions';
-import { nodeLoadNode } from '~/redux/node/actions';
-import { borisLoadStats } from '~/redux/boris/actions';
 import { Container } from '~/containers/main/Container';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import { BorisComments } from '~/components/boris/BorisComments';
 import { Card } from '~/components/containers/Card';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
-import { useImageModal } from '~/utils/hooks/useImageModal';
-import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
-import { useUser } from '~/utils/hooks/user/userUser';
+import { useUserContext } from '~/utils/providers/UserProvider';
+import { BorisUsageStats } from '~/redux/boris/reducer';
 
-type IProps = {};
+type IProps = {
+  title: string;
+  setIsBetaTester: (val: boolean) => void;
+  isTester: boolean;
+  stats: BorisUsageStats;
+};
 
-const BorisLayout: FC<IProps> = () => {
-  const title = useRandomPhrase('BORIS_TITLE');
-  const dispatch = useDispatch();
-  const node = useShallowSelect(selectNode);
-  const stats = useShallowSelect(selectBorisStats);
-  const comments = useShallowSelect(selectNodeComments);
-  const isTester = useShallowSelect(selectAuthIsTester);
-  const user = useUser();
-
-  useEffect(() => {
-    const last_comment = comments[0];
-
-    if (!last_comment) return;
-
-    if (
-      user.last_seen_boris &&
-      last_comment.created_at &&
-      !isBefore(new Date(user.last_seen_boris), new Date(last_comment.created_at))
-    )
-      return;
-
-    dispatch(authSetUser({ last_seen_boris: last_comment.created_at }));
-  }, [user.last_seen_boris, dispatch, comments]);
-
-  useEffect(() => {
-    if (node.is_loading) return;
-    dispatch(nodeLoadNode(696, 'DESC'));
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(borisLoadStats());
-  }, [dispatch]);
-
-  const setBetaTester = useCallback(
-    (is_tester: boolean) => {
-      dispatch(authSetState({ is_tester }));
-    },
-    [dispatch]
-  );
-
-  const onShowImageModal = useImageModal();
-  const { onLoadMoreComments, onDelete: onDeleteComment } = useNodeComments(696);
+const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats }) => {
+  const user = useUserContext();
 
   return (
     <Container>
@@ -82,16 +36,7 @@ const BorisLayout: FC<IProps> = () => {
 
         <div className={styles.container}>
           <Card className={styles.content}>
-            <BorisComments
-              node={node.current}
-              user={user}
-              comments={node.comments}
-              commentCount={node.comment_count}
-              isLoadingComments={node.is_loading_comments}
-              onLoadMoreComments={onLoadMoreComments}
-              onShowImageModal={onShowImageModal}
-              onDeleteComment={onDeleteComment}
-            />
+            <BorisComments />
           </Card>
 
           <Group className={styles.stats}>
@@ -99,7 +44,7 @@ const BorisLayout: FC<IProps> = () => {
               <BorisSidebar
                 isTester={isTester}
                 stats={stats}
-                setBetaTester={setBetaTester}
+                setBetaTester={setIsBetaTester}
                 user={user}
               />
             </StickyBox>
