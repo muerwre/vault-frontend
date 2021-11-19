@@ -6,13 +6,11 @@ import { Logo } from '~/components/main/Logo';
 
 import { Filler } from '~/components/containers/Filler';
 import { selectAuthUpdates, selectUser } from '~/redux/auth/selectors';
-import { Group } from '~/components/containers/Group';
 import { DIALOGS } from '~/redux/modal/constants';
 import { path, pick } from 'ramda';
 import { UserButton } from '../UserButton';
 import { Notifications } from '../Notifications';
 import { URLS } from '~/constants/urls';
-import { createPortal } from 'react-dom';
 import classNames from 'classnames';
 
 import styles from './styles.module.scss';
@@ -22,8 +20,8 @@ import { IState } from '~/redux/store';
 import isBefore from 'date-fns/isBefore';
 import { Authorized } from '~/components/containers/Authorized';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
-import { selectLabUpdates, selectLabUpdatesNodes } from '~/redux/lab/selectors';
-import { selectFlow, selectFlowUpdated } from '~/redux/flow/selectors';
+import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
+import { selectFlowUpdated } from '~/redux/flow/selectors';
 import { Button } from '~/components/input/Button';
 
 const mapStateToProps = (state: IState) => ({
@@ -82,7 +80,7 @@ const HeaderUnconnected: FC<IProps> = memo(
     const hasLabUpdates = useMemo(() => labUpdates.length > 0, [labUpdates]);
     const hasFlowUpdates = useMemo(() => flowUpdates.length > 0, [flowUpdates]);
 
-    return createPortal(
+    return (
       <div className={classNames(styles.wrap, { [styles.is_scrolled]: is_scrolled })}>
         <div className={styles.container}>
           <div className={classNames(styles.logo_wrapper, { [styles.logged_in]: is_user })}>
@@ -141,8 +139,7 @@ const HeaderUnconnected: FC<IProps> = memo(
             </Button>
           )}
         </div>
-      </div>,
-      document.body
+      </div>
     );
   }
 );
