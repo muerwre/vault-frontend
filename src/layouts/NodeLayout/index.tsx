@@ -8,7 +8,7 @@ import { Footer } from '~/components/main/Footer';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { Container } from '~/containers/main/Container';
 import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
-import { NodeBottomBlock } from '~/components/node/NodeBottomBlock';
+import { NodeBottomBlock } from '~/views/node/NodeBottomBlock';
 import { useNodeCoverImage } from '~/utils/hooks/node/useNodeCoverImage';
 import { URLS } from '~/constants/urls';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
@@ -20,10 +20,9 @@ type IProps = {};
 
 const NodeLayout: FC<IProps> = () => {
   const { node, isLoading } = useNodeContext();
+  const { head, block } = useNodeBlocks(node, isLoading);
 
   useNodeCoverImage(node);
-
-  const { head, block } = useNodeBlocks(node, isLoading);
 
   return (
     <div className={styles.wrap}>
