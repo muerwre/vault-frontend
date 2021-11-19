@@ -7,6 +7,10 @@ import { useImageModal } from '~/utils/hooks/useImageModal';
 import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
 import { useUser } from '~/utils/hooks/user/userUser';
 import { useNodeTags } from '~/utils/hooks/node/useNodeTags';
+import { NodeProvider } from '~/utils/providers/NodeProvider';
+import { CommentProvider } from '~/utils/providers/CommentProvider';
+import { TagProvider } from '~/utils/providers/TagProvider';
+import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
 
 type Props = RouteComponentProps<{ id: string }> & {};
 
@@ -31,26 +35,37 @@ const NodePage: FC<Props> = ({
     parseInt(id, 10)
   );
   const user = useUser();
+  const [canEdit] = useNodePermissions(node);
+
   useScrollToTop([id, isLoadingComments]);
 
   return (
-    <NodeLayout
-      node={node}
-      user={user}
-      related={related}
-      lastSeenCurrent={lastSeenCurrent}
-      comments={comments}
-      commentsCount={commentsCount}
-      isUser={user.is_user}
-      isLoading={isLoading}
-      isLoadingComments={isLoadingComments}
-      onShowImageModal={onShowImageModal}
-      onLoadMoreComments={onLoadMoreComments}
-      onDeleteComment={onDeleteComment}
-      onTagDelete={onTagDelete}
-      onTagClick={onTagClick}
-      onTagsChange={onTagsChange}
-    />
+    <NodeProvider node={node} related={related} isUser={user.is_user} isLoading={isLoading}>
+      <CommentProvider
+        node={node}
+        user={user}
+        comments={comments}
+        count={commentsCount}
+        lastSeenCurrent={lastSeenCurrent}
+        isLoadingNode={isLoading}
+        isLoadingComments={isLoadingComments}
+        onShowImageModal={onShowImageModal}
+        onLoadMoreComments={onLoadMoreComments}
+        onDeleteComment={onDeleteComment}
+      >
+        <TagProvider
+          tags={node.tags}
+          canAppend={user.is_user}
+          canDelete={canEdit}
+          isLoading={isLoading}
+          onChange={onTagsChange}
+          onTagClick={onTagClick}
+          onTagDelete={onTagDelete}
+        >
+          <NodeLayout />
+        </TagProvider>
+      </CommentProvider>
+    </NodeProvider>
   );
 };
 

@@ -6,53 +6,19 @@ import { NodeCommentsBlock } from '~/components/node/NodeCommentsBlock';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
 import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
-import { IComment, IFile, INode, ITag } from '~/redux/types';
 import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
-import { INodeRelated } from '~/redux/node/types';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import styles from './styles.module.scss';
 import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
-import { IUser } from '~/redux/auth/types';
+import { useNodeContext } from '~/utils/providers/NodeProvider';
 
 interface IProps {
-  node: INode;
-  user: IUser;
   isUser: boolean;
-  canEdit: boolean;
-  isLoading: boolean;
   commentsOrder: 'ASC' | 'DESC';
-  comments: IComment[];
-  commentsCount: number;
-  isLoadingComments: boolean;
-  related: INodeRelated;
-  lastSeenCurrent?: string;
-  onShowImageModal: (images: IFile[], index: number) => void;
-  onLoadMoreComments: () => void;
-  onDeleteComment: (id: IComment['id'], isLocked: boolean) => void;
-  onTagsChange: (tags: string[]) => void;
-  onTagClick: (tag: Partial<ITag>) => void;
-  onTagDelete: (id: ITag['ID']) => void;
 }
 
-const NodeBottomBlock: FC<IProps> = ({
-  node,
-  user,
-  canEdit,
-  isLoading,
-  isUser,
-  isLoadingComments,
-  comments,
-  commentsCount,
-  commentsOrder,
-  related,
-  lastSeenCurrent,
-  onLoadMoreComments,
-  onDeleteComment,
-  onShowImageModal,
-  onTagsChange,
-  onTagClick,
-  onTagDelete,
-}) => {
+const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
+  const { node, related, isUser, isLoading } = useNodeContext();
   const { inline } = useNodeBlocks(node, isLoading);
 
   if (node.deleted_at) {
@@ -66,19 +32,7 @@ const NodeBottomBlock: FC<IProps> = ({
           <Group className={styles.comments}>
             {inline && <div className={styles.inline}>{inline}</div>}
 
-            <NodeCommentsBlock
-              lastSeenCurrent={lastSeenCurrent}
-              isLoading={isLoading}
-              isLoadingComments={isLoadingComments}
-              comments={comments}
-              count={commentsCount}
-              order={commentsOrder}
-              user={user}
-              node={node}
-              onShowImageModal={onShowImageModal}
-              onLoadMoreComments={onLoadMoreComments}
-              onDeleteComment={onDeleteComment}
-            />
+            <NodeCommentsBlock order={commentsOrder} />
 
             {isUser && !isLoading && <NodeCommentForm nodeId={node.id} />}
           </Group>
@@ -89,16 +43,9 @@ const NodeBottomBlock: FC<IProps> = ({
                 <div className={styles.left_item}>
                   <NodeAuthorBlock user={node?.user} />
                 </div>
+
                 <div className={styles.left_item}>
-                  <NodeTagsBlock
-                    tags={node.tags}
-                    canDelete={canEdit}
-                    canAppend={isUser}
-                    isLoading={isLoading}
-                    onChange={onTagsChange}
-                    onTagClick={onTagClick}
-                    onTagDelete={onTagDelete}
-                  />
+                  <NodeTagsBlock />
                 </div>
                 <div className={styles.left_item}>
                   <NodeRelatedBlock isLoading={isLoading} node={node} related={related} />

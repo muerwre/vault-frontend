@@ -1,26 +1,20 @@
 import React, { FC } from 'react';
-import { ITag } from '~/redux/types';
 import { NodeTags } from '~/components/node/NodeTags';
+import { useTagContext } from '~/utils/providers/TagProvider';
 
-interface IProps {
-  tags: ITag[];
-  canAppend: boolean;
-  canDelete: boolean;
-  isLoading: boolean;
-  onChange: (tags: string[]) => void;
-  onTagClick: (tag: Partial<ITag>) => void;
-  onTagDelete: (id: ITag['ID']) => void;
-}
+interface IProps {}
 
-const NodeTagsBlock: FC<IProps> = ({
-  tags,
-  canAppend,
-  canDelete,
-  isLoading,
-  onChange,
-  onTagClick,
-  onTagDelete,
-}) => {
+const NodeTagsBlock: FC<IProps> = ({}) => {
+  const {
+    tags,
+    canAppend,
+    canDelete,
+    isLoading,
+    onChange,
+    onTagClick,
+    onTagDelete,
+  } = useTagContext();
+
   if (isLoading) {
     return null;
   }
