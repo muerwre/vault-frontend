@@ -1,29 +1,23 @@
-import React, { FC } from 'react';
-import { connect } from 'react-redux';
+import React, { VFC } from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { history } from '~/redux/store';
 import { MainLayout } from '~/containers/main/MainLayout';
 import { Sprites } from '~/sprites/Sprites';
 import { Modal } from '~/containers/dialogs/Modal';
-import { selectModal } from '~/redux/modal/selectors';
-import { BlurWrapper } from '~/components/containers/BlurWrapper';
 import { PageCover } from '~/components/containers/PageCover';
 import { BottomContainer } from '~/containers/main/BottomContainer';
 import { MainRouter } from '~/containers/main/MainRouter';
 import { DragDetectorProvider } from '~/utils/hooks/useDragDetector';
+import { useUser } from '~/utils/hooks/user/userUser';
+import { UserProvider } from '~/utils/providers/UserProvider';
 
-const mapStateToProps = state => ({
-  modal: selectModal(state),
-});
-const mapDispatchToProps = {};
+const App: VFC = () => {
+  const user = useUser();
 
-type IProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps> & {};
-
-const Component: FC<IProps> = ({ modal: { is_shown } }) => {
   return (
     <ConnectedRouter history={history}>
-      <DragDetectorProvider>
-        <BlurWrapper is_blurred={is_shown}>
+      <UserProvider user={user}>
+        <DragDetectorProvider>
           <PageCover />
 
           <MainLayout>
@@ -32,11 +26,11 @@ const Component: FC<IProps> = ({ modal: { is_shown } }) => {
 
             <MainRouter />
           </MainLayout>
-        </BlurWrapper>
-        <BottomContainer />
-      </DragDetectorProvider>
+          <BottomContainer />
+        </DragDetectorProvider>
+      </UserProvider>
     </ConnectedRouter>
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export { App };

@@ -3,10 +3,11 @@ import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { NodeComments } from '~/components/node/NodeComments';
+import { NodeComments } from '~/views/node/NodeComments';
 import { Footer } from '~/components/main/Footer';
 import { IComment, IFile, INode } from '~/redux/types';
 import { IUser } from '~/redux/auth/types';
+import { CommentProvider } from '~/utils/providers/CommentProvider';
 
 interface IProps {
   node: INode;
@@ -37,15 +38,16 @@ const BorisComments: FC<IProps> = ({
         {isLoadingComments ? (
           <NodeNoComments is_loading count={7} />
         ) : (
-          <NodeComments
+          <CommentProvider
             comments={comments}
             count={commentCount}
-            user={user}
-            order="ASC"
             onDeleteComment={onDeleteComment}
             onLoadMoreComments={onLoadMoreComments}
             onShowImageModal={onShowImageModal}
-          />
+            isLoadingComments={isLoadingComments}
+          >
+            <NodeComments order="ASC" />
+          </CommentProvider>
         )}
       </Group>
 

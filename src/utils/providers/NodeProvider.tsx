@@ -6,8 +6,8 @@ import React, { createContext, FC, useContext } from 'react';
 export interface NodeContextProps {
   node: INode;
   related: INodeRelated;
-  isUser: boolean;
   isLoading: boolean;
+  // isUser: boolean;
   // user: IUser;
   // isLoadingComments: boolean;
   // lastSeenCurrent?: string;
@@ -24,9 +24,10 @@ export interface NodeContextProps {
 export const NodeContext = createContext<NodeContextProps>({
   node: EMPTY_NODE,
   related: { albums: {}, similar: [] },
-  isUser: false,
   isLoading: false,
 
+  // UserContext
+  // isUser: false,
   // CommentContext
   // user: EMPTY_USER,
   // lastSeenCurrent: undefined,

@@ -19,7 +19,7 @@ import { useNodeContext } from '~/utils/providers/NodeProvider';
 type IProps = {};
 
 const NodeLayout: FC<IProps> = () => {
-  const { node, isUser, isLoading } = useNodeContext();
+  const { node, isLoading } = useNodeContext();
 
   useNodeCoverImage(node);
 
@@ -37,7 +37,7 @@ const NodeLayout: FC<IProps> = () => {
             <NodePanel node={node} isLoading={isLoading} />
           </div>
 
-          <NodeBottomBlock isUser={isUser} commentsOrder="DESC" />
+          <NodeBottomBlock commentsOrder="DESC" />
 
           <Footer />
         </Card>

@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
-import { NodeCommentsBlock } from '~/components/node/NodeCommentsBlock';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
 import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
@@ -11,14 +10,19 @@ import StickyBox from 'react-sticky-box/dist/esnext';
 import styles from './styles.module.scss';
 import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
 import { useNodeContext } from '~/utils/providers/NodeProvider';
+import { useCommentContext } from '~/utils/providers/CommentProvider';
+import { NodeNoComments } from '~/components/node/NodeNoComments';
+import { NodeComments } from '~/views/node/NodeComments';
+import { useUserContext } from '~/utils/providers/UserProvider';
 
 interface IProps {
-  isUser: boolean;
   commentsOrder: 'ASC' | 'DESC';
 }
 
 const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
-  const { node, related, isUser, isLoading } = useNodeContext();
+  const { is_user: isUser } = useUserContext();
+  const { node, related, isLoading } = useNodeContext();
+  const { comments, isLoadingComments } = useCommentContext();
   const { inline } = useNodeBlocks(node, isLoading);
 
   if (node.deleted_at) {
@@ -32,7 +36,11 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
           <Group className={styles.comments}>
             {inline && <div className={styles.inline}>{inline}</div>}
 
-            <NodeCommentsBlock order={commentsOrder} />
+            {isLoading || isLoadingComments || (!comments.length && !inline) ? (
+              <NodeNoComments is_loading={isLoadingComments || isLoading} />
+            ) : (
+              <NodeComments order={commentsOrder} />
+            )}
 
             {isUser && !isLoading && <NodeCommentForm nodeId={node.id} />}
           </Group>

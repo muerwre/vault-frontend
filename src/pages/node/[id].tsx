@@ -40,14 +40,11 @@ const NodePage: FC<Props> = ({
   useScrollToTop([id, isLoadingComments]);
 
   return (
-    <NodeProvider node={node} related={related} isUser={user.is_user} isLoading={isLoading}>
+    <NodeProvider node={node} related={related} isLoading={isLoading}>
       <CommentProvider
-        node={node}
-        user={user}
         comments={comments}
         count={commentsCount}
         lastSeenCurrent={lastSeenCurrent}
-        isLoadingNode={isLoading}
         isLoadingComments={isLoadingComments}
         onShowImageModal={onShowImageModal}
         onLoadMoreComments={onLoadMoreComments}
