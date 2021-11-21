@@ -20,7 +20,7 @@ export const useFlow = () => {
 
   const onChangeCellView = useCallback(
     (id: INode['id'], val: FlowDisplay) => dispatch(flowSetCellView(id, val)),
-    []
+    [dispatch]
   );
 
   return { nodes, heroes, recent, updates, isFluid, toggleLayout, onChangeCellView };

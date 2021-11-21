@@ -1,11 +1,11 @@
-import React, { FC, useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IFlowState } from '~/redux/flow/reducer';
 import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 import { getURL } from '~/utils/dom';
-import { withRouter, RouteComponentProps, useHistory } from 'react-router';
-import { URLS, PRESETS } from '~/constants/urls';
+import { RouteComponentProps, useHistory, withRouter } from 'react-router';
+import { PRESETS, URLS } from '~/constants/urls';
 import { Icon } from '~/components/input/Icon';
 import { INode } from '~/redux/types';
 
@@ -32,7 +32,7 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes }) => {
 
   const title = useMemo(() => {
     return loaded[current]?.title || '';
-  }, [loaded, current, heroes]);
+  }, [loaded, current]);
 
   const onNext = useCallback(() => {
     if (heroes.length > limit) setLimit(limit + 1);
@@ -45,16 +45,16 @@ const FlowHeroUnconnected: FC<IProps> = ({ heroes }) => {
 
   const goToNode = useCallback(() => {
     history.push(URLS.NODE_URL(loaded[current].id));
-  }, [current, loaded]);
+  }, [current, history, loaded]);
 
   useEffect(() => {
     timer.current = setTimeout(onNext, 5000);
     return () => clearTimeout(timer.current);
-  }, [current, timer.current]);
+  }, [current, onNext]);
 
   useEffect(() => {
     if (loaded.length === 1) onNext();
-  }, [loaded]);
+  }, [loaded, onNext]);
 
   return (
     <div className={styles.wrap}>

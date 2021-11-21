@@ -15,7 +15,6 @@ import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { useTranslatedError } from '~/utils/hooks/useTranslatedError';
 import { useCloseOnEscape } from '~/utils/hooks';
 import { EditorConfirmClose } from '~/components/editors/EditorConfirmClose';
-import { UploadDropzone } from '~/components/upload/UploadDropzone';
 
 interface Props extends IDialogProps {
   node: INode;
@@ -46,7 +45,7 @@ const EditorDialog: FC<Props> = ({ node, onRequestClose }) => {
     }
 
     setConfirmModalShown(true);
-  }, [onRequestClose, dirty, isConfirmModalShown, setConfirmModalShown]);
+  }, [dirty, isConfirmModalShown, onRequestClose, closeConfirmModal]);
 
   const error = useTranslatedError(status);
 
@@ -56,7 +55,7 @@ const EditorDialog: FC<Props> = ({ node, onRequestClose }) => {
     }
 
     setStatus('');
-  }, [values]);
+  }, [setStatus, status, values]);
 
   useCloseOnEscape(onClose);
 

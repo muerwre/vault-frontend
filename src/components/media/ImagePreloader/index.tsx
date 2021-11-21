@@ -44,7 +44,7 @@ const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className })
 
   const [width, height] = useMemo(
     () => [file?.metadata?.width || DEFAULT_WIDTH, file?.metadata?.height || DEFAULT_HEIGHT],
-    [file?.metadata]
+    [file]
   );
 
   useResizeHandler(onResize);

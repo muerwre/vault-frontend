@@ -25,7 +25,7 @@ export const useClickOutsideFocus = () => {
     document.addEventListener('mouseup', deactivator);
 
     return () => document.removeEventListener('mouseup', deactivator);
-  }, [isActive]);
+  }, [deactivate, isActive]);
 
   useCloseOnEscape(deactivate);
 

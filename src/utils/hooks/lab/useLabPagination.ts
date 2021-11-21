@@ -40,5 +40,5 @@ export const useLabPagination = (
     return () => {
       lastItems.forEach(item => observer.unobserve(item));
     };
-  }, [observer, columns]);
+  }, [observer, columns, isLoading]);
 };

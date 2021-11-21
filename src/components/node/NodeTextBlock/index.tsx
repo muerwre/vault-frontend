@@ -9,9 +9,7 @@ import markdown from '~/styles/common/markdown.module.scss';
 interface IProps extends INodeComponentProps {}
 
 const NodeTextBlock: FC<IProps> = ({ node }) => {
-  const content = useMemo(() => formatTextParagraphs(path(['blocks', 0, 'text'], node) || ''), [
-    node.blocks,
-  ]);
+  const content = useMemo(() => formatTextParagraphs(path(['blocks', 0, 'text'], node) || ''), [node]);
 
   return (
     <div

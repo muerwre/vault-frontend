@@ -31,10 +31,7 @@ const LoadingNode = () => (
 );
 
 const LabGrid: FC<IProps> = ({ isLoading, nodes, onLoadMore }) => {
-  const columns = useMemo(() => Array.from(document.querySelectorAll(`.${styles.column}`)), [
-    isLoading,
-    nodes,
-  ]);
+  const columns = useMemo(() => Array.from(document.querySelectorAll(`.${styles.column}`)), []);
 
   useLabPagination(isLoading, columns, onLoadMore);
 

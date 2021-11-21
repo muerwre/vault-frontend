@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { DIALOGS, IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/utils/hooks';
@@ -18,7 +18,6 @@ import { pick } from 'ramda';
 import { LoginDialogButtons } from '~/containers/dialogs/LoginDialogButtons';
 import { OAUTH_EVENT_TYPES } from '~/redux/types';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
-import { ERROR_LITERAL } from '~/constants/errors';
 import { useTranslatedError } from '~/utils/hooks/useTranslatedError';
 
 const mapStateToProps = state => ({
@@ -60,7 +59,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
       event.preventDefault();
       modalShowDialog(DIALOGS.RESTORE_REQUEST);
     },
-    [modalShowDialog, userSetLoginError]
+    [modalShowDialog]
   );
 
   const openOauthWindow = useCallback(
@@ -83,7 +82,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
 
   useEffect(() => {
     if (error) userSetLoginError('');
-  }, [username, password]);
+  }, [username, password, error, userSetLoginError]);
 
   useEffect(() => {
     window.addEventListener('message', onMessage);

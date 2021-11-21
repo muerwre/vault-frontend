@@ -12,7 +12,7 @@ export const useInputPasteUpload = (
     if (!image) return;
 
     onUpload([image]);
-  }, []);
+  }, [onUpload]);
 
   useEffect(() => {
     if (!input) return;

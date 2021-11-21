@@ -31,7 +31,7 @@ const TagSidebarUnconnected: FC<Props> = ({ nodes, tagLoadNodes, tagSetNodes }) 
   const history = useHistory();
 
   const basePath = url.replace(new RegExp(`\/tag\/${tag}$`), '');
-  const onClose = useCallback(() => history.push(basePath), [basePath]);
+  const onClose = useCallback(() => history.push(basePath), [basePath, history]);
 
   useEffect(() => {
     tagLoadNodes(tag);
@@ -39,7 +39,7 @@ const TagSidebarUnconnected: FC<Props> = ({ nodes, tagLoadNodes, tagSetNodes }) 
     return () => {
       tagSetNodes({ list: [], count: 0 });
     };
-  }, [tag]);
+  }, [tag, tagLoadNodes, tagSetNodes]);
 
   const loadMore = useCallback(() => {
     if (nodes.isLoading) return;

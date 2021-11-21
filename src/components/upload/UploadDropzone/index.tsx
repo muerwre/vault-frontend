@@ -19,7 +19,7 @@ const UploadDropzone: FC<IProps> = ({ children, onUpload, helperClassName, ...re
       onStopDragging();
       onUpload(files);
     },
-    [onUpload]
+    [onStopDragging, onUpload]
   );
 
   return (

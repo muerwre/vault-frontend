@@ -19,4 +19,4 @@ export const useColorGradientFromString = (
     const third = normalizeBrightColor(adjustHue(color, 90), saturation, lightness);
 
     return `linear-gradient(${angle}deg, ${color}, ${second}, ${third})`;
-  }, [val]);
+  }, [angle, lightness, saturation, val]);

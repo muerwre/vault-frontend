@@ -19,6 +19,6 @@ export const useBlockBackButton = (callback?: () => void) => {
           callback();
         }
       }),
-    [callback, history]
+    [callback]
   );
 };

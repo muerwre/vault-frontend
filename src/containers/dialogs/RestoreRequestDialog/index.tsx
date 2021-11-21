@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo, useCallback, useEffect } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { IDialogProps } from '~/redux/types';
 import { connect } from 'react-redux';
 import { BetterScrollDialog } from '../BetterScrollDialog';
@@ -45,7 +45,7 @@ const RestoreRequestDialogUnconnected: FC<IProps> = ({
     if (error || is_succesfull) {
       authSetRestore({ error: '', is_succesfull: false });
     }
-  }, [field]);
+  }, [authSetRestore, error, field, is_succesfull]);
 
   const buttons = useMemo(
     () => (
@@ -75,7 +75,7 @@ const RestoreRequestDialogUnconnected: FC<IProps> = ({
       ) : (
         undefined
       ),
-    [is_succesfull]
+    [is_succesfull, onRequestClose]
   );
 
   useCloseOnEscape(onRequestClose);

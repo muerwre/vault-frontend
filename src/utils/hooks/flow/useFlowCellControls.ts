@@ -9,7 +9,7 @@ export const useFlowCellControls = (
 ) => {
   const onChange = useCallback(
     (value: Partial<FlowDisplay>) => onChangeCellView(id, { ...flow, ...value }),
-    [flow, onChangeCellView]
+    [flow, id, onChangeCellView]
   );
 
   const hasDescription = !!description && description.length > 32;

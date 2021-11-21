@@ -61,7 +61,7 @@ const FlowStamp: FC<IProps> = ({
       ) : (
         <Icon icon="search" size={24} className={styles.search_icon} />
       ),
-    [searchText]
+    [onClearSearch, searchText]
   );
 
   return (

@@ -66,7 +66,7 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
       ps.listen('destroy', closeModal);
       ps.listen('close', closeModal);
     });
-  }, [photoswipe.images, photoswipe.index]);
+  }, [closeModal, photoswipe.images, photoswipe.index]);
 
   useBlockBackButton(closeModal);
 

@@ -29,7 +29,7 @@ const InfiniteScroll: FC<IProps> = ({ children, hasMore, scrollReactPx, loadMore
     observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, [ref.current, onScrollEnd]);
+  }, [onScrollEnd]);
 
   return (
     <div {...props}>

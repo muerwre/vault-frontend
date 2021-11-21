@@ -48,7 +48,7 @@ const Button: FC<IButtonProps> = memo(
           has_icon_right: !!iconRight,
           round,
         }),
-      [round, disabled, className, stretchy, iconLeft, iconRight, size, color]
+      [className, size, color, disabled, stretchy, iconLeft, iconRight, title, children, iconOnly, round]
     );
 
     return (

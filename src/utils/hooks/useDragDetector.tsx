@@ -1,5 +1,4 @@
-import React, { FC, useContext } from 'react';
-import { createContext, useCallback, useEffect, useState } from 'react';
+import React, { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
 
 const DragContext = createContext({
   isDragging: false,
@@ -44,7 +43,7 @@ export const useDragDetector = () => {
       document.removeEventListener('blur', removeClass);
       document.removeEventListener('drop', onStopDragging);
     };
-  }, [setIsDragging]);
+  }, [onStopDragging, setIsDragging]);
 
   return { isDragging, onStopDragging };
 };

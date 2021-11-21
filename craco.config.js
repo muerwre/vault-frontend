@@ -13,6 +13,18 @@ module.exports = {
   eslint: {
     enable: false,
     mode: 'file',
+    rules: {
+      'sort-imports': [
+        'error',
+        {
+          ignoreCase: false,
+          ignoreDeclarationSort: false,
+          ignoreMemberSort: false,
+          memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+          allowSeparatedGroups: false,
+        },
+      ],
+    },
   },
   jest: {
     setupTestFrameworkScriptFile: '<rootDir>/src/setupTests.js',

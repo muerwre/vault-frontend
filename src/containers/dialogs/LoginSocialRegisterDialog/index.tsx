@@ -51,15 +51,15 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
 
   useEffect(() => {
     if (errors.username) authSetRegisterSocialErrors({ username: '' });
-  }, [username]);
+  }, [authSetRegisterSocialErrors, errors.username, username]);
 
   useEffect(() => {
     if (errors.password) authSetRegisterSocialErrors({ password: '' });
-  }, [password]);
+  }, [authSetRegisterSocialErrors, errors.password, password]);
 
   useEffect(() => {
     if (error) authSetRegisterSocial({ error: '' });
-  }, [username, password]);
+  }, [username, password, error, authSetRegisterSocial]);
 
   useCloseOnEscape(onRequestClose);
 

@@ -13,5 +13,5 @@ export const useGrouppedComments = (
         groupCommentsByUser(lastSeen),
         []
       ),
-    [comments, order]
+    [comments, lastSeen, order]
   );

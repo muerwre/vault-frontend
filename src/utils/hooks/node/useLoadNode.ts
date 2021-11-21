@@ -14,5 +14,5 @@ export const useLoadNode = (id: any, isLoading: boolean) => {
     return () => {
       dispatch(nodeSetCurrent(EMPTY_NODE));
     };
-  }, [dispatch, id]);
+  }, [dispatch, id, isLoading]);
 };

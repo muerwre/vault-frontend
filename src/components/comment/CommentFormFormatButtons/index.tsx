@@ -20,7 +20,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
       event.preventDefault();
       wrapTextInsideInput(element, '**', '**', handler);
     },
-    [wrap, handler]
+    [element, handler]
   );
 
   const wrapItalic = useCallback(
@@ -28,7 +28,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
       event.preventDefault();
       wrapTextInsideInput(element, '*', '*', handler);
     },
-    [wrap, handler]
+    [element, handler]
   );
 
   const onKeyPress = useCallback(

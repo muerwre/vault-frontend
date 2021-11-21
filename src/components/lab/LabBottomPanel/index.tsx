@@ -20,7 +20,7 @@ type Props = {
 
 const LabBottomPanel: FC<Props> = ({ node, hasNewComments, commentCount, isLoading }) => {
   const history = useHistory();
-  const onClick = useCallback(() => history.push(URLS.NODE_URL(node.id)), [node.id]);
+  const onClick = useCallback(() => history.push(URLS.NODE_URL(node.id)), [history, node.id]);
 
   return (
     <Group horizontal className={styles.wrap} onClick={onClick}>

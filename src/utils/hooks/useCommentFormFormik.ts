@@ -71,7 +71,7 @@ export const useCommentFormFormik = (
     if (formik.status) {
       formik.setStatus('');
     }
-  }, [formik.values.text]);
+  }, [formik, formik.values.text]);
 
   return formik;
 };

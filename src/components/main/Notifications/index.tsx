@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState, useCallback, useEffect } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Icon } from '~/components/input/Icon';
 import styles from './styles.module.scss';
 import { connect } from 'react-redux';
@@ -7,7 +7,7 @@ import { pick } from 'ramda';
 import classNames from 'classnames';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { NotificationBubble } from '../../notifications/NotificationBubble';
-import { INotification, IMessageNotification } from '~/redux/types';
+import { IMessageNotification, INotification } from '~/redux/types';
 
 const mapStateToProps = state => ({
   user: pick(['last_seen_messages'], selectAuthUser(state)),
@@ -62,7 +62,7 @@ const NotificationsUnconnected: FC<IProps> = ({
   useEffect(() => {
     if (!visible || !has_new || !last) return;
     authSetLastSeenMessages(last);
-  }, [visible, last]);
+  }, [visible, last, has_new, authSetLastSeenMessages]);
 
   return (
     <div

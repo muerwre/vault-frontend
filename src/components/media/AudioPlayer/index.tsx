@@ -1,10 +1,10 @@
-import React, { useCallback, useState, useEffect, memo, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { selectPlayer } from '~/redux/player/selectors';
 import * as PLAYER_ACTIONS from '~/redux/player/actions';
 import { IFile } from '~/redux/types';
 import { PLAYER_STATES } from '~/redux/player/constants';
-import { Player, IPlayerProgress } from '~/utils/player';
+import { IPlayerProgress, Player } from '~/utils/player';
 import classNames from 'classnames';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
@@ -90,7 +90,7 @@ const AudioPlayerUnconnected = memo(
             [file.metadata.id3artist, file.metadata.id3title].filter(el => el).join(' - '))) ||
         file.orig_name ||
         '',
-      [file.metadata]
+      [file.metadata, file.orig_name]
     );
 
     const onRename = useCallback(

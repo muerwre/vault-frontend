@@ -9,7 +9,7 @@ interface IProps {
 }
 
 const CommendDeleted: FC<IProps> = ({ id, onDelete }) => {
-  const onRestore = useCallback(() => onDelete(id, false), [onDelete]);
+  const onRestore = useCallback(() => onDelete(id, false), [id, onDelete]);
 
   return (
     <div className={styles.wrap}>

@@ -4,10 +4,8 @@ import classNames from 'classnames';
 import { INode } from '~/redux/types';
 import { PRESETS, URLS } from '~/constants/urls';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { getURL, stringToColour } from '~/utils/dom';
+import { getURL } from '~/utils/dom';
 import { Avatar } from '~/components/common/Avatar';
-import { normalizeBrightColor } from '~/utils/color';
-import { adjustHue } from 'color2k';
 import { useColorGradientFromString } from '~/utils/hooks/useColorGradientFromString';
 
 type IProps = RouteComponentProps & {
@@ -53,7 +51,7 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
     cb();
 
     return () => window.removeEventListener('resize', cb);
-  }, [ref.current]);
+  }, []);
 
   const size = useMemo<CellSize>(() => {
     if (width > 90) return 'large';

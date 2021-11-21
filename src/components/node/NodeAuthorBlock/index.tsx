@@ -10,7 +10,7 @@ interface Props {
 }
 
 const NodeAuthorBlock: FC<Props> = ({ user }) => {
-  const onOpenProfile = useCallback(() => openUserProfile(user?.username), [user?.username]);
+  const onOpenProfile = useCallback(() => openUserProfile(user?.username), [user]);
 
   const description = useUserDescription(user);
 

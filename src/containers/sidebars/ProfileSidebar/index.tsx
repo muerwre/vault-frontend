@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import styles from './styles.module.scss';
 import { SidebarWrapper } from '~/containers/sidebars/SidebarWrapper';
 import { connect } from 'react-redux';
@@ -37,11 +37,11 @@ const ProfileSidebarUnconnected: FC<Props> = ({
 
   useEffect(() => {
     authLoadProfile(username);
-  }, [username]);
+  }, [authLoadProfile, username]);
 
   const history = useHistory();
   const basePath = url.replace(new RegExp(`\/~${username}$`), '');
-  const onClose = useCallback(() => history.push(basePath), [basePath]);
+  const onClose = useCallback(() => history.push(basePath), [basePath, history]);
 
   useCloseOnEscape(onClose);
 

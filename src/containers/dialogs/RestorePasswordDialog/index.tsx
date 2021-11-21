@@ -44,14 +44,14 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
 
       authRestorePassword(password);
     },
-    [doesnt_match, authRestorePassword]
+    [doesnt_match, authRestorePassword, password]
   );
 
   useEffect(() => {
     if (error || is_succesfull) {
       authSetRestore({ error: '', is_succesfull: false });
     }
-  }, [password, password_again]);
+  }, [authSetRestore, error, is_succesfull, password, password_again]);
 
   const buttons = useMemo(
     () => (
@@ -80,7 +80,7 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
       ) : (
         undefined
       ),
-    [is_succesfull]
+    [is_succesfull, onRequestClose, user]
   );
 
   const not_ready = useMemo(
@@ -105,7 +105,7 @@ const RestorePasswordDialogUnconnected: FC<IProps> = ({
       ) : (
         undefined
       ),
-    [is_loading, user, error]
+    [is_loading, user, error, onRequestClose]
   );
 
   useCloseOnEscape(onRequestClose);

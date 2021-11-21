@@ -43,12 +43,12 @@ export const Tags: FC<IProps> = ({
 
       onTagsChange(uniqueTags);
     },
-    [data]
+    [data, onTagsChange, tags]
   );
 
   useEffect(() => {
     setData(data.filter(title => !tags.some(tag => tag?.title?.trim() === title.trim())));
-  }, [tags]);
+  }, [data, tags]);
 
   const onAppendTag = useCallback(
     (created: string[]) => {

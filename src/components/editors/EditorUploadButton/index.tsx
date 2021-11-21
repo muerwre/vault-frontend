@@ -34,7 +34,7 @@ const EditorUploadButton: FC<IProps> = ({
 
       uploadFiles(files);
     },
-    [uploadFiles]
+    [type, uploadFiles]
   );
 
   const color = values.is_promoted ? 'primary' : 'lab';

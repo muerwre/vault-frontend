@@ -1,8 +1,8 @@
-import { IComment, INode } from '~/redux/types';
+import { INode } from '~/redux/types';
 import { FileUploader } from '~/utils/hooks/useFileUploader';
 import { useCallback, useEffect, useRef } from 'react';
 import { FormikHelpers, useFormik, useFormikContext } from 'formik';
-import { object, string } from 'yup';
+import { object } from 'yup';
 import { useDispatch } from 'react-redux';
 import { nodeSubmitLocal } from '~/redux/node/actions';
 import { keys } from 'ramda';
@@ -39,7 +39,7 @@ export const useNodeFormFormik = (
   const onSubmit = useCallback((values: INode, helpers: FormikHelpers<INode>) => {
     helpers.setSubmitting(true);
     dispatch(nodeSubmitLocal(values, onSuccess(helpers)));
-  }, []);
+  }, [dispatch]);
 
   const { current: initialValues } = useRef(values);
 
@@ -60,7 +60,7 @@ export const useNodeFormFormik = (
 
   useEffect(() => {
     formik.setFieldValue('files', uploader.files);
-  }, [formik.setFieldValue, uploader.files]);
+  }, [formik, formik.setFieldValue, uploader.files]);
 
   return formik;
 };

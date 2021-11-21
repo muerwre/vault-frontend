@@ -83,7 +83,7 @@ const TagAutocompleteUnconnected: FC<Props> = ({
   useEffect(() => {
     setSelected(-1);
     tagLoadAutocomplete(search, exclude);
-  }, [search]);
+  }, [exclude, search, tagLoadAutocomplete]);
 
   useEffect(() => {
     tagSetAutocomplete({ options: [] });
@@ -102,7 +102,7 @@ const TagAutocompleteUnconnected: FC<Props> = ({
     if (clientHeight - scrollTop + el.clientHeight < offsetTop || offsetTop < scrollTop) {
       scroll.current.scrollTo(0, el.offsetTop - el.clientHeight);
     }
-  }, [selected, scroll.current]);
+  }, [selected]);
 
   return (
     <div

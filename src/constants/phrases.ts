@@ -64,4 +64,4 @@ export const PHRASES = {
 };
 
 export const useRandomPhrase = (key: keyof typeof PHRASES) =>
-  useMemo(() => PHRASES[key][Math.floor(Math.random() * PHRASES[key].length)], []);
+  useMemo(() => PHRASES[key][Math.floor(Math.random() * PHRASES[key].length)], [key]);

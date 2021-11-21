@@ -24,7 +24,7 @@ const ProfileLayoutUnconnected: FC<IProps> = ({ history, nodeSetCoverImage }) =>
 
   useEffect(() => {
     if (user) setUser(undefined);
-  }, [username]);
+  }, [user, username]);
 
   useEffect(() => {
     if (user && user.id && user.cover) {
@@ -33,7 +33,7 @@ const ProfileLayoutUnconnected: FC<IProps> = ({ history, nodeSetCoverImage }) =>
         nodeSetCoverImage(undefined);
       };
     }
-  }, [user]);
+  }, [nodeSetCoverImage, user]);
 
   return (
     <Group className={styles.wrap} horizontal>

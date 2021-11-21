@@ -21,7 +21,7 @@ const CellShade: FC<Props> = ({ color, size = 50, ...rest }) => {
 
     return `linear-gradient(7deg, ${normalized} ${size}px, ${transparentize(normalized, 1)} ${size *
       5}px)`;
-  }, [color]);
+  }, [color, size]);
 
   return (
     <div {...rest} className={classNames(rest.className, styles.shade)} style={{ background }} />

@@ -27,7 +27,7 @@ const ProfileLayout: FC<Props> = ({
 
   useEffect(() => {
     dispatch(authLoadProfile(username));
-  }, [username]);
+  }, [dispatch, username]);
 
   const profile = useShallowSelect(selectAuthProfile);
 

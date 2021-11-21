@@ -9,7 +9,7 @@ import { Paragraph } from '~/components/placeholders/Paragraph';
 
 const LabText: FC<INodeComponentProps> = ({ node, isLoading }) => {
   const content = useMemo(() => formatTextParagraphs(path(['blocks', 0, 'text'], node) || ''), [
-    node.blocks,
+    node,
   ]);
 
   const onClick = useGotoNode(node.id);

@@ -62,7 +62,7 @@ const HeaderUnconnected: FC<IProps> = memo(
 
     useEffect(() => {
       onScroll();
-    }, []);
+    }, [onScroll]);
 
     useEffect(() => {
       window.addEventListener('scroll', onScroll);
@@ -74,7 +74,7 @@ const HeaderUnconnected: FC<IProps> = memo(
         is_user &&
         boris_commented_at &&
         (!last_seen_boris || isBefore(new Date(last_seen_boris), new Date(boris_commented_at))),
-      [boris_commented_at, last_seen_boris]
+      [boris_commented_at, is_user, last_seen_boris]
     );
 
     const hasLabUpdates = useMemo(() => labUpdates.length > 0, [labUpdates]);

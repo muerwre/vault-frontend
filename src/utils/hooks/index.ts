@@ -53,6 +53,6 @@ export const useFileDropZone = (onUpload: (file: File[]) => void, allowedTypes?:
 
       onUpload(files);
     },
-    [onUpload]
+    [allowedTypes, onUpload]
   );
 };

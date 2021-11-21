@@ -45,7 +45,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
 
       setInput(items[items.length - 1] || '');
     },
-    [setInput]
+    [onAppend]
   );
 
   const onKeyDown = useCallback(
@@ -71,7 +71,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
         setInput('');
       }
     },
-    [input, setInput, onClearTag, onAppend, onSubmit, ref.current, wrapper.current]
+    [input, setInput, onClearTag, onAppend]
   );
 
   const onFocus = useCallback(() => setFocused(true), []);
@@ -94,7 +94,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
 
       onSubmit([]);
     },
-    [input, onAppend, setInput, onSubmit]
+    [input, setInput, onSubmit]
   );
 
   const onAutocompleteSelect = useCallback(

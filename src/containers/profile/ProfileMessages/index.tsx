@@ -47,7 +47,7 @@ const ProfileMessagesUnconnected: FC<IProps> = ({
     if (profile.is_loading || !profile.user || !profile.user.username) return;
 
     messagesGetMessages(profile.user.username);
-  }, [profile.user]);
+  }, [messagesGetMessages, profile.is_loading, profile.user]);
 
   useEffect(() => {
     const timer = setInterval(messagesRefreshMessages, 20000);
@@ -73,7 +73,7 @@ const ProfileMessagesUnconnected: FC<IProps> = ({
     if (wasAtBottom.current) {
       parent.scrollTo(0, parent.scrollHeight);
     }
-  }, [messages.messages]);
+  }, [messages.messages, wrap]);
 
   const onScroll = useCallback(() => {
     const parent = wrap?.parentElement;

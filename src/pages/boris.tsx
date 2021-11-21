@@ -25,7 +25,7 @@ const BorisPage: VFC = () => {
   useEffect(() => {
     if (node.is_loading) return;
     dispatch(nodeLoadNode(696, 'DESC'));
-  }, [dispatch]);
+  }, [dispatch, node.is_loading]);
 
   return (
     <CommentProvider
