@@ -1,5 +1,4 @@
 import { IComment, INode, ITag } from '~/redux/types';
-import { INodeState } from '~/redux/node/reducer';
 
 export interface IEditorComponentProps {}
 
@@ -37,7 +36,7 @@ export type ApiGetNodeRelatedRequest = {
   id: INode['id'];
 };
 export type ApiGetNodeRelatedResult = {
-  related: INodeState['related'];
+  related: INodeRelated;
 };
 
 export type ApiPostCommentRequest = {

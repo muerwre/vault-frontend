@@ -1,14 +1,12 @@
 import { createReducer } from '~/utils/reducer';
 import { IComment, IFile, INode } from '../types';
-import { EMPTY_COMMENT, EMPTY_NODE } from './constants';
+import { EMPTY_NODE } from './constants';
 import { NODE_HANDLERS } from './handlers';
-import { INodeRelated } from '~/redux/node/types';
 
 export type INodeState = Readonly<{
   editor: INode;
   current: INode;
   comments: IComment[];
-  related: INodeRelated;
   lastSeenCurrent?: string;
   comment_count: number;
   current_cover_image?: IFile;
@@ -31,10 +29,6 @@ const INITIAL_STATE: INodeState = {
   current: { ...EMPTY_NODE },
   comment_count: 0,
   comments: [],
-  related: {
-    albums: {},
-    similar: [],
-  },
   current_cover_image: undefined,
 
   is_loading: false,

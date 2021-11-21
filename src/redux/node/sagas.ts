@@ -1,4 +1,4 @@
-import { all, call, put, select, takeLatest, takeLeading } from 'redux-saga/effects';
+import { call, put, select, takeLatest, takeLeading } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
 import { COMMENTS_DISPLAY, EMPTY_NODE, NODE_ACTIONS, NODE_EDITOR_DATA } from './constants';
@@ -18,7 +18,6 @@ import {
   nodeSetEditor,
   nodeSetLoading,
   nodeSetLoadingComments,
-  nodeSetRelated,
   nodeSetTags,
   nodeSubmitLocal,
   nodeUpdateTags,
@@ -27,7 +26,6 @@ import {
   apiDeleteNodeTag,
   apiGetNode,
   apiGetNodeComments,
-  apiGetNodeRelated,
   apiLockComment,
   apiLockNode,
   apiPostComment,
@@ -111,7 +109,6 @@ function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
   if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
 
   yield put(nodeLoadNode(id));
-  yield put(nodeSetRelated({ albums: {}, similar: [] }));
 }
 
 function* onNodeLoadMoreComments() {
@@ -144,13 +141,6 @@ function* onNodeLoadMoreComments() {
       })
     );
   } catch (error) {}
-}
-
-function* nodeGetRelated(id: INode['id']) {
-  try {
-    const { related }: Unwrap<typeof apiGetNodeRelated> = yield call(apiGetNodeRelated, { id });
-    yield put(nodeSet({ related }));
-  } catch {}
 }
 
 function* nodeGetComments(id: INode['id']) {
@@ -188,9 +178,9 @@ function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
     yield put(nodeSetLoading(false));
   }
 
-  // Comments and related
+  // Comments
   try {
-    yield all([call(nodeGetComments, id), call(nodeGetRelated, id)]);
+    yield call(nodeGetComments, id);
 
     yield put(
       nodeSet({
@@ -235,7 +225,6 @@ function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
     const { current }: ReturnType<typeof selectNode> = yield select(selectNode);
     if (!node || !node.id || node.id !== current.id) return;
     yield put(nodeSetTags(node.tags));
-    yield call(nodeGetRelated, id);
   } catch {}
 }
 
@@ -243,7 +232,6 @@ function* onDeleteTag({ id, tagId }: ReturnType<typeof nodeDeleteTag>) {
   try {
     const { tags }: Unwrap<typeof apiDeleteNodeTag> = yield call(apiDeleteNodeTag, { id, tagId });
     yield put(nodeSetTags(tags));
-    yield call(nodeGetRelated, id);
   } catch {}
 }
 

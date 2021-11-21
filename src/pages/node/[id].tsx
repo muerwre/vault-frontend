@@ -26,7 +26,6 @@ const NodePage: FC<Props> = ({
     isLoadingComments,
     comments,
     commentsCount,
-    related,
     lastSeenCurrent,
   } = useFullNode(id);
 

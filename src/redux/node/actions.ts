@@ -69,11 +69,6 @@ export const nodeSetComments = (comments: IComment[]) => ({
   type: NODE_ACTIONS.SET_COMMENTS,
 });
 
-export const nodeSetRelated = (related: INodeState['related']) => ({
-  related,
-  type: NODE_ACTIONS.SET_RELATED,
-});
-
 export const nodeUpdateTags = (id: INode['id'], tags: string[]) => ({
   type: NODE_ACTIONS.UPDATE_TAGS,
   id,
