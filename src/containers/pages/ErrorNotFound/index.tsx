@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { VFC } from 'react';
 import styles from './styles.module.scss';
 import { createPortal } from 'react-dom';
 import { GodRays } from '~/components/main/GodRays';
 
-const ErrorNotFound: FC<{}> = () =>
+const ErrorNotFound: VFC = () =>
   createPortal(
     <div className={styles.wrap}>
       <GodRays />

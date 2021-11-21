@@ -1,17 +1,13 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { LabBanner } from '~/components/lab/LabBanner';
-import { Card } from '~/components/containers/Card';
 import { Group } from '~/components/containers/Group';
-import { Placeholder } from '~/components/placeholders/Placeholder';
-import { Filler } from '~/components/containers/Filler';
-import { LabHero } from '~/components/lab/LabHero';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import {
   selectLabStatsHeroes,
   selectLabStatsLoading,
   selectLabStatsTags,
-  selectLabUpdatesNodes,
+  selectLabUpdatesNodes
 } from '~/redux/lab/selectors';
 import { LabTags } from '~/components/lab/LabTags';
 import { LabHeroes } from '~/components/lab/LabHeroes';
