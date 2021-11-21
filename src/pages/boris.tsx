@@ -4,7 +4,7 @@ import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectNode } from '~/redux/node/selectors';
 import { BorisLayout } from '~/layouts/BorisLayout';
 import { nodeLoadNode } from '~/redux/node/actions';
-import { CommentProvider } from '~/utils/providers/CommentProvider';
+import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { useImageModal } from '~/utils/hooks/useImageModal';
 import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
 import { useBoris } from '~/utils/hooks/boris/useBoris';
@@ -28,7 +28,7 @@ const BorisPage: VFC = () => {
   }, [dispatch, node.is_loading]);
 
   return (
-    <CommentProvider
+    <CommentContextProvider
       comments={comments}
       count={count}
       isLoading={isLoadingComments}
@@ -42,7 +42,7 @@ const BorisPage: VFC = () => {
         isTester={isTester}
         stats={stats}
       />
-    </CommentProvider>
+    </CommentContextProvider>
   );
 };
 

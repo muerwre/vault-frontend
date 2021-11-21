@@ -6,9 +6,9 @@ import { canEditComment } from '~/utils/node';
 import { COMMENTS_DISPLAY } from '~/redux/node/constants';
 import { plural } from '~/utils/dom';
 import { useGrouppedComments } from '~/utils/hooks/node/useGrouppedComments';
-import { useCommentContext } from '~/utils/providers/CommentProvider';
+import { useCommentContext } from '~/utils/context/CommentContextProvider';
 import { Comment } from '~/components/comment/Comment';
-import { useUserContext } from '~/utils/providers/UserProvider';
+import { useUserContext } from '~/utils/context/UserContextProvider';
 
 interface IProps {
   order: 'ASC' | 'DESC';

@@ -23,7 +23,7 @@ const CommentContext = createContext<CommentProviderProps>({
   onDeleteComment: () => {},
 });
 
-export const CommentProvider: FC<CommentProviderProps> = ({ children, ...contextValue }) => {
+export const CommentContextProvider: FC<CommentProviderProps> = ({ children, ...contextValue }) => {
   return <CommentContext.Provider value={contextValue}>{children}</CommentContext.Provider>;
 };
 

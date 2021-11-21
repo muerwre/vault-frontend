@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { NodeTags } from '~/components/node/NodeTags';
-import { useTagContext } from '~/utils/providers/TagProvider';
+import { useTagContext } from '~/utils/context/TagsContextProvider';
 
 interface IProps {}
 

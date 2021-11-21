@@ -12,7 +12,7 @@ export const NodeContext = createContext<NodeContextProps>({
   isLoading: false,
 });
 
-export const NodeProvider: FC<NodeContextProps> = ({ children, ...contextValue }) => {
+export const NodeContextProvider: FC<NodeContextProps> = ({ children, ...contextValue }) => {
   return <NodeContext.Provider value={contextValue}>{children}</NodeContext.Provider>;
 };
 

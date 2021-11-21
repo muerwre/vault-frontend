@@ -21,7 +21,7 @@ const TagContext = createContext<TagContextProps>({
   onTagDelete: () => {},
 });
 
-export const TagProvider: FC<TagContextProps> = ({ children, ...contextValue }) => {
+export const TagsContextProvider: FC<TagContextProps> = ({ children, ...contextValue }) => {
   return <TagContext.Provider value={contextValue}>{children}</TagContext.Provider>;
 };
 

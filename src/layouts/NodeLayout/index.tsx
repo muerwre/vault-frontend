@@ -14,7 +14,7 @@ import { URLS } from '~/constants/urls';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 
 import styles from './styles.module.scss';
-import { useNodeContext } from '~/utils/providers/NodeProvider';
+import { useNodeContext } from '~/utils/context/NodeContextProvider';
 
 type IProps = {};
 

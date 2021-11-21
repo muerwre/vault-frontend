@@ -8,7 +8,7 @@ import { BorisComments } from '~/components/boris/BorisComments';
 import { Card } from '~/components/containers/Card';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
-import { useUserContext } from '~/utils/providers/UserProvider';
+import { useUserContext } from '~/utils/context/UserContextProvider';
 import { BorisUsageStats } from '~/redux/boris/reducer';
 
 type IProps = {

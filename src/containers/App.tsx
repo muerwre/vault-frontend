@@ -9,14 +9,14 @@ import { BottomContainer } from '~/containers/main/BottomContainer';
 import { MainRouter } from '~/containers/main/MainRouter';
 import { DragDetectorProvider } from '~/utils/hooks/useDragDetector';
 import { useUser } from '~/utils/hooks/user/userUser';
-import { UserProvider } from '~/utils/providers/UserProvider';
+import { UserContextProvider } from '~/utils/context/UserContextProvider';
 
 const App: VFC = () => {
   const user = useUser();
 
   return (
     <ConnectedRouter history={history}>
-      <UserProvider user={user}>
+      <UserContextProvider user={user}>
         <DragDetectorProvider>
           <PageCover />
 
@@ -28,7 +28,7 @@ const App: VFC = () => {
           </MainLayout>
           <BottomContainer />
         </DragDetectorProvider>
-      </UserProvider>
+      </UserContextProvider>
     </ConnectedRouter>
   );
 };

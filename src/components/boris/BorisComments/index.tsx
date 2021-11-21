@@ -5,9 +5,9 @@ import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeComments } from '~/views/node/NodeComments';
 import { Footer } from '~/components/main/Footer';
-import { CommentProvider, useCommentContext } from '~/utils/providers/CommentProvider';
-import { useUserContext } from '~/utils/providers/UserProvider';
-import { useNodeContext } from '~/utils/providers/NodeProvider';
+import { CommentContextProvider, useCommentContext } from '~/utils/context/CommentContextProvider';
+import { useUserContext } from '~/utils/context/UserContextProvider';
+import { useNodeContext } from '~/utils/context/NodeContextProvider';
 
 interface IProps {}
 
@@ -31,7 +31,7 @@ const BorisComments: FC<IProps> = () => {
         {isLoading ? (
           <NodeNoComments is_loading count={7} />
         ) : (
-          <CommentProvider
+          <CommentContextProvider
             comments={comments}
             count={count}
             onDeleteComment={onDeleteComment}
@@ -40,7 +40,7 @@ const BorisComments: FC<IProps> = () => {
             isLoading={isLoading}
           >
             <NodeComments order="ASC" />
-          </CommentProvider>
+          </CommentContextProvider>
         )}
       </Group>
 

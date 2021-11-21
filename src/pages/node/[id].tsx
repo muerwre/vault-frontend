@@ -7,11 +7,11 @@ import { useImageModal } from '~/utils/hooks/useImageModal';
 import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
 import { useUser } from '~/utils/hooks/user/userUser';
 import { useNodeTags } from '~/utils/hooks/node/useNodeTags';
-import { NodeProvider } from '~/utils/providers/NodeProvider';
-import { CommentProvider } from '~/utils/providers/CommentProvider';
-import { TagProvider } from '~/utils/providers/TagProvider';
+import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
+import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
+import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
 import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
-import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
+import { NodeRelatedContextProvider } from '~/utils/context/NodeRelatedContextProvider';
 
 type Props = RouteComponentProps<{ id: string }> & {};
 
@@ -41,9 +41,9 @@ const NodePage: FC<Props> = ({
   useScrollToTop([id, isLoadingComments]);
 
   return (
-    <NodeProvider node={node} isLoading={isLoading}>
-      <NodeRelatedProvider related={related} isLoading={isLoading}>
-        <CommentProvider
+    <NodeContextProvider node={node} isLoading={isLoading}>
+      <NodeRelatedContextProvider related={related} isLoading={isLoading}>
+        <CommentContextProvider
           comments={comments}
           count={commentsCount}
           lastSeenCurrent={lastSeenCurrent}
@@ -52,7 +52,7 @@ const NodePage: FC<Props> = ({
           onLoadMoreComments={onLoadMoreComments}
           onDeleteComment={onDeleteComment}
         >
-          <TagProvider
+          <TagsContextProvider
             tags={node.tags}
             canAppend={user.is_user}
             canDelete={canEdit}
@@ -62,10 +62,10 @@ const NodePage: FC<Props> = ({
             onTagDelete={onTagDelete}
           >
             <NodeLayout />
-          </TagProvider>
-        </CommentProvider>
-      </NodeRelatedProvider>
-    </NodeProvider>
+          </TagsContextProvider>
+        </CommentContextProvider>
+      </NodeRelatedContextProvider>
+    </NodeContextProvider>
   );
 };
 

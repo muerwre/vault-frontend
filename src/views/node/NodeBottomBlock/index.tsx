@@ -9,12 +9,12 @@ import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import styles from './styles.module.scss';
 import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
-import { useNodeContext } from '~/utils/providers/NodeProvider';
-import { useCommentContext } from '~/utils/providers/CommentProvider';
+import { useNodeContext } from '~/utils/context/NodeContextProvider';
+import { useCommentContext } from '~/utils/context/CommentContextProvider';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeComments } from '~/views/node/NodeComments';
-import { useUserContext } from '~/utils/providers/UserProvider';
-import { useNodeRelatedContext } from '~/utils/providers/NodeRelatedProvider';
+import { useUserContext } from '~/utils/context/UserContextProvider';
+import { useNodeRelatedContext } from '~/utils/context/NodeRelatedContextProvider';
 
 interface IProps {
   commentsOrder: 'ASC' | 'DESC';
