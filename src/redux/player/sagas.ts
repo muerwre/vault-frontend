@@ -1,11 +1,11 @@
-import { takeLatest, put, fork, race, take, delay, call, select } from 'redux-saga/effects';
-import { PLAYER_ACTIONS, PLAYER_STATES } from './constants';
+import { call, delay, fork, put, race, select, take, takeLatest } from 'redux-saga/effects';
+import { PLAYER_ACTIONS, PlayerState } from './constants';
 import {
-  playerSetFile,
-  playerSeek,
-  playerSetStatus,
   playerGetYoutubeInfo,
+  playerSeek,
   playerSet,
+  playerSetFile,
+  playerSetStatus,
 } from './actions';
 import { Player } from '~/utils/player';
 import { getURL } from '~/utils/dom';
@@ -41,7 +41,7 @@ function seekSaga({ seek }: ReturnType<typeof playerSeek>) {
 }
 
 function* stoppedSaga() {
-  yield put(playerSetStatus(PLAYER_STATES.UNSET));
+  yield put(playerSetStatus(PlayerState.UNSET));
   yield put(playerSetFile(undefined));
 }
 

@@ -1,26 +1,21 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, VFC } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
-import { PLAYER_STATES } from '~/redux/player/constants';
-import { connect } from 'react-redux';
-import { pick } from 'ramda';
-import { selectPlayer } from '~/redux/player/selectors';
-import * as PLAYER_ACTIONS from '~/redux/player/actions';
-import { IPlayerProgress, Player } from '~/utils/player';
+import { PlayerState } from '~/redux/player/constants';
 import { path } from 'ramda';
+import { IPlayerProgress, Player } from '~/utils/player';
 import { IFile } from '~/redux/types';
 
-const mapStateToProps = state => pick(['status', 'file'], selectPlayer(state));
-const mapDispatchToProps = {
-  playerPlay: PLAYER_ACTIONS.playerPlay,
-  playerPause: PLAYER_ACTIONS.playerPause,
-  playerSeek: PLAYER_ACTIONS.playerSeek,
-  playerStop: PLAYER_ACTIONS.playerStop,
-};
+interface Props {
+  status: PlayerState;
+  file?: IFile;
+  playerPlay: () => void;
+  playerPause: () => void;
+  playerSeek: (pos: number) => void;
+  playerStop: () => void;
+}
 
-type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
-
-const PlayerBarUnconnected: FC<IProps> = ({
+const PlayerBar: VFC<Props> = ({
   status,
   playerPlay,
   playerPause,
@@ -31,7 +26,7 @@ const PlayerBarUnconnected: FC<IProps> = ({
   const [progress, setProgress] = useState<IPlayerProgress>({ progress: 0, current: 0, total: 0 });
 
   const onClick = useCallback(() => {
-    if (status === PLAYER_STATES.PLAYING) return playerPause();
+    if (status === PlayerState.PLAYING) return playerPause();
     return playerPlay();
   }, [playerPlay, playerPause, status]);
 
@@ -61,7 +56,7 @@ const PlayerBarUnconnected: FC<IProps> = ({
     };
   }, [onProgress]);
 
-  if (status === PLAYER_STATES.UNSET) return null;
+  if (status === PlayerState.UNSET) return null;
 
   const metadata: IFile['metadata'] = path(['metadata'], file);
   const title =
@@ -73,7 +68,7 @@ const PlayerBarUnconnected: FC<IProps> = ({
       <div className={styles.wrap}>
         <div className={styles.status}>
           <div className={styles.playpause} onClick={onClick}>
-            {status === PLAYER_STATES.PLAYING ? <Icon icon="pause" /> : <Icon icon="play" />}
+            {status === PlayerState.PLAYING ? <Icon icon="pause" /> : <Icon icon="play" />}
           </div>
 
           <div className={styles.info}>
@@ -93,7 +88,4 @@ const PlayerBarUnconnected: FC<IProps> = ({
   );
 };
 
-export const PlayerBar = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PlayerBarUnconnected);
+export { PlayerBar };

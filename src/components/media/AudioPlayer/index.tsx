@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { selectPlayer } from '~/redux/player/selectors';
 import * as PLAYER_ACTIONS from '~/redux/player/actions';
 import { IFile } from '~/redux/types';
-import { PLAYER_STATES } from '~/redux/player/constants';
 import { IPlayerProgress, Player } from '~/utils/player';
 import classNames from 'classnames';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { InputText } from '~/components/input/InputText';
+import { PlayerState } from '~/redux/player/constants';
 
 const mapStateToProps = state => ({
   player: selectPlayer(state),
@@ -52,7 +52,7 @@ const AudioPlayerUnconnected = memo(
       if (isEditing) return;
 
       if (current && current.id === file.id) {
-        if (status === PLAYER_STATES.PLAYING) return playerPause();
+        if (status === PlayerState.PLAYING) return playerPause();
         return playerPlay();
       }
 
@@ -122,11 +122,7 @@ const AudioPlayerUnconnected = memo(
         )}
 
         <div className={styles.playpause}>
-          {playing && status === PLAYER_STATES.PLAYING ? (
-            <Icon icon="pause" />
-          ) : (
-            <Icon icon="play" />
-          )}
+          {playing && status === PlayerState.PLAYING ? <Icon icon="pause" /> : <Icon icon="play" />}
         </div>
 
         {isEditing ? (

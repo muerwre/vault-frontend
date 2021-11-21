@@ -16,8 +16,8 @@ export const PLAYER_ACTIONS = {
   GET_YOUTUBE_INFO: `${prefix}GET_YOUTUBE_INFO`,
 };
 
-export const PLAYER_STATES = {
-  PLAYING: 'PLAYING',
-  PAUSED: 'PAUSED',
-  UNSET: 'UNSET',
-};
+export enum PlayerState {
+  PLAYING = 'PLAYING',
+  PAUSED = 'PAUSED',
+  UNSET = 'UNSET',
+}

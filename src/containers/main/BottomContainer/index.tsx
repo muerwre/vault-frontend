@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
-import { PlayerBar } from '~/components/bars/PlayerBar';
+import { PlayerView } from '~/views/player/PlayerView';
 
 type IProps = {};
 
@@ -8,7 +8,7 @@ const BottomContainer: FC<IProps> = () => (
   <div className={styles.wrap}>
     <div className={styles.content}>
       <div className={styles.padder}>
-        <PlayerBar />
+        <PlayerView />
       </div>
     </div>
   </div>
