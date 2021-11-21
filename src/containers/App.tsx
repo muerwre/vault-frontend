@@ -10,14 +10,14 @@ import { MainRouter } from '~/containers/main/MainRouter';
 import { DragDetectorProvider } from '~/utils/hooks/useDragDetector';
 import { useUser } from '~/utils/hooks/user/userUser';
 import { UserContextProvider } from '~/utils/context/UserContextProvider';
-import { SWRProvider } from '~/utils/providers/SWRProvider';
+import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
 
 const App: VFC = () => {
   const user = useUser();
 
   return (
     <ConnectedRouter history={history}>
-      <SWRProvider>
+      <SWRConfigProvider>
         <UserContextProvider user={user}>
           <DragDetectorProvider>
             <PageCover />
@@ -31,7 +31,7 @@ const App: VFC = () => {
             <BottomContainer />
           </DragDetectorProvider>
         </UserContextProvider>
-      </SWRProvider>
+      </SWRConfigProvider>
     </ConnectedRouter>
   );
 };

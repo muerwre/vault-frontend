@@ -5,4 +5,6 @@ const config: SWRConfiguration = {
   revalidateOnFocus: false,
 };
 
-export const SWRProvider: FC = ({ children }) => <SWRConfig value={config}>{children}</SWRConfig>;
+export const SWRConfigProvider: FC = ({ children }) => (
+  <SWRConfig value={config}>{children}</SWRConfig>
+);
