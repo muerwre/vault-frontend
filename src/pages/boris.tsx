@@ -11,7 +11,6 @@ import { useBoris } from '~/utils/hooks/boris/useBoris';
 
 const BorisPage: VFC = () => {
   const dispatch = useDispatch();
-  const node = useShallowSelect(selectNode);
   const {
     comments,
     comment_count: count,
@@ -23,9 +22,8 @@ const BorisPage: VFC = () => {
   const { title, setIsBetaTester, isTester, stats } = useBoris(comments);
 
   useEffect(() => {
-    if (node.is_loading) return;
     dispatch(nodeLoadNode(696, 'DESC'));
-  }, [dispatch, node.is_loading]);
+  }, [dispatch]);
 
   return (
     <CommentContextProvider
