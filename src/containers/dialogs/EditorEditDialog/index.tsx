@@ -5,6 +5,7 @@ import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import styles from './styles.module.scss';
 import { useGetNode } from '~/utils/hooks/data/useGetNode';
+import { EMPTY_NODE } from '~/redux/node/constants';
 
 const EditorEditDialog: FC = () => {
   const history = useHistory();
@@ -34,7 +35,7 @@ const EditorEditDialog: FC = () => {
     );
   }
 
-  return <EditorDialog node={node} onRequestClose={goBack} />;
+  return <EditorDialog node={node || EMPTY_NODE} onRequestClose={goBack} />;
 };
 
 export { EditorEditDialog };

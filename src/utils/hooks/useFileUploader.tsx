@@ -15,7 +15,7 @@ import { useDispatch } from 'react-redux';
 import { uploadUploadFiles } from '~/redux/uploads/actions';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectUploads } from '~/redux/uploads/selectors';
-import { has, path } from 'ramda';
+import { path } from 'ramda';
 import { IUploadStatus } from '~/redux/uploads/reducer';
 
 export const useFileUploader = (
@@ -66,7 +66,7 @@ export const useFileUploader = (
       setPendingIDs(newPending);
       setFiles([...files, ...added]);
     }
-  }, [statuses, files, pendingIDs, uploadedFiles]);
+  }, [statuses, files, pendingIDs, setFiles, setPendingIDs, uploadedFiles]);
 
   const pending = useMemo(() => pendingIDs.map(id => statuses[id]).filter(el => !!el), [
     statuses,

@@ -61,9 +61,14 @@ export const useNodeFormFormik = (
     validateOnChange: true,
   });
 
-  useEffect(() => {
-    formik.setFieldValue('files', uploader.files);
-  }, [formik, formik.setFieldValue, uploader.files]);
+  useEffect(
+    () => {
+      formik.setFieldValue('files', uploader.files);
+    },
+    // because it breaks files logic
+    // eslint-disable-next-line
+    [uploader.files, formik.setFieldValue]
+  );
 
   return formik;
 };
