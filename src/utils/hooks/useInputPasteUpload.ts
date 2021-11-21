@@ -6,13 +6,16 @@ export const useInputPasteUpload = (
   input: HTMLTextAreaElement | HTMLInputElement | undefined,
   onUpload: (files: File[]) => void
 ) => {
-  const onPaste = useCallback(async event => {
-    const image = await getImageFromPaste(event);
+  const onPaste = useCallback(
+    async event => {
+      const image = await getImageFromPaste(event);
 
-    if (!image) return;
+      if (!image) return;
 
-    onUpload([image]);
-  }, [onUpload]);
+      onUpload([image]);
+    },
+    [onUpload]
+  );
 
   useEffect(() => {
     if (!input) return;

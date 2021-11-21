@@ -36,10 +36,13 @@ export const useNodeFormFormik = (
   stopEditing: () => void
 ) => {
   const dispatch = useDispatch();
-  const onSubmit = useCallback((values: INode, helpers: FormikHelpers<INode>) => {
-    helpers.setSubmitting(true);
-    dispatch(nodeSubmitLocal(values, onSuccess(helpers)));
-  }, [dispatch]);
+  const onSubmit = useCallback(
+    (values: INode, helpers: FormikHelpers<INode>) => {
+      helpers.setSubmitting(true);
+      dispatch(nodeSubmitLocal(values, onSuccess(helpers)));
+    },
+    [dispatch]
+  );
 
   const { current: initialValues } = useRef(values);
 

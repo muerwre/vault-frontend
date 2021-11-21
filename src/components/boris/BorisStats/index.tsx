@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { BorisUsageStats, IBorisState } from '~/redux/boris/reducer';
+import { BorisUsageStats } from '~/redux/boris/reducer';
 import { BorisStatsGit } from '../BorisStatsGit';
 import { BorisStatsBackend } from '../BorisStatsBackend';
 
