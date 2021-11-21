@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, HTMLAttributes, useCallback, useMemo, useState } from 'react';
 import { TagField } from '~/components/containers/TagField';
 import { ITag } from '~/redux/types';
 import { uniq } from 'ramda';
@@ -42,17 +42,18 @@ export const Tags: FC<IProps> = ({
       }
 
       onTagsChange(uniqueTags);
+      setData([]);
     },
     [data, onTagsChange, tags]
   );
 
-  useEffect(() => {
-    setData(data.filter(title => !tags.some(tag => tag?.title?.trim() === title.trim())));
-  }, [data, tags]);
-
   const onAppendTag = useCallback(
     (created: string[]) => {
-      setData(uniq([...data, ...created]).filter(title => !tags.some(it => it.title === title)));
+      setData(
+        uniq([...data, ...created]).filter(
+          title => !tags.some(it => it.title?.trim() === title?.trim())
+        )
+      );
     },
     [data, setData, tags]
   );
