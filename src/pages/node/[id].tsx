@@ -11,7 +11,7 @@ import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
 import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
 import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
-import { NodeRelatedContextProvider } from '~/utils/context/NodeRelatedContextProvider';
+import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
 
 type Props = RouteComponentProps<{ id: string }> & {};
 
@@ -42,7 +42,7 @@ const NodePage: FC<Props> = ({
 
   return (
     <NodeContextProvider node={node} isLoading={isLoading}>
-      <NodeRelatedContextProvider related={related} isLoading={isLoading}>
+      <NodeRelatedProvider id={parseInt(id, 10)}>
         <CommentContextProvider
           comments={comments}
           count={commentsCount}
@@ -64,7 +64,7 @@ const NodePage: FC<Props> = ({
             <NodeLayout />
           </TagsContextProvider>
         </CommentContextProvider>
-      </NodeRelatedContextProvider>
+      </NodeRelatedProvider>
     </NodeContextProvider>
   );
 };
