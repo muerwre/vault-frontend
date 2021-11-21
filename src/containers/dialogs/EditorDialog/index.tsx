@@ -1,4 +1,4 @@
-import React, { createElement, FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { createElement, FC, useCallback, useMemo, useState } from 'react';
 import { IDialogProps } from '~/redux/modal/constants';
 import styles from './styles.module.scss';
 import { NODE_EDITORS } from '~/redux/node/constants';
@@ -25,7 +25,7 @@ const EditorDialog: FC<Props> = ({ node, onRequestClose }) => {
 
   const uploader = useFileUploader(UPLOAD_SUBJECTS.EDITOR, UPLOAD_TARGETS.NODES, node.files);
   const formik = useNodeFormFormik(node, uploader, onRequestClose);
-  const { values, handleSubmit, dirty, status, setStatus } = formik;
+  const { values, handleSubmit, dirty, status } = formik;
 
   const component = useMemo(() => node.type && prop(node.type, NODE_EDITORS), [node.type]);
 
@@ -48,14 +48,6 @@ const EditorDialog: FC<Props> = ({ node, onRequestClose }) => {
   }, [dirty, isConfirmModalShown, onRequestClose, closeConfirmModal]);
 
   const error = useTranslatedError(status);
-
-  useEffect(() => {
-    if (!status) {
-      return;
-    }
-
-    setStatus('');
-  }, [setStatus, status, values]);
 
   useCloseOnEscape(onClose);
 

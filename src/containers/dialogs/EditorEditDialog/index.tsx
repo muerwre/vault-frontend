@@ -1,15 +1,12 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { EMPTY_NODE } from '~/redux/node/constants';
+import React, { FC, useCallback, useMemo } from 'react';
 import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { useHistory, useRouteMatch } from 'react-router';
 import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
-import { apiGetNodeWithCancel } from '~/redux/node/api';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import styles from './styles.module.scss';
+import { useGetNode } from '~/utils/hooks/data/useGetNode';
 
 const EditorEditDialog: FC = () => {
-  const [data, setData] = useState(EMPTY_NODE);
-  const [isLoading, setLoading] = useState(true);
   const history = useHistory();
 
   const {
@@ -25,23 +22,9 @@ const EditorEditDialog: FC = () => {
     history.replace(backUrl);
   }, [backUrl, history]);
 
-  useEffect(() => {
-    if (!id) {
-      return;
-    }
+  const { node, isLoading } = useGetNode(parseInt(id, 10));
 
-    const { request, cancel } = apiGetNodeWithCancel({ id });
-
-    setLoading(true);
-    request
-      .then(data => setData(data.node))
-      .then(() => setLoading(false))
-      .catch(console.log);
-
-    return () => cancel();
-  }, [id]);
-
-  if (isLoading) {
+  if (isLoading || !node) {
     return (
       <ModalWrapper onOverlayClick={goBack}>
         <div className={styles.loader}>
@@ -51,7 +34,7 @@ const EditorEditDialog: FC = () => {
     );
   }
 
-  return <EditorDialog node={data} onRequestClose={goBack} />;
+  return <EditorDialog node={node} onRequestClose={goBack} />;
 };
 
 export { EditorEditDialog };
