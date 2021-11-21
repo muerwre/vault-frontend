@@ -14,9 +14,9 @@ const stateLabels: Record<IGithubIssue['state'], string> = {
 };
 
 const BorisStatsGitCard: FC<IProps> = ({ data: { created_at, title, html_url, state } }) => {
-  if (!title || !created_at) return null;
-
   const date = useMemo(() => getPrettyDate(created_at), [created_at]);
+
+  if (!title || !created_at) return null;
 
   return (
     <div className={styles.wrap}>

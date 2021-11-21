@@ -9,8 +9,6 @@ interface IProps {
 }
 
 const BorisStatsGit: FC<IProps> = ({ stats }) => {
-  if (!stats.issues.length) return null;
-
   const open = useMemo(
     () => stats.issues.filter(el => !el.pull_request && el.state === 'open').slice(0, 5),
     [stats.issues]
@@ -20,6 +18,8 @@ const BorisStatsGit: FC<IProps> = ({ stats }) => {
     () => stats.issues.filter(el => !el.pull_request && el.state === 'closed').slice(0, 5),
     [stats.issues]
   );
+
+  if (!stats.issues.length) return null;
 
   if (stats.is_loading) {
     return (

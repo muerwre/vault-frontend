@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC } from 'react';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectAuthIsTester, selectUser } from '~/redux/auth/selectors';
 
