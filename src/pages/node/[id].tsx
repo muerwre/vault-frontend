@@ -41,7 +41,7 @@ const NodePage: FC<Props> = ({
 
   return (
     <NodeContextProvider node={node} isLoading={isLoading}>
-      <NodeRelatedProvider id={parseInt(id, 10)}>
+      <NodeRelatedProvider id={parseInt(id, 10)} tags={node.tags}>
         <CommentContextProvider
           comments={comments}
           count={commentsCount}
