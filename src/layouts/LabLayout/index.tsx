@@ -1,42 +1,18 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { Sticky } from '~/components/containers/Sticky';
 import { Container } from '~/containers/main/Container';
 import { LabGrid } from '~/containers/lab/LabGrid';
-import { useDispatch } from 'react-redux';
-import { labGetList, labGetMore, labGetStats } from '~/redux/lab/actions';
 import { Group } from '~/components/containers/Group';
 import { LabHead } from '~/components/lab/LabHead';
 import { LabStats } from '~/containers/lab/LabStats';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
-import { selectLabList } from '~/redux/lab/selectors';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
-import { Superpower } from '~/components/boris/Superpower';
-import { Toggle } from '~/components/input/Toggle';
-import { usePersistedState } from '~/utils/hooks/usePersistedState';
-import classNames from 'classnames';
-import { useLabPagination } from '~/utils/hooks/lab/useLabPagination';
+import { useLabContext } from '~/utils/context/LabContextProvider';
 
 interface IProps {}
 
 const LabLayout: FC<IProps> = () => {
-  const { is_loading, nodes, count } = useShallowSelect(selectLabList);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(labGetList());
-    dispatch(labGetStats());
-  }, [dispatch]);
-
-  const onLoadMore = useCallback(() => {
-    if (nodes.length >= count) {
-      return;
-    }
-
-    dispatch(labGetMore());
-  }, [nodes, count, dispatch]);
-
-  const isInitialLoading = is_loading && !nodes.length;
+  const { isLoading } = useLabContext();
 
   return (
     <Container>
@@ -44,10 +20,10 @@ const LabLayout: FC<IProps> = () => {
         <div className={styles.wrap}>
           <Group className={styles.content}>
             <div className={styles.head}>
-              <LabHead isLoading={isInitialLoading} />
+              <LabHead isLoading={isLoading} />
             </div>
 
-            <LabGrid nodes={nodes} isLoading={isInitialLoading} onLoadMore={onLoadMore} />
+            <LabGrid />
           </Group>
 
           <div className={styles.panel}>

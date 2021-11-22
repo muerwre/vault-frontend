@@ -4,14 +4,10 @@ import styles from './styles.module.scss';
 import { LabNode } from '~/components/lab/LabNode';
 import { EMPTY_NODE, NODE_TYPES } from '~/redux/node/constants';
 import { values } from 'ramda';
-import { ILabNode } from '~/redux/lab/types';
 import { useLabPagination } from '~/utils/hooks/lab/useLabPagination';
+import { useLabContext } from '~/utils/context/LabContextProvider';
 
-interface IProps {
-  isLoading: boolean;
-  nodes: ILabNode[];
-  onLoadMore: () => void;
-}
+interface IProps {}
 
 const breakpointCols = {
   default: 2,
@@ -30,7 +26,9 @@ const LoadingNode = () => (
   />
 );
 
-const LabGrid: FC<IProps> = ({ isLoading, nodes, onLoadMore }) => {
+const LabGrid: FC<IProps> = () => {
+  const { isLoading, nodes, onLoadMore } = useLabContext();
+
   const columns = useMemo(() => Array.from(document.querySelectorAll(`.${styles.column}`)), []);
 
   useLabPagination(isLoading, columns, onLoadMore);

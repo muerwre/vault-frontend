@@ -2,25 +2,16 @@ import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { LabBanner } from '~/components/lab/LabBanner';
 import { Group } from '~/components/containers/Group';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
-import {
-  selectLabStatsHeroes,
-  selectLabStatsLoading,
-  selectLabStatsTags,
-  selectLabUpdatesNodes
-} from '~/redux/lab/selectors';
 import { LabTags } from '~/components/lab/LabTags';
 import { LabHeroes } from '~/components/lab/LabHeroes';
 import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
 import { SubTitle } from '~/components/common/SubTitle';
+import { useLabContext } from '~/utils/context/LabContextProvider';
 
 interface IProps {}
 
 const LabStats: FC<IProps> = () => {
-  const tags = useShallowSelect(selectLabStatsTags);
-  const heroes = useShallowSelect(selectLabStatsHeroes);
-  const isLoading = useShallowSelect(selectLabStatsLoading);
-  const updates = useShallowSelect(selectLabUpdatesNodes);
+  const { isLoadingStats, tags, heroes, updates } = useLabContext();
 
   return (
     <Group>
@@ -28,14 +19,14 @@ const LabStats: FC<IProps> = () => {
 
       <div className={styles.card}>
         <Group>
-          {(!!tags.length || isLoading) && (
-            <SubTitle isLoading={isLoading} className={styles.title}>
+          {(!!tags.length || isLoadingStats) && (
+            <SubTitle isLoading={isLoadingStats} className={styles.title}>
               Тэги
             </SubTitle>
           )}
 
           <div className={styles.tags}>
-            <LabTags tags={tags} isLoading={isLoading} />
+            <LabTags tags={tags} isLoading={isLoadingStats} />
           </div>
 
           <div />
@@ -53,14 +44,14 @@ const LabStats: FC<IProps> = () => {
             </>
           )}
 
-          {(!!heroes.length || isLoading) && (
-            <SubTitle isLoading={isLoading} className={styles.title}>
+          {(!!heroes.length || isLoadingStats) && (
+            <SubTitle isLoading={isLoadingStats} className={styles.title}>
               Важные
             </SubTitle>
           )}
 
           <div className={styles.heroes}>
-            <LabHeroes nodes={heroes} isLoading={isLoading} />
+            <LabHeroes nodes={heroes} isLoading={isLoadingStats} />
           </div>
         </Group>
       </div>

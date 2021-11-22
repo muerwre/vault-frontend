@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import { URLS } from '~/constants/urls';
 import { ErrorNotFound } from '~/containers/pages/ErrorNotFound';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
-import { LabLayout } from '~/layouts/LabLayout';
 import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
 import { selectAuthUser } from '~/redux/auth/selectors';
 import { ProfileLayout } from '~/layouts/ProfileLayout';
 import FlowPage from '~/pages';
 import BorisPage from '~/pages/boris';
 import NodePage from '~/pages/node/[id]';
+import LabPage from '~/pages/lab';
 
 interface IProps {}
 
@@ -23,7 +23,7 @@ const MainRouter: FC<IProps> = () => {
       <Route path={URLS.ERRORS.NOT_FOUND} component={ErrorNotFound} />
       <Route path={URLS.PROFILE_PAGE(':username')} component={ProfileLayout} />
 
-      {is_user && <Route path={URLS.LAB} component={LabLayout} />}
+      {is_user && <Route path={URLS.LAB} component={LabPage} />}
 
       <Route path={URLS.BASE} component={FlowPage} />
       <Redirect to="/" />
