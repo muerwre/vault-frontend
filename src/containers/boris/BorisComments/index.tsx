@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { NodeComments } from '~/views/node/NodeComments';
+import { NodeComments } from '~/containers/node/NodeComments';
 import { Footer } from '~/components/main/Footer';
 import { CommentContextProvider, useCommentContext } from '~/utils/context/CommentContextProvider';
 import { useUserContext } from '~/utils/context/UserContextProvider';

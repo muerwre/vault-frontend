@@ -12,7 +12,7 @@ import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { NodeComments } from '~/views/node/NodeComments';
+import { NodeComments } from '~/containers/node/NodeComments';
 import { useUserContext } from '~/utils/context/UserContextProvider';
 import { useNodeRelatedContext } from '~/utils/context/NodeRelatedContextProvider';
 

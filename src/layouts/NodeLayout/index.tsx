@@ -8,7 +8,7 @@ import { Footer } from '~/components/main/Footer';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { Container } from '~/containers/main/Container';
 import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
-import { NodeBottomBlock } from '~/views/node/NodeBottomBlock';
+import { NodeBottomBlock } from '~/containers/node/NodeBottomBlock';
 import { useNodeCoverImage } from '~/utils/hooks/node/useNodeCoverImage';
 import { URLS } from '~/constants/urls';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';

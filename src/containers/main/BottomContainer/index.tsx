@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
-import { PlayerView } from '~/views/player/PlayerView';
+import { PlayerView } from '~/containers/player/PlayerView';
 
 type IProps = {};
 

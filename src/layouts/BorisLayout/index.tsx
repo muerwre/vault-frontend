@@ -4,7 +4,7 @@ import { Group } from '~/components/containers/Group';
 import boris from '~/sprites/boris_robot.svg';
 import { Container } from '~/containers/main/Container';
 import StickyBox from 'react-sticky-box/dist/esnext';
-import { BorisComments } from '~/views/boris/BorisComments';
+import { BorisComments } from '~/containers/boris/BorisComments';
 import { Card } from '~/components/containers/Card';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
