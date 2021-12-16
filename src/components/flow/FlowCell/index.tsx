@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { NavLink } from 'react-router-dom';
 import { CellShade } from '~/components/flow/CellShade';
-import { FlowCellImage } from '~/components/flow/FlowCellImage';
 import { FlowDisplay, INode } from '~/redux/types';
 import { FlowCellText } from '~/components/flow/FlowCellText';
 import classNames from 'classnames';
@@ -10,6 +9,7 @@ import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
 import { useFlowCellControls } from '~/utils/hooks/flow/useFlowCellControls';
 import { useClickOutsideFocus } from '~/utils/hooks/useClickOutsideFocus';
 import { MenuDots } from '~/components/common/MenuDots';
+import { FlowCellImage } from '~/components/flow/FlowCellImage';
 
 interface Props {
   id: INode['id'];
