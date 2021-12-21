@@ -37,6 +37,8 @@
     animation: highlight 1s 0.5s forwards;
     background: transparentize($wisegreen, 0.7);
     border-radius: $radius;
+    pointer-events: none;
+    touch-action: none;
   }
 
   @include tablet {
