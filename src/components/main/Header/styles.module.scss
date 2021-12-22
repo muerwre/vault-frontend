@@ -14,7 +14,7 @@
 
   @include desktop {
     height: 64px;
-    padding: 0 $gap;
+    padding: 0;
   }
 
   &.is_scrolled {
@@ -28,7 +28,8 @@
   justify-content: flex-end;
   font-weight: 500;
   box-sizing: border-box;
-  flex: 0 1 $content_width;
+
+  @include container;
 }
 
 .spacer {

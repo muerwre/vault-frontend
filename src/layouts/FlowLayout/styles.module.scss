@@ -10,8 +10,7 @@
 $cols: $content_width / $cell;
 
 .container {
-  max-width: $content_width;
-  width: 100%;
+  @include container;
 }
 
 .grid {

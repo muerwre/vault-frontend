@@ -319,3 +319,16 @@ $sidebar_border: transparentize(white, 0.95);
 
   animation: __appear 0.25s forwards;
 }
+
+@mixin container {
+  max-width: $content_width + $gap * 8;
+  width: 100%;
+
+  padding-left: $gap * 4;
+  padding-right: $gap * 4;
+
+  @include tablet {
+    padding-left: $gap;
+    padding-right: $gap;
+  }
+}
