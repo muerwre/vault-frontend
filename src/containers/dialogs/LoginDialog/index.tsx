@@ -80,9 +80,10 @@ const LoginDialogUnconnected: FC<IProps> = ({
     [authGotOauthLoginEvent]
   );
 
-  useEffect(() => {
+  useEffect(() => { 
     if (error) userSetLoginError('');
-  }, [username, password, error, userSetLoginError]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username, password]);
 
   useEffect(() => {
     window.addEventListener('message', onMessage);
