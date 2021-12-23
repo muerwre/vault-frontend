@@ -5,6 +5,7 @@ import { uniq } from 'ramda';
 import { Tag } from '~/components/tags/Tag';
 import { TagInput } from '~/components/tags/TagInput';
 import { separateTags } from '~/utils/tag';
+import { Button } from '~/components/input/Button';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   tags: Partial<ITag>[];

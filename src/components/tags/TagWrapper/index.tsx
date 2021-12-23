@@ -29,6 +29,17 @@ const TagWrapper: FC<IProps> = ({
   title = '',
 }) => {
   const deletable = is_deletable && !is_editing && !has_input;
+  const onDeletePress = useCallback(
+    event => {
+      if (!onDelete) {
+        return;
+      }
+
+      event.stopPropagation();
+      onDelete();
+    },
+    [onDelete]
+  );
 
   return (
     <div
@@ -39,16 +50,18 @@ const TagWrapper: FC<IProps> = ({
         input: has_input,
         clickable: onClick,
       })}
+      onClick={onClick}
     >
-      <div className={styles.content} onClick={onClick}>
-        <div className={styles.hole} />
+      <div className={styles.hole} />
+
+      <div className={styles.text}>
         <div className={styles.title}>{title}</div>
         {children}
       </div>
 
       {deletable && (
-        <button type="button" className={styles.delete} onClick={onDelete}>
-          <Icon icon="close" size={20} />
+        <button type="button" className={styles.delete} onClick={onDeletePress}>
+          <Icon icon="close" size={12} />
         </button>
       )}
     </div>
