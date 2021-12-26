@@ -4,7 +4,6 @@
   position: relative;
   min-height: 40px;
   border-radius: $input_radius;
-  //box-shadow: $input_shadow;
   flex: 1;
   display: flex;
   opacity: 1;
@@ -274,7 +273,7 @@
     transition: top 0.25s, bottom 0.25s, font 0.25s, color 0.25s;
     pointer-events: none;
     touch-action: none;
-    color: transparentize(white, 0.5);
+    color: lighten($content_bg, 10%);
     text-transform: capitalize;
     background: $input_bg_color;
 

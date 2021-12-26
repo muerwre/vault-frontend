@@ -10,6 +10,8 @@ import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
 import { useUserContext } from '~/utils/context/UserContextProvider';
 import { BorisUsageStats } from '~/redux/boris/reducer';
+import { Tabs } from '~/components/dialogs/Tabs';
+import { Superpower } from '~/components/boris/Superpower';
 
 type IProps = {
   title: string;

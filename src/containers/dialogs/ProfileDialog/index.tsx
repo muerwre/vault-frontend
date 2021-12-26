@@ -4,22 +4,16 @@ import { ProfileInfo } from '~/containers/profile/ProfileInfo';
 import { IDialogProps } from '~/redux/types';
 import { connect } from 'react-redux';
 import { selectAuthProfile, selectAuthUser } from '~/redux/auth/selectors';
-import { ProfileMessages } from '~/containers/profile/ProfileMessages';
-import { ProfileDescription } from '~/components/profile/ProfileDescription';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IAuthState } from '~/redux/auth/types';
 import { pick } from 'ramda';
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
+import { MessageForm } from '~/components/profile/MessageForm';
+import { Tabs } from '~/components/dialogs/Tabs';
+import { ProfileDescription } from '~/components/profile/ProfileDescription';
+import { ProfileMessages } from '~/containers/profile/ProfileMessages';
 import { ProfileSettings } from '~/components/profile/ProfileSettings';
 import { ProfileAccounts } from '~/components/profile/ProfileAccounts';
-import { MessageForm } from '~/components/profile/MessageForm';
-
-const TAB_CONTENT = {
-  profile: <ProfileDescription />,
-  messages: <ProfileMessages />,
-  settings: <ProfileSettings />,
-  accounts: <ProfileAccounts />,
-};
 
 const mapStateToProps = state => ({
   profile: selectAuthProfile(state),
@@ -52,23 +46,30 @@ const ProfileDialogUnconnected: FC<IProps> = ({
   ]);
 
   return (
-    <BetterScrollDialog
-      header={
-        <ProfileInfo
-          is_own={user && user.id === id}
-          is_loading={is_loading}
-          user={user}
-          tab={tab}
-          setTab={setTab}
-          content={PROFILE_HEADERS[tab]}
-        />
-      }
-      footer={PROFILE_FOOTERS[tab]}
-      backdrop={<CoverBackdrop cover={user && user.cover} />}
-      onClose={onRequestClose}
-    >
-      {TAB_CONTENT[tab] || null}
-    </BetterScrollDialog>
+    <Tabs>
+      <BetterScrollDialog
+        header={
+          <ProfileInfo
+            is_own={user && user.id === id}
+            is_loading={is_loading}
+            user={user}
+            tab={tab}
+            setTab={setTab}
+            content={PROFILE_HEADERS[tab]}
+          />
+        }
+        footer={PROFILE_FOOTERS[tab]}
+        backdrop={<CoverBackdrop cover={user && user.cover} />}
+        onClose={onRequestClose}
+      >
+        <Tabs.Content>
+          <ProfileDescription />
+          <ProfileMessages />
+          <ProfileSettings />
+          <ProfileAccounts />
+        </Tabs.Content>
+      </BetterScrollDialog>
+    </Tabs>
   );
 };
 

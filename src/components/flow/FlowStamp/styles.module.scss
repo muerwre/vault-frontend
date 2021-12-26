@@ -76,10 +76,6 @@
   background: lighten($content_bg, 3%);
   padding: $gap;
   border-radius: $radius;
-
-  :global(.input_title) {
-    color: lighten($content_bg, 10%);
-  }
 }
 
 .search_icon {
