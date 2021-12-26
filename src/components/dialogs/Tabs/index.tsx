@@ -1,4 +1,4 @@
-import React, { createContext, FC, VFC, useContext, useState } from 'react';
+import React, { createContext, FC, VFC, useContext, useState, useMemo } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 
@@ -31,12 +31,19 @@ const List: VFC<TabProps> = ({ items }) => {
 
 const Content: FC<any> = ({ children }) => {
   const { activeTab } = useContext(TabContext);
+  const notEmptyChildren = useMemo(() => {
+    if (!Array.isArray(children)) {
+      return [children];
+    }
 
-  if (!Array.isArray(children) && activeTab > 0) {
-    return null;
+    return children.filter(it => it);
+  }, [children]);
+
+  if (Array.isArray(notEmptyChildren) && notEmptyChildren.length - 1 < activeTab) {
+    return notEmptyChildren[notEmptyChildren.length - 1];
   }
 
-  return Array.isArray(children) ? children[activeTab] : children;
+  return notEmptyChildren[activeTab];
 };
 
 const Tabs = function({ children }) {

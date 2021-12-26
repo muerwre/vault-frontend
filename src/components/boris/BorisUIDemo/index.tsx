@@ -4,6 +4,7 @@ import styles from './styles.module.scss';
 import markdown from '~/styles/common/markdown.module.scss';
 import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
+import { InputText } from '~/components/input/InputText';
 
 interface IProps {}
 
@@ -15,6 +16,14 @@ const BorisUIDemo: FC<IProps> = () => (
         Простая демонстрация элементов интерфейса. Используется, в основном, как подсказка при
         разработке
       </p>
+
+      <h2>Инпуты</h2>
+
+      <form autoComplete="off">
+        <InputText title="Обычный инпут" />
+        <InputText title="Инпут с ошибкой" error="Ошибка" />
+        <InputText title="Пароль" type="password" />
+      </form>
 
       <h2>Кнопки</h2>
 

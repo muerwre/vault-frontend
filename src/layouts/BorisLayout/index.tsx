@@ -12,6 +12,7 @@ import { useUserContext } from '~/utils/context/UserContextProvider';
 import { BorisUsageStats } from '~/redux/boris/reducer';
 import { Tabs } from '~/components/dialogs/Tabs';
 import { Superpower } from '~/components/boris/Superpower';
+import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
 
 type IProps = {
   title: string;
@@ -38,7 +39,18 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats }) =>
 
         <div className={styles.container}>
           <Card className={styles.content}>
-            <BorisComments />
+            <Tabs>
+              <Superpower>
+                <Tabs.List items={['Комментарии', 'ЮАЙ ПЛЭЙГРАУНД']} />
+              </Superpower>
+
+              <Tabs.Content>
+                <BorisComments />
+                <Superpower>
+                  <BorisUIDemo />
+                </Superpower>
+              </Tabs.Content>
+            </Tabs>
           </Card>
 
           <Group className={styles.stats}>
