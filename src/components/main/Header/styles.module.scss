@@ -23,13 +23,17 @@
 }
 
 .container {
+  @include container;
+
   display: flex;
   align-items: center;
   justify-content: flex-end;
   font-weight: 500;
   box-sizing: border-box;
 
-  @include container;
+  @include tablet {
+    padding: 0 $gap;
+  }
 }
 
 .spacer {
@@ -116,9 +120,8 @@
     background: lighten($wisegreen, 10%);
   }
 
-
   @include tablet {
-    padding: $gap;
+    padding: 0 $gap * 2 0 0;
 
     &.notifications {
       flex: 1;

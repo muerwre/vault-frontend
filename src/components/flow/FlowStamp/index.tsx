@@ -76,9 +76,9 @@ const FlowStamp: FC<IProps> = ({
         />
       </form>
 
-      <div className={styles.grid}>
-        {searchText ? (
-          <>
+      {searchText ? (
+        <div className={styles.search_results}>
+          <div className={styles.grid}>
             <div className={styles.label}>
               <span className={styles.label_text}>Результаты поиска</span>
               <span className="line" />
@@ -92,20 +92,20 @@ const FlowStamp: FC<IProps> = ({
                 onLoadMore={onSearchLoadMore}
               />
             </div>
-          </>
-        ) : (
-          <>
-            <div className={classNames(styles.label, styles.whatsnew)}>
-              <span className={styles.label_text}>Что нового?</span>
-              <span className="line" />
-            </div>
+          </div>
+        </div>
+      ) : (
+        <div className={styles.grid}>
+          <div className={classNames(styles.label, styles.whatsnew)}>
+            <span className={styles.label_text}>Что нового?</span>
+            <span className="line" />
+          </div>
 
-            <div className={styles.items}>
-              <FlowRecent updated={updated} recent={recent} />
-            </div>
-          </>
-        )}
-      </div>
+          <div className={styles.items}>
+            <FlowRecent updated={updated} recent={recent} />
+          </div>
+        </div>
+      )}
 
       {experimentalFeatures.liquidFlow && (
         <Superpower>

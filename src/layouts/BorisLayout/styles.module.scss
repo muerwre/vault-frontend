@@ -126,6 +126,10 @@
     padding: $gap;
     box-sizing: border-box;
     flex: 0 0 auto;
+
+    @include tablet {
+      border-radius: 0;
+    }
   }
 
   &__title {
@@ -154,6 +158,10 @@
   position: relative;
   z-index: 1;
   flex: 3;
+
+  @include tablet {
+    border-radius: 0;
+  }
 }
 
 .super_powers {

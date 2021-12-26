@@ -328,7 +328,7 @@ $sidebar_border: transparentize(white, 0.95);
   padding-right: $gap * 4;
 
   @include tablet {
-    padding-left: $gap;
-    padding-right: $gap;
+    padding-left: 0;
+    padding-right: 0;
   }
 }

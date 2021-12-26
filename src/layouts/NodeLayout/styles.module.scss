@@ -41,3 +41,9 @@
   align-items: flex-end;
   justify-content: stretch;
 }
+
+.node {
+  @include tablet {
+    border-radius: 0;
+  }
+}

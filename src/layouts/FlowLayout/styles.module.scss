@@ -11,6 +11,10 @@ $cols: $content_width / $cell;
 
 .container {
   @include container;
+
+  @include tablet {
+    padding: 0 $gap;
+  }
 }
 
 .grid {
