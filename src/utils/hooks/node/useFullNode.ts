@@ -14,7 +14,7 @@ export const useFullNode = (id: string) => {
   } = useShallowSelect(selectNode);
 
   useLoadNode(id);
-  useOnNodeSeen(node);
+  // useOnNodeSeen(node);
 
   return { node, comments, commentsCount, lastSeenCurrent, isLoading, isLoadingComments };
 };

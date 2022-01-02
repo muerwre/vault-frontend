@@ -42,9 +42,6 @@ export type ApiGetNodeCommentsResponse = { comments: IComment[]; comment_count: 
 export const apiPostNode = ({ node }: ApiPostNodeRequest) =>
   api.post<ApiPostNodeResult>(API.NODE.SAVE, node).then(cleanResult);
 
-export const apiPostNodeLocal = ({ node }: ApiPostNodeRequest) =>
-  api.post<ApiPostNodeResult>(API.NODE.SAVE, node).then(cleanResult);
-
 export const getNodeDiff = ({
   start,
   end,
@@ -69,7 +66,10 @@ export const getNodeDiff = ({
     .then(cleanResult);
 
 export const apiGetNode = ({ id }: ApiGetNodeRequest, config?: AxiosRequestConfig) =>
-  api.get<ApiGetNodeResponse>(API.NODE.GET_NODE(id), config).then(cleanResult);
+  api
+    .get<ApiGetNodeResponse>(API.NODE.GET_NODE(id), config)
+    .then(cleanResult)
+    .then(data => ({ node: data.node, last_seen: data.last_seen }));
 
 export const apiGetNodeWithCancel = ({ id }: ApiGetNodeRequest) => {
   const cancelToken = axios.CancelToken.source();

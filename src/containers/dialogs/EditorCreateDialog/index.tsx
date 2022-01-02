@@ -3,6 +3,10 @@ import { EMPTY_NODE, NODE_TYPES } from '~/redux/node/constants';
 import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { useHistory, useRouteMatch } from 'react-router';
 import { values } from 'ramda';
+import { INode } from '~/redux/types';
+import { apiPostNode } from '~/redux/node/api';
+import { useUpdateNode } from '~/utils/hooks/data/useUpdateNode';
+import { useCreateNode } from '~/utils/hooks/data/useCreateNode';
 
 const EditorCreateDialog: FC = () => {
   const history = useHistory();
@@ -25,11 +29,21 @@ const EditorCreateDialog: FC = () => {
 
   const data = useRef({ ...EMPTY_NODE, type, is_promoted: !isInLab });
 
+  const createNode = useCreateNode();
+
+  const onSubmit = useCallback(
+    async (node: INode) => {
+      await createNode(node);
+      goBack();
+    },
+    [goBack, createNode]
+  );
+
   if (!type || !isExist) {
     return null;
   }
 
-  return <EditorDialog node={data.current} onRequestClose={goBack} />;
+  return <EditorDialog node={data.current} onRequestClose={goBack} onSubmit={onSubmit} />;
 };
 
 export { EditorCreateDialog };

@@ -5,7 +5,8 @@ import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import styles from './styles.module.scss';
 import { useGetNode } from '~/utils/hooks/data/useGetNode';
-import { EMPTY_NODE } from '~/redux/node/constants';
+import { useUpdateNode } from '~/utils/hooks/data/useUpdateNode';
+import { INode } from '~/redux/types';
 
 const EditorEditDialog: FC = () => {
   const history = useHistory();
@@ -24,6 +25,15 @@ const EditorEditDialog: FC = () => {
   }, [backUrl, history]);
 
   const { node, isLoading } = useGetNode(parseInt(id, 10));
+  const updateNode = useUpdateNode(parseInt(id, 10));
+
+  const onSubmit = useCallback(
+    async (node: INode) => {
+      await updateNode(node);
+      goBack();
+    },
+    [updateNode, goBack]
+  );
 
   if (isLoading || !node) {
     return (
@@ -35,7 +45,7 @@ const EditorEditDialog: FC = () => {
     );
   }
 
-  return <EditorDialog node={node || EMPTY_NODE} onRequestClose={goBack} />;
+  return <EditorDialog node={node} onRequestClose={goBack} onSubmit={onSubmit} />;
 };
 
 export { EditorEditDialog };

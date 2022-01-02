@@ -5,7 +5,7 @@ import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { IEditorComponentProps } from '~/redux/node/types';
 import { useFileUploaderContext } from '~/utils/hooks/useFileUploader';
 import { getFileType } from '~/utils/uploader';
-import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
+import { useNodeFormContext } from '~/utils/hooks/node/useNodeFormFormik';
 import { Button } from '~/components/input/Button';
 
 type IProps = IEditorComponentProps & {

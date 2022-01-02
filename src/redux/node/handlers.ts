@@ -10,7 +10,6 @@ import {
   nodeSetLoadingComments,
   nodeSetSaveErrors,
   nodeSetSendingComment,
-  nodeSetTags,
 } from './actions';
 import { INodeState } from './reducer';
 
@@ -41,9 +40,6 @@ const setSendingComment = (
 const setComments = (state: INodeState, { comments }: ReturnType<typeof nodeSetComments>) =>
   assocPath(['comments'], comments, state);
 
-const setTags = (state: INodeState, { tags }: ReturnType<typeof nodeSetTags>) =>
-  assocPath(['current', 'tags'], tags, state);
-
 const setEditor = (state: INodeState, { editor }: ReturnType<typeof nodeSetEditor>) =>
   assocPath(['editor'], editor, state);
 
@@ -60,7 +56,6 @@ export const NODE_HANDLERS = {
   [NODE_ACTIONS.SET_CURRENT]: setCurrent,
   [NODE_ACTIONS.SET_SENDING_COMMENT]: setSendingComment,
   [NODE_ACTIONS.SET_COMMENTS]: setComments,
-  [NODE_ACTIONS.SET_TAGS]: setTags,
   [NODE_ACTIONS.SET_EDITOR]: setEditor,
   [NODE_ACTIONS.SET_COVER_IMAGE]: setCoverImage,
 };

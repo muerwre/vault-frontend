@@ -10,7 +10,7 @@ import styles from './styles.module.scss';
 import { NodeEditorProps } from '~/redux/node/types';
 import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
 import { useNodeAudios } from '~/utils/hooks/node/useNodeAudios';
-import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
+import { useNodeFormContext } from '~/utils/hooks/node/useNodeFormFormik';
 import { useFileUploaderContext } from '~/utils/hooks/useFileUploader';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 

@@ -8,8 +8,9 @@ import classNames from 'classnames';
 import { NEW_COMMENT_CLASSNAME } from '~/constants/comment';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
-  is_empty?: boolean;
-  is_loading?: boolean;
+  nodeId: number;
+  isEmpty?: boolean;
+  isLoading?: boolean;
   group: ICommentGroup;
   isSame?: boolean;
   canEdit?: boolean;
@@ -20,9 +21,10 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
 const Comment: FC<IProps> = memo(
   ({
     group,
-    is_empty,
+    nodeId,
+    isEmpty,
     isSame,
-    is_loading,
+    isLoading,
     className,
     canEdit,
     onDelete,
@@ -34,8 +36,8 @@ const Comment: FC<IProps> = memo(
         className={classNames(className, {
           [NEW_COMMENT_CLASSNAME]: group.hasNew,
         })}
-        isEmpty={is_empty}
-        isLoading={is_loading}
+        isEmpty={isEmpty}
+        isLoading={isLoading}
         user={group.user}
         isNew={group.hasNew && !isSame}
         {...props}
@@ -48,9 +50,10 @@ const Comment: FC<IProps> = memo(
 
             return (
               <CommentContent
+                nodeId={nodeId}
                 comment={comment}
                 key={comment.id}
-                can_edit={!!canEdit}
+                canEdit={!!canEdit}
                 onDelete={onDelete}
                 onShowImageModal={onShowImageModal}
               />

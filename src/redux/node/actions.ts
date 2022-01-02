@@ -47,16 +47,7 @@ export const nodePostLocalComment = (
   nodeId,
   comment,
   callback,
-  type: NODE_ACTIONS.POST_COMMENT,
-});
-
-export const nodeSubmitLocal = (
-  node: INode,
-  callback: (e?: string, errors?: Record<string, string>) => void
-) => ({
-  node,
-  callback,
-  type: NODE_ACTIONS.SUBMIT_LOCAL,
+  type: NODE_ACTIONS.POST_LOCAL_COMMENT,
 });
 
 export const nodeSetSendingComment = (is_sending_comment: boolean) => ({
@@ -67,34 +58,6 @@ export const nodeSetSendingComment = (is_sending_comment: boolean) => ({
 export const nodeSetComments = (comments: IComment[]) => ({
   comments,
   type: NODE_ACTIONS.SET_COMMENTS,
-});
-
-export const nodeUpdateTags = (id: INode['id'], tags: string[]) => ({
-  type: NODE_ACTIONS.UPDATE_TAGS,
-  id,
-  tags,
-});
-
-export const nodeDeleteTag = (id: INode['id'], tagId: ITag['ID']) => ({
-  type: NODE_ACTIONS.DELETE_TAG,
-  id: id!,
-  tagId,
-});
-
-export const nodeSetTags = (tags: ITag[]) => ({
-  type: NODE_ACTIONS.SET_TAGS,
-  tags,
-});
-
-export const nodeCreate = (node_type: INode['type'], isLab?: boolean) => ({
-  type: NODE_ACTIONS.CREATE,
-  node_type,
-  isLab,
-});
-
-export const nodeEdit = (id: INode['id']) => ({
-  type: NODE_ACTIONS.EDIT,
-  id,
 });
 
 export const nodeLike = (id: INode['id']) => ({
@@ -113,15 +76,11 @@ export const nodeLock = (id: INode['id'], is_locked: boolean) => ({
   is_locked,
 });
 
-export const nodeLockComment = (id: IComment['id'], is_locked: boolean) => ({
+export const nodeLockComment = (id: number, is_locked: boolean, nodeId: number) => ({
   type: NODE_ACTIONS.LOCK_COMMENT,
+  nodeId,
   id,
   is_locked,
-});
-
-export const nodeEditComment = (id: IComment['id']) => ({
-  type: NODE_ACTIONS.EDIT_COMMENT,
-  id,
 });
 
 export const nodeSetEditor = (editor: INode) => ({
