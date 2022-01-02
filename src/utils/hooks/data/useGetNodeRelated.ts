@@ -1,18 +1,17 @@
 import { INode } from '~/redux/types';
 import useSWR from 'swr';
-import { AxiosResponse } from 'axios';
 import { ApiGetNodeRelatedResult } from '~/redux/node/types';
 import { API } from '~/constants/api';
-import { api } from '~/utils/api';
 import { useCallback } from 'react';
+import { apiGetNodeRelated } from '~/redux/node/api';
 
 export const useGetNodeRelated = (id?: INode['id']) => {
-  const { data, isValidating: isLoading, mutate } = useSWR<AxiosResponse<ApiGetNodeRelatedResult>>(
+  const { data, isValidating: isLoading, mutate } = useSWR<ApiGetNodeRelatedResult>(
     API.NODE.RELATED(id),
-    api.get
+    () => apiGetNodeRelated({ id })
   );
 
   const refresh = useCallback(() => mutate(data, true), [data, mutate]);
 
-  return { related: data?.data.related, isLoading, refresh };
+  return { related: data?.related, isLoading, refresh };
 };
