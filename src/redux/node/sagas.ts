@@ -1,11 +1,9 @@
 import { call, put, select, takeLatest, takeLeading } from 'redux-saga/effects';
 
-import { COMMENTS_DISPLAY, EMPTY_NODE, NODE_ACTIONS, NODE_EDITOR_DATA } from './constants';
+import { COMMENTS_DISPLAY, EMPTY_NODE, NODE_ACTIONS } from './constants';
 import {
   nodeGotoNode,
-  nodeLike,
   nodeLoadNode,
-  nodeLock,
   nodeLockComment,
   nodePostLocalComment,
   nodeSet,
@@ -13,27 +11,11 @@ import {
   nodeSetCurrent,
   nodeSetLoadingComments,
 } from './actions';
-import {
-  apiGetNodeComments,
-  apiLockComment,
-  apiLockNode,
-  apiPostComment,
-  apiPostNodeHeroic,
-  apiPostNodeLike,
-  apiPostNodeTags,
-} from './api';
+import { apiGetNodeComments, apiLockComment, apiPostComment } from './api';
 import { flowSetNodes } from '../flow/actions';
-import { modalSetShown, modalShowDialog } from '../modal/actions';
 import { selectFlowNodes } from '../flow/selectors';
-import { URLS } from '~/constants/urls';
 import { selectNode } from './selectors';
 import { INode, Unwrap } from '../types';
-import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
-import { DIALOGS } from '~/redux/modal/constants';
-import { has } from 'ramda';
-import { selectLabListNodes } from '~/redux/lab/selectors';
-import { labSetList } from '~/redux/lab/actions';
-import { apiPostNode } from '~/redux/node/api';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 export function* updateNodeEverywhere(node) {
@@ -156,63 +138,6 @@ function* onPostComment({ nodeId, comment, callback }: ReturnType<typeof nodePos
   }
 }
 
-function* onLikeSaga({ id }: ReturnType<typeof nodeLike>) {
-  const { current }: ReturnType<typeof selectNode> = yield select(selectNode);
-
-  try {
-    const count = current.like_count || 0;
-
-    yield call(updateNodeEverywhere, {
-      ...current,
-      is_liked: !current.is_liked,
-      like_count: current.is_liked ? Math.max(count - 1, 0) : count + 1,
-    });
-
-    const data: Unwrap<typeof apiPostNodeLike> = yield call(apiPostNodeLike, { id });
-
-    yield call(updateNodeEverywhere, {
-      ...current,
-      is_liked: data.is_liked,
-      like_count: data.is_liked ? count + 1 : Math.max(count - 1, 0),
-    });
-  } catch {}
-}
-
-function* onStarSaga({ id }: ReturnType<typeof nodeLike>) {
-  try {
-    const {
-      current,
-      current: { is_heroic },
-    } = yield select(selectNode);
-
-    yield call(updateNodeEverywhere, { ...current, is_heroic: !is_heroic });
-
-    const data: Unwrap<typeof apiPostNodeHeroic> = yield call(apiPostNodeHeroic, { id });
-
-    yield call(updateNodeEverywhere, { ...current, is_heroic: data.is_heroic });
-  } catch {}
-}
-
-function* onLockSaga({ id, is_locked }: ReturnType<typeof nodeLock>) {
-  const { current }: ReturnType<typeof selectNode> = yield select(selectNode);
-
-  try {
-    yield call(updateNodeEverywhere, {
-      ...current,
-      deleted_at: is_locked ? new Date().toISOString() : null,
-    });
-
-    const data: Unwrap<typeof apiLockNode> = yield call(apiLockNode, { id, is_locked });
-
-    yield call(updateNodeEverywhere, {
-      ...current,
-      deleted_at: data.deleted_at || undefined,
-    });
-  } catch {
-    yield call(updateNodeEverywhere, { ...current, deleted_at: current.deleted_at });
-  }
-}
-
 function* onLockCommentSaga({ nodeId, id, is_locked }: ReturnType<typeof nodeLockComment>) {
   const { comments }: ReturnType<typeof selectNode> = yield select(selectNode);
 
@@ -239,9 +164,6 @@ export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_LOCAL_COMMENT, onPostComment);
-  yield takeLatest(NODE_ACTIONS.LIKE, onLikeSaga);
-  yield takeLatest(NODE_ACTIONS.STAR, onStarSaga);
-  yield takeLatest(NODE_ACTIONS.LOCK, onLockSaga);
   yield takeLatest(NODE_ACTIONS.LOCK_COMMENT, onLockCommentSaga);
   yield takeLeading(NODE_ACTIONS.LOAD_MORE_COMMENTS, onNodeLoadMoreComments);
 }

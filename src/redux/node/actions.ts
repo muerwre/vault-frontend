@@ -7,11 +7,6 @@ export const nodeSet = (node: Partial<INodeState>) => ({
   type: NODE_ACTIONS.SET,
 });
 
-export const nodeSetSaveErrors = (errors: IValidationErrors) => ({
-  errors,
-  type: NODE_ACTIONS.SET_SAVE_ERRORS,
-});
-
 export const nodeGotoNode = (id: INode['id'], node_type: INode['type']) => ({
   id,
   node_type,
@@ -60,32 +55,11 @@ export const nodeSetComments = (comments: IComment[]) => ({
   type: NODE_ACTIONS.SET_COMMENTS,
 });
 
-export const nodeLike = (id: INode['id']) => ({
-  type: NODE_ACTIONS.LIKE,
-  id,
-});
-
-export const nodeStar = (id: INode['id']) => ({
-  type: NODE_ACTIONS.STAR,
-  id,
-});
-
-export const nodeLock = (id: INode['id'], is_locked: boolean) => ({
-  type: NODE_ACTIONS.LOCK,
-  id,
-  is_locked,
-});
-
 export const nodeLockComment = (id: number, is_locked: boolean, nodeId: number) => ({
   type: NODE_ACTIONS.LOCK_COMMENT,
   nodeId,
   id,
   is_locked,
-});
-
-export const nodeSetEditor = (editor: INode) => ({
-  type: NODE_ACTIONS.SET_EDITOR,
-  editor,
 });
 
 export const nodeSetCoverImage = (current_cover_image?: IFile) => ({

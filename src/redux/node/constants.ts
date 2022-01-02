@@ -29,23 +29,17 @@ export const NODE_ACTIONS = {
   GOTO_NODE: `${prefix}GOTO_NODE`,
   SET: `${prefix}SET`,
 
-  LIKE: `${prefix}LIKE`,
-  STAR: `${prefix}STAR`,
-  LOCK: `${prefix}LOCK`,
   LOCK_COMMENT: `${prefix}LOCK_COMMENT`,
   EDIT_COMMENT: `${prefix}EDIT_COMMENT`,
   LOAD_MORE_COMMENTS: `${prefix}LOAD_MORE_COMMENTS`,
 
-  SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,
   SET_LOADING: `${prefix}SET_LOADING`,
   SET_LOADING_COMMENTS: `${prefix}SET_LOADING_COMMENTS`,
   SET_SENDING_COMMENT: `${prefix}SET_SENDING_COMMENT`,
   SET_CURRENT: `${prefix}SET_CURRENT`,
-  SET_EDITOR: `${prefix}SET_EDITOR`,
 
   POST_LOCAL_COMMENT: `${prefix}POST_LOCAL_COMMENT`,
   SET_COMMENTS: `${prefix}SET_COMMENTS`,
-  SET_RELATED: `${prefix}SET_RELATED`,
 
   SET_COVER_IMAGE: `${prefix}SET_COVER_IMAGE`,
 };

@@ -9,12 +9,12 @@ import { useImageModal } from '~/utils/hooks/useImageModal';
 import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
 import { useBoris } from '~/utils/hooks/boris/useBoris';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
+import { useGetNode } from '~/utils/hooks/data/useGetNode';
 
 const BorisPage: VFC = () => {
   const dispatch = useDispatch();
+  const { node, isLoading, update } = useGetNode(696);
   const {
-    current,
-    is_loading,
     comments,
     comment_count: count,
     is_loading_comments: isLoadingComments,
@@ -28,7 +28,7 @@ const BorisPage: VFC = () => {
   }, [dispatch]);
 
   return (
-    <NodeContextProvider node={current} isLoading={is_loading}>
+    <NodeContextProvider node={node} isLoading={isLoading} update={update}>
       <CommentContextProvider
         comments={comments}
         count={count}

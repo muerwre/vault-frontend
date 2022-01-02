@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { Route } from 'react-router';
 import { Card } from '~/components/containers/Card';
 
-import { NodePanel } from '~/components/node/NodePanel';
 import { Footer } from '~/components/main/Footer';
 
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
@@ -15,12 +14,17 @@ import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 
 import styles from './styles.module.scss';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
+import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
+import { useNodeActions } from '~/utils/hooks/node/useNodeActions';
+import { NodePanelInner } from '~/components/node/NodePanelInner';
 
 type IProps = {};
 
 const NodeLayout: FC<IProps> = () => {
-  const { node, isLoading } = useNodeContext();
+  const { node, isLoading, update } = useNodeContext();
   const { head, block } = useNodeBlocks(node, isLoading);
+  const [canEdit, canLike, canStar] = useNodePermissions(node);
+  const { onEdit, onLike, onStar, onLock } = useNodeActions(node, update);
 
   useNodeCoverImage(node);
 
@@ -33,7 +37,24 @@ const NodeLayout: FC<IProps> = () => {
           {block}
 
           <div className={styles.panel}>
-            <NodePanel node={node} isLoading={isLoading} />
+            <NodePanelInner
+              id={node.id}
+              title={node.title}
+              username={node.user?.username}
+              likeCount={node?.like_count || 0}
+              isHeroic={!!node.is_promoted}
+              isLiked={!!node.is_liked}
+              isLocked={!!node.deleted_at}
+              isLoading={isLoading}
+              createdAt={node.created_at || ''}
+              canEdit={canEdit}
+              canLike={canLike}
+              canStar={canStar}
+              onEdit={onEdit}
+              onLike={onLike}
+              onStar={onStar}
+              onLock={onLock}
+            />
           </div>
 
           <NodeBottomBlock commentsOrder="DESC" />

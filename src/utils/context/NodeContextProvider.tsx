@@ -4,11 +4,13 @@ import React, { createContext, FC, useContext } from 'react';
 
 export interface NodeContextProps {
   node: INode;
+  update: (node: Partial<INode>) => Promise<unknown>;
   isLoading: boolean;
 }
 
 export const NodeContext = createContext<NodeContextProps>({
   node: EMPTY_NODE,
+  update: async () => {},
   isLoading: false,
 });
 

@@ -21,7 +21,7 @@ const NodePage: FC<Props> = ({
     params: { id },
   },
 }) => {
-  const { node, isLoading } = useGetNode(parseInt(id, 10));
+  const { node, isLoading, update } = useGetNode(parseInt(id, 10));
   const { isLoadingComments, comments, commentsCount, lastSeenCurrent } = useFullNode(id);
 
   const onShowImageModal = useImageModal();
@@ -40,7 +40,7 @@ const NodePage: FC<Props> = ({
   }
 
   return (
-    <NodeContextProvider node={node} isLoading={isLoading}>
+    <NodeContextProvider node={node} isLoading={isLoading} update={update}>
       <NodeRelatedProvider id={parseInt(id, 10)} tags={node.tags}>
         <CommentContextProvider
           comments={comments}

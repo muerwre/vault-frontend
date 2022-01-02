@@ -38,17 +38,6 @@
   justify-content: center;
   box-sizing: border-box;
   min-width: 0;
-
-  &:global(.stack) {
-    padding: 0 $gap;
-    bottom: 0;
-    position: fixed;
-    z-index: 5;
-
-    @include tablet {
-      padding: 0;
-    }
-  }
 }
 
 .content {
@@ -209,7 +198,7 @@
   position: relative;
   flex: 0 0 32px;
 
-  &:global(.is_liked) {
+  .is_liked {
     svg {
       fill: $red;
     }
@@ -249,7 +238,7 @@
   transition: fill, stroke 0.25s;
   will-change: transform;
 
-  &:global(.is_heroic) {
+  .is_heroic {
     svg {
       fill: $orange;
     }

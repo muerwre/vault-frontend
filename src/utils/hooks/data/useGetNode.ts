@@ -5,6 +5,7 @@ import { useOnNodeSeen } from '~/utils/hooks/node/useOnNodeSeen';
 import { apiGetNode } from '~/redux/node/api';
 import { useCallback } from 'react';
 import { INode } from '~/redux/types';
+import { EMPTY_NODE } from '~/redux/node/constants';
 
 export const useGetNode = (id: number) => {
   const { data, isValidating, mutate } = useSWR<ApiGetNodeResponse>(API.NODE.GET_NODE(id), () =>
@@ -25,5 +26,5 @@ export const useGetNode = (id: number) => {
 
   useOnNodeSeen(data?.node);
 
-  return { node: data?.node, isLoading: isValidating && !data, update };
+  return { node: data?.node || EMPTY_NODE, isLoading: isValidating && !data, update };
 };

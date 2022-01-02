@@ -1,7 +1,6 @@
-import React, { FC, memo } from 'react';
+import React, { VFC, memo } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
-import { INode } from '~/redux/types';
 import classNames from 'classnames';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { getPrettyDate } from '~/utils/dom';
@@ -9,8 +8,15 @@ import { URLS } from '~/constants/urls';
 import { Link } from 'react-router-dom';
 
 interface IProps {
-  node: Partial<INode>;
-  stack?: boolean;
+  id?: number;
+  title: string;
+  username?: string;
+  createdAt: string;
+  likeCount: number;
+
+  isHeroic: boolean;
+  isLocked: boolean;
+  isLiked: boolean;
 
   canEdit: boolean;
   canLike: boolean;
@@ -24,10 +30,17 @@ interface IProps {
   onLock: () => void;
 }
 
-const NodePanelInner: FC<IProps> = memo(
+const NodePanelInner: VFC<IProps> = memo(
   ({
-    node: { id, title, user, is_liked, is_heroic, deleted_at, created_at, like_count },
-    stack,
+    id,
+    title,
+    username,
+    createdAt,
+    likeCount,
+
+    isHeroic,
+    isLocked,
+    isLiked,
 
     canStar,
     canEdit,
@@ -41,19 +54,19 @@ const NodePanelInner: FC<IProps> = memo(
     onLock,
   }) => {
     return (
-      <div className={classNames(styles.wrap, { stack })}>
+      <div className={classNames(styles.wrap)}>
         <div className={styles.content}>
           <div className={styles.panel}>
             <div className={styles.title}>
               {isLoading ? <Placeholder width="40%" /> : title || '...'}
             </div>
 
-            {user && user.username && (
+            {!!username && (
               <div className={styles.name}>
                 {isLoading ? (
                   <Placeholder width="100px" />
                 ) : (
-                  `~${user.username.toLocaleLowerCase()}, ${getPrettyDate(created_at)}`
+                  `~${username.toLocaleLowerCase()}, ${getPrettyDate(createdAt)}`
                 )}
               </div>
             )}
@@ -67,8 +80,8 @@ const NodePanelInner: FC<IProps> = memo(
 
               <div className={styles.editor_buttons}>
                 {canStar && (
-                  <div className={classNames(styles.star, { is_heroic })}>
-                    {is_heroic ? (
+                  <div className={classNames(styles.star, { [styles.is_heroic]: isHeroic })}>
+                    {isHeroic ? (
                       <Icon icon="star_full" size={24} onClick={onStar} />
                     ) : (
                       <Icon icon="star" size={24} onClick={onStar} />
@@ -77,27 +90,29 @@ const NodePanelInner: FC<IProps> = memo(
                 )}
 
                 <div>
-                  <Icon icon={deleted_at ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
+                  <Icon icon={isLocked ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
                 </div>
 
-                <Link to={URLS.NODE_EDIT_URL(id)}>
-                  <Icon icon="edit" size={24} onClick={onEdit} />
-                </Link>
+                {!!id && (
+                  <Link to={URLS.NODE_EDIT_URL(id)}>
+                    <Icon icon="edit" size={24} onClick={onEdit} />
+                  </Link>
+                )}
               </div>
             </div>
           )}
 
           <div className={styles.buttons}>
             {canLike && (
-              <div className={classNames(styles.like, { is_liked })}>
-                {is_liked ? (
+              <div className={classNames(styles.like, { [styles.is_liked]: isLiked })}>
+                {isLiked ? (
                   <Icon icon="heart_full" size={24} onClick={onLike} />
                 ) : (
                   <Icon icon="heart" size={24} onClick={onLike} />
                 )}
 
-                {!!like_count && like_count > 0 && (
-                  <div className={styles.like_count}>{like_count}</div>
+                {!!likeCount && likeCount > 0 && (
+                  <div className={styles.like_count}>{likeCount}</div>
                 )}
               </div>
             )}

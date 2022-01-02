@@ -5,10 +5,8 @@ import {
   nodeSetComments,
   nodeSetCoverImage,
   nodeSetCurrent,
-  nodeSetEditor,
   nodeSetLoading,
   nodeSetLoadingComments,
-  nodeSetSaveErrors,
   nodeSetSendingComment,
 } from './actions';
 import { INodeState } from './reducer';
@@ -17,9 +15,6 @@ const setData = (state: INodeState, { node }: ReturnType<typeof nodeSet>) => ({
   ...state,
   ...node,
 });
-
-const setSaveErrors = (state: INodeState, { errors }: ReturnType<typeof nodeSetSaveErrors>) =>
-  assocPath(['errors'], errors, state);
 
 const setLoading = (state: INodeState, { is_loading }: ReturnType<typeof nodeSetLoading>) =>
   assocPath(['is_loading'], is_loading, state);
@@ -40,9 +35,6 @@ const setSendingComment = (
 const setComments = (state: INodeState, { comments }: ReturnType<typeof nodeSetComments>) =>
   assocPath(['comments'], comments, state);
 
-const setEditor = (state: INodeState, { editor }: ReturnType<typeof nodeSetEditor>) =>
-  assocPath(['editor'], editor, state);
-
 const setCoverImage = (
   state: INodeState,
   { current_cover_image }: ReturnType<typeof nodeSetCoverImage>
@@ -50,12 +42,10 @@ const setCoverImage = (
 
 export const NODE_HANDLERS = {
   [NODE_ACTIONS.SET]: setData,
-  [NODE_ACTIONS.SET_SAVE_ERRORS]: setSaveErrors,
   [NODE_ACTIONS.SET_LOADING]: setLoading,
   [NODE_ACTIONS.SET_LOADING_COMMENTS]: setLoadingComments,
   [NODE_ACTIONS.SET_CURRENT]: setCurrent,
   [NODE_ACTIONS.SET_SENDING_COMMENT]: setSendingComment,
   [NODE_ACTIONS.SET_COMMENTS]: setComments,
-  [NODE_ACTIONS.SET_EDITOR]: setEditor,
   [NODE_ACTIONS.SET_COVER_IMAGE]: setCoverImage,
 };
