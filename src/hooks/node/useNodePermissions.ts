@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { canEditNode, canLikeNode, canStarNode } from '~/utils/node';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectUser } from '~/redux/auth/selectors';
 import { INode } from '~/redux/types';
 

@@ -6,16 +6,16 @@ import { Footer } from '~/components/main/Footer';
 
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { Container } from '~/containers/main/Container';
-import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
+import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { NodeBottomBlock } from '~/containers/node/NodeBottomBlock';
-import { useNodeCoverImage } from '~/utils/hooks/node/useNodeCoverImage';
+import { useNodeCoverImage } from '~/hooks/node/useNodeCoverImage';
 import { URLS } from '~/constants/urls';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 
 import styles from './styles.module.scss';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
-import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
-import { useNodeActions } from '~/utils/hooks/node/useNodeActions';
+import { useNodePermissions } from '~/hooks/node/useNodePermissions';
+import { useNodeActions } from '~/hooks/node/useNodeActions';
 import { NodeTitle } from '~/components/node/NodeTitle';
 
 type IProps = {};

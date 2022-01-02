@@ -8,10 +8,10 @@ import { selectUploads } from '~/redux/uploads/selectors';
 import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import styles from './styles.module.scss';
 import { NodeEditorProps } from '~/redux/node/types';
-import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
-import { useNodeAudios } from '~/utils/hooks/node/useNodeAudios';
-import { useNodeFormContext } from '~/utils/hooks/node/useNodeFormFormik';
-import { useFileUploaderContext } from '~/utils/hooks/useFileUploader';
+import { useNodeImages } from '~/hooks/node/useNodeImages';
+import { useNodeAudios } from '~/hooks/node/useNodeAudios';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+import { useFileUploaderContext } from '~/hooks/data/useFileUploader';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 
 type IProps = NodeEditorProps;

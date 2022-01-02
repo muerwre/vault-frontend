@@ -10,12 +10,11 @@ import styles from './styles.module.scss';
 
 import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions } from 'swiper';
 
-import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
+import { useNodeImages } from '~/hooks/node/useNodeImages';
 import SwiperClass from 'swiper/types/swiper-class';
-import { modalShowPhotoswipe } from '~/redux/modal/actions';
-import { useDispatch } from 'react-redux';
 import { ImagePreloader } from '~/components/media/ImagePreloader';
 import { normalizeBrightColor } from '~/utils/color';
+import { useImageModal } from '~/hooks/navigation/useImageModal';
 
 SwiperCore.use([Navigation, Pagination, Keyboard]);
 
@@ -28,8 +27,8 @@ const breakpoints: SwiperOptions['breakpoints'] = {
 };
 
 const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
-  const dispatch = useDispatch();
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
+  const showPhotoSwiper = useImageModal();
 
   const images = useNodeImages(node);
 
@@ -50,9 +49,9 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         return;
       }
 
-      dispatch(modalShowPhotoswipe(images, index));
+      showPhotoSwiper(images, index);
     },
-    [dispatch, images, controlledSwiper]
+    [images, controlledSwiper, showPhotoSwiper]
   );
 
   if (!images?.length) {

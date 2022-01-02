@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { Textarea } from '~/components/input/Textarea';
 import { path } from 'ramda';
 import { NodeEditorProps } from '~/redux/node/types';
-import { useNodeFormContext } from '~/utils/hooks/node/useNodeFormFormik';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 
 type IProps = NodeEditorProps & {};
 

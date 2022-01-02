@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import { RouteComponentProps } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { authLoadProfile } from '~/redux/auth/actions';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectAuthProfile, selectUser } from '~/redux/auth/selectors';
 import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
 import { Container } from '~/containers/main/Container';

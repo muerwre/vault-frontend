@@ -1,9 +1,9 @@
 import React, { FC, useCallback, useState } from 'react';
-import { useCommentFormFormik } from '~/utils/hooks/useCommentFormFormik';
+import { useCommentFormFormik } from '~/hooks/comments/useCommentFormFormik';
 import { FormikProvider } from 'formik';
 import { LocalCommentFormTextarea } from '~/components/comment/LocalCommentFormTextarea';
 import { Button } from '~/components/input/Button';
-import { FileUploaderProvider, useFileUploader } from '~/utils/hooks/useFileUploader';
+import { FileUploaderProvider, useFileUploader } from '~/hooks/data/useFileUploader';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS } from '~/redux/uploads/constants';
 import { CommentFormAttachButtons } from '~/components/comment/CommentFormAttachButtons';
 import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormatButtons';
@@ -14,7 +14,7 @@ import { EMPTY_COMMENT } from '~/redux/node/constants';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import styles from './styles.module.scss';
 import { ERROR_LITERAL } from '~/constants/errors';
-import { useInputPasteUpload } from '~/utils/hooks/useInputPasteUpload';
+import { useInputPasteUpload } from '~/hooks/dom/useInputPasteUpload';
 import { Filler } from '~/components/containers/Filler';
 
 interface IProps {

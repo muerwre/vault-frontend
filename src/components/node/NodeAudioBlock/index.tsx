@@ -4,7 +4,7 @@ import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import styles from './styles.module.scss';
 import { INodeComponentProps } from '~/redux/node/constants';
-import { useNodeAudios } from '~/utils/hooks/node/useNodeAudios';
+import { useNodeAudios } from '~/hooks/node/useNodeAudios';
 
 interface IProps extends INodeComponentProps {}
 

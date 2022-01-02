@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
 import Tippy from '@tippy.js/react';
-import { useGotoNode } from '~/utils/hooks/node/useGotoNode';
+import { useGotoNode } from '~/hooks/node/useGotoNode';
 import { INodeComponentProps } from '~/redux/node/constants';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 

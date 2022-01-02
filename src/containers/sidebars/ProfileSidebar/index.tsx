@@ -9,7 +9,7 @@ import { Filler } from '~/components/containers/Filler';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import * as USER_ACTIONS from '~/redux/auth/actions';
 import { ProfileSidebarMenu } from '~/components/profile/ProfileSidebarMenu';
-import { useCloseOnEscape } from '~/utils/hooks';
+import { useCloseOnEscape } from '~/hooks';
 import { Icon } from '~/components/input/Icon';
 import { ProfileSidebarSettings } from '~/components/profile/ProfileSidebarSettings';
 import classNames from 'classnames';

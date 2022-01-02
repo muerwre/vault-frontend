@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { URLS } from '~/constants/urls';
 import { ErrorNotFound } from '~/containers/pages/ErrorNotFound';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectAuthUser } from '~/redux/auth/selectors';
 import { ProfileLayout } from '~/layouts/ProfileLayout';
 import FlowPage from '~/pages';

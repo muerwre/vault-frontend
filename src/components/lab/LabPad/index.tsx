@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { INodeComponentProps } from '~/redux/node/constants';
-import { useGotoNode } from '~/utils/hooks/node/useGotoNode';
+import { useGotoNode } from '~/hooks/node/useGotoNode';
 
 const LabPad: FC<INodeComponentProps> = ({ node }) => {
   const onClick = useGotoNode(node.id);

@@ -3,9 +3,9 @@ import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { IEditorComponentProps } from '~/redux/node/types';
-import { useFileUploaderContext } from '~/utils/hooks/useFileUploader';
+import { useFileUploaderContext } from '~/hooks/data/useFileUploader';
 import { getFileType } from '~/utils/uploader';
-import { useNodeFormContext } from '~/utils/hooks/node/useNodeFormFormik';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { Button } from '~/components/input/Button';
 
 type IProps = IEditorComponentProps & {

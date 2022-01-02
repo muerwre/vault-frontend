@@ -4,8 +4,8 @@ import { useHistory, useRouteMatch } from 'react-router';
 import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import styles from './styles.module.scss';
-import { useGetNode } from '~/utils/hooks/data/useGetNode';
-import { useUpdateNode } from '~/utils/hooks/data/useUpdateNode';
+import { useGetNode } from '~/hooks/node/useGetNode';
+import { useUpdateNode } from '~/hooks/node/useUpdateNode';
 import { INode } from '~/redux/types';
 
 const EditorEditDialog: FC = () => {

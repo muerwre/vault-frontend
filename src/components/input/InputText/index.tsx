@@ -4,7 +4,7 @@ import styles from '~/styles/common/inputs.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { IInputTextProps } from '~/redux/types';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
-import { useTranslatedError } from '~/utils/hooks/useTranslatedError';
+import { useTranslatedError } from '~/hooks/data/useTranslatedError';
 
 const InputText: FC<IInputTextProps> = ({
   wrapperClassName,

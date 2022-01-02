@@ -2,7 +2,7 @@ import React, { FC, useCallback } from 'react';
 import styles from './styles.module.scss';
 import { Avatar } from '~/components/common/Avatar';
 import { openUserProfile } from '~/utils/user';
-import { useUserDescription } from '~/utils/hooks/user/useUserDescription';
+import { useUserDescription } from '~/hooks/user/useUserDescription';
 import { INodeUser } from '~/redux/types';
 
 interface Props {

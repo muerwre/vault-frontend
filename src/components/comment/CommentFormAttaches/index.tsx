@@ -5,9 +5,9 @@ import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
 import { IFile } from '~/redux/types';
 import { SortEnd } from 'react-sortable-hoc';
 import { moveArrItem } from '~/utils/fn';
-import { useFileDropZone } from '~/utils/hooks';
+import { useFileDropZone } from '~/hooks';
 import { COMMENT_FILE_TYPES, UPLOAD_TYPES } from '~/redux/uploads/constants';
-import { useFileUploaderContext } from '~/utils/hooks/useFileUploader';
+import { useFileUploaderContext } from '~/hooks/data/useFileUploader';
 
 const CommentFormAttaches: FC = () => {
   const uploader = useFileUploaderContext();

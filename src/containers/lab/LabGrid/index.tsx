@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { LabNode } from '~/components/lab/LabNode';
 import { EMPTY_NODE, NODE_TYPES } from '~/redux/node/constants';
 import { values } from 'ramda';
-import { useLabPagination } from '~/utils/hooks/lab/useLabPagination';
+import { useLabPagination } from '~/hooks/lab/useLabPagination';
 import { useLabContext } from '~/utils/context/LabContextProvider';
 
 interface IProps {}

@@ -12,7 +12,7 @@ import { pick } from 'ramda';
 import { selectAuthRestore } from '~/redux/auth/selectors';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { Icon } from '~/components/input/Icon';
-import { useCloseOnEscape } from '~/utils/hooks';
+import { useCloseOnEscape } from '~/hooks';
 
 const mapStateToProps = state => ({
   restore: selectAuthRestore(state),

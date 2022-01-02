@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import styles from './styles.module.scss';
 import { DivProps } from '~/utils/types';
 import { DropHereIcon } from '~/components/input/DropHereIcon';
-import { useDragDetector } from '~/utils/hooks/useDragDetector';
+import { useDragDetector } from '~/hooks/dom/useDragDetector';
 
 interface IProps extends DivProps {
   onUpload: (files: File[]) => void;

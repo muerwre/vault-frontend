@@ -2,7 +2,7 @@
  * Handles blur by detecting clicks outside refs.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useCloseOnEscape } from '~/utils/hooks/index';
+import { useCloseOnEscape } from '~/hooks';
 
 export const useClickOutsideFocus = () => {
   const ref = useRef<HTMLElement>();

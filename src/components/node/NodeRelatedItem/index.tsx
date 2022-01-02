@@ -6,7 +6,7 @@ import { PRESETS, URLS } from '~/constants/urls';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { getURL } from '~/utils/dom';
 import { Avatar } from '~/components/common/Avatar';
-import { useColorGradientFromString } from '~/utils/hooks/useColorGradientFromString';
+import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 
 type IProps = RouteComponentProps & {
   item: Partial<INode>;

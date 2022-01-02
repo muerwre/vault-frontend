@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { INodeComponentProps } from '~/redux/node/constants';
-import { useColorGradientFromString } from '~/utils/hooks/useColorGradientFromString';
+import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 
 interface Props extends INodeComponentProps {}
 

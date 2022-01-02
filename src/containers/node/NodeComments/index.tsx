@@ -5,7 +5,7 @@ import { ICommentGroup } from '~/redux/types';
 import { canEditComment } from '~/utils/node';
 import { COMMENTS_DISPLAY } from '~/redux/node/constants';
 import { plural } from '~/utils/dom';
-import { useGrouppedComments } from '~/utils/hooks/node/useGrouppedComments';
+import { useGrouppedComments } from '~/hooks/node/useGrouppedComments';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
 import { Comment } from '~/components/comment/Comment';
 import { useUserContext } from '~/utils/context/UserContextProvider';

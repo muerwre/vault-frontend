@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { ApiGetNodeResponse } from '~/redux/node/types';
 import { API } from '~/constants/api';
-import { useOnNodeSeen } from '~/utils/hooks/node/useOnNodeSeen';
+import { useOnNodeSeen } from '~/hooks/node/useOnNodeSeen';
 import { apiGetNode } from '~/redux/node/api';
 import { useCallback } from 'react';
 import { INode } from '~/redux/types';

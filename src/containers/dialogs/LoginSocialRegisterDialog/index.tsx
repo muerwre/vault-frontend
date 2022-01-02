@@ -9,7 +9,7 @@ import { InputText } from '~/components/input/InputText';
 import styles from './styles.module.scss';
 import { selectAuthRegisterSocial } from '~/redux/auth/selectors';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
-import { useCloseOnEscape } from '~/utils/hooks';
+import { useCloseOnEscape } from '~/hooks';
 import { LoginSocialRegisterButtons } from '~/containers/dialogs/LoginSocialRegisterButtons';
 import { Toggle } from '~/components/input/Toggle';
 

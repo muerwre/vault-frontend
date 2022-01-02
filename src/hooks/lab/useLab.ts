@@ -1,4 +1,4 @@
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import {
   selectLabList,
   selectLabStatsHeroes,

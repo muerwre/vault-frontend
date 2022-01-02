@@ -1,18 +1,18 @@
 import React, { FC } from 'react';
 import { NodeLayout } from '~/layouts/NodeLayout';
 import { RouteComponentProps } from 'react-router';
-import { useScrollToTop } from '~/utils/hooks/useScrollToTop';
-import { useFullNode } from '~/utils/hooks/node/useFullNode';
-import { useImageModal } from '~/utils/hooks/useImageModal';
-import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
-import { useUser } from '~/utils/hooks/user/userUser';
-import { useNodeTags } from '~/utils/hooks/node/useNodeTags';
+import { useScrollToTop } from '~/hooks/dom/useScrollToTop';
+import { useFullNode } from '~/hooks/node/useFullNode';
+import { useImageModal } from '~/hooks/navigation/useImageModal';
+import { useNodeComments } from '~/hooks/node/useNodeComments';
+import { useUser } from '~/hooks/user/userUser';
+import { useNodeTags } from '~/hooks/node/useNodeTags';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
 import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
-import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
+import { useNodePermissions } from '~/hooks/node/useNodePermissions';
 import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
-import { useGetNode } from '~/utils/hooks/data/useGetNode';
+import { useGetNode } from '~/hooks/node/useGetNode';
 
 type Props = RouteComponentProps<{ id: string }> & {};
 

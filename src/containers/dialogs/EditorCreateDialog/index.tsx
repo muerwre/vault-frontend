@@ -5,8 +5,8 @@ import { useHistory, useRouteMatch } from 'react-router';
 import { values } from 'ramda';
 import { INode } from '~/redux/types';
 import { apiPostNode } from '~/redux/node/api';
-import { useUpdateNode } from '~/utils/hooks/data/useUpdateNode';
-import { useCreateNode } from '~/utils/hooks/data/useCreateNode';
+import { useUpdateNode } from '~/hooks/node/useUpdateNode';
+import { useCreateNode } from '~/hooks/node/useCreateNode';
 
 const EditorCreateDialog: FC = () => {
   const history = useHistory();

@@ -12,7 +12,7 @@ import { PRESETS } from '~/constants/urls';
 import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
-import { useBlockBackButton } from '~/utils/hooks/useBlockBackButton';
+import { useBlockBackButton } from '~/hooks/navigation/useBlockBackButton';
 
 const mapStateToProps = (state: IState) => ({
   photoswipe: selectModal(state).photoswipe,

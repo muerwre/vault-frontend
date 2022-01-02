@@ -1,5 +1,5 @@
 import { INode } from '~/redux/types';
-import { FileUploader } from '~/utils/hooks/useFileUploader';
+import { FileUploader } from '~/hooks/data/useFileUploader';
 import { useCallback, useRef } from 'react';
 import { FormikConfig, FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { object } from 'yup';

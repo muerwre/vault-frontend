@@ -1,15 +1,15 @@
 import React, { useEffect, VFC } from 'react';
 import { useDispatch } from 'react-redux';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectNode } from '~/redux/node/selectors';
 import { BorisLayout } from '~/layouts/BorisLayout';
 import { nodeLoadNode } from '~/redux/node/actions';
 import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
-import { useImageModal } from '~/utils/hooks/useImageModal';
-import { useNodeComments } from '~/utils/hooks/node/useNodeComments';
-import { useBoris } from '~/utils/hooks/boris/useBoris';
+import { useImageModal } from '~/hooks/navigation/useImageModal';
+import { useNodeComments } from '~/hooks/node/useNodeComments';
+import { useBoris } from '~/hooks/boris/useBoris';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
-import { useGetNode } from '~/utils/hooks/data/useGetNode';
+import { useGetNode } from '~/hooks/node/useGetNode';
 
 const BorisPage: VFC = () => {
   const dispatch = useDispatch();

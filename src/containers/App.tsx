@@ -7,8 +7,8 @@ import { Modal } from '~/containers/dialogs/Modal';
 import { PageCover } from '~/components/containers/PageCover';
 import { BottomContainer } from '~/containers/main/BottomContainer';
 import { MainRouter } from '~/containers/main/MainRouter';
-import { DragDetectorProvider } from '~/utils/hooks/useDragDetector';
-import { useUser } from '~/utils/hooks/user/userUser';
+import { DragDetectorProvider } from '~/hooks/dom/useDragDetector';
+import { useUser } from '~/hooks/user/userUser';
 import { UserContextProvider } from '~/utils/context/UserContextProvider';
 import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
 

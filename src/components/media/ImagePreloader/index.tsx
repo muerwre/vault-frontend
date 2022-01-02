@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 import { IFile } from '~/redux/types';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { Icon } from '~/components/input/Icon';
-import { useResizeHandler } from '~/utils/hooks/useResizeHandler';
+import { useResizeHandler } from '~/hooks/dom/useResizeHandler';
 import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
 
 interface IProps {

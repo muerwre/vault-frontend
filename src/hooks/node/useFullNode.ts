@@ -1,7 +1,7 @@
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectNode } from '~/redux/node/selectors';
-import { useLoadNode } from '~/utils/hooks/node/useLoadNode';
-import { useOnNodeSeen } from '~/utils/hooks/node/useOnNodeSeen';
+import { useLoadNode } from '~/hooks/node/useLoadNode';
+import { useOnNodeSeen } from '~/hooks/node/useOnNodeSeen';
 
 export const useFullNode = (id: string) => {
   const {

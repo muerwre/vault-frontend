@@ -6,7 +6,7 @@ import { path } from 'ramda';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import { INodeComponentProps } from '~/redux/node/constants';
-import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
+import { useNodeImages } from '~/hooks/node/useNodeImages';
 
 interface IProps extends INodeComponentProps {}
 

@@ -4,7 +4,7 @@ import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
-import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
+import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import styles from './styles.module.scss';

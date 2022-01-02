@@ -6,7 +6,7 @@ import { InputText } from '~/components/input/InputText';
 import classnames from 'classnames';
 import { getYoutubeThumb } from '~/utils/dom';
 import { NodeEditorProps } from '~/redux/node/types';
-import { useNodeFormContext } from '~/utils/hooks/node/useNodeFormFormik';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 
 type IProps = NodeEditorProps & {};
 

@@ -1,9 +1,9 @@
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectFlow } from '~/redux/flow/selectors';
-import { useFlowLayout } from '~/utils/hooks/flow/useFlowLayout';
+import { useFlowLayout } from '~/hooks/flow/useFlowLayout';
 import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
 import { useDispatch } from 'react-redux';
-import { useFlowPagination } from '~/utils/hooks/flow/useFlowPagination';
+import { useFlowPagination } from '~/hooks/flow/useFlowPagination';
 import { useCallback, useMemo } from 'react';
 import { FlowDisplay, INode } from '~/redux/types';
 import { flowSetCellView } from '~/redux/flow/actions';

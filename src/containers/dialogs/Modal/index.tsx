@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { DIALOG_CONTENT } from '~/constants/dialogs';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectModal } from '~/redux/modal/selectors';
 import { modalSetDialog, modalSetShown, modalShowDialog } from '~/redux/modal/actions';
 import { ModalWrapper } from '~/components/dialogs/ModalWrapper';

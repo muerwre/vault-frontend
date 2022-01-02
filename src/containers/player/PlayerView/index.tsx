@@ -1,6 +1,6 @@
 import React, { VFC } from 'react';
 import { PlayerBar } from '~/components/bars/PlayerBar';
-import { usePlayer } from '~/utils/hooks/player/usePlayer';
+import { usePlayer } from '~/hooks/player/usePlayer';
 
 interface PlayerViewProps {}
 

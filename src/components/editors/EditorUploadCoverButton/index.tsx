@@ -11,8 +11,8 @@ import { getURL } from '~/utils/dom';
 import { Icon } from '~/components/input/Icon';
 import { PRESETS } from '~/constants/urls';
 import { IEditorComponentProps } from '~/redux/node/types';
-import { useFileUploader, useFileUploaderContext } from '~/utils/hooks/useFileUploader';
-import { useNodeFormContext } from '~/utils/hooks/node/useNodeFormFormik';
+import { useFileUploader, useFileUploaderContext } from '~/hooks/data/useFileUploader';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { getFileType } from '~/utils/uploader';
 
 type IProps = IEditorComponentProps & {};

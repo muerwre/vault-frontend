@@ -6,8 +6,8 @@ import { FlowDisplay, INode } from '~/redux/types';
 import { FlowCellText } from '~/components/flow/FlowCellText';
 import classNames from 'classnames';
 import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
-import { useFlowCellControls } from '~/utils/hooks/flow/useFlowCellControls';
-import { useClickOutsideFocus } from '~/utils/hooks/useClickOutsideFocus';
+import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';
+import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
 import { MenuDots } from '~/components/common/MenuDots';
 import { FlowCellImage } from '~/components/flow/FlowCellImage';
 

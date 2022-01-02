@@ -4,7 +4,7 @@ import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
 import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
-import { useNodeFormContext } from '~/utils/hooks/node/useNodeFormFormik';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 
 const EditorButtons: FC = () => {
   const { values, handleChange, isSubmitting } = useNodeFormContext();

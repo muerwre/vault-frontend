@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { flowChangeSearch, flowLoadMoreSearch } from '~/redux/flow/actions';
 import { useDispatch } from 'react-redux';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectFlow } from '~/redux/flow/selectors';
 
 export const useSearch = () => {

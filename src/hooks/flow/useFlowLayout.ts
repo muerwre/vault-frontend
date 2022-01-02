@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { usePersistedState } from '~/utils/hooks/usePersistedState';
+import { usePersistedState } from '~/hooks/data/usePersistedState';
 import { experimentalFeatures } from '~/constants/features';
 
 enum Layout {

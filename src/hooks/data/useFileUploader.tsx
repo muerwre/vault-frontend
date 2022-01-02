@@ -13,7 +13,7 @@ import { getFileType } from '~/utils/uploader';
 import uuid from 'uuid4';
 import { useDispatch } from 'react-redux';
 import { uploadUploadFiles } from '~/redux/uploads/actions';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectUploads } from '~/redux/uploads/selectors';
 import { path } from 'ramda';
 import { IUploadStatus } from '~/redux/uploads/reducer';

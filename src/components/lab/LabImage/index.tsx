@@ -9,8 +9,8 @@ import 'swiper/components/zoom/zoom.scss';
 import 'swiper/components/navigation/navigation.scss';
 
 import styles from './styles.module.scss';
-import { useNodeImages } from '~/utils/hooks/node/useNodeImages';
-import { useGotoNode } from '~/utils/hooks/node/useGotoNode';
+import { useNodeImages } from '~/hooks/node/useNodeImages';
+import { useGotoNode } from '~/hooks/node/useGotoNode';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { normalizeBrightColor } from '~/utils/color';
 import { ImagePreloader } from '~/components/media/ImagePreloader';

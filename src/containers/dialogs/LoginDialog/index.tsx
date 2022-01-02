@@ -1,7 +1,7 @@
 import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { DIALOGS, IDialogProps } from '~/redux/modal/constants';
-import { useCloseOnEscape } from '~/utils/hooks';
+import { useCloseOnEscape } from '~/hooks';
 import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
 import { Button } from '~/components/input/Button';
@@ -18,7 +18,7 @@ import { pick } from 'ramda';
 import { LoginDialogButtons } from '~/containers/dialogs/LoginDialogButtons';
 import { OAUTH_EVENT_TYPES } from '~/redux/types';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
-import { useTranslatedError } from '~/utils/hooks/useTranslatedError';
+import { useTranslatedError } from '~/hooks/data/useTranslatedError';
 
 const mapStateToProps = state => ({
   ...pick(['error', 'is_registering'], selectAuthLogin(state)),
@@ -80,7 +80,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
     [authGotOauthLoginEvent]
   );
 
-  useEffect(() => { 
+  useEffect(() => {
     if (error) userSetLoginError('');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username, password]);

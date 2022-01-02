@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+/** wraps text inside textarea with tags */
 export const useFormatWrapper = (
   target: HTMLTextAreaElement,
   onChange: (val: string) => void,
@@ -15,6 +16,7 @@ export const useFormatWrapper = (
   );
 };
 
+/** wraps text inside textarea with tags */
 export const wrapTextInsideInput = (
   target: HTMLTextAreaElement,
   prefix: string,

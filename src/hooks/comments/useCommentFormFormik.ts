@@ -2,7 +2,7 @@ import { IComment, INode } from '~/redux/types';
 import { useCallback, useEffect, useRef } from 'react';
 import { FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { array, object, string } from 'yup';
-import { FileUploader } from '~/utils/hooks/useFileUploader';
+import { FileUploader } from '~/hooks/data/useFileUploader';
 import { useDispatch } from 'react-redux';
 import { nodePostLocalComment } from '~/redux/node/actions';
 

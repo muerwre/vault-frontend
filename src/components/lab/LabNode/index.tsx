@@ -1,11 +1,11 @@
 import React, { FC, useMemo } from 'react';
 import { INode } from '~/redux/types';
-import { useNodeBlocks } from '~/utils/hooks/node/useNodeBlocks';
+import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import styles from './styles.module.scss';
 import { LabBottomPanel } from '~/components/lab/LabBottomPanel';
 import { isAfter, parseISO } from 'date-fns';
 import classNames from 'classnames';
-import { useColorGradientFromString } from '~/utils/hooks/useColorGradientFromString';
+import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 
 interface IProps {
   node: INode;

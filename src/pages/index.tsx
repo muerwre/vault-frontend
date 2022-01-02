@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { FlowLayout } from '~/layouts/FlowLayout';
-import { useFlow } from '~/utils/hooks/flow/useFlow';
-import { useSearch } from '~/utils/hooks/search/useSearch';
-import { useUser } from '~/utils/hooks/user/userUser';
+import { useFlow } from '~/hooks/flow/useFlow';
+import { useSearch } from '~/hooks/search/useSearch';
+import { useUser } from '~/hooks/user/userUser';
 
 interface Props {}
 

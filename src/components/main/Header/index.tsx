@@ -19,7 +19,7 @@ import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IState } from '~/redux/store';
 import isBefore from 'date-fns/isBefore';
 import { Authorized } from '~/components/containers/Authorized';
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
 import { selectFlowUpdated } from '~/redux/flow/selectors';
 import { Button } from '~/components/input/Button';

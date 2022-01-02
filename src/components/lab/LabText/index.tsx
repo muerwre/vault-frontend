@@ -4,7 +4,7 @@ import { INodeComponentProps } from '~/redux/node/constants';
 import { formatTextParagraphs } from '~/utils/dom';
 import { path } from 'ramda';
 import styles from './styles.module.scss';
-import { useGotoNode } from '~/utils/hooks/node/useGotoNode';
+import { useGotoNode } from '~/hooks/node/useGotoNode';
 import { Paragraph } from '~/components/placeholders/Paragraph';
 
 const LabText: FC<INodeComponentProps> = ({ node, isLoading }) => {

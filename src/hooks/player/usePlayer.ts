@@ -1,4 +1,4 @@
-import { useShallowSelect } from '~/utils/hooks/useShallowSelect';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectPlayer } from '~/redux/player/selectors';
 import { useCallback } from 'react';
 import { playerPause, playerPlay, playerSeek, playerStop } from '~/redux/player/actions';
