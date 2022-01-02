@@ -4,6 +4,7 @@ import { useCallback, useRef } from 'react';
 import { FormikConfig, FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { object } from 'yup';
 import { keys } from 'ramda';
+import { showErrorToast } from '~/utils/errors/showToast';
 
 const validationSchema = object().shape({});
 
@@ -15,6 +16,7 @@ const afterSubmit = ({ resetForm, setStatus, setSubmitting, setErrors }: FormikH
 
   if (e) {
     setStatus(e);
+    showErrorToast(e);
     return;
   }
 
