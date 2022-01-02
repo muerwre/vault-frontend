@@ -23,11 +23,6 @@ import { LabDescription } from '~/components/lab/LabDescription';
 import { LabVideo } from '~/components/lab/LabVideo';
 import { LabAudio } from '~/components/lab/LabAudioBlock';
 
-const prefix = 'NODE.';
-export const NODE_ACTIONS = {
-  SET_COVER_IMAGE: `${prefix}SET_COVER_IMAGE`,
-};
-
 export const EMPTY_NODE: INode = {
   id: 0,
   user: undefined,

@@ -11,8 +11,6 @@ import auth from '~/redux/auth';
 import authSaga from '~/redux/auth/sagas';
 import { IAuthState } from '~/redux/auth/types';
 
-import node, { INodeState } from '~/redux/node/reducer';
-
 import flow, { IFlowState } from '~/redux/flow/reducer';
 import flowSaga from '~/redux/flow/sagas';
 
@@ -65,7 +63,6 @@ export interface IState {
   auth: IAuthState;
   modal: IModalState;
   router: RouterState;
-  node: INodeState;
   uploads: IUploadState;
   flow: IFlowState;
   player: IPlayerState;
@@ -91,7 +88,6 @@ export const store = createStore(
     modal,
     boris,
     router: connectRouter(history),
-    node,
     uploads,
     flow: persistReducer(flowPersistConfig, flow),
     player: persistReducer(playerPersistConfig, player),

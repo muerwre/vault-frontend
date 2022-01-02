@@ -4,7 +4,7 @@ import { history } from '~/redux/store';
 import { MainLayout } from '~/containers/main/MainLayout';
 import { Sprites } from '~/sprites/Sprites';
 import { Modal } from '~/containers/dialogs/Modal';
-import { PageCover } from '~/components/containers/PageCover';
+import { PageCoverProvider } from '~/components/containers/PageCoverProvider';
 import { BottomContainer } from '~/containers/main/BottomContainer';
 import { MainRouter } from '~/containers/main/MainRouter';
 import { DragDetectorProvider } from '~/hooks/dom/useDragDetector';
@@ -20,15 +20,15 @@ const App: VFC = () => {
       <SWRConfigProvider>
         <UserContextProvider user={user}>
           <DragDetectorProvider>
-            <PageCover />
+            <PageCoverProvider>
+              <MainLayout>
+                <Modal />
+                <Sprites />
 
-            <MainLayout>
-              <Modal />
-              <Sprites />
-
-              <MainRouter />
-            </MainLayout>
-            <BottomContainer />
+                <MainRouter />
+              </MainLayout>
+              <BottomContainer />
+            </PageCoverProvider>
           </DragDetectorProvider>
         </UserContextProvider>
       </SWRConfigProvider>
