@@ -12,6 +12,7 @@ import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
 import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
 import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
+import { useGetNode } from '~/utils/hooks/data/useGetNode';
 
 type Props = RouteComponentProps<{ id: string }> & {};
 
@@ -20,14 +21,8 @@ const NodePage: FC<Props> = ({
     params: { id },
   },
 }) => {
-  const {
-    node,
-    isLoading,
-    isLoadingComments,
-    comments,
-    commentsCount,
-    lastSeenCurrent,
-  } = useFullNode(id);
+  const { node, isLoading } = useGetNode(parseInt(id, 10));
+  const { isLoadingComments, comments, commentsCount, lastSeenCurrent } = useFullNode(id);
 
   const onShowImageModal = useImageModal();
   const { onLoadMoreComments, onDelete: onDeleteComment } = useNodeComments(parseInt(id, 10));
@@ -38,6 +33,11 @@ const NodePage: FC<Props> = ({
   const [canEdit] = useNodePermissions(node);
 
   useScrollToTop([id, isLoadingComments]);
+
+  if (!node) {
+    // TODO: do something here
+    return null;
+  }
 
   return (
     <NodeContextProvider node={node} isLoading={isLoading}>

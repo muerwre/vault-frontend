@@ -5,7 +5,7 @@ import { NODE_EDITORS } from '~/redux/node/constants';
 import { BetterScrollDialog } from '../BetterScrollDialog';
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { prop } from 'ramda';
-import { useNodeFormFormik } from '~/utils/hooks/useNodeFormFormik';
+import { useNodeFormFormik } from '~/utils/hooks/node/useNodeFormFormik';
 import { EditorButtons } from '~/components/editors/EditorButtons';
 import { FileUploaderProvider, useFileUploader } from '~/utils/hooks/useFileUploader';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS } from '~/redux/uploads/constants';
@@ -15,16 +15,18 @@ import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { useTranslatedError } from '~/utils/hooks/useTranslatedError';
 import { useCloseOnEscape } from '~/utils/hooks';
 import { EditorConfirmClose } from '~/components/editors/EditorConfirmClose';
+import { on } from 'cluster';
 
 interface Props extends IDialogProps {
   node: INode;
+  onSubmit: (node: INode) => Promise<unknown>;
 }
 
-const EditorDialog: FC<Props> = ({ node, onRequestClose }) => {
+const EditorDialog: FC<Props> = ({ node, onRequestClose, onSubmit }) => {
   const [isConfirmModalShown, setConfirmModalShown] = useState(false);
 
   const uploader = useFileUploader(UPLOAD_SUBJECTS.EDITOR, UPLOAD_TARGETS.NODES, node.files);
-  const formik = useNodeFormFormik(node, uploader, onRequestClose);
+  const formik = useNodeFormFormik(node, uploader, onRequestClose, onSubmit);
   const { values, handleSubmit, dirty, status } = formik;
 
   const component = useMemo(() => node.type && prop(node.type, NODE_EDITORS), [node.type]);
@@ -71,6 +73,7 @@ const EditorDialog: FC<Props> = ({ node, onRequestClose }) => {
                 {isConfirmModalShown && (
                   <EditorConfirmClose onApprove={onRequestClose} onDecline={closeConfirmModal} />
                 )}
+
                 <div className={styles.editor}>{createElement(component)}</div>
               </>
             </BetterScrollDialog>

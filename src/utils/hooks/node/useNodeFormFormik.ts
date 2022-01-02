@@ -1,15 +1,13 @@
 import { INode } from '~/redux/types';
 import { FileUploader } from '~/utils/hooks/useFileUploader';
-import { useCallback, useEffect, useRef } from 'react';
-import { FormikHelpers, useFormik, useFormikContext } from 'formik';
+import { useCallback, useRef } from 'react';
+import { FormikConfig, FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { object } from 'yup';
-import { useDispatch } from 'react-redux';
-import { nodeSubmitLocal } from '~/redux/node/actions';
 import { keys } from 'ramda';
 
 const validationSchema = object().shape({});
 
-const onSuccess = ({ resetForm, setStatus, setSubmitting, setErrors }: FormikHelpers<INode>) => (
+const afterSubmit = ({ resetForm, setStatus, setSubmitting, setErrors }: FormikHelpers<INode>) => (
   e?: string,
   errors?: Record<string, string>
 ) => {
@@ -33,17 +31,9 @@ const onSuccess = ({ resetForm, setStatus, setSubmitting, setErrors }: FormikHel
 export const useNodeFormFormik = (
   values: INode,
   uploader: FileUploader,
-  stopEditing: () => void
+  stopEditing: () => void,
+  sendSaveRequest: (node: INode) => Promise<unknown>
 ) => {
-  const dispatch = useDispatch();
-  const onSubmit = useCallback(
-    (values: INode, helpers: FormikHelpers<INode>) => {
-      helpers.setSubmitting(true);
-      dispatch(nodeSubmitLocal(values, onSuccess(helpers)));
-    },
-    [dispatch]
-  );
-
   const { current: initialValues } = useRef(values);
 
   const onReset = useCallback(() => {
@@ -52,7 +42,19 @@ export const useNodeFormFormik = (
     if (stopEditing) stopEditing();
   }, [uploader, stopEditing]);
 
-  const formik = useFormik<INode>({
+  const onSubmit = useCallback<FormikConfig<INode>['onSubmit']>(
+    async (values, helpers) => {
+      try {
+        await sendSaveRequest({ ...values, files: uploader.files });
+        afterSubmit(helpers)();
+      } catch (error) {
+        afterSubmit(helpers)(error?.response?.data?.error, error?.response?.data?.errors);
+      }
+    },
+    [sendSaveRequest, uploader.files]
+  );
+
+  return useFormik<INode>({
     initialValues,
     validationSchema,
     onSubmit,
@@ -60,17 +62,6 @@ export const useNodeFormFormik = (
     initialStatus: '',
     validateOnChange: true,
   });
-
-  useEffect(
-    () => {
-      formik.setFieldValue('files', uploader.files);
-    },
-    // because it breaks files logic
-    // eslint-disable-next-line
-    [uploader.files, formik.setFieldValue]
-  );
-
-  return formik;
 };
 
 export const useNodeFormContext = () => useFormikContext<INode>();

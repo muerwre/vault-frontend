@@ -19,7 +19,6 @@ import {
   nodeSetLoading,
   nodeSetLoadingComments,
   nodeSetTags,
-  nodeSubmitLocal,
   nodeUpdateTags,
 } from './actions';
 import {
@@ -29,7 +28,6 @@ import {
   apiLockComment,
   apiLockNode,
   apiPostComment,
-  apiPostNode,
   apiPostNodeHeroic,
   apiPostNodeLike,
   apiPostNodeTags,
@@ -45,6 +43,7 @@ import { DIALOGS } from '~/redux/modal/constants';
 import { has } from 'ramda';
 import { selectLabListNodes } from '~/redux/lab/selectors';
 import { labSetList } from '~/redux/lab/actions';
+import { apiPostNode } from '~/redux/node/api';
 
 export function* updateNodeEverywhere(node) {
   const {
@@ -64,42 +63,6 @@ export function* updateNodeEverywhere(node) {
         .filter(flow_node => !flow_node.deleted_at)
     )
   );
-}
-
-function* onNodeSubmitLocal({ node, callback }: ReturnType<typeof nodeSubmitLocal>) {
-  try {
-    const { errors, node: result }: Unwrap<typeof apiPostNode> = yield call(apiPostNode, { node });
-
-    if (errors && Object.values(errors).length > 0) {
-      callback('', errors);
-      return;
-    }
-
-    if (node.is_promoted) {
-      const nodes: ReturnType<typeof selectFlowNodes> = yield select(selectFlowNodes);
-      const updated_flow_nodes = node.id
-        ? nodes.map(item => (item.id === result.id ? result : item))
-        : [result, ...nodes];
-      yield put(flowSetNodes(updated_flow_nodes));
-    } else {
-      const nodes: ReturnType<typeof selectLabListNodes> = yield select(selectLabListNodes);
-      const updated_lab_nodes = node.id
-        ? nodes.map(item => (item.node.id === result.id ? { ...item, node: result } : item))
-        : [{ node: result, comment_count: 0, last_seen: node.created_at }, ...nodes];
-      yield put(labSetList({ nodes: updated_lab_nodes }));
-    }
-
-    const { current } = yield select(selectNode);
-
-    if (node.id && current.id === result.id) {
-      yield put(nodeSetCurrent(result));
-    }
-
-    callback();
-    return;
-  } catch (error) {
-    callback(error.message);
-  }
 }
 
 function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
@@ -369,7 +332,6 @@ function* onLockCommentSaga({ id, is_locked }: ReturnType<typeof nodeLockComment
 }
 
 export default function* nodeSaga() {
-  yield takeLatest(NODE_ACTIONS.SUBMIT_LOCAL, onNodeSubmitLocal);
   yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
   yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);

@@ -64,7 +64,6 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
       <div className={styles.single}>
         <ImagePreloader
           file={images[0]}
-          onLoad={updateSwiper}
           onClick={() => onOpenPhotoSwipe(0)}
           className={styles.image}
         />

@@ -2,18 +2,26 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useCallback } from 'react';
 import { nodeDeleteTag, nodeUpdateTags } from '~/redux/node/actions';
-import { INode, ITag } from '~/redux/types';
+import { ITag } from '~/redux/types';
 import { URLS } from '~/constants/urls';
+import { useGetNode } from '~/utils/hooks/data/useGetNode';
+import { apiDeleteNodeTag, apiPostNodeTags } from '~/redux/node/api';
 
-export const useNodeTags = (id: INode['id']) => {
+export const useNodeTags = (id: number) => {
+  const { update } = useGetNode(id);
   const dispatch = useDispatch();
   const history = useHistory();
 
   const onChange = useCallback(
-    (tags: string[]) => {
-      dispatch(nodeUpdateTags(id, tags));
+    async (tags: string[]) => {
+      try {
+        const result = await apiPostNodeTags({ id, tags });
+        await update({ tags: result.node.tags });
+      } catch (error) {
+        console.warn(error);
+      }
     },
-    [dispatch, id]
+    [id, update]
   );
 
   const onClick = useCallback(
@@ -28,10 +36,15 @@ export const useNodeTags = (id: INode['id']) => {
   );
 
   const onDelete = useCallback(
-    (tagId: ITag['ID']) => {
-      dispatch(nodeDeleteTag(id, tagId));
+    async (tagId: ITag['ID']) => {
+      try {
+        const result = await apiDeleteNodeTag({ id, tagId });
+        await update({ tags: result.tags });
+      } catch (e) {
+        console.warn(e);
+      }
     },
-    [dispatch, id]
+    [id, update]
   );
 
   return { onDelete, onChange, onClick };

@@ -3,7 +3,7 @@ import { IEditorComponentProps } from '~/redux/node/types';
 import { Button } from '~/components/input/Button';
 import { Icon } from '~/components/input/Icon';
 import styles from './styles.module.scss';
-import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
+import { useNodeFormContext } from '~/utils/hooks/node/useNodeFormFormik';
 
 interface IProps extends IEditorComponentProps {}
 

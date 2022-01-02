@@ -13,8 +13,8 @@ export const useFullNode = (id: string) => {
     lastSeenCurrent,
   } = useShallowSelect(selectNode);
 
-  useLoadNode(id);
-  useOnNodeSeen(node);
+  // useLoadNode(id);
+  // useOnNodeSeen(node);
 
   return { node, comments, commentsCount, lastSeenCurrent, isLoading, isLoadingComments };
 };

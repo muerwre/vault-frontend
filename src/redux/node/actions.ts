@@ -50,15 +50,6 @@ export const nodePostLocalComment = (
   type: NODE_ACTIONS.POST_COMMENT,
 });
 
-export const nodeSubmitLocal = (
-  node: INode,
-  callback: (e?: string, errors?: Record<string, string>) => void
-) => ({
-  node,
-  callback,
-  type: NODE_ACTIONS.SUBMIT_LOCAL,
-});
-
 export const nodeSetSendingComment = (is_sending_comment: boolean) => ({
   is_sending_comment,
   type: NODE_ACTIONS.SET_SENDING_COMMENT,

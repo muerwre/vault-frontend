@@ -22,11 +22,9 @@ import { LabPad } from '~/components/lab/LabPad';
 import { LabDescription } from '~/components/lab/LabDescription';
 import { LabVideo } from '~/components/lab/LabVideo';
 import { LabAudio } from '~/components/lab/LabAudioBlock';
-import { LabLine } from '~/components/lab/LabLine';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
-  SUBMIT_LOCAL: `${prefix}SUBMIT_LOCAL`,
   LOAD_NODE: `${prefix}LOAD_NODE`,
   GOTO_NODE: `${prefix}GOTO_NODE`,
   SET: `${prefix}SET`,

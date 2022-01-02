@@ -4,7 +4,7 @@ import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
 import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
-import { useNodeFormContext } from '~/utils/hooks/useNodeFormFormik';
+import { useNodeFormContext } from '~/utils/hooks/node/useNodeFormFormik';
 
 const EditorButtons: FC = () => {
   const { values, handleChange, isSubmitting } = useNodeFormContext();
@@ -28,6 +28,7 @@ const EditorButtons: FC = () => {
           iconRight="check"
           color={values.is_promoted ? 'primary' : 'lab'}
           disabled={isSubmitting}
+          type="submit"
         />
       </Group>
     </Padder>
