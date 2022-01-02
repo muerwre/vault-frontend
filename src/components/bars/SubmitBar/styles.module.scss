@@ -55,7 +55,7 @@
 }
 
 .link {
-  @include outer_shadow;
+  @include row_shadow;
 
   height: $bar_height;
   width: $bar_height;
