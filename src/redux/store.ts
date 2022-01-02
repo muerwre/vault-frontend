@@ -12,7 +12,6 @@ import authSaga from '~/redux/auth/sagas';
 import { IAuthState } from '~/redux/auth/types';
 
 import node, { INodeState } from '~/redux/node/reducer';
-import nodeSaga from '~/redux/node/sagas';
 
 import flow, { IFlowState } from '~/redux/flow/reducer';
 import flowSaga from '~/redux/flow/sagas';
@@ -108,7 +107,6 @@ export function configureStore(): {
   persistor: Persistor;
 } {
   sagaMiddleware.run(authSaga);
-  sagaMiddleware.run(nodeSaga);
   sagaMiddleware.run(uploadSaga);
   sagaMiddleware.run(flowSaga);
   sagaMiddleware.run(playerSaga);

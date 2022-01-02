@@ -2,9 +2,8 @@ import React, { FC } from 'react';
 import { NodeLayout } from '~/layouts/NodeLayout';
 import { RouteComponentProps } from 'react-router';
 import { useScrollToTop } from '~/hooks/dom/useScrollToTop';
-import { useFullNode } from '~/hooks/node/useFullNode';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
-import { useNodeComments } from '~/hooks/node/useNodeComments';
+import { useNodeComments } from '~/hooks/comments/useNodeComments';
 import { useUser } from '~/hooks/user/userUser';
 import { useNodeTags } from '~/hooks/node/useNodeTags';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
@@ -12,7 +11,7 @@ import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
 import { useNodePermissions } from '~/hooks/node/useNodePermissions';
 import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
-import { useGetNode } from '~/hooks/node/useGetNode';
+import { useLoadNode } from '~/hooks/node/useLoadNode';
 
 type Props = RouteComponentProps<{ id: string }> & {};
 
@@ -21,11 +20,17 @@ const NodePage: FC<Props> = ({
     params: { id },
   },
 }) => {
-  const { node, isLoading, update } = useGetNode(parseInt(id, 10));
-  const { isLoadingComments, comments, commentsCount, lastSeenCurrent } = useFullNode(id);
+  const { node, isLoading, update, lastSeen } = useLoadNode(parseInt(id, 10));
 
   const onShowImageModal = useImageModal();
-  const { onLoadMoreComments, onDelete: onDeleteComment } = useNodeComments(parseInt(id, 10));
+  const {
+    onLoadMoreComments,
+    onDelete: onDeleteComment,
+    onEdit: onSaveComment,
+    comments,
+    hasMore,
+    isLoading: isLoadingComments,
+  } = useNodeComments(parseInt(id, 10));
   const { onDelete: onTagDelete, onChange: onTagsChange, onClick: onTagClick } = useNodeTags(
     parseInt(id, 10)
   );
@@ -43,9 +48,10 @@ const NodePage: FC<Props> = ({
     <NodeContextProvider node={node} isLoading={isLoading} update={update}>
       <NodeRelatedProvider id={parseInt(id, 10)} tags={node.tags}>
         <CommentContextProvider
+          onSaveComment={onSaveComment}
           comments={comments}
-          count={commentsCount}
-          lastSeenCurrent={lastSeenCurrent}
+          hasMore={hasMore}
+          lastSeenCurrent={lastSeen}
           isLoading={isLoadingComments}
           onShowImageModal={onShowImageModal}
           onLoadMoreComments={onLoadMoreComments}

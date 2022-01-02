@@ -21,27 +21,24 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
 
   const {
     comments,
-    count,
+    hasMore,
     lastSeenCurrent,
     onLoadMoreComments,
     onDeleteComment,
     onShowImageModal,
+    onSaveComment,
   } = useCommentContext();
-
-  const left = useMemo(() => Math.max(0, count - comments.length), [comments, count]);
 
   const groupped: ICommentGroup[] = useGrouppedComments(comments, order, lastSeenCurrent);
 
   const more = useMemo(
     () =>
-      left > 0 && (
+      hasMore && (
         <div className={styles.more} onClick={onLoadMoreComments}>
-          Показать ещё{' '}
-          {plural(Math.min(left, COMMENTS_DISPLAY), 'комментарий', 'комментария', 'комментариев')}
-          {left > COMMENTS_DISPLAY ? ` из ${left} оставшихся` : ''}
+          Показать ещё комментарии
         </div>
       ),
-    [left, onLoadMoreComments]
+    [hasMore, onLoadMoreComments]
   );
 
   if (!node?.id) {
@@ -61,6 +58,7 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
           onDelete={onDeleteComment}
           onShowImageModal={onShowImageModal}
           isSame={group.user.id === user.id}
+          saveComment={onSaveComment}
         />
       ))}
 

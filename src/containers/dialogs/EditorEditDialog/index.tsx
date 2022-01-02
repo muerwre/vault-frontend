@@ -4,7 +4,7 @@ import { useHistory, useRouteMatch } from 'react-router';
 import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import styles from './styles.module.scss';
-import { useGetNode } from '~/hooks/node/useGetNode';
+import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useUpdateNode } from '~/hooks/node/useUpdateNode';
 import { INode } from '~/redux/types';
 
@@ -24,7 +24,7 @@ const EditorEditDialog: FC = () => {
     history.replace(backUrl);
   }, [backUrl, history]);
 
-  const { node, isLoading } = useGetNode(parseInt(id, 10));
+  const { node, isLoading } = useLoadNode(parseInt(id, 10));
   const updateNode = useUpdateNode(parseInt(id, 10));
 
   const onSubmit = useCallback(

@@ -20,17 +20,24 @@ import { Filler } from '~/components/containers/Filler';
 interface IProps {
   comment?: IComment;
   nodeId: INode['id'];
+  saveComment: (data: IComment) => Promise<unknown>;
   onCancelEdit?: () => void;
 }
 
-const CommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
+const CommentForm: FC<IProps> = ({ comment, nodeId, saveComment, onCancelEdit }) => {
   const [textarea, setTextarea] = useState<HTMLTextAreaElement>();
   const uploader = useFileUploader(
     UPLOAD_SUBJECTS.COMMENT,
     UPLOAD_TARGETS.COMMENTS,
     comment?.files
   );
-  const formik = useCommentFormFormik(comment || EMPTY_COMMENT, nodeId, uploader, onCancelEdit);
+  const formik = useCommentFormFormik(
+    comment || EMPTY_COMMENT,
+    nodeId,
+    uploader,
+    saveComment,
+    onCancelEdit
+  );
   const isLoading = formik.isSubmitting || uploader.isUploading;
   const isEditing = !!comment?.id;
 

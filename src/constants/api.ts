@@ -27,7 +27,7 @@ export const API = {
     GET_DIFF: '/flow/diff',
     GET_NODE: (id: number | string) => `/node/${id}`,
 
-    COMMENT: (id: INode['id']) => `/node/${id}/comment`,
+    COMMENT: (id: INode['id'] | string) => `/node/${id}/comment`,
     RELATED: (id: INode['id']) => `/node/${id}/related`,
     UPDATE_TAGS: (id: INode['id']) => `/node/${id}/tags`,
     DELETE_TAG: (id: INode['id'], tagId: ITag['ID']) => `/node/${id}/tags/${tagId}`,

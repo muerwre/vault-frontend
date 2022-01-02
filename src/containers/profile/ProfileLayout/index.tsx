@@ -41,7 +41,7 @@ const ProfileLayoutUnconnected: FC<IProps> = ({ history, nodeSetCoverImage }) =>
 
       <Grid className={styles.content}>
         <div className={styles.comments}>
-          <CommentForm nodeId={0} />
+          <CommentForm nodeId={0} saveComment={async () => console.log()} />
           <NodeNoComments is_loading={false} />
         </div>
       </Grid>

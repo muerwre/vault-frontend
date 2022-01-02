@@ -2,11 +2,11 @@ import { useHistory } from 'react-router';
 import { useCallback } from 'react';
 import { ITag } from '~/redux/types';
 import { URLS } from '~/constants/urls';
-import { useGetNode } from '~/hooks/node/useGetNode';
+import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { apiDeleteNodeTag, apiPostNodeTags } from '~/redux/node/api';
 
 export const useNodeTags = (id: number) => {
-  const { update } = useGetNode(id);
+  const { update } = useLoadNode(id);
   const history = useHistory();
 
   const onChange = useCallback(

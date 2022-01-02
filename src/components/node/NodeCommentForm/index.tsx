@@ -1,27 +1,21 @@
 import React, { FC } from 'react';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
-import { connect } from 'react-redux';
-import { selectAuthUser } from '~/redux/auth/selectors';
 import { CommentForm } from '~/components/comment/CommentForm';
-import { INode } from '~/redux/types';
+import { IComment } from '~/redux/types';
+import { IUser } from '~/redux/auth/types';
 
-const mapStateToProps = state => ({
-  user: selectAuthUser(state),
-});
+interface NodeCommentFormProps {
+  user: IUser;
+  nodeId?: number;
+  saveComment: (comment: IComment) => Promise<unknown>;
+}
 
-type IProps = ReturnType<typeof mapStateToProps> & {
-  isBefore?: boolean;
-  nodeId: INode['id'];
-};
-
-const NodeCommentFormUnconnected: FC<IProps> = ({ user, isBefore, nodeId }) => {
+const NodeCommentForm: FC<NodeCommentFormProps> = ({ user, nodeId, saveComment }) => {
   return (
     <CommentWrapper user={user} isForm>
-      <CommentForm nodeId={nodeId} />
+      <CommentForm nodeId={nodeId} saveComment={saveComment} />
     </CommentWrapper>
   );
 };
-
-const NodeCommentForm = connect(mapStateToProps)(NodeCommentFormUnconnected);
 
 export { NodeCommentForm };

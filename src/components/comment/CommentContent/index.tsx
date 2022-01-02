@@ -18,12 +18,13 @@ interface IProps {
   nodeId: number;
   comment: IComment;
   canEdit: boolean;
+  saveComment: (data: IComment) => Promise<unknown>;
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
   onShowImageModal: (images: IFile[], index: number) => void;
 }
 
 const CommentContent: FC<IProps> = memo(
-  ({ comment, canEdit, nodeId, onDelete, onShowImageModal }) => {
+  ({ comment, canEdit, nodeId, saveComment, onDelete, onShowImageModal }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const startEditing = useCallback(() => setIsEditing(true), [setIsEditing]);
@@ -58,7 +59,14 @@ const CommentContent: FC<IProps> = memo(
     );
 
     if (isEditing) {
-      return <CommentForm nodeId={nodeId} comment={comment} onCancelEdit={stopEditing} />;
+      return (
+        <CommentForm
+          saveComment={saveComment}
+          nodeId={nodeId}
+          comment={comment}
+          onCancelEdit={stopEditing}
+        />
+      );
     }
 
     return (

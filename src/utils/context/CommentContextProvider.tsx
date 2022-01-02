@@ -2,22 +2,23 @@ import { IComment, IFile } from '~/redux/types';
 import React, { createContext, FC, useContext } from 'react';
 
 export interface CommentProviderProps {
-  // user: IUser;
   comments: IComment[];
-  count: number;
+  hasMore: boolean;
   lastSeenCurrent?: string;
   isLoading: boolean;
   onShowImageModal: (images: IFile[], index: number) => void;
   onLoadMoreComments: () => void;
+  onSaveComment: (comment: IComment) => Promise<unknown>;
   onDeleteComment: (id: IComment['id'], isLocked: boolean) => void;
 }
 
 const CommentContext = createContext<CommentProviderProps>({
   // user: EMPTY_USER,
   comments: [],
-  count: 0,
+  hasMore: false,
   lastSeenCurrent: undefined,
   isLoading: false,
+  onSaveComment: async () => {},
   onShowImageModal: () => {},
   onLoadMoreComments: () => {},
   onDeleteComment: () => {},

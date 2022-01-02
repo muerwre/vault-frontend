@@ -14,6 +14,7 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
   group: ICommentGroup;
   isSame?: boolean;
   canEdit?: boolean;
+  saveComment: (data: IComment) => Promise<unknown>;
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
   onShowImageModal: (images: IFile[], index: number) => void;
 };
@@ -29,6 +30,7 @@ const Comment: FC<IProps> = memo(
     canEdit,
     onDelete,
     onShowImageModal,
+    saveComment,
     ...props
   }) => {
     return (
@@ -50,6 +52,7 @@ const Comment: FC<IProps> = memo(
 
             return (
               <CommentContent
+                saveComment={saveComment}
                 nodeId={nodeId}
                 comment={comment}
                 key={comment.id}

@@ -21,9 +21,9 @@ interface IProps {
 }
 
 const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
-  const { is_user: isUser } = useUserContext();
+  const user = useUserContext();
   const { node, isLoading } = useNodeContext();
-  const { comments, isLoading: isLoadingComments } = useCommentContext();
+  const { comments, isLoading: isLoadingComments, onSaveComment } = useCommentContext();
   const { related, isLoading: isLoadingRelated } = useNodeRelatedContext();
   const { inline } = useNodeBlocks(node, isLoading);
 
@@ -44,7 +44,9 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
               <NodeComments order={commentsOrder} />
             )}
 
-            {isUser && !isLoading && <NodeCommentForm nodeId={node.id} />}
+            {user.is_user && !isLoading && (
+              <NodeCommentForm nodeId={node.id} saveComment={onSaveComment} user={user} />
+            )}
           </Group>
 
           <div className={styles.panel}>

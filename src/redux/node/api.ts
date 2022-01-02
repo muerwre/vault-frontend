@@ -117,7 +117,7 @@ export const apiLockNode = ({ id, is_locked }: ApiLockNodeRequest) =>
     .post<ApiLockNodeResult>(API.NODE.POST_LOCK(id), { is_locked })
     .then(cleanResult);
 
-export const apiLockComment = ({ id, is_locked, current }: ApiLockCommentRequest) =>
+export const apiLockComment = ({ id, isLocked, nodeId }: ApiLockCommentRequest) =>
   api
-    .post<ApiLockcommentResult>(API.NODE.LOCK_COMMENT(current, id), { is_locked })
+    .post<ApiLockcommentResult>(API.NODE.LOCK_COMMENT(nodeId, id), { is_locked: isLocked })
     .then(cleanResult);

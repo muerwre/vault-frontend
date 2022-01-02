@@ -3,21 +3,23 @@ import { useCallback, useEffect, useRef } from 'react';
 import { FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { array, object, string } from 'yup';
 import { FileUploader } from '~/hooks/data/useFileUploader';
-import { useDispatch } from 'react-redux';
-import { nodePostLocalComment } from '~/redux/node/actions';
+import { showErrorToast } from '~/utils/errors/showToast';
+import { hasPath, path } from 'ramda';
 
 const validationSchema = object().shape({
   text: string(),
   files: array(),
 });
 
-const onSuccess = ({ resetForm, setStatus, setSubmitting }: FormikHelpers<IComment>) => (
-  e?: string
+const onSuccess = ({ resetForm, setSubmitting, setErrors }: FormikHelpers<IComment>) => (
+  error?: unknown
 ) => {
   setSubmitting(false);
 
-  if (e) {
-    setStatus(e);
+  if (hasPath(['response', 'data', 'error'], error)) {
+    const message = path(['response', 'data', 'error'], error) as string;
+    setErrors({ text: message });
+    showErrorToast(error);
     return;
   }
 
@@ -30,26 +32,23 @@ export const useCommentFormFormik = (
   values: IComment,
   nodeId: INode['id'],
   uploader: FileUploader,
+  sendData: (data: IComment) => Promise<unknown>,
   stopEditing?: () => void
 ) => {
-  const dispatch = useDispatch();
   const { current: initialValues } = useRef(values);
 
   const onSubmit = useCallback(
-    (values: IComment, helpers: FormikHelpers<IComment>) => {
-      helpers.setSubmitting(true);
-      dispatch(
-        nodePostLocalComment(
-          nodeId,
-          {
-            ...values,
-            files: uploader.files,
-          },
-          onSuccess(helpers)
-        )
-      );
+    async (values: IComment, helpers: FormikHelpers<IComment>) => {
+      try {
+        helpers.setSubmitting(true);
+        await sendData(values);
+        onSuccess(helpers)();
+      } catch (error) {
+        console.log('error', error);
+        onSuccess(helpers)(error);
+      }
     },
-    [dispatch, nodeId, uploader.files]
+    [sendData]
   );
 
   const onReset = useCallback(() => {

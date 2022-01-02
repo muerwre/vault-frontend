@@ -1,4 +1,4 @@
-import { useGetNode } from '~/hooks/node/useGetNode';
+import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useCallback } from 'react';
 import { INode } from '~/redux/types';
 import { apiPostNode } from '~/redux/node/api';
@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 
 export const useUpdateNode = (id: number) => {
   const dispatch = useDispatch();
-  const { update } = useGetNode(id);
+  const { update } = useLoadNode(id);
   const flowNodes = useShallowSelect(selectFlowNodes);
   const labNodes = useShallowSelect(selectLabListNodes);
 

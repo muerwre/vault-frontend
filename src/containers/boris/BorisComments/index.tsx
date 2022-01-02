@@ -16,24 +16,28 @@ const BorisComments: FC<IProps> = () => {
   const {
     isLoading,
     comments,
+    onSaveComment,
     onLoadMoreComments,
     onDeleteComment,
     onShowImageModal,
-    count,
+    hasMore,
   } = useCommentContext();
   const { node } = useNodeContext();
 
   return (
     <>
       <Group className={styles.grid}>
-        {user.is_user && <NodeCommentForm isBefore nodeId={node.id} />}
+        {user.is_user && (
+          <NodeCommentForm user={user} nodeId={node.id} saveComment={onSaveComment} />
+        )}
 
         {isLoading ? (
           <NodeNoComments is_loading count={7} />
         ) : (
           <CommentContextProvider
+            onSaveComment={onSaveComment}
             comments={comments}
-            count={count}
+            hasMore={hasMore}
             onDeleteComment={onDeleteComment}
             onLoadMoreComments={onLoadMoreComments}
             onShowImageModal={onShowImageModal}

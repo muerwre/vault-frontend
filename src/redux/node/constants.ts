@@ -25,21 +25,6 @@ import { LabAudio } from '~/components/lab/LabAudioBlock';
 
 const prefix = 'NODE.';
 export const NODE_ACTIONS = {
-  LOAD_NODE: `${prefix}LOAD_NODE`,
-  GOTO_NODE: `${prefix}GOTO_NODE`,
-  SET: `${prefix}SET`,
-
-  LOCK_COMMENT: `${prefix}LOCK_COMMENT`,
-  EDIT_COMMENT: `${prefix}EDIT_COMMENT`,
-  LOAD_MORE_COMMENTS: `${prefix}LOAD_MORE_COMMENTS`,
-
-  SET_LOADING: `${prefix}SET_LOADING`,
-  SET_LOADING_COMMENTS: `${prefix}SET_LOADING_COMMENTS`,
-  SET_SENDING_COMMENT: `${prefix}SET_SENDING_COMMENT`,
-
-  POST_LOCAL_COMMENT: `${prefix}POST_LOCAL_COMMENT`,
-  SET_COMMENTS: `${prefix}SET_COMMENTS`,
-
   SET_COVER_IMAGE: `${prefix}SET_COVER_IMAGE`,
 };
 
