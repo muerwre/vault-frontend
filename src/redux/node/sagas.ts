@@ -8,7 +8,6 @@ import {
   nodePostLocalComment,
   nodeSet,
   nodeSetComments,
-  nodeSetCurrent,
   nodeSetLoadingComments,
 } from './actions';
 import { apiGetNodeComments, apiLockComment, apiPostComment } from './api';
@@ -25,10 +24,6 @@ export function* updateNodeEverywhere(node) {
 
   const flow_nodes: ReturnType<typeof selectFlowNodes> = yield select(selectFlowNodes);
 
-  if (id === node.id) {
-    yield put(nodeSetCurrent(node));
-  }
-
   yield put(
     flowSetNodes(
       flow_nodes
@@ -38,11 +33,10 @@ export function* updateNodeEverywhere(node) {
   );
 }
 
-function* onNodeGoto({ id, node_type }: ReturnType<typeof nodeGotoNode>) {
+function* onNodeGoto({ id }: ReturnType<typeof nodeGotoNode>) {
   if (!id) {
     return;
   }
-  if (node_type) yield put(nodeSetCurrent({ ...EMPTY_NODE, type: node_type }));
 
   yield put(nodeLoadNode(id));
 }

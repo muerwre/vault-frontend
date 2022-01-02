@@ -29,11 +29,6 @@ export const nodeSetLoadingComments = (is_loading_comments: INodeState['is_loadi
   type: NODE_ACTIONS.SET_LOADING_COMMENTS,
 });
 
-export const nodeSetCurrent = (current: INodeState['current']) => ({
-  current,
-  type: NODE_ACTIONS.SET_CURRENT,
-});
-
 export const nodePostLocalComment = (
   nodeId: INode['id'],
   comment: IComment,

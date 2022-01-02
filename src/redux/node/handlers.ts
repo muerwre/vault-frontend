@@ -4,7 +4,6 @@ import {
   nodeSet,
   nodeSetComments,
   nodeSetCoverImage,
-  nodeSetCurrent,
   nodeSetLoading,
   nodeSetLoadingComments,
   nodeSetSendingComment,
@@ -24,9 +23,6 @@ const setLoadingComments = (
   { is_loading_comments }: ReturnType<typeof nodeSetLoadingComments>
 ) => assocPath(['is_loading_comments'], is_loading_comments, state);
 
-const setCurrent = (state: INodeState, { current }: ReturnType<typeof nodeSetCurrent>) =>
-  assocPath(['current'], current, state);
-
 const setSendingComment = (
   state: INodeState,
   { is_sending_comment }: ReturnType<typeof nodeSetSendingComment>
@@ -44,7 +40,6 @@ export const NODE_HANDLERS = {
   [NODE_ACTIONS.SET]: setData,
   [NODE_ACTIONS.SET_LOADING]: setLoading,
   [NODE_ACTIONS.SET_LOADING_COMMENTS]: setLoadingComments,
-  [NODE_ACTIONS.SET_CURRENT]: setCurrent,
   [NODE_ACTIONS.SET_SENDING_COMMENT]: setSendingComment,
   [NODE_ACTIONS.SET_COMMENTS]: setComments,
   [NODE_ACTIONS.SET_COVER_IMAGE]: setCoverImage,
