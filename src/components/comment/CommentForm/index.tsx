@@ -15,6 +15,7 @@ import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import styles from './styles.module.scss';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { useInputPasteUpload } from '~/utils/hooks/useInputPasteUpload';
+import { Filler } from '~/components/containers/Filler';
 
 interface IProps {
   comment?: IComment;
@@ -67,11 +68,13 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
             <CommentFormAttaches />
 
             <div className={styles.buttons}>
-              <div className={styles.buttons_attach}>
+              <div className={styles.button_column}>
                 <CommentFormAttachButtons onUpload={uploader.uploadFiles} />
               </div>
 
-              <div className={styles.buttons_format}>
+              <Filler />
+
+              <div className={styles.button_column}>
                 {!!textarea && (
                   <CommentFormFormatButtons
                     element={textarea}
@@ -80,7 +83,7 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, onCancelEdit }) => {
                 )}
               </div>
 
-              <div className={styles.buttons_submit}>
+              <div className={styles.button_column}>
                 {isLoading && <LoaderCircle size={20} />}
 
                 {isEditing && (

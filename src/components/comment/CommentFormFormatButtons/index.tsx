@@ -66,6 +66,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         iconOnly
         type="button"
         label="Жирный Ctrl+B"
+        className={styles.button}
       />
 
       <Button
@@ -76,6 +77,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         iconOnly
         type="button"
         label="Наклонный Ctrl+I"
+        className={styles.button}
       />
 
       <Button
@@ -86,6 +88,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         iconOnly
         type="button"
         label="Заголовок"
+        className={styles.button}
       />
 
       <Button
@@ -96,6 +99,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         iconOnly
         type="button"
         label="Ссылка"
+        className={styles.button}
       />
 
       <Button
@@ -105,6 +109,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         iconOnly
         type="button"
         label="Коммент"
+        className={styles.button}
       >
         {`/ /`}
       </Button>
