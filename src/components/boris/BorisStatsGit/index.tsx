@@ -1,27 +1,28 @@
 import React, { FC, useMemo } from 'react';
-import { IBorisState } from '~/redux/boris/reducer';
+import { GithubIssue } from '~/types/boris';
 import styles from './styles.module.scss';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { BorisStatsGitCard } from '../BorisStatsGitCard';
 
 interface IProps {
-  stats: IBorisState['stats'];
+  issues: GithubIssue[];
+  isLoading: boolean;
 }
 
-const BorisStatsGit: FC<IProps> = ({ stats }) => {
+const BorisStatsGit: FC<IProps> = ({ issues, isLoading }) => {
   const open = useMemo(
-    () => stats.issues.filter(el => !el.pull_request && el.state === 'open').slice(0, 5),
-    [stats.issues]
+    () => issues.filter(el => !el.pull_request && el.state === 'open').slice(0, 5),
+    [issues]
   );
 
   const closed = useMemo(
-    () => stats.issues.filter(el => !el.pull_request && el.state === 'closed').slice(0, 5),
-    [stats.issues]
+    () => issues.filter(el => !el.pull_request && el.state === 'closed').slice(0, 5),
+    [issues]
   );
 
-  if (!stats.issues.length) return null;
+  if (!issues.length) return null;
 
-  if (stats.is_loading) {
+  if (isLoading) {
     return (
       <>
         <div className={styles.stats__title}>

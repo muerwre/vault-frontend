@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { modalShowDialog } from '~/redux/modal/actions';
 import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
-import { apiLockNode, apiPostNodeHeroic, apiPostNodeLike } from '~/redux/node/api';
+import { apiLockNode, apiPostNodeHeroic, apiPostNodeLike } from '~/api/node';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Promise<unknown>) => {

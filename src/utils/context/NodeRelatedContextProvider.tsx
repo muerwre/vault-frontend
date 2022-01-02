@@ -1,4 +1,4 @@
-import { INodeRelated } from '~/redux/node/types';
+import { INodeRelated } from '~/types/node';
 import React, { createContext, FC, useContext } from 'react';
 
 interface NodeRelatedProviderProps {

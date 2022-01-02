@@ -1,14 +1,14 @@
 import React, { FC, useMemo } from 'react';
 import styles from './styles.module.scss';
 import { getPrettyDate } from '~/utils/dom';
-import { IGithubIssue } from '~/redux/boris/types';
+import { GithubIssue } from '~/types/boris';
 import classNames from 'classnames';
 
 interface IProps {
-  data: IGithubIssue;
+  data: GithubIssue;
 }
 
-const stateLabels: Record<IGithubIssue['state'], string> = {
+const stateLabels: Record<GithubIssue['state'], string> = {
   open: 'Ожидает',
   closed: 'Сделано',
 };

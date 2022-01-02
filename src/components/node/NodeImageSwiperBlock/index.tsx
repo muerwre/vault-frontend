@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from 'react';
-import { INodeComponentProps } from '~/redux/node/constants';
+import { INodeComponentProps } from '~/constants/node';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/swiper.scss';

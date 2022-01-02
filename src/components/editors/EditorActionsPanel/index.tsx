@@ -1,6 +1,6 @@
 import React, { createElement, FC } from 'react';
 import styles from './styles.module.scss';
-import { NODE_PANEL_COMPONENTS } from '~/redux/node/constants';
+import { NODE_PANEL_COMPONENTS } from '~/constants/node';
 import { has } from 'ramda';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 

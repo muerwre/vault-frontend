@@ -1,7 +1,7 @@
 import React, { createElement, FC, useCallback, useMemo, useState } from 'react';
 import { IDialogProps } from '~/redux/modal/constants';
 import styles from './styles.module.scss';
-import { NODE_EDITORS } from '~/redux/node/constants';
+import { NODE_EDITORS } from '~/constants/node';
 import { BetterScrollDialog } from '../BetterScrollDialog';
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { prop } from 'ramda';

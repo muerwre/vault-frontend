@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { ITag } from '~/redux/types';
 import { URLS } from '~/constants/urls';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
-import { apiDeleteNodeTag, apiPostNodeTags } from '~/redux/node/api';
+import { apiDeleteNodeTag, apiPostNodeTags } from '~/api/node';
 
 export const useNodeTags = (id: number) => {
   const { update } = useLoadNode(id);

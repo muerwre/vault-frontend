@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Filler } from '~/components/containers/Filler';
-import { IEditorComponentProps } from '~/redux/node/types';
+import { IEditorComponentProps } from '~/types/node';
 import styles from './styles.module.scss';
 
 type IProps = IEditorComponentProps & {};

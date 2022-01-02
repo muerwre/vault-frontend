@@ -2,13 +2,12 @@ import { useDispatch } from 'react-redux';
 import { useCallback, useEffect } from 'react';
 import isBefore from 'date-fns/isBefore';
 import { authSetState, authSetUser } from '~/redux/auth/actions';
-import { borisLoadStats } from '~/redux/boris/actions';
 import { useUser } from '~/hooks/user/userUser';
 import { IComment } from '~/redux/types';
 import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectAuthIsTester } from '~/redux/auth/selectors';
-import { selectBorisStats } from '~/redux/boris/selectors';
 import { useRandomPhrase } from '~/constants/phrases';
+import { useBorisStats } from '~/hooks/boris/useBorisStats';
 
 export const useBoris = (comments: IComment[]) => {
   const dispatch = useDispatch();
@@ -29,9 +28,7 @@ export const useBoris = (comments: IComment[]) => {
     dispatch(authSetUser({ last_seen_boris: last_comment.created_at }));
   }, [user.last_seen_boris, dispatch, comments]);
 
-  useEffect(() => {
-    dispatch(borisLoadStats());
-  }, [dispatch]);
+  const { stats, isLoading: isLoadingStats } = useBorisStats();
 
   const setIsBetaTester = useCallback(
     (is_tester: boolean) => {
@@ -41,8 +38,7 @@ export const useBoris = (comments: IComment[]) => {
   );
 
   const isTester = useShallowSelect(selectAuthIsTester);
-  const stats = useShallowSelect(selectBorisStats);
   const title = useRandomPhrase('BORIS_TITLE');
 
-  return { setIsBetaTester, isTester, stats, title };
+  return { setIsBetaTester, isTester, stats, title, isLoadingStats };
 };

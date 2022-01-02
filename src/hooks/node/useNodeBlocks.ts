@@ -1,13 +1,7 @@
 import { INode } from '~/redux/types';
 import { createElement, FC, useCallback, useMemo } from 'react';
 import { isNil, prop } from 'ramda';
-import {
-  INodeComponentProps,
-  LAB_PREVIEW_LAYOUT,
-  NODE_COMPONENTS,
-  NODE_HEADS,
-  NODE_INLINES,
-} from '~/redux/node/constants';
+import { INodeComponentProps, LAB_PREVIEW_LAYOUT, NODE_COMPONENTS, NODE_HEADS, NODE_INLINES, } from '~/constants/node';
 
 // useNodeBlocks returns head, block and inline blocks of node
 export const useNodeBlocks = (node: INode, isLoading: boolean) => {

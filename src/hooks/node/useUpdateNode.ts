@@ -1,7 +1,7 @@
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useCallback } from 'react';
 import { INode } from '~/redux/types';
-import { apiPostNode } from '~/redux/node/api';
+import { apiPostNode } from '~/api/node';
 import { selectFlowNodes } from '~/redux/flow/selectors';
 import { flowSetNodes } from '~/redux/flow/actions';
 import { selectLabListNodes } from '~/redux/lab/selectors';

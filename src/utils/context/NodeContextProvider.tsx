@@ -1,5 +1,5 @@
 import { INode } from '~/redux/types';
-import { EMPTY_NODE } from '~/redux/node/constants';
+import { EMPTY_NODE } from '~/constants/node';
 import React, { createContext, FC, useContext } from 'react';
 
 export interface NodeContextProps {

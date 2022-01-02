@@ -2,7 +2,7 @@ import { USER_ROLES } from '~/redux/auth/constants';
 import { ICommentGroup, INode } from '~/redux/types';
 import { IUser } from '~/redux/auth/types';
 import { path } from 'ramda';
-import { NODE_TYPES } from '~/redux/node/constants';
+import { NODE_TYPES } from '~/constants/node';
 
 export const canEditNode = (node?: Partial<INode>, user?: Partial<IUser>): boolean =>
   path(['role'], user) === USER_ROLES.ADMIN ||

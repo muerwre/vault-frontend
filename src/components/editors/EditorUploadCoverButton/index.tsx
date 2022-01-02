@@ -5,7 +5,7 @@ import { path } from 'ramda';
 import { getURL } from '~/utils/dom';
 import { Icon } from '~/components/input/Icon';
 import { PRESETS } from '~/constants/urls';
-import { IEditorComponentProps } from '~/redux/node/types';
+import { IEditorComponentProps } from '~/types/node';
 import { useFileUploader } from '~/hooks/data/useFileUploader';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { getFileType } from '~/utils/uploader';

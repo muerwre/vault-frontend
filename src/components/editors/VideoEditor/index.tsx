@@ -4,7 +4,7 @@ import { path } from 'ramda';
 import { InputText } from '~/components/input/InputText';
 import classnames from 'classnames';
 import { getYoutubeThumb } from '~/utils/dom';
-import { NodeEditorProps } from '~/redux/node/types';
+import { NodeEditorProps } from '~/types/node';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 
 type IProps = NodeEditorProps & {};

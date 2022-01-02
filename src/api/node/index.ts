@@ -1,7 +1,7 @@
 import { api, cleanResult } from '~/utils/api';
-import { IComment, INode } from '../types';
+import { IComment, INode } from '~/redux/types';
 import { API } from '~/constants/api';
-import { COMMENTS_DISPLAY } from './constants';
+import { COMMENTS_DISPLAY } from '~/constants/node';
 import {
   ApiDeleteNodeTagsRequest,
   ApiDeleteNodeTagsResult,
@@ -23,7 +23,7 @@ import {
   ApiPostNodeTagsResult,
   GetNodeDiffRequest,
   GetNodeDiffResult,
-} from '~/redux/node/types';
+} from '~/types/node';
 import axios, { AxiosRequestConfig } from 'axios';
 
 export type ApiPostNodeRequest = { node: INode };

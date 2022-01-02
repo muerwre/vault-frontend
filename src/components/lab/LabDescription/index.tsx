@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { INodeComponentProps } from '~/redux/node/constants';
+import { INodeComponentProps } from '~/constants/node';
 import styles from './styles.module.scss';
 import { Markdown } from '~/components/containers/Markdown';
 import { formatText } from '~/utils/dom';

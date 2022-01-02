@@ -1,4 +1,4 @@
-import { NODE_TYPES } from '~/redux/node/constants';
+import { NODE_TYPES } from '~/constants/node';
 import { LoginDialog } from '~/containers/dialogs/LoginDialog';
 import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
 import { TestDialog } from '~/containers/dialogs/TestDialog';

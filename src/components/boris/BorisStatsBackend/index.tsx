@@ -1,72 +1,73 @@
 import React, { FC } from 'react';
-import { IBorisState } from '~/redux/boris/reducer';
+import { StatBackend } from '~/types/boris';
 import styles from './styles.module.scss';
 import { sizeOf } from '~/utils/dom';
 import { StatsRow } from '~/components/common/StatsRow';
 import { SubTitle } from '~/components/common/SubTitle';
 
 interface IProps {
-  stats: IBorisState['stats'];
+  stats: StatBackend;
+  isLoading: boolean;
 }
 
-const BorisStatsBackend: FC<IProps> = ({ stats: { is_loading, backend } }) => {
-  if (!backend && !is_loading) {
+const BorisStatsBackend: FC<IProps> = ({ isLoading, stats }) => {
+  if (!stats && !isLoading) {
     return null;
   }
 
   return (
     <div className={styles.wrap}>
-      <SubTitle isLoading={is_loading} className={styles.title}>
+      <SubTitle isLoading={isLoading} className={styles.title}>
         Юнитс
       </SubTitle>
 
       <ul>
-        <StatsRow isLoading={is_loading} label="В сознании">
-          {backend.users.alive}
+        <StatsRow isLoading={isLoading} label="В сознании">
+          {stats.users.alive}
         </StatsRow>
 
-        <StatsRow isLoading={is_loading} label="Криокамера">
-          {backend.users.total - backend.users.alive}
+        <StatsRow isLoading={isLoading} label="Криокамера">
+          {stats.users.total - stats.users.alive}
         </StatsRow>
       </ul>
 
-      <SubTitle isLoading={is_loading} className={styles.title}>
+      <SubTitle isLoading={isLoading} className={styles.title}>
         Контент
       </SubTitle>
 
       <ul>
-        <StatsRow isLoading={is_loading} label="Фотографии">
-          {backend.nodes.images}
+        <StatsRow isLoading={isLoading} label="Фотографии">
+          {stats.nodes.images}
         </StatsRow>
 
-        <StatsRow isLoading={is_loading} label="Письма">
-          {backend.nodes.texts}
+        <StatsRow isLoading={isLoading} label="Письма">
+          {stats.nodes.texts}
         </StatsRow>
 
-        <StatsRow isLoading={is_loading} label="Видеозаписи">
-          {backend.nodes.videos}
+        <StatsRow isLoading={isLoading} label="Видеозаписи">
+          {stats.nodes.videos}
         </StatsRow>
 
-        <StatsRow isLoading={is_loading} label="Аудиозаписи">
-          {backend.nodes.audios}
+        <StatsRow isLoading={isLoading} label="Аудиозаписи">
+          {stats.nodes.audios}
         </StatsRow>
 
-        <StatsRow isLoading={is_loading} label="Комментарии">
-          {backend.comments.total}
+        <StatsRow isLoading={isLoading} label="Комментарии">
+          {stats.comments.total}
         </StatsRow>
       </ul>
 
-      <SubTitle isLoading={is_loading} className={styles.title}>
+      <SubTitle isLoading={isLoading} className={styles.title}>
         Сторедж
       </SubTitle>
 
       <ul>
-        <StatsRow isLoading={is_loading} label="Файлы">
-          {backend.files.count}
+        <StatsRow isLoading={isLoading} label="Файлы">
+          {stats.files.count}
         </StatsRow>
 
-        <StatsRow isLoading={is_loading} label="На диске">
-          {sizeOf(backend.files.size)}
+        <StatsRow isLoading={isLoading} label="На диске">
+          {sizeOf(stats.files.size)}
         </StatsRow>
       </ul>
     </div>

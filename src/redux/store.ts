@@ -29,9 +29,6 @@ import { modalSaga } from './modal/sagas';
 
 import { authLogout, authOpenProfile, gotAuthPostMessage } from './auth/actions';
 
-import boris, { IBorisState } from './boris/reducer';
-import borisSaga from './boris/sagas';
-
 import messages, { IMessagesState } from './messages';
 import messagesSaga from './messages/sagas';
 
@@ -66,7 +63,6 @@ export interface IState {
   uploads: IUploadState;
   flow: IFlowState;
   player: IPlayerState;
-  boris: IBorisState;
   messages: IMessagesState;
   tag: ITagState;
   lab: ILabState;
@@ -86,7 +82,6 @@ export const store = createStore(
   combineReducers<IState>({
     auth: persistReducer(authPersistConfig, auth),
     modal,
-    boris,
     router: connectRouter(history),
     uploads,
     flow: persistReducer(flowPersistConfig, flow),
@@ -107,7 +102,6 @@ export function configureStore(): {
   sagaMiddleware.run(flowSaga);
   sagaMiddleware.run(playerSaga);
   sagaMiddleware.run(modalSaga);
-  sagaMiddleware.run(borisSaga);
   sagaMiddleware.run(messagesSaga);
   sagaMiddleware.run(tagSaga);
   sagaMiddleware.run(labSaga);

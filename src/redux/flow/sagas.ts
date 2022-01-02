@@ -1,7 +1,7 @@
 import { call, delay, put, race, select, take, takeLatest, takeLeading } from 'redux-saga/effects';
 import { REHYDRATE } from 'redux-persist';
 import { FLOW_ACTIONS } from './constants';
-import { getNodeDiff } from '../node/api';
+import { getNodeDiff } from '~/api/node';
 import {
   flowChangeSearch,
   flowSetCellView,

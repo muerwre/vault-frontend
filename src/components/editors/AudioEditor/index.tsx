@@ -3,7 +3,7 @@ import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { ImageGrid } from '../ImageGrid';
 import { AudioGrid } from '../AudioGrid';
 import styles from './styles.module.scss';
-import { NodeEditorProps } from '~/redux/node/types';
+import { NodeEditorProps } from '~/types/node';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { useNodeAudios } from '~/hooks/node/useNodeAudios';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';

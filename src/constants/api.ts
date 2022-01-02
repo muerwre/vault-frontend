@@ -46,6 +46,7 @@ export const API = {
   },
   BORIS: {
     GET_BACKEND_STATS: '/stats/',
+    GITHUB_ISSUES: 'https://api.github.com/repos/muerwre/vault-frontend/issues',
   },
   TAG: {
     NODES: `/tag/nodes`,

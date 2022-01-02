@@ -1,9 +1,9 @@
 import { INode } from '~/redux/types';
 import useSWR from 'swr';
-import { ApiGetNodeRelatedResult } from '~/redux/node/types';
+import { ApiGetNodeRelatedResult } from '~/types/node';
 import { API } from '~/constants/api';
 import { useCallback } from 'react';
-import { apiGetNodeRelated } from '~/redux/node/api';
+import { apiGetNodeRelated } from '~/api/node';
 
 export const useGetNodeRelated = (id?: INode['id']) => {
   const { data, isValidating, mutate } = useSWR<ApiGetNodeRelatedResult>(API.NODE.RELATED(id), () =>

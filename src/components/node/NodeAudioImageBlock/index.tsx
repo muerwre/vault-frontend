@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import { path } from 'ramda';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
-import { INodeComponentProps } from '~/redux/node/constants';
+import { INodeComponentProps } from '~/constants/node';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 
 interface IProps extends INodeComponentProps {}

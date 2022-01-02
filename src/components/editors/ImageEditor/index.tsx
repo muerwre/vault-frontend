@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { ImageGrid } from '~/components/editors/ImageGrid';
 import styles from './styles.module.scss';
-import { NodeEditorProps } from '~/redux/node/types';
+import { NodeEditorProps } from '~/types/node';
 import { useFileUploaderContext } from '~/hooks/data/useFileUploader';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 

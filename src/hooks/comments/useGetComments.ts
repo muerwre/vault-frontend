@@ -3,8 +3,8 @@ import { IComment } from '~/redux/types';
 import { API } from '~/constants/api';
 import { flatten, isNil } from 'ramda';
 import useSWRInfinite from 'swr/infinite';
-import { apiGetNodeComments } from '~/redux/node/api';
-import { COMMENTS_DISPLAY } from '~/redux/node/constants';
+import { apiGetNodeComments } from '~/api/node';
+import { COMMENTS_DISPLAY } from '~/constants/node';
 import { useCallback } from 'react';
 
 const getKey: (nodeId: number) => KeyLoader<IComment[]> = (nodeId: number) => (

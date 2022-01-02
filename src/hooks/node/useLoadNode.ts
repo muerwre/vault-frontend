@@ -1,11 +1,11 @@
 import useSWR from 'swr';
-import { ApiGetNodeResponse } from '~/redux/node/types';
+import { ApiGetNodeResponse } from '~/types/node';
 import { API } from '~/constants/api';
 import { useOnNodeSeen } from '~/hooks/node/useOnNodeSeen';
-import { apiGetNode } from '~/redux/node/api';
+import { apiGetNode } from '~/api/node';
 import { useCallback } from 'react';
 import { INode } from '~/redux/types';
-import { EMPTY_NODE } from '~/redux/node/constants';
+import { EMPTY_NODE } from '~/constants/node';
 
 export const useLoadNode = (id: number) => {
   const { data, isValidating, mutate } = useSWR<ApiGetNodeResponse>(API.NODE.GET_NODE(id), () =>

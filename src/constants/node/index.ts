@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { IComment, INode, ValueOf } from '../types';
+import { IComment, INode, ValueOf } from 'src/redux/types';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';
@@ -11,7 +11,7 @@ import { AudioEditor } from '~/components/editors/AudioEditor';
 import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadButton';
 import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadButton';
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
-import { IEditorComponentProps, NodeEditorProps } from '~/redux/node/types';
+import { IEditorComponentProps, NodeEditorProps } from '~/types/node';
 import { EditorFiller } from '~/components/editors/EditorFiller';
 import { EditorPublicSwitch } from '~/components/editors/EditorPublicSwitch';
 import { NodeImageSwiperBlock } from '~/components/node/NodeImageSwiperBlock';
@@ -126,5 +126,7 @@ export const NODE_SETTINGS = {
   MAX_FILES: 16,
   MAX_IMAGE_ASPECT: 1.2,
 };
+
+export const DEFAULT_DOMINANT_COLOR = '#000000';
 
 export const COMMENTS_DISPLAY = 25;

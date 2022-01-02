@@ -4,7 +4,7 @@ import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
 import Tippy from '@tippy.js/react';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
-import { INodeComponentProps } from '~/redux/node/constants';
+import { INodeComponentProps } from '~/constants/node';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 
 const LabNodeTitle: FC<INodeComponentProps> = ({ node, isLoading }) => {

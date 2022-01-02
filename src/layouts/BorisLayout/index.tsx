@@ -9,7 +9,7 @@ import { Card } from '~/components/containers/Card';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
 import { useUserContext } from '~/utils/context/UserContextProvider';
-import { BorisUsageStats } from '~/redux/boris/reducer';
+import { BorisUsageStats } from '~/types/boris';
 import { Tabs } from '~/components/dialogs/Tabs';
 import { Superpower } from '~/components/boris/Superpower';
 import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
@@ -19,9 +19,10 @@ type IProps = {
   setIsBetaTester: (val: boolean) => void;
   isTester: boolean;
   stats: BorisUsageStats;
+  isLoadingStats: boolean;
 };
 
-const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats }) => {
+const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLoadingStats }) => {
   const user = useUserContext();
 
   return (
@@ -60,6 +61,7 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats }) =>
                 stats={stats}
                 setBetaTester={setIsBetaTester}
                 user={user}
+                isLoading={isLoadingStats}
               />
             </StickyBox>
           </Group>

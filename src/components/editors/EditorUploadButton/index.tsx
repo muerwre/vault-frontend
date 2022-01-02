@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, useCallback } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
-import { IEditorComponentProps } from '~/redux/node/types';
+import { IEditorComponentProps } from '~/types/node';
 import { useFileUploaderContext } from '~/hooks/data/useFileUploader';
 import { getFileType } from '~/utils/uploader';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';

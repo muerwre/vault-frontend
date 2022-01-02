@@ -10,7 +10,7 @@ import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormat
 import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { IComment, INode } from '~/redux/types';
-import { EMPTY_COMMENT } from '~/redux/node/constants';
+import { EMPTY_COMMENT } from '~/constants/node';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import styles from './styles.module.scss';
 import { ERROR_LITERAL } from '~/constants/errors';

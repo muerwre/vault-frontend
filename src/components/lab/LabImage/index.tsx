@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { INodeComponentProps } from '~/redux/node/constants';
+import { INodeComponentProps } from '~/constants/node';
 import SwiperCore, { A11y, Navigation, Pagination, SwiperOptions } from 'swiper';
 
 import 'swiper/swiper.scss';

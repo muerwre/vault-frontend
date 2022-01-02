@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { Markdown } from '~/components/containers/Markdown';
-import { INodeComponentProps } from '~/redux/node/constants';
+import { INodeComponentProps } from '~/constants/node';
 import { formatTextParagraphs } from '~/utils/dom';
 import { path } from 'ramda';
 import styles from './styles.module.scss';

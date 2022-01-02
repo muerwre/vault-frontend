@@ -3,7 +3,7 @@ import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholde
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { URLS } from '~/constants/urls';
 import { INode } from '~/redux/types';
-import { INodeRelated } from '~/redux/node/types';
+import { INodeRelated } from '~/types/node';
 import { Link } from 'react-router-dom';
 
 interface IProps {

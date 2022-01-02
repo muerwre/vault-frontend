@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import styles from './styles.module.scss';
-import { INodeComponentProps } from '~/redux/node/constants';
+import { INodeComponentProps } from '~/constants/node';
 import { useNodeAudios } from '~/hooks/node/useNodeAudios';
 
 interface IProps extends INodeComponentProps {}

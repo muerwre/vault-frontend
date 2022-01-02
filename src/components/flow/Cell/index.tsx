@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 import markdown from '~/styles/common/markdown.module.scss';
 import { Icon } from '~/components/input/Icon';
 import { PRESETS } from '~/constants/urls';
-import { NODE_TYPES } from '~/redux/node/constants';
+import { NODE_TYPES } from '~/constants/node';
 import { Link } from 'react-router-dom';
 import { CellShade } from '~/components/flow/CellShade';
 

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { INodeComponentProps } from '~/redux/node/constants';
+import { INodeComponentProps } from '~/constants/node';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 
