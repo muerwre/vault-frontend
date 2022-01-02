@@ -1,7 +1,5 @@
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useCallback } from 'react';
-import { nodeDeleteTag, nodeUpdateTags } from '~/redux/node/actions';
 import { ITag } from '~/redux/types';
 import { URLS } from '~/constants/urls';
 import { useGetNode } from '~/utils/hooks/data/useGetNode';
@@ -9,7 +7,6 @@ import { apiDeleteNodeTag, apiPostNodeTags } from '~/redux/node/api';
 
 export const useNodeTags = (id: number) => {
   const { update } = useGetNode(id);
-  const dispatch = useDispatch();
   const history = useHistory();
 
   const onChange = useCallback(

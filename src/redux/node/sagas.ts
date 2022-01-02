@@ -1,11 +1,7 @@
 import { call, put, select, takeLatest, takeLeading } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
 
 import { COMMENTS_DISPLAY, EMPTY_NODE, NODE_ACTIONS, NODE_EDITOR_DATA } from './constants';
 import {
-  nodeCreate,
-  nodeDeleteTag,
-  nodeEdit,
   nodeGotoNode,
   nodeLike,
   nodeLoadNode,
@@ -15,15 +11,9 @@ import {
   nodeSet,
   nodeSetComments,
   nodeSetCurrent,
-  nodeSetEditor,
-  nodeSetLoading,
   nodeSetLoadingComments,
-  nodeSetTags,
-  nodeUpdateTags,
 } from './actions';
 import {
-  apiDeleteNodeTag,
-  apiGetNode,
   apiGetNodeComments,
   apiLockComment,
   apiLockNode,
@@ -44,6 +34,7 @@ import { has } from 'ramda';
 import { selectLabListNodes } from '~/redux/lab/selectors';
 import { labSetList } from '~/redux/lab/actions';
 import { apiPostNode } from '~/redux/node/api';
+import { showErrorToast } from '~/utils/errors/showToast';
 
 export function* updateNodeEverywhere(node) {
   const {
@@ -127,22 +118,9 @@ function* nodeGetComments(id: INode['id']) {
 }
 
 function* onNodeLoad({ id }: ReturnType<typeof nodeLoadNode>) {
-  // Get node body
-  try {
-    yield put(nodeSetLoading(true));
-    yield put(nodeSetLoadingComments(true));
-
-    const { node, last_seen }: Unwrap<typeof apiGetNode> = yield call(apiGetNode, { id });
-
-    yield put(nodeSet({ current: node, lastSeenCurrent: last_seen }));
-    yield put(nodeSetLoading(false));
-  } catch (error) {
-    yield put(push(URLS.ERRORS.NOT_FOUND));
-    yield put(nodeSetLoading(false));
-  }
-
   // Comments
   try {
+    yield put(nodeSetLoadingComments(true));
     yield call(nodeGetComments, id);
 
     yield put(
@@ -160,79 +138,21 @@ function* onPostComment({ nodeId, comment, callback }: ReturnType<typeof nodePos
       id: nodeId,
     });
 
-    const { current }: ReturnType<typeof selectNode> = yield select(selectNode);
+    const { comments }: ReturnType<typeof selectNode> = yield select(selectNode);
 
-    if (current?.id === nodeId) {
-      const { comments }: ReturnType<typeof selectNode> = yield select(selectNode);
-
-      if (!comment.id) {
-        yield put(nodeSetComments([data.comment, ...comments]));
-      } else {
-        yield put(
-          nodeSet({
-            comments: comments.map(item => (item.id === comment.id ? data.comment : item)),
-          })
-        );
-      }
-
-      callback();
+    if (!comment.id) {
+      yield put(nodeSetComments([data.comment, ...comments]));
+    } else {
+      yield put(
+        nodeSet({
+          comments: comments.map(item => (item.id === comment.id ? data.comment : item)),
+        })
+      );
     }
+
+    callback();
   } catch (error) {
     return callback(error.message);
-  }
-}
-
-function* onUpdateTags({ id, tags }: ReturnType<typeof nodeUpdateTags>) {
-  try {
-    const { node }: Unwrap<typeof apiPostNodeTags> = yield call(apiPostNodeTags, { id, tags });
-    const { current }: ReturnType<typeof selectNode> = yield select(selectNode);
-    if (!node || !node.id || node.id !== current.id) return;
-    yield put(nodeSetTags(node.tags));
-  } catch {}
-}
-
-function* onDeleteTag({ id, tagId }: ReturnType<typeof nodeDeleteTag>) {
-  try {
-    const { tags }: Unwrap<typeof apiDeleteNodeTag> = yield call(apiDeleteNodeTag, { id, tagId });
-    yield put(nodeSetTags(tags));
-  } catch {}
-}
-
-function* onCreateSaga({ node_type: type, isLab }: ReturnType<typeof nodeCreate>) {
-  if (!type || !has(type, NODE_EDITOR_DIALOGS)) return;
-
-  yield put(
-    nodeSetEditor({
-      ...EMPTY_NODE,
-      ...(NODE_EDITOR_DATA[type] || {}),
-      type,
-      is_promoted: !isLab,
-    })
-  );
-
-  yield put(modalShowDialog(NODE_EDITOR_DIALOGS[type]));
-}
-
-function* onEditSaga({ id }: ReturnType<typeof nodeEdit>) {
-  try {
-    if (!id) {
-      return;
-    }
-
-    yield put(modalShowDialog(DIALOGS.LOADING));
-
-    const { node }: Unwrap<typeof apiGetNode> = yield call(apiGetNode, { id });
-
-    if (!node.type || !has(node.type, NODE_EDITOR_DIALOGS)) return;
-
-    if (!NODE_EDITOR_DIALOGS[node?.type]) {
-      throw new Error('Unknown node type');
-    }
-
-    yield put(nodeSetEditor(node));
-    yield put(modalShowDialog(NODE_EDITOR_DIALOGS[node.type]));
-  } catch (error) {
-    yield put(modalSetShown(false));
   }
 }
 
@@ -293,22 +213,12 @@ function* onLockSaga({ id, is_locked }: ReturnType<typeof nodeLock>) {
   }
 }
 
-function* onLockCommentSaga({ id, is_locked }: ReturnType<typeof nodeLockComment>) {
-  const { current, comments }: ReturnType<typeof selectNode> = yield select(selectNode);
+function* onLockCommentSaga({ nodeId, id, is_locked }: ReturnType<typeof nodeLockComment>) {
+  const { comments }: ReturnType<typeof selectNode> = yield select(selectNode);
 
   try {
-    yield put(
-      nodeSetComments(
-        comments.map(comment =>
-          comment.id === id
-            ? { ...comment, deleted_at: is_locked ? new Date().toISOString() : undefined }
-            : comment
-        )
-      )
-    );
-
     const data: Unwrap<typeof apiLockComment> = yield call(apiLockComment, {
-      current: current.id,
+      current: nodeId,
       id,
       is_locked,
     });
@@ -320,25 +230,15 @@ function* onLockCommentSaga({ id, is_locked }: ReturnType<typeof nodeLockComment
         )
       )
     );
-  } catch {
-    yield put(
-      nodeSetComments(
-        comments.map(comment =>
-          comment.id === id ? { ...comment, deleted_at: current.deleted_at } : comment
-        )
-      )
-    );
+  } catch (e) {
+    showErrorToast(e);
   }
 }
 
 export default function* nodeSaga() {
   yield takeLatest(NODE_ACTIONS.GOTO_NODE, onNodeGoto);
   yield takeLatest(NODE_ACTIONS.LOAD_NODE, onNodeLoad);
-  yield takeLatest(NODE_ACTIONS.POST_COMMENT, onPostComment);
-  yield takeLatest(NODE_ACTIONS.UPDATE_TAGS, onUpdateTags);
-  yield takeLatest(NODE_ACTIONS.DELETE_TAG, onDeleteTag);
-  yield takeLatest(NODE_ACTIONS.CREATE, onCreateSaga);
-  yield takeLatest(NODE_ACTIONS.EDIT, onEditSaga);
+  yield takeLatest(NODE_ACTIONS.POST_LOCAL_COMMENT, onPostComment);
   yield takeLatest(NODE_ACTIONS.LIKE, onLikeSaga);
   yield takeLatest(NODE_ACTIONS.STAR, onStarSaga);
   yield takeLatest(NODE_ACTIONS.LOCK, onLockSaga);

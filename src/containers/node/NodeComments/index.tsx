@@ -9,6 +9,7 @@ import { useGrouppedComments } from '~/utils/hooks/node/useGrouppedComments';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
 import { Comment } from '~/components/comment/Comment';
 import { useUserContext } from '~/utils/context/UserContextProvider';
+import { useNodeContext } from '~/utils/context/NodeContextProvider';
 
 interface IProps {
   order: 'ASC' | 'DESC';
@@ -16,6 +17,8 @@ interface IProps {
 
 const NodeComments: FC<IProps> = memo(({ order }) => {
   const user = useUserContext();
+  const { node } = useNodeContext();
+
   const {
     comments,
     count,
@@ -41,12 +44,17 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
     [left, onLoadMoreComments]
   );
 
+  if (!node?.id) {
+    return null;
+  }
+
   return (
     <div className={styles.wrap}>
       {order === 'DESC' && more}
 
       {groupped.map(group => (
         <Comment
+          nodeId={node.id!}
           key={group.ids.join()}
           group={group}
           canEdit={canEditComment(group, user)}

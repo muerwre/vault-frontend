@@ -29,13 +29,11 @@ export const NODE_ACTIONS = {
   GOTO_NODE: `${prefix}GOTO_NODE`,
   SET: `${prefix}SET`,
 
-  EDIT: `${prefix}EDIT`,
   LIKE: `${prefix}LIKE`,
   STAR: `${prefix}STAR`,
   LOCK: `${prefix}LOCK`,
   LOCK_COMMENT: `${prefix}LOCK_COMMENT`,
   EDIT_COMMENT: `${prefix}EDIT_COMMENT`,
-  CREATE: `${prefix}CREATE`,
   LOAD_MORE_COMMENTS: `${prefix}LOAD_MORE_COMMENTS`,
 
   SET_SAVE_ERRORS: `${prefix}SET_SAVE_ERRORS`,
@@ -45,13 +43,10 @@ export const NODE_ACTIONS = {
   SET_CURRENT: `${prefix}SET_CURRENT`,
   SET_EDITOR: `${prefix}SET_EDITOR`,
 
-  POST_COMMENT: `${prefix}POST_LOCAL_COMMENT`,
+  POST_LOCAL_COMMENT: `${prefix}POST_LOCAL_COMMENT`,
   SET_COMMENTS: `${prefix}SET_COMMENTS`,
   SET_RELATED: `${prefix}SET_RELATED`,
 
-  UPDATE_TAGS: `${prefix}UPDATE_TAGS`,
-  DELETE_TAG: `${prefix}DELETE_TAG`,
-  SET_TAGS: `${prefix}SET_TAGS`,
   SET_COVER_IMAGE: `${prefix}SET_COVER_IMAGE`,
 };
 
