@@ -1,15 +1,10 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import { IAuthState } from '~/redux/auth/types';
-import { formatText, getURL } from '~/utils/dom';
-import { PRESETS, URLS } from '~/constants/urls';
+import { formatText } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
 import { Placeholder } from '~/components/placeholders/Placeholder';
-import { Link } from 'react-router-dom';
-import { Icon } from '~/components/input/Icon';
-import classNames from 'classnames';
 
 import styles from './styles.module.scss';
-import markdown from '~/styles/common/markdown.module.scss';
-import { ProfileAvatar } from '~/containers/profile/ProfileAvatar';
 import { Avatar } from '~/components/common/Avatar';
 import { Markdown } from '~/components/containers/Markdown';
 

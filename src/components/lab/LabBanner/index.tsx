@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
-import { Card } from '~/components/containers/Card';
-import { Placeholder } from '~/components/placeholders/Placeholder';
 import { Group } from '~/components/containers/Group';
 import { Square } from '~/components/containers/Square';
 

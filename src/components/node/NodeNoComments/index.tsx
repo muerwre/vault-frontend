@@ -2,7 +2,6 @@ import React, { FC, useMemo } from 'react';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import classNames from 'classnames';
-import { Filler } from '~/components/containers/Filler';
 import { ERRORS } from '~/constants/errors';
 import { t } from '~/utils/trans';
 

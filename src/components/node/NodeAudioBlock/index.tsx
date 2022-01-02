@@ -1,6 +1,4 @@
-import React, { FC, useMemo } from 'react';
-import { INode } from '~/redux/types';
-import { UPLOAD_TYPES } from '~/redux/uploads/constants';
+import React, { FC } from 'react';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import styles from './styles.module.scss';
 import { INodeComponentProps } from '~/redux/node/constants';

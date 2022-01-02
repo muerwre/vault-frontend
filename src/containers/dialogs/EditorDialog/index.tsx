@@ -15,7 +15,6 @@ import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { useTranslatedError } from '~/hooks/data/useTranslatedError';
 import { useCloseOnEscape } from '~/hooks';
 import { EditorConfirmClose } from '~/components/editors/EditorConfirmClose';
-import { on } from 'cluster';
 
 interface Props extends IDialogProps {
   node: INode;

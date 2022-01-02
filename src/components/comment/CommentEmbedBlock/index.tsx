@@ -1,4 +1,4 @@
-import React, { FC, memo, useMemo, useEffect } from 'react';
+import React, { FC, memo, useEffect, useMemo } from 'react';
 import { ICommentBlockProps } from '~/constants/comment';
 import styles from './styles.module.scss';
 import { getYoutubeThumb } from '~/utils/dom';

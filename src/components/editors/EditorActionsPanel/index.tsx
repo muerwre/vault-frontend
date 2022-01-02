@@ -1,4 +1,4 @@
-import React, { FC, createElement } from 'react';
+import React, { createElement, FC } from 'react';
 import styles from './styles.module.scss';
 import { NODE_PANEL_COMPONENTS } from '~/redux/node/constants';
 import { has } from 'ramda';

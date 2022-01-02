@@ -1,8 +1,7 @@
-import { assocPath } from 'ramda';
-import { omit } from 'ramda';
+import { assocPath, omit } from 'ramda';
 
-import { UPLOAD_ACTIONS, EMPTY_UPLOAD_STATUS } from './constants';
-import { uploadAddStatus, uploadDropStatus, uploadSetStatus, uploadAddFile } from './actions';
+import { EMPTY_UPLOAD_STATUS, UPLOAD_ACTIONS } from './constants';
+import { uploadAddFile, uploadAddStatus, uploadDropStatus, uploadSetStatus } from './actions';
 import { IUploadState } from './reducer';
 
 const addStatus = (

@@ -1,4 +1,4 @@
-import { IFile, INotification, IResultWithStatus } from '../types';
+import { IFile, INotification } from '../types';
 
 export interface IToken {
   access: string;

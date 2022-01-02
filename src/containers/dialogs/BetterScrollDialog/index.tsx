@@ -1,9 +1,8 @@
-import React, { FC, MouseEventHandler, ReactElement, useEffect, useRef } from 'react';
+import React, { FC, MouseEventHandler, useEffect, useRef } from 'react';
 import styles from './styles.module.scss';
 import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
 import { Icon } from '~/components/input/Icon';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
-import { useCloseOnEscape } from '~/hooks';
 
 interface IProps {
   children: React.ReactChild;

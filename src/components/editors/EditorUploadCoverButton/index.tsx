@@ -1,17 +1,12 @@
-import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
-import { IFileWithUUID } from '~/redux/types';
-import uuid from 'uuid4';
+import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 import styles from './styles.module.scss';
 import { UPLOAD_SUBJECTS, UPLOAD_TARGETS, UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { path } from 'ramda';
-import { connect } from 'react-redux';
-import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
-import { selectUploads } from '~/redux/uploads/selectors';
 import { getURL } from '~/utils/dom';
 import { Icon } from '~/components/input/Icon';
 import { PRESETS } from '~/constants/urls';
 import { IEditorComponentProps } from '~/redux/node/types';
-import { useFileUploader, useFileUploaderContext } from '~/hooks/data/useFileUploader';
+import { useFileUploader } from '~/hooks/data/useFileUploader';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { getFileType } from '~/utils/uploader';
 

@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, useEffect, useRef } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { IUser } from '~/redux/auth/types';
 import styles from './styles.module.scss';
 import { getURL } from '~/utils/dom';

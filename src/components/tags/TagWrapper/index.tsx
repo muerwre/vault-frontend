@@ -1,7 +1,6 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback } from 'react';
 import classNames from 'classnames';
 import styles from './styles.module.scss';
-import { Manager, Popper, Reference } from 'react-popper';
 import { Icon } from '~/components/input/Icon';
 
 interface IProps {

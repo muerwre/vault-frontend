@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
-import { describeArc } from '~/utils/dom';
 import classNames from 'classnames';
 import { LoaderCircleInner } from '~/components/input/LoaderCircleInner';
 import { SVGProps } from '~/utils/types';

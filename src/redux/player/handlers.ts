@@ -1,6 +1,6 @@
 import { PLAYER_ACTIONS } from './constants';
 import { assocPath } from 'ramda';
-import { playerSetFile, playerSetStatus, playerSet } from './actions';
+import { playerSet, playerSetFile, playerSetStatus } from './actions';
 
 const setFile = (state, { file }: ReturnType<typeof playerSetFile>) =>
   assocPath(['file'], file, state);

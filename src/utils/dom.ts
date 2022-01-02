@@ -10,11 +10,11 @@ import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/c
 import format from 'date-fns/format';
 import { pipe } from 'ramda';
 import {
-  formatTextDash,
   formatExclamations,
-  formatTextMarkdown,
   formatTextClickableUsernames,
   formatTextComments,
+  formatTextDash,
+  formatTextMarkdown,
   formatTextSanitizeTags,
   formatTextSanitizeYoutube,
   formatTextTodos,

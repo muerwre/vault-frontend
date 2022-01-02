@@ -1,7 +1,7 @@
 import { MODAL_HANDLERS } from '~/redux/modal/handlers';
 import { createReducer } from '~/utils/reducer';
 import { DIALOGS } from '~/redux/modal/constants';
-import { ValueOf, IFile } from '~/redux/types';
+import { IFile, ValueOf } from '~/redux/types';
 
 export interface IModalState {
   is_shown: boolean;

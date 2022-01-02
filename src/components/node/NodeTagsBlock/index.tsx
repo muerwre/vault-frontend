@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import { NodeTags } from '~/components/node/NodeTags';
 import { useTagContext } from '~/utils/context/TagsContextProvider';
-import { Group } from '~/components/containers/Group';
-import { Button } from '~/components/input/Button';
 
 interface IProps {}
 

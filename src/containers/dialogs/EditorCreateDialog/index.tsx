@@ -4,8 +4,6 @@ import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { useHistory, useRouteMatch } from 'react-router';
 import { values } from 'ramda';
 import { INode } from '~/redux/types';
-import { apiPostNode } from '~/redux/node/api';
-import { useUpdateNode } from '~/hooks/node/useUpdateNode';
 import { useCreateNode } from '~/hooks/node/useCreateNode';
 
 const EditorCreateDialog: FC = () => {

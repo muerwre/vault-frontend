@@ -1,4 +1,4 @@
-import React, { createContext, FC, VFC, useContext, useState, useMemo } from 'react';
+import React, { createContext, FC, useContext, useMemo, useState, VFC } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 

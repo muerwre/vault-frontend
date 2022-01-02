@@ -7,7 +7,7 @@ import {
   tagSetNodes,
 } from '~/redux/tag/actions';
 import { selectTagNodes } from '~/redux/tag/selectors';
-import { apiGetTagSuggestions, apiGetNodesOfTag } from '~/redux/tag/api';
+import { apiGetNodesOfTag, apiGetTagSuggestions } from '~/redux/tag/api';
 import { Unwrap } from '~/redux/types';
 
 function* loadTagNodes({ tag }: ReturnType<typeof tagLoadNodes>) {

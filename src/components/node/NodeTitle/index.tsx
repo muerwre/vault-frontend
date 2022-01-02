@@ -1,4 +1,4 @@
-import React, { VFC, memo } from 'react';
+import React, { memo, VFC } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
 import classNames from 'classnames';

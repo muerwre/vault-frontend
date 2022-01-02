@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, DetailedHTMLProps, FC, HTMLAttributes } from 'react';
+import React, { DetailedHTMLProps, FC, HTMLAttributes } from 'react';
 import styles from '~/styles/common/markdown.module.scss';
 import classNames from 'classnames';
 

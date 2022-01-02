@@ -1,7 +1,5 @@
-import React, { FC, HTMLAttributes, SVGAttributes } from 'react';
-import { describeArc } from '~/utils/dom';
+import React, { FC, SVGAttributes } from 'react';
 import styles from './styles.module.scss';
-import classNames from 'classnames';
 
 interface IProps extends SVGAttributes<SVGElement> {
   size: number;

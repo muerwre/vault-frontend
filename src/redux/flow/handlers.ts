@@ -1,12 +1,12 @@
 import { assocPath } from 'ramda';
 import { FLOW_ACTIONS } from './constants';
 import {
-  flowSetNodes,
-  flowSetHeroes,
-  flowSetRecent,
-  flowSetUpdated,
   flowSetFlow,
+  flowSetHeroes,
+  flowSetNodes,
+  flowSetRecent,
   flowSetSearch,
+  flowSetUpdated,
 } from './actions';
 import { IFlowState } from './reducer';
 

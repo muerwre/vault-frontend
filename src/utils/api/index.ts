@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { push } from 'connected-react-router';
 import { API } from '~/constants/api';
 import { store } from '~/redux/store';

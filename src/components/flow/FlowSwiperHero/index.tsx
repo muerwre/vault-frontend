@@ -1,11 +1,11 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
 import 'swiper/components/effect-fade/effect-fade.scss';
 import 'swiper/components/lazy/lazy.scss';
 import styles from './styles.module.scss';
 
-import SwiperCore, { EffectFade, Navigation, Lazy, Autoplay } from 'swiper';
+import SwiperCore, { Autoplay, EffectFade, Lazy, Navigation } from 'swiper';
 import { Icon } from '~/components/input/Icon';
 import { IFlowState } from '~/redux/flow/reducer';
 import { getURLFromString } from '~/utils/dom';

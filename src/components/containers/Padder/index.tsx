@@ -7,7 +7,7 @@ type IProps = React.HTMLAttributes<HTMLDivElement> & {
   padding?: number;
   vertical?: boolean;
   horizontal?: boolean;
-}
+};
 
 const Padder: FC<IProps> = ({
   padding,

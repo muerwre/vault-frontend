@@ -1,11 +1,7 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { connect } from 'react-redux';
 import { UPLOAD_TYPES } from '~/redux/uploads/constants';
 import { ImageGrid } from '../ImageGrid';
 import { AudioGrid } from '../AudioGrid';
-import { selectUploads } from '~/redux/uploads/selectors';
-
-import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
 import styles from './styles.module.scss';
 import { NodeEditorProps } from '~/redux/node/types';
 import { useNodeImages } from '~/hooks/node/useNodeImages';

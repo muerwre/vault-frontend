@@ -3,7 +3,6 @@ import styles from './/styles.module.scss';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { ITag } from '~/redux/types';
 import { Tag } from '~/components/tags/Tag';
-import { Group } from '~/components/containers/Group';
 
 interface IProps {
   tags: ITag[];

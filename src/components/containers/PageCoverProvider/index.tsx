@@ -1,4 +1,4 @@
-import React, { createContext, FC, memo, useContext, useState } from 'react';
+import React, { createContext, FC, useContext, useState } from 'react';
 import styles from './styles.module.scss';
 import { createPortal } from 'react-dom';
 import { getURL } from '~/utils/dom';

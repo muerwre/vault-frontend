@@ -1,4 +1,4 @@
-import React, { FC, createElement } from 'react';
+import React, { createElement, FC } from 'react';
 import { INotification, NOTIFICATION_TYPES } from '~/redux/types';
 import styles from './styles.module.scss';
 import { NotificationMessage } from '../NotificationMessage';

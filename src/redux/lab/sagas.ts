@@ -1,10 +1,10 @@
-import { takeLeading, call, put, select } from 'redux-saga/effects';
+import { call, put, select, takeLeading } from 'redux-saga/effects';
 import {
   labGetList,
+  labSeenNode,
   labSetList,
   labSetStats,
   labSetUpdates,
-  labSeenNode,
 } from '~/redux/lab/actions';
 import { LAB_ACTIONS } from '~/redux/lab/constants';
 import { Unwrap } from '~/redux/types';

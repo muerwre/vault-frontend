@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { INode } from '~/redux/types';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';

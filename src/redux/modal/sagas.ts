@@ -1,8 +1,8 @@
-import { takeEvery, put } from 'redux-saga/effects';
-import { LocationChangeAction, LOCATION_CHANGE } from 'connected-react-router';
+import { put, takeEvery } from 'redux-saga/effects';
+import { LOCATION_CHANGE, LocationChangeAction } from 'connected-react-router';
 import { authOpenProfile, authShowRestoreModal } from '../auth/actions';
-import { MODAL_ACTIONS, DIALOGS } from './constants';
-import { modalShowPhotoswipe, modalSet } from './actions';
+import { DIALOGS, MODAL_ACTIONS } from './constants';
+import { modalSet, modalShowPhotoswipe } from './actions';
 
 function* onPathChange({
   payload: {
