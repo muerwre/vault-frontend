@@ -29,6 +29,8 @@
 
 .button_column {
   padding: $gap / 4;
+  display: flex;
+  flex-direction: row;
 }
 
 .uploads {

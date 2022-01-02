@@ -79,8 +79,6 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, saveComment, onCancelEdit })
                 <CommentFormAttachButtons onUpload={uploader.uploadFiles} />
               </div>
 
-              <Filler />
-
               <div className={styles.button_column}>
                 {!!textarea && (
                   <CommentFormFormatButtons
@@ -89,6 +87,8 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, saveComment, onCancelEdit })
                   />
                 )}
               </div>
+
+              <Filler />
 
               <div className={styles.button_column}>
                 {isLoading && <LoaderCircle size={20} />}
