@@ -30,7 +30,7 @@ interface IProps {
   onLock: () => void;
 }
 
-const NodePanelInner: VFC<IProps> = memo(
+const NodeTitle: VFC<IProps> = memo(
   ({
     id,
     title,
@@ -123,4 +123,4 @@ const NodePanelInner: VFC<IProps> = memo(
   }
 );
 
-export { NodePanelInner };
+export { NodeTitle };

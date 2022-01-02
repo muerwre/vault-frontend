@@ -16,7 +16,7 @@ import styles from './styles.module.scss';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
 import { useNodePermissions } from '~/utils/hooks/node/useNodePermissions';
 import { useNodeActions } from '~/utils/hooks/node/useNodeActions';
-import { NodePanelInner } from '~/components/node/NodePanelInner';
+import { NodeTitle } from '~/components/node/NodeTitle';
 
 type IProps = {};
 
@@ -37,7 +37,7 @@ const NodeLayout: FC<IProps> = () => {
           {block}
 
           <div className={styles.panel}>
-            <NodePanelInner
+            <NodeTitle
               id={node.id}
               title={node.title}
               username={node.user?.username}
