@@ -5,7 +5,7 @@ import {
   ApiGetNodesOfTagResult,
   ApiGetTagSuggestionsRequest,
   ApiGetTagSuggestionsResult,
-} from '~/redux/tag/types';
+} from '~/types/tags';
 
 export const apiGetNodesOfTag = ({ tag, offset, limit }: ApiGetNodesOfTagRequest) =>
   api

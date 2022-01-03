@@ -32,8 +32,6 @@ import { authLogout, authOpenProfile, gotAuthPostMessage } from './auth/actions'
 import messages, { IMessagesState } from './messages';
 import messagesSaga from './messages/sagas';
 
-import tag, { ITagState } from './tag';
-import tagSaga from './tag/sagas';
 import { AxiosError } from 'axios';
 import { api } from '~/utils/api';
 import { assocPath } from 'ramda';
@@ -64,7 +62,6 @@ export interface IState {
   flow: IFlowState;
   player: IPlayerState;
   messages: IMessagesState;
-  tag: ITagState;
   lab: ILabState;
 }
 
@@ -87,7 +84,6 @@ export const store = createStore(
     flow: persistReducer(flowPersistConfig, flow),
     player: persistReducer(playerPersistConfig, player),
     messages,
-    tag: tag,
     lab: lab,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
@@ -103,7 +99,6 @@ export function configureStore(): {
   sagaMiddleware.run(playerSaga);
   sagaMiddleware.run(modalSaga);
   sagaMiddleware.run(messagesSaga);
-  sagaMiddleware.run(tagSaga);
   sagaMiddleware.run(labSaga);
 
   window.addEventListener('message', message => {

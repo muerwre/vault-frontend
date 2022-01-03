@@ -1,34 +1,23 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState, VFC } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import * as TAG_ACTIONS from '~/redux/tag/actions';
-import { selectTagAutocomplete } from '~/redux/tag/selectors';
 import { separateTagOptions } from '~/utils/tag';
 import { TagAutocompleteRow } from '~/components/tags/TagAutocompleteRow';
 import { usePopper } from 'react-popper';
 
-const mapStateToProps = selectTagAutocomplete;
-const mapDispatchToProps = {
-  tagSetAutocomplete: TAG_ACTIONS.tagSetAutocomplete,
-  tagLoadAutocomplete: TAG_ACTIONS.tagLoadAutocomplete,
-};
+interface TagAutocompleteProps {
+  exclude: string[];
+  input: HTMLInputElement;
+  onSelect: (val: string) => void;
+  search: string;
+  options: string[];
+}
 
-type Props = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps & {
-    exclude: string[];
-    input: HTMLInputElement;
-    onSelect: (val: string) => void;
-    search: string;
-  };
-
-const TagAutocompleteUnconnected: FC<Props> = ({
+const TagAutocomplete: VFC<TagAutocompleteProps> = ({
   exclude,
   input,
   onSelect,
   search,
-  tagSetAutocomplete,
-  tagLoadAutocomplete,
   options,
 }) => {
   const [selected, setSelected] = useState(-1);
@@ -81,19 +70,6 @@ const TagAutocompleteUnconnected: FC<Props> = ({
   }, [input, onKeyDown]);
 
   useEffect(() => {
-    setSelected(-1);
-    tagLoadAutocomplete(search, exclude);
-  }, [exclude, search, tagLoadAutocomplete]);
-
-  useEffect(() => {
-    tagSetAutocomplete({ options: [] });
-
-    return () => {
-      tagSetAutocomplete({ options: [] });
-    };
-  }, [tagSetAutocomplete]);
-
-  useEffect(() => {
     if (!scroll.current || !scroll.current?.children[selected + 1]) return;
     const el = scroll.current?.children[selected + 1] as HTMLDivElement;
     const { scrollTop, clientHeight } = scroll.current;
@@ -142,7 +118,5 @@ const TagAutocompleteUnconnected: FC<Props> = ({
     </div>
   );
 };
-
-const TagAutocomplete = connect(mapStateToProps, mapDispatchToProps)(TagAutocompleteUnconnected);
 
 export { TagAutocomplete };

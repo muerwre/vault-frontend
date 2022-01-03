@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TagAutocomplete } from '~/components/tags/TagAutocomplete';
 import { TagWrapper } from '~/components/tags/TagWrapper';
+import { useTagAutocomplete } from '~/hooks/tag/useTagAutocomplete';
 import styles from './styles.module.scss';
 
 const placeholder = 'Добавить';
@@ -29,6 +30,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
   const [input, setInput] = useState('');
   const ref = useRef<HTMLInputElement>(null);
   const wrapper = useRef<HTMLDivElement>(null);
+  const options = useTagAutocomplete(input, exclude);
 
   const onInput = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
@@ -136,6 +138,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
           input={ref.current}
           onSelect={onAutocompleteSelect}
           search={input}
+          options={options}
         />
       )}
     </div>

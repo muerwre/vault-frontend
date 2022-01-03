@@ -3,7 +3,7 @@ import { TagField } from '~/components/containers/TagField';
 import { ITag } from '~/redux/types';
 import { uniq } from 'ramda';
 import { Tag } from '~/components/tags/Tag';
-import { TagInput } from '~/components/tags/TagInput';
+import { TagInput } from '~/containers/tags/TagInput';
 import { separateTags } from '~/utils/tag';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {

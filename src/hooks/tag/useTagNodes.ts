@@ -4,8 +4,7 @@ import { API } from '~/constants/api';
 import { flatten, isNil } from 'ramda';
 import useSWRInfinite from 'swr/infinite';
 import { useCallback } from 'react';
-import { apiGetNodesOfTag } from '~/redux/tag/api';
-import { COMMENTS_DISPLAY } from '~/constants/node';
+import { apiGetNodesOfTag } from '~/api/tags';
 
 const PAGE_SIZE = 10;
 
