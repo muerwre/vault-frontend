@@ -43,8 +43,7 @@ export const useGetComments = (nodeId: number) => {
   );
 
   const comments = flatten(data || []);
-  const hasMore =
-    !!data?.[data?.length - 1].length && data[data.length - 1].length === COMMENTS_DISPLAY;
+  const hasMore = (data?.[size - 1]?.length || 0) >= COMMENTS_DISPLAY;
 
   const onLoadMoreComments = useCallback(() => setSize(size + 1), [setSize, size]);
 

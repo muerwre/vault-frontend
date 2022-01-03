@@ -9,6 +9,7 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
 
 const InfiniteScroll: FC<IProps> = ({ children, hasMore, scrollReactPx, loadMore, ...props }) => {
   const ref = useRef<HTMLDivElement>(null);
+
   const onScrollEnd = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       if (!hasMore || !entries[0].isIntersecting) return;
