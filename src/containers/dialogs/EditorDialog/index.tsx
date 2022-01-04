@@ -1,5 +1,4 @@
 import React, { createElement, FC, useCallback, useMemo, useState } from 'react';
-import { IDialogProps } from '~/redux/modal/constants';
 import styles from './styles.module.scss';
 import { NODE_EDITORS } from '~/constants/node';
 import { BetterScrollDialog } from '../BetterScrollDialog';
@@ -15,6 +14,7 @@ import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { useTranslatedError } from '~/hooks/data/useTranslatedError';
 import { useCloseOnEscape } from '~/hooks';
 import { EditorConfirmClose } from '~/components/editors/EditorConfirmClose';
+import { IDialogProps } from '~/types/modal';
 
 interface Props extends IDialogProps {
   node: INode;

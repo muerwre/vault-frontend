@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { IDialogProps } from '~/redux/types';
 import { connect } from 'react-redux';
 import { BetterScrollDialog } from '../BetterScrollDialog';
 import { Group } from '~/components/containers/Group';
@@ -13,6 +12,7 @@ import { selectAuthRestore } from '~/redux/auth/selectors';
 import { ERROR_LITERAL, ERRORS } from '~/constants/errors';
 import { Icon } from '~/components/input/Icon';
 import { useCloseOnEscape } from '~/hooks';
+import { IDialogProps } from '~/types/modal';
 
 const mapStateToProps = state => ({
   restore: selectAuthRestore(state),

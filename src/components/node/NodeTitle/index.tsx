@@ -24,7 +24,6 @@ interface IProps {
 
   isLoading: boolean;
 
-  onEdit: () => void;
   onLike: () => void;
   onStar: () => void;
   onLock: () => void;
@@ -49,7 +48,6 @@ const NodeTitle: VFC<IProps> = memo(
     isLoading,
 
     onStar,
-    onEdit,
     onLike,
     onLock,
   }) => {
@@ -95,7 +93,7 @@ const NodeTitle: VFC<IProps> = memo(
 
                 {!!id && (
                   <Link to={URLS.NODE_EDIT_URL(id)}>
-                    <Icon icon="edit" size={24} onClick={onEdit} />
+                    <Icon icon="edit" size={24} />
                   </Link>
                 )}
               </div>

@@ -1,33 +1,22 @@
-import React, { FC, useCallback, useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useRef, VFC } from 'react';
 
 import PhotoSwipeJs from 'photoswipe/dist/photoswipe.js';
 import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js';
 import 'photoswipe/dist/photoswipe.css';
 import 'photoswipe/dist/default-skin/default-skin.css';
-import { IState } from '~/redux/store';
-import { selectModal } from '~/redux/modal/selectors';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
-import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { useBlockBackButton } from '~/hooks/navigation/useBlockBackButton';
+import { useModal } from '~/hooks/modal/useModal';
+import { usePhotoSwipeStore } from '~/store/photoSwipe/usePhotoSwipeStore';
+import { observer } from 'mobx-react';
 
-const mapStateToProps = (state: IState) => ({
-  photoswipe: selectModal(state).photoswipe,
-});
-
-const mapDispatchToProps = {
-  modalSetShown: MODAL_ACTIONS.modalSetShown,
-};
-
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
-
-const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
+const PhotoSwipe: VFC = observer(() => {
   let ref = useRef<HTMLDivElement>(null);
-
-  const closeModal = useCallback(() => modalSetShown(false), [modalSetShown]);
+  const { hideModal } = useModal();
+  const photoswipe = usePhotoSwipeStore();
 
   useEffect(() => {
     new Promise(async resolve => {
@@ -63,12 +52,12 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
       });
 
       ps.init();
-      ps.listen('destroy', closeModal);
-      ps.listen('close', closeModal);
+      ps.listen('destroy', hideModal);
+      ps.listen('close', hideModal);
     });
-  }, [closeModal, photoswipe.images, photoswipe.index]);
+  }, [hideModal, photoswipe.images, photoswipe.index]);
 
-  useBlockBackButton(closeModal);
+  useBlockBackButton(hideModal);
 
   return (
     <div className="pswp" tabIndex={-1} role="dialog" aria-hidden="true" ref={ref}>
@@ -112,8 +101,6 @@ const PhotoSwipeUnconnected: FC<Props> = ({ photoswipe, modalSetShown }) => {
       </div>
     </div>
   );
-};
-
-const PhotoSwipe = connect(mapStateToProps, mapDispatchToProps)(PhotoSwipeUnconnected);
+});
 
 export { PhotoSwipe };

@@ -1,13 +1,18 @@
 import { useCallback } from 'react';
 import { IFile } from '~/redux/types';
-import { modalShowPhotoswipe } from '~/redux/modal/actions';
-import { useDispatch } from 'react-redux';
+import { usePhotoSwipeStore } from '~/store/photoSwipe/usePhotoSwipeStore';
+import { useShowModal } from '~/hooks/modal/useShowModal';
+import { Dialog } from '~/constants/modal';
 
 export const useImageModal = () => {
-  const dispatch = useDispatch();
+  const { setData } = usePhotoSwipeStore();
+  const showModal = useShowModal(Dialog.Photoswipe);
 
   return useCallback(
-    (images: IFile[], index: number) => dispatch(modalShowPhotoswipe(images, index)),
-    [dispatch]
+    (images: IFile[], index: number) => {
+      setData(images, index);
+      showModal();
+    },
+    [setData, showModal]
   );
 };

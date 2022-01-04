@@ -1,34 +1,26 @@
-import React, { FC, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { DIALOG_CONTENT } from '~/constants/dialogs';
-import { useShallowSelect } from '~/hooks/data/useShallowSelect';
-import { selectModal } from '~/redux/modal/selectors';
-import { modalSetDialog, modalSetShown, modalShowDialog } from '~/redux/modal/actions';
+import React, { FC } from 'react';
 import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
+import { DIALOG_CONTENT } from '~/constants/modal';
+import { useModalStore } from '~/store/modal/useModalStore';
+import { has } from 'ramda';
+import { observer } from 'mobx-react';
 
 type IProps = {};
 
-const Modal: FC<IProps> = ({}) => {
-  const { is_shown, dialog } = useShallowSelect(selectModal);
-  const dispatch = useDispatch();
+const Modal: FC<IProps> = observer(() => {
+  const { current, hide } = useModalStore();
 
-  const onRequestClose = useCallback(() => {
-    dispatch(modalSetShown(false));
-    dispatch(modalSetDialog(''));
-  }, [dispatch]);
-
-  const onDialogChange = useCallback((val: string) => dispatch(modalShowDialog(val)), [dispatch]);
-
-  if (!dialog || !DIALOG_CONTENT[dialog] || !is_shown) return null;
+  if (!current || !has(current, DIALOG_CONTENT)) {
+    return null;
+  }
 
   return (
-    <ModalWrapper onOverlayClick={onRequestClose}>
-      {React.createElement(DIALOG_CONTENT[dialog], {
-        onRequestClose,
-        onDialogChange,
+    <ModalWrapper onOverlayClick={hide}>
+      {React.createElement(DIALOG_CONTENT[current!]!, {
+        onRequestClose: hide,
       })}
     </ModalWrapper>
   );
-};
+});
 
 export { Modal };

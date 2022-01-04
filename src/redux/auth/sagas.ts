@@ -40,7 +40,6 @@ import {
   apiUpdateUser,
   apiUserLogin,
 } from '~/redux/auth/api';
-import { modalSetShown, modalShowDialog } from '~/redux/modal/actions';
 import {
   selectAuth,
   selectAuthProfile,
@@ -51,14 +50,16 @@ import {
 } from './selectors';
 import { OAUTH_EVENT_TYPES, Unwrap } from '../types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
-import { selectModal } from '~/redux/modal/selectors';
-import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 import { messagesSet } from '~/redux/messages/actions';
 import { SagaIterator } from 'redux-saga';
 import { isEmpty } from 'ramda';
 import { AxiosError } from 'axios';
 import { labGetUpdates } from '~/redux/lab/actions';
+import { getMOBXStore } from '~/store';
+import { Dialog } from '~/constants/modal';
+
+const modalStore = getMOBXStore().modal;
 
 function* setTokenSaga({ token }: ReturnType<typeof authSetToken>) {
   localStorage.setItem('token', token);
@@ -76,7 +77,8 @@ function* sendLoginRequestSaga({ username, password }: ReturnType<typeof userSen
     yield put(authSetToken(token));
     yield put(authSetUser({ ...user, is_user: true }));
     yield put(authLoggedIn());
-    yield put(modalSetShown(false));
+
+    modalStore.hide();
   } catch (error) {
     yield put(userSetLoginError(error.message));
   }
@@ -110,9 +112,11 @@ function* gotPostMessageSaga({ token }: ReturnType<typeof gotAuthPostMessage>) {
   yield put(authSetToken(token));
   yield call(refreshUser);
 
-  const { is_shown, dialog }: ReturnType<typeof selectModal> = yield select(selectModal);
+  const { current } = modalStore;
 
-  if (is_shown && dialog === DIALOGS.LOGIN) yield put(modalSetShown(false));
+  if (current === Dialog.Login) {
+    modalStore.hide();
+  }
 }
 
 function* logoutSaga() {
@@ -143,13 +147,13 @@ function* loadProfile({ username }: ReturnType<typeof authLoadProfile>): SagaIte
 }
 
 function* openProfile({ username, tab = 'profile' }: ReturnType<typeof authOpenProfile>) {
-  yield put(modalShowDialog(DIALOGS.PROFILE));
+  modalStore.setCurrent(Dialog.Profile);
   yield put(authSetProfile({ tab }));
 
   const success: Unwrap<typeof loadProfile> = yield call(loadProfile, authLoadProfile(username));
 
   if (!success) {
-    return yield put(modalSetShown(false));
+    modalStore.hide();
   }
 }
 
@@ -159,13 +163,13 @@ function* getUpdates() {
 
     if (!user || !user.is_user || user.role === USER_ROLES.GUEST || !user.id) return;
 
-    const modal: ReturnType<typeof selectModal> = yield select(selectModal);
+    const { current } = modalStore;
+
     const profile: ReturnType<typeof selectAuthProfile> = yield select(selectAuthProfile);
     const { last, boris_commented_at }: ReturnType<typeof selectAuthUpdates> = yield select(
       selectAuthUpdates
     );
-    const exclude_dialogs =
-      modal.is_shown && modal.dialog === DIALOGS.PROFILE && profile.user?.id ? profile.user.id : 0;
+    const exclude_dialogs = current === Dialog.Profile && profile.user?.id ? profile.user.id : 0;
 
     const data: Unwrap<typeof apiAuthGetUpdates> = yield call(apiAuthGetUpdates, {
       exclude_dialogs,
@@ -248,12 +252,14 @@ function* showRestoreModal({ code }: ReturnType<typeof authShowRestoreModal>) {
     const data: Unwrap<typeof apiCheckRestoreCode> = yield call(apiCheckRestoreCode, { code });
 
     yield put(authSetRestore({ user: data.user, code, is_loading: false }));
-    yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
+
+    modalStore.setCurrent(Dialog.RestoreRequest);
   } catch (error) {
     yield put(
       authSetRestore({ is_loading: false, error: error.message || ERRORS.CODE_IS_INVALID })
     );
-    yield put(modalShowDialog(DIALOGS.RESTORE_PASSWORD));
+
+    modalStore.setCurrent(Dialog.RestoreRequest);
   }
 }
 
@@ -347,20 +353,20 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
     if (data.token) {
       yield put(authSetToken(data.token));
       yield call(refreshUser);
-      yield put(modalSetShown(false));
+      modalStore.hide();
       return;
     }
   } catch (error) {
-    const { dialog }: ReturnType<typeof selectModal> = yield select(selectModal);
+    const { current } = modalStore;
     const data = (error as AxiosError<{
       needs_register: boolean;
       errors: Record<'username' | 'password', string>;
     }>).response?.data;
 
     // Backend asks us for account registration
-    if (dialog !== DIALOGS.LOGIN_SOCIAL_REGISTER && data?.needs_register) {
+    if (current !== Dialog.LoginSocialRegister && data?.needs_register) {
       yield put(authSetRegisterSocial({ token }));
-      yield put(modalShowDialog(DIALOGS.LOGIN_SOCIAL_REGISTER));
+      modalStore.setCurrent(Dialog.LoginSocialRegister);
       return;
     }
 
@@ -400,7 +406,9 @@ function* authRegisterSocial({ username, password }: ReturnType<typeof authSendR
     if (data.token) {
       yield put(authSetToken(data.token));
       yield call(refreshUser);
-      yield put(modalSetShown(false));
+
+      modalStore.hide();
+
       return;
     }
   } catch (error) {

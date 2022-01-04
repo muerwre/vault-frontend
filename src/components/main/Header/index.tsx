@@ -6,7 +6,6 @@ import { Logo } from '~/components/main/Logo';
 
 import { Filler } from '~/components/containers/Filler';
 import { selectAuthUpdates, selectUser } from '~/redux/auth/selectors';
-import { DIALOGS } from '~/redux/modal/constants';
 import { path, pick } from 'ramda';
 import { UserButton } from '../UserButton';
 import { Notifications } from '../Notifications';
@@ -14,7 +13,6 @@ import { URLS } from '~/constants/urls';
 import classNames from 'classnames';
 
 import styles from './styles.module.scss';
-import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IState } from '~/redux/store';
 import isBefore from 'date-fns/isBefore';
@@ -24,6 +22,8 @@ import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
 import { Button } from '~/components/input/Button';
 import { useFlowStore } from '~/store/flow/useFlowStore';
 import { observer } from 'mobx-react';
+import { useShowModal } from '~/hooks/modal/useShowModal';
+import { Dialog } from '~/constants/modal';
 
 const mapStateToProps = (state: IState) => ({
   user: pick(['username', 'is_user', 'photo', 'last_seen_boris'])(selectUser(state)),
@@ -33,7 +33,6 @@ const mapStateToProps = (state: IState) => ({
 
 const mapDispatchToProps = {
   push: historyPush,
-  showDialog: MODAL_ACTIONS.modalShowDialog,
   authLogout: AUTH_ACTIONS.authLogout,
   authOpenProfile: AUTH_ACTIONS.authOpenProfile,
 };
@@ -44,7 +43,6 @@ const HeaderUnconnected: FC<IProps> = observer(
   ({
     user,
     user: { is_user, last_seen_boris },
-    showDialog,
     pathname,
     updates: { boris_commented_at },
     authLogout,
@@ -53,7 +51,7 @@ const HeaderUnconnected: FC<IProps> = observer(
     const [is_scrolled, setIsScrolled] = useState(false);
     const labUpdates = useShallowSelect(selectLabUpdatesNodes);
     const { updated: flowUpdates } = useFlowStore();
-    const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
+    const onLogin = useShowModal(Dialog.Login);
 
     const onScroll = useCallback(() => {
       const active = window.scrollY > 32;

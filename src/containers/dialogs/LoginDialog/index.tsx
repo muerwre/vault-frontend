@@ -1,6 +1,5 @@
 import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { DIALOGS, IDialogProps } from '~/redux/modal/constants';
 import { useCloseOnEscape } from '~/hooks';
 import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
@@ -12,13 +11,15 @@ import { BetterScrollDialog } from '../BetterScrollDialog';
 
 import styles from './styles.module.scss';
 import * as ACTIONS from '~/redux/auth/actions';
-import * as MODAL_ACTIONS from '~/redux/modal/actions';
 import { ISocialProvider } from '~/redux/auth/types';
 import { pick } from 'ramda';
 import { LoginDialogButtons } from '~/containers/dialogs/LoginDialogButtons';
 import { OAUTH_EVENT_TYPES } from '~/redux/types';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
 import { useTranslatedError } from '~/hooks/data/useTranslatedError';
+import { IDialogProps } from '~/types/modal';
+import { useShowModal } from '~/hooks/modal/useShowModal';
+import { Dialog } from '~/constants/modal';
 
 const mapStateToProps = state => ({
   ...pick(['error', 'is_registering'], selectAuthLogin(state)),
@@ -28,7 +29,6 @@ const mapDispatchToProps = {
   userSendLoginRequest: ACTIONS.userSendLoginRequest,
   userSetLoginError: ACTIONS.userSetLoginError,
   authLoginWithSocial: ACTIONS.authLoginWithSocial,
-  modalShowDialog: MODAL_ACTIONS.modalShowDialog,
   authGotOauthLoginEvent: ACTIONS.authGotOauthLoginEvent,
 };
 
@@ -40,11 +40,12 @@ const LoginDialogUnconnected: FC<IProps> = ({
   onRequestClose,
   userSendLoginRequest,
   userSetLoginError,
-  modalShowDialog,
   authGotOauthLoginEvent,
 }) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
+
+  const showRestoreDialog = useShowModal(Dialog.RestoreRequest);
 
   const onSubmit = useCallback(
     (event: FormEvent) => {
@@ -57,9 +58,9 @@ const LoginDialogUnconnected: FC<IProps> = ({
   const onRestoreRequest = useCallback(
     event => {
       event.preventDefault();
-      modalShowDialog(DIALOGS.RESTORE_REQUEST);
+      showRestoreDialog();
     },
-    [modalShowDialog]
+    [showRestoreDialog]
   );
 
   const openOauthWindow = useCallback(

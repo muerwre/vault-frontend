@@ -1,5 +1,4 @@
 import { DetailedHTMLProps, InputHTMLAttributes, ReactElement } from 'react';
-import { DIALOGS } from '~/redux/modal/constants';
 import { ERRORS } from '~/constants/errors';
 import { IUser } from './auth/types';
 import { CallEffect } from 'redux-saga/effects';
@@ -30,11 +29,6 @@ export type IInputTextProps = DetailedHTMLProps<
 export type IIcon = string;
 
 export type ValueOf<T> = T[keyof T];
-
-export interface IDialogProps {
-  onRequestClose: () => void;
-  onDialogChange: (dialog: ValueOf<typeof DIALOGS>) => void;
-}
 
 export interface IApiErrorResult {
   detail?: string;

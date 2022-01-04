@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { getNodeDiff } from '~/api/node';
 import { uniq } from 'ramda';
 import { useFlowStore } from '~/store/flow/useFlowStore';

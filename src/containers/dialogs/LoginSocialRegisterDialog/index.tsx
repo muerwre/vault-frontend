@@ -1,6 +1,5 @@
 import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { IDialogProps } from '~/redux/modal/constants';
 import { BetterScrollDialog } from '~/containers/dialogs/BetterScrollDialog';
 import { Padder } from '~/components/containers/Padder';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
@@ -12,6 +11,7 @@ import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { useCloseOnEscape } from '~/hooks';
 import { LoginSocialRegisterButtons } from '~/containers/dialogs/LoginSocialRegisterButtons';
 import { Toggle } from '~/components/input/Toggle';
+import { IDialogProps } from '~/types/modal';
 
 const mapStateToProps = selectAuthRegisterSocial;
 const mapDispatchToProps = {

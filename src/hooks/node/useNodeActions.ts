@@ -1,22 +1,9 @@
 import { INode } from '~/redux/types';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { modalShowDialog } from '~/redux/modal/actions';
-import { NODE_EDITOR_DIALOGS } from '~/constants/dialogs';
 import { apiLockNode, apiPostNodeHeroic, apiPostNodeLike } from '~/api/node';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Promise<unknown>) => {
-  const dispatch = useDispatch();
-
-  const onEdit = useCallback(() => {
-    if (!node.type) {
-      return;
-    }
-
-    dispatch(modalShowDialog(NODE_EDITOR_DIALOGS[node.type]));
-  }, [dispatch, node]);
-
   const onLike = useCallback(async () => {
     try {
       const result = await apiPostNodeLike({ id: node.id });
@@ -50,5 +37,5 @@ export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Pr
     }
   }, [node.deleted_at, node.id, update]);
 
-  return { onEdit, onLike, onStar, onLock };
+  return { onLike, onStar, onLock };
 };

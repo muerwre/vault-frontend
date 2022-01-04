@@ -5,11 +5,11 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { configureStore } from '~/redux/store';
 import { App } from '~/containers/App';
 import '~/styles/main.scss';
-import { Store } from '~/store';
+import { getMOBXStore } from '~/store';
 import { StoreContextProvider } from '~/utils/context/StoreContextProvider';
 
 const { store, persistor } = configureStore();
-const mobxStore = new Store();
+const mobxStore = getMOBXStore();
 
 render(
   <StoreContextProvider store={mobxStore}>
