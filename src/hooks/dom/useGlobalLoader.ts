@@ -5,15 +5,15 @@ import { useFlowLoader } from '~/hooks/flow/useFlowLoader';
 
 /** simply waits for all data to settle and then show the app */
 export const useGlobalLoader = () => {
-  useFlowLoader();
-
+  const { getInitialNodes } = useFlowLoader();
   const flow = useFlowStore();
 
   useEffect(() => {
     if (!flow.isRefreshed) {
+      void getInitialNodes();
       return;
     }
 
     hideLoader();
-  }, [flow.isRefreshed]);
+  }, [flow.isRefreshed, getInitialNodes]);
 };

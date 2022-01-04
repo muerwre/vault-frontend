@@ -9,6 +9,7 @@
   position: relative;
   color: $input_text_color;
   font: $input_font;
+  min-width: 0;
 
   ::placeholder {
     font: $input_placeholder_font;
@@ -21,6 +22,16 @@
   }
 }
 
+.error, .title {
+  pointer-events: none;
+  touch-action: none;
+  user-select: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: calc(100% - 10px);
+}
+
 .error {
   position: absolute;
   font: $font_12_semibold;
@@ -31,8 +42,6 @@
   bottom: 0;
   right: $gap / 2;
   transform: translate(0, 50%);
-  pointer-events: none;
-  touch-action: none;
 }
 
 .title {
@@ -48,8 +57,6 @@
   background-color: $input_bg_color;
   color: $input_grey_color;
   text-transform: uppercase;
-  pointer-events: none;
-  touch-action: none;
 
   .focused &, .not_empty & {
     transform: translate(0, -100%) scale(0.75);

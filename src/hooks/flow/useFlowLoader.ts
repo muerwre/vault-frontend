@@ -82,13 +82,5 @@ export const useFlowLoader = () => {
     }
   }, [flow]);
 
-  useEffect(() => {
-    if (flow.isRefreshed) {
-      return;
-    }
-
-    void getInitialNodes();
-  }, [flow, getInitialNodes]);
-
   return { getInitialNodes, isSyncing, loadMore };
 };
