@@ -1,8 +1,8 @@
 import { api, cleanResult, configWithToken } from '~/utils/api';
-import { INode, IResultWithStatus } from '../types';
+import { INode, IResultWithStatus } from 'src/redux/types';
 import { API } from '~/constants/api';
 import { PostCellViewRequest, PostCellViewResult } from '~/types/node';
-import { GetSearchResultsRequest, GetSearchResultsResult } from '~/redux/flow/types';
+import { GetSearchResultsRequest, GetSearchResultsResult } from '~/types/flow';
 
 export const postNode = ({
   access,

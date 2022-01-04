@@ -2,7 +2,7 @@ import { useFlowStore } from '~/store/flow/useFlowStore';
 import { useCallback } from 'react';
 import { FlowDisplay } from '~/redux/types';
 import { showErrorToast } from '~/utils/errors/showToast';
-import { postCellView } from '~/redux/flow/api';
+import { postCellView } from '~/api/flow';
 
 export const useFlowSetCellView = () => {
   const { updateNode } = useFlowStore();

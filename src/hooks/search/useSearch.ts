@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import useSWRInfinite from 'swr/infinite';
 import { flatten } from 'ramda';
-import { getSearchResults } from '~/redux/flow/api';
+import { getSearchResults } from '~/api/flow';
 import { KeyLoader } from 'swr';
 import { INode } from '~/redux/types';
-import { GetSearchResultsRequest } from '~/redux/flow/types';
+import { GetSearchResultsRequest } from '~/types/flow';
 
 const RESULTS_COUNT = 20;
 
