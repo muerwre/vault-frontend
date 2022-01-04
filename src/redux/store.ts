@@ -11,9 +11,6 @@ import auth from '~/redux/auth';
 import authSaga from '~/redux/auth/sagas';
 import { IAuthState } from '~/redux/auth/types';
 
-import flow, { IFlowState } from '~/redux/flow/reducer';
-import flowSaga from '~/redux/flow/sagas';
-
 import lab from '~/redux/lab';
 import labSaga from '~/redux/lab/sagas';
 import { ILabState } from '~/redux/lab/types';
@@ -59,7 +56,6 @@ export interface IState {
   modal: IModalState;
   router: RouterState;
   uploads: IUploadState;
-  flow: IFlowState;
   player: IPlayerState;
   messages: IMessagesState;
   lab: ILabState;
@@ -81,7 +77,6 @@ export const store = createStore(
     modal,
     router: connectRouter(history),
     uploads,
-    flow: persistReducer(flowPersistConfig, flow),
     player: persistReducer(playerPersistConfig, player),
     messages,
     lab: lab,
@@ -95,7 +90,6 @@ export function configureStore(): {
 } {
   sagaMiddleware.run(authSaga);
   sagaMiddleware.run(uploadSaga);
-  sagaMiddleware.run(flowSaga);
   sagaMiddleware.run(playerSaga);
   sagaMiddleware.run(modalSaga);
   sagaMiddleware.run(messagesSaga);

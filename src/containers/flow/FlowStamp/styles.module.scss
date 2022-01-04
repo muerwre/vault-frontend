@@ -123,6 +123,8 @@
 }
 
 .search_results {
+  overflow: auto;
+
   @include tablet {
     margin-top: $gap;
   }

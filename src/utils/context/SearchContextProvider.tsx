@@ -4,38 +4,34 @@ import { useSearch } from '~/hooks/search/useSearch';
 
 export interface SearchContextProps {
   searchText: string;
-  searchTotal: number;
+  hasMore: boolean;
   searchIsLoading: boolean;
   searchResults: INode[];
-  onSearchChange: (text: string) => void;
-  onSearchLoadMore: () => void;
+  setSearchText: (text: string) => void;
+  loadMore: () => void;
 }
 
 export const SearchContext = createContext<SearchContextProps>({
   searchText: '',
-  searchTotal: 0,
+  hasMore: false,
   searchIsLoading: false,
   searchResults: [],
-  onSearchChange: () => {},
-  onSearchLoadMore: () => {},
+  setSearchText: () => {},
+  loadMore: () => {},
 });
 
 export const SearchContextProvider: FC = ({ children }) => {
-  const {
-    search: { text, results, is_loading, total },
-    onSearchLoadMore,
-    onSearchChange,
-  } = useSearch();
+  const { results, searchText, isLoading, loadMore, setSearchText, hasMore } = useSearch();
 
   return (
     <SearchContext.Provider
       value={{
-        searchText: text,
+        searchText,
         searchResults: results,
-        searchIsLoading: is_loading,
-        searchTotal: total,
-        onSearchChange,
-        onSearchLoadMore,
+        searchIsLoading: isLoading,
+        hasMore,
+        setSearchText,
+        loadMore,
       }}
     >
       {children}

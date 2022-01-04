@@ -21,11 +21,11 @@ interface IProps {
 const FlowStamp: FC<IProps> = ({ isFluid, onToggleLayout }) => {
   const {
     searchText,
-    searchTotal,
+    hasMore: searchHasMore,
     searchIsLoading,
     searchResults,
-    onSearchChange,
-    onSearchLoadMore,
+    setSearchText,
+    loadMore: onSearchLoadMore,
   } = useSearchContext();
 
   const { recent, updates } = useFlowContext();
@@ -34,7 +34,7 @@ const FlowStamp: FC<IProps> = ({ isFluid, onToggleLayout }) => {
     event.preventDefault();
   }, []);
 
-  const onClearSearch = useCallback(() => onSearchChange(''), [onSearchChange]);
+  const onClearSearch = useCallback(() => setSearchText(''), [setSearchText]);
 
   const onKeyUp = useCallback(
     event => {
@@ -61,7 +61,7 @@ const FlowStamp: FC<IProps> = ({ isFluid, onToggleLayout }) => {
         <InputText
           title="Поиск"
           value={searchText}
-          handler={onSearchChange}
+          handler={setSearchText}
           after={after}
           onKeyUp={onKeyUp}
         />
@@ -73,11 +73,11 @@ const FlowStamp: FC<IProps> = ({ isFluid, onToggleLayout }) => {
             <div className={styles.label}>
               <span className={styles.label_text}>Результаты поиска</span>
               <span className="line" />
-              <span>{!searchIsLoading && searchTotal}</span>
             </div>
 
             <div className={styles.items}>
               <FlowSearchResults
+                hasMore={searchHasMore}
                 isLoading={searchIsLoading}
                 results={searchResults}
                 onLoadMore={onSearchLoadMore}

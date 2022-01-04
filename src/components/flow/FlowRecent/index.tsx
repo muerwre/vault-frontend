@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
-import { IFlowState } from '~/redux/flow/reducer';
 import { FlowRecentItem } from '../FlowRecentItem';
 import styles from './styles.module.scss';
+import { IFlowNode } from '~/redux/types';
 
 interface IProps {
-  recent: IFlowState['recent'];
-  updated: IFlowState['updated'];
+  recent: IFlowNode[];
+  updated: IFlowNode[];
 }
 
 const FlowRecent: FC<IProps> = ({ recent, updated }) => {

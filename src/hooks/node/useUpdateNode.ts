@@ -2,7 +2,6 @@ import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useCallback } from 'react';
 import { INode } from '~/redux/types';
 import { apiPostNode } from '~/api/node';
-import { selectFlowNodes } from '~/redux/flow/selectors';
 import { selectLabListNodes } from '~/redux/lab/selectors';
 import { labSetList } from '~/redux/lab/actions';
 import { useShallowSelect } from '~/hooks/data/useShallowSelect';

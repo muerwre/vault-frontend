@@ -7,18 +7,18 @@ import styles from './styles.module.scss';
 
 import SwiperCore, { Autoplay, EffectFade, Lazy, Navigation } from 'swiper';
 import { Icon } from '~/components/input/Icon';
-import { IFlowState } from '~/redux/flow/reducer';
 import { getURLFromString } from '~/utils/dom';
 import { PRESETS, URLS } from '~/constants/urls';
 import SwiperClass from 'swiper/types/swiper-class';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { useHistory } from 'react-router';
 import classNames from 'classnames';
+import { IFlowNode } from '~/redux/types';
 
 SwiperCore.use([EffectFade, Lazy, Autoplay, Navigation]);
 
 interface Props {
-  heroes: IFlowState['heroes'];
+  heroes: IFlowNode[];
 }
 
 export const FlowSwiperHero: FC<Props> = ({ heroes }) => {

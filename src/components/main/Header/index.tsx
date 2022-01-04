@@ -21,8 +21,9 @@ import isBefore from 'date-fns/isBefore';
 import { Authorized } from '~/components/containers/Authorized';
 import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
-import { selectFlowUpdated } from '~/redux/flow/selectors';
 import { Button } from '~/components/input/Button';
+import { useFlowStore } from '~/store/flow/useFlowStore';
+import { observer } from 'mobx-react';
 
 const mapStateToProps = (state: IState) => ({
   user: pick(['username', 'is_user', 'photo', 'last_seen_boris'])(selectUser(state)),
@@ -39,7 +40,7 @@ const mapDispatchToProps = {
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const HeaderUnconnected: FC<IProps> = memo(
+const HeaderUnconnected: FC<IProps> = observer(
   ({
     user,
     user: { is_user, last_seen_boris },
@@ -51,7 +52,7 @@ const HeaderUnconnected: FC<IProps> = memo(
   }) => {
     const [is_scrolled, setIsScrolled] = useState(false);
     const labUpdates = useShallowSelect(selectLabUpdatesNodes);
-    const flowUpdates = useShallowSelect(selectFlowUpdated);
+    const { updated: flowUpdates } = useFlowStore();
     const onLogin = useCallback(() => showDialog(DIALOGS.LOGIN), [showDialog]);
 
     const onScroll = useCallback(() => {

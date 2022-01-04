@@ -18,7 +18,7 @@ export const postCellView = ({ id, flow }: PostCellViewRequest) =>
     .post<PostCellViewResult>(API.NODE.SET_CELL_VIEW(id), { flow })
     .then(cleanResult);
 
-export const getSearchResults = ({ text, skip = 0 }: GetSearchResultsRequest) =>
+export const getSearchResults = ({ text, skip, take }: GetSearchResultsRequest) =>
   api
-    .get<GetSearchResultsResult>(API.SEARCH.NODES, { params: { text, skip } })
+    .get<GetSearchResultsResult>(API.SEARCH.NODES, { params: { text, skip, take } })
     .then(cleanResult);
