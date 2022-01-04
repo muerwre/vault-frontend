@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { push as historyPush } from 'connected-react-router';
 import { Link } from 'react-router-dom';

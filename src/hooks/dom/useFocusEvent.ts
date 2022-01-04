@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-export const useFocusEvent = (initialState = false) => {
+export const useFocusEvent = (initialState = false, delay = 0) => {
   const [focused, setFocused] = useState(initialState);
 
   const onFocus = useCallback(
@@ -12,7 +12,7 @@ export const useFocusEvent = (initialState = false) => {
     },
     [setFocused]
   );
-  const onBlur = useCallback(() => setTimeout(() => setFocused(false), 300), [setFocused]);
+  const onBlur = useCallback(() => setTimeout(() => setFocused(false), delay), [delay]);
 
   return { focused, onBlur, onFocus };
 };

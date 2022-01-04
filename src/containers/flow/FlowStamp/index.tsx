@@ -62,7 +62,7 @@ const FlowStamp: FC<IProps> = ({ isFluid, onToggleLayout }) => {
           title="Поиск"
           value={searchText}
           handler={setSearchText}
-          after={after}
+          suffix={after}
           onKeyUp={onKeyUp}
         />
       </form>

@@ -1,0 +1,62 @@
+@import '~/styles/variables';
+
+.content {
+  @include inner_shadow;
+
+  background: $input_bg_color;
+  min-height: $input_height;
+  border-radius: $radius;
+  position: relative;
+  color: $input_text_color;
+  font: $input_font;
+
+  ::placeholder {
+    font: $input_placeholder_font;
+    color: $input-grey_color;
+    text-transform: uppercase;
+  }
+
+  &.has_error {
+    box-shadow: inset $red 0 0 0 1px;
+  }
+}
+
+.error {
+  position: absolute;
+  font: $font_12_semibold;
+  padding: 0 $gap / 2;
+  border-radius: 4px;
+  color: white;
+  background-color: $red;
+  bottom: 0;
+  right: $gap / 2;
+  transform: translate(0, 50%);
+  pointer-events: none;
+  touch-action: none;
+}
+
+.title {
+  position: absolute;
+  top: $gap;
+  left: $gap / 2;
+  padding: 0 $gap / 2;
+  transform: translate(0, 0) scale(1);
+  font: $input_font;
+  transition: transform 0.25s;
+  transform-origin: 0 50%;
+  border-radius: 6px;
+  background-color: $input_bg_color;
+  color: $input_grey_color;
+  text-transform: uppercase;
+  pointer-events: none;
+  touch-action: none;
+
+  .focused &, .not_empty & {
+    transform: translate(0, -100%) scale(0.75);
+  }
+
+  .focused.has_error &, .not_empty.has_error & {
+    color: white;
+    background-color: $red;
+  }
+}

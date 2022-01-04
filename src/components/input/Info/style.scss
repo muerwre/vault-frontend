@@ -2,7 +2,7 @@
 
 .container {
   min-height: $info_height;
-  border-radius: $input_radius;
+  border-radius: $radius;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,4 +26,3 @@
     background: transparentize($red, 0.5);
   }
 }
-

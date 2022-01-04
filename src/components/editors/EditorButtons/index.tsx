@@ -5,6 +5,7 @@ import { InputText } from '~/components/input/InputText';
 import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+import { Filler } from '~/components/containers/Filler';
 
 const EditorButtons: FC = () => {
   const { values, handleChange, isSubmitting } = useNodeFormContext();
@@ -14,14 +15,16 @@ const EditorButtons: FC = () => {
       <EditorActionsPanel />
 
       <Group horizontal>
-        <InputText
-          title="Название"
-          value={values.title}
-          handler={handleChange('title')}
-          autoFocus
-          maxLength={256}
-          disabled={isSubmitting}
-        />
+        <Filler>
+          <InputText
+            title="Название"
+            value={values.title}
+            handler={handleChange('title')}
+            autoFocus
+            maxLength={256}
+            disabled={isSubmitting}
+          />
+        </Filler>
 
         <Button
           title="Сохранить"

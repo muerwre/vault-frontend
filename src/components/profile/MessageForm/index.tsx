@@ -70,7 +70,6 @@ const MessageFormUnconnected: FC<IProps> = ({
           handler={setText}
           minRows={1}
           maxRows={isEditing ? 15 : 5}
-          seamless
           onKeyDown={onKeyDown}
           disabled={is_sending_messages}
           autoFocus

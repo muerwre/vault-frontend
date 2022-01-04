@@ -1,0 +1,246 @@
+
+@mixin outer_shadow() {
+  box-shadow:
+          inset transparentize(white, 0.95) 1px 1px,
+          transparentize(black, 0.8) 1px 1px,
+          transparentize(black, 0.6) 0 1px 5px;
+}
+
+// same as outer shadow, but higher
+@mixin dropdown_shadow {
+  box-shadow:
+          inset transparentize(white, 0.95) 1px 1px,
+          transparentize(black, 0.8) 1px 1px,
+          transparentize(black, 0.6) 5px 5px 10px;
+}
+
+@mixin row_shadow() {
+  &:not(:last-child) {
+    box-shadow: transparentize(white, 0.95) 0 1px,
+    inset transparentize(black, 0.8) 0 -1px;
+  }
+
+  &:only-child {
+    box-shadow: none;
+  }
+}
+
+@mixin inner_shadow() {
+  box-shadow:
+          inset transparentize(white, 0.95) -1px -1px,
+          inset transparentize(black, 0.9) 1px 1px,
+          inset transparentize(black, 0.9) 0 0 10px;
+}
+
+@mixin inner_shadow_active() {
+  @include inner_shadow;
+  transition: background-color 250ms;
+
+  &:hover {
+    background: transparentize(white, 0.95);
+  }
+}
+
+@mixin input_shadow() {
+  box-shadow: inset transparentize(white, 0.92) 0 -1px, inset transparentize(black, 0.8) 0 1px;
+}
+
+@mixin modal_mixin() {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin after_shade($color, $position: relative) {
+  position: $position;
+
+  &::after {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 120px;
+    width: 100%;
+    background: linear-gradient(transparentize($color, 1), $color);
+    border-radius: $radius;
+    pointer-events: none;
+    touch-action: none;
+  }
+}
+
+@mixin phone {
+  @media (max-width: 320px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (max-width: $content_width) {
+    @content;
+  }
+}
+
+@mixin vertical_at_tablet {
+  @media (max-width: 599px) {
+    flex-direction: column !important;
+
+    @content;
+
+    & > * {
+      margin: $gap/2 0 !important;
+
+      &:first-child {
+        margin-top: 0 !important;
+      }
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+}
+
+@mixin can_backdrop {
+  @supports ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+    @content;
+  }
+}
+
+@mixin blur($color: $content_bg, $radius: 15px, $opacity: 0.5) {
+  background: transparentize($color, $opacity / 2);
+
+  @include can_backdrop {
+    backdrop-filter: blur($radius);
+    -webkit-backdrop-filter: blur($radius);
+    background: transparentize($color, $opacity);
+  }
+}
+
+@mixin title_with_line {
+  font: $font_14_semibold;
+  text-transform: uppercase;
+  color: transparentize(white, 0.3);
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+
+  & > * {
+    padding-right: $gap;
+  }
+
+  & > :global(.line) {
+    flex: 1;
+    height: 2px;
+    background: transparentize(white, 0.95);
+  }
+}
+
+@mixin clamp($lines, $line: 1em) {
+  display: -webkit-box;
+  line-clamp: $lines;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@mixin sidebar {
+  @include blur();
+}
+
+@mixin sidebar_content(
+  $width: 400px,
+) {
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 $width;
+  max-width: 100vw;
+  position: relative;
+  background: transparentize($content_bg, 0.4);
+  box-shadow: transparentize(white, 0.95) -1px 0;
+}
+
+@mixin editor_round_button {
+  width: $upload_button_height;
+  height: $upload_button_height;
+  border-radius: ($upload_button_height / 2) !important;
+  flex: 0 0 $upload_button_height;
+  position: relative;
+  border-radius: $radius;
+  cursor: pointer;
+}
+
+@mixin lab_gradient {
+  background: linear-gradient(darken($dark_blue, 0%), darken($blue, 30%));
+}
+
+@mixin hero_gradient {
+  $color: mix($wisegreen, $content_bg, 30%);
+  background: linear-gradient(170deg, lighten($color, 10%), $color);
+}
+
+@mixin flow_grid {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax($cell - 5, 1fr));
+  grid-auto-rows: $cell;
+
+  grid-auto-flow: row dense;
+  grid-column-gap: $gap;
+  grid-row-gap: $gap;
+
+  @media (max-width: ($cell + 10) * 3) {
+    grid-template-columns: repeat(auto-fill, minmax($fluid_cell - 20, 1fr));
+    grid-auto-rows: $fluid_cell;
+    grid-template-rows: calc(50vw - 10px) $fluid_cell;
+  }
+
+  @media (max-width: $cell_tablet) {
+    grid-template-rows: calc(66vw - 10px) auto $fluid_cell;
+  }
+
+  @media (max-width: $cell_mobile) {
+    // rework stamp, so it will be shown as smaller one on mobiles
+    grid-template-columns: repeat(auto-fill, minmax(calc(50vw - 20px), 1fr));
+    grid-template-rows: calc(80vw - 10px) auto 50vw;
+    grid-auto-rows: 50vw;
+  }
+
+  @media (max-width: ($fluid_cell + 5) * 1.5 + 20) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(50vw - 20px), 1fr));
+    grid-template-rows: calc(80vw - 10px) auto 50vw;
+    grid-auto-rows: 50vw;
+  }
+}
+
+@mixin appear {
+  @keyframes __appear {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  animation: __appear 0.25s forwards;
+}
+
+@mixin container {
+  max-width: $content_width + $gap * 8;
+  width: 100%;
+
+  padding-left: $gap * 4;
+  padding-right: $gap * 4;
+
+  @include tablet {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

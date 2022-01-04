@@ -5,7 +5,6 @@ import { getSearchResults } from '~/redux/flow/api';
 import { KeyLoader } from 'swr';
 import { INode } from '~/redux/types';
 import { GetSearchResultsRequest } from '~/redux/flow/types';
-import { COMMENTS_DISPLAY } from '~/constants/node';
 
 const RESULTS_COUNT = 20;
 

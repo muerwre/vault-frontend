@@ -10,44 +10,35 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import autosize from 'autosize';
+import styles from './styles.module.scss';
 
-import styles from '~/styles/common/inputs.module.scss';
-import { Icon } from '../Icon';
+import { InputWrapper } from '~/components/input/InputWrapper';
 
 type IProps = DetailedHTMLProps<
   TextareaHTMLAttributes<HTMLTextAreaElement>,
   HTMLTextAreaElement
 > & {
-  value: string;
-  placeholder?: string;
-  rows?: number;
-  className?: string;
   minRows?: number;
   maxRows?: number;
+  error?: string;
+  value: string;
+  className?: string;
   handler: (value: string) => void;
-  required?: boolean;
-  status?: 'error' | 'success' | '';
   title?: string;
-  seamless?: boolean;
-  setRef?: (r: HTMLTextAreaElement) => void;
 };
 
 const Textarea = memo<IProps>(
   ({
     placeholder,
-    className,
+    error,
     minRows = 3,
     maxRows = 30,
+    className,
     handler,
-    required = false,
     title = '',
-    status = '',
-    seamless,
     value,
-    setRef,
     ...props
   }) => {
-    const [rows, setRows] = useState(minRows || 1);
     const [focused, setFocused] = useState(false);
     const ref = useRef<HTMLTextAreaElement>(null);
 
@@ -60,17 +51,10 @@ const Textarea = memo<IProps>(
     const onBlur = useCallback(() => setFocused(false), [setFocused]);
 
     useEffect(() => {
-      const target = ref?.current;
-      if (!target) return;
-
-      autosize(target);
-
-      if (setRef) {
-        setRef(target);
-      }
-
-      return () => autosize.destroy(target);
-    }, [ref, setRef]);
+      if (!ref?.current) return;
+      autosize(ref.current);
+      return () => autosize.destroy(ref.current);
+    }, [ref]);
 
     useEffect(() => {
       if (!ref.current) return;
@@ -79,48 +63,22 @@ const Textarea = memo<IProps>(
     }, [value]);
 
     return (
-      <div
-        className={classNames(styles.input_text_wrapper, styles.textarea_wrapper, {
-          [styles.required]: required,
-          [styles.focused]: focused,
-          [styles.has_status]: !!status,
-          [styles.has_value]: !!value,
-          [styles.seamless]: !!seamless,
-        })}
-      >
-        <div className={styles.input}>
-          <textarea
-            rows={rows}
-            value={value || ''}
-            placeholder={placeholder}
-            className={classNames(styles.textarea, className)}
-            onChange={onInput}
-            ref={ref}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            style={{
-              // maxHeight: maxRows * 20,
-              minHeight: minRows * 20,
-            }}
-            {...props}
-          />
-        </div>
-
-        <div className={styles.status}>
-          <div className={classNames({ active: status === 'success' })}>
-            <Icon icon="check" size={20} />
-          </div>
-          <div className={classNames({ active: status === 'error' })}>
-            <Icon icon="hide" size={20} />
-          </div>
-        </div>
-
-        {title && (
-          <div className={styles.title}>
-            <span>{title}</span>
-          </div>
-        )}
-      </div>
+      <InputWrapper title={title} error={error} focused={focused} notEmpty={!!value}>
+        <textarea
+          {...props}
+          style={{
+            ...props.style,
+            minHeight: minRows * 20,
+          }}
+          value={value || ''}
+          placeholder={placeholder}
+          className={classNames(styles.textarea, className)}
+          onChange={onInput}
+          ref={ref}
+          onFocus={onFocus}
+          onBlur={onBlur}
+        />
+      </InputWrapper>
     );
   }
 );

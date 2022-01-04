@@ -27,8 +27,7 @@ const LocalCommentFormTextarea: FC<IProps> = ({ setRef }) => {
       onKeyDown={onKeyDown}
       disabled={isSubmitting}
       placeholder={placeholder}
-      minRows={2}
-      setRef={setRef}
+      ref={setRef}
     />
   );
 };

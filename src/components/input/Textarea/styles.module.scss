@@ -1,0 +1,12 @@
+@import "~/styles/variables";
+
+.textarea {
+  background: none;
+  color: inherit;
+  font: inherit;
+  width: 100%;
+  border: none;
+  padding: $gap;
+  outline: none;
+  resize: none;
+}

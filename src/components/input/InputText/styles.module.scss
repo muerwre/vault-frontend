@@ -1,0 +1,39 @@
+@import "~/styles/variables";
+
+.input {
+  display: flex;
+  align-items: center;
+  color: inherit;
+
+  &.has_error {
+    color: $red;
+  }
+
+  input {
+    height: $input_height;
+    border: none;
+    flex: 1;
+    outline: none;
+    color: inherit;
+    min-width: 0;
+    background: none;
+    padding: 0 $gap 0 $gap;
+    font: $font_14_semibold;
+    border-radius: $radius;
+  }
+}
+
+.suffix {
+  fill: currentColor;
+  stroke: currentColor;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $input_grey_color;
+  padding: 0 $gap;
+}
+
+.reveal {
+  cursor: pointer;
+}

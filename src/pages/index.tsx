@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { FlowLayout } from '~/layouts/FlowLayout';
 import { useFlow } from '~/hooks/flow/useFlow';
 import { FlowContextProvider } from '~/utils/context/FlowContextProvider';
-import { SearchProvider } from '~/utils/providers/SearchProvider';
 import { observer } from 'mobx-react';
 
 interface Props {}

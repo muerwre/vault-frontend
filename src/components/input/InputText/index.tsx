@@ -1,27 +1,24 @@
-import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useCallback, useState } from 'react';
 import classNames from 'classnames';
-import styles from '~/styles/common/inputs.module.scss';
-import { Icon } from '~/components/input/Icon';
 import { IInputTextProps } from '~/redux/types';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { useTranslatedError } from '~/hooks/data/useTranslatedError';
+import { InputWrapper } from '~/components/input/InputWrapper';
+import styles from './styles.module.scss';
+import { Icon } from '~/components/input/Icon';
+import { useFocusEvent } from '~/hooks/dom/useFocusEvent';
 
 const InputText: FC<IInputTextProps> = ({
-  wrapperClassName,
   className = '',
   handler,
   required = false,
-  status,
   title,
   error,
   value = '',
-  onRef,
-  is_loading,
-  after,
+  suffix,
   ...props
 }) => {
-  const [focused, setFocused] = useState(false);
-  const [inner_ref, setInnerRef] = useState<HTMLInputElement | null>(null);
+  const { focused, onFocus, onBlur } = useFocusEvent();
+  const [revealed, setRevealed] = useState(false);
 
   const onInput = useCallback(
     ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -34,69 +31,35 @@ const InputText: FC<IInputTextProps> = ({
     [handler]
   );
 
-  const onFocus = useCallback(() => setFocused(true), []);
-  const onBlur = useCallback(() => setFocused(false), []);
+  const toggleRevealed = useCallback(() => setRevealed(!revealed), [setRevealed, revealed]);
 
   const translatedError = useTranslatedError(error);
 
-  useEffect(() => {
-    if (onRef) onRef(inner_ref);
-  }, [inner_ref, onRef]);
+  const type = props.type === 'password' && revealed ? 'text' : props.type;
 
   return (
-    <div
-      className={classNames(styles.input_text_wrapper, wrapperClassName, {
-        [styles.required]: required,
-        [styles.focused]: focused,
-        [styles.has_status]: !!status || !!error,
-        [styles.has_value]: !!value,
-        [styles.has_error]: !!error,
-        [styles.has_loader]: is_loading,
-      })}
-    >
-      <div className={styles.input}>
+    <InputWrapper title={title} error={translatedError} focused={focused} notEmpty={!!value}>
+      <div className={classNames(styles.input, { [styles.has_error]: !!error })}>
         <input
-          type="text"
-          onChange={onInput}
-          className={classNames(styles.input_text, className)}
+          {...props}
           onFocus={onFocus}
           onBlur={onBlur}
+          type={type}
+          onChange={onInput}
+          className={classNames(styles.input_text, className)}
           value={value || ''}
-          ref={setInnerRef}
-          {...props}
         />
+
+        {(!!suffix || props.type === 'password') && (
+          <div className={styles.suffix}>
+            {suffix}
+            {props.type === 'password' && (
+              <Icon icon="eye" onClick={toggleRevealed} className={styles.reveal} />
+            )}
+          </div>
+        )}
       </div>
-
-      <div className={styles.status}>
-        <div className={classNames(styles.success_icon, { active: status === 'success' })}>
-          <Icon icon="check" size={20} />
-        </div>
-
-        <div className={classNames(styles.error_icon, { active: status === 'error' || !!error })}>
-          <Icon icon="close" size={20} />
-        </div>
-      </div>
-
-      <div className={styles.loader}>
-        <div className={classNames({ active: is_loading })}>
-          <LoaderCircle size={20} />
-        </div>
-      </div>
-
-      {title && (
-        <div className={classNames(styles.title)}>
-          <span>{title}</span>
-        </div>
-      )}
-
-      {!!translatedError && (
-        <div className={styles.error}>
-          <span>{translatedError}</span>
-        </div>
-      )}
-
-      {!!after && <div className={styles.after}>{after}</div>}
-    </div>
+    </InputWrapper>
   );
 };
 

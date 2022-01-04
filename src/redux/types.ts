@@ -21,18 +21,10 @@ export type IInputTextProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 > & {
-  wrapperClassName?: string;
   handler?: (value: string) => void;
-  required?: boolean;
   title?: string;
   error?: string;
-  can_negative?: boolean;
-  status?: string;
-  maskChar?: string;
-  mask?: string;
-  onRef?: (ref: any) => void;
-  is_loading?: boolean;
-  after?: ReactElement;
+  suffix?: ReactElement;
 };
 
 export type IIcon = string;

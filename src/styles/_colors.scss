@@ -1,11 +1,9 @@
 // color 0, 0, 68 is pretty cool, btw
-// $red: #ff3344;
 $red: #ff3344;
 $yellow: #ffd60f;
 $dark_blue: #592071;
 $blue: #582cd0;
 $green: #00d2b9;
-//$green: #00503c;
 $olive: #8bc12a;
 $orange: #ff7549;
 $grass: #41800d;
@@ -46,7 +44,6 @@ $text_small: 14px;
 $text_big: 20px;
 $text_sign: 22px;
 
-$input_bg_color: darken($content_bg, 2%);
 $button_bg_color: $red_gradient;
 
 $inset_bg: linear-gradient(135deg, darken($content_bg, 2%), $content_bg);

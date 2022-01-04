@@ -13,7 +13,7 @@
 .content {
   @include inner_shadow();
   background: $input_bg_color;
-  border-radius: $input_radius;
+  border-radius: $radius;
 }
 
 .buttons {
