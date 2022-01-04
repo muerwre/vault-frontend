@@ -20,7 +20,7 @@ export const SearchContext = createContext<SearchContextProps>({
   loadMore: () => {},
 });
 
-export const SearchContextProvider: FC = ({ children }) => {
+export const SearchProvider: FC = ({ children }) => {
   const { results, searchText, isLoading, loadMore, setSearchText, hasMore } = useSearch();
 
   return (

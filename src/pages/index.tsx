@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { FlowLayout } from '~/layouts/FlowLayout';
 import { useFlow } from '~/hooks/flow/useFlow';
 import { FlowContextProvider } from '~/utils/context/FlowContextProvider';
-import { SearchContextProvider } from '~/utils/context/SearchContextProvider';
+import { SearchProvider } from '~/utils/providers/SearchProvider';
 import { observer } from 'mobx-react';
 
 interface Props {}
@@ -18,9 +18,7 @@ const FlowPage: FC<Props> = observer(() => {
       nodes={nodes}
       onChangeCellView={onChangeCellView}
     >
-      <SearchContextProvider>
-        <FlowLayout isFluid={isFluid} onToggleLayout={toggleLayout} />
-      </SearchContextProvider>
+      <FlowLayout isFluid={isFluid} onToggleLayout={toggleLayout} />
     </FlowContextProvider>
   );
 });

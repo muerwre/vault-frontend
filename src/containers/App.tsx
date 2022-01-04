@@ -12,6 +12,7 @@ import { UserContextProvider } from '~/utils/context/UserContextProvider';
 import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
 import { observer } from 'mobx-react';
 import { useGlobalLoader } from '~/hooks/dom/useGlobalLoader';
+import { SearchProvider } from '~/utils/providers/SearchProvider';
 
 const App: VFC = observer(() => {
   useGlobalLoader();
@@ -22,13 +23,15 @@ const App: VFC = observer(() => {
         <UserContextProvider>
           <DragDetectorProvider>
             <PageCoverProvider>
-              <MainLayout>
-                <Modal />
-                <Sprites />
+              <SearchProvider>
+                <MainLayout>
+                  <Modal />
+                  <Sprites />
 
-                <MainRouter />
-              </MainLayout>
-              <BottomContainer />
+                  <MainRouter />
+                </MainLayout>
+                <BottomContainer />
+              </SearchProvider>
             </PageCoverProvider>
           </DragDetectorProvider>
         </UserContextProvider>

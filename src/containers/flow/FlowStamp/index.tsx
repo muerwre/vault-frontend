@@ -10,7 +10,7 @@ import { Toggle } from '~/components/input/Toggle';
 import classNames from 'classnames';
 import { Superpower } from '~/components/boris/Superpower';
 import { experimentalFeatures } from '~/constants/features';
-import { useSearchContext } from '~/utils/context/SearchContextProvider';
+import { useSearchContext } from '~/utils/providers/SearchProvider';
 import { useFlowContext } from '~/utils/context/FlowContextProvider';
 
 interface IProps {
