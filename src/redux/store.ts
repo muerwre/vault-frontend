@@ -36,12 +36,6 @@ const authPersistConfig: PersistConfig = {
   storage,
 };
 
-const flowPersistConfig: PersistConfig = {
-  key: 'flow',
-  whitelist: ['nodes', 'recent', 'updated'],
-  storage,
-};
-
 const playerPersistConfig: PersistConfig = {
   key: 'player',
   whitelist: ['youtubes'],

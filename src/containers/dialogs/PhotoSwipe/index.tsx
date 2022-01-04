@@ -2,8 +2,6 @@ import React, { useEffect, useRef, VFC } from 'react';
 
 import PhotoSwipeJs from 'photoswipe/dist/photoswipe.js';
 import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js';
-import 'photoswipe/dist/photoswipe.css';
-import 'photoswipe/dist/default-skin/default-skin.css';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import styles from './styles.module.scss';

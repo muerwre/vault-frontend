@@ -1,8 +1,5 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper.scss';
-import 'swiper/components/effect-fade/effect-fade.scss';
-import 'swiper/components/lazy/lazy.scss';
 import styles from './styles.module.scss';
 
 import SwiperCore, { Autoplay, EffectFade, Lazy, Navigation } from 'swiper';

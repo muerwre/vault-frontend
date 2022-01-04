@@ -3,7 +3,7 @@ import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { DIALOG_CONTENT } from '~/constants/modal';
 import { useModalStore } from '~/store/modal/useModalStore';
 import { has } from 'ramda';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 type IProps = {};
 

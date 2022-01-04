@@ -2,10 +2,6 @@ import React, { FC, useCallback, useState } from 'react';
 import { INodeComponentProps } from '~/constants/node';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/swiper.scss';
-import 'swiper/components/pagination/pagination.scss';
-import 'swiper/components/navigation/navigation.scss';
-import 'swiper/components/lazy/lazy.min.css';
 import styles from './styles.module.scss';
 
 import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions } from 'swiper';

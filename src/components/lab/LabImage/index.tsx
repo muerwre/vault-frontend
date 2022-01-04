@@ -2,12 +2,6 @@ import React, { FC } from 'react';
 import { INodeComponentProps } from '~/constants/node';
 import SwiperCore, { A11y, Navigation, Pagination, SwiperOptions } from 'swiper';
 
-import 'swiper/swiper.scss';
-import 'swiper/components/pagination/pagination.scss';
-import 'swiper/components/scrollbar/scrollbar.scss';
-import 'swiper/components/zoom/zoom.scss';
-import 'swiper/components/navigation/navigation.scss';
-
 import styles from './styles.module.scss';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { useGotoNode } from '~/hooks/node/useGotoNode';

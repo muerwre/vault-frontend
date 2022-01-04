@@ -1,4 +1,14 @@
 @import "src/styles/variables";
+@import 'photoswipe/dist/photoswipe';
+@import 'photoswipe/dist/default-skin/default-skin';
+
+@import 'swiper/swiper';
+@import 'swiper/components/effect-fade/effect-fade';
+@import 'swiper/components/lazy/lazy';
+@import 'swiper/components/pagination/pagination';
+@import 'swiper/components/scrollbar/scrollbar';
+@import 'swiper/components/zoom/zoom';
+@import 'swiper/components/navigation/navigation';
 
 html {
   min-height: 100vh;
