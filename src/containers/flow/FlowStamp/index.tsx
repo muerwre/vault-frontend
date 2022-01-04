@@ -1,44 +1,35 @@
 import React, { FC, FormEvent, useCallback, useMemo } from 'react';
 import { InputText } from '~/components/input/InputText';
-import { FlowRecent } from '../FlowRecent';
+import { FlowRecent } from '~/components/flow/FlowRecent';
 
-import styles from './styles.module.scss';
-import { FlowSearchResults } from '../FlowSearchResults';
+import styles from '~/containers/flow/FlowStamp/styles.module.scss';
+import { FlowSearchResults } from '~/components/flow/FlowSearchResults';
 import { Icon } from '~/components/input/Icon';
 import { Group } from '~/components/containers/Group';
 import { Toggle } from '~/components/input/Toggle';
 import classNames from 'classnames';
 import { Superpower } from '~/components/boris/Superpower';
 import { experimentalFeatures } from '~/constants/features';
-import { IFlowNode, INode } from '~/redux/types';
+import { useSearchContext } from '~/utils/context/SearchContextProvider';
+import { useFlowContext } from '~/utils/context/FlowContextProvider';
 
 interface IProps {
-  searchText: string;
-  searchTotal: number;
-  searchIsLoading: boolean;
-  searchResults: INode[];
-  onSearchChange: (text: string) => void;
-  onSearchLoadMore: () => void;
-
-  recent: IFlowNode[];
-  updated: IFlowNode[];
   isFluid: boolean;
   onToggleLayout: () => void;
 }
 
-const FlowStamp: FC<IProps> = ({
-  searchText,
-  searchIsLoading,
-  searchTotal,
-  searchResults,
-  onSearchChange,
-  onSearchLoadMore,
+const FlowStamp: FC<IProps> = ({ isFluid, onToggleLayout }) => {
+  const {
+    searchText,
+    searchTotal,
+    searchIsLoading,
+    searchResults,
+    onSearchChange,
+    onSearchLoadMore,
+  } = useSearchContext();
 
-  recent,
-  updated,
-  isFluid,
-  onToggleLayout,
-}) => {
+  const { recent, updates } = useFlowContext();
+
   const onSearchSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
   }, []);
@@ -102,7 +93,7 @@ const FlowStamp: FC<IProps> = ({
           </div>
 
           <div className={styles.items}>
-            <FlowRecent updated={updated} recent={recent} />
+            <FlowRecent updated={updates} recent={recent} />
           </div>
         </div>
       )}

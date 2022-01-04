@@ -1,33 +1,26 @@
 import React, { FC } from 'react';
 import { FlowLayout } from '~/layouts/FlowLayout';
 import { useFlow } from '~/hooks/flow/useFlow';
-import { useSearch } from '~/hooks/search/useSearch';
-import { useUser } from '~/hooks/user/userUser';
+import { FlowContextProvider } from '~/utils/context/FlowContextProvider';
+import { SearchContextProvider } from '~/utils/context/SearchContextProvider';
 
 interface Props {}
 
 const FlowPage: FC<Props> = () => {
   const { updates, nodes, heroes, recent, isFluid, toggleLayout, onChangeCellView } = useFlow();
-  const user = useUser();
-  const { search, onSearchLoadMore, onSearchChange } = useSearch();
 
   return (
-    <FlowLayout
+    <FlowContextProvider
       updates={updates}
       recent={recent}
       heroes={heroes}
       nodes={nodes}
-      user={user}
-      isFluid={isFluid}
-      onToggleLayout={toggleLayout}
       onChangeCellView={onChangeCellView}
-      searchResults={search.results}
-      searchText={search.text}
-      searchTotal={search.total}
-      searchIsLoading={search.is_loading}
-      onSearchLoadMore={onSearchLoadMore}
-      onSearchChange={onSearchChange}
-    />
+    >
+      <SearchContextProvider>
+        <FlowLayout isFluid={isFluid} onToggleLayout={toggleLayout} />
+      </SearchContextProvider>
+    </FlowContextProvider>
   );
 };
 
