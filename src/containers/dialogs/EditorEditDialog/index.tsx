@@ -7,8 +7,9 @@ import styles from './styles.module.scss';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useUpdateNode } from '~/hooks/node/useUpdateNode';
 import { INode } from '~/redux/types';
+import { observer } from 'mobx-react';
 
-const EditorEditDialog: FC = () => {
+const EditorEditDialog: FC = observer(() => {
   const history = useHistory();
 
   const {
@@ -46,6 +47,6 @@ const EditorEditDialog: FC = () => {
   }
 
   return <EditorDialog node={node} onRequestClose={goBack} onSubmit={onSubmit} />;
-};
+});
 
 export { EditorEditDialog };

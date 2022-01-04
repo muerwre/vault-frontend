@@ -3,10 +3,11 @@ import { FlowLayout } from '~/layouts/FlowLayout';
 import { useFlow } from '~/hooks/flow/useFlow';
 import { FlowContextProvider } from '~/utils/context/FlowContextProvider';
 import { SearchContextProvider } from '~/utils/context/SearchContextProvider';
+import { observer } from 'mobx-react';
 
 interface Props {}
 
-const FlowPage: FC<Props> = () => {
+const FlowPage: FC<Props> = observer(() => {
   const { updates, nodes, heroes, recent, isFluid, toggleLayout, onChangeCellView } = useFlow();
 
   return (
@@ -22,6 +23,6 @@ const FlowPage: FC<Props> = () => {
       </SearchContextProvider>
     </FlowContextProvider>
   );
-};
+});
 
 export default FlowPage;

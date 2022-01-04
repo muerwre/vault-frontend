@@ -1,20 +1,23 @@
 import { useShallowSelect } from '~/hooks/data/useShallowSelect';
-import { selectFlow } from '~/redux/flow/selectors';
 import { useFlowLayout } from '~/hooks/flow/useFlowLayout';
 import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
 import { useDispatch } from 'react-redux';
-import { useFlowPagination } from '~/hooks/flow/useFlowPagination';
 import { useCallback, useMemo } from 'react';
 import { FlowDisplay, INode } from '~/redux/types';
 import { flowSetCellView } from '~/redux/flow/actions';
+import { useFlowLoader } from '~/hooks/flow/useFlowLoader';
+import { useFlowStore } from '~/store/flow/useFlowStore';
+import { useInfiniteLoader } from '~/hooks/dom/useInfiniteLoader';
 
 export const useFlow = () => {
-  const { nodes, heroes, recent, updated, isLoading } = useShallowSelect(selectFlow);
+  const { loadMore, isSyncing } = useFlowLoader();
+
+  const { nodes, heroes, recent, updated } = useFlowStore();
   const { isFluid, toggleLayout } = useFlowLayout();
   const labUpdates = useShallowSelect(selectLabUpdatesNodes);
   const dispatch = useDispatch();
 
-  useFlowPagination({ isLoading });
+  useInfiniteLoader(loadMore, isSyncing);
 
   const updates = useMemo(() => [...updated, ...labUpdates].slice(0, 10), [updated, labUpdates]);
 

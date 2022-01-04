@@ -3,16 +3,16 @@ import { useCallback } from 'react';
 import { INode } from '~/redux/types';
 import { apiPostNode } from '~/api/node';
 import { selectFlowNodes } from '~/redux/flow/selectors';
-import { flowSetNodes } from '~/redux/flow/actions';
 import { selectLabListNodes } from '~/redux/lab/selectors';
 import { labSetList } from '~/redux/lab/actions';
 import { useShallowSelect } from '~/hooks/data/useShallowSelect';
 import { useDispatch } from 'react-redux';
+import { useFlowStore } from '~/store/flow/useFlowStore';
 
 export const useUpdateNode = (id: number) => {
   const dispatch = useDispatch();
   const { update } = useLoadNode(id);
-  const flowNodes = useShallowSelect(selectFlowNodes);
+  const flow = useFlowStore();
   const labNodes = useShallowSelect(selectLabListNodes);
 
   return useCallback(
@@ -25,12 +25,8 @@ export const useUpdateNode = (id: number) => {
 
       await update(result.node);
 
-      // TODO: use another store here someday
       if (node.is_promoted) {
-        const updatedNodes = flowNodes.map(item =>
-          item.id === result.node.id ? result.node : item
-        );
-        dispatch(flowSetNodes(updatedNodes));
+        flow.updateNode(result.node.id!, result.node);
       } else {
         const updatedNodes = labNodes.map(item =>
           item.node.id === result.node.id ? { ...item, node: result.node } : item
@@ -38,6 +34,6 @@ export const useUpdateNode = (id: number) => {
         dispatch(labSetList({ nodes: updatedNodes }));
       }
     },
-    [update, flowNodes, dispatch, labNodes]
+    [update, flow, labNodes, dispatch]
   );
 };

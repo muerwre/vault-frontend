@@ -8,17 +8,18 @@ import { PageCoverProvider } from '~/components/containers/PageCoverProvider';
 import { BottomContainer } from '~/containers/main/BottomContainer';
 import { MainRouter } from '~/containers/main/MainRouter';
 import { DragDetectorProvider } from '~/hooks/dom/useDragDetector';
-import { useUser } from '~/hooks/user/userUser';
 import { UserContextProvider } from '~/utils/context/UserContextProvider';
 import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
+import { observer } from 'mobx-react';
+import { useGlobalLoader } from '~/hooks/dom/useGlobalLoader';
 
-const App: VFC = () => {
-  const user = useUser();
+const App: VFC = observer(() => {
+  useGlobalLoader();
 
   return (
     <ConnectedRouter history={history}>
       <SWRConfigProvider>
-        <UserContextProvider user={user}>
+        <UserContextProvider>
           <DragDetectorProvider>
             <PageCoverProvider>
               <MainLayout>
@@ -34,6 +35,6 @@ const App: VFC = () => {
       </SWRConfigProvider>
     </ConnectedRouter>
   );
-};
+});
 
 export { App };

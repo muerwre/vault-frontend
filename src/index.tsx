@@ -5,14 +5,19 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { configureStore } from '~/redux/store';
 import { App } from '~/containers/App';
 import '~/styles/main.scss';
+import { Store } from '~/store';
+import { StoreContextProvider } from '~/utils/context/StoreContextProvider';
 
 const { store, persistor } = configureStore();
+const mobxStore = new Store();
 
 render(
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <App />
-    </PersistGate>
-  </Provider>,
+  <StoreContextProvider store={mobxStore}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
+    </Provider>
+  </StoreContextProvider>,
   document.getElementById('app')
 );

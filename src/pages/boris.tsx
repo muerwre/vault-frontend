@@ -6,8 +6,9 @@ import { useNodeComments } from '~/hooks/comments/useNodeComments';
 import { useBoris } from '~/hooks/boris/useBoris';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
+import { observer } from 'mobx-react';
 
-const BorisPage: VFC = () => {
+const BorisPage: VFC = observer(() => {
   const { node, isLoading, update } = useLoadNode(696);
 
   const onShowImageModal = useImageModal();
@@ -42,6 +43,6 @@ const BorisPage: VFC = () => {
       </CommentContextProvider>
     </NodeContextProvider>
   );
-};
+});
 
 export default BorisPage;
