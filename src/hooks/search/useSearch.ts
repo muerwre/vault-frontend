@@ -56,8 +56,6 @@ export const useSearch = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText]);
 
-  console.log({ hasMore, data });
-
   return {
     results,
     searchText,
