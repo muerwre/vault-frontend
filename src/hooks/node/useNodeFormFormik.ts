@@ -8,14 +8,13 @@ import { showErrorToast } from '~/utils/errors/showToast';
 
 const validationSchema = object().shape({});
 
-const afterSubmit = ({ resetForm, setStatus, setSubmitting, setErrors }: FormikHelpers<INode>) => (
+const afterSubmit = ({ resetForm, setSubmitting, setErrors }: FormikHelpers<INode>) => (
   e?: string,
   errors?: Record<string, string>
 ) => {
   setSubmitting(false);
 
   if (e) {
-    setStatus(e);
     showErrorToast(e);
     return;
   }

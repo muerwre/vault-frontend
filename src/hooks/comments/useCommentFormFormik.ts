@@ -44,7 +44,6 @@ export const useCommentFormFormik = (
         await sendData(values);
         onSuccess(helpers)();
       } catch (error) {
-        console.log('error', error);
         onSuccess(helpers)(error);
       }
     },

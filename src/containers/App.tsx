@@ -13,6 +13,8 @@ import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
 import { observer } from 'mobx-react';
 import { useGlobalLoader } from '~/hooks/dom/useGlobalLoader';
 import { SearchProvider } from '~/utils/providers/SearchProvider';
+import { Toaster } from 'react-hot-toast';
+import { ToastProvider } from '~/utils/providers/ToastProvider';
 
 const App: VFC = observer(() => {
   useGlobalLoader();
@@ -25,6 +27,7 @@ const App: VFC = observer(() => {
             <PageCoverProvider>
               <SearchProvider>
                 <MainLayout>
+                  <ToastProvider />
                   <Modal />
                   <Sprites />
 

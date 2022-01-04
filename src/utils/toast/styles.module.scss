@@ -1,0 +1,14 @@
+@import "src/styles/variables";
+
+.toast {
+  @include outer_shadow;
+  cursor: pointer;
+}
+
+.error {
+  font: $font_14_semibold;
+  background: $red_gradient_alt;
+  color: white;
+  user-select: none;
+  text-transform: uppercase;
+}
