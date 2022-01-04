@@ -46,16 +46,16 @@ export const ERRORS = {
 };
 
 export const ERROR_LITERAL = {
-  [ERRORS.NOT_AN_EMAIL]: 'Введите правильный e-mail',
-  [ERRORS.TOO_SHIRT]: 'Добавьте хоть что-нибудь',
+  [ERRORS.NOT_AN_EMAIL]: 'Введи правильный e-mail',
+  [ERRORS.TOO_SHIRT]: 'Добавь хоть что-нибудь',
   [ERRORS.NO_COMMENTS]: 'Комментариев пока нет',
   [ERRORS.EMPTY_RESPONSE]: 'Пустой ответ сервера',
-  [ERRORS.FILES_REQUIRED]: 'Добавьте файлы',
+  [ERRORS.FILES_REQUIRED]: 'Добавь файлы',
   [ERRORS.TEXT_REQUIRED]: 'Нужно немного текста',
   [ERRORS.UNKNOWN_NODE_TYPE]: 'Неизвестный тип поста',
   [ERRORS.URL_INVALID]: 'Неизвестный адрес',
   [ERRORS.FILES_AUDIO_REQUIRED]: 'Нужна хотя бы одна песня',
-  [ERRORS.NOT_ENOUGH_RIGHTS]: 'У вас недостаточно прав',
+  [ERRORS.NOT_ENOUGH_RIGHTS]: 'У тебя недостаточно прав',
   [ERRORS.INCORRECT_DATA]: 'Недопустимые данные',
   [ERRORS.IMAGE_CONVERSION_FAILED]: 'Не удалось изменить изображение',
   [ERRORS.USER_NOT_FOUND]: 'Пользователь не найден',

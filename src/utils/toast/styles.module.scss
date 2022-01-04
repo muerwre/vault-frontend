@@ -3,12 +3,20 @@
 .toast {
   @include outer_shadow;
   cursor: pointer;
+  font: $font_14_semibold;
+  user-select: none;
+  text-transform: uppercase;
+  color: white;
 }
 
 .error {
-  font: $font_14_semibold;
   background: $red_gradient_alt;
-  color: white;
-  user-select: none;
-  text-transform: uppercase;
+}
+
+.success {
+  background: $green_gradient;
+}
+
+.info {
+  background: $cyan_gradient;
 }

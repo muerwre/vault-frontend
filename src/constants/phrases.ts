@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 
 export const PHRASES = {
+  WELCOME: ['Ого! Кто это тут у нас?'],
+  GOODBYE: ['Возвращайся, мы будем скучать'],
   SIMPLE: [
     'Ответ на твоё одиночество кроется в одиночестве. Удивительно? Нет.',
     'Ах, Боря, Боренька, неужели это всё, на что мы с тобою способны?',
@@ -63,5 +65,8 @@ export const PHRASES = {
   ],
 };
 
+export const getRandomPhrase = (key: keyof typeof PHRASES) =>
+  PHRASES[key][Math.floor(Math.random() * PHRASES[key].length)];
+
 export const useRandomPhrase = (key: keyof typeof PHRASES) =>
-  useMemo(() => PHRASES[key][Math.floor(Math.random() * PHRASES[key].length)], [key]);
+  useMemo(() => getRandomPhrase(key), [key]);

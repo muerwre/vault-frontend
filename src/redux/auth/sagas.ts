@@ -58,6 +58,9 @@ import { AxiosError } from 'axios';
 import { labGetUpdates } from '~/redux/lab/actions';
 import { getMOBXStore } from '~/store';
 import { Dialog } from '~/constants/modal';
+import { showErrorToast } from '~/utils/errors/showToast';
+import { showToastSuccess, showToastInfo } from '~/utils/toast';
+import { getRandomPhrase } from '~/constants/phrases';
 
 const modalStore = getMOBXStore().modal;
 
@@ -79,8 +82,9 @@ function* sendLoginRequestSaga({ username, password }: ReturnType<typeof userSen
     yield put(authLoggedIn());
 
     modalStore.hide();
+    showToastInfo(getRandomPhrase('WELCOME'));
   } catch (error) {
-    yield put(userSetLoginError(error.message));
+    showErrorToast(error);
   }
 }
 
@@ -128,6 +132,7 @@ function* logoutSaga() {
       notifications: [],
     })
   );
+  showToastInfo(getRandomPhrase('GOODBYE'));
 }
 
 function* loadProfile({ username }: ReturnType<typeof authLoadProfile>): SagaIterator<boolean> {
@@ -192,7 +197,9 @@ function* getUpdates() {
         })
       );
     }
-  } catch (error) {}
+  } catch (error) {
+    showErrorToast(error);
+  }
 }
 
 function* startPollingSaga() {
@@ -220,8 +227,9 @@ function* patchUser(payload: ReturnType<typeof authPatchUser>) {
     yield put(authSetUser({ ...me, ...user }));
     yield put(authSetProfile({ user: { ...me, ...user }, tab: 'profile' }));
   } catch (error) {
-    if (isEmpty(error.response.data.errors)) return;
+    showErrorToast(error);
 
+    if (isEmpty(error.response.data.errors)) return;
     yield put(authSetProfile({ patch_errors: error.response.data.errors }));
   }
 }
@@ -237,6 +245,8 @@ function* requestRestoreCode({ field }: ReturnType<typeof authRequestRestoreCode
 
     yield put(authSetRestore({ is_loading: false, is_succesfull: true }));
   } catch (error) {
+    showErrorToast(error);
+
     return yield put(authSetRestore({ is_loading: false, error: error.message }));
   }
 }
@@ -255,6 +265,8 @@ function* showRestoreModal({ code }: ReturnType<typeof authShowRestoreModal>) {
 
     modalStore.setCurrent(Dialog.RestoreRequest);
   } catch (error) {
+    showErrorToast(error);
+
     yield put(
       authSetRestore({ is_loading: false, error: error.message || ERRORS.CODE_IS_INVALID })
     );
@@ -283,9 +295,7 @@ function* restorePassword({ password }: ReturnType<typeof authRestorePassword>) 
 
     yield call(refreshUser);
   } catch (error) {
-    return yield put(
-      authSetRestore({ is_loading: false, error: error.message || ERRORS.CODE_IS_INVALID })
-    );
+    showErrorToast(error);
   }
 }
 
@@ -295,7 +305,7 @@ function* getSocials() {
     const data: Unwrap<typeof apiGetSocials> = yield call(apiGetSocials);
     yield put(authSetSocials({ accounts: data.accounts }));
   } catch (error) {
-    yield put(authSetSocials({ error: error.message }));
+    showErrorToast(error);
   } finally {
     yield put(authSetSocials({ is_loading: false }));
   }
@@ -312,7 +322,7 @@ function* dropSocial({ provider, id }: ReturnType<typeof authDropSocial>) {
 
     yield call(getSocials);
   } catch (error) {
-    yield put(authSetSocials({ error: error.message }));
+    showErrorToast(error);
   }
 }
 
@@ -335,8 +345,8 @@ function* attachSocial({ token }: ReturnType<typeof authAttachSocial>) {
     }
 
     yield put(authSetSocials({ accounts: [...accounts, data.account] }));
-  } catch (e) {
-    yield put(authSetSocials({ error: e.message }));
+  } catch (error) {
+    showErrorToast(error);
   } finally {
     yield put(authSetSocials({ is_loading: false }));
   }
@@ -370,7 +380,7 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
       return;
     }
 
-    yield put(userSetLoginError(error.message));
+    showErrorToast(error);
   }
 }
 
@@ -422,7 +432,7 @@ function* authRegisterSocial({ username, password }: ReturnType<typeof authSendR
       return;
     }
 
-    yield put(authSetRegisterSocial({ error: error.message }));
+    showErrorToast(error);
   }
 }
 
