@@ -1,14 +1,18 @@
-import React, { FC, KeyboardEventHandler, useCallback } from 'react';
+import React, {
+  forwardRef,
+  KeyboardEventHandler,
+  TextareaHTMLAttributes,
+  useCallback,
+} from 'react';
 import { Textarea } from '~/components/input/Textarea';
 import { useCommentFormContext } from '~/hooks/comments/useCommentFormFormik';
 import { useRandomPhrase } from '~/constants/phrases';
 
-interface IProps {
+interface IProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   isLoading?: boolean;
-  setRef?: (r: HTMLTextAreaElement) => void;
 }
 
-const LocalCommentFormTextarea: FC<IProps> = ({ setRef }) => {
+const LocalCommentFormTextarea = forwardRef<HTMLTextAreaElement, IProps>(({ ...rest }, ref) => {
   const { values, handleChange, handleSubmit, isSubmitting } = useCommentFormContext();
 
   const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
@@ -22,14 +26,15 @@ const LocalCommentFormTextarea: FC<IProps> = ({ setRef }) => {
 
   return (
     <Textarea
+      {...rest}
+      ref={ref}
       value={values.text}
       handler={handleChange('text')}
       onKeyDown={onKeyDown}
       disabled={isSubmitting}
       placeholder={placeholder}
-      ref={setRef}
     />
   );
-};
+});
 
 export { LocalCommentFormTextarea };

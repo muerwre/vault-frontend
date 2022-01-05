@@ -25,7 +25,7 @@ interface IProps {
 }
 
 const CommentForm: FC<IProps> = ({ comment, nodeId, saveComment, onCancelEdit }) => {
-  const [textarea, setTextarea] = useState<HTMLTextAreaElement>();
+  const [textarea, setTextArea] = useState<HTMLTextAreaElement | null>(null);
   const uploader = useFileUploader(
     UPLOAD_SUBJECTS.COMMENT,
     UPLOAD_TARGETS.COMMENTS,
@@ -55,7 +55,7 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, saveComment, onCancelEdit })
   }, [formik]);
 
   const error = formik.status || formik.errors.text;
-  useInputPasteUpload(textarea, uploader.uploadFiles);
+  const onPaste = useInputPasteUpload(uploader.uploadFiles);
 
   return (
     <UploadDropzone onUpload={uploader.uploadFiles}>
@@ -63,7 +63,7 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, saveComment, onCancelEdit })
         <FormikProvider value={formik}>
           <FileUploaderProvider value={uploader}>
             <div className={styles.input}>
-              <LocalCommentFormTextarea setRef={setTextarea} />
+              <LocalCommentFormTextarea onPaste={onPaste} ref={setTextArea} />
 
               {!!error && (
                 <div className={styles.error} onClick={clearError}>
