@@ -5,7 +5,7 @@ import {
   GetLabNodesResult,
   GetLabStatsResult,
   GetLabUpdatesResult,
-} from '~/redux/lab/types';
+} from '~/types/lab';
 
 export const getLabNodes = ({ after }: GetLabNodesRequest) =>
   api

@@ -11,10 +11,6 @@ import auth from '~/redux/auth';
 import authSaga from '~/redux/auth/sagas';
 import { IAuthState } from '~/redux/auth/types';
 
-import lab from '~/redux/lab';
-import labSaga from '~/redux/lab/sagas';
-import { ILabState } from '~/redux/lab/types';
-
 import uploads, { IUploadState } from '~/redux/uploads/reducer';
 import uploadSaga from '~/redux/uploads/sagas';
 
@@ -48,7 +44,6 @@ export interface IState {
   uploads: IUploadState;
   player: IPlayerState;
   messages: IMessagesState;
-  lab: ILabState;
 }
 
 export const sagaMiddleware = createSagaMiddleware();
@@ -68,7 +63,6 @@ export const store = createStore(
     uploads,
     player: persistReducer(playerPersistConfig, player),
     messages,
-    lab: lab,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
@@ -81,7 +75,6 @@ export function configureStore(): {
   sagaMiddleware.run(uploadSaga);
   sagaMiddleware.run(playerSaga);
   sagaMiddleware.run(messagesSaga);
-  sagaMiddleware.run(labSaga);
 
   window.addEventListener('message', message => {
     if (message && message.data && message.data.type === 'oauth_login' && message.data.token)

@@ -1,24 +1,24 @@
-import { ILabNode } from '~/redux/lab/types';
+import { ILabNode } from '~/types/lab';
 import React, { createContext, FC, useContext } from 'react';
-import { INode, ITag } from '~/redux/types';
+import { IFlowNode, ITag } from '~/redux/types';
 
 export interface LabContextProps {
   isLoading: boolean;
   nodes: ILabNode[];
-  count: number;
-  onLoadMore: () => void;
+  hasMore: boolean;
+  loadMore: () => void;
 
   tags: ITag[];
-  heroes: Partial<INode>[];
+  heroes: IFlowNode[];
   isLoadingStats: boolean;
-  updates: Partial<INode>[];
+  updates: IFlowNode[];
 }
 
 const defaultValues: LabContextProps = {
   isLoading: false,
   nodes: [],
-  count: 0,
-  onLoadMore: () => {},
+  hasMore: false,
+  loadMore: () => {},
   tags: [],
   heroes: [],
   isLoadingStats: false,

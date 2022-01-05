@@ -5,14 +5,14 @@ import { useLab } from '~/hooks/lab/useLab';
 interface LabProviderProps {}
 
 const LabProvider: FC<LabProviderProps> = ({ children }) => {
-  const { isLoading, nodes, count, onLoadMore, tags, heroes, isLoadingStats, updates } = useLab();
+  const { isLoading, nodes, loadMore, hasMore, tags, heroes, isLoadingStats, updates } = useLab();
 
   return (
     <LabContextProvider
       isLoading={isLoading && !nodes.length}
       nodes={nodes}
-      count={count}
-      onLoadMore={onLoadMore}
+      hasMore={hasMore}
+      loadMore={loadMore}
       tags={tags}
       heroes={heroes}
       isLoadingStats={isLoadingStats}

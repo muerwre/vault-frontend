@@ -17,13 +17,12 @@ import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IState } from '~/redux/store';
 import isBefore from 'date-fns/isBefore';
 import { Authorized } from '~/components/containers/Authorized';
-import { useShallowSelect } from '~/hooks/data/useShallowSelect';
-import { selectLabUpdatesNodes } from '~/redux/lab/selectors';
 import { Button } from '~/components/input/Button';
 import { useFlowStore } from '~/store/flow/useFlowStore';
 import { observer } from 'mobx-react';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { Dialog } from '~/constants/modal';
+import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
 
 const mapStateToProps = (state: IState) => ({
   user: pick(['username', 'is_user', 'photo', 'last_seen_boris'])(selectUser(state)),
@@ -49,9 +48,9 @@ const HeaderUnconnected: FC<IProps> = observer(
     authOpenProfile,
   }) => {
     const [is_scrolled, setIsScrolled] = useState(false);
-    const labUpdates = useShallowSelect(selectLabUpdatesNodes);
     const { updated: flowUpdates } = useFlowStore();
     const onLogin = useShowModal(Dialog.Login);
+    const labStats = useGetLabStats();
 
     const onScroll = useCallback(() => {
       const active = window.scrollY > 32;
@@ -76,7 +75,7 @@ const HeaderUnconnected: FC<IProps> = observer(
       [boris_commented_at, is_user, last_seen_boris]
     );
 
-    const hasLabUpdates = useMemo(() => labUpdates.length > 0, [labUpdates]);
+    const hasLabUpdates = useMemo(() => labStats.updates.length > 0, [labStats.updates]);
     const hasFlowUpdates = useMemo(() => flowUpdates.length > 0, [flowUpdates]);
 
     return (

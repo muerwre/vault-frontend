@@ -1,11 +1,11 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import Masonry from 'react-masonry-css';
 import styles from './styles.module.scss';
 import { LabNode } from '~/components/lab/LabNode';
 import { EMPTY_NODE, NODE_TYPES } from '~/constants/node';
 import { values } from 'ramda';
-import { useLabPagination } from '~/hooks/lab/useLabPagination';
 import { useLabContext } from '~/utils/context/LabContextProvider';
+import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
 
 interface IProps {}
 
@@ -27,11 +27,7 @@ const LoadingNode = () => (
 );
 
 const LabGrid: FC<IProps> = () => {
-  const { isLoading, nodes, onLoadMore } = useLabContext();
-
-  const columns = useMemo(() => Array.from(document.querySelectorAll(`.${styles.column}`)), []);
-
-  useLabPagination(isLoading, columns, onLoadMore);
+  const { isLoading, nodes, hasMore, loadMore } = useLabContext();
 
   if (isLoading) {
     return (
@@ -54,20 +50,22 @@ const LabGrid: FC<IProps> = () => {
   }
 
   return (
-    <Masonry
-      className={styles.wrap}
-      breakpointCols={breakpointCols}
-      columnClassName={styles.column}
-    >
-      {nodes.map(node => (
-        <LabNode
-          node={node.node}
-          key={node.node.id}
-          lastSeen={node.last_seen}
-          commentCount={node.comment_count}
-        />
-      ))}
-    </Masonry>
+    <InfiniteScroll hasMore={hasMore} loadMore={loadMore}>
+      <Masonry
+        className={styles.wrap}
+        breakpointCols={breakpointCols}
+        columnClassName={styles.column}
+      >
+        {nodes.map(node => (
+          <LabNode
+            node={node.node}
+            key={node.node.id}
+            lastSeen={node.last_seen}
+            commentCount={node.comment_count}
+          />
+        ))}
+      </Masonry>
+    </InfiniteScroll>
   );
 };
 

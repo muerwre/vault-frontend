@@ -1,16 +1,12 @@
 import { useCallback } from 'react';
 import { INode } from '~/redux/types';
 import { apiPostNode } from '~/api/node';
-import { selectLabListNodes } from '~/redux/lab/selectors';
-import { labSetList } from '~/redux/lab/actions';
-import { useShallowSelect } from '~/hooks/data/useShallowSelect';
-import { useDispatch } from 'react-redux';
 import { useFlowStore } from '~/store/flow/useFlowStore';
+import { useGetLabNodes } from '~/hooks/lab/useGetLabNodes';
 
 export const useCreateNode = () => {
-  const dispatch = useDispatch();
   const flow = useFlowStore();
-  const labNodes = useShallowSelect(selectLabListNodes);
+  const lab = useGetLabNodes();
 
   return useCallback(
     async (node: INode) => {
@@ -19,13 +15,9 @@ export const useCreateNode = () => {
       if (node.is_promoted) {
         flow.setNodes([result.node, ...flow.nodes]);
       } else {
-        const updatedNodes = [
-          { node: result.node, comment_count: 0, last_seen: node.created_at },
-          ...labNodes,
-        ];
-        dispatch(labSetList({ nodes: updatedNodes }));
+        await lab.unshift({ node: result.node, comment_count: 0, last_seen: node.created_at });
       }
     },
-    [flow, labNodes, dispatch]
+    [flow, lab]
   );
 };

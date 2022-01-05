@@ -1,13 +1,12 @@
 import { INode } from '~/redux/types';
-import { useDispatch } from 'react-redux';
-import { labSeenNode } from '~/redux/lab/actions';
 import { useEffect } from 'react';
 import { useFlowStore } from '~/store/flow/useFlowStore';
+import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
 
 // useOnNodeSeen updates node seen status across all needed places
 export const useOnNodeSeen = (node?: INode) => {
+  const labStats = useGetLabStats();
   const flow = useFlowStore();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!node?.id) {
@@ -18,7 +17,8 @@ export const useOnNodeSeen = (node?: INode) => {
     if (node.is_promoted) {
       flow.seenNode(node.id);
     } else {
-      dispatch(labSeenNode(node.id));
+      void labStats.seenNode(node.id);
     }
-  }, [dispatch, flow, node]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [node?.id]);
 };

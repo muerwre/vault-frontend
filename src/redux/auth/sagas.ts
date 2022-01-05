@@ -55,16 +55,15 @@ import { messagesSet } from '~/redux/messages/actions';
 import { SagaIterator } from 'redux-saga';
 import { isEmpty } from 'ramda';
 import { AxiosError } from 'axios';
-import { labGetUpdates } from '~/redux/lab/actions';
 import { getMOBXStore } from '~/store';
 import { Dialog } from '~/constants/modal';
 import { showErrorToast } from '~/utils/errors/showToast';
-import { showToastSuccess, showToastInfo } from '~/utils/toast';
+import { showToastInfo } from '~/utils/toast';
 import { getRandomPhrase } from '~/constants/phrases';
 
 const modalStore = getMOBXStore().modal;
 
-function* setTokenSaga({ token }: ReturnType<typeof authSetToken>) {
+function setTokenSaga({ token }: ReturnType<typeof authSetToken>) {
   localStorage.setItem('token', token);
 }
 
@@ -205,7 +204,6 @@ function* getUpdates() {
 function* startPollingSaga() {
   while (true) {
     yield call(getUpdates);
-    yield put(labGetUpdates());
     yield delay(60000);
   }
 }
