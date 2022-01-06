@@ -11,9 +11,6 @@ import auth from '~/redux/auth';
 import authSaga from '~/redux/auth/sagas';
 import { IAuthState } from '~/redux/auth/types';
 
-import uploads, { IUploadState } from '~/redux/uploads/reducer';
-import uploadSaga from '~/redux/uploads/sagas';
-
 import player, { IPlayerState } from '~/redux/player/reducer';
 import playerSaga from '~/redux/player/sagas';
 
@@ -41,7 +38,6 @@ const playerPersistConfig: PersistConfig = {
 export interface IState {
   auth: IAuthState;
   router: RouterState;
-  uploads: IUploadState;
   player: IPlayerState;
   messages: IMessagesState;
 }
@@ -60,7 +56,6 @@ export const store = createStore(
   combineReducers<IState>({
     auth: persistReducer(authPersistConfig, auth),
     router: connectRouter(history),
-    uploads,
     player: persistReducer(playerPersistConfig, player),
     messages,
   }),
@@ -72,7 +67,6 @@ export function configureStore(): {
   persistor: Persistor;
 } {
   sagaMiddleware.run(authSaga);
-  sagaMiddleware.run(uploadSaga);
   sagaMiddleware.run(playerSaga);
   sagaMiddleware.run(messagesSaga);
 

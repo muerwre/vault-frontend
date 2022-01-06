@@ -1,13 +1,13 @@
 import { INode } from '~/redux/types';
 import { useMemo } from 'react';
-import { UPLOAD_TYPES } from '~/redux/uploads/constants';
+import { UploadType } from '~/constants/uploads';
 
 export const useNodeAudios = (node: INode) => {
   if (!node?.files) {
     return [];
   }
 
-  return useMemo(() => node.files.filter(file => file && file.type === UPLOAD_TYPES.AUDIO), [
+  return useMemo(() => node.files.filter(file => file && file.type === UploadType.Audio), [
     node.files,
   ]);
 };

@@ -2,9 +2,9 @@ import { IComment, INode } from '~/redux/types';
 import { useCallback, useEffect, useRef } from 'react';
 import { FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { array, object, string } from 'yup';
-import { FileUploader } from '~/hooks/data/useFileUploader';
 import { showErrorToast } from '~/utils/errors/showToast';
 import { hasPath, path } from 'ramda';
+import { Uploader } from '~/utils/context/UploaderContextProvider';
 
 const validationSchema = object().shape({
   text: string(),
@@ -31,7 +31,7 @@ const onSuccess = ({ resetForm, setSubmitting, setErrors }: FormikHelpers<IComme
 export const useCommentFormFormik = (
   values: IComment,
   nodeId: INode['id'],
-  uploader: FileUploader,
+  uploader: Uploader,
   sendData: (data: IComment) => Promise<unknown>,
   stopEditing?: () => void
 ) => {
@@ -41,20 +41,19 @@ export const useCommentFormFormik = (
     async (values: IComment, helpers: FormikHelpers<IComment>) => {
       try {
         helpers.setSubmitting(true);
-        await sendData(values);
+        await sendData({ ...values, files: uploader.files });
         onSuccess(helpers)();
       } catch (error) {
         onSuccess(helpers)(error);
       }
     },
-    [sendData]
+    [sendData, uploader.files]
   );
 
   const onReset = useCallback(() => {
     uploader.setFiles([]);
-
     if (stopEditing) stopEditing();
-  }, [uploader, stopEditing]);
+  }, [stopEditing, uploader]);
 
   const formik = useFormik({
     initialValues,

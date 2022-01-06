@@ -1,16 +1,16 @@
 import React, { FC, useCallback } from 'react';
 import { SortEnd } from 'react-sortable-hoc';
 import { IFile } from '~/redux/types';
-import { IUploadStatus } from '~/redux/uploads/reducer';
 import { moveArrItem } from '~/utils/fn';
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
 
 import styles from './styles.module.scss';
+import { UploadStatus } from '~/store/uploader/UploaderStore';
 
 interface IProps {
   files: IFile[];
   setFiles: (val: IFile[]) => void;
-  locked: IUploadStatus[];
+  locked: UploadStatus[];
 }
 
 const AudioGrid: FC<IProps> = ({ files, setFiles, locked }) => {

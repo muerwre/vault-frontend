@@ -4,7 +4,7 @@ import { append, assocPath, path } from 'ramda';
 import { formatCommentText, getPrettyDate, getURL } from '~/utils/dom';
 import { Group } from '~/components/containers/Group';
 import styles from './styles.module.scss';
-import { UPLOAD_TYPES } from '~/redux/uploads/constants';
+import { UploadType } from '~/constants/uploads';
 import reduce from 'ramda/es/reduce';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import classnames from 'classnames';
@@ -30,12 +30,12 @@ const CommentContent: FC<IProps> = memo(
     const startEditing = useCallback(() => setIsEditing(true), [setIsEditing]);
     const stopEditing = useCallback(() => setIsEditing(false), [setIsEditing]);
 
-    const groupped = useMemo<Record<keyof typeof UPLOAD_TYPES, IFile[]>>(
+    const groupped = useMemo<Record<UploadType, IFile[]>>(
       () =>
         reduce(
           (group, file) =>
             file.type ? assocPath([file.type], append(file, group[file.type]), group) : group,
-          {},
+          {} as Record<UploadType, IFile[]>,
           comment.files
         ),
       [comment]

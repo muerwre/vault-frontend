@@ -6,8 +6,7 @@ import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { prop } from 'ramda';
 import { useNodeFormFormik } from '~/hooks/node/useNodeFormFormik';
 import { EditorButtons } from '~/components/editors/EditorButtons';
-import { FileUploaderProvider, useFileUploader } from '~/hooks/data/useFileUploader';
-import { UPLOAD_SUBJECTS, UPLOAD_TARGETS } from '~/redux/uploads/constants';
+import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { FormikProvider } from 'formik';
 import { INode } from '~/redux/types';
 import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
@@ -15,16 +14,19 @@ import { useTranslatedError } from '~/hooks/data/useTranslatedError';
 import { useCloseOnEscape } from '~/hooks';
 import { EditorConfirmClose } from '~/components/editors/EditorConfirmClose';
 import { IDialogProps } from '~/types/modal';
+import { useUploader } from '~/hooks/data/useUploader';
+import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
+import { observer } from 'mobx-react-lite';
 
 interface Props extends IDialogProps {
   node: INode;
   onSubmit: (node: INode) => Promise<unknown>;
 }
 
-const EditorDialog: FC<Props> = ({ node, onRequestClose, onSubmit }) => {
+const EditorDialog: FC<Props> = observer(({ node, onRequestClose, onSubmit }) => {
   const [isConfirmModalShown, setConfirmModalShown] = useState(false);
 
-  const uploader = useFileUploader(UPLOAD_SUBJECTS.EDITOR, UPLOAD_TARGETS.NODES, node.files);
+  const uploader = useUploader(UploadSubject.Editor, UploadTarget.Nodes, node.files);
   const formik = useNodeFormFormik(node, uploader, onRequestClose, onSubmit);
   const { values, handleSubmit, dirty, status } = formik;
 
@@ -58,7 +60,7 @@ const EditorDialog: FC<Props> = ({ node, onRequestClose, onSubmit }) => {
 
   return (
     <ModalWrapper onOverlayClick={onClose}>
-      <FileUploaderProvider value={uploader}>
+      <UploaderContextProvider value={uploader}>
         <FormikProvider value={formik}>
           <form onSubmit={handleSubmit} className={styles.form}>
             <BetterScrollDialog
@@ -78,9 +80,9 @@ const EditorDialog: FC<Props> = ({ node, onRequestClose, onSubmit }) => {
             </BetterScrollDialog>
           </form>
         </FormikProvider>
-      </FileUploaderProvider>
+      </UploaderContextProvider>
     </ModalWrapper>
   );
-};
+});
 
 export { EditorDialog };

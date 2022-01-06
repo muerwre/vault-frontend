@@ -4,8 +4,8 @@ import { AudioUpload } from '~/components/upload/AudioUpload';
 import styles from './styles.module.scss';
 import { SortableAudioGridItem } from '~/components/editors/SortableAudioGridItem';
 import { IFile } from '~/redux/types';
-import { IUploadStatus } from '~/redux/uploads/reducer';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
+import { UploadStatus } from '~/store/uploader/UploaderStore';
 
 const SortableAudioGrid = SortableContainer(
   ({
@@ -15,7 +15,7 @@ const SortableAudioGrid = SortableContainer(
     onTitleChange,
   }: {
     items: IFile[];
-    locked: IUploadStatus[];
+    locked: UploadStatus[];
     onDelete: (file_id: IFile['id']) => void;
     onTitleChange: (file_id: IFile['id'], title: string) => void;
   }) => {
@@ -35,7 +35,7 @@ const SortableAudioGrid = SortableContainer(
           ))}
 
         {locked.map((item, index) => (
-          <SortableAudioGridItem key={item.temp_id} index={index} collection={1} disabled>
+          <SortableAudioGridItem key={item.id} index={index} collection={1} disabled>
             <AudioUpload title={item.name} progress={item.progress} is_uploading />
           </SortableAudioGridItem>
         ))}

@@ -1,27 +1,27 @@
 import React, { ChangeEvent, FC, useCallback } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
-import { UPLOAD_TYPES } from '~/redux/uploads/constants';
+import { UploadType } from '~/constants/uploads';
 import { IEditorComponentProps } from '~/types/node';
-import { useFileUploaderContext } from '~/hooks/data/useFileUploader';
 import { getFileType } from '~/utils/uploader';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { Button } from '~/components/input/Button';
+import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
 
 type IProps = IEditorComponentProps & {
   accept?: string;
   icon?: string;
-  type?: typeof UPLOAD_TYPES[keyof typeof UPLOAD_TYPES];
+  type?: UploadType;
   label?: string;
 };
 
 const EditorUploadButton: FC<IProps> = ({
   accept = 'image/*',
   icon = 'plus',
-  type = UPLOAD_TYPES.IMAGE,
+  type = UploadType.Image,
   label,
 }) => {
-  const { uploadFiles } = useFileUploaderContext()!;
+  const { uploadFiles } = useUploaderContext()!;
   const { values } = useNodeFormContext();
 
   const onInputChange = useCallback(

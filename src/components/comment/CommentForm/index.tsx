@@ -3,8 +3,7 @@ import { useCommentFormFormik } from '~/hooks/comments/useCommentFormFormik';
 import { FormikProvider } from 'formik';
 import { LocalCommentFormTextarea } from '~/components/comment/LocalCommentFormTextarea';
 import { Button } from '~/components/input/Button';
-import { FileUploaderProvider, useFileUploader } from '~/hooks/data/useFileUploader';
-import { UPLOAD_SUBJECTS, UPLOAD_TARGETS } from '~/redux/uploads/constants';
+import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { CommentFormAttachButtons } from '~/components/comment/CommentFormAttachButtons';
 import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormatButtons';
 import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
@@ -16,6 +15,9 @@ import styles from './styles.module.scss';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { useInputPasteUpload } from '~/hooks/dom/useInputPasteUpload';
 import { Filler } from '~/components/containers/Filler';
+import { useUploader } from '~/hooks/data/useUploader';
+import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
+import { observer } from 'mobx-react-lite';
 
 interface IProps {
   comment?: IComment;
@@ -24,13 +26,9 @@ interface IProps {
   onCancelEdit?: () => void;
 }
 
-const CommentForm: FC<IProps> = ({ comment, nodeId, saveComment, onCancelEdit }) => {
+const CommentForm: FC<IProps> = observer(({ comment, nodeId, saveComment, onCancelEdit }) => {
   const [textarea, setTextArea] = useState<HTMLTextAreaElement | null>(null);
-  const uploader = useFileUploader(
-    UPLOAD_SUBJECTS.COMMENT,
-    UPLOAD_TARGETS.COMMENTS,
-    comment?.files
-  );
+  const uploader = useUploader(UploadSubject.Comment, UploadTarget.Comments, comment?.files);
   const formik = useCommentFormFormik(
     comment || EMPTY_COMMENT,
     nodeId,
@@ -61,7 +59,7 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, saveComment, onCancelEdit })
     <UploadDropzone onUpload={uploader.uploadFiles}>
       <form onSubmit={formik.handleSubmit} className={styles.wrap}>
         <FormikProvider value={formik}>
-          <FileUploaderProvider value={uploader}>
+          <UploaderContextProvider value={uploader}>
             <div className={styles.input}>
               <LocalCommentFormTextarea onPaste={onPaste} ref={setTextArea} />
 
@@ -110,11 +108,11 @@ const CommentForm: FC<IProps> = ({ comment, nodeId, saveComment, onCancelEdit })
                 </Button>
               </div>
             </div>
-          </FileUploaderProvider>
+          </UploaderContextProvider>
         </FormikProvider>
       </form>
     </UploadDropzone>
   );
-};
+});
 
 export { CommentForm };

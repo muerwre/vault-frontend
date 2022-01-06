@@ -1,104 +1,75 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useCallback } from 'react';
 import styles from './styles.module.scss';
 import { connect } from 'react-redux';
 import { getURL } from '~/utils/dom';
-import { path, pick } from 'ramda';
+import { pick } from 'ramda';
 import { selectAuthProfile, selectAuthUser } from '~/redux/auth/selectors';
 import { PRESETS } from '~/constants/urls';
-import { selectUploads } from '~/redux/uploads/selectors';
-import { IFileWithUUID } from '~/redux/types';
-import uuid from 'uuid4';
-import { UPLOAD_SUBJECTS, UPLOAD_TARGETS, UPLOAD_TYPES } from '~/redux/uploads/constants';
-import * as UPLOAD_ACTIONS from '~/redux/uploads/actions';
+import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { Icon } from '~/components/input/Icon';
+import { useUploader } from '~/hooks/data/useUploader';
+import { observer } from 'mobx-react-lite';
+import { showErrorToast } from '~/utils/errors/showToast';
 
 const mapStateToProps = state => ({
   user: pick(['id'], selectAuthUser(state)),
   profile: pick(['is_loading', 'user'], selectAuthProfile(state)),
-  uploads: pick(['statuses', 'files'], selectUploads(state)),
 });
 
 const mapDispatchToProps = {
-  uploadUploadFiles: UPLOAD_ACTIONS.uploadUploadFiles,
   authPatchUser: AUTH_ACTIONS.authPatchUser,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const ProfileAvatarUnconnected: FC<IProps> = ({
-  user: { id },
-  profile: { is_loading, user },
-  uploads: { statuses, files },
-  uploadUploadFiles,
-  authPatchUser,
-}) => {
-  const can_edit = !is_loading && id && id === user?.id;
+const ProfileAvatarUnconnected: FC<IProps> = observer(
+  ({ user: { id }, profile: { is_loading, user }, authPatchUser }) => {
+    const uploader = useUploader(
+      UploadSubject.Avatar,
+      UploadTarget.Profiles,
+      user?.photo ? [] : []
+    );
 
-  const [temp, setTemp] = useState<string>('');
+    const onInputChange = useCallback(
+      async (event: ChangeEvent<HTMLInputElement>) => {
+        try {
+          if (!event.target.files?.length) {
+            return;
+          }
 
-  useEffect(() => {
-    if (!can_edit) return;
+          const photo = await uploader.uploadFile(event.target.files[0]);
+          authPatchUser({ photo });
+        } catch (error) {
+          showErrorToast(error);
+        }
+      },
+      [uploader, authPatchUser]
+    );
 
-    Object.entries(statuses).forEach(([id, status]) => {
-      if (temp === id && !!status.uuid && files[status.uuid]) {
-        authPatchUser({ photo: files[status.uuid] });
-        setTemp('');
-      }
-    });
-  }, [statuses, files, temp, can_edit, authPatchUser]);
+    const can_edit = !is_loading && id && id === user?.id;
 
-  const onUpload = useCallback(
-    (uploads: File[]) => {
-      const items: IFileWithUUID[] = Array.from(uploads).map(
-        (file: File): IFileWithUUID => ({
-          file,
-          temp_id: uuid(),
-          subject: UPLOAD_SUBJECTS.AVATAR,
-          target: UPLOAD_TARGETS.PROFILES,
-          type: UPLOAD_TYPES.IMAGE,
-        })
-      );
+    const backgroundImage = is_loading
+      ? undefined
+      : `url("${user && getURL(user.photo, PRESETS.avatar)}")`;
 
-      setTemp(path([0, 'temp_id'], items) || '');
-      uploadUploadFiles(items.slice(0, 1));
-    },
-    [uploadUploadFiles, setTemp]
-  );
-
-  const onInputChange = useCallback(
-    event => {
-      if (!can_edit) return;
-
-      event.preventDefault();
-
-      if (!event.target.files || !event.target.files.length) return;
-
-      onUpload(Array.from(event.target.files));
-    },
-    [onUpload, can_edit]
-  );
-
-  const backgroundImage = is_loading
-    ? undefined
-    : `url("${user && getURL(user.photo, PRESETS.avatar)}")`;
-
-  return (
-    <div
-      className={styles.avatar}
-      style={{
-        backgroundImage,
-      }}
-    >
-      {can_edit && <input type="file" onInput={onInputChange} />}
-      {can_edit && (
-        <div className={styles.can_edit}>
-          <Icon icon="photo_add" />
-        </div>
-      )}
-    </div>
-  );
-};
+    return (
+      <div
+        className={styles.avatar}
+        style={{
+          backgroundImage,
+        }}
+      >
+        {can_edit && <input type="file" onInput={onInputChange} />}
+        {can_edit && (
+          <div className={styles.can_edit}>
+            <Icon icon="photo_add" />
+          </div>
+        )}
+      </div>
+    );
+  }
+);
 
 const ProfileAvatar = connect(mapStateToProps, mapDispatchToProps)(ProfileAvatarUnconnected);
 

@@ -1,5 +1,5 @@
 import isValid from 'date-fns/isValid';
-import { IMAGE_MIME_TYPES } from '~/utils/uploader';
+import { IMAGE_MIME_TYPES } from '~/constants/uploads';
 
 const isValidEmail = (email: string): boolean =>
   !!email &&

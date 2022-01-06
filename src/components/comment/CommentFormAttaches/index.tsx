@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback } from 'react';
 import styles from './styles.module.scss';
 import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
@@ -6,68 +6,59 @@ import { IFile } from '~/redux/types';
 import { SortEnd } from 'react-sortable-hoc';
 import { moveArrItem } from '~/utils/fn';
 import { useFileDropZone } from '~/hooks';
-import { COMMENT_FILE_TYPES, UPLOAD_TYPES } from '~/redux/uploads/constants';
-import { useFileUploaderContext } from '~/hooks/data/useFileUploader';
+import { COMMENT_FILE_TYPES } from '~/constants/uploads';
+import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
 
 const CommentFormAttaches: FC = () => {
-  const uploader = useFileUploaderContext();
-  const { files, pending, setFiles, uploadFiles } = uploader!;
-
-  const images = useMemo(() => files.filter(file => file && file.type === UPLOAD_TYPES.IMAGE), [
+  const {
     files,
-  ]);
-
-  const pendingImages = useMemo(() => pending.filter(item => item.type === UPLOAD_TYPES.IMAGE), [
-    pending,
-  ]);
-
-  const audios = useMemo(() => files.filter(file => file && file.type === UPLOAD_TYPES.AUDIO), [
-    files,
-  ]);
-
-  const pendingAudios = useMemo(() => pending.filter(item => item.type === UPLOAD_TYPES.AUDIO), [
-    pending,
-  ]);
+    pendingImages,
+    pendingAudios,
+    filesAudios,
+    filesImages,
+    uploadFiles,
+    setFiles,
+  } = useUploaderContext();
 
   const onDrop = useFileDropZone(uploadFiles, COMMENT_FILE_TYPES);
 
-  const hasImageAttaches = images.length > 0 || pendingImages.length > 0;
-  const hasAudioAttaches = audios.length > 0 || pendingAudios.length > 0;
+  const hasImageAttaches = filesImages.length > 0 || pendingImages.length > 0;
+  const hasAudioAttaches = filesAudios.length > 0 || pendingAudios.length > 0;
   const hasAttaches = hasImageAttaches || hasAudioAttaches;
 
   const onImageMove = useCallback(
     ({ oldIndex, newIndex }: SortEnd) => {
       setFiles([
-        ...audios,
+        ...filesAudios,
         ...(moveArrItem(
           oldIndex,
           newIndex,
-          images.filter(file => !!file)
+          filesImages.filter(file => !!file)
         ) as IFile[]),
       ]);
     },
-    [images, audios, setFiles]
+    [setFiles, filesImages, filesAudios]
   );
 
   const onAudioMove = useCallback(
     ({ oldIndex, newIndex }: SortEnd) => {
       setFiles([
-        ...images,
+        ...filesImages,
         ...(moveArrItem(
           oldIndex,
           newIndex,
-          audios.filter(file => !!file)
+          filesAudios.filter(file => !!file)
         ) as IFile[]),
       ]);
     },
-    [images, audios, setFiles]
+    [setFiles, filesImages, filesAudios]
   );
 
   const onFileDelete = useCallback(
     (fileId: IFile['id']) => {
       setFiles(files.filter(file => file.id !== fileId));
     },
-    [setFiles, files]
+    [files, setFiles]
   );
 
   const onAudioTitleChange = useCallback(
@@ -90,7 +81,7 @@ const CommentFormAttaches: FC = () => {
           onDelete={onFileDelete}
           onSortEnd={onImageMove}
           axis="xy"
-          items={images}
+          items={filesImages}
           locked={pendingImages}
           pressDelay={50}
           helperClass={styles.helper}
@@ -100,7 +91,7 @@ const CommentFormAttaches: FC = () => {
 
       {hasAudioAttaches && (
         <SortableAudioGrid
-          items={audios}
+          items={filesAudios}
           onDelete={onFileDelete}
           onTitleChange={onAudioTitleChange}
           onSortEnd={onAudioMove}

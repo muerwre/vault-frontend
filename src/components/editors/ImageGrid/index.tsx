@@ -2,14 +2,14 @@ import React, { FC, useCallback } from 'react';
 import { SortEnd } from 'react-sortable-hoc';
 import styles from './styles.module.scss';
 import { IFile } from '~/redux/types';
-import { IUploadStatus } from '~/redux/uploads/reducer';
 import { moveArrItem } from '~/utils/fn';
 import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
+import { UploadStatus } from '~/store/uploader/UploaderStore';
 
 interface IProps {
   files: IFile[];
   setFiles: (val: IFile[]) => void;
-  locked: IUploadStatus[];
+  locked: UploadStatus[];
 }
 
 const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {

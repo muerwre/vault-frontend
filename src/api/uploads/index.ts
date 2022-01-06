@@ -1,12 +1,13 @@
 import { api, cleanResult } from '~/utils/api';
 
 import { API } from '~/constants/api';
-import { ApiUploadFileRequest, ApiUploadFIleResult } from '~/redux/uploads/types';
+import { ApiUploadFileRequest, ApiUploadFIleResult } from '~/api/uploads/types';
+import { UploadTarget, UploadType } from '~/constants/uploads';
 
 export const apiUploadFile = ({
   file,
-  target = 'others',
-  type = 'image',
+  target = UploadTarget.Others,
+  type = UploadType.Image,
   onProgress,
 }: ApiUploadFileRequest) => {
   const data = new FormData();

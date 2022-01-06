@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from 'react';
 import { ButtonGroup } from '~/components/input/ButtonGroup';
 import { Button } from '~/components/input/Button';
-import { COMMENT_FILE_TYPES } from '~/redux/uploads/constants';
+import { COMMENT_FILE_TYPES } from '~/constants/uploads';
 
 interface IProps {
   onUpload: (files: File[]) => void;

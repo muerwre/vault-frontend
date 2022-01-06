@@ -1,10 +1,10 @@
 import { INode } from '~/redux/types';
-import { FileUploader } from '~/hooks/data/useFileUploader';
 import { useCallback, useRef } from 'react';
 import { FormikConfig, FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { object } from 'yup';
 import { keys } from 'ramda';
 import { showErrorToast } from '~/utils/errors/showToast';
+import { Uploader } from '~/utils/context/UploaderContextProvider';
 
 const validationSchema = object().shape({});
 
@@ -31,7 +31,7 @@ const afterSubmit = ({ resetForm, setSubmitting, setErrors }: FormikHelpers<INod
 
 export const useNodeFormFormik = (
   values: INode,
-  uploader: FileUploader,
+  uploader: Uploader,
   stopEditing: () => void,
   sendSaveRequest: (node: INode) => Promise<unknown>
 ) => {
