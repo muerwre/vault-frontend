@@ -64,14 +64,6 @@ export function configureStore(): {
   sagaMiddleware.run(authSaga);
   sagaMiddleware.run(messagesSaga);
 
-  window.addEventListener('message', message => {
-    if (message && message.data && message.data.type === 'oauth_login' && message.data.token)
-      return store.dispatch(gotAuthPostMessage({ token: message.data.token }));
-
-    if (message && message.data && message.data.type === 'username' && message.data.username)
-      return store.dispatch(authOpenProfile(message.data.username));
-  });
-
   const persistor = persistStore(store);
 
   // Pass token to axios
@@ -95,6 +87,16 @@ export function configureStore(): {
 
     throw error;
   });
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('message', message => {
+      if (message && message.data && message.data.type === 'oauth_login' && message.data.token)
+        return store.dispatch(gotAuthPostMessage({ token: message.data.token }));
+
+      if (message && message.data && message.data.type === 'username' && message.data.username)
+        return store.dispatch(authOpenProfile(message.data.username));
+    });
+  }
 
   return { store, persistor };
 }

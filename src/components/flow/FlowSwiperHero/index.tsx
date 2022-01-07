@@ -11,6 +11,7 @@ import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { useHistory } from 'react-router';
 import classNames from 'classnames';
 import { IFlowNode } from '~/redux/types';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
 
 SwiperCore.use([EffectFade, Lazy, Autoplay, Navigation]);
 
@@ -19,9 +20,13 @@ interface Props {
 }
 
 export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
+  const { innerWidth } = useWindowSize();
+
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
   const [currentIndex, setCurrentIndex] = useState(heroes.length);
-  const preset = useMemo(() => (window.innerWidth <= 768 ? PRESETS.cover : PRESETS.small_hero), []);
+  const preset = useMemo(() => (innerWidth <= 768 ? PRESETS.cover : PRESETS.small_hero), [
+    innerWidth,
+  ]);
   const history = useHistory();
 
   const onNext = useCallback(() => {
