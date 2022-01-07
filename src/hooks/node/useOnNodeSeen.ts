@@ -1,7 +1,7 @@
-import { INode } from '~/redux/types';
-import { useEffect } from 'react';
-import { useFlowStore } from '~/store/flow/useFlowStore';
-import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
+import { INode } from "~/redux/types";
+import { useEffect } from "react";
+import { useFlowStore } from "~/store/flow/useFlowStore";
+import { useGetLabStats } from "~/hooks/lab/useGetLabStats";
 
 // useOnNodeSeen updates node seen status across all needed places
 export const useOnNodeSeen = (node?: INode) => {

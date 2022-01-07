@@ -1,12 +1,12 @@
-import React, { FC } from 'react';
-import { INode } from '~/redux/types';
-import styles from './styles.module.scss';
-import { URLS } from '~/constants/urls';
-import { NodeRelatedItem } from '~/components/node/NodeRelatedItem';
-import { getPrettyDate } from '~/utils/dom';
-import { Link } from 'react-router-dom';
-import classNames from 'classnames';
-import { Icon } from '~/components/input/Icon';
+import React, { FC } from "react";
+import { INode } from "~/redux/types";
+import styles from "./styles.module.scss";
+import { URLS } from "~/constants/urls";
+import { NodeRelatedItem } from "~/components/node/NodeRelatedItem";
+import { getPrettyDate } from "~/utils/dom";
+import { Link } from "react-router-dom";
+import classNames from "classnames";
+import { Icon } from "~/components/input/Icon";
 
 interface IProps {
   node: Partial<INode>;

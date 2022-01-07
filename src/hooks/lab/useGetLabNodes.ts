@@ -1,5 +1,4 @@
-import useSWRInfinite from 'swr/infinite';
-import { KeyLoader } from 'swr';
+import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { GetLabNodesRequest, ILabNode } from '~/types/lab';
 import { getLabNodes } from '~/api/lab';
 import { flatten, last, uniqBy } from 'ramda';
@@ -8,7 +7,7 @@ import { useCallback, useEffect } from 'react';
 import { INode } from '~/redux/types';
 import { useUser } from '~/hooks/user/userUser';
 
-const getKey: (isUser: boolean) => KeyLoader<ILabNode[]> = isUser => (index, prev) => {
+const getKey: (isUser: boolean) => SWRInfiniteKeyLoader = isUser => (index, prev: ILabNode[]) => {
   if (!isUser) return null;
   if (index > 0 && !prev?.length) return null;
 

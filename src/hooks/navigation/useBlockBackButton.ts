@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { history } from '~/redux/store';
+import { useEffect } from "react";
+import { history } from "~/redux/store";
 
 /**
  * useBlockBackButton - blocks back navigation and calls {callback}

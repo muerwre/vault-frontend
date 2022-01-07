@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { IIcon } from '~/redux/types';
+import React, { FC } from "react";
+import { IIcon } from "~/redux/types";
 
 type IProps = React.SVGAttributes<SVGElement> & {
   size?: number;

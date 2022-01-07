@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
-import { ProfileSettings } from '~/components/profile/ProfileSettings';
-import styles from './styles.module.scss';
-import { Filler } from '~/components/containers/Filler';
-import { Button } from '~/components/input/Button';
+import React, { FC } from "react";
+import { ProfileSettings } from "~/components/profile/ProfileSettings";
+import styles from "./styles.module.scss";
+import { Filler } from "~/components/containers/Filler";
+import { Button } from "~/components/input/Button";
 
 interface IProps {}
 

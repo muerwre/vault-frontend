@@ -1,17 +1,17 @@
-import React, { FC, FormEvent, useCallback, useMemo } from 'react';
-import { InputText } from '~/components/input/InputText';
-import { FlowRecent } from '~/components/flow/FlowRecent';
+import React, { FC, FormEvent, useCallback, useMemo } from "react";
+import { InputText } from "~/components/input/InputText";
+import { FlowRecent } from "~/components/flow/FlowRecent";
 
-import styles from '~/containers/flow/FlowStamp/styles.module.scss';
-import { FlowSearchResults } from '~/components/flow/FlowSearchResults';
-import { Icon } from '~/components/input/Icon';
-import { Group } from '~/components/containers/Group';
-import { Toggle } from '~/components/input/Toggle';
-import classNames from 'classnames';
-import { Superpower } from '~/components/boris/Superpower';
-import { experimentalFeatures } from '~/constants/features';
-import { useSearchContext } from '~/utils/providers/SearchProvider';
-import { useFlowContext } from '~/utils/context/FlowContextProvider';
+import styles from "~/containers/flow/FlowStamp/styles.module.scss";
+import { FlowSearchResults } from "~/components/flow/FlowSearchResults";
+import { Icon } from "~/components/input/Icon";
+import { Group } from "~/components/containers/Group";
+import { Toggle } from "~/components/input/Toggle";
+import classNames from "classnames";
+import { Superpower } from "~/components/boris/Superpower";
+import { experimentalFeatures } from "~/constants/features";
+import { useSearchContext } from "~/utils/providers/SearchProvider";
+import { useFlowContext } from "~/utils/context/FlowContextProvider";
 
 interface IProps {
   isFluid: boolean;

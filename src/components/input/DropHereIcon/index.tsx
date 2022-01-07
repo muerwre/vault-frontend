@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { SVGProps } from '~/utils/types';
+import React, { FC } from "react";
+import styles from "./styles.module.scss";
+import { SVGProps } from "~/utils/types";
 
 interface Props extends SVGProps {}
 

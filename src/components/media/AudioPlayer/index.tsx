@@ -1,152 +1,100 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { connect } from 'react-redux';
-import { selectPlayer } from '~/redux/player/selectors';
-import * as PLAYER_ACTIONS from '~/redux/player/actions';
-import { IFile } from '~/redux/types';
-import { IPlayerProgress, Player } from '~/utils/player';
-import classNames from 'classnames';
-import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
-import { InputText } from '~/components/input/InputText';
-import { PlayerState } from '~/redux/player/constants';
+import React, { memo, useCallback, useMemo } from "react";
+import { IFile } from "~/redux/types";
+import classNames from "classnames";
+import styles from "./styles.module.scss";
+import { Icon } from "~/components/input/Icon";
+import { InputText } from "~/components/input/InputText";
+import { PlayerState } from "~/constants/player";
+import { useAudioPlayer } from "~/utils/providers/AudioPlayerProvider";
 
-const mapStateToProps = state => ({
-  player: selectPlayer(state),
-});
-
-const mapDispatchToProps = {
-  playerSetFileAndPlay: PLAYER_ACTIONS.playerSetFileAndPlay,
-  playerPlay: PLAYER_ACTIONS.playerPlay,
-  playerPause: PLAYER_ACTIONS.playerPause,
-  playerSeek: PLAYER_ACTIONS.playerSeek,
+type Props = {
+  file: IFile;
+  isEditing?: boolean;
+  onDelete?: (id: IFile['id']) => void;
+  onTitleChange?: (file_id: IFile['id'], title: string) => void;
 };
 
-type Props = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps & {
-    file: IFile;
-    isEditing?: boolean;
-    onDelete?: (id: IFile['id']) => void;
-    onTitleChange?: (file_id: IFile['id'], title: string) => void;
-  };
+const AudioPlayer = memo(({ file, onDelete, isEditing, onTitleChange }: Props) => {
+  const { toPercent, file: currentFile, setFile, play, status, progress, pause } = useAudioPlayer();
 
-const AudioPlayerUnconnected = memo(
-  ({
-    file,
-    onDelete,
-    isEditing,
-    onTitleChange,
-    player: { file: current, status },
-    playerSetFileAndPlay,
-    playerPlay,
-    playerPause,
-    playerSeek,
-  }: Props) => {
-    const [playing, setPlaying] = useState(false);
-    const [progress, setProgress] = useState<IPlayerProgress>({
-      progress: 0,
-      current: 0,
-      total: 0,
-    });
+  const onPlay = useCallback(async () => {
+    if (file.id !== currentFile?.id) {
+      setFile(file);
+      setTimeout(() => void play(), 0);
+      return;
+    }
 
-    const onPlay = useCallback(() => {
-      if (isEditing) return;
+    status === PlayerState.PLAYING ? pause() : await play();
+  }, [play, pause, setFile, file, currentFile, status]);
 
-      if (current && current.id === file.id) {
-        if (status === PlayerState.PLAYING) return playerPause();
-        return playerPlay();
-      }
+  const onSeek = useCallback(
+    event => {
+      event.stopPropagation();
+      const { clientX, target } = event;
+      const { left, width } = target.getBoundingClientRect();
+      toPercent(((clientX - left) / width) * 100);
+    },
+    [toPercent]
+  );
 
-      playerSetFileAndPlay(file);
-    }, [file, current, status, playerPlay, playerPause, playerSetFileAndPlay, isEditing]);
+  const onDropClick = useCallback(() => {
+    if (!onDelete) return;
 
-    const onProgress = useCallback(
-      ({ detail }: { detail: IPlayerProgress }) => {
-        if (!detail || !detail.total) return;
-        setProgress(detail);
-      },
-      [setProgress]
-    );
+    onDelete(file.id);
+  }, [file, onDelete]);
 
-    const onSeek = useCallback(
-      event => {
-        event.stopPropagation();
-        const { clientX, target } = event;
-        const { left, width } = target.getBoundingClientRect();
-        playerSeek((clientX - left) / width);
-      },
-      [playerSeek]
-    );
+  const title = useMemo(
+    () =>
+      (file.metadata &&
+        (file.metadata.title ||
+          [file.metadata.id3artist, file.metadata.id3title].filter(el => el).join(' - '))) ||
+      file.orig_name ||
+      '',
+    [file.metadata, file.orig_name]
+  );
 
-    const onDropClick = useCallback(() => {
-      if (!onDelete) return;
+  const onRename = useCallback(
+    (val: string) => {
+      if (!onTitleChange) return;
 
-      onDelete(file.id);
-    }, [file, onDelete]);
+      onTitleChange(file.id, val);
+    },
+    [onTitleChange, file.id]
+  );
 
-    const title = useMemo(
-      () =>
-        (file.metadata &&
-          (file.metadata.title ||
-            [file.metadata.id3artist, file.metadata.id3title].filter(el => el).join(' - '))) ||
-        file.orig_name ||
-        '',
-      [file.metadata, file.orig_name]
-    );
+  const playing = currentFile?.id === file.id;
 
-    const onRename = useCallback(
-      (val: string) => {
-        if (!onTitleChange) return;
-
-        onTitleChange(file.id, val);
-      },
-      [onTitleChange, file.id]
-    );
-
-    useEffect(() => {
-      const active = current && current.id === file.id;
-      setPlaying(!!current && current.id === file.id);
-
-      if (active) Player.on('playprogress', onProgress);
-
-      return () => {
-        if (active) Player.off('playprogress', onProgress);
-      };
-    }, [file, current, setPlaying, onProgress]);
-
-    return (
-      <div onClick={onPlay} className={classNames(styles.wrap, { playing })}>
-        {onDelete && (
-          <div className={styles.drop} onMouseDown={onDropClick}>
-            <Icon icon="close" />
-          </div>
-        )}
-
-        <div className={styles.playpause}>
-          {playing && status === PlayerState.PLAYING ? <Icon icon="pause" /> : <Icon icon="play" />}
+  return (
+    <div onClick={onPlay} className={classNames(styles.wrap, { [styles.playing]: playing })}>
+      {onDelete && (
+        <div className={styles.drop} onMouseDown={onDropClick}>
+          <Icon icon="close" />
         </div>
+      )}
 
-        {isEditing ? (
-          <div className={styles.input}>
-            <InputText
-              placeholder={title}
-              handler={onRename}
-              value={file.metadata && file.metadata.title}
-            />
-          </div>
-        ) : (
-          <div className={styles.content}>
-            <div className={styles.title}>
-              <div className={styles.title}>{title || 'Unknown'}</div>
-            </div>
-
-            <div className={styles.progress} onClick={onSeek}>
-              <div className={styles.bar} style={{ width: `${progress.progress}%` }} />
-            </div>
-          </div>
-        )}
+      <div className={styles.playpause}>
+        {playing && status === PlayerState.PLAYING ? <Icon icon="pause" /> : <Icon icon="play" />}
       </div>
-    );
-  }
-);
 
-export const AudioPlayer = connect(mapStateToProps, mapDispatchToProps)(AudioPlayerUnconnected);
+      {isEditing ? (
+        <div className={styles.input}>
+          <InputText
+            placeholder={title}
+            handler={onRename}
+            value={file.metadata && file.metadata.title}
+          />
+        </div>
+      ) : (
+        <div className={styles.content}>
+          <div className={styles.title}>{title || ''}</div>
+
+          <div className={styles.progress} onClick={onSeek}>
+            <div className={styles.bar} style={{ width: `${progress.progress}%` }} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+});
+
+export { AudioPlayer };

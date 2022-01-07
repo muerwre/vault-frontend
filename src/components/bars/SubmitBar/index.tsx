@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useState } from 'react';
-import { Icon } from '~/components/input/Icon';
-import { Link } from 'react-router-dom';
-import classNames from 'classnames';
-import { useRouteMatch } from 'react-router';
-import styles from './styles.module.scss';
+import React, { FC, useCallback, useState } from "react";
+import { Icon } from "~/components/input/Icon";
+import { Link } from "react-router-dom";
+import classNames from "classnames";
+import { useRouteMatch } from "react-router";
+import styles from "./styles.module.scss";
 
 interface Props {
   isLab?: boolean;

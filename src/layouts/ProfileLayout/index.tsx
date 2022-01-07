@@ -1,18 +1,18 @@
-import React, { FC, useEffect } from 'react';
-import styles from './styles.module.scss';
-import { RouteComponentProps } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { authLoadProfile } from '~/redux/auth/actions';
-import { useShallowSelect } from '~/hooks/data/useShallowSelect';
-import { selectAuthProfile, selectUser } from '~/redux/auth/selectors';
-import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
-import { Container } from '~/containers/main/Container';
-import { FlowGrid } from '~/components/flow/FlowGrid';
-import { Sticky } from '~/components/containers/Sticky';
-import { ProfilePageStats } from '~/containers/profile/ProfilePageStats';
-import { Card } from '~/components/containers/Card';
-import { useFlowStore } from '~/store/flow/useFlowStore';
-import { observer } from 'mobx-react';
+import React, { FC, useEffect } from "react";
+import styles from "./styles.module.scss";
+import { RouteComponentProps } from "react-router";
+import { useDispatch } from "react-redux";
+import { authLoadProfile } from "~/redux/auth/actions";
+import { useShallowSelect } from "~/hooks/data/useShallowSelect";
+import { selectAuthProfile, selectUser } from "~/redux/auth/selectors";
+import { ProfilePageLeft } from "~/containers/profile/ProfilePageLeft";
+import { Container } from "~/containers/main/Container";
+import { FlowGrid } from "~/components/flow/FlowGrid";
+import { Sticky } from "~/components/containers/Sticky";
+import { ProfilePageStats } from "~/containers/profile/ProfilePageStats";
+import { Card } from "~/components/containers/Card";
+import { useFlowStore } from "~/store/flow/useFlowStore";
+import { observer } from "mobx-react";
 
 type Props = RouteComponentProps<{ username: string }> & {};
 

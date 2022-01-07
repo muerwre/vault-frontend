@@ -1,9 +1,9 @@
-import React, { FC, MouseEventHandler } from 'react';
-import { Button } from '~/components/input/Button';
-import { Grid } from '~/components/containers/Grid';
-import { Group } from '~/components/containers/Group';
-import styles from './styles.module.scss';
-import { ISocialProvider } from '~/redux/auth/types';
+import React, { FC, MouseEventHandler } from "react";
+import { Button } from "~/components/input/Button";
+import { Grid } from "~/components/containers/Grid";
+import { Group } from "~/components/containers/Group";
+import styles from "./styles.module.scss";
+import { ISocialProvider } from "~/redux/auth/types";
 
 interface IProps {
   openOauthWindow: (provider: ISocialProvider) => MouseEventHandler;

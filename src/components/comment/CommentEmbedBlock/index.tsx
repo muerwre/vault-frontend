@@ -1,75 +1,45 @@
-import React, { FC, memo, useEffect, useMemo } from 'react';
-import { ICommentBlockProps } from '~/constants/comment';
-import styles from './styles.module.scss';
-import { getYoutubeThumb } from '~/utils/dom';
-import { selectPlayer } from '~/redux/player/selectors';
-import { connect } from 'react-redux';
-import * as PLAYER_ACTIONS from '~/redux/player/actions';
-import { Icon } from '~/components/input/Icon';
-import { path } from 'ramda';
+import React, { FC, memo, useMemo } from "react";
+import { ICommentBlockProps } from "~/constants/comment";
+import styles from "./styles.module.scss";
+import { getYoutubeThumb } from "~/utils/dom";
+import { Icon } from "~/components/input/Icon";
+import { useYoutubeMetadata } from "~/hooks/metadata/useYoutubeMetadata";
 
-const mapStateToProps = state => ({
-  youtubes: selectPlayer(state).youtubes,
-});
+type Props = ICommentBlockProps & {};
 
-const mapDispatchToProps = {
-  playerGetYoutubeInfo: PLAYER_ACTIONS.playerGetYoutubeInfo,
-};
+const CommentEmbedBlock: FC<Props> = memo(({ block }) => {
+  const id = useMemo(() => {
+    const match = block.content.match(
+      /https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?([\w\-\=]+)/
+    );
 
-type Props = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps &
-  ICommentBlockProps & {};
+    return (match && match[1]) || '';
+  }, [block.content]);
 
-const CommentEmbedBlockUnconnected: FC<Props> = memo(
-  ({ block, youtubes, playerGetYoutubeInfo }) => {
-    const id = useMemo(() => {
-      const match = block.content.match(
-        /https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?([\w\-\=]+)/
-      );
+  const url = useMemo(() => `https://youtube.com/watch?v=${id}`, [id]);
 
-      return (match && match[1]) || '';
-    }, [block.content]);
+  const preview = useMemo(() => getYoutubeThumb(block.content), [block.content]);
 
-    const url = useMemo(() => `https://youtube.com/watch?v=${id}`, [id]);
+  const metadata = useYoutubeMetadata(id);
+  const title = metadata?.metadata?.title || '';
 
-    const preview = useMemo(() => getYoutubeThumb(block.content), [block.content]);
+  return (
+    <div className={styles.embed}>
+      <a href={url} target="_blank" rel="noreferrer" />
 
-    useEffect(() => {
-      if (!id) return;
-      playerGetYoutubeInfo(id);
-    }, [id, playerGetYoutubeInfo]);
-
-    const title = useMemo<string>(() => {
-      if (!id) {
-        return block.content;
-      }
-
-      return path([id, 'metadata', 'title'], youtubes) || block.content;
-    }, [id, youtubes, block.content]);
-
-    return (
-      <div className={styles.embed}>
-        <a href={url} target="_blank" />
-
-        <div className={styles.preview}>
-          <div style={{ backgroundImage: `url("${preview}")` }}>
-            <div className={styles.backdrop}>
-              <div className={styles.play}>
-                <Icon icon="play" size={32} />
-              </div>
-
-              <div className={styles.title}>{title}</div>
+      <div className={styles.preview}>
+        <div style={{ backgroundImage: `url("${preview}")` }}>
+          <div className={styles.backdrop}>
+            <div className={styles.play}>
+              <Icon icon="play" size={32} />
             </div>
+
+            <div className={styles.title}>{title}</div>
           </div>
         </div>
       </div>
-    );
-  }
-);
-
-const CommentEmbedBlock = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CommentEmbedBlockUnconnected);
+    </div>
+  );
+});
 
 export { CommentEmbedBlock };

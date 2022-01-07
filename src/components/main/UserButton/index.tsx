@@ -1,11 +1,11 @@
-import React, { FC, useCallback } from 'react';
-import { Group } from '~/components/containers/Group';
-import styles from './styles.module.scss';
-import { getURL } from '~/utils/dom';
-import { Icon } from '~/components/input/Icon';
-import { IUser } from '~/redux/auth/types';
-import { PRESETS } from '~/constants/urls';
-import { authOpenProfile } from '~/redux/auth/actions';
+import React, { FC, useCallback } from "react";
+import { Group } from "~/components/containers/Group";
+import styles from "./styles.module.scss";
+import { getURL } from "~/utils/dom";
+import { Icon } from "~/components/input/Icon";
+import { IUser } from "~/redux/auth/types";
+import { PRESETS } from "~/constants/urls";
+import { authOpenProfile } from "~/redux/auth/actions";
 
 interface IProps {
   user: Partial<IUser>;

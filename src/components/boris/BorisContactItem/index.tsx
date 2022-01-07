@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
+import React, { FC } from "react";
+import styles from "./styles.module.scss";
+import { Icon } from "~/components/input/Icon";
 
 interface Props {
   icon: string;

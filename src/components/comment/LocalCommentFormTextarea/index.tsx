@@ -1,12 +1,7 @@
-import React, {
-  forwardRef,
-  KeyboardEventHandler,
-  TextareaHTMLAttributes,
-  useCallback,
-} from 'react';
-import { Textarea } from '~/components/input/Textarea';
-import { useCommentFormContext } from '~/hooks/comments/useCommentFormFormik';
-import { useRandomPhrase } from '~/constants/phrases';
+import React, { forwardRef, KeyboardEventHandler, TextareaHTMLAttributes, useCallback } from "react";
+import { Textarea } from "~/components/input/Textarea";
+import { useCommentFormContext } from "~/hooks/comments/useCommentFormFormik";
+import { useRandomPhrase } from "~/constants/phrases";
 
 interface IProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   isLoading?: boolean;

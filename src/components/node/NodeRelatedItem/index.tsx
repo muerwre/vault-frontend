@@ -1,12 +1,12 @@
-import React, { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import styles from './styles.module.scss';
-import classNames from 'classnames';
-import { INode } from '~/redux/types';
-import { PRESETS, URLS } from '~/constants/urls';
-import { RouteComponentProps, withRouter } from 'react-router';
-import { getURL } from '~/utils/dom';
-import { Avatar } from '~/components/common/Avatar';
-import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
+import React, { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import styles from "./styles.module.scss";
+import classNames from "classnames";
+import { INode } from "~/redux/types";
+import { PRESETS, URLS } from "~/constants/urls";
+import { RouteComponentProps, withRouter } from "react-router";
+import { getURL } from "~/utils/dom";
+import { Avatar } from "~/components/common/Avatar";
+import { useColorGradientFromString } from "~/hooks/color/useColorGradientFromString";
 
 type IProps = RouteComponentProps & {
   item: Partial<INode>;

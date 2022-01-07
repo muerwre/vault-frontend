@@ -1,5 +1,4 @@
 const CracoAlias = require('craco-alias');
-const fastRefreshCracoPlugin = require('craco-fast-refresh');
 
 module.exports = {
   webpack: {
@@ -9,6 +8,19 @@ module.exports = {
     output: {
       publicPath: '/',
     },
+    rules: [
+      {
+        test: /\.(svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'images/[hash]-[name].[ext]',
+            },
+          },
+        ],
+      },
+    ],
   },
   eslint: {
     enable: false,
@@ -48,7 +60,6 @@ module.exports = {
     },
   },
   plugins: [
-    { plugin: fastRefreshCracoPlugin },
     {
       plugin: CracoAlias,
       options: {

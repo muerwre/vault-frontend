@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
-import { useShallowSelect } from '~/hooks/data/useShallowSelect';
-import { selectUser } from '~/redux/auth/selectors';
+import React, { FC } from "react";
+import { useShallowSelect } from "~/hooks/data/useShallowSelect";
+import { selectUser } from "~/redux/auth/selectors";
 
 interface IProps {}
 

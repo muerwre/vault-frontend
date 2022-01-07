@@ -1,11 +1,11 @@
-import React, { FC, ReactNode } from 'react';
-import { IAuthState, IUser } from '~/redux/auth/types';
-import styles from './styles.module.scss';
-import { Group } from '~/components/containers/Group';
-import { Placeholder } from '~/components/placeholders/Placeholder';
-import { getPrettyDate } from '~/utils/dom';
-import { ProfileTabs } from '../ProfileTabs';
-import { ProfileAvatar } from '../ProfileAvatar';
+import React, { FC, ReactNode } from "react";
+import { IAuthState, IUser } from "~/redux/auth/types";
+import styles from "./styles.module.scss";
+import { Group } from "~/components/containers/Group";
+import { Placeholder } from "~/components/placeholders/Placeholder";
+import { getPrettyDate } from "~/utils/dom";
+import { ProfileTabs } from "../ProfileTabs";
+import { ProfileAvatar } from "../ProfileAvatar";
 
 interface IProps {
   user?: IUser;

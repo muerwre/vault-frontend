@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState, VFC } from 'react';
-import styles from './styles.module.scss';
-import classNames from 'classnames';
-import { separateTagOptions } from '~/utils/tag';
-import { TagAutocompleteRow } from '~/components/tags/TagAutocompleteRow';
-import { usePopper } from 'react-popper';
+import React, { useCallback, useEffect, useMemo, useRef, useState, VFC } from "react";
+import styles from "./styles.module.scss";
+import classNames from "classnames";
+import { separateTagOptions } from "~/utils/tag";
+import { TagAutocompleteRow } from "~/components/tags/TagAutocompleteRow";
+import { usePopper } from "react-popper";
 
 interface TagAutocompleteProps {
   exclude: string[];

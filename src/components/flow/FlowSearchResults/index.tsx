@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { FlowRecentItem } from '../FlowRecentItem';
-import { Icon } from '~/components/input/Icon';
-import { INode } from '~/redux/types';
-import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
+import React, { FC } from "react";
+import styles from "./styles.module.scss";
+import { FlowRecentItem } from "../FlowRecentItem";
+import { Icon } from "~/components/input/Icon";
+import { INode } from "~/redux/types";
+import { InfiniteScroll } from "~/components/containers/InfiniteScroll";
 
 interface IProps {
   isLoading: boolean;

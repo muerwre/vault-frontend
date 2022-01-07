@@ -1,11 +1,11 @@
-import React, { memo, VFC } from 'react';
-import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
-import classNames from 'classnames';
-import { Placeholder } from '~/components/placeholders/Placeholder';
-import { getPrettyDate } from '~/utils/dom';
-import { URLS } from '~/constants/urls';
-import { Link } from 'react-router-dom';
+import React, { memo, VFC } from "react";
+import styles from "./styles.module.scss";
+import { Icon } from "~/components/input/Icon";
+import classNames from "classnames";
+import { Placeholder } from "~/components/placeholders/Placeholder";
+import { getPrettyDate } from "~/utils/dom";
+import { URLS } from "~/constants/urls";
+import { Link } from "react-router-dom";
 
 interface IProps {
   id?: number;

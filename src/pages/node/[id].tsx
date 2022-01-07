@@ -1,18 +1,18 @@
-import React, { FC } from 'react';
-import { NodeLayout } from '~/layouts/NodeLayout';
-import { RouteComponentProps } from 'react-router';
-import { useScrollToTop } from '~/hooks/dom/useScrollToTop';
-import { useImageModal } from '~/hooks/navigation/useImageModal';
-import { useNodeComments } from '~/hooks/comments/useNodeComments';
-import { useUser } from '~/hooks/user/userUser';
-import { useNodeTags } from '~/hooks/node/useNodeTags';
-import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
-import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
-import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
-import { useNodePermissions } from '~/hooks/node/useNodePermissions';
-import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
-import { useLoadNode } from '~/hooks/node/useLoadNode';
-import { observer } from 'mobx-react';
+import React, { FC } from "react";
+import { NodeLayout } from "~/layouts/NodeLayout";
+import { RouteComponentProps } from "react-router";
+import { useScrollToTop } from "~/hooks/dom/useScrollToTop";
+import { useImageModal } from "~/hooks/navigation/useImageModal";
+import { useNodeComments } from "~/hooks/comments/useNodeComments";
+import { useUser } from "~/hooks/user/userUser";
+import { useNodeTags } from "~/hooks/node/useNodeTags";
+import { NodeContextProvider } from "~/utils/context/NodeContextProvider";
+import { CommentContextProvider } from "~/utils/context/CommentContextProvider";
+import { TagsContextProvider } from "~/utils/context/TagsContextProvider";
+import { useNodePermissions } from "~/hooks/node/useNodePermissions";
+import { NodeRelatedProvider } from "~/utils/providers/NodeRelatedProvider";
+import { useLoadNode } from "~/hooks/node/useLoadNode";
+import { observer } from "mobx-react";
 
 type Props = RouteComponentProps<{ id: string }> & {};
 

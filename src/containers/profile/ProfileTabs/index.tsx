@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { IAuthState } from '~/redux/auth/types';
-import { Tabs } from '~/components/dialogs/Tabs';
+import React, { FC } from "react";
+import styles from "./styles.module.scss";
+import { IAuthState } from "~/redux/auth/types";
+import { Tabs } from "~/components/dialogs/Tabs";
 
 interface IProps {
   tab: string;

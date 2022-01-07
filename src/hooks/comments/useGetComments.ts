@@ -1,15 +1,14 @@
-import { KeyLoader } from 'swr';
-import { IComment } from '~/redux/types';
 import { API } from '~/constants/api';
 import { flatten, isNil } from 'ramda';
-import useSWRInfinite from 'swr/infinite';
+import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { apiGetNodeComments } from '~/api/node';
 import { COMMENTS_DISPLAY } from '~/constants/node';
 import { useCallback } from 'react';
+import { IComment } from '~/redux/types';
 
-const getKey: (nodeId: number) => KeyLoader<IComment[]> = (nodeId: number) => (
+const getKey: (nodeId: number) => SWRInfiniteKeyLoader = (nodeId: number) => (
   pageIndex,
-  previousPageData
+  previousPageData: IComment[]
 ) => {
   if (pageIndex > 0 && !previousPageData?.length) return null;
   return `${API.NODE.COMMENT(nodeId)}?page=${pageIndex}`;

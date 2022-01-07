@@ -11,9 +11,6 @@ import auth from '~/redux/auth';
 import authSaga from '~/redux/auth/sagas';
 import { IAuthState } from '~/redux/auth/types';
 
-import player, { IPlayerState } from '~/redux/player/reducer';
-import playerSaga from '~/redux/player/sagas';
-
 import { authLogout, authOpenProfile, gotAuthPostMessage } from './auth/actions';
 
 import messages, { IMessagesState } from './messages';
@@ -38,7 +35,6 @@ const playerPersistConfig: PersistConfig = {
 export interface IState {
   auth: IAuthState;
   router: RouterState;
-  player: IPlayerState;
   messages: IMessagesState;
 }
 
@@ -56,7 +52,6 @@ export const store = createStore(
   combineReducers<IState>({
     auth: persistReducer(authPersistConfig, auth),
     router: connectRouter(history),
-    player: persistReducer(playerPersistConfig, player),
     messages,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
@@ -67,7 +62,6 @@ export function configureStore(): {
   persistor: Persistor;
 } {
   sagaMiddleware.run(authSaga);
-  sagaMiddleware.run(playerSaga);
   sagaMiddleware.run(messagesSaga);
 
   window.addEventListener('message', message => {

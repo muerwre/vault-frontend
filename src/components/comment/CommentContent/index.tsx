@@ -1,18 +1,18 @@
-import React, { createElement, FC, Fragment, memo, useCallback, useMemo, useState } from 'react';
-import { IComment, IFile } from '~/redux/types';
-import { append, assocPath, path } from 'ramda';
-import { formatCommentText, getPrettyDate, getURL } from '~/utils/dom';
-import { Group } from '~/components/containers/Group';
-import styles from './styles.module.scss';
-import { UploadType } from '~/constants/uploads';
-import reduce from 'ramda/es/reduce';
-import { AudioPlayer } from '~/components/media/AudioPlayer';
-import classnames from 'classnames';
-import classNames from 'classnames';
-import { PRESETS } from '~/constants/urls';
-import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
-import { CommentMenu } from '../CommentMenu';
-import { CommentForm } from '~/components/comment/CommentForm';
+import React, { createElement, FC, Fragment, memo, useCallback, useMemo, useState } from "react";
+import { IComment, IFile } from "~/redux/types";
+import { append, assocPath, path } from "ramda";
+import { formatCommentText, getPrettyDate, getURL } from "~/utils/dom";
+import { Group } from "~/components/containers/Group";
+import styles from "./styles.module.scss";
+import { UploadType } from "~/constants/uploads";
+import reduce from "ramda/es/reduce";
+import { AudioPlayer } from "~/components/media/AudioPlayer";
+import classnames from "classnames";
+import classNames from "classnames";
+import { PRESETS } from "~/constants/urls";
+import { COMMENT_BLOCK_RENDERERS } from "~/constants/comment";
+import { CommentMenu } from "../CommentMenu";
+import { CommentForm } from "~/components/comment/CommentForm";
 
 interface IProps {
   nodeId: number;

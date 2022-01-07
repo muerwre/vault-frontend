@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
-import { Link } from 'react-router-dom';
+import React, { FC } from "react";
+import styles from "./styles.module.scss";
+import { Icon } from "~/components/input/Icon";
+import { Link } from "react-router-dom";
 
 interface IProps {
   path: string;

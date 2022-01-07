@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
-import classNames from 'classnames';
-import { Toggle } from '~/components/input/Toggle';
-import { Group } from '~/components/containers/Group';
-import { FlowDisplayVariant } from '~/redux/types';
+import React, { FC } from "react";
+import styles from "./styles.module.scss";
+import { Icon } from "~/components/input/Icon";
+import classNames from "classnames";
+import { Toggle } from "~/components/input/Toggle";
+import { Group } from "~/components/containers/Group";
+import { FlowDisplayVariant } from "~/redux/types";
 
 interface Props {
   onClose: () => void;

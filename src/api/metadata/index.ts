@@ -1,6 +1,6 @@
 import { api, cleanResult } from '~/utils/api';
 import { API } from '~/constants/api';
-import { ApiGetEmbedYoutubeResult } from '~/redux/player/types';
+import { ApiGetEmbedYoutubeResult } from '~/api/metadata/types';
 
 export const apiGetEmbedYoutube = (ids: string[]) =>
   api

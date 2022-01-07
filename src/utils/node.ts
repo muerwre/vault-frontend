@@ -5,8 +5,7 @@ import { path } from 'ramda';
 import { NODE_TYPES } from '~/constants/node';
 
 export const canEditNode = (node?: Partial<INode>, user?: Partial<IUser>): boolean =>
-  path(['role'], user) === USER_ROLES.ADMIN ||
-  (path(['user', 'id'], node) && path(['user', 'id'], node) === path(['id'], user));
+  path(['role'], user) === USER_ROLES.ADMIN || path(['user', 'id'], node) === path(['id'], user);
 
 export const canEditComment = (comment?: Partial<ICommentGroup>, user?: Partial<IUser>): boolean =>
   path(['role'], user) === USER_ROLES.ADMIN || path(['user', 'id'], comment) === path(['id'], user);

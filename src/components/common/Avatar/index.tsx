@@ -1,10 +1,10 @@
-import React, { FC, useCallback } from 'react';
-import { getURLFromString } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
-import styles from './styles.module.scss';
-import classNames from 'classnames';
-import { openUserProfile } from '~/utils/user';
-import { DivProps } from '~/utils/types';
+import React, { FC, useCallback } from "react";
+import { getURLFromString } from "~/utils/dom";
+import { PRESETS } from "~/constants/urls";
+import styles from "./styles.module.scss";
+import classNames from "classnames";
+import { openUserProfile } from "~/utils/user";
+import { DivProps } from "~/utils/types";
 
 interface Props extends DivProps {
   url?: string;

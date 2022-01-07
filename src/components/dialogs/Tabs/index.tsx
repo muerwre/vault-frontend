@@ -1,6 +1,6 @@
-import React, { createContext, FC, useContext, useMemo, useState, VFC } from 'react';
-import styles from './styles.module.scss';
-import classNames from 'classnames';
+import React, { createContext, FC, useContext, useMemo, useState, VFC } from "react";
+import styles from "./styles.module.scss";
+import classNames from "classnames";
 
 interface TabProps {
   items: string[];

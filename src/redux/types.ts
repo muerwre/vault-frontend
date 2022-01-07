@@ -207,17 +207,6 @@ export type Unwrap<T> = T extends (...args: any) => Promise<any>
   ? U
   : any;
 
-export interface IEmbed {
-  provider: string;
-  address: string;
-  id: number;
-  metadata: {
-    title: string;
-    thumb: string;
-    duration: string;
-  };
-}
-
 export const OAUTH_EVENT_TYPES = {
   OAUTH_PROCESSED: 'oauth_processed',
   OAUTH_ERROR: 'oauth_error',

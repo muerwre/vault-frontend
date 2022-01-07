@@ -1,12 +1,12 @@
-import React, { FC, useCallback } from 'react';
-import { Placeholder } from '~/components/placeholders/Placeholder';
-import { Group } from '~/components/containers/Group';
-import { Icon } from '~/components/input/Icon';
-import styles from './styles.module.scss';
-import { INode } from '~/redux/types';
-import { getPrettyDate } from '~/utils/dom';
-import { URLS } from '~/constants/urls';
-import { useHistory } from 'react-router-dom';
+import React, { FC, useCallback } from "react";
+import { Placeholder } from "~/components/placeholders/Placeholder";
+import { Group } from "~/components/containers/Group";
+import { Icon } from "~/components/input/Icon";
+import styles from "./styles.module.scss";
+import { INode } from "~/redux/types";
+import { getPrettyDate } from "~/utils/dom";
+import { URLS } from "~/constants/urls";
+import { useHistory } from "react-router-dom";
 
 interface IProps {
   node?: Partial<INode>;

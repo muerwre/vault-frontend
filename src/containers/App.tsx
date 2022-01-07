@@ -13,8 +13,9 @@ import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
 import { observer } from 'mobx-react';
 import { useGlobalLoader } from '~/hooks/dom/useGlobalLoader';
 import { SearchProvider } from '~/utils/providers/SearchProvider';
-import { Toaster } from 'react-hot-toast';
 import { ToastProvider } from '~/utils/providers/ToastProvider';
+import { AudioPlayerProvider } from '~/utils/providers/AudioPlayerProvider';
+import { MetadataProvider } from '~/utils/providers/MetadataProvider';
 
 const App: VFC = observer(() => {
   useGlobalLoader();
@@ -26,14 +27,18 @@ const App: VFC = observer(() => {
           <DragDetectorProvider>
             <PageCoverProvider>
               <SearchProvider>
-                <MainLayout>
-                  <ToastProvider />
-                  <Modal />
-                  <Sprites />
+                <AudioPlayerProvider>
+                  <MetadataProvider>
+                    <MainLayout>
+                      <ToastProvider />
+                      <Modal />
+                      <Sprites />
 
-                  <MainRouter />
-                </MainLayout>
-                <BottomContainer />
+                      <MainRouter />
+                    </MainLayout>
+                    <BottomContainer />
+                  </MetadataProvider>
+                </AudioPlayerProvider>
               </SearchProvider>
             </PageCoverProvider>
           </DragDetectorProvider>

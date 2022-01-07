@@ -1,9 +1,9 @@
-import React, { createElement, FC } from 'react';
-import { INotification, NOTIFICATION_TYPES } from '~/redux/types';
-import styles from './styles.module.scss';
-import { NotificationMessage } from '../NotificationMessage';
-import { Icon } from '~/components/input/Icon';
-import { useRandomPhrase } from '~/constants/phrases';
+import React, { createElement, FC } from "react";
+import { INotification, NOTIFICATION_TYPES } from "~/redux/types";
+import styles from "./styles.module.scss";
+import { NotificationMessage } from "../NotificationMessage";
+import { Icon } from "~/components/input/Icon";
+import { useRandomPhrase } from "~/constants/phrases";
 
 interface IProps {
   notifications: INotification[];

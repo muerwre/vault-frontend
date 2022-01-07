@@ -1,15 +1,15 @@
-import React, { FC, useCallback } from 'react';
-import { Group } from '~/components/containers/Group';
-import { Filler } from '~/components/containers/Filler';
-import styles from './styles.module.scss';
-import { getPrettyDate } from '~/utils/dom';
-import { INode } from '~/redux/types';
-import { Icon } from '~/components/input/Icon';
-import classNames from 'classnames';
-import { Grid } from '~/components/containers/Grid';
-import { useHistory } from 'react-router';
-import { URLS } from '~/constants/urls';
-import { Placeholder } from '~/components/placeholders/Placeholder';
+import React, { FC, useCallback } from "react";
+import { Group } from "~/components/containers/Group";
+import { Filler } from "~/components/containers/Filler";
+import styles from "./styles.module.scss";
+import { getPrettyDate } from "~/utils/dom";
+import { INode } from "~/redux/types";
+import { Icon } from "~/components/input/Icon";
+import classNames from "classnames";
+import { Grid } from "~/components/containers/Grid";
+import { useHistory } from "react-router";
+import { URLS } from "~/constants/urls";
+import { Placeholder } from "~/components/placeholders/Placeholder";
 
 type Props = {
   node: INode;

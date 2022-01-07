@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
-import { usePersistedState } from '~/hooks/data/usePersistedState';
-import { experimentalFeatures } from '~/constants/features';
+import { useCallback } from "react";
+import { usePersistedState } from "~/hooks/data/usePersistedState";
+import { experimentalFeatures } from "~/constants/features";
 
 enum Layout {
   Fluid = 'fluid',

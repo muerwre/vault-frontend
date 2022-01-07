@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { ProfileAvatar } from '~/containers/profile/ProfileAvatar';
-import { Placeholder } from '~/components/placeholders/Placeholder';
-import { getPrettyDate } from '~/utils/dom';
-import { IUser } from '~/redux/auth/types';
+import React, { FC } from "react";
+import styles from "./styles.module.scss";
+import { ProfileAvatar } from "~/containers/profile/ProfileAvatar";
+import { Placeholder } from "~/components/placeholders/Placeholder";
+import { getPrettyDate } from "~/utils/dom";
+import { IUser } from "~/redux/auth/types";
 
 interface IProps {
   is_loading: boolean;

@@ -1,6 +1,5 @@
 import { hideToast, showToastError } from '~/utils/toast';
-import { has, path } from 'ramda';
-import { ERROR_LITERAL, ERRORS } from '~/constants/errors';
+import { getErrorMessage } from '~/utils/errors/getErrorMessage';
 
 let toastId = '';
 
@@ -10,29 +9,16 @@ const handleTranslated = (message: string) => {
     hideToast(toastId);
   }
 
-  toastId = showToastError(ERROR_LITERAL[message]);
+  toastId = showToastError(message);
 };
 
 export const showErrorToast = (error: unknown) => {
-  if (typeof error === 'string' && has(error, ERROR_LITERAL)) {
-    handleTranslated(error);
-    return;
+  const message = getErrorMessage(error);
+  if (message) {
+    return handleTranslated(message);
   }
 
   if (!(error instanceof Error)) {
-    console.warn('catched strange exception', error);
-    return;
-  }
-
-  // TODO: Network error
-  if (error.message === 'Network Error') {
-    handleTranslated(ERRORS.NETWORK_ERROR);
-    return;
-  }
-
-  const messageFromBackend = String(path(['response', 'data', 'error'], error));
-  if (messageFromBackend && has(messageFromBackend, ERROR_LITERAL)) {
-    handleTranslated(messageFromBackend);
     return;
   }
 

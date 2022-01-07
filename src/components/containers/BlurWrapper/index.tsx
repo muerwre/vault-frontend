@@ -1,6 +1,6 @@
-import React, { AllHTMLAttributes, FC } from 'react';
-import styles from './styles.module.scss';
-import classNames from 'classnames';
+import React, { AllHTMLAttributes, FC } from "react";
+import styles from "./styles.module.scss";
+import classNames from "classnames";
 
 type IProps = AllHTMLAttributes<HTMLDivElement> & { is_blurred: boolean };
 

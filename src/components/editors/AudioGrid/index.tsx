@@ -1,11 +1,11 @@
-import React, { FC, useCallback } from 'react';
-import { SortEnd } from 'react-sortable-hoc';
-import { IFile } from '~/redux/types';
-import { moveArrItem } from '~/utils/fn';
-import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
+import React, { FC, useCallback } from "react";
+import { SortEnd } from "react-sortable-hoc";
+import { IFile } from "~/redux/types";
+import { moveArrItem } from "~/utils/fn";
+import { SortableAudioGrid } from "~/components/editors/SortableAudioGrid";
 
-import styles from './styles.module.scss';
-import { UploadStatus } from '~/store/uploader/UploaderStore';
+import styles from "./styles.module.scss";
+import { UploadStatus } from "~/store/uploader/UploaderStore";
 
 interface IProps {
   files: IFile[];

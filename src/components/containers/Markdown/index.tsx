@@ -1,6 +1,6 @@
-import React, { DetailedHTMLProps, FC, HTMLAttributes } from 'react';
-import styles from '~/styles/common/markdown.module.scss';
-import classNames from 'classnames';
+import React, { DetailedHTMLProps, FC, HTMLAttributes } from "react";
+import styles from "~/styles/common/markdown.module.scss";
+import classNames from "classnames";
 
 interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}
 

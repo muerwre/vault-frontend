@@ -18,6 +18,7 @@ import {
 import { MESSAGES_ACTIONS } from '~/redux/messages/constants';
 import { selectMessages } from '~/redux/messages/selectors';
 import { sortCreatedAtDesc } from '~/utils/date';
+import { getErrorMessage } from '~/utils/errors/getErrorMessage';
 
 function* getMessages({ username }: ReturnType<typeof messagesGetMessages>) {
   try {
@@ -55,7 +56,7 @@ function* getMessages({ username }: ReturnType<typeof messagesGetMessages>) {
     }
   } catch (error) {
     messagesSet({
-      error: error.message || ERRORS.EMPTY_RESPONSE,
+      error: getErrorMessage(error) || ERRORS.EMPTY_RESPONSE,
     });
   } finally {
     yield put(
@@ -110,7 +111,7 @@ function* sendMessage({ message, onSuccess }: ReturnType<typeof messagesSendMess
     onSuccess();
   } catch (error) {
     messagesSet({
-      error: error.message || ERRORS.EMPTY_RESPONSE,
+      error: getErrorMessage(error) || ERRORS.EMPTY_RESPONSE,
     });
   } finally {
     yield put(
@@ -155,7 +156,7 @@ function* deleteMessage({ id, is_locked }: ReturnType<typeof messagesDeleteMessa
     );
   } catch (error) {
     messagesSet({
-      error: error.message || ERRORS.EMPTY_RESPONSE,
+      error: getErrorMessage(error) || ERRORS.EMPTY_RESPONSE,
     });
   } finally {
     yield put(
@@ -193,7 +194,7 @@ function* refreshMessages({}: ReturnType<typeof messagesRefreshMessages>) {
     yield put(messagesSet({ messages: newMessages }));
   } catch (error) {
     messagesSet({
-      error: error.message || ERRORS.EMPTY_RESPONSE,
+      error: getErrorMessage(error) || ERRORS.EMPTY_RESPONSE,
     });
   } finally {
     yield put(

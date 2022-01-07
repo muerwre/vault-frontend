@@ -1,13 +1,13 @@
-import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
-import styles from './styles.module.scss';
-import { UploadSubject, UploadTarget, UploadType } from '~/constants/uploads';
-import { getURL } from '~/utils/dom';
-import { Icon } from '~/components/input/Icon';
-import { PRESETS } from '~/constants/urls';
-import { IEditorComponentProps } from '~/types/node';
-import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
-import { getFileType } from '~/utils/uploader';
-import { useUploader } from '~/hooks/data/useUploader';
+import React, { ChangeEvent, FC, useCallback, useEffect } from "react";
+import styles from "./styles.module.scss";
+import { UploadSubject, UploadTarget, UploadType } from "~/constants/uploads";
+import { getURL } from "~/utils/dom";
+import { Icon } from "~/components/input/Icon";
+import { PRESETS } from "~/constants/urls";
+import { IEditorComponentProps } from "~/types/node";
+import { useNodeFormContext } from "~/hooks/node/useNodeFormFormik";
+import { getFileType } from "~/utils/uploader";
+import { useUploader } from "~/hooks/data/useUploader";
 
 type IProps = IEditorComponentProps & {};
 

@@ -9,21 +9,6 @@
   justify-content: stretch;
   flex: 1;
   user-select: none;
-
-  &:global(.playing) {
-    .progress {
-      opacity: 1;
-      pointer-events: all;
-      touch-action: auto;
-    }
-
-    .title {
-      top: 20px;
-      opacity: 1;
-      font-size: 12px;
-      padding-right: 140px;
-    }
-  }
 }
 
 .playpause {
@@ -76,6 +61,14 @@
   text-align: left;
   transition: all 0.5s;
   font: $font_18_semibold;
+
+  .playing & {
+    top: 20px;
+    opacity: 1;
+    font-size: 12px;
+    padding-right: 140px;
+    color: transparentize(white, 0.7);
+  }
 }
 
 .progress {
@@ -87,6 +80,12 @@
   transition: opacity 0.5s;
   left: 0;
   cursor: pointer;
+
+  .playing & {
+    opacity: 1;
+    pointer-events: all;
+    touch-action: auto;
+  }
 
   &::after {
     content: ' ';

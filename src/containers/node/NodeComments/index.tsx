@@ -1,13 +1,13 @@
-import React, { FC, memo, useMemo } from 'react';
+import React, { FC, memo, useMemo } from "react";
 
-import styles from './styles.module.scss';
-import { ICommentGroup } from '~/redux/types';
-import { canEditComment } from '~/utils/node';
-import { useGrouppedComments } from '~/hooks/node/useGrouppedComments';
-import { useCommentContext } from '~/utils/context/CommentContextProvider';
-import { Comment } from '~/components/comment/Comment';
-import { useUserContext } from '~/utils/context/UserContextProvider';
-import { useNodeContext } from '~/utils/context/NodeContextProvider';
+import styles from "./styles.module.scss";
+import { ICommentGroup } from "~/redux/types";
+import { canEditComment } from "~/utils/node";
+import { useGrouppedComments } from "~/hooks/node/useGrouppedComments";
+import { useCommentContext } from "~/utils/context/CommentContextProvider";
+import { Comment } from "~/components/comment/Comment";
+import { useUserContext } from "~/utils/context/UserContextProvider";
+import { useNodeContext } from "~/utils/context/NodeContextProvider";
 
 interface IProps {
   order: 'ASC' | 'DESC';

@@ -1,5 +1,5 @@
-import marked from 'marked';
-import { stripHTMLTags } from '~/utils/stripHTMLTags';
+import marked from "marked";
+import { stripHTMLTags } from "~/utils/stripHTMLTags";
 
 /**
  * Cleans youtube urls

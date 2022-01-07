@@ -1,9 +1,9 @@
-import React, { FC, useCallback } from 'react';
-import { IEditorComponentProps } from '~/types/node';
-import { Button } from '~/components/input/Button';
-import { Icon } from '~/components/input/Icon';
-import styles from './styles.module.scss';
-import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+import React, { FC, useCallback } from "react";
+import { IEditorComponentProps } from "~/types/node";
+import { Button } from "~/components/input/Button";
+import { Icon } from "~/components/input/Icon";
+import styles from "./styles.module.scss";
+import { useNodeFormContext } from "~/hooks/node/useNodeFormFormik";
 
 interface IProps extends IEditorComponentProps {}
 

@@ -1,12 +1,12 @@
-import React, { FC, Fragment } from 'react';
-import { FlowDisplay, IFlowNode, INode } from '~/redux/types';
-import { IUser } from '~/redux/auth/types';
-import { PRESETS, URLS } from '~/constants/urls';
-import { FlowCell } from '~/components/flow/FlowCell';
-import classNames from 'classnames';
-import styles from './styles.module.scss';
-import { getURLFromString } from '~/utils/dom';
-import { canEditNode } from '~/utils/node';
+import React, { FC, Fragment } from "react";
+import { FlowDisplay, IFlowNode, INode } from "~/redux/types";
+import { IUser } from "~/redux/auth/types";
+import { PRESETS, URLS } from "~/constants/urls";
+import { FlowCell } from "~/components/flow/FlowCell";
+import classNames from "classnames";
+import styles from "./styles.module.scss";
+import { getURLFromString } from "~/utils/dom";
+import { canEditNode } from "~/utils/node";
 
 interface Props {
   nodes: IFlowNode[];

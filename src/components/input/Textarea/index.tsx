@@ -5,14 +5,14 @@ import React, {
   TextareaHTMLAttributes,
   useCallback,
   useEffect,
-  useState,
-} from 'react';
-import classNames from 'classnames';
-import autosize from 'autosize';
-import styles from './styles.module.scss';
+  useState
+} from "react";
+import classNames from "classnames";
+import autosize from "autosize";
+import styles from "./styles.module.scss";
 
-import { InputWrapper } from '~/components/input/InputWrapper';
-import { useForwardRef } from '~/hooks/dom/useForwardRef';
+import { InputWrapper } from "~/components/input/InputWrapper";
+import { useForwardRef } from "~/hooks/dom/useForwardRef";
 
 type IProps = DetailedHTMLProps<
   TextareaHTMLAttributes<HTMLTextAreaElement>,

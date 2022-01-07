@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
-import { FlowRecentItem } from '../FlowRecentItem';
-import styles from './styles.module.scss';
-import { IFlowNode } from '~/redux/types';
+import React, { FC } from "react";
+import { FlowRecentItem } from "../FlowRecentItem";
+import styles from "./styles.module.scss";
+import { IFlowNode } from "~/redux/types";
 
 interface IProps {
   recent: IFlowNode[];

@@ -1,11 +1,11 @@
-import React, { FC, useCallback, useMemo } from 'react';
-import styles from './styles.module.scss';
-import { path } from 'ramda';
-import { InputText } from '~/components/input/InputText';
-import classnames from 'classnames';
-import { getYoutubeThumb } from '~/utils/dom';
-import { NodeEditorProps } from '~/types/node';
-import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+import React, { FC, useCallback, useMemo } from "react";
+import styles from "./styles.module.scss";
+import { path } from "ramda";
+import { InputText } from "~/components/input/InputText";
+import classnames from "classnames";
+import { getYoutubeThumb } from "~/utils/dom";
+import { NodeEditorProps } from "~/types/node";
+import { useNodeFormContext } from "~/hooks/node/useNodeFormFormik";
 
 type IProps = NodeEditorProps & {};
 

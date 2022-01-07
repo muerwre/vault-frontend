@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
-import { Group } from '~/components/containers/Group';
-import { Icon } from '~/components/input/Icon';
-import { Placeholder } from '~/components/placeholders/Placeholder';
-import styles from './styles.module.scss';
-import classNames from 'classnames';
+import React, { FC } from "react";
+import { Group } from "~/components/containers/Group";
+import { Icon } from "~/components/input/Icon";
+import { Placeholder } from "~/components/placeholders/Placeholder";
+import styles from "./styles.module.scss";
+import classNames from "classnames";
 
 interface IProps {
   icon: string;

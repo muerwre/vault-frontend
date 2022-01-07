@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import useSWRInfinite from 'swr/infinite';
+import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { flatten } from 'ramda';
 import { getSearchResults } from '~/api/flow';
-import { KeyLoader } from 'swr';
 import { INode } from '~/redux/types';
 import { GetSearchResultsRequest } from '~/types/flow';
 
 const RESULTS_COUNT = 20;
 
-const getKey: (text: string) => KeyLoader<INode[]> = text => (pageIndex, previousPageData) => {
+const getKey: (text: string) => SWRInfiniteKeyLoader = text => (
+  pageIndex,
+  previousPageData: INode[]
+) => {
   if ((pageIndex > 0 && !previousPageData?.length) || !text) return null;
 
   const props: GetSearchResultsRequest = {

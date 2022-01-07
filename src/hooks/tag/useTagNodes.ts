@@ -1,14 +1,16 @@
-import { KeyLoader } from 'swr';
 import { INode } from '~/redux/types';
 import { API } from '~/constants/api';
 import { flatten, isNil } from 'ramda';
-import useSWRInfinite from 'swr/infinite';
+import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { useCallback } from 'react';
 import { apiGetNodesOfTag } from '~/api/tags';
 
 const PAGE_SIZE = 10;
 
-const getKey: (tag: string) => KeyLoader<INode[]> = tag => (pageIndex, previousPageData) => {
+const getKey: (tag: string) => SWRInfiniteKeyLoader = tag => (
+  pageIndex,
+  previousPageData: INode[]
+) => {
   if (pageIndex > 0 && !previousPageData?.length) return null;
   return `${API.TAG.NODES}?tag=${tag}&page=${pageIndex}`;
 };

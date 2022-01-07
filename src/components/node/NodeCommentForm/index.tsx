@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
-import { CommentWrapper } from '~/components/containers/CommentWrapper';
-import { CommentForm } from '~/components/comment/CommentForm';
-import { IComment } from '~/redux/types';
-import { IUser } from '~/redux/auth/types';
+import React, { FC } from "react";
+import { CommentWrapper } from "~/components/containers/CommentWrapper";
+import { CommentForm } from "~/components/comment/CommentForm";
+import { IComment } from "~/redux/types";
+import { IUser } from "~/redux/auth/types";
 
 interface NodeCommentFormProps {
   user: IUser;

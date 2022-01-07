@@ -1,10 +1,10 @@
-import React, { FC, useMemo } from 'react';
-import { path } from 'ramda';
-import { formatTextParagraphs } from '~/utils/dom';
-import { INodeComponentProps } from '~/constants/node';
-import classNames from 'classnames';
-import styles from './styles.module.scss';
-import markdown from '~/styles/common/markdown.module.scss';
+import React, { FC, useMemo } from "react";
+import { path } from "ramda";
+import { formatTextParagraphs } from "~/utils/dom";
+import { INodeComponentProps } from "~/constants/node";
+import classNames from "classnames";
+import styles from "./styles.module.scss";
+import markdown from "~/styles/common/markdown.module.scss";
 
 interface IProps extends INodeComponentProps {}
 

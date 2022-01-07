@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
-import styles from './/styles.module.scss';
-import { Placeholder } from '~/components/placeholders/Placeholder';
-import { ITag } from '~/redux/types';
-import { Tag } from '~/components/tags/Tag';
+import React, { FC } from "react";
+import styles from ".//styles.module.scss";
+import { Placeholder } from "~/components/placeholders/Placeholder";
+import { ITag } from "~/redux/types";
+import { Tag } from "~/components/tags/Tag";
 
 interface IProps {
   tags: ITag[];
