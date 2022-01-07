@@ -13,7 +13,7 @@ import { Tabs } from '~/components/dialogs/Tabs';
 import { Superpower } from '~/components/boris/Superpower';
 import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
 
-const boris = require('~/sprites/boris_robot.svg');
+import boris from '~/sprites/boris_robot.svg';
 
 type IProps = {
   title: string;

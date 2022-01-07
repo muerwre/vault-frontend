@@ -10,15 +10,8 @@ module.exports = {
     },
     rules: [
       {
-        test: /\.(svg)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: 'images/[hash]-[name].[ext]',
-            },
-          },
-        ],
+        test: /\.svg/,
+        type: 'asset/resource',
       },
     ],
   },
