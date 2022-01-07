@@ -1,4 +1,4 @@
-FROM node:dubnium-alpine as builder
+FROM node:14-alpine as builder
 COPY package.json yarn.lock ./
 RUN yarn
 COPY . .
