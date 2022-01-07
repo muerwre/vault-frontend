@@ -56,7 +56,8 @@
     "start": "craco start",
     "build": "craco build",
     "ts-check": "tsc -p tsconfig.json --noEmit",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -85,6 +86,13 @@
     "@types/throttle-debounce": "^2.1.0",
     "@types/yup": "^0.29.11",
     "craco-alias": "^2.3.1",
-    "prettier": "^1.18.2"
+    "lint-staged": "^12.1.6",
+    "prettier": "^1.18.2",
+    "husky": "^7.0.4"
+  },
+  "lint-staged": {
+    "./**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
   }
 }
