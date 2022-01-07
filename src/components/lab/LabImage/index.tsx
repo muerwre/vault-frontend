@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { INodeComponentProps } from '~/constants/node';
-import SwiperCore, { A11y, Navigation, Pagination, SwiperOptions } from 'swiper';
+import SwiperCore, { A11y, Navigation, Pagination } from 'swiper';
 
 import styles from './styles.module.scss';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
@@ -12,12 +12,6 @@ import { ImagePreloader } from '~/components/media/ImagePreloader';
 SwiperCore.use([Navigation, Pagination, A11y]);
 
 interface IProps extends INodeComponentProps {}
-
-const breakpoints: SwiperOptions['breakpoints'] = {
-  599: {
-    navigation: true,
-  },
-};
 
 const LabImage: FC<IProps> = ({ node, isLoading }) => {
   const images = useNodeImages(node);

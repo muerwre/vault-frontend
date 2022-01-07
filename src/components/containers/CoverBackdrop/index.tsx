@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from "react";
-import { IUser } from "~/redux/auth/types";
-import styles from "./styles.module.scss";
-import { getURL } from "~/utils/dom";
-import { PRESETS } from "~/constants/urls";
-import classNames from "classnames";
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { IUser } from '~/redux/auth/types';
+import styles from './styles.module.scss';
+import { getURL } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
+import classNames from 'classnames';
 
 interface IProps {
   cover: IUser['cover'];
@@ -33,7 +33,7 @@ const CoverBackdrop: FC<IProps> = ({ cover }) => {
       className={classNames(styles.cover, { [styles.active]: is_loaded })}
       style={{ backgroundImage: `url("${image}")` }}
     >
-      <img onLoad={onLoad} ref={ref} />
+      <img onLoad={onLoad} ref={ref} alt="" />
     </div>
   );
 };

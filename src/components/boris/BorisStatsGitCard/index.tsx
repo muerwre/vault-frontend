@@ -1,8 +1,8 @@
-import React, { FC, useMemo } from "react";
-import styles from "./styles.module.scss";
-import { getPrettyDate } from "~/utils/dom";
-import { GithubIssue } from "~/types/boris";
-import classNames from "classnames";
+import React, { FC, useMemo } from 'react';
+import styles from './styles.module.scss';
+import { getPrettyDate } from '~/utils/dom';
+import { GithubIssue } from '~/types/boris';
+import classNames from 'classnames';
 
 interface IProps {
   data: GithubIssue;
@@ -25,7 +25,7 @@ const BorisStatsGitCard: FC<IProps> = ({ data: { created_at, title, html_url, st
         {date}
       </div>
 
-      <a className={styles.subject} href={html_url} target="_blank">
+      <a className={styles.subject} href={html_url} target="_blank" rel="noreferrer">
         {title}
       </a>
     </div>

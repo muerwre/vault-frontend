@@ -1,7 +1,7 @@
-import React, { FC, useMemo } from "react";
-import styles from "./styles.module.scss";
-import { path } from "ramda";
-import { INodeComponentProps } from "~/constants/node";
+import React, { FC, useMemo } from 'react';
+import styles from './styles.module.scss';
+import { path } from 'ramda';
+import { INodeComponentProps } from '~/constants/node';
 
 interface IProps extends INodeComponentProps {}
 
@@ -11,7 +11,7 @@ const NodeVideoBlock: FC<IProps> = ({ node }) => {
     const match =
       url &&
       url.match(
-        /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?/
+        /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-_]*)(&(amp;)?[\w?=]*)?/
       );
 
     return match && match[1];

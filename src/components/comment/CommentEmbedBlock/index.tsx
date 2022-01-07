@@ -1,16 +1,16 @@
-import React, { FC, memo, useMemo } from "react";
-import { ICommentBlockProps } from "~/constants/comment";
-import styles from "./styles.module.scss";
-import { getYoutubeThumb } from "~/utils/dom";
-import { Icon } from "~/components/input/Icon";
-import { useYoutubeMetadata } from "~/hooks/metadata/useYoutubeMetadata";
+import React, { FC, memo, useMemo } from 'react';
+import { ICommentBlockProps } from '~/constants/comment';
+import styles from './styles.module.scss';
+import { getYoutubeThumb } from '~/utils/dom';
+import { Icon } from '~/components/input/Icon';
+import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
 
 type Props = ICommentBlockProps & {};
 
 const CommentEmbedBlock: FC<Props> = memo(({ block }) => {
   const id = useMemo(() => {
     const match = block.content.match(
-      /https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?([\w\-\=]+)/
+      /https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?([\w\-=]+)/
     );
 
     return (match && match[1]) || '';

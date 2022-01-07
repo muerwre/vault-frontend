@@ -1,10 +1,10 @@
-import React, { FC } from "react";
-import { NodeTags } from "~/components/node/NodeTags";
-import { useTagContext } from "~/utils/context/TagsContextProvider";
+import React, { FC } from 'react';
+import { NodeTags } from '~/components/node/NodeTags';
+import { useTagContext } from '~/utils/context/TagsContextProvider';
 
 interface IProps {}
 
-const NodeTagsBlock: FC<IProps> = ({}) => {
+const NodeTagsBlock: FC<IProps> = () => {
   const {
     tags,
     canAppend,

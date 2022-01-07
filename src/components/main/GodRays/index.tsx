@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 interface IGodRaysProps {
   raised?: boolean;
@@ -30,7 +30,7 @@ export class GodRays extends React.Component<IGodRaysProps> {
       return setTimeout(() => window.requestAnimationFrame(this.draw), 500);
     }
 
-    const { width, height, rays, particles } = this.state;
+    const { width, height, rays } = this.state;
 
     const ctx = this.canvas.getContext('2d');
 
@@ -42,7 +42,7 @@ export class GodRays extends React.Component<IGodRaysProps> {
     ctx.clearRect(0, 0, width, height + 100); // clear canvas
     ctx.save();
 
-    rays.map(({ angle, iterator, weight, speed, pulsar, opacity }, index) => {
+    rays.forEach(({ angle, iterator, weight, speed, pulsar, opacity }, index) => {
       const gradient = ctx.createLinearGradient(0, 0, 0, height * 1.3);
       gradient.addColorStop(0.2, `rgba(160, 255, 60, ${opacity * 0.1})`);
       gradient.addColorStop(1, 'rgba(160, 255, 60, 0)');

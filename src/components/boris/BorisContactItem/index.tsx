@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import styles from "./styles.module.scss";
-import { Icon } from "~/components/input/Icon";
+import React, { FC } from 'react';
+import styles from './styles.module.scss';
+import { Icon } from '~/components/input/Icon';
 
 interface Props {
   icon: string;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const BorisContactItem: FC<Props> = ({ icon, title, subtitle, link }) => (
-  <a className={styles.item} href={link} target="_blank">
+  <a className={styles.item} href={link} target="_blank" rel="noreferrer">
     <div className={styles.icon}>
       <Icon icon={icon} size={32} />
     </div>
