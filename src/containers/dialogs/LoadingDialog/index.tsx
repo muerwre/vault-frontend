@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, VFC } from 'react';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import styles from './styles.module.scss';
 
-const LoadingDialog: FC<{}> = () => (
+const LoadingDialog: VFC = () => (
   <div className={styles.wrap}>
     <LoaderCircle size={64} />
   </div>

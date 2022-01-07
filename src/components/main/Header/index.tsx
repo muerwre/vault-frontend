@@ -132,7 +132,12 @@ const HeaderUnconnected: FC<IProps> = observer(
           )}
 
           {!is_user && (
-            <Button className={styles.user_button} onClick={onLogin} round color="secondary">
+            <Button
+              className={styles.user_button}
+              onClick={() => onLogin({})}
+              round
+              color="secondary"
+            >
               ВДОХ
             </Button>
           )}

@@ -152,7 +152,7 @@ function* loadProfile({ username }: ReturnType<typeof authLoadProfile>): SagaIte
 }
 
 function* openProfile({ username, tab = 'profile' }: ReturnType<typeof authOpenProfile>) {
-  modalStore.setCurrent(Dialog.Profile);
+  modalStore.setCurrent(Dialog.Profile, {});
   yield put(authSetProfile({ tab }));
 
   const success: Unwrap<typeof loadProfile> = yield call(loadProfile, authLoadProfile(username));
@@ -265,7 +265,7 @@ function* showRestoreModal({ code }: ReturnType<typeof authShowRestoreModal>) {
 
     yield put(authSetRestore({ user: data.user, code, is_loading: false }));
 
-    modalStore.setCurrent(Dialog.RestoreRequest);
+    modalStore.setCurrent(Dialog.RestoreRequest, {});
   } catch (error) {
     showErrorToast(error);
 
@@ -273,7 +273,7 @@ function* showRestoreModal({ code }: ReturnType<typeof authShowRestoreModal>) {
       authSetRestore({ is_loading: false, error: getErrorMessage(error) || ERRORS.CODE_IS_INVALID })
     );
 
-    modalStore.setCurrent(Dialog.RestoreRequest);
+    modalStore.setCurrent(Dialog.RestoreRequest, {});
   }
 }
 
@@ -378,7 +378,7 @@ function* loginWithSocial({ token }: ReturnType<typeof authLoginWithSocial>) {
     // Backend asks us for account registration
     if (current !== Dialog.LoginSocialRegister && data?.needs_register) {
       yield put(authSetRegisterSocial({ token }));
-      modalStore.setCurrent(Dialog.LoginSocialRegister);
+      modalStore.setCurrent(Dialog.LoginSocialRegister, {});
       return;
     }
 

@@ -58,7 +58,7 @@ const LoginDialogUnconnected: FC<IProps> = ({
   const onRestoreRequest = useCallback(
     event => {
       event.preventDefault();
-      showRestoreDialog();
+      showRestoreDialog({});
     },
     [showRestoreDialog]
   );

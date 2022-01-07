@@ -8,18 +8,23 @@ import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { useBlockBackButton } from '~/hooks/navigation/useBlockBackButton';
 import { useModal } from '~/hooks/modal/useModal';
-import { usePhotoSwipeStore } from '~/store/photoSwipe/usePhotoSwipeStore';
 import { observer } from 'mobx-react';
+import { IFile } from '~/redux/types';
+import { IDialogProps } from '~/types/modal';
 
-const PhotoSwipe: VFC = observer(() => {
+export interface PhotoSwipeProps extends IDialogProps {
+  items: IFile[];
+  index: number;
+}
+
+const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
   let ref = useRef<HTMLDivElement>(null);
   const { hideModal } = useModal();
-  const photoswipe = usePhotoSwipeStore();
 
   useEffect(() => {
     new Promise(async resolve => {
       const images = await Promise.all(
-        photoswipe.images.map(
+        items.map(
           image =>
             new Promise(resolveImage => {
               const img = new Image();
@@ -44,7 +49,7 @@ const PhotoSwipe: VFC = observer(() => {
       resolve(images);
     }).then(images => {
       const ps = new PhotoSwipeJs(ref.current, PhotoSwipeUI_Default, images, {
-        index: photoswipe.index || 0,
+        index: index || 0,
         closeOnScroll: false,
         history: false,
       });
@@ -53,7 +58,7 @@ const PhotoSwipe: VFC = observer(() => {
       ps.listen('destroy', hideModal);
       ps.listen('close', hideModal);
     });
-  }, [hideModal, photoswipe.images, photoswipe.index]);
+  }, [hideModal, items, index]);
 
   useBlockBackButton(hideModal);
 

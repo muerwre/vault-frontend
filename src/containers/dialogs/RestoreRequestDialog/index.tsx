@@ -1,5 +1,5 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { FC, useCallback, useEffect, useMemo, useState, VFC } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import { BetterScrollDialog } from '../BetterScrollDialog';
 import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
@@ -7,28 +7,30 @@ import { Button } from '~/components/input/Button';
 import styles from './styles.module.scss';
 
 import * as AUTH_ACTIONS from '~/redux/auth/actions';
-import { pick } from 'ramda';
 import { selectAuthRestore } from '~/redux/auth/selectors';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { Icon } from '~/components/input/Icon';
 import { useCloseOnEscape } from '~/hooks';
 import { IDialogProps } from '~/types/modal';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
+import { IAuthState } from '~/redux/auth/types';
 
-const mapStateToProps = state => ({
-  restore: selectAuthRestore(state),
-});
+interface RestoreRequestDialogProps extends IDialogProps {}
 
-const mapDispatchToProps = pick(['authRequestRestoreCode', 'authSetRestore'], AUTH_ACTIONS);
-
-type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
-
-const RestoreRequestDialogUnconnected: FC<IProps> = ({
-  restore: { error, is_loading, is_succesfull },
-  authSetRestore,
-  onRequestClose,
-  authRequestRestoreCode,
-}) => {
+const RestoreRequestDialog: VFC<RestoreRequestDialogProps> = ({ onRequestClose }) => {
+  const dispatch = useDispatch();
+  const { error, is_loading, is_succesfull } = useShallowSelect(selectAuthRestore);
   const [field, setField] = useState('');
+
+  const authSetRestore = useCallback(
+    (restore: Partial<IAuthState['restore']>) => dispatch(AUTH_ACTIONS.authSetRestore(restore)),
+    [dispatch]
+  );
+
+  const authRequestRestoreCode = useCallback(
+    (field: string) => dispatch(AUTH_ACTIONS.authRequestRestoreCode(field)),
+    [dispatch]
+  );
 
   const onSubmit = useCallback(
     event => {
@@ -104,10 +106,5 @@ const RestoreRequestDialogUnconnected: FC<IProps> = ({
     </form>
   );
 };
-
-const RestoreRequestDialog = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RestoreRequestDialogUnconnected);
 
 export { RestoreRequestDialog };

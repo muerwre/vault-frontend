@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, VFC } from 'react';
 import { LoginDialog } from '~/containers/dialogs/LoginDialog';
 import { LoginSocialRegisterDialog } from '~/containers/dialogs/LoginSocialRegisterDialog';
 import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
@@ -6,7 +6,7 @@ import { TestDialog } from '~/containers/dialogs/TestDialog';
 import { ProfileDialog } from '~/containers/dialogs/ProfileDialog';
 import { RestoreRequestDialog } from '~/containers/dialogs/RestoreRequestDialog';
 import { RestorePasswordDialog } from '~/containers/dialogs/RestorePasswordDialog';
-import { PhotoSwipe } from '~/containers/dialogs/PhotoSwipe';
+import { PhotoSwipe, PhotoSwipeProps } from '~/containers/dialogs/PhotoSwipe';
 import { IDialogProps } from '~/types/modal';
 
 export enum Dialog {
@@ -20,7 +20,7 @@ export enum Dialog {
   Photoswipe = 'Photoswipe',
 }
 
-export const DIALOG_CONTENT: Record<Dialog, FC<IDialogProps>> = {
+export const DIALOG_CONTENT = {
   [Dialog.Login]: LoginDialog,
   [Dialog.LoginSocialRegister]: LoginSocialRegisterDialog,
   [Dialog.Loading]: LoadingDialog,
@@ -29,4 +29,4 @@ export const DIALOG_CONTENT: Record<Dialog, FC<IDialogProps>> = {
   [Dialog.RestoreRequest]: RestoreRequestDialog,
   [Dialog.RestorePassword]: RestorePasswordDialog,
   [Dialog.Photoswipe]: PhotoSwipe,
-};
+} as const;
