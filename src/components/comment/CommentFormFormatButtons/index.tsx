@@ -1,8 +1,8 @@
-import React, { FC, useCallback, useEffect } from "react";
-import { ButtonGroup } from "~/components/input/ButtonGroup";
-import { Button } from "~/components/input/Button";
-import { useFormatWrapper, wrapTextInsideInput } from "~/hooks/dom/useFormatWrapper";
-import styles from "./styles.module.scss";
+import React, { FC, useCallback, useEffect } from 'react';
+import { ButtonGroup } from '~/components/input/ButtonGroup';
+import { Button } from '~/components/input/Button';
+import { useFormatWrapper, wrapTextInsideInput } from '~/hooks/dom/useFormatWrapper';
+import styles from './styles.module.scss';
 
 interface IProps {
   element: HTMLTextAreaElement;
@@ -10,10 +10,12 @@ interface IProps {
 }
 
 const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
-  const wrap = useCallback(
-    (prefix = '', suffix = '') => useFormatWrapper(element, handler, prefix, suffix),
-    [element, handler]
-  );
+  const wrapper = useFormatWrapper(handler);
+
+  const wrap = useCallback((prefix = '', suffix = '') => wrapper(element, prefix, suffix), [
+    element,
+    wrapper,
+  ]);
 
   const wrapBold = useCallback(
     event => {

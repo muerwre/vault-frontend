@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { Container } from '~/containers/main/Container';
-import StickyBox from 'react-sticky-box/dist/esnext';
+import StickyBox from 'react-sticky-box';
 import { BorisComments } from '~/containers/boris/BorisComments';
 import { Card } from '~/components/containers/Card';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';

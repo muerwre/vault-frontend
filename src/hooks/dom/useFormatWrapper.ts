@@ -1,18 +1,18 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
 /** wraps text inside textarea with tags */
-export const useFormatWrapper = (
-  target: HTMLTextAreaElement,
-  onChange: (val: string) => void,
-  prefix = '',
-  suffix = ''
-) => {
+export const useFormatWrapper = (onChange: (val: string) => void) => {
   return useCallback(
-    event => {
+    (
+      target: HTMLTextAreaElement,
+
+      prefix = '',
+      suffix = ''
+    ) => event => {
       event.preventDefault();
       wrapTextInsideInput(target, prefix, suffix, onChange);
     },
-    [target, onChange, prefix, suffix]
+    [onChange]
   );
 };
 
