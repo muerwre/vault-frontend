@@ -91,7 +91,9 @@ export type ApiUserLoginResult = { token: string; user: IUser };
 export type ApiAuthGetUserRequest = {};
 export type ApiAuthGetUserResult = { user: IUser };
 
-export type ApiUpdateUserRequest = { user: Partial<IUser> };
+export type ApiUpdateUserRequest = {
+  user: Partial<IUser & { password: string; newPassword: string }>;
+};
 export type ApiUpdateUserResult = { user: IUser; errors: Record<Partial<keyof IUser>, string> };
 
 export type ApiAuthGetUserProfileRequest = { username: string };

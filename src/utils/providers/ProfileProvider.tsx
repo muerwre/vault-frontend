@@ -1,5 +1,5 @@
 import { createContext, FC, useCallback, useContext } from "react";
-import { IUser } from "~/redux/auth/types";
+import { ApiUpdateUserRequest, IUser } from "~/redux/auth/types";
 import { useGetProfile } from "~/hooks/profile/useGetProfile";
 import { EMPTY_USER } from "~/redux/auth/constants";
 import { usePatchProfile } from "~/hooks/profile/usePatchProfile";
@@ -15,7 +15,7 @@ interface ProfileContextValue {
   profile: IUser;
   isLoading: boolean;
   updatePhoto: (file: File) => Promise<unknown>;
-  updateProfile: (user: Partial<IUser>) => Promise<IUser>;
+  updateProfile: (user: Partial<ApiUpdateUserRequest['user']>) => Promise<IUser>;
 }
 
 const ProfileContext = createContext<ProfileContextValue>({
