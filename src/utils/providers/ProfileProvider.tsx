@@ -1,11 +1,11 @@
-import { createContext, FC, useCallback, useContext } from "react";
-import { ApiUpdateUserRequest, IUser } from "~/redux/auth/types";
-import { useGetProfile } from "~/hooks/profile/useGetProfile";
-import { EMPTY_USER } from "~/redux/auth/constants";
-import { usePatchProfile } from "~/hooks/profile/usePatchProfile";
-import { useUser } from "~/hooks/user/userUser";
-import { useDispatch } from "react-redux";
-import { authSetUser } from "~/redux/auth/actions";
+import { createContext, FC, useCallback, useContext } from 'react';
+import { ApiUpdateUserRequest, IUser } from '~/redux/auth/types';
+import { useGetProfile } from '~/hooks/profile/useGetProfile';
+import { EMPTY_USER } from '~/redux/auth/constants';
+import { usePatchProfile } from '~/hooks/profile/usePatchProfile';
+import { useUser } from '~/hooks/user/userUser';
+import { useDispatch } from 'react-redux';
+import { authSetUser } from '~/redux/auth/actions';
 
 interface ProfileProviderProps {
   username: string;
