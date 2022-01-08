@@ -7,7 +7,6 @@ import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { IAuthState } from '~/redux/auth/types';
 import { pick } from 'ramda';
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
-import { MessageForm } from '~/components/profile/MessageForm';
 import { Tabs } from '~/components/dialogs/Tabs';
 import { ProfileDescription } from '~/components/profile/ProfileDescription';
 import { ProfileMessages } from '~/containers/profile/ProfileMessages';
@@ -26,13 +25,9 @@ const mapDispatchToProps = {
 
 type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
 
-const PROFILE_HEADERS = {
-  // messages: <MessageForm />,
-};
+const PROFILE_HEADERS = {};
 
-const PROFILE_FOOTERS = {
-  messages: <MessageForm />,
-};
+const PROFILE_FOOTERS = {};
 
 const ProfileDialogUnconnected: FC<IProps> = ({
   onRequestClose,

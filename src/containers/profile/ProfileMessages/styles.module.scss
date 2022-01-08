@@ -4,7 +4,7 @@
   padding: $gap;
   background: $node_bg;
   display: flex;
-  flex-direction: column-reverse !important;
+  flex-direction: column !important;
   overflow: auto;
 
   & > * {
@@ -24,4 +24,20 @@
   font: $font_12_regular;
   padding: $gap;
   text-align: center;
+}
+
+div.warning.warning {
+  padding: $gap;
+  box-shadow: $red 0 0 0 2px;
+  border-radius: $radius;
+  font: $font_14_semibold;
+  margin-bottom: $gap * 2;
+
+  p {
+    margin-bottom: $gap;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }

@@ -47,7 +47,7 @@ $text_sign: 22px;
 $button_bg_color: $red_gradient;
 
 $inset_bg: linear-gradient(135deg, darken($content_bg, 2%), $content_bg);
-$comment_bg: linear-gradient(135deg, $content_bg, lighten($content_bg, 2%));
+$comment_bg: lighten($content_bg, 2%);
 
 $panel_bg: transparent;
 $node_bg: darken($content_bg, 2%);

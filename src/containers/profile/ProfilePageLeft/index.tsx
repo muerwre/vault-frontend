@@ -1,12 +1,12 @@
-import React, { FC } from "react";
-import { IAuthState } from "~/redux/auth/types";
-import { formatText } from "~/utils/dom";
-import { PRESETS } from "~/constants/urls";
-import { Placeholder } from "~/components/placeholders/Placeholder";
+import React, { FC } from 'react';
+import { IAuthState } from '~/redux/auth/types';
+import { formatText } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
+import { Placeholder } from '~/components/placeholders/Placeholder';
 
-import styles from "./styles.module.scss";
-import { Avatar } from "~/components/common/Avatar";
-import { Markdown } from "~/components/containers/Markdown";
+import styles from './styles.module.scss';
+import { Avatar } from '~/components/common/Avatar';
+import { Markdown } from '~/components/containers/Markdown';
 
 interface IProps {
   profile: IAuthState['profile'];

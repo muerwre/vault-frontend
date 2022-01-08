@@ -11,10 +11,6 @@ $outgoing_color: $comment_bg;
   position: relative;
   word-break: break-word;
 
-  .avatar {
-    // margin: 0 0 0 10px;
-  }
-
   &::before {
     position: absolute;
     content: '';

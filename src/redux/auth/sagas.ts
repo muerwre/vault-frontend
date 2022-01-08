@@ -51,7 +51,6 @@ import {
 import { OAUTH_EVENT_TYPES, Unwrap } from '../types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { ERRORS } from '~/constants/errors';
-import { messagesSet } from '~/redux/messages/actions';
 import { SagaIterator } from 'redux-saga';
 import { AxiosError } from 'axios';
 import { getMOBXStore } from '~/store';
@@ -144,7 +143,6 @@ function* loadProfile({ username }: ReturnType<typeof authLoadProfile>): SagaIte
     });
 
     yield put(authSetProfile({ is_loading: false, user }));
-    yield put(messagesSet({ messages: [] }));
     return true;
   } catch (error) {
     return false;

@@ -2,14 +2,12 @@
 
 .wrap {
   display: grid;
-  grid-template-columns: $cell auto;
+  grid-template-columns: auto;
   grid-column-gap: $gap;
 }
 
 .grid {
   @include flow_grid;
-}
-.left {
 }
 
 .row {
@@ -20,4 +18,8 @@
   font: $font_14_semibold;
   text-align: center;
   padding: $gap * 2 $gap;
+}
+
+.stamp {
+  grid-row-end: span 2;
 }

@@ -1,5 +1,5 @@
 import { useModalStore } from '~/store/modal/useModalStore';
-import { FC, useCallback, VFC } from 'react';
+import { useCallback } from 'react';
 import { Dialog, DIALOG_CONTENT } from '~/constants/modal';
 import { IDialogProps } from '~/types/modal';
 

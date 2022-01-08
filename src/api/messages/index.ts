@@ -7,7 +7,7 @@ import {
   ApiGetUserMessagesResponse,
   ApiSendMessageRequest,
   ApiSendMessageResult,
-} from '~/redux/messages/types';
+} from '~/api/messages/types';
 
 export const apiGetUserMessages = ({ username, after, before }: ApiGetUserMessagesRequest) =>
   api

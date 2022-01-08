@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
 /** wraps text inside textarea with tags */
 export const useFormatWrapper = (onChange: (val: string) => void) => {

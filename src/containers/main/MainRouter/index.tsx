@@ -1,14 +1,14 @@
-import React, { FC } from "react";
-import { URLS } from "~/constants/urls";
-import { ErrorNotFound } from "~/containers/pages/ErrorNotFound";
-import { Redirect, Route, Switch, useLocation } from "react-router";
-import { useShallowSelect } from "~/hooks/data/useShallowSelect";
-import { selectAuthUser } from "~/redux/auth/selectors";
-import { ProfileLayout } from "~/layouts/ProfileLayout";
-import FlowPage from "~/pages";
-import BorisPage from "~/pages/boris";
-import NodePage from "~/pages/node/[id]";
-import LabPage from "~/pages/lab";
+import React, { FC } from 'react';
+import { URLS } from '~/constants/urls';
+import { ErrorNotFound } from '~/containers/pages/ErrorNotFound';
+import { Redirect, Route, Switch, useLocation } from 'react-router';
+import { useShallowSelect } from '~/hooks/data/useShallowSelect';
+import { selectAuthUser } from '~/redux/auth/selectors';
+import { ProfileLayout } from '~/layouts/ProfileLayout';
+import FlowPage from '~/pages';
+import BorisPage from '~/pages/boris';
+import NodePage from '~/pages/node/[id]';
+import LabPage from '~/pages/lab';
 
 interface IProps {}
 

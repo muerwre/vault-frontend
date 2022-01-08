@@ -13,9 +13,6 @@ import { IAuthState } from '~/redux/auth/types';
 
 import { authLogout, authOpenProfile, gotAuthPostMessage } from './auth/actions';
 
-import messages, { IMessagesState } from './messages';
-import messagesSaga from './messages/sagas';
-
 import { AxiosError } from 'axios';
 import { api } from '~/utils/api';
 import { assocPath } from 'ramda';
@@ -26,16 +23,9 @@ const authPersistConfig: PersistConfig = {
   storage,
 };
 
-const playerPersistConfig: PersistConfig = {
-  key: 'player',
-  whitelist: ['youtubes'],
-  storage,
-};
-
 export interface IState {
   auth: IAuthState;
   router: RouterState;
-  messages: IMessagesState;
 }
 
 export const sagaMiddleware = createSagaMiddleware();
@@ -52,7 +42,6 @@ export const store = createStore(
   combineReducers<IState>({
     auth: persistReducer(authPersistConfig, auth),
     router: connectRouter(history),
-    messages,
   }),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
@@ -62,7 +51,6 @@ export function configureStore(): {
   persistor: Persistor;
 } {
   sagaMiddleware.run(authSaga);
-  sagaMiddleware.run(messagesSaga);
 
   const persistor = persistStore(store);
 

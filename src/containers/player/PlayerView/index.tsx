@@ -1,6 +1,6 @@
-import React, { VFC } from "react";
-import { PlayerBar } from "~/components/bars/PlayerBar";
-import { useAudioPlayer } from "~/utils/providers/AudioPlayerProvider";
+import React, { VFC } from 'react';
+import { PlayerBar } from '~/components/bars/PlayerBar';
+import { useAudioPlayer } from '~/utils/providers/AudioPlayerProvider';
 
 interface PlayerViewProps {}
 

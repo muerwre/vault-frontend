@@ -8,7 +8,6 @@ import { selectAuthProfile, selectUser } from "~/redux/auth/selectors";
 import { ProfilePageLeft } from "~/containers/profile/ProfilePageLeft";
 import { Container } from "~/containers/main/Container";
 import { FlowGrid } from "~/components/flow/FlowGrid";
-import { Sticky } from "~/components/containers/Sticky";
 import { ProfilePageStats } from "~/containers/profile/ProfilePageStats";
 import { Card } from "~/components/containers/Card";
 import { useFlowStore } from "~/store/flow/useFlowStore";
@@ -35,8 +34,8 @@ const ProfileLayout: FC<Props> = observer(
 
     return (
       <Container className={styles.wrap}>
-        <div className={styles.left}>
-          <Sticky>
+        <div className={styles.grid}>
+          <div className={styles.stamp}>
             <div className={styles.row}>
               <ProfilePageLeft profile={profile} username={username} />
             </div>
@@ -50,10 +49,8 @@ const ProfileLayout: FC<Props> = observer(
             <div className={styles.row}>
               <ProfilePageStats />
             </div>
-          </Sticky>
-        </div>
+          </div>
 
-        <div className={styles.grid}>
           <FlowGrid nodes={nodes} user={user} onChangeCellView={console.log} />
         </div>
       </Container>

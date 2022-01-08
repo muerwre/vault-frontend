@@ -1,5 +1,5 @@
-import React, { FC, useCallback, useEffect, useMemo, useState, VFC } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useMemo, useState, VFC } from 'react';
+import { useDispatch } from 'react-redux';
 import { BetterScrollDialog } from '../BetterScrollDialog';
 import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';

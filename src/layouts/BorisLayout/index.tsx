@@ -1,19 +1,19 @@
-import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { Group } from '~/components/containers/Group';
-import { Container } from '~/containers/main/Container';
-import StickyBox from 'react-sticky-box';
-import { BorisComments } from '~/containers/boris/BorisComments';
-import { Card } from '~/components/containers/Card';
-import { SidebarRouter } from '~/containers/main/SidebarRouter';
-import { BorisSidebar } from '~/components/boris/BorisSidebar';
-import { useUserContext } from '~/utils/context/UserContextProvider';
-import { BorisUsageStats } from '~/types/boris';
-import { Tabs } from '~/components/dialogs/Tabs';
-import { Superpower } from '~/components/boris/Superpower';
-import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
+import React, { FC } from "react";
+import styles from "./styles.module.scss";
+import { Group } from "~/components/containers/Group";
+import { Container } from "~/containers/main/Container";
+import StickyBox from "react-sticky-box";
+import { BorisComments } from "~/containers/boris/BorisComments";
+import { Card } from "~/components/containers/Card";
+import { SidebarRouter } from "~/containers/main/SidebarRouter";
+import { BorisSidebar } from "~/components/boris/BorisSidebar";
+import { useUserContext } from "~/utils/context/UserContextProvider";
+import { BorisUsageStats } from "~/types/boris";
+import { Tabs } from "~/components/dialogs/Tabs";
+import { Superpower } from "~/components/boris/Superpower";
+import { BorisUIDemo } from "~/components/boris/BorisUIDemo";
 
-import boris from '~/sprites/boris_robot.svg';
+import boris from "~/sprites/boris_robot.svg";
 
 type IProps = {
   title: string;
