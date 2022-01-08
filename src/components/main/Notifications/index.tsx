@@ -46,10 +46,7 @@ const NotificationsUnconnected: FC<IProps> = ({
             return;
           }
 
-          return authOpenProfile(
-            (notification as IMessageNotification).content.from!.username,
-            'messages'
-          );
+          return authOpenProfile((notification as IMessageNotification).content.from!.username);
         default:
           return;
       }

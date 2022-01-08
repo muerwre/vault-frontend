@@ -10,9 +10,9 @@ import { useBlockBackButton } from '~/hooks/navigation/useBlockBackButton';
 import { useModal } from '~/hooks/modal/useModal';
 import { observer } from 'mobx-react';
 import { IFile } from '~/redux/types';
-import { IDialogProps } from '~/types/modal';
+import { DialogComponentProps } from '~/types/modal';
 
-export interface PhotoSwipeProps extends IDialogProps {
+export interface PhotoSwipeProps extends DialogComponentProps {
   items: IFile[];
   index: number;
 }

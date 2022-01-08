@@ -1,39 +1,33 @@
 import React, { FC } from 'react';
 import { formatText } from '~/utils/dom';
 import styles from './styles.module.scss';
-import { connect } from 'react-redux';
-import { selectAuthProfile } from '~/redux/auth/selectors';
 import { ProfileLoader } from '~/containers/profile/ProfileLoader';
 import { Group } from '~/components/containers/Group';
 import markdown from '~/styles/common/markdown.module.scss';
 import classNames from 'classnames';
+import { useProfileContext } from '~/utils/providers/ProfileProvider';
 
-const mapStateToProps = state => ({
-  profile: selectAuthProfile(state),
-});
+const ProfileDescription: FC = () => {
+  const { profile, isLoading } = useProfileContext();
 
-type IProps = ReturnType<typeof mapStateToProps> & {};
-
-const ProfileDescriptionUnconnected: FC<IProps> = ({ profile: { user, is_loading } }) => {
-  if (is_loading) return <ProfileLoader />;
+  if (isLoading) return <ProfileLoader />;
 
   return (
     <div className={styles.wrap}>
-      {!!user?.description && (
+      {!!profile?.description && (
         <Group
           className={classNames(styles.content, markdown.wrapper)}
-          dangerouslySetInnerHTML={{ __html: formatText(user.description) }}
+          dangerouslySetInnerHTML={{ __html: formatText(profile.description) }}
         />
       )}
-      {!user?.description && (
+
+      {!profile?.description && (
         <div className={styles.placeholder}>
-          {user?.fullname || user?.username} пока ничего не рассказал о себе
+          {profile?.fullname || profile?.username} пока ничего не рассказал о себе
         </div>
       )}
     </div>
   );
 };
-
-const ProfileDescription = connect(mapStateToProps)(ProfileDescriptionUnconnected);
 
 export { ProfileDescription };

@@ -1,35 +1,25 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import styles from './styles.module.scss';
-import { connect } from 'react-redux';
-import { selectAuthProfile, selectAuthUser } from '~/redux/auth/selectors';
 import { Textarea } from '~/components/input/Textarea';
 import { Button } from '~/components/input/Button';
 import { Group } from '~/components/containers/Group';
 import { Filler } from '~/components/containers/Filler';
 import { InputText } from '~/components/input/InputText';
-import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { ProfileAccounts } from '~/components/profile/ProfileAccounts';
 import classNames from 'classnames';
+import { useUser } from '~/hooks/user/userUser';
+import { useProfileContext } from '~/utils/providers/ProfileProvider';
+import { showErrorToast } from '~/utils/errors/showToast';
+import { getValidationErrors } from '~/utils/errors/getValidationErrors';
+import { showToastSuccess } from '~/utils/toast';
+import { getRandomPhrase } from '~/constants/phrases';
 
-const mapStateToProps = state => ({
-  user: selectAuthUser(state),
-  profile: selectAuthProfile(state),
-});
+const ProfileSettings: FC = () => {
+  const [errors, setErrors] = useState<Record<string, any>>({});
+  const user = useUser();
+  const { updateProfile } = useProfileContext();
 
-const mapDispatchToProps = {
-  authPatchUser: AUTH_ACTIONS.authPatchUser,
-  authSetProfile: AUTH_ACTIONS.authSetProfile,
-};
-
-type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
-
-const ProfileSettingsUnconnected: FC<IProps> = ({
-  user,
-  profile: { patch_errors, socials },
-  authPatchUser,
-  authSetProfile,
-}) => {
   const [password, setPassword] = useState('');
   const [new_password, setNewPassword] = useState('');
 
@@ -39,28 +29,40 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
     data,
     setData,
   ]);
+
   const setEmail = useCallback(email => setData({ ...data, email }), [data, setData]);
   const setUsername = useCallback(username => setData({ ...data, username }), [data, setData]);
   const setFullname = useCallback(fullname => setData({ ...data, fullname }), [data, setData]);
 
   const onSubmit = useCallback(
-    event => {
-      event.preventDefault();
+    async event => {
+      try {
+        event.preventDefault();
 
-      const fields = {
-        ...data,
-        password: password.length > 0 && password ? password : undefined,
-        new_password: new_password.length > 0 && new_password ? new_password : undefined,
-      };
+        const fields = {
+          ...data,
+          password: password.length > 0 && password ? password : undefined,
+          new_password: new_password.length > 0 && new_password ? new_password : undefined,
+        };
 
-      authPatchUser(fields);
+        await updateProfile(fields);
+
+        showToastSuccess(getRandomPhrase('SUCCESS'));
+      } catch (error) {
+        showErrorToast(error);
+
+        const validationErrors = getValidationErrors(error);
+        if (validationErrors) {
+          setErrors(validationErrors);
+        }
+      }
     },
-    [data, password, new_password, authPatchUser]
+    [data, password, new_password, updateProfile]
   );
 
   useEffect(() => {
-    authSetProfile({ patch_errors: {} });
-  }, [password, new_password, data, authSetProfile]);
+    setErrors({});
+  }, [password, new_password, data]);
 
   return (
     <form className={styles.wrap} onSubmit={onSubmit}>
@@ -74,7 +76,7 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
             value={data.fullname}
             handler={setFullname}
             title="Полное имя"
-            error={patch_errors.fullname && ERROR_LITERAL[patch_errors.fullname]}
+            error={errors.fullname && ERROR_LITERAL[errors.fullname]}
           />
 
           <Textarea value={data.description} handler={setDescription} title="Описание" />
@@ -96,14 +98,14 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
             value={data.username}
             handler={setUsername}
             title="Логин"
-            error={patch_errors.username && ERROR_LITERAL[patch_errors.username]}
+            error={errors.username && ERROR_LITERAL[errors.username]}
           />
 
           <InputText
             value={data.email}
             handler={setEmail}
             title="E-mail"
-            error={patch_errors.email && ERROR_LITERAL[patch_errors.email]}
+            error={errors.email && ERROR_LITERAL[errors.email]}
           />
 
           <InputText
@@ -111,7 +113,7 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
             handler={setNewPassword}
             title="Новый пароль"
             type="password"
-            error={patch_errors.new_password && ERROR_LITERAL[patch_errors.new_password]}
+            error={errors.new_password && ERROR_LITERAL[errors.new_password]}
           />
 
           <InputText
@@ -119,7 +121,7 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
             handler={setPassword}
             title="Старый пароль"
             type="password"
-            error={patch_errors.password && ERROR_LITERAL[patch_errors.password]}
+            error={errors.password && ERROR_LITERAL[errors.password]}
           />
 
           <div className={styles.small}>
@@ -149,7 +151,5 @@ const ProfileSettingsUnconnected: FC<IProps> = ({
     </form>
   );
 };
-
-const ProfileSettings = connect(mapStateToProps, mapDispatchToProps)(ProfileSettingsUnconnected);
 
 export { ProfileSettings };

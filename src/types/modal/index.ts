@@ -1,3 +1,3 @@
-export interface IDialogProps {
+export interface DialogComponentProps {
   onRequestClose: () => void;
 }

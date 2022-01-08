@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState, VFC } from 'react';
-import { useDispatch } from 'react-redux';
-import { BetterScrollDialog } from '../BetterScrollDialog';
-import { Group } from '~/components/containers/Group';
-import { InputText } from '~/components/input/InputText';
-import { Button } from '~/components/input/Button';
-import styles from './styles.module.scss';
+import React, { useCallback, useEffect, useMemo, useState, VFC } from "react";
+import { useDispatch } from "react-redux";
+import { BetterScrollDialog } from "../BetterScrollDialog";
+import { Group } from "~/components/containers/Group";
+import { InputText } from "~/components/input/InputText";
+import { Button } from "~/components/input/Button";
+import styles from "./styles.module.scss";
 
-import * as AUTH_ACTIONS from '~/redux/auth/actions';
-import { selectAuthRestore } from '~/redux/auth/selectors';
-import { ERROR_LITERAL } from '~/constants/errors';
-import { Icon } from '~/components/input/Icon';
-import { useCloseOnEscape } from '~/hooks';
-import { IDialogProps } from '~/types/modal';
-import { useShallowSelect } from '~/hooks/data/useShallowSelect';
-import { IAuthState } from '~/redux/auth/types';
+import * as AUTH_ACTIONS from "~/redux/auth/actions";
+import { selectAuthRestore } from "~/redux/auth/selectors";
+import { ERROR_LITERAL } from "~/constants/errors";
+import { Icon } from "~/components/input/Icon";
+import { useCloseOnEscape } from "~/hooks";
+import { DialogComponentProps } from "~/types/modal";
+import { useShallowSelect } from "~/hooks/data/useShallowSelect";
+import { IAuthState } from "~/redux/auth/types";
 
-interface RestoreRequestDialogProps extends IDialogProps {}
+interface RestoreRequestDialogProps extends DialogComponentProps {}
 
 const RestoreRequestDialog: VFC<RestoreRequestDialogProps> = ({ onRequestClose }) => {
   const dispatch = useDispatch();

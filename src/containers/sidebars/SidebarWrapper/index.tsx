@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useRef } from 'react';
-import styles from './styles.module.scss';
-import { createPortal } from 'react-dom';
-import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
-import { useCloseOnEscape } from '~/hooks';
+import React, { FC, useEffect, useRef } from "react";
+import styles from "./styles.module.scss";
+import { createPortal } from "react-dom";
+import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
+import { useCloseOnEscape } from "~/hooks";
 
 interface IProps {
   onClose?: () => void;

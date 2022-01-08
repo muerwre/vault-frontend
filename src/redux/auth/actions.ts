@@ -43,20 +43,9 @@ export const authLoggedIn = () => ({
   type: AUTH_USER_ACTIONS.LOGGED_IN,
 });
 
-export const authOpenProfile = (username: string, tab?: IAuthState['profile']['tab']) => ({
+export const authOpenProfile = (username: string) => ({
   type: AUTH_USER_ACTIONS.OPEN_PROFILE,
   username,
-  tab,
-});
-
-export const authLoadProfile = (username: string) => ({
-  type: AUTH_USER_ACTIONS.LOAD_PROFILE,
-  username,
-});
-
-export const authSetProfile = (profile: Partial<IAuthState['profile']>) => ({
-  type: AUTH_USER_ACTIONS.SET_PROFILE,
-  profile,
 });
 
 export const authSetUpdates = (updates: Partial<IAuthState['updates']>) => ({
@@ -69,11 +58,6 @@ export const authSetLastSeenMessages = (
 ) => ({
   type: AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES,
   last_seen_messages,
-});
-
-export const authPatchUser = (user: Partial<IUser>) => ({
-  type: AUTH_USER_ACTIONS.PATCH_USER,
-  user,
 });
 
 export const authRequestRestoreCode = (field: string) => ({

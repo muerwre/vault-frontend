@@ -4,16 +4,13 @@ import {
   authAttachSocial,
   authDropSocial,
   authGotOauthLoginEvent,
-  authLoadProfile,
   authLoggedIn,
   authLoginWithSocial,
   authOpenProfile,
-  authPatchUser,
   authRequestRestoreCode,
   authRestorePassword,
   authSendRegisterSocial,
   authSetLastSeenMessages,
-  authSetProfile,
   authSetRegisterSocial,
   authSetRegisterSocialErrors,
   authSetRestore,
@@ -30,7 +27,6 @@ import {
   apiAttachSocial,
   apiAuthGetUpdates,
   apiAuthGetUser,
-  apiAuthGetUserProfile,
   apiCheckRestoreCode,
   apiDropSocial,
   apiGetSocials,
@@ -51,14 +47,12 @@ import {
 import { OAUTH_EVENT_TYPES, Unwrap } from '../types';
 import { REHYDRATE, RehydrateAction } from 'redux-persist';
 import { ERRORS } from '~/constants/errors';
-import { SagaIterator } from 'redux-saga';
 import { AxiosError } from 'axios';
 import { getMOBXStore } from '~/store';
 import { Dialog } from '~/constants/modal';
 import { showErrorToast } from '~/utils/errors/showToast';
 import { showToastInfo } from '~/utils/toast';
 import { getRandomPhrase } from '~/constants/phrases';
-import { getValidationErrors } from '~/utils/errors/getValidationErrors';
 import { getErrorMessage } from '~/utils/errors/getErrorMessage';
 
 const modalStore = getMOBXStore().modal;
@@ -134,30 +128,8 @@ function* logoutSaga() {
   showToastInfo(getRandomPhrase('GOODBYE'));
 }
 
-function* loadProfile({ username }: ReturnType<typeof authLoadProfile>): SagaIterator<boolean> {
-  yield put(authSetProfile({ is_loading: true }));
-
-  try {
-    const { user }: Unwrap<typeof apiAuthGetUserProfile> = yield call(apiAuthGetUserProfile, {
-      username,
-    });
-
-    yield put(authSetProfile({ is_loading: false, user }));
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-
-function* openProfile({ username, tab = 'profile' }: ReturnType<typeof authOpenProfile>) {
-  modalStore.setCurrent(Dialog.Profile, {});
-  yield put(authSetProfile({ tab }));
-
-  const success: Unwrap<typeof loadProfile> = yield call(loadProfile, authLoadProfile(username));
-
-  if (!success) {
-    modalStore.hide();
-  }
+function openProfile({ username }: ReturnType<typeof authOpenProfile>) {
+  modalStore.setCurrent(Dialog.Profile, { username });
 }
 
 function* getUpdates() {
@@ -211,27 +183,6 @@ function* setLastSeenMessages({ last_seen_messages }: ReturnType<typeof authSetL
   if (!Date.parse(last_seen_messages)) return;
 
   yield call(apiUpdateUser, { user: { last_seen_messages } });
-}
-
-function* patchUser(payload: ReturnType<typeof authPatchUser>) {
-  const me: ReturnType<typeof selectAuthUser> = yield select(selectAuthUser);
-
-  try {
-    const { user }: Unwrap<typeof apiUpdateUser> = yield call(apiUpdateUser, {
-      user: payload.user,
-    });
-
-    yield put(authSetUser({ ...me, ...user }));
-    yield put(authSetProfile({ user: { ...me, ...user }, tab: 'profile' }));
-  } catch (error) {
-    showErrorToast(error);
-
-    const patch_errors = getValidationErrors(error);
-
-    if (!patch_errors) return;
-
-    yield put(authSetProfile({ patch_errors }));
-  }
 }
 
 function* requestRestoreCode({ field }: ReturnType<typeof authRequestRestoreCode>) {
@@ -445,9 +396,7 @@ function* authSaga() {
   yield takeLatest(AUTH_USER_ACTIONS.SEND_LOGIN_REQUEST, sendLoginRequestSaga);
   yield takeLatest(AUTH_USER_ACTIONS.GOT_AUTH_POST_MESSAGE, gotPostMessageSaga);
   yield takeLatest(AUTH_USER_ACTIONS.OPEN_PROFILE, openProfile);
-  yield takeLatest(AUTH_USER_ACTIONS.LOAD_PROFILE, loadProfile);
   yield takeLatest(AUTH_USER_ACTIONS.SET_LAST_SEEN_MESSAGES, setLastSeenMessages);
-  yield takeLatest(AUTH_USER_ACTIONS.PATCH_USER, patchUser);
   yield takeLatest(AUTH_USER_ACTIONS.REQUEST_RESTORE_CODE, requestRestoreCode);
   yield takeLatest(AUTH_USER_ACTIONS.SHOW_RESTORE_MODAL, showRestoreModal);
   yield takeLatest(AUTH_USER_ACTIONS.RESTORE_PASSWORD, restorePassword);

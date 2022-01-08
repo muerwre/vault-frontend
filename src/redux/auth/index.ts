@@ -25,7 +25,6 @@ const INITIAL_STATE: IAuthState = {
   },
 
   profile: {
-    tab: 'profile',
     is_loading: true,
 
     user: undefined,

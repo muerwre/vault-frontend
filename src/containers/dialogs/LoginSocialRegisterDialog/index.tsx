@@ -11,7 +11,7 @@ import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { useCloseOnEscape } from '~/hooks';
 import { LoginSocialRegisterButtons } from '~/containers/dialogs/LoginSocialRegisterButtons';
 import { Toggle } from '~/components/input/Toggle';
-import { IDialogProps } from '~/types/modal';
+import { DialogComponentProps } from '~/types/modal';
 
 const mapStateToProps = selectAuthRegisterSocial;
 const mapDispatchToProps = {
@@ -20,7 +20,9 @@ const mapDispatchToProps = {
   authSendRegisterSocial: AUTH_ACTIONS.authSendRegisterSocial,
 };
 
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
+type Props = ReturnType<typeof mapStateToProps> &
+  typeof mapDispatchToProps &
+  DialogComponentProps & {};
 
 const phrase = [
   'Сушёный кабачок особенно хорош в это время года, знаете ли.',

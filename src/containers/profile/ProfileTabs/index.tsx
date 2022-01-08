@@ -1,15 +1,12 @@
-import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { IAuthState } from '~/redux/auth/types';
-import { Tabs } from '~/components/dialogs/Tabs';
+import React, { FC } from "react";
+import styles from "./styles.module.scss";
+import { Tabs } from "~/components/dialogs/Tabs";
 
 interface IProps {
-  tab: string;
   is_own: boolean;
-  setTab?: (tab: IAuthState['profile']['tab']) => void;
 }
 
-const ProfileTabs: FC<IProps> = ({ tab, is_own, setTab }) => {
+const ProfileTabs: FC<IProps> = ({ is_own }) => {
   const items = ['Профиль', 'Сообщения', ...(is_own ? ['Настройки'] : [])];
 
   return (

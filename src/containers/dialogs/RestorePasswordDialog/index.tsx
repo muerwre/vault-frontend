@@ -12,7 +12,7 @@ import { selectAuthRestore } from '~/redux/auth/selectors';
 import { ERROR_LITERAL, ERRORS } from '~/constants/errors';
 import { Icon } from '~/components/input/Icon';
 import { useCloseOnEscape } from '~/hooks';
-import { IDialogProps } from '~/types/modal';
+import { DialogComponentProps } from '~/types/modal';
 
 const mapStateToProps = state => ({
   restore: selectAuthRestore(state),
@@ -20,7 +20,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = pick(['authRestorePassword', 'authSetRestore'], AUTH_ACTIONS);
 
-type IProps = IDialogProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {};
+type IProps = DialogComponentProps &
+  ReturnType<typeof mapStateToProps> &
+  typeof mapDispatchToProps & {};
 
 const RestorePasswordDialogUnconnected: FC<IProps> = ({
   restore: { error, is_loading, is_succesfull, user },

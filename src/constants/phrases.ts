@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 export const PHRASES = {
+  SUCCESS: ['Готово! Что-нибудь ещё?'],
   WELCOME: ['Ого! Кто это тут у нас?'],
   GOODBYE: ['Возвращайся, мы будем скучать'],
   SIMPLE: [

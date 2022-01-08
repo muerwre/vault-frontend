@@ -52,7 +52,6 @@ export type IAuthState = Readonly<{
   };
 
   profile: {
-    tab: 'profile' | 'messages' | 'settings';
     is_loading: boolean;
 
     user?: IUser;

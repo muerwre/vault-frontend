@@ -17,7 +17,7 @@ import { LoginDialogButtons } from '~/containers/dialogs/LoginDialogButtons';
 import { OAUTH_EVENT_TYPES } from '~/redux/types';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
 import { useTranslatedError } from '~/hooks/data/useTranslatedError';
-import { IDialogProps } from '~/types/modal';
+import { DialogComponentProps } from '~/types/modal';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { Dialog } from '~/constants/modal';
 
@@ -32,7 +32,9 @@ const mapDispatchToProps = {
   authGotOauthLoginEvent: ACTIONS.authGotOauthLoginEvent,
 };
 
-type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & IDialogProps & {};
+type IProps = ReturnType<typeof mapStateToProps> &
+  typeof mapDispatchToProps &
+  DialogComponentProps & {};
 
 const LoginDialogUnconnected: FC<IProps> = ({
   error,
