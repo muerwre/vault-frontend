@@ -11,8 +11,8 @@ export class ModalStore {
   }
 
   setCurrent = <T extends Dialog>(current: T, props: DialogContentProps[T]) => {
-    this.props = props;
-    this.current = current ?? {};
+    this.props = current ? props : {};
+    this.current = current;
   };
 
   hide = () => {
