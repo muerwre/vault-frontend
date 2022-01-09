@@ -1,7 +1,7 @@
 import { IUser } from '~/types/auth';
 import { EMPTY_USER } from '~/constants/auth';
 import { makeAutoObservable } from 'mobx';
-import { makePersistable, isHydrated } from 'mobx-persist-store';
+import { isHydrated, makePersistable } from 'mobx-persist-store';
 
 export class AuthStore {
   token: string = '';
@@ -14,7 +14,7 @@ export class AuthStore {
     void makePersistable(this, {
       name: `vault48_auth_${process.env.REACT_APP_API_URL}`,
       properties: ['token', 'user', 'isTesterInternal'],
-      storage: window.localStorage,
+      storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     });
   }
 

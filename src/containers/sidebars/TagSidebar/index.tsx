@@ -2,7 +2,6 @@ import React, { useMemo, VFC } from 'react';
 import { SidebarWrapper } from '~/containers/sidebars/SidebarWrapper';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
-import { Link } from 'react-router-dom';
 import { TagSidebarList } from '~/components/sidebar/TagSidebarList';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';

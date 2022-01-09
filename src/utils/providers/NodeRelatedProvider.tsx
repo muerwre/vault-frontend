@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { INode, ITag } from '~/types';
 import { NodeRelatedContextProvider } from '~/utils/context/NodeRelatedContextProvider';
 import { INodeRelated } from '~/types/node';
