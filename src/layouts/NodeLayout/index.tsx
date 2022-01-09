@@ -42,7 +42,7 @@ const NodeLayout: FC<IProps> = () => {
               title={node.title}
               username={node.user?.username}
               likeCount={node?.like_count || 0}
-              isHeroic={!!node.is_promoted}
+              isHeroic={!!node.is_heroic}
               isLiked={!!node.is_liked}
               isLocked={!!node.deleted_at}
               isLoading={isLoading}

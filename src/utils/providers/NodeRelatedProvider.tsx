@@ -15,15 +15,7 @@ const defaultValue: INodeRelated = {
 };
 
 const NodeRelatedProvider: FC<NodeRelatedProviderProps> = ({ id, children, tags }) => {
-  const { related, isLoading, refresh } = useGetNodeRelated(id);
-
-  useEffect(
-    () => {
-      refresh();
-    },
-    // eslint-disable-next-line
-    [tags]
-  );
+  const { related, isLoading } = useGetNodeRelated(id);
 
   return (
     <NodeRelatedContextProvider related={related || defaultValue} isLoading={isLoading}>

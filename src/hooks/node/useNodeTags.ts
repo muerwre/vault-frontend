@@ -4,8 +4,10 @@ import { ITag } from '~/types';
 import { URLS } from '~/constants/urls';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { apiDeleteNodeTag, apiPostNodeTags } from '~/api/node';
+import { useGetNodeRelated } from '~/hooks/node/useGetNodeRelated';
 
 export const useNodeTags = (id: number) => {
+  const { refresh: refreshRelated } = useGetNodeRelated(id);
   const { update } = useLoadNode(id);
   const history = useHistory();
 
@@ -14,11 +16,12 @@ export const useNodeTags = (id: number) => {
       try {
         const result = await apiPostNodeTags({ id, tags });
         await update({ tags: result.node.tags });
+        await refreshRelated();
       } catch (error) {
         console.warn(error);
       }
     },
-    [id, update]
+    [id, update, refreshRelated]
   );
 
   const onClick = useCallback(
@@ -37,11 +40,12 @@ export const useNodeTags = (id: number) => {
       try {
         const result = await apiDeleteNodeTag({ id, tagId });
         await update({ tags: result.tags });
+        await refreshRelated();
       } catch (e) {
         console.warn(e);
       }
     },
-    [id, update]
+    [id, update, refreshRelated]
   );
 
   return { onDelete, onChange, onClick };

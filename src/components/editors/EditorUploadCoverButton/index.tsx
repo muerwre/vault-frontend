@@ -13,10 +13,10 @@ type IProps = IEditorComponentProps & {};
 
 const EditorUploadCoverButton: FC<IProps> = () => {
   const { values, setFieldValue } = useNodeFormContext();
-  const { uploadFiles, files, pendingImages } = useUploader(
+  const { uploadFile, files, pendingImages } = useUploader(
     UploadSubject.Editor,
     UploadTarget.Nodes,
-    []
+    values.cover ? [values.cover] : []
   );
 
   const background = values.cover ? getURL(values.cover, PRESETS['300']) : null;
@@ -27,14 +27,15 @@ const EditorUploadCoverButton: FC<IProps> = () => {
   }, [setFieldValue]);
 
   const onInputChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
+    async (event: ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(event.target.files || [])
         .filter(file => getFileType(file) === UploadType.Image)
         .slice(0, 1);
 
-      uploadFiles(files);
+      const result = await uploadFile(files[0]);
+      setFieldValue('cover', result);
     },
-    [uploadFiles]
+    [uploadFile, setFieldValue]
   );
 
   useEffect(() => {

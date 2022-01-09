@@ -11,6 +11,7 @@ interface TagAutocompleteProps {
   onSelect: (val: string) => void;
   search: string;
   options: string[];
+  visible: boolean;
 }
 
 const TagAutocomplete: VFC<TagAutocompleteProps> = ({
@@ -19,6 +20,7 @@ const TagAutocomplete: VFC<TagAutocompleteProps> = ({
   onSelect,
   search,
   options,
+  visible,
 }) => {
   const [selected, setSelected] = useState(-1);
   const [categories, tags] = useMemo(
@@ -82,7 +84,7 @@ const TagAutocomplete: VFC<TagAutocompleteProps> = ({
 
   return (
     <div
-      className={classNames(styles.window)}
+      className={classNames(styles.window, { [styles.visible]: visible })}
       ref={wrapper}
       style={pop.styles.popper}
       {...pop.attributes.popper}

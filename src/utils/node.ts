@@ -15,5 +15,5 @@ export const canLikeNode = (node?: Partial<INode>, user?: Partial<IUser>): boole
 
 export const canStarNode = (node?: Partial<INode>, user?: Partial<IUser>): boolean =>
   path(['type'], node) === NODE_TYPES.IMAGE &&
-  path(['is_promoted'], node) === false &&
+  path(['is_promoted'], node) === true &&
   path(['role'], user) === Role.Admin;
