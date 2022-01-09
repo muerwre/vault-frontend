@@ -244,3 +244,12 @@
     padding-right: 0;
   }
 }
+
+@mixin modal_backdrop {
+  @include blur();
+  background: url('../../src/sprites/noise.png');
+
+  @include can_backdrop {
+    background: url('../../src/sprites/noise.png');
+  }
+}
