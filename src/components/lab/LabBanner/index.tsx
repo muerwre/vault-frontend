@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
-import { Square } from '~/components/lab/LabSquare';
+import { LabSquare } from '~/components/lab/LabSquare';
 
 interface IProps {}
 
 const LabBanner: FC<IProps> = () => (
-  <Square className={styles.wrap}>
+  <LabSquare className={styles.wrap}>
     <Group>
       <div className={styles.title}>Лаборатория!</div>
 
@@ -19,7 +19,7 @@ const LabBanner: FC<IProps> = () => (
         </p>
       </Group>
     </Group>
-  </Square>
+  </LabSquare>
 );
 
 export { LabBanner };

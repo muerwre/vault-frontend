@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 interface IProps extends DivProps {}
 
-const Square: FC<IProps> = ({ children, ...rest }) => (
+const LabSquare: FC<IProps> = ({ children, ...rest }) => (
   <div className={styles.square}>
     <div {...rest} className={classNames(styles.content, rest.className)}>
       {children}
@@ -13,4 +13,4 @@ const Square: FC<IProps> = ({ children, ...rest }) => (
   </div>
 );
 
-export { Square };
+export { LabSquare };
