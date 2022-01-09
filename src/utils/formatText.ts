@@ -1,12 +1,13 @@
-import marked from "marked";
-import { stripHTMLTags } from "~/utils/stripHTMLTags";
+import marked from 'marked';
+import { stripHTMLTags } from '~/utils/stripHTMLTags';
+import { EventMessageType } from '~/constants/events';
 
 /**
  * Cleans youtube urls
  */
 export const formatTextSanitizeYoutube = (text: string): string =>
   text.replace(
-    /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-\&\=]+)/gim,
+    /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-&=]+)/gim,
     '\n$1\n'
   );
 
@@ -21,7 +22,7 @@ export const formatTextSanitizeTags = (text: string): string => stripHTMLTags(te
 export const formatTextClickableUsernames = (text: string): string =>
   text.replace(
     /~([\wа-яА-Я-]+)/giu,
-    '<span class="username" onClick="window.postMessage({ type: \'username\', username: \'$1\'});">~$1</span>'
+    `<span class="username" onClick="window.postMessage({ type: '${EventMessageType.OpenProfile}', username: '$1'});">~$1</span>`
   );
 
 /**
@@ -49,16 +50,7 @@ export const formatTextTodos = (text: string): string =>
  * Formats !!exclamation messages with green color
  */
 export const formatExclamations = (text: string): string =>
-  text.replace(/(\!\![\s\S]*?(\!\!|\n|$))/gim, '<span class="green">$1$2</span>');
-
-/**
- * Formats links
- */
-export const formatLinks = (text: string): string =>
-  text.replace(
-    /(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)([-A-Z0-9+&@#%?\/=~_|!:,.;]*)[-A-Z0-9+&@#\/%=~_|])/gi,
-    '<a href="$1" target="blank" rel="nofollow">$1</a>'
-  );
+  text.replace(/(!![\s\S]*?(!!|\n|$))/gim, '<span class="green">$1$2</span>');
 
 /**
  * Replaces -- with dash

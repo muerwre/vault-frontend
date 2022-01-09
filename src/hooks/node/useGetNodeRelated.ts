@@ -1,4 +1,4 @@
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import useSWR from 'swr';
 import { ApiGetNodeRelatedResult } from '~/types/node';
 import { API } from '~/constants/api';

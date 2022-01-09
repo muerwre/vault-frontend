@@ -10,9 +10,7 @@ export const useBorisStats = () => {
     () => getBorisBackendStats()
   );
 
-  const { data: issues = [], isValidating: isValidatingGit } = useSWR(API.BORIS.GITHUB_ISSUES, () =>
-    getGithubIssues()
-  );
+  const { data: issues = [] } = useSWR(API.BORIS.GITHUB_ISSUES, () => getGithubIssues());
 
   const stats: BorisUsageStats = {
     backend,

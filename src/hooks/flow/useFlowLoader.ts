@@ -4,7 +4,6 @@ import { uniq } from 'ramda';
 import { useFlowStore } from '~/store/flow/useFlowStore';
 import { runInAction } from 'mobx';
 import { showErrorToast } from '~/utils/errors/showToast';
-import { delay } from 'redux-saga/effects';
 
 export const useFlowLoader = () => {
   const [isSyncing, setIsSyncing] = useState(false);
@@ -74,7 +73,7 @@ export const useFlowLoader = () => {
       });
 
       // wait a little to debounce
-      await delay(1000);
+      await new Promise(resolve => setTimeout(resolve, 1000));
     } catch (error) {
       showErrorToast(error);
     } finally {

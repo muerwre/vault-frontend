@@ -1,11 +1,13 @@
-import React, { FC } from "react";
-import styles from "./styles.module.scss";
-import { Group } from "~/components/containers/Group";
-import { Placeholder } from "~/components/placeholders/Placeholder";
-import { getPrettyDate } from "~/utils/dom";
-import { ProfileTabs } from "../ProfileTabs";
-import { ProfileAvatar } from "~/components/profile/ProfileAvatar";
-import { useProfileContext } from "~/utils/providers/ProfileProvider";
+import React, { FC } from 'react';
+import styles from './styles.module.scss';
+import { Group } from '~/components/containers/Group';
+import { Placeholder } from '~/components/placeholders/Placeholder';
+import { getPrettyDate } from '~/utils/dom';
+import { ProfileTabs } from '../ProfileTabs';
+import { ProfileAvatar } from '~/components/profile/ProfileAvatar';
+import { useProfileContext } from '~/utils/providers/ProfileProvider';
+import { usePatchUser } from '~/hooks/auth/usePatchUser';
+import { useUser } from '~/hooks/auth/useUser';
 
 interface IProps {
   isLoading?: boolean;
@@ -13,20 +15,27 @@ interface IProps {
 }
 
 const ProfileInfo: FC<IProps> = ({ isOwn }) => {
-  const { updatePhoto, profile, isLoading } = useProfileContext();
+  const { user } = useUser();
+  const { updatePhoto } = usePatchUser();
+  const { profile, isLoading } = useProfileContext();
+
+  const photo = isOwn ? user.photo : profile.photo;
+  const fullName = isOwn ? user.fullname : profile.fullname;
+  const lastSeen = isOwn ? new Date().toISOString() : profile.last_seen;
+  const username = isOwn ? user.username : profile.username;
 
   return (
     <div>
       <Group className={styles.wrap} horizontal>
-        <ProfileAvatar canEdit={isOwn} onChangePhoto={updatePhoto} photo={profile.photo} />
+        <ProfileAvatar canEdit={isOwn} onChangePhoto={updatePhoto} photo={photo} />
 
         <div className={styles.field}>
           <div className={styles.name}>
-            {isLoading ? <Placeholder width="80%" /> : profile?.fullname || profile?.username}
+            {isLoading ? <Placeholder width="80%" /> : fullName || username}
           </div>
 
           <div className={styles.description}>
-            {isLoading ? <Placeholder /> : getPrettyDate(profile?.last_seen)}
+            {isLoading ? <Placeholder /> : getPrettyDate(lastSeen)}
           </div>
         </div>
       </Group>

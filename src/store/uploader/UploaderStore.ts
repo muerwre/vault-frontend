@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { IFile, UUID } from '~/redux/types';
+import { IFile, UUID } from '~/types';
 import { getFileType, uploadGetThumb } from '~/utils/uploader';
 import { has, omit, values } from 'ramda';
 import { UploadType } from '~/constants/uploads';

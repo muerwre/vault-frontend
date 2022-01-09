@@ -1,15 +1,15 @@
-import React, { FC } from "react";
-import styles from "./styles.module.scss";
-import { NavLink } from "react-router-dom";
-import { CellShade } from "~/components/flow/CellShade";
-import { FlowDisplay, INode } from "~/redux/types";
-import { FlowCellText } from "~/components/flow/FlowCellText";
-import classNames from "classnames";
-import { FlowCellMenu } from "~/components/flow/FlowCellMenu";
-import { useFlowCellControls } from "~/hooks/flow/useFlowCellControls";
-import { useClickOutsideFocus } from "~/hooks/dom/useClickOutsideFocus";
-import { MenuDots } from "~/components/common/MenuDots";
-import { FlowCellImage } from "~/components/flow/FlowCellImage";
+import React, { FC } from 'react';
+import styles from './styles.module.scss';
+import { NavLink } from 'react-router-dom';
+import { CellShade } from '~/components/flow/CellShade';
+import { FlowDisplay, INode } from '~/types';
+import { FlowCellText } from '~/components/flow/FlowCellText';
+import classNames from 'classnames';
+import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
+import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';
+import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
+import { MenuDots } from '~/components/common/MenuDots';
+import { FlowCellImage } from '~/components/flow/FlowCellImage';
 
 interface Props {
   id: INode['id'];

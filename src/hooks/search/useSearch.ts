@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { flatten } from 'ramda';
 import { getSearchResults } from '~/api/flow';
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { GetSearchResultsRequest } from '~/types/flow';
 
 const RESULTS_COUNT = 20;
@@ -44,7 +44,7 @@ export const useSearch = () => {
   const loadMore = useCallback(() => setSize(size + 1), [setSize, size]);
   const hasMore = (data?.[size - 1]?.length || 0) >= RESULTS_COUNT;
 
-  const results = flatten(data || []);
+  const results = useMemo(() => flatten(data || []), [data]);
 
   useEffect(() => {
     const timeout = setTimeout(async () => {

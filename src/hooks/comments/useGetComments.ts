@@ -3,8 +3,8 @@ import { flatten, isNil } from 'ramda';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { apiGetNodeComments } from '~/api/node';
 import { COMMENTS_DISPLAY } from '~/constants/node';
-import { useCallback } from 'react';
-import { IComment } from '~/redux/types';
+import { useCallback, useMemo } from 'react';
+import { IComment } from '~/types';
 
 const getKey: (nodeId: number) => SWRInfiniteKeyLoader = (nodeId: number) => (
   pageIndex,
@@ -41,7 +41,7 @@ export const useGetComments = (nodeId: number) => {
     }
   );
 
-  const comments = flatten(data || []);
+  const comments = useMemo(() => flatten(data || []), [data]);
   const hasMore = (data?.[size - 1]?.length || 0) >= COMMENTS_DISPLAY;
 
   const onLoadMoreComments = useCallback(() => setSize(size + 1), [setSize, size]);

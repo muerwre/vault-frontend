@@ -6,10 +6,9 @@ import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
-import { useBlockBackButton } from '~/hooks/navigation/useBlockBackButton';
 import { useModal } from '~/hooks/modal/useModal';
-import { observer } from 'mobx-react';
-import { IFile } from '~/redux/types';
+import { observer } from 'mobx-react-lite';
+import { IFile } from '~/types';
 import { DialogComponentProps } from '~/types/modal';
 
 export interface PhotoSwipeProps extends DialogComponentProps {
@@ -59,8 +58,6 @@ const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
       ps.listen('close', hideModal);
     });
   }, [hideModal, items, index]);
-
-  useBlockBackButton(hideModal);
 
   return (
     <div className="pswp" tabIndex={-1} role="dialog" aria-hidden="true" ref={ref}>

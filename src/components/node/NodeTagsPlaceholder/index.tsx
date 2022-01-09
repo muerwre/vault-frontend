@@ -1,6 +1,6 @@
-import React, { FC, memo } from "react";
-import { ITag } from "~/redux/types";
-import { Tags } from "~/containers/tags/Tags";
+import React, { FC, memo } from 'react';
+import { ITag } from '~/types';
+import { Tags } from '~/containers/tags/Tags';
 
 interface IProps {
   is_editable?: boolean;

@@ -1,8 +1,7 @@
-import React, { FC, useEffect, useRef } from "react";
-import styles from "./styles.module.scss";
-import { createPortal } from "react-dom";
-import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
-import { useCloseOnEscape } from "~/hooks";
+import React, { FC, useEffect, useRef } from 'react';
+import styles from './styles.module.scss';
+import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
+import { useCloseOnEscape } from '~/hooks';
 
 interface IProps {
   onClose?: () => void;
@@ -20,13 +19,10 @@ const SidebarWrapper: FC<IProps> = ({ children, onClose }) => {
     return () => clearAllBodyScrollLocks();
   }, []);
 
-  return createPortal(
+  return (
     <div className={styles.wrapper} ref={ref}>
-      <div className={styles.clicker} onClick={onClose} />
-
       {children}
-    </div>,
-    document.body
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import { INode } from "~/redux/types";
-import styles from "./styles.module.scss";
-import { FlowRecentItem } from "~/components/flow/FlowRecentItem";
+import React, { FC } from 'react';
+import { INode } from '~/types';
+import styles from './styles.module.scss';
+import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
 
 interface IProps {
   nodes: INode[];

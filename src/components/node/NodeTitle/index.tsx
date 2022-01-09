@@ -1,11 +1,9 @@
-import React, { memo, VFC } from "react";
-import styles from "./styles.module.scss";
-import { Icon } from "~/components/input/Icon";
-import classNames from "classnames";
-import { Placeholder } from "~/components/placeholders/Placeholder";
-import { getPrettyDate } from "~/utils/dom";
-import { URLS } from "~/constants/urls";
-import { Link } from "react-router-dom";
+import React, { memo, VFC } from 'react';
+import styles from './styles.module.scss';
+import { Icon } from '~/components/input/Icon';
+import classNames from 'classnames';
+import { Placeholder } from '~/components/placeholders/Placeholder';
+import { getPrettyDate } from '~/utils/dom';
 
 interface IProps {
   id?: number;
@@ -27,6 +25,7 @@ interface IProps {
   onLike: () => void;
   onStar: () => void;
   onLock: () => void;
+  onEdit: () => void;
 }
 
 const NodeTitle: VFC<IProps> = memo(
@@ -50,6 +49,7 @@ const NodeTitle: VFC<IProps> = memo(
     onStar,
     onLike,
     onLock,
+    onEdit,
   }) => {
     return (
       <div className={classNames(styles.wrap)}>
@@ -91,11 +91,7 @@ const NodeTitle: VFC<IProps> = memo(
                   <Icon icon={isLocked ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
                 </div>
 
-                {!!id && (
-                  <Link to={URLS.NODE_EDIT_URL(id)}>
-                    <Icon icon="edit" size={24} />
-                  </Link>
-                )}
+                {!!id && <Icon icon="edit" size={24} onClick={onEdit} />}
               </div>
             </div>
           )}

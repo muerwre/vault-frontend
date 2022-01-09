@@ -1,19 +1,18 @@
-import React, { FC } from "react";
-import { URLS } from "~/constants/urls";
-import { ErrorNotFound } from "~/containers/pages/ErrorNotFound";
-import { Redirect, Route, Switch, useLocation } from "react-router";
-import { useShallowSelect } from "~/hooks/data/useShallowSelect";
-import { selectAuthUser } from "~/redux/auth/selectors";
-import { ProfileLayout } from "~/layouts/ProfileLayout";
-import FlowPage from "~/pages";
-import BorisPage from "~/pages/boris";
-import NodePage from "~/pages/node/[id]";
-import LabPage from "~/pages/lab";
+import React, { FC } from 'react';
+import { URLS } from '~/constants/urls';
+import { ErrorNotFound } from '~/containers/pages/ErrorNotFound';
+import { Redirect, Route, Switch, useLocation } from 'react-router';
+import { ProfileLayout } from '~/layouts/ProfileLayout';
+import FlowPage from '~/pages';
+import BorisPage from '~/pages/boris';
+import NodePage from '~/pages/node/[id]';
+import LabPage from '~/pages/lab';
+import { useAuth } from '~/hooks/auth/useAuth';
 
 interface IProps {}
 
 const MainRouter: FC<IProps> = () => {
-  const { is_user } = useShallowSelect(selectAuthUser);
+  const { isUser } = useAuth();
   const location = useLocation();
 
   return (
@@ -23,7 +22,7 @@ const MainRouter: FC<IProps> = () => {
       <Route path={URLS.ERRORS.NOT_FOUND} component={ErrorNotFound} />
       <Route path={URLS.PROFILE_PAGE(':username')} component={ProfileLayout} />
 
-      {is_user && <Route path={URLS.LAB} component={LabPage} />}
+      {isUser && <Route path={URLS.LAB} component={LabPage} />}
 
       <Route path={URLS.BASE} component={FlowPage} />
       <Redirect to="/" />

@@ -1,16 +1,32 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { push } from 'connected-react-router';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { API } from '~/constants/api';
-import { store } from '~/redux/store';
-import { IApiErrorResult, IResultWithStatus } from '~/redux/types';
-
-export const authMiddleware = r => {
-  store.dispatch(push('/login'));
-  return r;
-};
+import { getMOBXStore } from '~/store';
+import { assocPath } from 'ramda';
 
 export const api = axios.create({
   baseURL: API.BASE,
+});
+
+// Pass token to axios
+api.interceptors.request.use(options => {
+  const token = getMOBXStore().auth.token;
+
+  if (!token) {
+    return options;
+  }
+
+  return assocPath(['headers', 'authorization'], `Bearer ${token}`, options);
+});
+
+// Logout on 401
+api.interceptors.response.use(undefined, (error: AxiosError<{ error: string }>) => {
+  if (error.response?.status === HTTP_RESPONSES.UNAUTHORIZED) {
+    getMOBXStore().auth.logout();
+  }
+
+  error.message = error?.response?.data?.error || error?.response?.statusText || error.message;
+
+  throw error;
 });
 
 export const HTTP_RESPONSES = {
@@ -22,33 +38,5 @@ export const HTTP_RESPONSES = {
   NOT_FOUND: 404,
   TOO_MANY_REQUESTS: 429,
 };
-
-export const resultMiddleware = <T extends any>({ status, data }: { status; data: T }) => ({
-  status,
-  data,
-});
-
-export const errorMiddleware = <T extends any = any>(debug): IResultWithStatus<T> =>
-  debug && debug.response
-    ? {
-        status: debug.response.status,
-        data:
-          (debug.response.data as T & IApiErrorResult) || (debug.response as T & IApiErrorResult),
-        error: debug?.response?.data?.error || debug?.response?.error || 'Неизвестная ошибка',
-      }
-    : {
-        status: HTTP_RESPONSES.CONNECTION_REFUSED,
-        data: {} as T & IApiErrorResult & any,
-        debug,
-        error: 'Ошибка сети',
-      };
-
-export const configWithToken = (
-  access: string,
-  config: AxiosRequestConfig = {}
-): AxiosRequestConfig => ({
-  ...config,
-  headers: { ...(config.headers || {}), Authorization: `Bearer ${access}` },
-});
 
 export const cleanResult = <T extends any>(response: AxiosResponse<T>): T => response?.data;

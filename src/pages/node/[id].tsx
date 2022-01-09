@@ -1,18 +1,17 @@
-import React, { FC } from "react";
-import { NodeLayout } from "~/layouts/NodeLayout";
-import { RouteComponentProps } from "react-router";
-import { useScrollToTop } from "~/hooks/dom/useScrollToTop";
-import { useImageModal } from "~/hooks/navigation/useImageModal";
-import { useNodeComments } from "~/hooks/comments/useNodeComments";
-import { useUser } from "~/hooks/user/userUser";
-import { useNodeTags } from "~/hooks/node/useNodeTags";
-import { NodeContextProvider } from "~/utils/context/NodeContextProvider";
-import { CommentContextProvider } from "~/utils/context/CommentContextProvider";
-import { TagsContextProvider } from "~/utils/context/TagsContextProvider";
-import { useNodePermissions } from "~/hooks/node/useNodePermissions";
-import { NodeRelatedProvider } from "~/utils/providers/NodeRelatedProvider";
-import { useLoadNode } from "~/hooks/node/useLoadNode";
-import { observer } from "mobx-react";
+import React, { FC } from 'react';
+import { NodeLayout } from '~/layouts/NodeLayout';
+import { RouteComponentProps } from 'react-router';
+import { useScrollToTop } from '~/hooks/dom/useScrollToTop';
+import { useImageModal } from '~/hooks/navigation/useImageModal';
+import { useNodeComments } from '~/hooks/comments/useNodeComments';
+import { useNodeTags } from '~/hooks/node/useNodeTags';
+import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
+import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
+import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
+import { useNodePermissions } from '~/hooks/node/useNodePermissions';
+import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
+import { useLoadNode } from '~/hooks/node/useLoadNode';
+import { observer } from 'mobx-react-lite';
 
 type Props = RouteComponentProps<{ id: string }> & {};
 
@@ -36,7 +35,6 @@ const NodePage: FC<Props> = observer(
     const { onDelete: onTagDelete, onChange: onTagsChange, onClick: onTagClick } = useNodeTags(
       parseInt(id, 10)
     );
-    const user = useUser();
     const [canEdit] = useNodePermissions(node);
 
     useScrollToTop([id, isLoadingComments]);
@@ -61,7 +59,7 @@ const NodePage: FC<Props> = observer(
           >
             <TagsContextProvider
               tags={node.tags}
-              canAppend={user.is_user}
+              canAppend={canEdit}
               canDelete={canEdit}
               isLoading={isLoading}
               onChange={onTagsChange}

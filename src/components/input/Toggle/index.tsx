@@ -1,7 +1,7 @@
-import React, { FC, useCallback } from "react";
-import styles from "./styles.module.scss";
-import classNames from "classnames";
-import { ButtonProps } from "~/utils/types";
+import React, { FC, useCallback } from 'react';
+import styles from './styles.module.scss';
+import classNames from 'classnames';
+import { ButtonProps } from '~/utils/types';
 
 type ToggleColor = 'primary' | 'secondary' | 'lab' | 'danger' | 'white';
 

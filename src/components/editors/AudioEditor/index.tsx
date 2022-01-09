@@ -1,15 +1,15 @@
-import React, { FC, useCallback, useMemo } from "react";
-import { UploadType } from "~/constants/uploads";
-import { ImageGrid } from "../ImageGrid";
-import { AudioGrid } from "../AudioGrid";
-import styles from "./styles.module.scss";
-import { NodeEditorProps } from "~/types/node";
-import { useNodeImages } from "~/hooks/node/useNodeImages";
-import { useNodeAudios } from "~/hooks/node/useNodeAudios";
-import { useNodeFormContext } from "~/hooks/node/useNodeFormFormik";
-import { UploadDropzone } from "~/components/upload/UploadDropzone";
-import { useUploaderContext } from "~/utils/context/UploaderContextProvider";
-import { values } from "ramda";
+import React, { FC, useCallback, useMemo } from 'react';
+import { UploadType } from '~/constants/uploads';
+import { ImageGrid } from '../ImageGrid';
+import { AudioGrid } from '../AudioGrid';
+import styles from './styles.module.scss';
+import { NodeEditorProps } from '~/types/node';
+import { useNodeImages } from '~/hooks/node/useNodeImages';
+import { useNodeAudios } from '~/hooks/node/useNodeAudios';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+import { UploadDropzone } from '~/components/upload/UploadDropzone';
+import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
+import { values } from 'ramda';
 
 type IProps = NodeEditorProps;
 

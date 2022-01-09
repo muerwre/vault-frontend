@@ -1,0 +1,152 @@
+@import "../../../styles/variables";
+
+.wrap {
+  height: $header_height;
+  z-index: 25;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: background-color 0.5s;
+
+  @include desktop {
+    height: 64px;
+    padding: 0;
+  }
+
+  &.is_scrolled {
+    @include blur();
+  }
+}
+
+.container {
+  @include container;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-weight: 500;
+  box-sizing: border-box;
+
+  @include tablet {
+    padding: 0 $gap;
+  }
+}
+
+.spacer {
+  flex: 1;
+}
+
+.plugs {
+  display: flex;
+  user-select: none;
+  text-transform: uppercase;
+  align-items: center;
+
+  @include tablet {
+    flex: 1;
+    justify-content: flex-start;
+  }
+}
+
+.profile {
+  padding: 5px 10px;
+  box-shadow: white 0 0 0 1px;
+  border-radius: 10px;
+}
+
+.user_button {
+  flex: 0;
+  cursor: pointer;
+}
+
+.item {
+  font: $font_16_medium;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: $gap $gap * 2;
+  cursor: pointer;
+  transition: color 0.25s;
+  text-decoration: none;
+  color: white;
+  white-space: nowrap;
+
+  &:hover {
+    color: $red;
+  }
+
+  &::before {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    width: 50%;
+    right: 50%;
+    background: white;
+    transform: translate(50%, 0) scaleX(0);
+    opacity: 0;
+    border-radius: 3px;
+    transition: transform 0.5s, opacity 0.25s;
+  }
+
+  &::after {
+    content: ' ';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 4px;
+    background: lighten($red, 10%);
+    right: 12px;
+    top: 6px;
+    transition: opacity 0.5s;
+    opacity: 0;
+  }
+
+  &.has_dot {
+    &::after {
+      opacity: 1;
+    }
+  }
+
+  &.lab::after {
+    background: lighten($blue, 10%);
+  }
+
+  &.boris::after {
+    background: lighten($wisegreen, 10%);
+  }
+
+  @include tablet {
+    padding: 0 $gap * 2 0 0;
+
+    &.notifications {
+      flex: 1;
+      justify-content: flex-end;
+      align-items: center;
+      margin-right: $gap;
+    }
+
+    &::after {
+      right: 0;
+    }
+  }
+}
+
+.filler {
+  @include tablet {
+    display: none;
+  }
+}
+
+.logo_wrapper {
+
+  @include tablet {
+    &.logged_in {
+      display: none;
+    }
+  }
+}

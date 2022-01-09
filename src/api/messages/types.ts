@@ -1,4 +1,4 @@
-import { IMessage } from '~/redux/types';
+import { IMessage } from '~/types';
 
 export type ApiGetUserMessagesRequest = {
   username: string;

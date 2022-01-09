@@ -1,9 +1,9 @@
 import useSWR from 'swr';
 import { API } from '~/constants/api';
-import { apiAuthGetUserProfile } from '~/redux/auth/api';
-import { EMPTY_USER } from '~/redux/auth/constants';
+import { apiAuthGetUserProfile } from '~/api/auth';
+import { EMPTY_USER } from '~/constants/auth';
 import { useCallback } from 'react';
-import { IUser } from '~/redux/auth/types';
+import { IUser } from '~/types/auth';
 
 const getKey = (username?: string): string | null => {
   return username ? `${API.USER.PROFILE}/${username}` : null;

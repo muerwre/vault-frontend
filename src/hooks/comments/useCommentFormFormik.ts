@@ -1,4 +1,4 @@
-import { IComment, INode } from '~/redux/types';
+import { IComment, INode } from '~/types';
 import { useCallback, useEffect, useRef } from 'react';
 import { FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { array, object, string } from 'yup';

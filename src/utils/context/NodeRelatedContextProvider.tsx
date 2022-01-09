@@ -1,5 +1,5 @@
-import { INodeRelated } from "~/types/node";
-import React, { createContext, FC, useContext } from "react";
+import { INodeRelated } from '~/types/node';
+import React, { createContext, FC, useContext } from 'react';
 
 interface NodeRelatedProviderProps {
   related: INodeRelated;

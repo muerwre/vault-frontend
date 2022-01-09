@@ -3,7 +3,7 @@ import { SortableContainer } from 'react-sortable-hoc';
 import { AudioUpload } from '~/components/upload/AudioUpload';
 import styles from './styles.module.scss';
 import { SortableAudioGridItem } from '~/components/editors/SortableAudioGridItem';
-import { IFile } from '~/redux/types';
+import { IFile } from '~/types';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 

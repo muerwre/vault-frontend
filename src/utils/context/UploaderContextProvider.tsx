@@ -1,6 +1,6 @@
 import React, { createContext, FC, useContext } from 'react';
 import { useUploader } from '~/hooks/data/useUploader';
-import { IFile } from '~/redux/types';
+import { IFile } from '~/types';
 import { EMPTY_FILE } from '~/constants/uploads';
 
 export type Uploader = ReturnType<typeof useUploader>;

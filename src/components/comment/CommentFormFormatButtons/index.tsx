@@ -1,8 +1,8 @@
-import React, { FC, useCallback, useEffect } from "react";
-import { ButtonGroup } from "~/components/input/ButtonGroup";
-import { Button } from "~/components/input/Button";
-import { useFormatWrapper, wrapTextInsideInput } from "~/hooks/dom/useFormatWrapper";
-import styles from "./styles.module.scss";
+import React, { FC, useCallback, useEffect } from 'react';
+import { ButtonGroup } from '~/components/input/ButtonGroup';
+import { Button } from '~/components/input/Button';
+import { useFormatWrapper, wrapTextInsideInput } from '~/hooks/dom/useFormatWrapper';
+import styles from './styles.module.scss';
 
 interface IProps {
   element: HTMLTextAreaElement;

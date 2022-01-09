@@ -1,6 +1,6 @@
 import { useFlowStore } from '~/store/flow/useFlowStore';
 import { useCallback } from 'react';
-import { FlowDisplay } from '~/redux/types';
+import { FlowDisplay } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
 import { postCellView } from '~/api/flow';
 

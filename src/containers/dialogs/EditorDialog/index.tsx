@@ -1,22 +1,20 @@
-import React, { createElement, FC, useCallback, useMemo, useState } from "react";
-import styles from "./styles.module.scss";
-import { NODE_EDITORS } from "~/constants/node";
-import { BetterScrollDialog } from "../BetterScrollDialog";
-import { CoverBackdrop } from "~/components/containers/CoverBackdrop";
-import { prop } from "ramda";
-import { useNodeFormFormik } from "~/hooks/node/useNodeFormFormik";
-import { EditorButtons } from "~/components/editors/EditorButtons";
-import { UploadSubject, UploadTarget } from "~/constants/uploads";
-import { FormikProvider } from "formik";
-import { INode } from "~/redux/types";
-import { ModalWrapper } from "~/components/dialogs/ModalWrapper";
-import { useTranslatedError } from "~/hooks/data/useTranslatedError";
-import { useCloseOnEscape } from "~/hooks";
-import { EditorConfirmClose } from "~/components/editors/EditorConfirmClose";
-import { DialogComponentProps } from "~/types/modal";
-import { useUploader } from "~/hooks/data/useUploader";
-import { UploaderContextProvider } from "~/utils/context/UploaderContextProvider";
-import { observer } from "mobx-react-lite";
+import React, { createElement, FC, useCallback, useMemo, useState } from 'react';
+import styles from './styles.module.scss';
+import { NODE_EDITORS } from '~/constants/node';
+import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
+import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
+import { prop } from 'ramda';
+import { useNodeFormFormik } from '~/hooks/node/useNodeFormFormik';
+import { EditorButtons } from '~/components/editors/EditorButtons';
+import { UploadSubject, UploadTarget } from '~/constants/uploads';
+import { FormikProvider } from 'formik';
+import { INode } from '~/types';
+import { useCloseOnEscape } from '~/hooks';
+import { EditorConfirmClose } from '~/components/editors/EditorConfirmClose';
+import { DialogComponentProps } from '~/types/modal';
+import { useUploader } from '~/hooks/data/useUploader';
+import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
+import { observer } from 'mobx-react-lite';
 
 interface Props extends DialogComponentProps {
   node: INode;
@@ -50,8 +48,6 @@ const EditorDialog: FC<Props> = observer(({ node, onRequestClose, onSubmit }) =>
     setConfirmModalShown(true);
   }, [dirty, isConfirmModalShown, onRequestClose, closeConfirmModal]);
 
-  const error = useTranslatedError(status);
-
   useCloseOnEscape(onClose);
 
   if (!component) {
@@ -59,29 +55,26 @@ const EditorDialog: FC<Props> = observer(({ node, onRequestClose, onSubmit }) =>
   }
 
   return (
-    <ModalWrapper onOverlayClick={onClose}>
-      <UploaderContextProvider value={uploader}>
-        <FormikProvider value={formik}>
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <BetterScrollDialog
-              footer={<EditorButtons />}
-              backdrop={<CoverBackdrop cover={values.cover} />}
-              width={860}
-              error={error}
-              onClose={onClose}
-            >
-              <>
-                {isConfirmModalShown && (
-                  <EditorConfirmClose onApprove={onRequestClose} onDecline={closeConfirmModal} />
-                )}
+    <UploaderContextProvider value={uploader}>
+      <FormikProvider value={formik}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <BetterScrollDialog
+            footer={<EditorButtons />}
+            backdrop={<CoverBackdrop cover={values.cover} />}
+            width={860}
+            onClose={onClose}
+          >
+            <>
+              {isConfirmModalShown && (
+                <EditorConfirmClose onApprove={onRequestClose} onDecline={closeConfirmModal} />
+              )}
 
-                <div className={styles.editor}>{createElement(component)}</div>
-              </>
-            </BetterScrollDialog>
-          </form>
-        </FormikProvider>
-      </UploaderContextProvider>
-    </ModalWrapper>
+              <div className={styles.editor}>{createElement(component)}</div>
+            </>
+          </BetterScrollDialog>
+        </form>
+      </FormikProvider>
+    </UploaderContextProvider>
   );
 });
 

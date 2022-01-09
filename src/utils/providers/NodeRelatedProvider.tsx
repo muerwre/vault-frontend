@@ -1,8 +1,8 @@
-import React, { FC, useEffect } from "react";
-import { INode, ITag } from "~/redux/types";
-import { NodeRelatedContextProvider } from "~/utils/context/NodeRelatedContextProvider";
-import { INodeRelated } from "~/types/node";
-import { useGetNodeRelated } from "~/hooks/node/useGetNodeRelated";
+import React, { FC } from 'react';
+import { INode, ITag } from '~/types';
+import { NodeRelatedContextProvider } from '~/utils/context/NodeRelatedContextProvider';
+import { INodeRelated } from '~/types/node';
+import { useGetNodeRelated } from '~/hooks/node/useGetNodeRelated';
 
 interface NodeRelatedProviderProps {
   id: INode['id'];
@@ -15,15 +15,7 @@ const defaultValue: INodeRelated = {
 };
 
 const NodeRelatedProvider: FC<NodeRelatedProviderProps> = ({ id, children, tags }) => {
-  const { related, isLoading, refresh } = useGetNodeRelated(id);
-
-  useEffect(
-    () => {
-      refresh();
-    },
-    // eslint-disable-next-line
-    [tags]
-  );
+  const { related, isLoading } = useGetNodeRelated(id);
 
   return (
     <NodeRelatedContextProvider related={related || defaultValue} isLoading={isLoading}>

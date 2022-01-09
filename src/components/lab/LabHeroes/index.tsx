@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import { INode } from "~/redux/types";
-import styles from "~/containers/lab/LabStats/styles.module.scss";
-import { LabHero } from "~/components/lab/LabHero";
-import { Group } from "~/components/containers/Group";
+import React, { FC } from 'react';
+import { INode } from '~/types';
+import styles from '~/containers/lab/LabStats/styles.module.scss';
+import { LabHero } from '~/components/lab/LabHero';
+import { Group } from '~/components/containers/Group';
 
 interface IProps {
   nodes: Partial<INode>[];

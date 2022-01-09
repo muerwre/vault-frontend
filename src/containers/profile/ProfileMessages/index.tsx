@@ -3,12 +3,12 @@ import styles from './styles.module.scss';
 import { Message } from '~/components/profile/Message';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { useMessages } from '~/hooks/messages/useMessages';
-import { useUser } from '~/hooks/user/userUser';
+import { useUser } from '~/hooks/auth/useUser';
 import { useProfileContext } from '~/utils/providers/ProfileProvider';
 
 const ProfileMessages: FC = () => {
   const { profile, isLoading: isLoadingProfile } = useProfileContext();
-  const user = useUser();
+  const { user } = useUser();
   const { messages, isLoading: isLoadingMessages } = useMessages(profile?.username || '');
 
   if (!messages.length || isLoadingProfile)

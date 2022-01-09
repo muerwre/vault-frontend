@@ -1,16 +1,9 @@
-import React, { FC } from "react";
-import styles from "./styles.module.scss";
-import { StatsRow } from "~/components/common/StatsRow";
-import { SubTitle } from "~/components/common/SubTitle";
+import React, { FC } from 'react';
+import styles from './styles.module.scss';
+import { StatsRow } from '~/components/common/StatsRow';
+import { SubTitle } from '~/components/common/SubTitle';
 
 interface Props {}
-
-const Row: FC<{ count: number; title: string; icon?: string }> = ({ count, title, icon }) => (
-  <div className={styles.row}>
-    <div className={styles.title}>{title}</div>
-    <div className={styles.counter}>{count > 999 ? '999+' : count}</div>
-  </div>
-);
 
 const ProfilePageStats: FC<Props> = () => (
   <div className={styles.wrap}>

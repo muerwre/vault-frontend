@@ -1,4 +1,4 @@
-import { IFile, IUploadProgressHandler } from '~/redux/types';
+import { IFile, IUploadProgressHandler } from '~/types';
 import { UploadTarget, UploadType } from '~/constants/uploads';
 
 export type ApiUploadFileRequest = {

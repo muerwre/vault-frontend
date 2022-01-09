@@ -1,4 +1,4 @@
-@import "~/styles/variables.scss";
+@import "src/styles/variables.scss";
 
 .wrap {
   @include outer_shadow;
@@ -14,4 +14,3 @@
     @include hero_gradient;
   }
 }
-

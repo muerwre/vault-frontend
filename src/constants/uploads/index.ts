@@ -1,4 +1,4 @@
-import { IFile } from '~/redux/types';
+import { IFile } from '~/types';
 
 export const EMPTY_FILE: IFile = {
   id: undefined,

@@ -1,22 +1,22 @@
-import React, { FC } from "react";
-import { Route } from "react-router";
-import { Card } from "~/components/containers/Card";
+import React, { FC } from 'react';
+import { Route } from 'react-router';
+import { Card } from '~/components/containers/Card';
 
-import { Footer } from "~/components/main/Footer";
+import { Footer } from '~/components/main/Footer';
 
-import { SidebarRouter } from "~/containers/main/SidebarRouter";
-import { Container } from "~/containers/main/Container";
-import { useNodeBlocks } from "~/hooks/node/useNodeBlocks";
-import { NodeBottomBlock } from "~/containers/node/NodeBottomBlock";
-import { useNodeCoverImage } from "~/hooks/node/useNodeCoverImage";
-import { URLS } from "~/constants/urls";
-import { EditorEditDialog } from "~/containers/dialogs/EditorEditDialog";
+import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import { Container } from '~/containers/main/Container';
+import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
+import { NodeBottomBlock } from '~/containers/node/NodeBottomBlock';
+import { useNodeCoverImage } from '~/hooks/node/useNodeCoverImage';
+import { URLS } from '~/constants/urls';
+import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 
-import styles from "./styles.module.scss";
-import { useNodeContext } from "~/utils/context/NodeContextProvider";
-import { useNodePermissions } from "~/hooks/node/useNodePermissions";
-import { useNodeActions } from "~/hooks/node/useNodeActions";
-import { NodeTitle } from "~/components/node/NodeTitle";
+import styles from './styles.module.scss';
+import { useNodeContext } from '~/utils/context/NodeContextProvider';
+import { useNodePermissions } from '~/hooks/node/useNodePermissions';
+import { useNodeActions } from '~/hooks/node/useNodeActions';
+import { NodeTitle } from '~/components/node/NodeTitle';
 
 type IProps = {};
 
@@ -24,7 +24,7 @@ const NodeLayout: FC<IProps> = () => {
   const { node, isLoading, update } = useNodeContext();
   const { head, block } = useNodeBlocks(node, isLoading);
   const [canEdit, canLike, canStar] = useNodePermissions(node);
-  const { onLike, onStar, onLock } = useNodeActions(node, update);
+  const { onLike, onStar, onLock, onEdit } = useNodeActions(node, update);
 
   useNodeCoverImage(node);
 
@@ -42,7 +42,7 @@ const NodeLayout: FC<IProps> = () => {
               title={node.title}
               username={node.user?.username}
               likeCount={node?.like_count || 0}
-              isHeroic={!!node.is_promoted}
+              isHeroic={!!node.is_heroic}
               isLiked={!!node.is_liked}
               isLocked={!!node.deleted_at}
               isLoading={isLoading}
@@ -53,6 +53,7 @@ const NodeLayout: FC<IProps> = () => {
               onLike={onLike}
               onStar={onStar}
               onLock={onLock}
+              onEdit={onEdit}
             />
           </div>
 

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { IFile } from '~/redux/types';
+import { IFile } from '~/types';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { Dialog } from '~/constants/modal';
 

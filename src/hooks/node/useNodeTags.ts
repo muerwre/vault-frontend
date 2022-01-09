@@ -1,24 +1,27 @@
-import { useHistory } from 'react-router';
 import { useCallback } from 'react';
-import { ITag } from '~/redux/types';
-import { URLS } from '~/constants/urls';
+import { ITag } from '~/types';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { apiDeleteNodeTag, apiPostNodeTags } from '~/api/node';
+import { useGetNodeRelated } from '~/hooks/node/useGetNodeRelated';
+import { useShowModal } from '~/hooks/modal/useShowModal';
+import { Dialog } from '~/constants/modal';
 
 export const useNodeTags = (id: number) => {
+  const showModal = useShowModal(Dialog.TagSidebar);
+  const { refresh: refreshRelated } = useGetNodeRelated(id);
   const { update } = useLoadNode(id);
-  const history = useHistory();
 
   const onChange = useCallback(
     async (tags: string[]) => {
       try {
         const result = await apiPostNodeTags({ id, tags });
         await update({ tags: result.node.tags });
+        await refreshRelated();
       } catch (error) {
         console.warn(error);
       }
     },
-    [id, update]
+    [id, update, refreshRelated]
   );
 
   const onClick = useCallback(
@@ -27,9 +30,9 @@ export const useNodeTags = (id: number) => {
         return;
       }
 
-      history.push(URLS.NODE_TAG_URL(id, encodeURIComponent(tag.title)));
+      showModal({ tag: tag.title });
     },
-    [history, id]
+    [showModal, id]
   );
 
   const onDelete = useCallback(
@@ -37,11 +40,12 @@ export const useNodeTags = (id: number) => {
       try {
         const result = await apiDeleteNodeTag({ id, tagId });
         await update({ tags: result.tags });
+        await refreshRelated();
       } catch (e) {
         console.warn(e);
       }
     },
-    [id, update]
+    [id, update, refreshRelated]
   );
 
   return { onDelete, onChange, onClick };

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useCallback, useState } from 'react';
 import classNames from 'classnames';
-import { IInputTextProps } from '~/redux/types';
+import { IInputTextProps } from '~/types';
 import { useTranslatedError } from '~/hooks/data/useTranslatedError';
 import { InputWrapper } from '~/components/input/InputWrapper';
 import styles from './styles.module.scss';

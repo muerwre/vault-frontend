@@ -1,22 +1,22 @@
-import React, { ChangeEvent, FC, useCallback, useEffect } from "react";
-import styles from "./styles.module.scss";
-import { UploadSubject, UploadTarget, UploadType } from "~/constants/uploads";
-import { getURL } from "~/utils/dom";
-import { Icon } from "~/components/input/Icon";
-import { PRESETS } from "~/constants/urls";
-import { IEditorComponentProps } from "~/types/node";
-import { useNodeFormContext } from "~/hooks/node/useNodeFormFormik";
-import { getFileType } from "~/utils/uploader";
-import { useUploader } from "~/hooks/data/useUploader";
+import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
+import styles from './styles.module.scss';
+import { UploadSubject, UploadTarget, UploadType } from '~/constants/uploads';
+import { getURL } from '~/utils/dom';
+import { Icon } from '~/components/input/Icon';
+import { PRESETS } from '~/constants/urls';
+import { IEditorComponentProps } from '~/types/node';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+import { getFileType } from '~/utils/uploader';
+import { useUploader } from '~/hooks/data/useUploader';
 
 type IProps = IEditorComponentProps & {};
 
 const EditorUploadCoverButton: FC<IProps> = () => {
   const { values, setFieldValue } = useNodeFormContext();
-  const { uploadFiles, files, pendingImages } = useUploader(
+  const { uploadFile, files, pendingImages } = useUploader(
     UploadSubject.Editor,
     UploadTarget.Nodes,
-    []
+    values.cover ? [values.cover] : []
   );
 
   const background = values.cover ? getURL(values.cover, PRESETS['300']) : null;
@@ -27,14 +27,15 @@ const EditorUploadCoverButton: FC<IProps> = () => {
   }, [setFieldValue]);
 
   const onInputChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
+    async (event: ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(event.target.files || [])
         .filter(file => getFileType(file) === UploadType.Image)
         .slice(0, 1);
 
-      uploadFiles(files);
+      const result = await uploadFile(files[0]);
+      setFieldValue('cover', result);
     },
-    [uploadFiles]
+    [uploadFile, setFieldValue]
   );
 
   useEffect(() => {

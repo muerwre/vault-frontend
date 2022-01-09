@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import styles from "./styles.module.scss";
-import classNames from "classnames";
+import React, { FC } from 'react';
+import styles from './styles.module.scss';
+import classNames from 'classnames';
 
 interface InputWrapperProps {
   title?: string;

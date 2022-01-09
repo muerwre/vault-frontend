@@ -1,5 +1,5 @@
 import React, { FC, FocusEventHandler, useCallback } from 'react';
-import { ITag } from '~/redux/types';
+import { ITag } from '~/types';
 import { TagWrapper } from '~/components/tags/TagWrapper';
 
 const getTagFeature = (tag: Partial<ITag>) => {

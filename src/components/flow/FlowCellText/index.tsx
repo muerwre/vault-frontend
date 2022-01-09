@@ -1,9 +1,9 @@
-import React, { FC, ReactElement } from "react";
-import { Markdown } from "~/components/containers/Markdown";
-import { DivProps } from "~/utils/types";
-import classNames from "classnames";
-import styles from "./styles.module.scss";
-import { formatText } from "~/utils/dom";
+import React, { FC, ReactElement } from 'react';
+import { Markdown } from '~/components/containers/Markdown';
+import { DivProps } from '~/utils/types';
+import classNames from 'classnames';
+import styles from './styles.module.scss';
+import { formatText } from '~/utils/dom';
 
 interface Props extends DivProps {
   children: string;

@@ -1,13 +1,13 @@
-import React, { FC, MouseEventHandler, useCallback, useMemo, useState } from "react";
-import classNames from "classnames";
-import { getURL } from "~/utils/dom";
-import { PRESETS } from "~/constants/urls";
-import styles from "./styles.module.scss";
-import { IFile } from "~/redux/types";
-import { LoaderCircle } from "~/components/input/LoaderCircle";
-import { Icon } from "~/components/input/Icon";
-import { useResizeHandler } from "~/hooks/dom/useResizeHandler";
-import { DEFAULT_DOMINANT_COLOR } from "~/constants/node";
+import React, { FC, MouseEventHandler, useCallback, useMemo, useState } from 'react';
+import classNames from 'classnames';
+import { getURL } from '~/utils/dom';
+import { PRESETS } from '~/constants/urls';
+import styles from './styles.module.scss';
+import { IFile } from '~/types';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { Icon } from '~/components/input/Icon';
+import { useResizeHandler } from '~/hooks/dom/useResizeHandler';
+import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
 
 interface IProps {
   file: IFile;

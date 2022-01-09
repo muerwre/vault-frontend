@@ -1,7 +1,7 @@
-import React, { FC, useCallback } from "react";
-import styles from "./styles.module.scss";
-import classNames from "classnames";
-import { Icon } from "~/components/input/Icon";
+import React, { FC, useCallback } from 'react';
+import styles from './styles.module.scss';
+import classNames from 'classnames';
+import { Icon } from '~/components/input/Icon';
 
 interface IProps {
   selected: boolean;

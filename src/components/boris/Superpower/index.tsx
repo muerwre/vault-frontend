@@ -1,14 +1,12 @@
-import React, { FC } from "react";
-import { useShallowSelect } from "~/hooks/data/useShallowSelect";
-import { selectAuthIsTester, selectUser } from "~/redux/auth/selectors";
+import React, { FC } from 'react';
+import { useAuth } from '~/hooks/auth/useAuth';
 
 interface IProps {}
 
 const Superpower: FC<IProps> = ({ children }) => {
-  const user = useShallowSelect(selectUser);
-  const is_tester = useShallowSelect(selectAuthIsTester);
+  const { isTester } = useAuth();
 
-  if (!user.is_user || !is_tester) return null;
+  if (!isTester) return null;
 
   return <>{children}</>;
 };

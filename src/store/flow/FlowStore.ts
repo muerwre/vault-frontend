@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { IFlowNode } from '~/redux/types';
+import { IFlowNode } from '~/types';
 
 export class FlowStore {
   nodes: IFlowNode[] = [];

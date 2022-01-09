@@ -1,10 +1,10 @@
-import React, { FC, useCallback, useState } from "react";
-import { IUser } from "~/redux/auth/types";
-import { Avatar } from "~/components/common/Avatar";
-import { path } from "ramda";
-import { Manager, Popper, Reference } from "react-popper";
-import styles from "./styles.module.scss";
-import { useRandomPhrase } from "~/constants/phrases";
+import React, { FC, useCallback, useState } from 'react';
+import { IUser } from '~/types/auth';
+import { Avatar } from '~/components/common/Avatar';
+import { path } from 'ramda';
+import { Manager, Popper, Reference } from 'react-popper';
+import styles from './styles.module.scss';
+import { useRandomPhrase } from '~/constants/phrases';
 
 interface Props {
   user: IUser;

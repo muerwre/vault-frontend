@@ -1,76 +1,52 @@
-import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { BetterScrollDialog } from '~/containers/dialogs/BetterScrollDialog';
+import React, { FC, useCallback, useState } from 'react';
+import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
 import { Padder } from '~/components/containers/Padder';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
 import { Group } from '~/components/containers/Group';
 import { InputText } from '~/components/input/InputText';
 import styles from './styles.module.scss';
-import { selectAuthRegisterSocial } from '~/redux/auth/selectors';
-import * as AUTH_ACTIONS from '~/redux/auth/actions';
 import { useCloseOnEscape } from '~/hooks';
-import { LoginSocialRegisterButtons } from '~/containers/dialogs/LoginSocialRegisterButtons';
+import { LoginSocialRegisterButtons } from '~/components/auth/oauth/LoginSocialRegisterButtons';
 import { Toggle } from '~/components/input/Toggle';
 import { DialogComponentProps } from '~/types/modal';
+import { getRandomPhrase } from '~/constants/phrases';
+import { useSocialRegisterForm } from '~/hooks/auth/useSocialRegisterForm';
+import { apiLoginWithSocial } from '~/api/auth';
+import { useModal } from '~/hooks/modal/useModal';
+import { useAuthStore } from '~/store/auth/useAuthStore';
 
-const mapStateToProps = selectAuthRegisterSocial;
-const mapDispatchToProps = {
-  authSetRegisterSocialErrors: AUTH_ACTIONS.authSetRegisterSocialErrors,
-  authSetRegisterSocial: AUTH_ACTIONS.authSetRegisterSocial,
-  authSendRegisterSocial: AUTH_ACTIONS.authSendRegisterSocial,
-};
+type LoginSocialRegisterDialogProps = DialogComponentProps & { token: string };
 
-type Props = ReturnType<typeof mapStateToProps> &
-  typeof mapDispatchToProps &
-  DialogComponentProps & {};
+const phrase = getRandomPhrase('REGISTER');
 
-const phrase = [
-  'Сушёный кабачок особенно хорош в это время года, знаете ли.',
-  'Бывало, стреляешь по кабачку, или он стреляет в тебя.',
-  'Он всегда рядом, кабачок -- первый сорт! Надежда империи.',
-];
-
-const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
+const LoginSocialRegisterDialog: FC<LoginSocialRegisterDialogProps> = ({
   onRequestClose,
-  errors,
-  error,
-
-  authSetRegisterSocialErrors,
-  authSetRegisterSocial,
-  authSendRegisterSocial,
+  token,
 }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [isDryingPants, setIsDryingPants] = useState(false);
+  useCloseOnEscape(onRequestClose);
+  const { hideModal } = useModal();
+  const auth = useAuthStore();
 
-  const onSubmit = useCallback(
-    (event: FormEvent) => {
-      event.preventDefault();
-      authSendRegisterSocial(username, password);
+  const [isDryingPants, setIsDryingPants] = useState(false);
+  const onSuccess = useCallback(
+    (loginToken: string) => {
+      auth.setToken(loginToken);
+      hideModal();
     },
-    [username, password, authSendRegisterSocial]
+    [auth, hideModal]
   );
 
-  useEffect(() => {
-    if (errors.username) authSetRegisterSocialErrors({ username: '' });
-  }, [authSetRegisterSocialErrors, errors.username, username]);
-
-  useEffect(() => {
-    if (errors.password) authSetRegisterSocialErrors({ password: '' });
-  }, [authSetRegisterSocialErrors, errors.password, password]);
-
-  useEffect(() => {
-    if (error) authSetRegisterSocial({ error: '' });
-  }, [username, password, error, authSetRegisterSocial]);
-
-  useCloseOnEscape(onRequestClose);
+  const { values, errors, handleChange, handleSubmit } = useSocialRegisterForm(
+    token,
+    apiLoginWithSocial,
+    onSuccess
+  );
 
   return (
-    <form onSubmit={onSubmit} autoComplete="new-password">
+    <form onSubmit={handleSubmit} autoComplete="new-password">
       <BetterScrollDialog
         onClose={onRequestClose}
         width={300}
-        error={error}
         footer={<LoginSocialRegisterButtons />}
       >
         <Padder>
@@ -79,16 +55,16 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
               <DialogTitle>Добро пожаловать в семью!</DialogTitle>
 
               <InputText
-                handler={setUsername}
-                value={username}
+                handler={handleChange('username')}
+                value={values.username}
                 title="Юзернэйм"
                 error={errors.username}
                 autoComplete="new-password"
               />
 
               <InputText
-                handler={setPassword}
-                value={password}
+                handler={handleChange('password')}
+                value={values.password}
                 title="Пароль"
                 type="password"
                 error={errors.password}
@@ -102,7 +78,7 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
 
               <div className={styles.check} onClick={() => setIsDryingPants(!isDryingPants)}>
                 <Toggle value={!isDryingPants} color="primary" />
-                <span>{phrase[Math.floor(Math.random() * phrase.length)]}</span>
+                <span>{phrase}</span>
               </div>
             </Group>
           </div>
@@ -111,10 +87,5 @@ const LoginSocialRegisterDialogUnconnected: FC<Props> = ({
     </form>
   );
 };
-
-const LoginSocialRegisterDialog = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginSocialRegisterDialogUnconnected);
 
 export { LoginSocialRegisterDialog };

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { IComment, INode, ValueOf } from 'src/redux/types';
+import { IComment, INode, ValueOf } from '~/types';
 import { NodeTextBlock } from '~/components/node/NodeTextBlock';
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';

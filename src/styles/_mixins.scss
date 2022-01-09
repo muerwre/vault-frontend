@@ -164,8 +164,9 @@
   flex: 0 1 $width;
   max-width: 100vw;
   position: relative;
-  background: transparentize($content_bg, 0.4);
+  background: transparentize($content_bg, 0.1);
   box-shadow: transparentize(white, 0.95) -1px 0;
+  border-radius: $radius 0 0 $radius;
 }
 
 @mixin editor_round_button {
@@ -242,5 +243,14 @@
   @include tablet {
     padding-left: 0;
     padding-right: 0;
+  }
+}
+
+@mixin modal_backdrop {
+  @include blur();
+  background: url('../../src/sprites/noise.png');
+
+  @include can_backdrop {
+    background: url('../../src/sprites/noise.png');
   }
 }

@@ -132,8 +132,9 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
         />
       </TagWrapper>
 
-      {focused && input?.length > 0 && ref.current && (
+      {!!ref.current && (
         <TagAutocomplete
+          visible={focused && input?.length > 0}
           exclude={exclude}
           input={ref.current}
           onSelect={onAutocompleteSelect}

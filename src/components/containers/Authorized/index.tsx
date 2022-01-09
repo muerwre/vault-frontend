@@ -1,13 +1,12 @@
-import React, { FC } from "react";
-import { useShallowSelect } from "~/hooks/data/useShallowSelect";
-import { selectUser } from "~/redux/auth/selectors";
+import React, { FC } from 'react';
+import { useAuth } from '~/hooks/auth/useAuth';
 
 interface IProps {}
 
 const Authorized: FC<IProps> = ({ children }) => {
-  const user = useShallowSelect(selectUser);
+  const { isUser } = useAuth();
 
-  if (!user.is_user) return null;
+  if (!isUser) return null;
 
   return <>{children}</>;
 };

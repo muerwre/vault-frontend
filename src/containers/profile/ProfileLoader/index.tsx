@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import styles from "./styles.module.scss";
-import { LoaderCircle } from "~/components/input/LoaderCircle";
+import React, { FC } from 'react';
+import styles from './styles.module.scss';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
 
 interface IProps {}
 

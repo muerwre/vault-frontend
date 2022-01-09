@@ -1,4 +1,4 @@
-import { IComment, IFile } from '~/redux/types';
+import { IComment, IFile } from '~/types';
 import React, { createContext, FC, useContext } from 'react';
 
 export interface CommentProviderProps {

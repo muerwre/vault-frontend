@@ -1,5 +1,5 @@
-import React, { FC, memo } from "react";
-import styles from "./styles.module.scss";
+import React, { FC, memo } from 'react';
+import styles from './styles.module.scss';
 
 interface IProps {}
 

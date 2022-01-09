@@ -1,5 +1,5 @@
 import React, { createContext, FC, useContext } from 'react';
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { useSearch } from '~/hooks/search/useSearch';
 
 export interface SearchContextProps {

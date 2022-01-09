@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { FlowDisplay, INode } from '~/redux/types';
+import { FlowDisplay, INode } from '~/types';
 
 export const useFlowCellControls = (
   id: INode['id'],

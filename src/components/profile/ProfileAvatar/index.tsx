@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import { Icon } from '~/components/input/Icon';
-import { IFile } from '~/redux/types';
+import { IFile } from '~/types';
 
 export interface ProfileAvatarProps {
   canEdit: boolean;

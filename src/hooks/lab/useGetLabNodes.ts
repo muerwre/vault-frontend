@@ -3,9 +3,9 @@ import { GetLabNodesRequest, ILabNode } from '~/types/lab';
 import { getLabNodes } from '~/api/lab';
 import { flatten, last, uniqBy } from 'ramda';
 import { useLabStore } from '~/store/lab/useLabStore';
-import { useCallback, useEffect } from 'react';
-import { INode } from '~/redux/types';
-import { useUser } from '~/hooks/user/userUser';
+import { useCallback, useMemo } from 'react';
+import { INode } from '~/types';
+import { useAuth } from '~/hooks/auth/useAuth';
 
 const getKey: (isUser: boolean) => SWRInfiniteKeyLoader = isUser => (index, prev: ILabNode[]) => {
   if (!isUser) return null;
@@ -33,10 +33,10 @@ const parseKey = (key: string): GetLabNodesRequest => {
 
 export const useGetLabNodes = () => {
   const labStore = useLabStore();
-  const { is_user } = useUser();
+  const { isUser } = useAuth();
 
   const { data, isValidating, size, setSize, mutate } = useSWRInfinite(
-    getKey(is_user),
+    getKey(isUser),
     async (key: string) => {
       const result = await getLabNodes(parseKey(key));
       return result.nodes;
@@ -47,7 +47,7 @@ export const useGetLabNodes = () => {
     }
   );
 
-  const nodes = uniqBy(n => n.node.id, flatten(data || []));
+  const nodes = useMemo(() => uniqBy(n => n.node.id, flatten(data || [])), [data]);
   const hasMore = (data?.[size - 1]?.length || 0) >= 1;
   const loadMore = useCallback(() => setSize(size + 1), [setSize, size]);
 
@@ -70,15 +70,6 @@ export const useGetLabNodes = () => {
     },
     [data, mutate]
   );
-
-  /** purge cache on exit */
-  useEffect(() => {
-    if (is_user) {
-      return;
-    }
-
-    labStore.setNodes([]);
-  }, [is_user, labStore]);
 
   return { nodes, isLoading: !data && isValidating, hasMore, loadMore, unshift, updateNode };
 };

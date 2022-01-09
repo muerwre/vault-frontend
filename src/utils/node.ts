@@ -1,19 +1,19 @@
-import { USER_ROLES } from '~/redux/auth/constants';
-import { ICommentGroup, INode } from '~/redux/types';
-import { IUser } from '~/redux/auth/types';
+import { Role } from '~/constants/auth';
+import { ICommentGroup, INode } from '~/types';
+import { IUser } from '~/types/auth';
 import { path } from 'ramda';
 import { NODE_TYPES } from '~/constants/node';
 
 export const canEditNode = (node?: Partial<INode>, user?: Partial<IUser>): boolean =>
-  path(['role'], user) === USER_ROLES.ADMIN || path(['user', 'id'], node) === path(['id'], user);
+  path(['role'], user) === Role.Admin || path(['user', 'id'], node) === path(['id'], user);
 
 export const canEditComment = (comment?: Partial<ICommentGroup>, user?: Partial<IUser>): boolean =>
-  path(['role'], user) === USER_ROLES.ADMIN || path(['user', 'id'], comment) === path(['id'], user);
+  path(['role'], user) === Role.Admin || path(['user', 'id'], comment) === path(['id'], user);
 
 export const canLikeNode = (node?: Partial<INode>, user?: Partial<IUser>): boolean =>
-  path(['role'], user) !== USER_ROLES.GUEST;
+  path(['role'], user) !== Role.Guest;
 
 export const canStarNode = (node?: Partial<INode>, user?: Partial<IUser>): boolean =>
   path(['type'], node) === NODE_TYPES.IMAGE &&
-  path(['is_promoted'], node) === false &&
-  path(['role'], user) === USER_ROLES.ADMIN;
+  path(['is_promoted'], node) === true &&
+  path(['role'], user) === Role.Admin;

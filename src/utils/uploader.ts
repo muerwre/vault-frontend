@@ -1,9 +1,9 @@
-import { VALIDATORS } from "~/utils/validators";
-import { FILE_MIMES, UploadType } from "~/constants/uploads";
+import { isMimeOfImage } from '~/utils/validators';
+import { FILE_MIMES, UploadType } from '~/constants/uploads';
 
 /** if file is image, returns data-uri of thumbnail */
 export const uploadGetThumb = async file => {
-  if (!file.type || !VALIDATORS.IS_IMAGE_MIME(file.type)) return '';
+  if (!file.type || !isMimeOfImage(file.type)) return '';
 
   return new Promise<string>(resolve => {
     const reader = new FileReader();

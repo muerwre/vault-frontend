@@ -1,4 +1,4 @@
-import { IUser } from '~/redux/auth/types';
+import { IUser } from '~/types/auth';
 import { Asserts, object, string } from 'yup';
 import { ERRORS } from '~/constants/errors';
 import { FormikConfig, useFormik } from 'formik';
