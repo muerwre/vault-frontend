@@ -4,7 +4,6 @@ import { Route, Switch } from 'react-router';
 import { TagSidebar } from '~/containers/sidebars/TagSidebar';
 import { Authorized } from '~/components/containers/Authorized';
 import { SubmitBar } from '~/components/bars/SubmitBar';
-import { EditorCreateDialog } from '~/containers/dialogs/EditorCreateDialog';
 
 interface IProps {
   prefix?: string;
@@ -13,16 +12,9 @@ interface IProps {
 
 const SidebarRouter: FC<IProps> = ({ prefix = '', isLab }) => {
   return createPortal(
-    <>
-      <Switch>
-        <Route path={`${prefix}/create/:type`} component={EditorCreateDialog} />
-        <Route path={`${prefix}/tag/:tag`} component={TagSidebar} />
-      </Switch>
-
-      <Authorized>
-        <SubmitBar isLab={isLab} />
-      </Authorized>
-    </>,
+    <Authorized>
+      <SubmitBar isLab={isLab} />
+    </Authorized>,
     document.body
   );
 };

@@ -24,7 +24,7 @@ const NodeLayout: FC<IProps> = () => {
   const { node, isLoading, update } = useNodeContext();
   const { head, block } = useNodeBlocks(node, isLoading);
   const [canEdit, canLike, canStar] = useNodePermissions(node);
-  const { onLike, onStar, onLock } = useNodeActions(node, update);
+  const { onLike, onStar, onLock, onEdit } = useNodeActions(node, update);
 
   useNodeCoverImage(node);
 
@@ -53,6 +53,7 @@ const NodeLayout: FC<IProps> = () => {
               onLike={onLike}
               onStar={onStar}
               onLock={onLock}
+              onEdit={onEdit}
             />
           </div>
 

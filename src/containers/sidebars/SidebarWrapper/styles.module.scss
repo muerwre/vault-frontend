@@ -10,9 +10,6 @@
 }
 
 .wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -22,19 +19,7 @@
   overflow: hidden;
   animation: appear 0.25s forwards;
 
-  @include sidebar;
-
   & > * {
     z-index: 4;
   }
-}
-
-.clicker {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  cursor: pointer;
 }

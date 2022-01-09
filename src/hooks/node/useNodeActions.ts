@@ -2,8 +2,12 @@ import { INode } from '~/types';
 import { useCallback } from 'react';
 import { apiLockNode, apiPostNodeHeroic, apiPostNodeLike } from '~/api/node';
 import { showErrorToast } from '~/utils/errors/showToast';
+import { useModal } from '~/hooks/modal/useModal';
+import { Dialog } from '~/constants/modal';
 
 export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Promise<unknown>) => {
+  const { showModal } = useModal();
+
   const onLike = useCallback(async () => {
     try {
       const result = await apiPostNodeLike({ id: node.id });
@@ -37,5 +41,7 @@ export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Pr
     }
   }, [node.deleted_at, node.id, update]);
 
-  return { onLike, onStar, onLock };
+  const onEdit = useCallback(() => showModal(Dialog.EditNode, { nodeId: node.id! }), [node]);
+
+  return { onLike, onStar, onLock, onEdit };
 };

@@ -1,7 +1,6 @@
-import React, { useCallback, useMemo, VFC } from 'react';
+import React, { useMemo, VFC } from 'react';
 import { SidebarWrapper } from '~/containers/sidebars/SidebarWrapper';
 import styles from './styles.module.scss';
-import { useHistory, useRouteMatch } from 'react-router';
 import { Icon } from '~/components/input/Icon';
 import { Link } from 'react-router-dom';
 import { TagSidebarList } from '~/components/sidebar/TagSidebarList';
@@ -9,21 +8,18 @@ import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
 import { Tag } from '~/components/tags/Tag';
 import { useTagNodes } from '~/hooks/tag/useTagNodes';
+import { DialogComponentProps } from '~/types/modal';
 
-const TagSidebar: VFC = () => {
-  const {
-    params: { tag },
-    url,
-  } = useRouteMatch<{ tag: string }>();
-  const history = useHistory();
+interface TagSidebarProps extends DialogComponentProps {
+  tag: string;
+}
 
-  const basePath = url.replace(new RegExp(`/tag/${tag}$`), '');
-  const onClose = useCallback(() => history.push(basePath), [basePath, history]);
+const TagSidebar: VFC<TagSidebarProps> = ({ tag, onRequestClose }) => {
   const { nodes, hasMore, isLoading, loadMore } = useTagNodes(tag);
   const title = useMemo(() => decodeURIComponent(tag), [tag]);
 
   return (
-    <SidebarWrapper onClose={onClose}>
+    <SidebarWrapper onClose={onRequestClose}>
       <div className={styles.wrap}>
         <div className={styles.content}>
           <div className={styles.head}>
@@ -38,9 +34,9 @@ const TagSidebar: VFC = () => {
             )}
 
             <div className={styles.close}>
-              <Link to={basePath}>
+              <button onClick={onRequestClose}>
                 <Icon icon="close" size={32} />
-              </Link>
+              </button>
             </div>
           </div>
 

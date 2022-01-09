@@ -1,6 +1,5 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback } from 'react';
 import { EditorDialog } from '~/containers/dialogs/EditorDialog';
-import { useHistory, useRouteMatch } from 'react-router';
 import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import styles from './styles.module.scss';
@@ -8,37 +7,27 @@ import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useUpdateNode } from '~/hooks/node/useUpdateNode';
 import { INode } from '~/types';
 import { observer } from 'mobx-react-lite';
+import { DialogComponentProps } from '~/types/modal';
 
-const EditorEditDialog: FC = observer(() => {
-  const history = useHistory();
+export interface EditorEditDialogProps extends DialogComponentProps {
+  nodeId: number;
+}
 
-  const {
-    params: { id },
-    url,
-  } = useRouteMatch<{ id: string }>();
-
-  const backUrl = useMemo(() => {
-    return url.replace(/\/edit$/, '');
-  }, [url]);
-
-  const goBack = useCallback(() => {
-    history.replace(backUrl);
-  }, [backUrl, history]);
-
-  const { node, isLoading } = useLoadNode(parseInt(id, 10));
-  const updateNode = useUpdateNode(parseInt(id, 10));
+const EditorEditDialog: FC<EditorEditDialogProps> = observer(({ nodeId, onRequestClose }) => {
+  const { node, isLoading } = useLoadNode(nodeId);
+  const updateNode = useUpdateNode(nodeId);
 
   const onSubmit = useCallback(
     async (node: INode) => {
       await updateNode(node);
-      goBack();
+      onRequestClose();
     },
-    [updateNode, goBack]
+    [updateNode, onRequestClose]
   );
 
   if (isLoading || !node) {
     return (
-      <ModalWrapper onOverlayClick={goBack}>
+      <ModalWrapper onOverlayClick={onRequestClose}>
         <div className={styles.loader}>
           <LoaderCircle size={64} />
         </div>
@@ -46,7 +35,7 @@ const EditorEditDialog: FC = observer(() => {
     );
   }
 
-  return <EditorDialog node={node} onRequestClose={goBack} onSubmit={onSubmit} />;
+  return <EditorDialog node={node} onRequestClose={onRequestClose} onSubmit={onSubmit} />;
 });
 
 export { EditorEditDialog };

@@ -6,14 +6,14 @@ import { makePersistable, isHydrated } from 'mobx-persist-store';
 export class AuthStore {
   token: string = '';
   user: IUser = EMPTY_USER;
-  private isTesterInternal: boolean = false;
+  isTesterInternal: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
 
     void makePersistable(this, {
       name: `vault48_auth_${process.env.REACT_APP_API_URL}`,
-      properties: ['token', 'user'],
+      properties: ['token', 'user', 'isTesterInternal'],
       storage: window.localStorage,
     });
   }

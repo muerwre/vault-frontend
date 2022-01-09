@@ -1,29 +1,18 @@
 import React, { FC, useCallback, useMemo, useRef } from 'react';
 import { EMPTY_NODE, NODE_TYPES } from '~/constants/node';
 import { EditorDialog } from '~/containers/dialogs/EditorDialog';
-import { useHistory, useRouteMatch } from 'react-router';
 import { values } from 'ramda';
 import { INode } from '~/types';
 import { useCreateNode } from '~/hooks/node/useCreateNode';
+import { DialogComponentProps } from '~/types/modal';
 
-const EditorCreateDialog: FC = () => {
-  const history = useHistory();
-  const {
-    params: { type },
-    url,
-  } = useRouteMatch<{ type: string }>();
+export interface EditorCreateDialogProps extends DialogComponentProps {
+  type: typeof NODE_TYPES[keyof typeof NODE_TYPES];
+  isInLab: boolean;
+}
 
-  const backUrl = useMemo(() => {
-    return (url && url.replace(/\/create\/(.*)$/, '')) || '/';
-  }, [url]);
-
-  const goBack = useCallback(() => {
-    history.replace(backUrl);
-  }, [backUrl, history]);
-
+const EditorCreateDialog: FC<EditorCreateDialogProps> = ({ type, isInLab, onRequestClose }) => {
   const isExist = useMemo(() => values(NODE_TYPES).some(el => el === type), [type]);
-
-  const isInLab = useMemo(() => !!url.match(/^\/lab/), [url]);
 
   const data = useRef({ ...EMPTY_NODE, type, is_promoted: !isInLab });
 
@@ -32,16 +21,16 @@ const EditorCreateDialog: FC = () => {
   const onSubmit = useCallback(
     async (node: INode) => {
       await createNode(node);
-      goBack();
+      onRequestClose();
     },
-    [goBack, createNode]
+    [onRequestClose, createNode]
   );
 
   if (!type || !isExist) {
     return null;
   }
 
-  return <EditorDialog node={data.current} onRequestClose={goBack} onSubmit={onSubmit} />;
+  return <EditorDialog node={data.current} onRequestClose={onRequestClose} onSubmit={onSubmit} />;
 };
 
 export { EditorCreateDialog };

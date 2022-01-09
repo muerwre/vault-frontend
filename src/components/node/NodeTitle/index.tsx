@@ -27,6 +27,7 @@ interface IProps {
   onLike: () => void;
   onStar: () => void;
   onLock: () => void;
+  onEdit: () => void;
 }
 
 const NodeTitle: VFC<IProps> = memo(
@@ -50,6 +51,7 @@ const NodeTitle: VFC<IProps> = memo(
     onStar,
     onLike,
     onLock,
+    onEdit,
   }) => {
     return (
       <div className={classNames(styles.wrap)}>
@@ -91,11 +93,7 @@ const NodeTitle: VFC<IProps> = memo(
                   <Icon icon={isLocked ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
                 </div>
 
-                {!!id && (
-                  <Link to={URLS.NODE_EDIT_URL(id)}>
-                    <Icon icon="edit" size={24} />
-                  </Link>
-                )}
+                {!!id && <Icon icon="edit" size={24} onClick={onEdit} />}
               </div>
             </div>
           )}
