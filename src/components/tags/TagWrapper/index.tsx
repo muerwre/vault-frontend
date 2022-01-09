@@ -1,7 +1,7 @@
-import React, { FC, useCallback } from "react";
-import classNames from "classnames";
-import styles from "./styles.module.scss";
-import { Icon } from "~/components/input/Icon";
+import React, { FC, useCallback } from 'react';
+import classNames from 'classnames';
+import styles from './styles.module.scss';
+import { Icon } from '~/components/input/Icon';
 
 interface IProps {
   feature?: string;

@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { API } from '~/constants/api';
 import { apiGetUserMessages } from '~/api/messages';
-import { IMessage } from '~/redux/types';
+import { IMessage } from '~/types';
 
 const getKey = (username: string): string | null => {
   return username ? `${API.USER.MESSAGES}/${username}` : null;

@@ -10,6 +10,7 @@ export const useYoutubeMetadata = (id: string) => {
     }
 
     enqueue(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return metadata[id];

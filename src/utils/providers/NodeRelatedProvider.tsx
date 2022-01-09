@@ -1,8 +1,8 @@
-import React, { FC, useEffect } from "react";
-import { INode, ITag } from "~/redux/types";
-import { NodeRelatedContextProvider } from "~/utils/context/NodeRelatedContextProvider";
-import { INodeRelated } from "~/types/node";
-import { useGetNodeRelated } from "~/hooks/node/useGetNodeRelated";
+import React, { FC, useEffect } from 'react';
+import { INode, ITag } from '~/types';
+import { NodeRelatedContextProvider } from '~/utils/context/NodeRelatedContextProvider';
+import { INodeRelated } from '~/types/node';
+import { useGetNodeRelated } from '~/hooks/node/useGetNodeRelated';
 
 interface NodeRelatedProviderProps {
   id: INode['id'];

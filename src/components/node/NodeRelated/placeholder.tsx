@@ -1,10 +1,10 @@
-import React, { FC, memo } from "react";
-import styles from "./styles.module.scss";
-import cell_style from "~/components/node/NodeRelatedItem/styles.module.scss";
-import { Group } from "~/components/containers/Group";
-import { Placeholder } from "~/components/placeholders/Placeholder";
-import range from "ramda/es/range";
-import classNames from "classnames";
+import React, { FC, memo } from 'react';
+import styles from './styles.module.scss';
+import cell_style from '~/components/node/NodeRelatedItem/styles.module.scss';
+import { Group } from '~/components/containers/Group';
+import { Placeholder } from '~/components/placeholders/Placeholder';
+import range from 'ramda/es/range';
+import classNames from 'classnames';
 
 interface IProps {}
 

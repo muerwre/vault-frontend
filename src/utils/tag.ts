@@ -1,4 +1,4 @@
-import { ITag } from '~/redux/types';
+import { ITag } from '~/types';
 
 export const separateTags = (tags: Partial<ITag>[]): Partial<ITag>[][] =>
   (tags || []).reduce(

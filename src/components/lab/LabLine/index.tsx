@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import styles from "./styles.module.scss";
-import { INodeComponentProps } from "~/constants/node";
-import { useColorGradientFromString } from "~/hooks/color/useColorGradientFromString";
+import React, { FC } from 'react';
+import styles from './styles.module.scss';
+import { INodeComponentProps } from '~/constants/node';
+import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 
 interface Props extends INodeComponentProps {}
 

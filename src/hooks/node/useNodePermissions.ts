@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { canEditNode, canLikeNode, canStarNode } from '~/utils/node';
-import { useShallowSelect } from '~/hooks/data/useShallowSelect';
-import { selectUser } from '~/redux/auth/selectors';
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
+import { useUser } from '~/hooks/auth/useUser';
 
 export const useNodePermissions = (node?: INode) => {
-  const user = useShallowSelect(selectUser);
+  const { user } = useUser();
+
   const edit = useMemo(() => canEditNode(node, user), [node, user]);
   const like = useMemo(() => canLikeNode(node, user), [node, user]);
   const star = useMemo(() => canStarNode(node, user), [node, user]);

@@ -1,4 +1,4 @@
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { API } from '~/constants/api';
 import { flatten, isNil } from 'ramda';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';

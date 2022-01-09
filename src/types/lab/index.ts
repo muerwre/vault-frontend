@@ -1,4 +1,4 @@
-import { IError, INode, ITag } from '~/redux/types';
+import { IError, INode, ITag } from '~/types';
 
 export type ILabState = Readonly<{
   list: {

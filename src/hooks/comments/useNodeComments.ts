@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { IComment } from '~/redux/types';
+import { IComment } from '~/types';
 import { useGetComments } from '~/hooks/comments/useGetComments';
 import { apiLockComment, apiPostComment } from '~/api/node';
 import { showErrorToast } from '~/utils/errors/showToast';

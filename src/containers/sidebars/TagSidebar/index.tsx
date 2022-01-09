@@ -17,7 +17,7 @@ const TagSidebar: VFC = () => {
   } = useRouteMatch<{ tag: string }>();
   const history = useHistory();
 
-  const basePath = url.replace(new RegExp(`\/tag\/${tag}$`), '');
+  const basePath = url.replace(new RegExp(`/tag/${tag}$`), '');
   const onClose = useCallback(() => history.push(basePath), [basePath, history]);
   const { nodes, hasMore, isLoading, loadMore } = useTagNodes(tag);
   const title = useMemo(() => decodeURIComponent(tag), [tag]);

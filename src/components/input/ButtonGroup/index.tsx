@@ -1,6 +1,6 @@
-import React, { HTMLAttributes } from "react";
-import styles from "./styles.module.scss";
-import classNames from "classnames";
+import React, { HTMLAttributes } from 'react';
+import styles from './styles.module.scss';
+import classNames from 'classnames';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {};
 

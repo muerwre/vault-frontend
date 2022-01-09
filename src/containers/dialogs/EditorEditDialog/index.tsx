@@ -6,7 +6,7 @@ import { LoaderCircle } from '~/components/input/LoaderCircle';
 import styles from './styles.module.scss';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useUpdateNode } from '~/hooks/node/useUpdateNode';
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { observer } from 'mobx-react';
 
 const EditorEditDialog: FC = observer(() => {

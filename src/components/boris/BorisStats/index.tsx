@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import { BorisUsageStats } from "~/types/boris";
-import { BorisStatsGit } from "../BorisStatsGit";
-import { BorisStatsBackend } from "../BorisStatsBackend";
+import React, { FC } from 'react';
+import { BorisUsageStats } from '~/types/boris';
+import { BorisStatsGit } from '../BorisStatsGit';
+import { BorisStatsBackend } from '../BorisStatsBackend';
 
 interface IProps {
   stats: BorisUsageStats;

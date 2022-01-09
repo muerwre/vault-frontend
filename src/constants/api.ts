@@ -1,11 +1,11 @@
-import { IComment, INode, ITag } from '~/redux/types';
-import { ISocialProvider } from '~/redux/auth/types';
+import { IComment, INode, ITag } from '~/types';
+import { OAuthProvider } from '~/types/auth';
 
 export const API = {
   BASE: process.env.REACT_APP_API_HOST,
   USER: {
     LOGIN: '/user/login',
-    OAUTH_WINDOW: (provider: ISocialProvider) =>
+    OAUTH_WINDOW: (provider: OAuthProvider) =>
       `${process.env.REACT_APP_API_HOST}oauth/${provider}/redirect`,
     ME: '/user/',
     PROFILE: (username: string) => `/user/user/${username}/profile`,

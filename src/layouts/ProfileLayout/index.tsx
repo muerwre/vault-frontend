@@ -1,16 +1,15 @@
-import React, { FC } from "react";
-import styles from "./styles.module.scss";
-import { RouteComponentProps } from "react-router";
-import { useShallowSelect } from "~/hooks/data/useShallowSelect";
-import { selectUser } from "~/redux/auth/selectors";
-import { ProfilePageLeft } from "~/containers/profile/ProfilePageLeft";
-import { Container } from "~/containers/main/Container";
-import { FlowGrid } from "~/components/flow/FlowGrid";
-import { ProfilePageStats } from "~/containers/profile/ProfilePageStats";
-import { Card } from "~/components/containers/Card";
-import { useFlowStore } from "~/store/flow/useFlowStore";
-import { observer } from "mobx-react";
-import { useGetProfile } from "~/hooks/profile/useGetProfile";
+import React, { FC } from 'react';
+import styles from './styles.module.scss';
+import { RouteComponentProps } from 'react-router';
+import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
+import { Container } from '~/containers/main/Container';
+import { FlowGrid } from '~/components/flow/FlowGrid';
+import { ProfilePageStats } from '~/containers/profile/ProfilePageStats';
+import { Card } from '~/components/containers/Card';
+import { useFlowStore } from '~/store/flow/useFlowStore';
+import { observer } from 'mobx-react';
+import { useGetProfile } from '~/hooks/profile/useGetProfile';
+import { useUser } from '~/hooks/auth/useUser';
 
 type Props = RouteComponentProps<{ username: string }> & {};
 
@@ -21,7 +20,7 @@ const ProfileLayout: FC<Props> = observer(
     },
   }) => {
     const { nodes } = useFlowStore();
-    const user = useShallowSelect(selectUser);
+    const { user } = useUser();
     const { profile, isLoading } = useGetProfile(username);
 
     return (

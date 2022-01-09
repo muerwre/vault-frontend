@@ -1,9 +1,9 @@
-import React, { FC, useCallback } from "react";
-import styles from "./styles.module.scss";
-import { Avatar } from "~/components/common/Avatar";
-import { openUserProfile } from "~/utils/user";
-import { useUserDescription } from "~/hooks/user/useUserDescription";
-import { INodeUser } from "~/redux/types";
+import React, { FC, useCallback } from 'react';
+import styles from './styles.module.scss';
+import { Avatar } from '~/components/common/Avatar';
+import { openUserProfile } from '~/utils/user';
+import { useUserDescription } from '~/hooks/auth/useUserDescription';
+import { INodeUser } from '~/types';
 
 interface Props {
   user?: INodeUser;

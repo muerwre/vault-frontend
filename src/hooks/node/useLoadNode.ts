@@ -4,7 +4,7 @@ import { API } from '~/constants/api';
 import { useOnNodeSeen } from '~/hooks/node/useOnNodeSeen';
 import { apiGetNode } from '~/api/node';
 import { useCallback } from 'react';
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { EMPTY_NODE } from '~/constants/node';
 
 export const useLoadNode = (id: number) => {

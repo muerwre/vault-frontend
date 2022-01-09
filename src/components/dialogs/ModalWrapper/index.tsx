@@ -1,6 +1,6 @@
-import React, { FC, MouseEventHandler } from "react";
-import ReactDOM from "react-dom";
-import styles from "./styles.module.scss";
+import React, { FC, MouseEventHandler } from 'react';
+import ReactDOM from 'react-dom';
+import styles from './styles.module.scss';
 
 type IProps = {
   onOverlayClick: MouseEventHandler;

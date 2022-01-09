@@ -1,5 +1,5 @@
-import React, { FC, HTMLAttributes, useCallback, useEffect, useRef } from "react";
-import styles from "./styles.module.scss";
+import React, { FC, HTMLAttributes, useCallback, useEffect, useRef } from 'react';
+import styles from './styles.module.scss';
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   hasMore: boolean;

@@ -1,11 +1,11 @@
-import React, { FC } from "react";
-import classNames from "classnames";
+import React, { FC } from 'react';
+import classNames from 'classnames';
 
-import styles from "./styles.module.scss";
-import { IUser } from "~/redux/auth/types";
-import { path } from "ramda";
-import { CommentAvatar } from "~/components/comment/CommentAvatar";
-import { DivProps } from "~/utils/types";
+import styles from './styles.module.scss';
+import { IUser } from '~/types/auth';
+import { path } from 'ramda';
+import { CommentAvatar } from '~/components/comment/CommentAvatar';
+import { DivProps } from '~/utils/types';
 
 type IProps = DivProps & {
   user: IUser;

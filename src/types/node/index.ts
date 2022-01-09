@@ -1,4 +1,4 @@
-import { IComment, INode, ITag } from '~/redux/types';
+import { IComment, INode, ITag } from '~/types';
 
 export interface IEditorComponentProps {}
 

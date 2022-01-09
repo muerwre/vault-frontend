@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { IFile } from '~/redux/types';
+import { IFile } from '~/types';
 import { usePageCoverContext } from '~/components/containers/PageCoverProvider/index';
 
 export const usePageCover = (cover?: IFile) => {

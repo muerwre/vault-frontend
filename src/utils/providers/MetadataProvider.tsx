@@ -1,8 +1,8 @@
-import React, { createContext, FC, useContext, useEffect } from "react";
-import { MetadataStore } from "~/store/metadata/MetadataStore";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { apiGetEmbedYoutube } from "~/api/metadata";
-import { EmbedMetadata } from "~/types/metadata";
+import React, { createContext, FC, useContext, useEffect } from 'react';
+import { MetadataStore } from '~/store/metadata/MetadataStore';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { apiGetEmbedYoutube } from '~/api/metadata';
+import { EmbedMetadata } from '~/types/metadata';
 
 interface MetadataContextProps {
   metadata: Record<string, EmbedMetadata>;

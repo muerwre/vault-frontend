@@ -1,4 +1,4 @@
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { useMemo } from 'react';
 import { UploadType } from '~/constants/uploads';
 

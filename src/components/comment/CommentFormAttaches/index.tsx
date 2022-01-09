@@ -2,7 +2,7 @@ import React, { FC, useCallback } from 'react';
 import styles from './styles.module.scss';
 import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
-import { IFile } from '~/redux/types';
+import { IFile } from '~/types';
 import { SortEnd } from 'react-sortable-hoc';
 import { moveArrItem } from '~/utils/fn';
 import { useFileDropZone } from '~/hooks';

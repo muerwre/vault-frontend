@@ -1,6 +1,6 @@
 import { ILabNode } from '~/types/lab';
 import React, { createContext, FC, useContext } from 'react';
-import { IFlowNode, ITag } from '~/redux/types';
+import { IFlowNode, ITag } from '~/types';
 
 export interface LabContextProps {
   isLoading: boolean;

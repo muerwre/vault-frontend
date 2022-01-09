@@ -6,24 +6,29 @@ import { Group } from '~/components/containers/Group';
 import markdown from '~/styles/common/markdown.module.scss';
 import classNames from 'classnames';
 import { useProfileContext } from '~/utils/providers/ProfileProvider';
+import { useUser } from '~/hooks/auth/useUser';
 
 const ProfileDescription: FC = () => {
   const { profile, isLoading } = useProfileContext();
+  const { user } = useUser();
+
+  const isOwn = user?.id === profile?.id;
+  const description = isOwn ? user.description : profile.description;
+  const fullName = isOwn ? user.fullname : profile.fullname;
+  const username = isOwn ? user.username : profile.username;
 
   if (isLoading) return <ProfileLoader />;
 
   return (
     <div className={styles.wrap}>
-      {!!profile?.description && (
+      {!!description ? (
         <Group
           className={classNames(styles.content, markdown.wrapper)}
-          dangerouslySetInnerHTML={{ __html: formatText(profile.description) }}
+          dangerouslySetInnerHTML={{ __html: formatText(description) }}
         />
-      )}
-
-      {!profile?.description && (
+      ) : (
         <div className={styles.placeholder}>
-          {profile?.fullname || profile?.username} пока ничего не рассказал о себе
+          {fullName || username} пока ничего не рассказал о себе
         </div>
       )}
     </div>

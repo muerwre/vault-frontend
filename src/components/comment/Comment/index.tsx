@@ -1,11 +1,11 @@
-import React, { FC, HTMLAttributes, memo } from "react";
-import { CommentWrapper } from "~/components/containers/CommentWrapper";
-import { IComment, ICommentGroup, IFile } from "~/redux/types";
-import { CommentContent } from "~/components/comment/CommentContent";
-import styles from "./styles.module.scss";
-import { CommendDeleted } from "../../node/CommendDeleted";
-import classNames from "classnames";
-import { NEW_COMMENT_CLASSNAME } from "~/constants/comment";
+import React, { FC, HTMLAttributes, memo } from 'react';
+import { CommentWrapper } from '~/components/containers/CommentWrapper';
+import { IComment, ICommentGroup, IFile } from '~/types';
+import { CommentContent } from '~/components/comment/CommentContent';
+import styles from './styles.module.scss';
+import { CommendDeleted } from '../../node/CommendDeleted';
+import classNames from 'classnames';
+import { NEW_COMMENT_CLASSNAME } from '~/constants/comment';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   nodeId: number;

@@ -1,4 +1,4 @@
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { useCallback } from 'react';
 import { apiLockNode, apiPostNodeHeroic, apiPostNodeLike } from '~/api/node';
 import { showErrorToast } from '~/utils/errors/showToast';

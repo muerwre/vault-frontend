@@ -6,22 +6,22 @@ import { Group } from '~/components/containers/Group';
 import { Filler } from '~/components/containers/Filler';
 import { InputText } from '~/components/input/InputText';
 import { ERROR_LITERAL } from '~/constants/errors';
-import { ProfileAccounts } from '~/components/profile/ProfileAccounts';
+import { ProfileAccounts } from '~/containers/profile/ProfileAccounts';
 import classNames from 'classnames';
-import { useUser } from '~/hooks/user/userUser';
-import { useProfileContext } from '~/utils/providers/ProfileProvider';
+import { useUser } from '~/hooks/auth/useUser';
 import { useProfileForm } from '~/hooks/profile/useProfileForm';
 import { has } from 'ramda';
+import { usePatchUser } from '~/hooks/auth/usePatchUser';
 
 const getError = (error?: string) => (error && has(error, ERROR_LITERAL) ? error : undefined);
 
 const ProfileSettings: FC = () => {
-  const user = useUser();
-  const { updateProfile } = useProfileContext();
+  const { user } = useUser();
+  const { save } = usePatchUser();
 
   const { handleSubmit, values, errors, handleChange } = useProfileForm(
     { ...user, password: '', newPassword: '' },
-    updateProfile
+    save
   );
 
   return (

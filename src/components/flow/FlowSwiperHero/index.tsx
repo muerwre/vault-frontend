@@ -10,7 +10,7 @@ import SwiperClass from 'swiper/types/swiper-class';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { useHistory } from 'react-router';
 import classNames from 'classnames';
-import { IFlowNode } from '~/redux/types';
+import { IFlowNode } from '~/types';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 
 SwiperCore.use([EffectFade, Lazy, Autoplay, Navigation]);

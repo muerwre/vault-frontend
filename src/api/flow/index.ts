@@ -1,17 +1,7 @@
-import { api, cleanResult, configWithToken } from '~/utils/api';
-import { INode, IResultWithStatus } from 'src/redux/types';
+import { api, cleanResult } from '~/utils/api';
 import { API } from '~/constants/api';
 import { PostCellViewRequest, PostCellViewResult } from '~/types/node';
 import { GetSearchResultsRequest, GetSearchResultsResult } from '~/types/flow';
-
-export const postNode = ({
-  access,
-  node,
-}: {
-  access: string;
-  node: INode;
-}): Promise<IResultWithStatus<INode>> =>
-  api.post(API.NODE.SAVE, { node }, configWithToken(access)).then(cleanResult);
 
 export const postCellView = ({ id, flow }: PostCellViewRequest) =>
   api

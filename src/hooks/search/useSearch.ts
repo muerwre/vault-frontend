@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { flatten } from 'ramda';
 import { getSearchResults } from '~/api/flow';
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { GetSearchResultsRequest } from '~/types/flow';
 
 const RESULTS_COUNT = 20;

@@ -1,5 +1,5 @@
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
-import { IFile } from '~/redux/types';
+import { IFile } from '~/types';
 import { useCallback } from 'react';
 import { apiUploadFile } from '~/api/uploads';
 import { keys } from 'ramda';

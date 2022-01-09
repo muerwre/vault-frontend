@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import styles from "./styles.module.scss";
-import { DivProps } from "~/utils/types";
-import classNames from "classnames";
+import React, { FC } from 'react';
+import styles from './styles.module.scss';
+import { DivProps } from '~/utils/types';
+import classNames from 'classnames';
 
 interface IProps extends DivProps {}
 

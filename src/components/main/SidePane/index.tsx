@@ -1,7 +1,7 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
-import classNames from "classnames";
-import styles from "./styles.module.scss";
-import { Group } from "~/components/containers/Group";
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import classNames from 'classnames';
+import styles from './styles.module.scss';
+import { Group } from '~/components/containers/Group';
 
 interface IProps {}
 

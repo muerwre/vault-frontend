@@ -1,5 +1,5 @@
 import { api, cleanResult } from '~/utils/api';
-import { IComment, INode } from '~/redux/types';
+import { IComment, INode } from '~/types';
 import { API } from '~/constants/api';
 import { COMMENTS_DISPLAY } from '~/constants/node';
 import {

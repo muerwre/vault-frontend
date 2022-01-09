@@ -1,11 +1,11 @@
-import React, { memo, useCallback, useMemo } from "react";
-import { IFile } from "~/redux/types";
-import classNames from "classnames";
-import styles from "./styles.module.scss";
-import { Icon } from "~/components/input/Icon";
-import { InputText } from "~/components/input/InputText";
-import { PlayerState } from "~/constants/player";
-import { useAudioPlayer } from "~/utils/providers/AudioPlayerProvider";
+import React, { memo, useCallback, useMemo } from 'react';
+import { IFile } from '~/types';
+import classNames from 'classnames';
+import styles from './styles.module.scss';
+import { Icon } from '~/components/input/Icon';
+import { InputText } from '~/components/input/InputText';
+import { PlayerState } from '~/constants/player';
+import { useAudioPlayer } from '~/utils/providers/AudioPlayerProvider';
 
 type Props = {
   file: IFile;

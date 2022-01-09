@@ -1,4 +1,4 @@
-import { IComment } from '~/redux/types';
+import { IComment } from '~/types';
 import { useMemo } from 'react';
 import { groupCommentsByUser } from '~/utils/fn';
 

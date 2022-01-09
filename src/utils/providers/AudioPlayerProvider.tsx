@@ -1,9 +1,9 @@
-import React, { createContext, FC, useCallback, useContext, useEffect, useState } from "react";
-import { IFile } from "~/redux/types";
-import { getURL } from "~/utils/dom";
-import { path } from "ramda";
-import { PlayerState } from "~/constants/player";
-import { PlayerProgress } from "~/types/player";
+import React, { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
+import { IFile } from '~/types';
+import { getURL } from '~/utils/dom';
+import { path } from 'ramda';
+import { PlayerState } from '~/constants/player';
+import { PlayerProgress } from '~/types/player';
 
 interface AudioPlayerProps {
   file?: IFile;

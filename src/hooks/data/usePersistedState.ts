@@ -7,13 +7,13 @@ export const usePersistedState = (key: string, initial: string): [string, (val: 
     } catch (e) {
       return initial;
     }
-  }, [key]);
+  }, [key, initial]);
 
   const [val, setVal] = useState<string>(stored);
 
   useEffect(() => {
     localStorage.setItem(`vault_${key}`, val);
-  }, [val]);
+  }, [val, key]);
 
   return [val, setVal];
 };

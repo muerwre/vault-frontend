@@ -1,12 +1,12 @@
-import React, { FC } from "react";
-import { FlowGrid } from "~/components/flow/FlowGrid";
-import styles from "./styles.module.scss";
-import { FlowStamp } from "~/containers/flow/FlowStamp";
-import { SidebarRouter } from "~/containers/main/SidebarRouter";
-import classNames from "classnames";
-import { FlowSwiperHero } from "~/components/flow/FlowSwiperHero";
-import { useFlowContext } from "~/utils/context/FlowContextProvider";
-import { useUser } from "~/hooks/user/userUser";
+import React, { FC } from 'react';
+import { FlowGrid } from '~/components/flow/FlowGrid';
+import styles from './styles.module.scss';
+import { FlowStamp } from '~/containers/flow/FlowStamp';
+import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import classNames from 'classnames';
+import { FlowSwiperHero } from '~/components/flow/FlowSwiperHero';
+import { useFlowContext } from '~/utils/context/FlowContextProvider';
+import { useUser } from '~/hooks/auth/useUser';
 
 interface Props {
   isFluid: boolean;
@@ -15,7 +15,7 @@ interface Props {
 
 const FlowLayout: FC<Props> = ({ isFluid, onToggleLayout }) => {
   const { heroes, nodes, onChangeCellView } = useFlowContext();
-  const user = useUser();
+  const { user } = useUser();
 
   return (
     <div className={classNames(styles.container)}>

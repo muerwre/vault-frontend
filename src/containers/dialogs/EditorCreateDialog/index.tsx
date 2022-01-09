@@ -3,7 +3,7 @@ import { EMPTY_NODE, NODE_TYPES } from '~/constants/node';
 import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { useHistory, useRouteMatch } from 'react-router';
 import { values } from 'ramda';
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { useCreateNode } from '~/hooks/node/useCreateNode';
 
 const EditorCreateDialog: FC = () => {

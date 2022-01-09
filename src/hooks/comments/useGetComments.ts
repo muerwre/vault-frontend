@@ -4,7 +4,7 @@ import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { apiGetNodeComments } from '~/api/node';
 import { COMMENTS_DISPLAY } from '~/constants/node';
 import { useCallback } from 'react';
-import { IComment } from '~/redux/types';
+import { IComment } from '~/types';
 
 const getKey: (nodeId: number) => SWRInfiniteKeyLoader = (nodeId: number) => (
   pageIndex,

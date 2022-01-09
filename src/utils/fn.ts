@@ -1,5 +1,5 @@
 import { curry, insert, nth, path, remove } from 'ramda';
-import { IComment, ICommentGroup } from '~/redux/types';
+import { IComment, ICommentGroup } from '~/types';
 import { isAfter, isValid, parseISO } from 'date-fns';
 
 export const moveArrItem = curry((at, to, list) => insert(to, nth(at, list), remove(at, 1, list)));

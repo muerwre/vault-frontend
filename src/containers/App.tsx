@@ -1,6 +1,4 @@
 import React, { VFC } from 'react';
-import { ConnectedRouter } from 'connected-react-router';
-import { history } from '~/redux/store';
 import { MainLayout } from '~/containers/main/MainLayout';
 import { Sprites } from '~/sprites/Sprites';
 import { Modal } from '~/containers/dialogs/Modal';
@@ -16,12 +14,14 @@ import { SearchProvider } from '~/utils/providers/SearchProvider';
 import { ToastProvider } from '~/utils/providers/ToastProvider';
 import { AudioPlayerProvider } from '~/utils/providers/AudioPlayerProvider';
 import { MetadataProvider } from '~/utils/providers/MetadataProvider';
+import { AuthProvider } from '~/utils/providers/AuthProvider';
+import { BrowserRouter } from 'react-router-dom';
 
 const App: VFC = observer(() => {
   useGlobalLoader();
 
   return (
-    <ConnectedRouter history={history}>
+    <BrowserRouter>
       <SWRConfigProvider>
         <UserContextProvider>
           <DragDetectorProvider>
@@ -29,14 +29,16 @@ const App: VFC = observer(() => {
               <SearchProvider>
                 <AudioPlayerProvider>
                   <MetadataProvider>
-                    <MainLayout>
-                      <ToastProvider />
-                      <Modal />
-                      <Sprites />
+                    <AuthProvider>
+                      <MainLayout>
+                        <ToastProvider />
+                        <Modal />
+                        <Sprites />
 
-                      <MainRouter />
-                    </MainLayout>
-                    <BottomContainer />
+                        <MainRouter />
+                      </MainLayout>
+                      <BottomContainer />
+                    </AuthProvider>
                   </MetadataProvider>
                 </AudioPlayerProvider>
               </SearchProvider>
@@ -44,7 +46,7 @@ const App: VFC = observer(() => {
           </DragDetectorProvider>
         </UserContextProvider>
       </SWRConfigProvider>
-    </ConnectedRouter>
+    </BrowserRouter>
   );
 });
 

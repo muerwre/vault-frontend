@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import { Placeholder } from "~/components/placeholders/Placeholder";
-import { DivProps } from "~/utils/types";
-import classNames from "classnames";
-import styles from "./styles.module.scss";
+import React, { FC } from 'react';
+import { Placeholder } from '~/components/placeholders/Placeholder';
+import { DivProps } from '~/utils/types';
+import classNames from 'classnames';
+import styles from './styles.module.scss';
 
 interface Props extends DivProps {
   isLoading?: boolean;

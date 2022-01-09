@@ -1,18 +1,21 @@
-import React, { FC } from "react";
-import styles from "./styles.module.scss";
-import { Group } from "~/components/containers/Group";
-import { NodeCommentForm } from "~/components/node/NodeCommentForm";
-import { NodeNoComments } from "~/components/node/NodeNoComments";
-import { NodeComments } from "~/containers/node/NodeComments";
-import { Footer } from "~/components/main/Footer";
-import { CommentContextProvider, useCommentContext } from "~/utils/context/CommentContextProvider";
-import { useUserContext } from "~/utils/context/UserContextProvider";
-import { useNodeContext } from "~/utils/context/NodeContextProvider";
+import React, { FC } from 'react';
+import styles from './styles.module.scss';
+import { Group } from '~/components/containers/Group';
+import { NodeCommentForm } from '~/components/node/NodeCommentForm';
+import { NodeNoComments } from '~/components/node/NodeNoComments';
+import { NodeComments } from '~/containers/node/NodeComments';
+import { Footer } from '~/components/main/Footer';
+import { CommentContextProvider, useCommentContext } from '~/utils/context/CommentContextProvider';
+import { useUserContext } from '~/utils/context/UserContextProvider';
+import { useNodeContext } from '~/utils/context/NodeContextProvider';
+import { useAuth } from '~/hooks/auth/useAuth';
 
 interface IProps {}
 
 const BorisComments: FC<IProps> = () => {
   const user = useUserContext();
+  const { isUser } = useAuth();
+
   const {
     isLoading,
     comments,
@@ -27,9 +30,7 @@ const BorisComments: FC<IProps> = () => {
   return (
     <>
       <Group className={styles.grid}>
-        {user.is_user && (
-          <NodeCommentForm user={user} nodeId={node.id} saveComment={onSaveComment} />
-        )}
+        {isUser && <NodeCommentForm user={user} nodeId={node.id} saveComment={onSaveComment} />}
 
         {isLoading ? (
           <NodeNoComments is_loading count={7} />

@@ -1,10 +1,9 @@
-import { IFile, ValueOf } from '~/redux/types';
+import { IFile, ValueOf } from '~/types';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import isAfter from 'date-fns/isAfter';
 import differenceInMonths from 'date-fns/differenceInMonths';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import ru from 'date-fns/locale/ru';
-import Axios from 'axios';
 import { PRESETS } from '~/constants/urls';
 import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/constants/comment';
 import format from 'date-fns/format';
@@ -20,18 +19,6 @@ import {
   formatTextTodos,
 } from '~/utils/formatText';
 import { splitTextByYoutube, splitTextOmitEmpty } from '~/utils/splitText';
-
-export const getStyle = (oElm: any, strCssRule: string) => {
-  if (document.defaultView && document.defaultView.getComputedStyle) {
-    return document.defaultView.getComputedStyle(oElm, '').getPropertyValue(strCssRule);
-  }
-
-  if (oElm.currentStyle) {
-    return oElm.currentStyle[strCssRule.replace(/-(\w)/g, (strMatch, p1) => p1.toUpperCase())];
-  }
-
-  return '';
-};
 
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
   const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
@@ -126,8 +113,6 @@ export const splitCommentByBlocks = (text: string): ICommentBlock[] =>
 export const formatCommentText = (author?: string, text?: string): ICommentBlock[] =>
   author && text ? splitCommentByBlocks(text) : [];
 
-export const formatCellText = (text: string): string => formatTextParagraphs(text);
-
 export const getPrettyDate = (date?: string): string => {
   if (!date) {
     return '';
@@ -147,29 +132,15 @@ export const getPrettyDate = (date?: string): string => {
       });
 };
 
-export const getYoutubeTitle = async (id: string) => {
-  Axios.get(`http://youtube.com/get_video_info?video_id=${id}`).then(console.log);
-};
-
 export const getYoutubeThumb = (url: string) => {
   const match =
     url &&
     url.match(
-      /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?/
+      /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-_]*)(&(amp;)?[\w?=]*)?/
     );
 
   return match && match[1] ? `https://i.ytimg.com/vi/${match[1]}/hqdefault.jpg` : null;
 };
-
-export function plural(n: number, one: string, two: string, five: string) {
-  if (n % 10 === 1 && n % 100 !== 11) {
-    return `${n} ${one}`;
-  } else if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) {
-    return `${n} ${two}`;
-  } else {
-    return `${n} ${five}`;
-  }
-}
 
 export const stringToColour = (str: string) => {
   let hash = 0;
@@ -189,26 +160,26 @@ export const stringToColour = (str: string) => {
 };
 
 export const darken = (col: string, amt: number) => {
-  var usePound = false;
+  let usePound = false;
 
-  if (col[0] == '#') {
+  if (col[0] === '#') {
     col = col.slice(1);
     usePound = true;
   }
 
-  var num = parseInt(col, 16);
+  const num = parseInt(col, 16);
 
-  var r = (num >> 16) + amt;
+  let r = (num >> 16) + amt;
 
   if (r > 255) r = 255;
   else if (r < 0) r = 0;
 
-  var b = ((num >> 8) & 0x00ff) + amt;
+  let b = ((num >> 8) & 0x00ff) + amt;
 
   if (b > 255) b = 255;
   else if (b < 0) b = 0;
 
-  var g = (num & 0x0000ff) + amt;
+  let g = (num & 0x0000ff) + amt;
 
   if (g > 255) g = 255;
   else if (g < 0) g = 0;
@@ -217,9 +188,9 @@ export const darken = (col: string, amt: number) => {
 };
 
 export const sizeOf = (bytes: number): string => {
-  if (bytes == 0) {
+  if (bytes === 0) {
     return '0.00 B';
   }
-  var e = Math.floor(Math.log(bytes) / Math.log(1024));
+  let e = Math.floor(Math.log(bytes) / Math.log(1024));
   return (bytes / Math.pow(1024, e)).toFixed(2) + ' ' + ' KMGTP'.charAt(e) + 'B';
 };

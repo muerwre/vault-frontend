@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router';
 import { useCallback } from 'react';
-import { ITag } from '~/redux/types';
+import { ITag } from '~/types';
 import { URLS } from '~/constants/urls';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { apiDeleteNodeTag, apiPostNodeTags } from '~/api/node';

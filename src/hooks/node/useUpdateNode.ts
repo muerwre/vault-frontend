@@ -1,13 +1,11 @@
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useCallback } from 'react';
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { apiPostNode } from '~/api/node';
-import { useDispatch } from 'react-redux';
 import { useFlowStore } from '~/store/flow/useFlowStore';
 import { useGetLabNodes } from '~/hooks/lab/useGetLabNodes';
 
 export const useUpdateNode = (id: number) => {
-  const dispatch = useDispatch();
   const { update } = useLoadNode(id);
   const flow = useFlowStore();
   const lab = useGetLabNodes();

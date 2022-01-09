@@ -1,4 +1,4 @@
-import { INode } from '~/redux/types';
+import { INode } from '~/types';
 import { useCallback, useRef } from 'react';
 import { FormikConfig, FormikHelpers, useFormik, useFormikContext } from 'formik';
 import { object } from 'yup';

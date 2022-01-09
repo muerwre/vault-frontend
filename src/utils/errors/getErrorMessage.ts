@@ -1,7 +1,11 @@
 import { has, path } from 'ramda';
 import { ERROR_LITERAL, ERRORS } from '~/constants/errors';
 
-export const getErrorMessage = (error: unknown) => {
+export const getErrorMessage = (error: unknown): string | undefined => {
+  if (error === undefined) {
+    return undefined;
+  }
+
   if (typeof error === 'string' && has(error, ERROR_LITERAL)) {
     return ERROR_LITERAL[error];
   }

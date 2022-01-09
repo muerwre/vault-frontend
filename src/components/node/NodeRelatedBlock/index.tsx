@@ -1,10 +1,10 @@
-import React, { FC } from "react";
-import { NodeRelatedPlaceholder } from "~/components/node/NodeRelated/placeholder";
-import { NodeRelated } from "~/components/node/NodeRelated";
-import { URLS } from "~/constants/urls";
-import { INode } from "~/redux/types";
-import { INodeRelated } from "~/types/node";
-import { Link } from "react-router-dom";
+import React, { FC } from 'react';
+import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
+import { NodeRelated } from '~/components/node/NodeRelated';
+import { URLS } from '~/constants/urls';
+import { INode } from '~/types';
+import { INodeRelated } from '~/types/node';
+import { Link } from 'react-router-dom';
 
 interface IProps {
   isLoading: boolean;

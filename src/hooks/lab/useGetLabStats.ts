@@ -2,17 +2,17 @@ import useSWR from 'swr';
 import { API } from '~/constants/api';
 import { getLabStats, getLabUpdates } from '~/api/lab';
 import { useLabStore } from '~/store/lab/useLabStore';
-import { useCallback, useEffect } from 'react';
-import { useUser } from '~/hooks/user/userUser';
+import { useCallback, useMemo } from 'react';
+import { useAuth } from '~/hooks/auth/useAuth';
 
 const refreshInterval = 1000 * 60 * 5; // 5 minutes
 
 export const useGetLabStats = () => {
   const lab = useLabStore();
-  const { is_user } = useUser();
+  const { isUser } = useAuth();
 
   const { data: stats, isValidating: isValidatingStats } = useSWR(
-    is_user ? API.LAB.STATS : null,
+    isUser ? API.LAB.STATS : null,
     async () => getLabStats(),
     {
       fallbackData: {
@@ -28,7 +28,7 @@ export const useGetLabStats = () => {
   );
 
   const { data: updatesData, isValidating: isValidatingUpdates, mutate: mutateUpdates } = useSWR(
-    is_user ? API.LAB.UPDATES : null,
+    isUser ? API.LAB.UPDATES : null,
     async () => {
       const result = await getLabUpdates();
       return result.nodes;
@@ -42,9 +42,9 @@ export const useGetLabStats = () => {
     }
   );
 
-  const heroes = stats?.heroes || [];
-  const tags = stats?.tags || [];
-  const updates = updatesData || [];
+  const heroes = useMemo(() => stats?.heroes || [], [stats]);
+  const tags = useMemo(() => stats?.tags || [], [stats]);
+  const updates = useMemo(() => updatesData || [], [updatesData]);
 
   const isLoading = (!stats || !updates) && (isValidatingStats || isValidatingUpdates);
   const seenNode = useCallback(
@@ -56,17 +56,6 @@ export const useGetLabStats = () => {
     },
     [mutateUpdates, updates]
   );
-
-  /** purge cache on exit */
-  useEffect(() => {
-    if (is_user) {
-      return;
-    }
-
-    lab.setHeroes([]);
-    lab.setTags([]);
-    lab.setUpdates([]);
-  }, [is_user, lab]);
 
   return { heroes, tags, updates, isLoading, seenNode };
 };

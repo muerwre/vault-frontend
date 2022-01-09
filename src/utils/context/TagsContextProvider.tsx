@@ -1,5 +1,5 @@
 import React, { createContext, FC, useContext } from 'react';
-import { ITag } from '~/redux/types';
+import { ITag } from '~/types';
 
 export interface TagContextProps {
   tags: ITag[];

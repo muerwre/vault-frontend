@@ -1,7 +1,7 @@
-import React, { FC, useCallback } from "react";
-import styles from "./styles.module.scss";
-import { Button } from "~/components/input/Button";
-import { IComment } from "~/redux/types";
+import React, { FC, useCallback } from 'react';
+import styles from './styles.module.scss';
+import { Button } from '~/components/input/Button';
+import { IComment } from '~/types';
 
 interface IProps {
   id: IComment['id'];
