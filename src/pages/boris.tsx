@@ -6,7 +6,7 @@ import { useNodeComments } from '~/hooks/comments/useNodeComments';
 import { useBoris } from '~/hooks/boris/useBoris';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 const BorisPage: VFC = observer(() => {
   const { node, isLoading, update } = useLoadNode(696);

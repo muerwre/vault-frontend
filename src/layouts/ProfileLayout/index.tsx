@@ -7,7 +7,7 @@ import { FlowGrid } from '~/components/flow/FlowGrid';
 import { ProfilePageStats } from '~/containers/profile/ProfilePageStats';
 import { Card } from '~/components/containers/Card';
 import { useFlowStore } from '~/store/flow/useFlowStore';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { useGetProfile } from '~/hooks/profile/useGetProfile';
 import { useUser } from '~/hooks/auth/useUser';
 

@@ -8,7 +8,7 @@ import { MainRouter } from '~/containers/main/MainRouter';
 import { DragDetectorProvider } from '~/hooks/dom/useDragDetector';
 import { UserContextProvider } from '~/utils/context/UserContextProvider';
 import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { useGlobalLoader } from '~/hooks/dom/useGlobalLoader';
 import { SearchProvider } from '~/utils/providers/SearchProvider';
 import { ToastProvider } from '~/utils/providers/ToastProvider';

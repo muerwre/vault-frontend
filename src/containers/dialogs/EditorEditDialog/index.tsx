@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useUpdateNode } from '~/hooks/node/useUpdateNode';
 import { INode } from '~/types';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 const EditorEditDialog: FC = observer(() => {
   const history = useHistory();

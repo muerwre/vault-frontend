@@ -11,7 +11,7 @@ import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
 import { useNodePermissions } from '~/hooks/node/useNodePermissions';
 import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 type Props = RouteComponentProps<{ id: string }> & {};
 

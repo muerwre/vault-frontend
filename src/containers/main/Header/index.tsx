@@ -11,7 +11,7 @@ import styles from './styles.module.scss';
 import isBefore from 'date-fns/isBefore';
 import { Authorized } from '~/components/containers/Authorized';
 import { Button } from '~/components/input/Button';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { Dialog } from '~/constants/modal';
 import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
 import { useAuth } from '~/hooks/auth/useAuth';

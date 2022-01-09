@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { FlowLayout } from '~/layouts/FlowLayout';
 import { useFlow } from '~/hooks/flow/useFlow';
 import { FlowContextProvider } from '~/utils/context/FlowContextProvider';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 interface Props {}
 

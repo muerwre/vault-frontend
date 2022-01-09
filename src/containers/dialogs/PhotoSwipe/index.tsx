@@ -7,7 +7,7 @@ import { PRESETS } from '~/constants/urls';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { useModal } from '~/hooks/modal/useModal';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { IFile } from '~/types';
 import { DialogComponentProps } from '~/types/modal';
 
