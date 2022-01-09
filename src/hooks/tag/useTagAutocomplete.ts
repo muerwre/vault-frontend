@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { API } from '~/constants/api';
 import { apiGetTagSuggestions } from '~/api/tags';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export const useTagAutocomplete = (input: string, exclude: string[]): string[] => {
   const [search, setSearch] = useState('');
@@ -19,5 +19,5 @@ export const useTagAutocomplete = (input: string, exclude: string[]): string[] =
     }
   );
 
-  return data || [];
+  return useMemo(() => data || [], [data]);
 };

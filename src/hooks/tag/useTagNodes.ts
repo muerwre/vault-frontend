@@ -2,7 +2,7 @@ import { INode } from '~/types';
 import { API } from '~/constants/api';
 import { flatten, isNil } from 'ramda';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { apiGetNodesOfTag } from '~/api/tags';
 
 const PAGE_SIZE = 10;
@@ -40,7 +40,7 @@ export const useTagNodes = (tag: string) => {
     }
   );
 
-  const nodes = flatten(data || []);
+  const nodes = useMemo(() => flatten(data || []), [data]);
   const hasMore = (data?.[size - 1]?.length || 0) >= PAGE_SIZE;
 
   const loadMore = useCallback(() => setSize(size + 1), [setSize, size]);

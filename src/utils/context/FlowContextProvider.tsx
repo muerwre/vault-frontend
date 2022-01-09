@@ -6,6 +6,8 @@ export interface FlowContextProps {
   recent: IFlowNode[];
   heroes: IFlowNode[];
   nodes: IFlowNode[];
+  isSyncing: boolean;
+  loadMore: () => Promise<unknown>;
   onChangeCellView: (id: INode['id'], flow: FlowDisplay) => void;
 }
 
@@ -14,6 +16,8 @@ export const FlowContext = createContext<FlowContextProps>({
   recent: [],
   heroes: [],
   nodes: [],
+  isSyncing: false,
+  loadMore: async () => {},
 
   onChangeCellView: () => {},
 });

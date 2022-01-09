@@ -3,7 +3,7 @@ import { GetLabNodesRequest, ILabNode } from '~/types/lab';
 import { getLabNodes } from '~/api/lab';
 import { flatten, last, uniqBy } from 'ramda';
 import { useLabStore } from '~/store/lab/useLabStore';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { INode } from '~/types';
 import { useAuth } from '~/hooks/auth/useAuth';
 
@@ -47,7 +47,7 @@ export const useGetLabNodes = () => {
     }
   );
 
-  const nodes = uniqBy(n => n.node.id, flatten(data || []));
+  const nodes = useMemo(() => uniqBy(n => n.node.id, flatten(data || [])), [data]);
   const hasMore = (data?.[size - 1]?.length || 0) >= 1;
   const loadMore = useCallback(() => setSize(size + 1), [setSize, size]);
 

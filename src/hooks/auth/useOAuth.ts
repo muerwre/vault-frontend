@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { OAuthProvider } from '~/types/auth';
 import { API } from '~/constants/api';
 import { apiAttachSocial, apiDropSocial, apiGetSocials, apiLoginWithSocial } from '~/api/auth';
@@ -89,13 +89,15 @@ export const useOAuth = () => {
     [mutate]
   );
 
+  const accounts = useMemo(() => data || [], [data]);
+
   return {
     openOauthWindow,
     loginWithSocial,
     createSocialAccount,
     attachAccount,
     dropAccount,
-    accounts: data || [],
+    accounts,
     isLoading: !data && isLoading,
   };
 };

@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { FlowSwiperHero } from '~/components/flow/FlowSwiperHero';
 import { useFlowContext } from '~/utils/context/FlowContextProvider';
 import { useUser } from '~/hooks/auth/useUser';
+import { useInfiniteLoader } from '~/hooks/dom/useInfiniteLoader';
 
 interface Props {
   isFluid: boolean;
@@ -14,8 +15,10 @@ interface Props {
 }
 
 const FlowLayout: FC<Props> = ({ isFluid, onToggleLayout }) => {
-  const { heroes, nodes, onChangeCellView } = useFlowContext();
+  const { heroes, nodes, onChangeCellView, loadMore, isSyncing } = useFlowContext();
   const { user } = useUser();
+
+  useInfiniteLoader(loadMore, isSyncing);
 
   return (
     <div className={classNames(styles.container)}>
