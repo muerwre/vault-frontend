@@ -4,9 +4,10 @@ import classNames from 'classnames';
 import { INode } from '~/types';
 import { PRESETS, URLS } from '~/constants/urls';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { getURL } from '~/utils/dom';
+import { getURL, getURLFromString } from '~/utils/dom';
 import { Avatar } from '~/components/common/Avatar';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
+import { Square } from '~/components/common/Square';
 
 type IProps = RouteComponentProps & {
   item: Partial<INode>;
@@ -68,11 +69,13 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
       onClick={onClick}
       ref={ref}
     >
-      <Avatar
-        username={item.title}
-        url={item.thumbnail}
-        className={classNames(styles.thumb, { [styles.is_loaded]: is_loaded })}
-      />
+      {item.thumbnail && (
+        <Square
+          image={getURLFromString(item.thumbnail, 'avatar')}
+          onClick={onClick}
+          className={classNames(styles.thumb, { [styles.is_loaded]: is_loaded })}
+        />
+      )}
 
       {!item.thumbnail && size === 'small' && (
         <div className={styles.letters} style={{ background }}>

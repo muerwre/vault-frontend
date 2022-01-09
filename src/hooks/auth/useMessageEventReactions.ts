@@ -20,7 +20,7 @@ export const useMessageEventReactions = () => {
         return;
       }
 
-      console.log('caught event:', type);
+      console.log('caught event:', type, event.data);
 
       switch (type) {
         case EventMessageType.OAuthLogin:

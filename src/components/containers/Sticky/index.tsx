@@ -1,5 +1,5 @@
 import React, { DetailsHTMLAttributes, FC } from 'react';
-import StickyBox from 'react-sticky-box';
+import StickyBox from 'react-stickynode';
 
 interface IProps extends DetailsHTMLAttributes<HTMLDivElement> {
   offsetTop?: number;

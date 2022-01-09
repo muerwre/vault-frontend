@@ -40,6 +40,7 @@
     "react-scripts": "^5.0.0",
     "react-sortable-hoc": "^2.0.0",
     "react-sticky-box": "^0.9.3",
+    "react-stickynode": "^4.0.0",
     "sticky-sidebar": "^3.3.1",
     "swiper": "^6.8.4",
     "swr": "^1.0.1",

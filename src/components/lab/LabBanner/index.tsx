@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
-import { Square } from '~/components/containers/Square';
+import { Square } from '~/components/lab/LabSquare';
 
 interface IProps {}
 
