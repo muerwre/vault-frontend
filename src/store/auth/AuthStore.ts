@@ -1,7 +1,7 @@
 import { IUser } from '~/types/auth';
 import { EMPTY_USER } from '~/constants/auth';
 import { makeAutoObservable } from 'mobx';
-import { makePersistable } from 'mobx-persist-store';
+import { makePersistable, isHydrated } from 'mobx-persist-store';
 
 export class AuthStore {
   token: string = '';
@@ -16,6 +16,10 @@ export class AuthStore {
       properties: ['token', 'user'],
       storage: window.localStorage,
     });
+  }
+
+  get isHydrated() {
+    return isHydrated(this);
   }
 
   get isUser() {

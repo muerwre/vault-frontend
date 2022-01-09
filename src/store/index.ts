@@ -13,6 +13,10 @@ export class Store {
   constructor() {
     makeAutoObservable(this);
   }
+
+  get isHydrated() {
+    return this.auth.isHydrated;
+  }
 }
 
 const defaultStore = new Store();
