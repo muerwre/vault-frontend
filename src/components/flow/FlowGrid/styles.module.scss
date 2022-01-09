@@ -1,4 +1,4 @@
-@import "~/styles/variables";
+@import "src/styles/variables";
 
 @mixin mobile {
   @media (max-width: $cell * 2) {
