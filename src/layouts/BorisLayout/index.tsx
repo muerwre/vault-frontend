@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { Group } from '~/components/containers/Group';
 import { Container } from '~/containers/main/Container';
-import StickyBox from 'react-sticky-box';
 import { BorisComments } from '~/containers/boris/BorisComments';
 import { Card } from '~/components/containers/Card';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
@@ -14,6 +13,7 @@ import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
 
 import boris from '~/sprites/boris_robot.svg';
 import { useAuthProvider } from '~/utils/providers/AuthProvider';
+import { Sticky } from '~/components/containers/Sticky';
 
 type IProps = {
   title: string;
@@ -56,7 +56,7 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLo
           </Card>
 
           <Group className={styles.stats}>
-            <StickyBox className={styles.sticky} offsetTop={72} offsetBottom={10}>
+            <Sticky>
               <BorisSidebar
                 isTester={isTester}
                 stats={stats}
@@ -64,7 +64,7 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLo
                 isUser={isUser}
                 isLoading={isLoadingStats}
               />
-            </StickyBox>
+            </Sticky>
           </Group>
         </div>
       </div>
