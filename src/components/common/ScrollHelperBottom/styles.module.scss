@@ -1,0 +1,26 @@
+@import "src/styles/variables";
+
+.helper {
+  position: fixed;
+  bottom: 0;
+  background: radial-gradient($red, transparent) 50% 24px no-repeat;
+  background-size: 100% 48px;
+  display: none;
+  width: calc(100% - 20px);
+  z-index: 4;
+  text-align: center;
+  max-width: 500px;
+  height: 64px;
+  align-items: flex-end;
+  justify-content: center;
+  padding: $gap;
+  text-transform: uppercase;
+  font: $font_16_medium;
+  border-radius: $radius $radius 0 0;
+  user-select: none;
+  cursor: pointer;
+
+  &.visible {
+    display: flex;
+  }
+}

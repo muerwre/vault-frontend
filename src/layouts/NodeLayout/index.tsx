@@ -17,6 +17,8 @@ import { useNodeContext } from '~/utils/context/NodeContextProvider';
 import { useNodePermissions } from '~/hooks/node/useNodePermissions';
 import { useNodeActions } from '~/hooks/node/useNodeActions';
 import { NodeTitle } from '~/components/node/NodeTitle';
+import { ScrollHelperBottom } from '~/components/common/ScrollHelperBottom';
+import { Superpower } from '~/components/boris/Superpower';
 
 type IProps = {};
 
@@ -65,7 +67,9 @@ const NodeLayout: FC<IProps> = () => {
 
       <SidebarRouter prefix="/post:id" />
 
-      <Route path={URLS.NODE_EDIT_URL(':id')} component={EditorEditDialog} />
+      <Superpower>
+        <ScrollHelperBottom />
+      </Superpower>
     </div>
   );
 };

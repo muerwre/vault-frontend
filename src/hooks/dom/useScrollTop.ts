@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 export const useScrollTop = () => {
-  const [top, setTop] = useState(0);
+  const [top, setTop] = useState(typeof window !== 'undefined' ? window.scrollY : 0);
 
   useEffect(() => {
     const onScroll = () => {
