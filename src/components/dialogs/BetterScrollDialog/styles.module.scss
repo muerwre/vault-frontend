@@ -22,7 +22,6 @@
   flex-direction: column;
   min-width: $cell;
   max-width: 400px;
-  max-height: 100%;
   max-height: calc(100vh - 75px);
   width: 100%;
   position: relative;
@@ -43,7 +42,6 @@
 .footer {
   @include outer_shadow();
 
-  // padding: 10px;
   background: darken($content_bg, 2%);
 }
 
@@ -66,13 +64,15 @@
 }
 
 .close {
-  background: darken($content_bg, 2%);
-  width: 48px;
-  height: 48px;
+  @include outer_shadow;
+
+  background: lighten($content_bg, 4%);
+  width: 36px;
+  height: 36px;
   position: absolute;
-  top: -58px;
-  right: 50%;
-  transform: translate(50%, 0);
+  top: -14px;
+  right: 4px;
+  transform: translate(50%, 0) scale(1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,15 +80,21 @@
   cursor: pointer;
   transition: transform 0.25s, background-color 0.25s;
   animation: appear 0.5s forwards;
+  z-index: 10;
+
+  @include tablet {
+    top: -16px;
+    right: 16px;
+  }
 
   &:hover {
     background-color: $red;
-    transform: translate(50%, -5px);
+    transform: translate(50%, 0) scale(1.25);
   }
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 }
 
