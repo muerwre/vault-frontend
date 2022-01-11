@@ -21,35 +21,10 @@
     height: 100%;
     opacity: 0;
   }
-
-  &:hover {
-    svg {
-      fill: $red;
-    }
-  }
 }
 
 .can_edit {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  touch-action: none;
-  // background: red;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: $gap / 2;
-  box-sizing: border-box;
-  background: linear-gradient(330deg, $content_bg, transparentize($content_bg, 1));
-  border-radius: $radius;
-
-  svg {
-    width: 32px;
-    height: 32px;
-    fill: white;
-    transition: fill 0.25s;
-  }
+  right: -4px;
+  bottom: -4px;
 }

@@ -4,6 +4,7 @@ import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import { Icon } from '~/components/input/Icon';
 import { IFile } from '~/types';
+import { Button } from '~/components/input/Button';
 
 export interface ProfileAvatarProps {
   canEdit: boolean;
@@ -33,11 +34,7 @@ const ProfileAvatar: FC<ProfileAvatarProps> = ({ photo, onChangePhoto, canEdit }
       }}
     >
       {canEdit && <input type="file" onInput={onInputChange} />}
-      {canEdit && (
-        <div className={styles.can_edit}>
-          <Icon icon="photo_add" />
-        </div>
-      )}
+      {canEdit && <Button iconLeft="photo_add" round iconOnly className={styles.can_edit} />}
     </div>
   );
 };
