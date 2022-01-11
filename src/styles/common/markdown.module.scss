@@ -53,43 +53,13 @@ $margin: 1em;
     margin-bottom: $margin;
   }
 
-  p {
-    margin-bottom: $margin;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
   h5, h4, h3, h2, h1 {
-    color: white;
-    font-weight: 800;
     line-height: 1.2em;
     margin: $margin * 1.5 0 $margin / 2;
 
     &:first-child {
       margin-top: $margin / 4;
     }
-  }
-
-  h1 {
-    font-size: 2em;
-  }
-
-  h2 {
-    font-size: 1.8em;
-  }
-
-  h3 {
-    font-size: 1.6em;
-  }
-
-  h4 {
-    font-size: 1.4em;
-  }
-
-  h5 {
-    font-size: 1.2em;
   }
 
   ul {

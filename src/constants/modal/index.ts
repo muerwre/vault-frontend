@@ -9,6 +9,7 @@ import { PhotoSwipe } from '~/containers/dialogs/PhotoSwipe';
 import { EditorCreateDialog } from '~/containers/dialogs/EditorCreateDialog';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 import { TagSidebar } from '~/containers/sidebars/TagSidebar';
+import { ProfileSidebar } from '~/containers/sidebars/ProfileSidebar';
 
 export enum Dialog {
   Login = 'Login',
@@ -22,6 +23,7 @@ export enum Dialog {
   CreateNode = 'CreateNode',
   EditNode = 'EditNode',
   TagSidebar = 'TagNodes',
+  ProfileSidebar = 'ProfileSidebar',
 }
 
 export const DIALOG_CONTENT = {
@@ -36,4 +38,5 @@ export const DIALOG_CONTENT = {
   [Dialog.CreateNode]: EditorCreateDialog,
   [Dialog.EditNode]: EditorEditDialog,
   [Dialog.TagSidebar]: TagSidebar,
+  [Dialog.ProfileSidebar]: ProfileSidebar,
 } as const;

@@ -25,6 +25,8 @@
 
   :global(.swiper-button-next),
   :global(.swiper-button-prev) {
+    @include outer_shadow;
+
     color: white;
     font-size: 10px;
     width: 40px;

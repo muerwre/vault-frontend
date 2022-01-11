@@ -27,7 +27,9 @@ const ProfileInfo: FC<IProps> = ({ isOwn }) => {
   return (
     <div>
       <Group className={styles.wrap} horizontal>
-        <ProfileAvatar canEdit={isOwn} onChangePhoto={updatePhoto} photo={photo} />
+        <div className={styles.avatar}>
+          <ProfileAvatar canEdit={isOwn} onChangePhoto={updatePhoto} photo={photo} />
+        </div>
 
         <div className={styles.field}>
           <div className={styles.name}>

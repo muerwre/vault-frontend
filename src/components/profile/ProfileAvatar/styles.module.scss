@@ -8,10 +8,8 @@
   height: 100px;
   background: $content_bg 50% 50% no-repeat;
   background-size: cover;
-  position: absolute;
-  bottom: 0;
-  left: $gap;
   cursor: pointer;
+  position: relative;
 
   input {
     position: absolute;

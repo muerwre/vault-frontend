@@ -1,0 +1,22 @@
+@import "src/styles/variables";
+
+.wrap {
+  @include sidebar_content(400px);
+}
+
+.content {
+  border-radius: $radius;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  padding: $gap;
+}
+
+.text {
+  margin-top: $gap * 2;
+}
