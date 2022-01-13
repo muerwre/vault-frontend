@@ -19,6 +19,7 @@ import {
   formatTextTodos,
 } from '~/utils/formatText';
 import { splitTextByYoutube, splitTextOmitEmpty } from '~/utils/splitText';
+import { CONFIG } from '~/utils/config';
 
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
   const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
@@ -67,13 +68,10 @@ export const getURLFromString = (
   size?: typeof PRESETS[keyof typeof PRESETS]
 ): string => {
   if (size) {
-    return (url || '').replace(
-      'REMOTE_CURRENT://',
-      `${process.env.REACT_APP_REMOTE_CURRENT}cache/${size}/`
-    );
+    return (url || '').replace('REMOTE_CURRENT://', `${CONFIG.REMOTE_CURRENT}cache/${size}/`);
   }
 
-  return (url || '').replace('REMOTE_CURRENT://', process.env.REACT_APP_REMOTE_CURRENT);
+  return (url || '').replace('REMOTE_CURRENT://', CONFIG.REMOTE_CURRENT);
 };
 
 export const getURL = (

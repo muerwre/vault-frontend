@@ -1,12 +1,12 @@
 import { IComment, INode, ITag } from '~/types';
 import { OAuthProvider } from '~/types/auth';
+import { CONFIG } from '~/utils/config';
 
 export const API = {
-  BASE: process.env.REACT_APP_API_HOST,
+  BASE: CONFIG.API_HOST,
   USER: {
     LOGIN: '/user/login',
-    OAUTH_WINDOW: (provider: OAuthProvider) =>
-      `${process.env.REACT_APP_API_HOST}oauth/${provider}/redirect`,
+    OAUTH_WINDOW: (provider: OAuthProvider) => `${CONFIG.API_HOST}oauth/${provider}/redirect`,
     ME: '/user/',
     PROFILE: (username: string) => `/user/user/${username}/profile`,
     MESSAGES: (username: string) => `/user/user/${username}/messages`,
