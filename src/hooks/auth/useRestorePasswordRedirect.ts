@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { useHistory } from 'react-router';
 import { useModal } from '~/hooks/modal/useModal';
 import { Dialog } from '~/constants/modal';
+import { useNavigation } from '~/hooks/navigation/useNavigation';
 
 /** redirects to the password redirect modal */
 export const useRestorePasswordRedirect = () => {
-  const history = useHistory();
+  const { push } = useNavigation();
   const { showModal } = useModal();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export const useRestorePasswordRedirect = () => {
       return;
     }
 
-    history.push('/');
+    push('/');
     showModal(Dialog.RestorePassword, { code: match[1] });
-  }, [showModal, history]);
+  }, [showModal, push]);
 };

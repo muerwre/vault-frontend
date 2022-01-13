@@ -5,9 +5,9 @@ import { INode } from '~/types';
 import { PRESETS, URLS } from '~/constants/urls';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { getURL, getURLFromString } from '~/utils/dom';
-import { Avatar } from '~/components/common/Avatar';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { Square } from '~/components/common/Square';
+import { useNavigation } from '~/hooks/navigation/useNavigation';
 
 type IProps = RouteComponentProps & {
   item: Partial<INode>;
@@ -29,11 +29,12 @@ const getTitleLetters = (title?: string): string => {
     : words[0].substr(0, 2).toUpperCase();
 };
 
-const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
+const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item }) => {
+  const { push } = useNavigation();
   const [is_loaded, setIsLoaded] = useState(false);
   const [width, setWidth] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
-  const onClick = useCallback(() => history.push(URLS.NODE_URL(item.id)), [item, history]);
+  const onClick = useCallback(() => push(URLS.NODE_URL(item.id)), [item, push]);
 
   const thumb = useMemo(
     () => (item.thumbnail ? getURL({ url: item.thumbnail }, PRESETS.avatar) : ''),

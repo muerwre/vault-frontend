@@ -10,6 +10,7 @@ import { Grid } from '~/components/containers/Grid';
 import { useHistory } from 'react-router';
 import { URLS } from '~/constants/urls';
 import { Placeholder } from '~/components/placeholders/Placeholder';
+import { useNavigation } from '~/hooks/navigation/useNavigation';
 
 type Props = {
   node: INode;
@@ -19,8 +20,8 @@ type Props = {
 };
 
 const LabBottomPanel: FC<Props> = ({ node, hasNewComments, commentCount, isLoading }) => {
-  const history = useHistory();
-  const onClick = useCallback(() => history.push(URLS.NODE_URL(node.id)), [history, node.id]);
+  const { push } = useNavigation();
+  const onClick = useCallback(() => push(URLS.NODE_URL(node.id)), [push, node.id]);
 
   return (
     <Group horizontal className={styles.wrap} onClick={onClick}>
