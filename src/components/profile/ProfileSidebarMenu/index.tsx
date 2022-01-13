@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
 import { Icon } from '~/components/input/Icon';
-import { Link } from 'react-router-dom';
+import { Anchor } from '~/components/common/Anchor';
 
 interface IProps {
   path: string;
@@ -12,10 +12,10 @@ const ProfileSidebarMenu: FC<IProps> = ({ path }) => {
 
   return (
     <div className={styles.wrap}>
-      <Link className={styles.row} to={`${cleaned}/settings`}>
+      <Anchor className={styles.row} href={`${cleaned}/settings`}>
         <Icon icon="settings" />
         <span>Настройки</span>
-      </Link>
+      </Anchor>
 
       <div className={styles.row}>
         <Icon icon="messages" />

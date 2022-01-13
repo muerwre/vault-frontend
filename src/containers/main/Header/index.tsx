@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { Logo } from '~/components/main/Logo';
 
 import { Filler } from '~/components/containers/Filler';
@@ -19,6 +18,7 @@ import { useModal } from '~/hooks/modal/useModal';
 import { useScrollTop } from '~/hooks/dom/useScrollTop';
 import { useFlow } from '~/hooks/flow/useFlow';
 import { useUpdates } from '~/hooks/updates/useUpdates';
+import { Anchor } from '~/components/common/Anchor';
 
 type HeaderProps = {};
 
@@ -62,32 +62,32 @@ const Header: FC<HeaderProps> = observer(() => {
 
         <div className={styles.plugs}>
           <Authorized>
-            <Link
+            <Anchor
               className={classNames(styles.item, {
                 [styles.has_dot]: hasFlowUpdates,
               })}
-              to={URLS.BASE}
+              href={URLS.BASE}
             >
               ФЛОУ
-            </Link>
+            </Anchor>
 
-            <Link
+            <Anchor
               className={classNames(styles.item, styles.lab, {
                 [styles.has_dot]: hasLabUpdates,
               })}
-              to={URLS.LAB}
+              href={URLS.LAB}
             >
               ЛАБ
-            </Link>
+            </Anchor>
 
-            <Link
+            <Anchor
               className={classNames(styles.item, styles.boris, {
                 [styles.has_dot]: hasBorisUpdates,
               })}
-              to={URLS.BORIS}
+              href={URLS.BORIS}
             >
               БОРИС
-            </Link>
+            </Anchor>
           </Authorized>
         </div>
 

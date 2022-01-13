@@ -13,7 +13,7 @@ export class AuthStore {
     makeAutoObservable(this);
 
     void makePersistable(this, {
-      name: `vault48_auth_${CONFIG.API_HOST}`,
+      name: `vault48_auth_${CONFIG.apiHost}`,
       properties: ['token', 'user', 'isTesterInternal'],
       storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     });

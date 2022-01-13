@@ -15,10 +15,13 @@ import { AudioPlayerProvider } from '~/utils/providers/AudioPlayerProvider';
 import { MetadataProvider } from '~/utils/providers/MetadataProvider';
 import { AuthProvider } from '~/utils/providers/AuthProvider';
 import { MainLayout } from '~/containers/main/MainLayout';
+import { useGlobalLoader } from '~/hooks/dom/useGlobalLoader';
 
 const mobxStore = getMOBXStore();
 
 export default function MyApp({ Component, pageProps }) {
+  useGlobalLoader();
+
   return (
     <StoreContextProvider store={mobxStore}>
       <SWRConfigProvider>

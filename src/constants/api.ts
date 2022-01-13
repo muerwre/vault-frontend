@@ -3,10 +3,10 @@ import { OAuthProvider } from '~/types/auth';
 import { CONFIG } from '~/utils/config';
 
 export const API = {
-  BASE: CONFIG.API_HOST,
+  BASE: CONFIG.apiHost,
   USER: {
     LOGIN: '/user/login',
-    OAUTH_WINDOW: (provider: OAuthProvider) => `${CONFIG.API_HOST}oauth/${provider}/redirect`,
+    OAUTH_WINDOW: (provider: OAuthProvider) => `${CONFIG.apiHost}oauth/${provider}/redirect`,
     ME: '/user/',
     PROFILE: (username: string) => `/user/user/${username}/profile`,
     MESSAGES: (username: string) => `/user/user/${username}/messages`,

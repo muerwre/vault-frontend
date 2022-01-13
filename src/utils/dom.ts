@@ -68,10 +68,10 @@ export const getURLFromString = (
   size?: typeof PRESETS[keyof typeof PRESETS]
 ): string => {
   if (size) {
-    return (url || '').replace('REMOTE_CURRENT://', `${CONFIG.REMOTE_CURRENT}cache/${size}/`);
+    return (url || '').replace('REMOTE_CURRENT://', `${CONFIG.remoteCurrent}cache/${size}/`);
   }
 
-  return (url || '').replace('REMOTE_CURRENT://', CONFIG.REMOTE_CURRENT);
+  return (url || '').replace('REMOTE_CURRENT://', CONFIG.remoteCurrent);
 };
 
 export const getURL = (
