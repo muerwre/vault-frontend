@@ -8,7 +8,7 @@ interface IProps {
   isLab?: boolean;
 }
 
-const SidebarRouter: FC<IProps> = ({ prefix = '', isLab }) => {
+const SidebarRouter: FC<IProps> = ({ isLab }) => {
   if (typeof document === 'undefined') {
     return null;
   }
