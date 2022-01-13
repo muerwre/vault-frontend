@@ -1,4 +1,12 @@
-import React, { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
 import { path } from 'ramda';
@@ -33,9 +41,8 @@ const PlayerContext = createContext<AudioPlayerProps>({
   toPercent: () => {},
 });
 
-const audio = new Audio();
-
 export const AudioPlayerProvider: FC = ({ children }) => {
+  const audio = useRef(new Audio()).current;
   const [status, setStatus] = useState(PlayerState.UNSET);
   const [file, setFile] = useState<IFile | undefined>();
   const [progress, setProgress] = useState<PlayerProgress>({ progress: 0, current: 0, total: 0 });
@@ -48,17 +55,20 @@ export const AudioPlayerProvider: FC = ({ children }) => {
     audio.dispatchEvent(new CustomEvent('stop'));
     setFile(undefined);
     setStatus(PlayerState.UNSET);
-  }, [setFile]);
+  }, [audio, setFile]);
 
-  const toTime = useCallback((time: number) => {
-    audio.currentTime = time;
-  }, []);
+  const toTime = useCallback(
+    (time: number) => {
+      audio.currentTime = time;
+    },
+    [audio]
+  );
 
   const toPercent = useCallback(
     (percent: number) => {
       audio.currentTime = (progress.total * percent) / 100;
     },
-    [progress]
+    [progress, audio]
   );
 
   /** handles progress update */
@@ -90,12 +100,12 @@ export const AudioPlayerProvider: FC = ({ children }) => {
       audio.removeEventListener('pause', onPause);
       audio.removeEventListener('playing', onPlay);
     };
-  }, []);
+  }, [audio]);
 
   /** update audio src */
   useEffect(() => {
     audio.src = file ? getURL(file) : '';
-  }, [file]);
+  }, [file, audio]);
 
   const metadata: IFile['metadata'] = path(['metadata'], file);
   const title =
