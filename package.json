@@ -85,6 +85,7 @@
     "craco-alias": "^2.3.1",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.6",
+    "next-transpile-modules": "^9.0.0",
     "prettier": "^1.18.2"
   },
   "lint-staged": {

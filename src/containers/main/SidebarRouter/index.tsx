@@ -9,6 +9,10 @@ interface IProps {
 }
 
 const SidebarRouter: FC<IProps> = ({ prefix = '', isLab }) => {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
   return createPortal(
     <Authorized>
       <SubmitBar isLab={isLab} />
