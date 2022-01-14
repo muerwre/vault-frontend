@@ -1,0 +1,30 @@
+@import "src/styles/variables";
+
+.stack {
+  background: transparentize($content_bg, 0.1);
+  display: flex;
+  flex-direction: row-reverse;
+  width: auto;
+  border-radius: $radius 0 0 $radius;
+}
+
+.card {
+  @include sidebar_content(400px);
+
+  box-shadow: transparentize(white, 0.9) -1px 0;
+  max-width: 400px;
+  width: 100vw;
+}
+
+.content {
+  border-radius: $radius;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  padding: $gap;
+}
