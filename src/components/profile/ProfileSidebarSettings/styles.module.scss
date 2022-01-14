@@ -1,7 +1,6 @@
 @import "src/styles/variables";
 
 .wrap {
-  @include sidebar_content(600px);
   display: flex;
   align-items: center;
   justify-content: center;

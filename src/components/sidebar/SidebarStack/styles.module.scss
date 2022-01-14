@@ -9,11 +9,10 @@
 }
 
 .card {
-  @include sidebar_content(400px);
-
   box-shadow: transparentize(white, 0.9) -1px 0;
-  max-width: 400px;
-  width: 100vw;
+  border-radius: $radius 0 0 $radius;
+  display: flex;
+  flex-direction: column;
 }
 
 .content {

@@ -1,0 +1,17 @@
+@import "src/styles/variables";
+
+.card {
+  width: 100vw;
+  max-width: 400px;
+  flex-basis: 400px;
+  flex: 1;
+}
+
+.head {
+  @include row_shadow;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $gap $gap $gap $gap * 2;
+}
