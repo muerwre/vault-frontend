@@ -23,7 +23,7 @@ const SidebarStackCard: FC<SidebarStackCardProps> = ({ children, title, width, h
         </div>
       )}
 
-      <Filler>{children}</Filler>
+      <div className={styles.content}>{children}</div>
     </div>
   );
 };

@@ -11,6 +11,7 @@ const ProfileSidebarSettings: FC<IProps> = () => (
     <div className={styles.scroller}>
       <ProfileSettings />
     </div>
+
     <div className={styles.buttons}>
       <Filler />
       <Button color="outline">Отмена</Button>
