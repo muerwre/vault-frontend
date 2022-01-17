@@ -3,7 +3,7 @@ import { FlowStore } from '~/store/flow/FlowStore';
 import { ModalStore } from '~/store/modal/ModalStore';
 import { LabStore } from '~/store/lab/LabStore';
 import { AuthStore } from '~/store/auth/AuthStore';
-import { useStaticRendering } from 'mobx-react-lite';
+import { enableStaticRendering, useStaticRendering } from 'mobx-react-lite';
 
 export class Store {
   flow = new FlowStore();
@@ -24,5 +24,4 @@ const defaultStore = new Store();
 
 export const getMOBXStore = () => defaultStore;
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
-useStaticRendering(typeof window === 'undefined');
+enableStaticRendering(typeof window === 'undefined');

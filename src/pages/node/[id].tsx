@@ -13,14 +13,15 @@ import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { observer } from 'mobx-react-lite';
 import { useNodePageParams } from '~/hooks/node/useNodePageParams';
-import { GetServerSidePropsContext } from 'next';
+import { InferGetServerSidePropsType } from 'next';
 import { apiGetNode } from '~/api/node';
-import { ApiGetNodeResponse } from '~/types/node';
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<{ id: string }, ApiGetNodeResponse>
-) {
-  const id = parseInt(context.query.id as string, 10);
+export const getServerSideProps = async context => {
+  if (!context.params?.id) {
+    return { props: {} };
+  }
+
+  const id = parseInt(context.params.id, 10);
 
   if (!id) {
     return { props: {} };
@@ -36,11 +37,10 @@ export async function getServerSideProps(
       },
     },
   };
-}
-
-type Props = RouteComponentProps<{ id: string }> & {
-  fallbackData?: ApiGetNodeResponse;
 };
+
+type Props = RouteComponentProps<{ id: string }> &
+  InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const NodePage: FC<Props> = observer(props => {
   const id = useNodePageParams();

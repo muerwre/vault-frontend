@@ -30,7 +30,7 @@ export type PostCellViewResult = unknown; // TODO: update it with actual type
 export type ApiGetNodeRequest = {
   id: string | number;
 };
-export type ApiGetNodeResponse = { node: INode; last_seen?: string };
+export type ApiGetNodeResponse = { node: INode; last_seen?: string | null };
 
 export type ApiGetNodeRelatedRequest = {
   id: INode['id'];
