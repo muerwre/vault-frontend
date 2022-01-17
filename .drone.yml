@@ -91,4 +91,5 @@ steps:
         path: /tmp/cache
 volumes:
   - name: cache
-    temp: {}
+    host:
+      path: /tmp/drone-cache
