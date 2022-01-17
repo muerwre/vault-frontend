@@ -13,12 +13,38 @@ import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { observer } from 'mobx-react-lite';
 import { useNodePageParams } from '~/hooks/node/useNodePageParams';
+import { GetServerSidePropsContext } from 'next';
+import { apiGetNode } from '~/api/node';
+import { ApiGetNodeResponse } from '~/types/node';
 
-type Props = RouteComponentProps<{ id: string }> & {};
+export async function getServerSideProps(
+  context: GetServerSidePropsContext<{ id: string }, ApiGetNodeResponse>
+) {
+  const id = parseInt(context.query.id as string, 10);
 
-const NodePage: FC<Props> = observer(() => {
+  if (!id) {
+    return { props: {} };
+  }
+
+  const fallbackData = await apiGetNode({ id });
+
+  return {
+    props: {
+      fallbackData: {
+        ...fallbackData,
+        last_seen: fallbackData.last_seen ?? null,
+      },
+    },
+  };
+}
+
+type Props = RouteComponentProps<{ id: string }> & {
+  fallbackData?: ApiGetNodeResponse;
+};
+
+const NodePage: FC<Props> = observer(props => {
   const id = useNodePageParams();
-  const { node, isLoading, update, lastSeen } = useLoadNode(parseInt(id, 10));
+  const { node, isLoading, update, lastSeen } = useLoadNode(parseInt(id, 10), props.fallbackData);
 
   const onShowImageModal = useImageModal();
   const {

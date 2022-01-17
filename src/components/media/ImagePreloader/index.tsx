@@ -21,7 +21,7 @@ const DEFAULT_WIDTH = 1920;
 const DEFAULT_HEIGHT = 1020;
 
 const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className }) => {
-  const [maxHeight, setMaxHeight] = useState(window.innerHeight - 140);
+  const [maxHeight, setMaxHeight] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 

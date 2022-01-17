@@ -19,7 +19,7 @@ steps:
       cache_key: '{{ .Repo.Name }}_{{ checksum "package.json" }}_{{ checksum "yarn.lock" }}_{{ arch }}_{{ os }}'
       archive_format: "gzip"
       mount:
-        - '/app/node_modules'
+        - '/app'
     volumes:
       - name: cache
         path: /tmp/cache
@@ -85,7 +85,7 @@ steps:
       cache_key: '{{ .Repo.Name }}_{{ checksum "package.json" }}_{{ checksum "yarn.lock" }}_{{ arch }}_{{ os }}'
       archive_format: "gzip"
       mount:
-        - '/app/node_modules'
+        - '/app'
     volumes:
       - name: cache
         path: /tmp/cache

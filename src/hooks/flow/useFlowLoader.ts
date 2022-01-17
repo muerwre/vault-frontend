@@ -81,7 +81,5 @@ export const useFlowLoader = () => {
     }
   }, [flow]);
 
-  console.log(toJS(flow.nodes));
-
   return { getInitialNodes, isSyncing, loadMore };
 };
