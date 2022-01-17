@@ -90,4 +90,5 @@ steps:
       - name: cache
         path: /tmp/cache
 volumes:
-  cache: /tmp/cache
+  - name: cache
+    temp: {}
