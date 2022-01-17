@@ -75,6 +75,9 @@ steps:
         from_secret: docker_repo
   - name: rebuild-cache-with-filesystem
     image: meltwater/drone-cache:dev
+    when:
+      branch:
+        - develop
     pull: true
     settings:
       backend: "filesystem"
