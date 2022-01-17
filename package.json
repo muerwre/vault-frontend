@@ -54,7 +54,9 @@
     "build": "craco build",
     "ts-check": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "next:build": "next build",
+    "next:start": "next start -p 80"
   },
   "eslintConfig": {
     "extends": [

@@ -38,13 +38,13 @@ steps:
       branch:
         - develop
     environment:
-      REACT_APP_API_HOST: https://pig.staging.vault48.org/
-      REACT_APP_REMOTE_CURRENT: https://pig.staging.vault48.org/static/
+      NEXT_PUBLIC_API_HOST: https://pig.staging.vault48.org/
+      NEXT_PUBLIC_REMOTE_CURRENT: https://pig.staging.vault48.org/static/
     settings:
-      dockerfile: docker/www/Dockerfile
+      dockerfile: docker/nextjs/Dockerfile
       build_args_from_env:
-        - REACT_APP_API_HOST
-        - REACT_APP_REMOTE_CURRENT
+        - NEXT_PUBLIC_API_HOST
+        - NEXT_PUBLIC_REMOTE_CURRENT
       tag:
         - ${DRONE_BRANCH}
       custom_labels:
