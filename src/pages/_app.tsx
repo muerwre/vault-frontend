@@ -20,8 +20,6 @@ import { useGlobalLoader } from '~/hooks/dom/useGlobalLoader';
 const mobxStore = getMOBXStore();
 
 export default function MyApp({ Component, pageProps }) {
-  useGlobalLoader();
-
   return (
     <StoreContextProvider store={mobxStore}>
       <SWRConfigProvider>

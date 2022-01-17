@@ -8,7 +8,9 @@ interface AnchorProps extends LinkProps {}
 
 const Anchor: VFC<AnchorProps> = ({ ref, href, ...rest }) =>
   CONFIG.isNextEnvironment ? (
-    <NextLink {...rest} href={href ?? ''} />
+    <NextLink href={href ?? ''} passHref>
+      <a {...rest} />
+    </NextLink>
   ) : (
     <Link {...rest} to={href ?? ''} />
   );

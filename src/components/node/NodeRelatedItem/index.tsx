@@ -3,13 +3,13 @@ import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { INode } from '~/types';
 import { PRESETS, URLS } from '~/constants/urls';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import { getURL, getURLFromString } from '~/utils/dom';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { Square } from '~/components/common/Square';
-import { useNavigation } from '~/hooks/navigation/useNavigation';
+import { useGotoNode } from '~/hooks/node/useGotoNode';
 
-type IProps = RouteComponentProps & {
+type IProps = {
   item: Partial<INode>;
 };
 
@@ -29,12 +29,11 @@ const getTitleLetters = (title?: string): string => {
     : words[0].substr(0, 2).toUpperCase();
 };
 
-const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item }) => {
-  const { push } = useNavigation();
+const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
+  const onClick = useGotoNode(item.id);
   const [is_loaded, setIsLoaded] = useState(false);
   const [width, setWidth] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
-  const onClick = useCallback(() => push(URLS.NODE_URL(item.id)), [item, push]);
 
   const thumb = useMemo(
     () => (item.thumbnail ? getURL({ url: item.thumbnail }, PRESETS.avatar) : ''),
@@ -94,7 +93,5 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item }) => {
     </div>
   );
 });
-
-const NodeRelatedItem = withRouter(NodeRelatedItemUnconnected);
 
 export { NodeRelatedItem };

@@ -3,10 +3,13 @@ import { FlowLayout } from '~/layouts/FlowLayout';
 import { useFlow } from '~/hooks/flow/useFlow';
 import { FlowContextProvider } from '~/utils/context/FlowContextProvider';
 import { observer } from 'mobx-react-lite';
+import { useGlobalLoader } from '~/hooks/dom/useGlobalLoader';
 
 interface Props {}
 
 const FlowPage: FC<Props> = observer(() => {
+  useGlobalLoader();
+
   const {
     updates,
     nodes,

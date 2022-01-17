@@ -3,5 +3,5 @@ export const CONFIG = {
   remoteCurrent:
     process.env.REACT_APP_REMOTE_CURRENT || process.env.NEXT_PUBLIC_REMOTE_CURRENT || '',
   // transitional prop, marks migration to nextjs
-  isNextEnvironment: false,
+  isNextEnvironment: !!process.env.NEXT_PUBLIC_REMOTE_CURRENT || typeof window === 'undefined',
 };
