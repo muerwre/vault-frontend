@@ -20,6 +20,9 @@ steps:
       archive_format: "gzip"
       mount:
         - '/app/node_modules'
+    volumes:
+      - name: cache
+        path: /tmp/cache
   - name: build-master
     image: plugins/docker
     when:
@@ -72,4 +75,4 @@ steps:
         from_secret: docker_repo
 volumes:
   - name: cache
-    path: /tmp/cache
+    temp: {}
