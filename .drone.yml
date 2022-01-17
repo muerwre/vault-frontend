@@ -7,6 +7,22 @@ platform:
   arch: amd64
 
 steps:
+  - name: restore-cache-with-filesystem
+    image: meltwater/drone-cache:dev
+    when:
+      branch:
+        - develop
+    pull: true
+    settings:
+      backend: "filesystem"
+      restore: true
+      cache_key: '{{ .Repo.Name }}_{{ checksum "package.json" }}_{{ checksum "yarn.lock" }}_{{ arch }}_{{ os }}'
+      archive_format: "gzip"
+      mount:
+        - '/app/node_modules'
+    volumes:
+      - name: cache
+        path: /tmp/cache
   - name: build-master
     image: plugins/docker
     when:
