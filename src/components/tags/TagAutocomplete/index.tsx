@@ -35,6 +35,7 @@ const TagAutocomplete: VFC<TagAutocompleteProps> = ({
 
   const pop = usePopper(wrapper?.current?.parentElement, wrapper.current, {
     placement: 'bottom-end',
+    strategy: 'fixed',
     modifiers: [
       {
         name: 'offset',

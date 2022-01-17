@@ -25,6 +25,8 @@
 
   :global(.swiper-button-next),
   :global(.swiper-button-prev) {
+    @include outer_shadow;
+
     color: white;
     font-size: 10px;
     width: 40px;
@@ -79,7 +81,7 @@
 
 }
 
-.slide {
+.slide.slide {
   text-align: center;
   text-transform: uppercase;
   font: $font_32_bold;
@@ -90,7 +92,8 @@
   width: auto;
   max-width: 100vw;
   opacity: 1;
-  transform: translate(0, 10px);
+  //transform: translate(0, 10px);
+  transform: scale(0.99);
   filter: brightness(50%) saturate(0.5);
   transition: opacity 0.5s, filter 0.5s, transform 0.5s;
   padding-bottom: $gap * 1.5;
@@ -99,7 +102,8 @@
   &:global(.swiper-slide-active) {
     opacity: 1;
     filter: brightness(100%);
-    transform: translate(0, 0);
+    //transform: translate(0, 0);
+    transform: scale(1);
   }
 
   @include tablet {

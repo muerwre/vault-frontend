@@ -1,0 +1,21 @@
+@import "src/styles/variables";
+
+.svg {
+  width: 100%;
+}
+
+.wrapper {
+  width: 100%;
+  border-radius: $radius;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

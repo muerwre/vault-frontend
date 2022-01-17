@@ -10,6 +10,7 @@ import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';
 import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
 import { MenuDots } from '~/components/common/MenuDots';
 import { FlowCellImage } from '~/components/flow/FlowCellImage';
+import { Anchor } from '~/components/common/Anchor';
 
 interface Props {
   id: INode['id'];
@@ -71,7 +72,7 @@ const FlowCell: FC<Props> = ({
         </div>
       )}
 
-      <NavLink className={styles.link} to={to}>
+      <Anchor className={styles.link} href={to}>
         {withText && (
           <FlowCellText className={styles.text} heading={<h4 className={styles.title}>{title}</h4>}>
             {text!}
@@ -94,7 +95,7 @@ const FlowCell: FC<Props> = ({
             <h4 className={styles.title}>{title}</h4>
           </div>
         )}
-      </NavLink>
+      </Anchor>
     </div>
   );
 };

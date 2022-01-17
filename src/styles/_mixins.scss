@@ -164,8 +164,6 @@
   flex: 0 1 $width;
   max-width: 100vw;
   position: relative;
-  background: transparentize($content_bg, 0.1);
-  box-shadow: transparentize(white, 0.95) -1px 0;
   border-radius: $radius 0 0 $radius;
 }
 

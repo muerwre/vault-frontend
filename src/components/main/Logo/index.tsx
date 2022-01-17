@@ -1,9 +1,10 @@
 import React from 'react';
 import styles from './styles.module.scss';
-import { Link } from 'react-router-dom';
+import { Anchor } from '~/components/common/Anchor';
+import { URLS } from '~/constants/urls';
 
 export const Logo = () => (
-  <Link className={styles.logo} to="/">
+  <Anchor className={styles.logo} href={URLS.BASE}>
     VAULT
-  </Link>
+  </Anchor>
 );

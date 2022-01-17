@@ -5,12 +5,10 @@ interface IProps extends DetailsHTMLAttributes<HTMLDivElement> {
   offsetTop?: number;
 }
 
-const Sticky: FC<IProps> = ({ children, offsetTop = 65 }) => {
-  return (
-    <StickyBox offsetTop={offsetTop} offsetBottom={10}>
-      {children}
-    </StickyBox>
-  );
-};
+const Sticky: FC<IProps> = ({ children, offsetTop = 65 }) => (
+  <StickyBox offsetTop={offsetTop} offsetBottom={10}>
+    {children}
+  </StickyBox>
+);
 
 export { Sticky };

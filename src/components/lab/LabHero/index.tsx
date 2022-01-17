@@ -7,6 +7,7 @@ import { INode } from '~/types';
 import { getPrettyDate } from '~/utils/dom';
 import { URLS } from '~/constants/urls';
 import { useHistory } from 'react-router-dom';
+import { useNavigation } from '~/hooks/navigation/useNavigation';
 
 interface IProps {
   node?: Partial<INode>;
@@ -14,10 +15,10 @@ interface IProps {
 }
 
 const LabHero: FC<IProps> = ({ node, isLoading }) => {
-  const history = useHistory();
+  const { push } = useNavigation();
   const onClick = useCallback(() => {
-    history.push(URLS.NODE_URL(node?.id));
-  }, [history, node]);
+    push(URLS.NODE_URL(node?.id));
+  }, [push, node]);
 
   if (!node || isLoading) {
     return (

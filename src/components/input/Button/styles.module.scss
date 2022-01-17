@@ -10,6 +10,8 @@
 }
 
 .button {
+  @include outer_shadow();
+
   position: relative;
   height: $input_height;
   border: none;
@@ -34,12 +36,7 @@
   align-items: center;
   justify-content: center;
 
-  filter: grayscale(0);
-
   transition: opacity 0.25s, filter 0.25s, box-shadow 0.25s, background-color 0.5s;
-  opacity: 0.8;
-
-  @include outer_shadow();
 
   input {
     position: absolute;

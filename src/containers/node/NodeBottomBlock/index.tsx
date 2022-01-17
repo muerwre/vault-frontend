@@ -16,6 +16,7 @@ import { NodeComments } from '~/containers/node/NodeComments';
 import { useUserContext } from '~/utils/context/UserContextProvider';
 import { useNodeRelatedContext } from '~/utils/context/NodeRelatedContextProvider';
 import { useAuthProvider } from '~/utils/providers/AuthProvider';
+import { Sticky } from '~/components/containers/Sticky';
 
 interface IProps {
   commentsOrder: 'ASC' | 'DESC';
@@ -52,8 +53,8 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
           </Group>
 
           <div className={styles.panel}>
-            <StickyBox className={styles.sticky} offsetTop={72}>
-              <div className={styles.left}>
+            <div className={styles.left}>
+              <Sticky>
                 <div className={styles.left_item}>
                   <NodeAuthorBlock user={node?.user} />
                 </div>
@@ -64,8 +65,8 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
                 <div className={styles.left_item}>
                   <NodeRelatedBlock isLoading={isLoadingRelated} node={node} related={related} />
                 </div>
-              </div>
-            </StickyBox>
+              </Sticky>
+            </div>
           </div>
         </Group>
       </Padder>

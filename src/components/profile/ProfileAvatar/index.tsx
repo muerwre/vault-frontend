@@ -2,16 +2,17 @@ import React, { ChangeEvent, FC, useCallback } from 'react';
 import styles from './styles.module.scss';
 import { getURL } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
-import { Icon } from '~/components/input/Icon';
 import { IFile } from '~/types';
+import { Button } from '~/components/input/Button';
 
 export interface ProfileAvatarProps {
+  size?: number;
   canEdit: boolean;
   photo?: IFile;
   onChangePhoto: (file: File) => void;
 }
 
-const ProfileAvatar: FC<ProfileAvatarProps> = ({ photo, onChangePhoto, canEdit }) => {
+const ProfileAvatar: FC<ProfileAvatarProps> = ({ photo, onChangePhoto, canEdit, size }) => {
   const onInputChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       if (!event.target.files?.length) {
@@ -30,14 +31,12 @@ const ProfileAvatar: FC<ProfileAvatarProps> = ({ photo, onChangePhoto, canEdit }
       className={styles.avatar}
       style={{
         backgroundImage,
+        width: size,
+        height: size,
       }}
     >
       {canEdit && <input type="file" onInput={onInputChange} />}
-      {canEdit && (
-        <div className={styles.can_edit}>
-          <Icon icon="photo_add" />
-        </div>
-      )}
+      {canEdit && <Button iconLeft="photo_add" round iconOnly className={styles.can_edit} />}
     </div>
   );
 };

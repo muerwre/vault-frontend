@@ -101,8 +101,8 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
 
   const onAutocompleteSelect = useCallback(
     (val: string) => {
-      onAppend([val]);
       setInput('');
+      onAppend([val]);
     },
     [onAppend, setInput]
   );

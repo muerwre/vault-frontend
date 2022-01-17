@@ -24,7 +24,6 @@ export const useLoginForm = (
       try {
         await fetcher(values.username, values.password);
         onSuccess();
-        showToastSuccess(getRandomPhrase('WELCOME'));
       } catch (error) {
         showErrorToast(error);
 

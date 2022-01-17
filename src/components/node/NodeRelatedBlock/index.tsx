@@ -4,7 +4,7 @@ import { NodeRelated } from '~/components/node/NodeRelated';
 import { URLS } from '~/constants/urls';
 import { INode } from '~/types';
 import { INodeRelated } from '~/types/node';
-import { Link } from 'react-router-dom';
+import { Anchor } from '~/components/common/Anchor';
 
 interface IProps {
   isLoading: boolean;
@@ -27,7 +27,9 @@ const NodeRelatedBlock: FC<IProps> = ({ isLoading, node, related }) => {
           .map(album => (
             <NodeRelated
               title={
-                <Link to={URLS.NODE_TAG_URL(node.id!, encodeURIComponent(album))}>{album}</Link>
+                <Anchor href={URLS.NODE_TAG_URL(node.id!, encodeURIComponent(album))}>
+                  {album}
+                </Anchor>
               }
               items={related.albums[album]}
               key={album}

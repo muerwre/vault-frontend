@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { createPortal } from 'react-dom';
 import { Authorized } from '~/components/containers/Authorized';
 import { SubmitBar } from '~/components/bars/SubmitBar';
 
@@ -8,13 +7,10 @@ interface IProps {
   isLab?: boolean;
 }
 
-const SidebarRouter: FC<IProps> = ({ prefix = '', isLab }) => {
-  return createPortal(
-    <Authorized>
-      <SubmitBar isLab={isLab} />
-    </Authorized>,
-    document.body
-  );
-};
+const SidebarRouter: FC<IProps> = ({ isLab }) => (
+  <Authorized>
+    <SubmitBar isLab={isLab} />
+  </Authorized>
+);
 
 export { SidebarRouter };

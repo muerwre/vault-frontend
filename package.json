@@ -40,6 +40,7 @@
     "react-scripts": "^5.0.0",
     "react-sortable-hoc": "^2.0.0",
     "react-sticky-box": "^0.9.3",
+    "react-stickynode": "^4.0.0",
     "sticky-sidebar": "^3.3.1",
     "swiper": "^6.8.4",
     "swr": "^1.0.1",
@@ -86,6 +87,7 @@
     "craco-alias": "^2.3.1",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.6",
+    "next-transpile-modules": "^9.0.0",
     "prettier": "^1.18.2"
   },
   "lint-staged": {

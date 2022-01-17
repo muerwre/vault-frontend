@@ -1,4 +1,9 @@
-import React, { forwardRef, KeyboardEventHandler, TextareaHTMLAttributes, useCallback } from 'react';
+import React, {
+  forwardRef,
+  KeyboardEventHandler,
+  TextareaHTMLAttributes,
+  useCallback,
+} from 'react';
 import { Textarea } from '~/components/input/Textarea';
 import { useCommentFormContext } from '~/hooks/comments/useCommentFormFormik';
 import { useRandomPhrase } from '~/constants/phrases';
@@ -11,8 +16,8 @@ const LocalCommentFormTextarea = forwardRef<HTMLTextAreaElement, IProps>(({ ...r
   const { values, handleChange, handleSubmit, isSubmitting } = useCommentFormContext();
 
   const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
-    ({ ctrlKey, key }) => {
-      if (ctrlKey && key === 'Enter') handleSubmit(undefined);
+    ({ ctrlKey, key, metaKey }) => {
+      if ((ctrlKey || metaKey) && key === 'Enter') handleSubmit(undefined);
     },
     [handleSubmit]
   );

@@ -36,9 +36,9 @@ const CommentAvatar: FC<Props> = ({ user, withDetails, className }) => {
             url={path(['photo', 'url'], user)}
             username={user.username}
             className={className}
-            innerRef={ref}
             onMouseOver={onMouseOver}
             onMouseOut={onMouseOut}
+            ref={ref}
           />
         )}
       </Reference>

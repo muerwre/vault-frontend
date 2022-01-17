@@ -3,12 +3,13 @@ import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { INode } from '~/types';
 import { PRESETS, URLS } from '~/constants/urls';
-import { RouteComponentProps, withRouter } from 'react-router';
-import { getURL } from '~/utils/dom';
-import { Avatar } from '~/components/common/Avatar';
+import { RouteComponentProps } from 'react-router';
+import { getURL, getURLFromString } from '~/utils/dom';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
+import { Square } from '~/components/common/Square';
+import { useGotoNode } from '~/hooks/node/useGotoNode';
 
-type IProps = RouteComponentProps & {
+type IProps = {
   item: Partial<INode>;
 };
 
@@ -28,11 +29,11 @@ const getTitleLetters = (title?: string): string => {
     : words[0].substr(0, 2).toUpperCase();
 };
 
-const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
+const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
+  const onClick = useGotoNode(item.id);
   const [is_loaded, setIsLoaded] = useState(false);
   const [width, setWidth] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
-  const onClick = useCallback(() => history.push(URLS.NODE_URL(item.id)), [item, history]);
 
   const thumb = useMemo(
     () => (item.thumbnail ? getURL({ url: item.thumbnail }, PRESETS.avatar) : ''),
@@ -68,11 +69,13 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
       onClick={onClick}
       ref={ref}
     >
-      <Avatar
-        username={item.title}
-        url={item.thumbnail}
-        className={classNames(styles.thumb, { [styles.is_loaded]: is_loaded })}
-      />
+      {item.thumbnail && (
+        <Square
+          image={getURLFromString(item.thumbnail, 'avatar')}
+          onClick={onClick}
+          className={classNames(styles.thumb, { [styles.is_loaded]: is_loaded })}
+        />
+      )}
 
       {!item.thumbnail && size === 'small' && (
         <div className={styles.letters} style={{ background }}>
@@ -90,7 +93,5 @@ const NodeRelatedItemUnconnected: FC<IProps> = memo(({ item, history }) => {
     </div>
   );
 });
-
-const NodeRelatedItem = withRouter(NodeRelatedItemUnconnected);
 
 export { NodeRelatedItem };

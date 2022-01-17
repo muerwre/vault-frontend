@@ -2,6 +2,8 @@
 
 .wrap {
   @include sidebar_content(400px);
+  width: 100vw;
+  max-width: 400px;
 }
 
 .content {
@@ -17,11 +19,12 @@
 }
 
 .head {
+  @include row_shadow;
+
   display: flex;
   align-items: center;
   justify-content: center;
   padding: $gap;
-  box-shadow: transparentize(white, 0.95) 0 1px;
 }
 
 .tag {
