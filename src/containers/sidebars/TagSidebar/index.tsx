@@ -53,7 +53,7 @@ const TagSidebar: VFC<TagSidebarProps> = ({ tag, onRequestClose }) => {
               </div>
             ) : (
               <InfiniteScroll hasMore={hasMore} loadMore={loadMore} className={styles.list}>
-                <TagSidebarList nodes={nodes} />
+                <TagSidebarList nodes={nodes} onClick={onRequestClose} />
               </InfiniteScroll>
             )}
           </div>
