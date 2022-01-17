@@ -72,4 +72,4 @@ steps:
         from_secret: docker_repo
 volumes:
   - name: cache
-    path: /tmp/drone-cache
+    path: /tmp/cache
