@@ -73,6 +73,19 @@ steps:
         from_secret: global_docker_registry
       repo:
         from_secret: docker_repo
+  - name: rebuild-cache-with-filesystem
+      image: meltwater/drone-cache:dev
+      pull: true
+      settings:
+        backend: "filesystem"
+        rebuild: true
+        cache_key: '{{ .Repo.Name }}_{{ checksum "package.json" }}_{{ checksum "yarn.lock" }}_{{ arch }}_{{ os }}'
+        archive_format: "gzip"
+        mount:
+          - '/app/node_modules'
+      volumes:
+        - name: cache
+          path: /tmp/cache
 volumes:
   - name: cache
     temp: {}
