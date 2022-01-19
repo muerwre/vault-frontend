@@ -5,6 +5,7 @@ import { InferGetServerSidePropsType } from 'next';
 import { RouteComponentProps } from 'react-router';
 
 import { apiGetNode } from '~/api/node';
+import { NodeHeadMetadata } from '~/components/node/NodeHeadMetadata';
 import { useNodeComments } from '~/hooks/comments/useNodeComments';
 import { useScrollToTop } from '~/hooks/dom/useScrollToTop';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
@@ -49,6 +50,7 @@ const NodePage: FC<Props> = observer(props => {
   const { node, isLoading, update, lastSeen } = useLoadNode(parseInt(id, 10), props.fallbackData);
 
   const onShowImageModal = useImageModal();
+
   const {
     onLoadMoreComments,
     onDelete: onDeleteComment,
@@ -57,6 +59,7 @@ const NodePage: FC<Props> = observer(props => {
     hasMore,
     isLoading: isLoadingComments,
   } = useNodeComments(parseInt(id, 10));
+
   const { onDelete: onTagDelete, onChange: onTagsChange, onClick: onTagClick } = useNodeTags(
     parseInt(id, 10)
   );
@@ -91,6 +94,7 @@ const NodePage: FC<Props> = observer(props => {
             onTagClick={onTagClick}
             onTagDelete={onTagDelete}
           >
+            <NodeHeadMetadata />
             <NodeLayout />
           </TagsContextProvider>
         </CommentContextProvider>

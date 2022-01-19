@@ -1,5 +1,7 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 
+import { getPageTitle } from '~/utils/ssr/getPageTitle';
+
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
@@ -9,7 +11,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head title="Убежище">
+        <Head title={getPageTitle()}>
           <meta charSet="utf-8" />
           <meta httpEquiv="content-language" content="ru" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />

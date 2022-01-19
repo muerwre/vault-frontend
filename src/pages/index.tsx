@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
+import { PageTitle } from '~/components/common/PageTitle';
 import { useGlobalLoader } from '~/hooks/dom/useGlobalLoader';
 import { useFlow } from '~/hooks/flow/useFlow';
 import { FlowLayout } from '~/layouts/FlowLayout';
 import { FlowContextProvider } from '~/utils/context/FlowContextProvider';
-
-
+import { getPageTitle } from '~/utils/ssr/getPageTitle';
 
 interface Props {}
 
@@ -36,6 +36,7 @@ const FlowPage: FC<Props> = observer(() => {
       isSyncing={isSyncing}
       onChangeCellView={onChangeCellView}
     >
+      <PageTitle title={getPageTitle('Флоу')} />
       <FlowLayout isFluid={isFluid} onToggleLayout={toggleLayout} />
     </FlowContextProvider>
   );
