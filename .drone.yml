@@ -31,23 +31,23 @@ steps:
     environment:
       NEXT_PUBLIC_API_HOST: https://pig.vault48.org/
       NEXT_PUBLIC_REMOTE_CURRENT: https://pig.vault48.org/static/
-      settings:
-        dockerfile: docker/nextjs/Dockerfile
-        build_args_from_env:
-          - NEXT_PUBLIC_API_HOST
-          - NEXT_PUBLIC_REMOTE_CURRENT
-        tag:
-          - ${DRONE_BRANCH}
-        custom_labels:
-          - "commit=${DRONE_COMMIT_SHA}"
-        username:
-          from_secret: global_docker_login
-        password:
-          from_secret: global_docker_password
-        registry:
-          from_secret: global_docker_registry
-        repo:
-          from_secret: docker_repo
+    settings:
+      dockerfile: docker/nextjs/Dockerfile
+      build_args_from_env:
+        - NEXT_PUBLIC_API_HOST
+        - NEXT_PUBLIC_REMOTE_CURRENT
+      tag:
+        - ${DRONE_BRANCH}
+      custom_labels:
+        - "commit=${DRONE_COMMIT_SHA}"
+      username:
+        from_secret: global_docker_login
+      password:
+        from_secret: global_docker_password
+      registry:
+        from_secret: global_docker_registry
+      repo:
+        from_secret: docker_repo
   - name: build-develop
     image: plugins/docker
     when:
