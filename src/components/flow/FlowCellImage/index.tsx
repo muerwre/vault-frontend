@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
-import { IMGProps } from '~/utils/types';
-import styles from './styles.module.scss';
+
 import classNames from 'classnames';
+
+import { IMGProps } from '~/utils/types';
+
+import styles from './styles.module.scss';
 
 interface Props extends IMGProps {
   height?: number;

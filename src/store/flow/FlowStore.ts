@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+
 import { IFlowNode } from '~/types';
 
 export class FlowStore {

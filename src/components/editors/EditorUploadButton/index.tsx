@@ -1,12 +1,14 @@
 import React, { ChangeEvent, FC, useCallback } from 'react';
-import styles from './styles.module.scss';
+
+import { Button } from '~/components/input/Button';
 import { Icon } from '~/components/input/Icon';
 import { UploadType } from '~/constants/uploads';
-import { IEditorComponentProps } from '~/types/node';
-import { getFileType } from '~/utils/uploader';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
-import { Button } from '~/components/input/Button';
+import { IEditorComponentProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
+import { getFileType } from '~/utils/uploader';
+
+import styles from './styles.module.scss';
 
 type IProps = IEditorComponentProps & {
   accept?: string;

@@ -1,6 +1,7 @@
 import React, { VFC } from 'react';
-import { Group } from '~/components/containers/Group';
+
 import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
 import { ProfileAvatar } from '~/components/profile/ProfileAvatar';
 import { usePatchUser } from '~/hooks/auth/usePatchUser';
 import { useUser } from '~/hooks/auth/useUser';

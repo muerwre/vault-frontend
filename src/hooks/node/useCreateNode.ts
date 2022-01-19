@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
-import { INode } from '~/types';
+
 import { apiPostNode } from '~/api/node';
-import { useFlowStore } from '~/store/flow/useFlowStore';
 import { useGetLabNodes } from '~/hooks/lab/useGetLabNodes';
+import { useFlowStore } from '~/store/flow/useFlowStore';
+import { INode } from '~/types';
 
 export const useCreateNode = () => {
   const flow = useFlowStore();

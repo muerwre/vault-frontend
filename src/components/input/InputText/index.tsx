@@ -1,11 +1,15 @@
 import React, { ChangeEvent, FC, useCallback, useState } from 'react';
+
 import classNames from 'classnames';
-import { IInputTextProps } from '~/types';
-import { useTranslatedError } from '~/hooks/data/useTranslatedError';
-import { InputWrapper } from '~/components/input/InputWrapper';
-import styles from './styles.module.scss';
+
 import { Icon } from '~/components/input/Icon';
+import { InputWrapper } from '~/components/input/InputWrapper';
+import { useTranslatedError } from '~/hooks/data/useTranslatedError';
 import { useFocusEvent } from '~/hooks/dom/useFocusEvent';
+import { IInputTextProps } from '~/types';
+
+import styles from './styles.module.scss';
+
 
 const InputText: FC<IInputTextProps> = ({
   className = '',

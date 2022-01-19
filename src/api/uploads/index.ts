@@ -1,8 +1,8 @@
-import { api, cleanResult } from '~/utils/api';
 
-import { API } from '~/constants/api';
 import { ApiUploadFileRequest, ApiUploadFIleResult } from '~/api/uploads/types';
+import { API } from '~/constants/api';
 import { UploadTarget, UploadType } from '~/constants/uploads';
+import { api, cleanResult } from '~/utils/api';
 
 export const apiUploadFile = ({
   file,

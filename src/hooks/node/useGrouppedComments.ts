@@ -1,5 +1,6 @@
-import { IComment } from '~/types';
 import { useMemo } from 'react';
+
+import { IComment } from '~/types';
 import { groupCommentsByUser } from '~/utils/fn';
 
 export const useGrouppedComments = (

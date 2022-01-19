@@ -1,15 +1,18 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { CellShade } from '~/components/flow/CellShade';
-import { FlowDisplay, INode } from '~/types';
-import { FlowCellText } from '~/components/flow/FlowCellText';
+
 import classNames from 'classnames';
-import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
-import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';
-import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
-import { MenuDots } from '~/components/common/MenuDots';
-import { FlowCellImage } from '~/components/flow/FlowCellImage';
+
 import { Anchor } from '~/components/common/Anchor';
+import { MenuDots } from '~/components/common/MenuDots';
+import { CellShade } from '~/components/flow/CellShade';
+import { FlowCellImage } from '~/components/flow/FlowCellImage';
+import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
+import { FlowCellText } from '~/components/flow/FlowCellText';
+import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
+import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';
+import { FlowDisplay, INode } from '~/types';
+
+import styles from './styles.module.scss';
 
 interface Props {
   id: INode['id'];

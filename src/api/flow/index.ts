@@ -1,7 +1,7 @@
-import { api, cleanResult } from '~/utils/api';
 import { API } from '~/constants/api';
-import { PostCellViewRequest, PostCellViewResult } from '~/types/node';
 import { GetSearchResultsRequest, GetSearchResultsResult } from '~/types/flow';
+import { PostCellViewRequest, PostCellViewResult } from '~/types/node';
+import { api, cleanResult } from '~/utils/api';
 
 export const postCellView = ({ id, flow }: PostCellViewRequest) =>
   api

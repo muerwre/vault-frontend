@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+
 import { SWRConfig, SWRConfiguration } from 'swr';
 
 const config: SWRConfiguration = {

@@ -1,4 +1,5 @@
 import { DetailedHTMLProps, InputHTMLAttributes, ReactElement } from 'react';
+
 import { ERRORS } from '~/constants/errors';
 import { IUser } from '~/types/auth';
 

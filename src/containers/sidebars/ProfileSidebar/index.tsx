@@ -1,10 +1,11 @@
 import React, { VFC } from 'react';
+
+import { ProfileSidebarSettings } from '~/components/profile/ProfileSidebarSettings';
+import { SidebarStack } from '~/components/sidebar/SidebarStack';
+import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
+import { ProfileSidebarMenu } from '~/containers/profile/ProfileSidebarMenu';
 import { SidebarWrapper } from '~/containers/sidebars/SidebarWrapper';
 import { DialogComponentProps } from '~/types/modal';
-import { ProfileSidebarMenu } from '~/containers/profile/ProfileSidebarMenu';
-import { SidebarStack } from '~/components/sidebar/SidebarStack';
-import { ProfileSidebarSettings } from '~/components/profile/ProfileSidebarSettings';
-import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
 
 interface ProfileSidebarProps extends DialogComponentProps {}
 

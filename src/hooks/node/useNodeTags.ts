@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
-import { ITag } from '~/types';
-import { useLoadNode } from '~/hooks/node/useLoadNode';
+
 import { apiDeleteNodeTag, apiPostNodeTags } from '~/api/node';
-import { useGetNodeRelated } from '~/hooks/node/useGetNodeRelated';
-import { useShowModal } from '~/hooks/modal/useShowModal';
 import { Dialog } from '~/constants/modal';
+import { useShowModal } from '~/hooks/modal/useShowModal';
+import { useGetNodeRelated } from '~/hooks/node/useGetNodeRelated';
+import { useLoadNode } from '~/hooks/node/useLoadNode';
+import { ITag } from '~/types';
 
 export const useNodeTags = (id: number) => {
   const showModal = useShowModal(Dialog.TagSidebar);

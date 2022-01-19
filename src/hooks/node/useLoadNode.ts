@@ -1,11 +1,13 @@
-import useSWR from 'swr';
-import { ApiGetNodeResponse } from '~/types/node';
-import { API } from '~/constants/api';
-import { useOnNodeSeen } from '~/hooks/node/useOnNodeSeen';
-import { apiGetNode } from '~/api/node';
 import { useCallback } from 'react';
-import { INode } from '~/types';
+
+import useSWR from 'swr';
+
+import { apiGetNode } from '~/api/node';
+import { API } from '~/constants/api';
 import { EMPTY_NODE } from '~/constants/node';
+import { useOnNodeSeen } from '~/hooks/node/useOnNodeSeen';
+import { INode } from '~/types';
+import { ApiGetNodeResponse } from '~/types/node';
 
 export const useLoadNode = (id: number, fallbackData?: ApiGetNodeResponse) => {
   const { data, isValidating, mutate } = useSWR<ApiGetNodeResponse>(

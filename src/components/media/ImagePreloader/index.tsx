@@ -1,14 +1,18 @@
 import React, { FC, MouseEventHandler, useCallback, useMemo, useState } from 'react';
+
 import classNames from 'classnames';
-import { getURL } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
-import styles from './styles.module.scss';
-import { IFile } from '~/types';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
-import { Icon } from '~/components/input/Icon';
-import { useResizeHandler } from '~/hooks/dom/useResizeHandler';
-import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
+
 import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
+import { Icon } from '~/components/input/Icon';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
+import { PRESETS } from '~/constants/urls';
+import { useResizeHandler } from '~/hooks/dom/useResizeHandler';
+import { IFile } from '~/types';
+import { getURL } from '~/utils/dom';
+
+import styles from './styles.module.scss';
+
 
 interface IProps {
   file: IFile;

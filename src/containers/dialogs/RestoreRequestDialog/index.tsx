@@ -1,14 +1,17 @@
 import React, { useCallback, useMemo, useState, VFC } from 'react';
-import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
-import { Group } from '~/components/containers/Group';
-import { InputText } from '~/components/input/InputText';
-import { Button } from '~/components/input/Button';
-import styles from './styles.module.scss';
-import { useCloseOnEscape } from '~/hooks';
-import { DialogComponentProps } from '~/types/modal';
-import { useRestoreRequestForm } from '~/hooks/auth/useRestoreRequestForm';
+
 import { apiRequestRestoreCode } from '~/api/auth';
 import { RestoreSent } from '~/components/auth/restore/RestoreSent';
+import { Group } from '~/components/containers/Group';
+import { Button } from '~/components/input/Button';
+import { InputText } from '~/components/input/InputText';
+import { useCloseOnEscape } from '~/hooks';
+import { useRestoreRequestForm } from '~/hooks/auth/useRestoreRequestForm';
+import { DialogComponentProps } from '~/types/modal';
+
+import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
+
+import styles from './styles.module.scss';
 
 interface RestoreRequestDialogProps extends DialogComponentProps {}
 

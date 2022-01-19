@@ -1,5 +1,3 @@
-import { api, cleanResult } from '~/utils/api';
-import { API } from '~/constants/api';
 import {
   ApiDeleteMessageRequest,
   ApiDeleteMessageResult,
@@ -8,6 +6,8 @@ import {
   ApiSendMessageRequest,
   ApiSendMessageResult,
 } from '~/api/messages/types';
+import { API } from '~/constants/api';
+import { api, cleanResult } from '~/utils/api';
 
 export const apiGetUserMessages = ({ username, after, before }: ApiGetUserMessagesRequest) =>
   api

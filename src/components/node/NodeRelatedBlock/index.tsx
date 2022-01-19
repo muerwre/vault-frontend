@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
-import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
+
+import { Anchor } from '~/components/common/Anchor';
 import { NodeRelated } from '~/components/node/NodeRelated';
+import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
 import { URLS } from '~/constants/urls';
 import { INode } from '~/types';
 import { INodeRelated } from '~/types/node';
-import { Anchor } from '~/components/common/Anchor';
 
 interface IProps {
   isLoading: boolean;

@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
-import styles from './/styles.module.scss';
+
 import { Placeholder } from '~/components/placeholders/Placeholder';
-import { ITag } from '~/types';
 import { Tag } from '~/components/tags/Tag';
+import { ITag } from '~/types';
+
+import styles from './/styles.module.scss';
 
 interface IProps {
   tags: ITag[];

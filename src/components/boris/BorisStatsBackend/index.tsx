@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
-import { StatBackend } from '~/types/boris';
-import styles from './styles.module.scss';
-import { sizeOf } from '~/utils/dom';
+
 import { StatsRow } from '~/components/common/StatsRow';
 import { SubTitle } from '~/components/common/SubTitle';
+import { StatBackend } from '~/types/boris';
+import { sizeOf } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   stats: StatBackend;

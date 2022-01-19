@@ -1,9 +1,11 @@
 import React, { ChangeEvent, FC, useCallback } from 'react';
-import styles from './styles.module.scss';
-import { getURL } from '~/utils/dom';
+
+import { Button } from '~/components/input/Button';
 import { PRESETS } from '~/constants/urls';
 import { IFile } from '~/types';
-import { Button } from '~/components/input/Button';
+import { getURL } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 export interface ProfileAvatarProps {
   size?: number;

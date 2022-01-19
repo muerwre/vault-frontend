@@ -1,11 +1,13 @@
-import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
-import { GetLabNodesRequest, ILabNode } from '~/types/lab';
-import { getLabNodes } from '~/api/lab';
-import { flatten, last, uniqBy } from 'ramda';
-import { useLabStore } from '~/store/lab/useLabStore';
 import { useCallback, useMemo } from 'react';
-import { INode } from '~/types';
+
+import { flatten, last, uniqBy } from 'ramda';
+import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
+
+import { getLabNodes } from '~/api/lab';
 import { useAuth } from '~/hooks/auth/useAuth';
+import { useLabStore } from '~/store/lab/useLabStore';
+import { INode } from '~/types';
+import { GetLabNodesRequest, ILabNode } from '~/types/lab';
 
 const getKey: (isUser: boolean) => SWRInfiniteKeyLoader = isUser => (index, prev: ILabNode[]) => {
   if (!isUser) return null;

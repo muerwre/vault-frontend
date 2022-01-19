@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { useModal } from '~/hooks/modal/useModal';
+
 import { Dialog } from '~/constants/modal';
+import { useModal } from '~/hooks/modal/useModal';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
 
 /** redirects to the password redirect modal */

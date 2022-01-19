@@ -1,13 +1,15 @@
-import { IFile, ValueOf } from '~/types';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
+import differenceInMonths from 'date-fns/differenceInMonths';
+import format from 'date-fns/format';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import isAfter from 'date-fns/isAfter';
-import differenceInMonths from 'date-fns/differenceInMonths';
-import differenceInMinutes from 'date-fns/differenceInMinutes';
 import ru from 'date-fns/locale/ru';
-import { PRESETS } from '~/constants/urls';
-import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/constants/comment';
-import format from 'date-fns/format';
 import { pipe } from 'ramda';
+
+import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/constants/comment';
+import { PRESETS } from '~/constants/urls';
+import { IFile, ValueOf } from '~/types';
+import { CONFIG } from '~/utils/config';
 import {
   formatExclamations,
   formatTextClickableUsernames,
@@ -19,7 +21,6 @@ import {
   formatTextTodos,
 } from '~/utils/formatText';
 import { splitTextByYoutube, splitTextOmitEmpty } from '~/utils/splitText';
-import { CONFIG } from '~/utils/config';
 
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
   const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;

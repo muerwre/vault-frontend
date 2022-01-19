@@ -1,11 +1,14 @@
 import React from 'react';
+
 import { SortableContainer } from 'react-sortable-hoc';
-import { AudioUpload } from '~/components/upload/AudioUpload';
-import styles from './styles.module.scss';
+
 import { SortableAudioGridItem } from '~/components/editors/SortableAudioGridItem';
-import { IFile } from '~/types';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
+import { AudioUpload } from '~/components/upload/AudioUpload';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
+import { IFile } from '~/types';
+
+import styles from './styles.module.scss';
 
 const SortableAudioGrid = SortableContainer(
   ({

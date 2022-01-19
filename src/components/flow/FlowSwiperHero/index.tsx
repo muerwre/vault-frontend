@@ -1,17 +1,20 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import styles from './styles.module.scss';
 
-import SwiperCore, { Autoplay, EffectFade, Lazy, Navigation } from 'swiper';
-import { Icon } from '~/components/input/Icon';
-import { getURLFromString } from '~/utils/dom';
-import { PRESETS, URLS } from '~/constants/urls';
-import SwiperClass from 'swiper/types/swiper-class';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+
 import classNames from 'classnames';
-import { IFlowNode } from '~/types';
+import SwiperCore, { Autoplay, EffectFade, Lazy, Navigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperClass from 'swiper/types/swiper-class';
+
+import { Icon } from '~/components/input/Icon';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { PRESETS, URLS } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
+import { IFlowNode } from '~/types';
+import { getURLFromString } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 SwiperCore.use([EffectFade, Lazy, Autoplay, Navigation]);
 

@@ -1,5 +1,6 @@
 import { autorun, makeAutoObservable, runInAction } from 'mobx';
 import { keys, values, without } from 'ramda';
+
 import { EmbedMetadata } from '~/types/metadata';
 
 const MAX_QUEUE_SIZE = 25;

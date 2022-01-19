@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
+
 import { Group } from '~/components/containers/Group';
-import { ERROR_LITERAL } from '~/constants/errors';
 import { Button } from '~/components/input/Button';
+import { ERROR_LITERAL } from '~/constants/errors';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   onClose: () => void;

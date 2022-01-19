@@ -1,7 +1,8 @@
-import { IUser } from '~/types/auth';
-import { useRandomPhrase } from '~/constants/phrases';
 import { differenceInDays, parseISO } from 'date-fns';
+
+import { useRandomPhrase } from '~/constants/phrases';
 import { INACTIVE_ACCOUNT_DAYS } from '~/constants/user';
+import { IUser } from '~/types/auth';
 
 const today = new Date();
 

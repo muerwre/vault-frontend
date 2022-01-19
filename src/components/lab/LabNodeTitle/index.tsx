@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
+
+import Tippy from '@tippy.js/react';
+
 import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
-import Tippy from '@tippy.js/react';
-import { useGotoNode } from '~/hooks/node/useGotoNode';
-import { INodeComponentProps } from '~/constants/node';
 import { Placeholder } from '~/components/placeholders/Placeholder';
+import { INodeComponentProps } from '~/constants/node';
+import { useGotoNode } from '~/hooks/node/useGotoNode';
+
+import styles from './styles.module.scss';
 
 const LabNodeTitle: FC<INodeComponentProps> = ({ node, isLoading }) => {
   const onClick = useGotoNode(node.id);

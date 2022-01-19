@@ -1,20 +1,24 @@
 import React, { createElement, FC, useCallback, useMemo, useState } from 'react';
-import styles from './styles.module.scss';
-import { NODE_EDITORS } from '~/constants/node';
-import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
-import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
-import { prop } from 'ramda';
-import { useNodeFormFormik } from '~/hooks/node/useNodeFormFormik';
-import { EditorButtons } from '~/components/editors/EditorButtons';
-import { UploadSubject, UploadTarget } from '~/constants/uploads';
+
 import { FormikProvider } from 'formik';
-import { INode } from '~/types';
-import { useCloseOnEscape } from '~/hooks';
-import { EditorConfirmClose } from '~/components/editors/EditorConfirmClose';
-import { DialogComponentProps } from '~/types/modal';
-import { useUploader } from '~/hooks/data/useUploader';
-import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
 import { observer } from 'mobx-react-lite';
+import { prop } from 'ramda';
+
+import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
+import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
+import { EditorButtons } from '~/components/editors/EditorButtons';
+import { EditorConfirmClose } from '~/components/editors/EditorConfirmClose';
+import { NODE_EDITORS } from '~/constants/node';
+import { UploadSubject, UploadTarget } from '~/constants/uploads';
+import { useCloseOnEscape } from '~/hooks';
+import { useUploader } from '~/hooks/data/useUploader';
+import { useNodeFormFormik } from '~/hooks/node/useNodeFormFormik';
+import { INode } from '~/types';
+import { DialogComponentProps } from '~/types/modal';
+import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
+
+
+import styles from './styles.module.scss';
 
 interface Props extends DialogComponentProps {
   node: INode;

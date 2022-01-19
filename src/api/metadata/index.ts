@@ -1,6 +1,6 @@
-import { api, cleanResult } from '~/utils/api';
-import { API } from '~/constants/api';
 import { ApiGetEmbedYoutubeResult } from '~/api/metadata/types';
+import { API } from '~/constants/api';
+import { api, cleanResult } from '~/utils/api';
 
 export const apiGetEmbedYoutube = (ids: string[]) =>
   api

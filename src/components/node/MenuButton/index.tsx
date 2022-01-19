@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { Group } from '~/components/containers/Group';
+
 import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   title: string;

@@ -1,7 +1,9 @@
-import useSWR from 'swr';
-import { API } from '~/constants/api';
-import { apiGetTagSuggestions } from '~/api/tags';
 import { useEffect, useMemo, useState } from 'react';
+
+import useSWR from 'swr';
+
+import { apiGetTagSuggestions } from '~/api/tags';
+import { API } from '~/constants/api';
 
 export const useTagAutocomplete = (input: string, exclude: string[]): string[] => {
   const [search, setSearch] = useState('');

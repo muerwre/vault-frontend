@@ -1,9 +1,13 @@
 import React, { FC, useCallback, useState } from 'react';
-import { Icon } from '~/components/input/Icon';
+
 import classNames from 'classnames';
-import styles from './styles.module.scss';
-import { useShowModal } from '~/hooks/modal/useShowModal';
+
+import { Icon } from '~/components/input/Icon';
 import { Dialog } from '~/constants/modal';
+import { useShowModal } from '~/hooks/modal/useShowModal';
+
+import styles from './styles.module.scss';
+
 
 interface Props {
   isLab?: boolean;

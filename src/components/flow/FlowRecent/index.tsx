@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
-import { FlowRecentItem } from '../FlowRecentItem';
-import styles from './styles.module.scss';
+
 import { IFlowNode } from '~/types';
+
+import { FlowRecentItem } from '../FlowRecentItem';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   recent: IFlowNode[];

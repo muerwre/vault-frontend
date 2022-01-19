@@ -1,11 +1,13 @@
 import React, { FC, Fragment } from 'react';
-import styles from './styles.module.scss';
-import { Placeholder } from '~/components/placeholders/Placeholder';
-import { Icon } from '~/components/input/Icon';
-import { Button } from '~/components/input/Button';
+
 import { Group } from '~/components/containers/Group';
-import { useOAuth } from '~/hooks/auth/useOAuth';
+import { Button } from '~/components/input/Button';
+import { Icon } from '~/components/input/Icon';
+import { Placeholder } from '~/components/placeholders/Placeholder';
 import { SOCIAL_ICONS } from '~/constants/auth/socials';
+import { useOAuth } from '~/hooks/auth/useOAuth';
+
+import styles from './styles.module.scss';
 
 type ProfileAccountsProps = {};
 

@@ -1,5 +1,6 @@
-import { IComment, IFile } from '~/types';
 import React, { createContext, FC, useContext } from 'react';
+
+import { IComment, IFile } from '~/types';
 
 export interface CommentProviderProps {
   comments: IComment[];

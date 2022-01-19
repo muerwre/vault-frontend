@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
+
 import { LabHeadItem } from '~/components/lab/LabHeadItem';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   isLoading?: boolean;

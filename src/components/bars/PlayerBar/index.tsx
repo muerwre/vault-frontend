@@ -1,10 +1,13 @@
 import React, { useCallback, VFC } from 'react';
-import styles from './styles.module.scss';
+
+import { path } from 'ramda';
+
 import { Icon } from '~/components/input/Icon';
 import { PlayerState } from '~/constants/player';
-import { path } from 'ramda';
 import { IFile } from '~/types';
 import { PlayerProgress } from '~/types/player';
+
+import styles from './styles.module.scss';
 
 interface Props {
   progress: PlayerProgress;

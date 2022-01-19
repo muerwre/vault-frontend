@@ -1,20 +1,22 @@
 import React, { FC, useCallback } from 'react';
-import { useCloseOnEscape } from '~/hooks';
+
+
+import { LoginDialogButtons } from '~/components/auth/login/LoginDialogButtons';
 import { Group } from '~/components/containers/Group';
-import { InputText } from '~/components/input/InputText';
-import { Button } from '~/components/input/Button';
 import { Padder } from '~/components/containers/Padder';
 import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
-
-import styles from './styles.module.scss';
-import { LoginDialogButtons } from '~/components/auth/login/LoginDialogButtons';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
-import { DialogComponentProps } from '~/types/modal';
-import { useShowModal } from '~/hooks/modal/useShowModal';
+import { Button } from '~/components/input/Button';
+import { InputText } from '~/components/input/InputText';
 import { Dialog } from '~/constants/modal';
+import { useCloseOnEscape } from '~/hooks';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useLoginForm } from '~/hooks/auth/useLoginForm';
 import { useOAuth } from '~/hooks/auth/useOAuth';
+import { useShowModal } from '~/hooks/modal/useShowModal';
+import { DialogComponentProps } from '~/types/modal';
+
+import styles from './styles.module.scss';
 
 type LoginDialogProps = DialogComponentProps & {};
 

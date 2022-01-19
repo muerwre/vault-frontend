@@ -1,8 +1,11 @@
 import React, { FC, useMemo } from 'react';
-import { GithubIssue } from '~/types/boris';
-import styles from './styles.module.scss';
+
 import { Placeholder } from '~/components/placeholders/Placeholder';
+import { GithubIssue } from '~/types/boris';
+
 import { BorisStatsGitCard } from '../BorisStatsGitCard';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   issues: GithubIssue[];

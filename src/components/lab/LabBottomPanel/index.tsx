@@ -1,15 +1,18 @@
 import React, { FC, useCallback } from 'react';
-import { Group } from '~/components/containers/Group';
-import { Filler } from '~/components/containers/Filler';
-import styles from './styles.module.scss';
-import { getPrettyDate } from '~/utils/dom';
-import { INode } from '~/types';
-import { Icon } from '~/components/input/Icon';
+
 import classNames from 'classnames';
+
+import { Filler } from '~/components/containers/Filler';
 import { Grid } from '~/components/containers/Grid';
-import { URLS } from '~/constants/urls';
+import { Group } from '~/components/containers/Group';
+import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
+import { URLS } from '~/constants/urls';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
+import { INode } from '~/types';
+import { getPrettyDate } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 type Props = {
   node: INode;

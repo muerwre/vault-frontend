@@ -1,17 +1,21 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { Textarea } from '~/components/input/Textarea';
-import { Button } from '~/components/input/Button';
-import { Group } from '~/components/containers/Group';
+
+import classNames from 'classnames';
+import { has } from 'ramda';
+
 import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
+import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
+import { Textarea } from '~/components/input/Textarea';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { ProfileAccounts } from '~/containers/profile/ProfileAccounts';
-import classNames from 'classnames';
+import { usePatchUser } from '~/hooks/auth/usePatchUser';
 import { useUser } from '~/hooks/auth/useUser';
 import { useProfileForm } from '~/hooks/profile/useProfileForm';
-import { has } from 'ramda';
-import { usePatchUser } from '~/hooks/auth/usePatchUser';
+
+
+import styles from './styles.module.scss';
 
 const getError = (error?: string) => (error && has(error, ERROR_LITERAL) ? error : undefined);
 

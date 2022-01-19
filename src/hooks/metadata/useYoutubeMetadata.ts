@@ -1,5 +1,6 @@
-import { useMetadataProvider } from '~/utils/providers/MetadataProvider';
 import { useEffect } from 'react';
+
+import { useMetadataProvider } from '~/utils/providers/MetadataProvider';
 
 export const useYoutubeMetadata = (id: string) => {
   const { queue, enqueue, metadata, pending } = useMetadataProvider();

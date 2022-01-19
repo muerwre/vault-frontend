@@ -1,7 +1,10 @@
 import React, { FC, useMemo } from 'react';
-import styles from './styles.module.scss';
+
 import { path } from 'ramda';
+
 import { INodeComponentProps } from '~/constants/node';
+
+import styles from './styles.module.scss';
 
 interface IProps extends INodeComponentProps {}
 

@@ -1,4 +1,3 @@
-import { api, cleanResult } from '~/utils/api';
 import { API } from '~/constants/api';
 import {
   ApiGetNodesOfTagRequest,
@@ -6,6 +5,7 @@ import {
   ApiGetTagSuggestionsRequest,
   ApiGetTagSuggestionsResult,
 } from '~/types/tags';
+import { api, cleanResult } from '~/utils/api';
 
 export const apiGetNodesOfTag = ({ tag, offset, limit }: ApiGetNodesOfTagRequest) =>
   api

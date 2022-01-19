@@ -1,8 +1,10 @@
-import useSWR from 'swr';
-import { API } from '~/constants/api';
-import { apiAuthGetUserProfile } from '~/api/auth';
-import { EMPTY_USER } from '~/constants/auth';
 import { useCallback } from 'react';
+
+import useSWR from 'swr';
+
+import { apiAuthGetUserProfile } from '~/api/auth';
+import { API } from '~/constants/api';
+import { EMPTY_USER } from '~/constants/auth';
 import { IUser } from '~/types/auth';
 
 const getKey = (username?: string): string | null => {

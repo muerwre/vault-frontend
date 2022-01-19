@@ -1,7 +1,8 @@
-import { IUser } from '~/types/auth';
-import { EMPTY_USER } from '~/constants/auth';
 import { makeAutoObservable } from 'mobx';
 import { isHydrated, makePersistable } from 'mobx-persist-store';
+
+import { EMPTY_USER } from '~/constants/auth';
+import { IUser } from '~/types/auth';
 import { CONFIG } from '~/utils/config';
 
 export class AuthStore {

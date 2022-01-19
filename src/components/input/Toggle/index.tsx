@@ -1,7 +1,10 @@
 import React, { FC, useCallback } from 'react';
-import styles from './styles.module.scss';
+
 import classNames from 'classnames';
+
 import { ButtonProps } from '~/utils/types';
+
+import styles from './styles.module.scss';
 
 type ToggleColor = 'primary' | 'secondary' | 'lab' | 'danger' | 'white';
 

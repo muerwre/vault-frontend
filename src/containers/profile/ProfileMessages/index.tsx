@@ -1,10 +1,13 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { Message } from '~/components/profile/Message';
+
+import { Anchor } from '~/components/common/Anchor';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { useMessages } from '~/hooks/messages/useMessages';
+import { Message } from '~/components/profile/Message';
 import { useUser } from '~/hooks/auth/useUser';
+import { useMessages } from '~/hooks/messages/useMessages';
 import { useProfileContext } from '~/utils/providers/ProfileProvider';
+
+import styles from './styles.module.scss';
 
 const ProfileMessages: FC = () => {
   const { profile, isLoading: isLoadingProfile } = useProfileContext();
@@ -29,7 +32,7 @@ const ProfileMessages: FC = () => {
         </p>
 
         <p>
-          Давай обсудим это в <a href="/boris">Борисе</a>, если это так важно.
+          Давай обсудим это в <Anchor href="/boris">Борисе</Anchor>, если это так важно.
         </p>
       </div>
 

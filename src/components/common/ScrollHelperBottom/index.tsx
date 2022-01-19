@@ -1,9 +1,12 @@
 import React, { VFC } from 'react';
-import styles from './styles.module.scss';
-import { useScrollTop } from '~/hooks/dom/useScrollTop';
-import { useScrollHeight } from '~/hooks/dom/useScrollHeight';
+
 import classNames from 'classnames';
+
+import { useScrollHeight } from '~/hooks/dom/useScrollHeight';
 import { useScrollToBottom } from '~/hooks/dom/useScrollToBottom';
+import { useScrollTop } from '~/hooks/dom/useScrollTop';
+
+import styles from './styles.module.scss';
 
 interface ScrollHelperBottomProps {}
 

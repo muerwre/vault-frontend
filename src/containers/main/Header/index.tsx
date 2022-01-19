@@ -1,24 +1,25 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { Logo } from '~/components/main/Logo';
 
-import { Filler } from '~/components/containers/Filler';
-import { UserButton } from '~/components/main/UserButton';
-import { URLS } from '~/constants/urls';
 import classNames from 'classnames';
-
-import styles from './styles.module.scss';
 import isBefore from 'date-fns/isBefore';
-import { Authorized } from '~/components/containers/Authorized';
-import { Button } from '~/components/input/Button';
 import { observer } from 'mobx-react-lite';
+
+import { Anchor } from '~/components/common/Anchor';
+import { Authorized } from '~/components/containers/Authorized';
+import { Filler } from '~/components/containers/Filler';
+import { Button } from '~/components/input/Button';
+import { Logo } from '~/components/main/Logo';
+import { UserButton } from '~/components/main/UserButton';
 import { Dialog } from '~/constants/modal';
-import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
+import { URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
-import { useModal } from '~/hooks/modal/useModal';
 import { useScrollTop } from '~/hooks/dom/useScrollTop';
 import { useFlow } from '~/hooks/flow/useFlow';
+import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
+import { useModal } from '~/hooks/modal/useModal';
 import { useUpdates } from '~/hooks/updates/useUpdates';
-import { Anchor } from '~/components/common/Anchor';
+
+import styles from './styles.module.scss';
 
 type HeaderProps = {};
 

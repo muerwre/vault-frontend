@@ -1,9 +1,12 @@
 import React, { FC, useCallback } from 'react';
+
 import classNames from 'classnames';
-import styles from './styles.module.scss';
+
 import { ArcProgress } from '~/components/input/ArcProgress';
-import { IFile } from '~/types';
 import { Icon } from '~/components/input/Icon';
+import { IFile } from '~/types';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   id?: IFile['id'];

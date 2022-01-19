@@ -1,6 +1,8 @@
 import React, { createContext, FC, useContext } from 'react';
-import { Store } from '~/store';
+
 import { observer } from 'mobx-react-lite';
+
+import { Store } from '~/store';
 
 export const StoreContext = createContext<Store>(new Store());
 

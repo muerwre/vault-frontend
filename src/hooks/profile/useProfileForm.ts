@@ -1,12 +1,14 @@
-import { IUser } from '~/types/auth';
-import { Asserts, object, string } from 'yup';
-import { ERRORS } from '~/constants/errors';
-import { FormikConfig, useFormik } from 'formik';
 import { useCallback, useRef } from 'react';
-import { showToastSuccess } from '~/utils/toast';
+
+import { FormikConfig, useFormik } from 'formik';
+import { Asserts, object, string } from 'yup';
+
+import { ERRORS } from '~/constants/errors';
 import { getRandomPhrase } from '~/constants/phrases';
-import { showErrorToast } from '~/utils/errors/showToast';
+import { IUser } from '~/types/auth';
 import { getValidationErrors } from '~/utils/errors/getValidationErrors';
+import { showErrorToast } from '~/utils/errors/showToast';
+import { showToastSuccess } from '~/utils/toast';
 
 const validationSchema = object({
   username: string()

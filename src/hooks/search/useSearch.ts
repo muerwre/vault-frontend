@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
+
 import { flatten } from 'ramda';
+import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
+
 import { getSearchResults } from '~/api/flow';
 import { INode } from '~/types';
 import { GetSearchResultsRequest } from '~/types/flow';

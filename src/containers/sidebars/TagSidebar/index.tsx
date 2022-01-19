@@ -1,14 +1,16 @@
 import React, { useMemo, VFC } from 'react';
-import { SidebarWrapper } from '~/containers/sidebars/SidebarWrapper';
-import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
-import { TagSidebarList } from '~/components/sidebar/TagSidebarList';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
+import { Icon } from '~/components/input/Icon';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { SidebarStack } from '~/components/sidebar/SidebarStack';
+import { TagSidebarList } from '~/components/sidebar/TagSidebarList';
 import { Tag } from '~/components/tags/Tag';
+import { SidebarWrapper } from '~/containers/sidebars/SidebarWrapper';
 import { useTagNodes } from '~/hooks/tag/useTagNodes';
 import { DialogComponentProps } from '~/types/modal';
-import { SidebarStack } from '~/components/sidebar/SidebarStack';
+
+import styles from './styles.module.scss';
 
 interface TagSidebarProps extends DialogComponentProps {
   tag: string;

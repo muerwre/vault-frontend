@@ -1,4 +1,5 @@
 import React, { FC, useMemo } from 'react';
+
 import styles from './styles.module.scss';
 
 interface SidebarStackProps {}

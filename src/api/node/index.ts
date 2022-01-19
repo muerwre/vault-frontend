@@ -1,7 +1,8 @@
-import { api, cleanResult } from '~/utils/api';
-import { IComment, INode } from '~/types';
+import axios, { AxiosRequestConfig } from 'axios';
+
 import { API } from '~/constants/api';
 import { COMMENTS_DISPLAY } from '~/constants/node';
+import { IComment, INode } from '~/types';
 import {
   ApiDeleteNodeTagsRequest,
   ApiDeleteNodeTagsResult,
@@ -24,7 +25,8 @@ import {
   GetNodeDiffRequest,
   GetNodeDiffResult,
 } from '~/types/node';
-import axios, { AxiosRequestConfig } from 'axios';
+import { api, cleanResult } from '~/utils/api';
+
 
 export type ApiPostNodeRequest = { node: INode };
 export type ApiPostNodeResult = {

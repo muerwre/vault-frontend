@@ -1,19 +1,20 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { Group } from '~/components/containers/Group';
-import { Container } from '~/containers/main/Container';
-import { BorisComments } from '~/containers/boris/BorisComments';
-import { Card } from '~/components/containers/Card';
-import { SidebarRouter } from '~/containers/main/SidebarRouter';
-import { BorisSidebar } from '~/components/boris/BorisSidebar';
-import { BorisUsageStats } from '~/types/boris';
-import { Tabs } from '~/components/dialogs/Tabs';
-import { Superpower } from '~/components/boris/Superpower';
-import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
 
-import boris from '~/sprites/boris_robot.svg';
-import { useAuthProvider } from '~/utils/providers/AuthProvider';
+import { BorisSidebar } from '~/components/boris/BorisSidebar';
+import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
+import { Superpower } from '~/components/boris/Superpower';
+import { Card } from '~/components/containers/Card';
+import { Group } from '~/components/containers/Group';
 import { Sticky } from '~/components/containers/Sticky';
+import { Tabs } from '~/components/dialogs/Tabs';
+import { BorisComments } from '~/containers/boris/BorisComments';
+import { Container } from '~/containers/main/Container';
+import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import boris from '~/sprites/boris_robot.svg';
+import { BorisUsageStats } from '~/types/boris';
+import { useAuthProvider } from '~/utils/providers/AuthProvider';
+
+import styles from './styles.module.scss';
 
 type IProps = {
   title: string;

@@ -1,9 +1,12 @@
 import React, { FC, useMemo } from 'react';
-import { ICommentBlockProps } from '~/constants/comment';
-import styles from './styles.module.scss';
+
 import classNames from 'classnames';
+
+import { ICommentBlockProps } from '~/constants/comment';
 import markdown from '~/styles/common/markdown.module.scss';
 import { formatText } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 interface IProps extends ICommentBlockProps {}
 

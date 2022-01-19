@@ -1,7 +1,9 @@
 import React, { FC, HTMLAttributes } from 'react';
-import styles from './styles.module.scss';
 
 import classNames from 'classnames';
+
+import styles from './styles.module.scss';
+
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   seamless?: boolean;

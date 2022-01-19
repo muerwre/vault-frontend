@@ -1,5 +1,6 @@
-import { useRouteMatch } from 'react-router';
 import { useRouter } from 'next/router';
+import { useRouteMatch } from 'react-router';
+
 import { CONFIG } from '~/utils/config';
 
 export const useNodePageParams = () => {

@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
+
 import { adjustHue } from 'color2k';
+
 import { normalizeBrightColor } from '~/utils/color';
 import { stringToColour } from '~/utils/dom';
 

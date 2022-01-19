@@ -1,13 +1,16 @@
 import React, { FC, useCallback } from 'react';
-import styles from './styles.module.scss';
-import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
-import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
-import { IFile } from '~/types';
+
 import { SortEnd } from 'react-sortable-hoc';
-import { moveArrItem } from '~/utils/fn';
-import { useFileDropZone } from '~/hooks';
+
+import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
+import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
 import { COMMENT_FILE_TYPES } from '~/constants/uploads';
+import { useFileDropZone } from '~/hooks';
+import { IFile } from '~/types';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
+import { moveArrItem } from '~/utils/fn';
+
+import styles from './styles.module.scss';
 
 const CommentFormAttaches: FC = () => {
   const {

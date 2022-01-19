@@ -1,6 +1,7 @@
-import { curry, insert, nth, path, remove } from 'ramda';
-import { IComment, ICommentGroup } from '~/types';
 import { isAfter, isValid, parseISO } from 'date-fns';
+import { curry, insert, nth, path, remove } from 'ramda';
+
+import { IComment, ICommentGroup } from '~/types';
 
 export const moveArrItem = curry((at, to, list) => insert(to, nth(at, list), remove(at, 1, list)));
 export const objFromArray = (array: any[], key: string) =>

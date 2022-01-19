@@ -9,7 +9,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head>
+        <Head title="Убежище">
           <meta charSet="utf-8" />
           <meta httpEquiv="content-language" content="ru" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -23,8 +23,6 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800&display=swap&subset=cyrillic"
             rel="stylesheet"
           />
-
-          <title>Убежище</title>
         </Head>
 
         <body>

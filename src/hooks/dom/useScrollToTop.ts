@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { NEW_COMMENT_CLASSNAME } from '~/constants/comment';
 
 export const useScrollToTop = (deps?: any[]) => {

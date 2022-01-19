@@ -1,6 +1,7 @@
 import React, { createContext, FC, useContext } from 'react';
-import { INode } from '~/types';
+
 import { useSearch } from '~/hooks/search/useSearch';
+import { INode } from '~/types';
 
 export interface SearchContextProps {
   searchText: string;

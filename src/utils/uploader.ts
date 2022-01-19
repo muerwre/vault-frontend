@@ -1,5 +1,5 @@
-import { isMimeOfImage } from '~/utils/validators';
 import { FILE_MIMES, UploadType } from '~/constants/uploads';
+import { isMimeOfImage } from '~/utils/validators';
 
 /** if file is image, returns data-uri of thumbnail */
 export const uploadGetThumb = async file => {

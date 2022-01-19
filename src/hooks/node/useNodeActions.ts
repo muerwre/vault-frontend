@@ -1,9 +1,10 @@
-import { INode } from '~/types';
 import { useCallback } from 'react';
+
 import { apiLockNode, apiPostNodeHeroic, apiPostNodeLike } from '~/api/node';
-import { showErrorToast } from '~/utils/errors/showToast';
-import { useModal } from '~/hooks/modal/useModal';
 import { Dialog } from '~/constants/modal';
+import { useModal } from '~/hooks/modal/useModal';
+import { INode } from '~/types';
+import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Promise<unknown>) => {
   const { showModal } = useModal();

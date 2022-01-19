@@ -1,20 +1,22 @@
-import { StoreContextProvider } from '~/utils/context/StoreContextProvider';
-import { getMOBXStore } from '~/store';
-import '~/styles/main.scss';
-import { ToastProvider } from '~/utils/providers/ToastProvider';
-import { Modal } from '~/containers/dialogs/Modal';
-import { Sprites } from '~/sprites/Sprites';
 import React from 'react';
-import { BottomContainer } from '~/containers/main/BottomContainer';
-import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
-import { UserContextProvider } from '~/utils/context/UserContextProvider';
-import { DragDetectorProvider } from '~/hooks/dom/useDragDetector';
+
 import { PageCoverProvider } from '~/components/containers/PageCoverProvider';
-import { SearchProvider } from '~/utils/providers/SearchProvider';
-import { AudioPlayerProvider } from '~/utils/providers/AudioPlayerProvider';
-import { MetadataProvider } from '~/utils/providers/MetadataProvider';
-import { AuthProvider } from '~/utils/providers/AuthProvider';
+import { Modal } from '~/containers/dialogs/Modal';
+import { BottomContainer } from '~/containers/main/BottomContainer';
 import { MainLayout } from '~/containers/main/MainLayout';
+import { DragDetectorProvider } from '~/hooks/dom/useDragDetector';
+import { Sprites } from '~/sprites/Sprites';
+import { getMOBXStore } from '~/store';
+import { StoreContextProvider } from '~/utils/context/StoreContextProvider';
+import { UserContextProvider } from '~/utils/context/UserContextProvider';
+import { AudioPlayerProvider } from '~/utils/providers/AudioPlayerProvider';
+import { AuthProvider } from '~/utils/providers/AuthProvider';
+import { MetadataProvider } from '~/utils/providers/MetadataProvider';
+import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
+import { SearchProvider } from '~/utils/providers/SearchProvider';
+import { ToastProvider } from '~/utils/providers/ToastProvider';
+
+import '~/styles/main.scss';
 
 const mobxStore = getMOBXStore();
 

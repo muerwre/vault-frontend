@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { IFile } from '~/types';
+
 import { usePageCoverContext } from '~/components/containers/PageCoverProvider/index';
+import { IFile } from '~/types';
 
 export const usePageCover = (cover?: IFile) => {
   const { setCover } = usePageCoverContext();

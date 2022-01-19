@@ -1,6 +1,7 @@
 import React, { FC, useCallback } from 'react';
-import styles from '~/components/notifications/NotificationBubble/styles.module.scss';
+
 import { Icon } from '~/components/input/Icon';
+import styles from '~/components/notifications/NotificationBubble/styles.module.scss';
 import { IMessageNotification, INotification } from '~/types';
 
 interface IProps {

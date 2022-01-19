@@ -1,7 +1,10 @@
 import React, { FC, useCallback } from 'react';
+
 import classNames from 'classnames';
-import styles from './styles.module.scss';
+
 import { Icon } from '~/components/input/Icon';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   feature?: string;

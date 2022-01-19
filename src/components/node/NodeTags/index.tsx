@@ -1,6 +1,7 @@
 import React, { FC, memo } from 'react';
-import { ITag } from '~/types';
+
 import { Tags } from '~/containers/tags/Tags';
+import { ITag } from '~/types';
 
 interface IProps {
   is_deletable?: boolean;

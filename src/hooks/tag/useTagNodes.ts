@@ -1,9 +1,11 @@
-import { INode } from '~/types';
-import { API } from '~/constants/api';
+import { useCallback, useMemo } from 'react';
+
 import { flatten, isNil } from 'ramda';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
-import { useCallback, useMemo } from 'react';
+
 import { apiGetNodesOfTag } from '~/api/tags';
+import { API } from '~/constants/api';
+import { INode } from '~/types';
 
 const PAGE_SIZE = 10;
 

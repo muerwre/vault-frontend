@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { LabBanner } from '~/components/lab/LabBanner';
-import { Group } from '~/components/containers/Group';
-import { LabTags } from '~/components/lab/LabTags';
-import { LabHeroes } from '~/components/lab/LabHeroes';
-import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
+
 import { SubTitle } from '~/components/common/SubTitle';
+import { Group } from '~/components/containers/Group';
+import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
+import { LabBanner } from '~/components/lab/LabBanner';
+import { LabHeroes } from '~/components/lab/LabHeroes';
+import { LabTags } from '~/components/lab/LabTags';
 import { useLabContext } from '~/utils/context/LabContextProvider';
+
+import styles from './styles.module.scss';
 
 interface IProps {}
 

@@ -1,10 +1,12 @@
 import React, { FC, useCallback } from 'react';
+
 import { Group } from '~/components/containers/Group';
-import styles from './styles.module.scss';
-import { getURL } from '~/utils/dom';
 import { Icon } from '~/components/input/Icon';
-import { IUser } from '~/types/auth';
 import { PRESETS } from '~/constants/urls';
+import { IUser } from '~/types/auth';
+import { getURL } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   user: Partial<IUser>;

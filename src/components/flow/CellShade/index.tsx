@@ -1,10 +1,13 @@
 import React, { FC, useMemo } from 'react';
-import styles from './styles.module.scss';
-import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
-import { DivProps } from '~/utils/types';
+
 import classNames from 'classnames';
 import { transparentize } from 'color2k';
+
+import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
 import { normalizeBrightColor } from '~/utils/color';
+import { DivProps } from '~/utils/types';
+
+import styles from './styles.module.scss';
 
 interface Props extends DivProps {
   color?: string;

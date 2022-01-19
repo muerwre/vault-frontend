@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
-import { IComment } from '~/types';
-import { useGetComments } from '~/hooks/comments/useGetComments';
+
 import { apiLockComment, apiPostComment } from '~/api/node';
+import { useGetComments } from '~/hooks/comments/useGetComments';
+import { IComment } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useNodeComments = (nodeId: number) => {

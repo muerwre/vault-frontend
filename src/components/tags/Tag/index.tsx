@@ -1,6 +1,7 @@
 import React, { FC, FocusEventHandler, useCallback } from 'react';
-import { ITag } from '~/types';
+
 import { TagWrapper } from '~/components/tags/TagWrapper';
+import { ITag } from '~/types';
 
 const getTagFeature = (tag: Partial<ITag>) => {
   if (tag?.title?.substr(0, 1) === '/') return 'green';

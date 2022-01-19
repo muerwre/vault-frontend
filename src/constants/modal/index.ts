@@ -1,15 +1,15 @@
-import { LoginDialog } from '~/containers/dialogs/LoginDialog';
-import { LoginSocialRegisterDialog } from '~/containers/dialogs/LoginSocialRegisterDialog';
-import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
-import { TestDialog } from '~/containers/dialogs/TestDialog';
-import { ProfileDialog } from '~/containers/dialogs/ProfileDialog';
-import { RestoreRequestDialog } from '~/containers/dialogs/RestoreRequestDialog';
-import { RestorePasswordDialog } from '~/containers/dialogs/RestorePasswordDialog';
-import { PhotoSwipe } from '~/containers/dialogs/PhotoSwipe';
 import { EditorCreateDialog } from '~/containers/dialogs/EditorCreateDialog';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
-import { TagSidebar } from '~/containers/sidebars/TagSidebar';
+import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
+import { LoginDialog } from '~/containers/dialogs/LoginDialog';
+import { LoginSocialRegisterDialog } from '~/containers/dialogs/LoginSocialRegisterDialog';
+import { PhotoSwipe } from '~/containers/dialogs/PhotoSwipe';
+import { ProfileDialog } from '~/containers/dialogs/ProfileDialog';
+import { RestorePasswordDialog } from '~/containers/dialogs/RestorePasswordDialog';
+import { RestoreRequestDialog } from '~/containers/dialogs/RestoreRequestDialog';
+import { TestDialog } from '~/containers/dialogs/TestDialog';
 import { ProfileSidebar } from '~/containers/sidebars/ProfileSidebar';
+import { TagSidebar } from '~/containers/sidebars/TagSidebar';
 
 export enum Dialog {
   Login = 'Login',

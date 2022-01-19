@@ -1,8 +1,10 @@
-import useSWR from 'swr';
-import { API } from '~/constants/api';
-import { apiGetUserMessages } from '~/api/messages';
-import { IMessage } from '~/types';
 import { useMemo } from 'react';
+
+import useSWR from 'swr';
+
+import { apiGetUserMessages } from '~/api/messages';
+import { API } from '~/constants/api';
+import { IMessage } from '~/types';
 
 const getKey = (username: string): string | null => {
   return username ? `${API.USER.MESSAGES}/${username}` : null;

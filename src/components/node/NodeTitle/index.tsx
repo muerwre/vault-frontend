@@ -1,9 +1,12 @@
 import React, { memo, VFC } from 'react';
-import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
+
 import classNames from 'classnames';
+
+import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { getPrettyDate } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   id?: number;

@@ -1,5 +1,5 @@
-import { CommentTextBlock } from '~/components/comment/CommentTextBlock';
 import { CommentEmbedBlock } from '~/components/comment/CommentEmbedBlock';
+import { CommentTextBlock } from '~/components/comment/CommentTextBlock';
 
 export const COMMENT_BLOCK_TYPES = {
   TEXT: 'TEXT',

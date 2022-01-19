@@ -1,13 +1,16 @@
 import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
-import styles from './styles.module.scss';
+
 import classNames from 'classnames';
-import { INode } from '~/types';
-import { PRESETS } from '~/constants/urls';
-import { getURL, getURLFromString } from '~/utils/dom';
-import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
-import { Square } from '~/components/common/Square';
-import { useGotoNode } from '~/hooks/node/useGotoNode';
+
 import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
+import { Square } from '~/components/common/Square';
+import { PRESETS } from '~/constants/urls';
+import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
+import { useGotoNode } from '~/hooks/node/useGotoNode';
+import { INode } from '~/types';
+import { getURL, getURLFromString } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 type IProps = {
   item: Partial<INode>;

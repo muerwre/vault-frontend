@@ -1,11 +1,14 @@
 import React, { memo, useCallback, useMemo } from 'react';
-import { IFile } from '~/types';
+
 import classNames from 'classnames';
-import styles from './styles.module.scss';
+
 import { Icon } from '~/components/input/Icon';
 import { InputText } from '~/components/input/InputText';
 import { PlayerState } from '~/constants/player';
+import { IFile } from '~/types';
 import { useAudioPlayer } from '~/utils/providers/AudioPlayerProvider';
+
+import styles from './styles.module.scss';
 
 type Props = {
   file: IFile;

@@ -1,5 +1,6 @@
-import { Toaster } from 'react-hot-toast';
 import React from 'react';
+
+import { Toaster } from 'react-hot-toast';
 
 const containerStyle = {
   top: 10,

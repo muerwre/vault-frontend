@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
+
 import classNames from 'classnames';
+
+import styles from './styles.module.scss';
 
 export interface PlaceholderProps {
   width?: string;

@@ -1,6 +1,6 @@
+import { useLoginLogoutRestore } from '~/hooks/auth/useLoginLogoutRestore';
 import { useUser } from '~/hooks/auth/useUser';
 import { useAuthStore } from '~/store/auth/useAuthStore';
-import { useLoginLogoutRestore } from '~/hooks/auth/useLoginLogoutRestore';
 
 export const useAuth = () => {
   const { user } = useUser();

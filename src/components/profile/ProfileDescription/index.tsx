@@ -1,12 +1,17 @@
 import React, { FC } from 'react';
-import { formatText } from '~/utils/dom';
-import styles from './styles.module.scss';
-import { ProfileLoader } from '~/containers/profile/ProfileLoader';
-import { Group } from '~/components/containers/Group';
-import markdown from '~/styles/common/markdown.module.scss';
+
 import classNames from 'classnames';
-import { useProfileContext } from '~/utils/providers/ProfileProvider';
+
+import { Group } from '~/components/containers/Group';
+import { ProfileLoader } from '~/containers/profile/ProfileLoader';
 import { useUser } from '~/hooks/auth/useUser';
+import markdown from '~/styles/common/markdown.module.scss';
+import { formatText } from '~/utils/dom';
+import { useProfileContext } from '~/utils/providers/ProfileProvider';
+
+import styles from './styles.module.scss';
+
+
 
 const ProfileDescription: FC = () => {
   const { profile, isLoading } = useProfileContext();

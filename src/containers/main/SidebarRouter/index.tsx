@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { Authorized } from '~/components/containers/Authorized';
+
 import { SubmitBar } from '~/components/bars/SubmitBar';
+import { Authorized } from '~/components/containers/Authorized';
 
 interface IProps {
   prefix?: string;

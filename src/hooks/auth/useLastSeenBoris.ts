@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+
 import { useUser } from '~/hooks/auth/useUser';
 
 export const useLastSeenBoris = () => {
