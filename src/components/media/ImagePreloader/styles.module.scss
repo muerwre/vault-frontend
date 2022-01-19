@@ -1,10 +1,14 @@
 @import "src/styles/variables.scss";
 
-.image {
+img.image {
   position: absolute;
   opacity: 0;
+  width: 0;
+  height: 0;
 
   &.is_loaded {
+    width: auto;
+    height: auto;
     opacity: 1;
     position: static;
   }

@@ -13,7 +13,6 @@ import { getURL } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-
 interface IProps {
   file: IFile;
   color?: string;
