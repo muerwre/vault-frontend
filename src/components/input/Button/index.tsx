@@ -1,9 +1,14 @@
-import classnames from 'classnames';
 import React, { ButtonHTMLAttributes, DetailedHTMLProps, FC, memo, useMemo } from 'react';
-import styles from './styles.module.scss';
+
+import Tippy from '@tippy.js/react';
+import classnames from 'classnames';
+
+
 import { Icon } from '~/components/input/Icon';
 import { IIcon } from '~/types';
-import Tippy from '@tippy.js/react';
+
+import styles from './styles.module.scss';
+
 import 'tippy.js/dist/tippy.css';
 
 type IButtonProps = DetailedHTMLProps<

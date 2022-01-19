@@ -1,5 +1,5 @@
-import { CommentTextBlock } from '~/components/comment/CommentTextBlock';
 import { CommentEmbedBlock } from '~/components/comment/CommentEmbedBlock';
+import { CommentTextBlock } from '~/components/comment/CommentTextBlock';
 
 export const COMMENT_BLOCK_TYPES = {
   TEXT: 'TEXT',
@@ -10,7 +10,7 @@ export const COMMENT_BLOCK_TYPES = {
 export const COMMENT_BLOCK_DETECTORS = [
   {
     type: COMMENT_BLOCK_TYPES.EMBED,
-    test: /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-\&\=]+)/gim,
+    test: /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-&=]+)/gim,
   },
   {
     type: COMMENT_BLOCK_TYPES.MARK,

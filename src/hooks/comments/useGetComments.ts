@@ -1,9 +1,11 @@
-import { API } from '~/constants/api';
+import { useCallback, useMemo } from 'react';
+
 import { flatten, isNil } from 'ramda';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
+
 import { apiGetNodeComments } from '~/api/node';
+import { API } from '~/constants/api';
 import { COMMENTS_DISPLAY } from '~/constants/node';
-import { useCallback, useMemo } from 'react';
 import { IComment } from '~/types';
 
 const getKey: (nodeId: number) => SWRInfiniteKeyLoader = (nodeId: number) => (

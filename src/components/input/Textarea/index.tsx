@@ -7,12 +7,15 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import classNames from 'classnames';
+
 import autosize from 'autosize';
-import styles from './styles.module.scss';
+import classNames from 'classnames';
+
 
 import { InputWrapper } from '~/components/input/InputWrapper';
 import { useForwardRef } from '~/hooks/dom/useForwardRef';
+
+import styles from './styles.module.scss';
 
 type IProps = DetailedHTMLProps<
   TextareaHTMLAttributes<HTMLTextAreaElement>,

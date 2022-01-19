@@ -1,8 +1,11 @@
 import React, { createContext, FC, useContext } from 'react';
-import { IUser } from '~/types/auth';
+
+import { observer } from 'mobx-react-lite';
+
 import { EMPTY_USER } from '~/constants/auth';
 import { useUser } from '~/hooks/auth/useUser';
-import { observer } from 'mobx-react-lite';
+import { IUser } from '~/types/auth';
+
 
 const UserContext = createContext<IUser>(EMPTY_USER);
 

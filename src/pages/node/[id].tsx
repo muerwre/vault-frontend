@@ -1,26 +1,56 @@
 import React, { FC } from 'react';
-import { NodeLayout } from '~/layouts/NodeLayout';
+
+import { observer } from 'mobx-react-lite';
+import { InferGetServerSidePropsType } from 'next';
 import { RouteComponentProps } from 'react-router';
+
+import { apiGetNode } from '~/api/node';
+import { NodeHeadMetadata } from '~/components/node/NodeHeadMetadata';
+import { useNodeComments } from '~/hooks/comments/useNodeComments';
 import { useScrollToTop } from '~/hooks/dom/useScrollToTop';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
-import { useNodeComments } from '~/hooks/comments/useNodeComments';
-import { useNodeTags } from '~/hooks/node/useNodeTags';
-import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
-import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
-import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
-import { useNodePermissions } from '~/hooks/node/useNodePermissions';
-import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
-import { observer } from 'mobx-react-lite';
 import { useNodePageParams } from '~/hooks/node/useNodePageParams';
+import { useNodePermissions } from '~/hooks/node/useNodePermissions';
+import { useNodeTags } from '~/hooks/node/useNodeTags';
+import { NodeLayout } from '~/layouts/NodeLayout';
+import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
+import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
+import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
+import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
 
-type Props = RouteComponentProps<{ id: string }> & {};
+export const getServerSideProps = async context => {
+  if (!context.params?.id) {
+    return { props: {} };
+  }
 
-const NodePage: FC<Props> = observer(() => {
+  const id = parseInt(context.params.id, 10);
+
+  if (!id) {
+    return { props: {} };
+  }
+
+  const fallbackData = await apiGetNode({ id });
+
+  return {
+    props: {
+      fallbackData: {
+        ...fallbackData,
+        last_seen: fallbackData.last_seen ?? null,
+      },
+    },
+  };
+};
+
+type Props = RouteComponentProps<{ id: string }> &
+  InferGetServerSidePropsType<typeof getServerSideProps>;
+
+const NodePage: FC<Props> = observer(props => {
   const id = useNodePageParams();
-  const { node, isLoading, update, lastSeen } = useLoadNode(parseInt(id, 10));
+  const { node, isLoading, update, lastSeen } = useLoadNode(parseInt(id, 10), props.fallbackData);
 
   const onShowImageModal = useImageModal();
+
   const {
     onLoadMoreComments,
     onDelete: onDeleteComment,
@@ -29,6 +59,7 @@ const NodePage: FC<Props> = observer(() => {
     hasMore,
     isLoading: isLoadingComments,
   } = useNodeComments(parseInt(id, 10));
+
   const { onDelete: onTagDelete, onChange: onTagsChange, onClick: onTagClick } = useNodeTags(
     parseInt(id, 10)
   );
@@ -63,6 +94,7 @@ const NodePage: FC<Props> = observer(() => {
             onTagClick={onTagClick}
             onTagDelete={onTagDelete}
           >
+            <NodeHeadMetadata />
             <NodeLayout />
           </TagsContextProvider>
         </CommentContextProvider>

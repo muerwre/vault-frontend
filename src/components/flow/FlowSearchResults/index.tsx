@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { FlowRecentItem } from '../FlowRecentItem';
+
+import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
 import { Icon } from '~/components/input/Icon';
 import { INode } from '~/types';
-import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
+
+import { FlowRecentItem } from '../FlowRecentItem';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   isLoading: boolean;

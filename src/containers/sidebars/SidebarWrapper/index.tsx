@@ -1,7 +1,10 @@
 import React, { FC, useEffect, useRef } from 'react';
-import styles from './styles.module.scss';
+
 import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
+
 import { useCloseOnEscape } from '~/hooks';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   onClose?: () => void;

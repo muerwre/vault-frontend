@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
-import { IFile } from '~/types';
-import { useShowModal } from '~/hooks/modal/useShowModal';
+
 import { Dialog } from '~/constants/modal';
+import { useShowModal } from '~/hooks/modal/useShowModal';
+import { IFile } from '~/types';
 
 export const useImageModal = () => {
   const showModal = useShowModal(Dialog.Photoswipe);

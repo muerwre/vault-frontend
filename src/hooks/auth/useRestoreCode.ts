@@ -1,5 +1,6 @@
-import { apiCheckRestoreCode } from '~/api/auth';
 import useSWR from 'swr';
+
+import { apiCheckRestoreCode } from '~/api/auth';
 import { API } from '~/constants/api';
 import { getErrorMessage } from '~/utils/errors/getErrorMessage';
 

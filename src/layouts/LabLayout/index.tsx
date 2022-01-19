@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { Sticky } from '~/components/containers/Sticky';
-import { Container } from '~/containers/main/Container';
-import { LabGrid } from '~/containers/lab/LabGrid';
+
 import { Group } from '~/components/containers/Group';
+import { Sticky } from '~/components/containers/Sticky';
 import { LabHead } from '~/components/lab/LabHead';
+import { LabGrid } from '~/containers/lab/LabGrid';
 import { LabStats } from '~/containers/lab/LabStats';
+import { Container } from '~/containers/main/Container';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { useLabContext } from '~/utils/context/LabContextProvider';
+
+import styles from './styles.module.scss';
 
 interface IProps {}
 

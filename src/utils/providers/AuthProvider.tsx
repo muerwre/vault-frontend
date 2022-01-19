@@ -1,9 +1,11 @@
 import { createContext, FC, useContext } from 'react';
-import { useRestorePasswordRedirect } from '~/hooks/auth/useRestorePasswordRedirect';
-import { useMessageEventReactions } from '~/hooks/auth/useMessageEventReactions';
+
 import { observer } from 'mobx-react-lite';
-import { useAuth } from '~/hooks/auth/useAuth';
+
 import { EMPTY_USER } from '~/constants/auth';
+import { useAuth } from '~/hooks/auth/useAuth';
+import { useMessageEventReactions } from '~/hooks/auth/useMessageEventReactions';
+import { useRestorePasswordRedirect } from '~/hooks/auth/useRestorePasswordRedirect';
 
 interface AuthProviderContextType extends ReturnType<typeof useAuth> {}
 

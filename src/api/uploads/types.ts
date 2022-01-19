@@ -1,5 +1,5 @@
-import { IFile, IUploadProgressHandler } from '~/types';
 import { UploadTarget, UploadType } from '~/constants/uploads';
+import { IFile, IUploadProgressHandler } from '~/types';
 
 export type ApiUploadFileRequest = {
   file: File;

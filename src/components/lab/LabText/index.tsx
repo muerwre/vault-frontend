@@ -1,11 +1,15 @@
 import React, { FC, useMemo } from 'react';
-import { Markdown } from '~/components/containers/Markdown';
-import { INodeComponentProps } from '~/constants/node';
-import { formatTextParagraphs } from '~/utils/dom';
+
 import { path } from 'ramda';
-import styles from './styles.module.scss';
-import { useGotoNode } from '~/hooks/node/useGotoNode';
+
+import { Markdown } from '~/components/containers/Markdown';
 import { Paragraph } from '~/components/placeholders/Paragraph';
+import { INodeComponentProps } from '~/constants/node';
+import { useGotoNode } from '~/hooks/node/useGotoNode';
+import { formatTextParagraphs } from '~/utils/dom';
+
+import styles from './styles.module.scss';
+
 
 const LabText: FC<INodeComponentProps> = ({ node, isLoading }) => {
   const content = useMemo(() => formatTextParagraphs(path(['blocks', 0, 'text'], node) || ''), [

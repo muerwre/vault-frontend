@@ -1,7 +1,8 @@
-import { API } from '~/constants/api';
-import { api, cleanResult } from '~/utils/api';
-import { IGetGithubIssuesResult, StatBackend } from '~/types/boris';
 import axios from 'axios';
+
+import { API } from '~/constants/api';
+import { IGetGithubIssuesResult, StatBackend } from '~/types/boris';
+import { api, cleanResult } from '~/utils/api';
 
 export const getBorisBackendStats = () =>
   api.get<StatBackend>(API.BORIS.GET_BACKEND_STATS).then(cleanResult);

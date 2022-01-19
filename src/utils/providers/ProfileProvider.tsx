@@ -1,7 +1,8 @@
 import { createContext, FC, useContext } from 'react';
-import { IUser } from '~/types/auth';
-import { useGetProfile } from '~/hooks/profile/useGetProfile';
+
 import { EMPTY_USER } from '~/constants/auth';
+import { useGetProfile } from '~/hooks/profile/useGetProfile';
+import { IUser } from '~/types/auth';
 
 interface ProfileProviderProps {
   username: string;

@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
-import styles from '~/layouts/BorisLayout/styles.module.scss';
-import { BorisSuperpowers } from '~/components/boris/BorisSuperpowers';
+
 import { BorisContacts } from '~/components/boris/BorisContacts';
 import { BorisStats } from '~/components/boris/BorisStats';
+import { BorisSuperpowers } from '~/components/boris/BorisSuperpowers';
 import { Group } from '~/components/containers/Group';
+import styles from '~/layouts/BorisLayout/styles.module.scss';
 import { BorisUsageStats } from '~/types/boris';
 
 interface Props {

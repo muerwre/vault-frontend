@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
-import { Button } from '~/components/input/Button';
+
 import { Grid } from '~/components/containers/Grid';
 import { Group } from '~/components/containers/Group';
-import styles from './styles.module.scss';
+import { Button } from '~/components/input/Button';
 import { OAuthProvider } from '~/types/auth';
+
+import styles from './styles.module.scss';
+
 
 interface IProps {
   openOauthWindow: (provider: OAuthProvider) => void;

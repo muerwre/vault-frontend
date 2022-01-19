@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
-import { INode, ITag } from '~/types';
-import { NodeRelatedContextProvider } from '~/utils/context/NodeRelatedContextProvider';
-import { INodeRelated } from '~/types/node';
+
 import { useGetNodeRelated } from '~/hooks/node/useGetNodeRelated';
+import { INode, ITag } from '~/types';
+import { INodeRelated } from '~/types/node';
+import { NodeRelatedContextProvider } from '~/utils/context/NodeRelatedContextProvider';
 
 interface NodeRelatedProviderProps {
   id: INode['id'];

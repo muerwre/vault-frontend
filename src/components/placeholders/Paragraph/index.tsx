@@ -1,7 +1,9 @@
 import React, { FC, useMemo } from 'react';
-import { Placeholder, PlaceholderProps } from '~/components/placeholders/Placeholder';
-import styles from './styles.module.scss';
+
 import { Group } from '~/components/containers/Group';
+import { Placeholder, PlaceholderProps } from '~/components/placeholders/Placeholder';
+
+import styles from './styles.module.scss';
 
 type Props = PlaceholderProps & {
   lines?: number;

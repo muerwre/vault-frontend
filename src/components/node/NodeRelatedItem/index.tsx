@@ -1,13 +1,16 @@
-import React, { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import styles from './styles.module.scss';
+import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
+
 import classNames from 'classnames';
-import { INode } from '~/types';
-import { PRESETS, URLS } from '~/constants/urls';
-import { RouteComponentProps } from 'react-router';
-import { getURL, getURLFromString } from '~/utils/dom';
-import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
+
+import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 import { Square } from '~/components/common/Square';
+import { PRESETS } from '~/constants/urls';
+import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
+import { INode } from '~/types';
+import { getURL, getURLFromString } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 type IProps = {
   item: Partial<INode>;
@@ -89,7 +92,7 @@ const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
         </div>
       )}
 
-      <img src={image} alt="loader" onLoad={() => setIsLoaded(true)} />
+      <ImageWithSSRLoad src={image} alt="loader" onLoad={() => setIsLoaded(true)} />
     </div>
   );
 });

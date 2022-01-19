@@ -1,7 +1,8 @@
 import useSWR from 'swr';
-import { useAuth } from '~/hooks/auth/useAuth';
+
 import { apiAuthGetUpdates } from '~/api/auth';
 import { API } from '~/constants/api';
+import { useAuth } from '~/hooks/auth/useAuth';
 
 export const useUpdates = () => {
   const { isUser } = useAuth();

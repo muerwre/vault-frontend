@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
+
 import classNames from 'classnames';
+
 import styles from './styles.module.scss';
 
 type IProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -31,7 +33,7 @@ const Group: FC<IProps> = ({
         [styles.wrap]: wrap,
         [styles.seamless]: seamless,
       },
-      className,
+      className
     )}
     {...props}
   >

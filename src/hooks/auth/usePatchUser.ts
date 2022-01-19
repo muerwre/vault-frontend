@@ -1,10 +1,11 @@
-import { useUploader } from '~/hooks/data/useUploader';
-import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { useCallback } from 'react';
-import { showErrorToast } from '~/utils/errors/showToast';
+
 import { apiUpdateUser } from '~/api/auth';
 import { ApiUpdateUserRequest } from '~/api/auth/types';
+import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { useUser } from '~/hooks/auth/useUser';
+import { useUploader } from '~/hooks/data/useUploader';
+import { showErrorToast } from '~/utils/errors/showToast';
 
 export const usePatchUser = () => {
   const { update } = useUser();

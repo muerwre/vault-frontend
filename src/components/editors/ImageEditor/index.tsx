@@ -1,10 +1,13 @@
 import React, { FC } from 'react';
-import { ImageGrid } from '~/components/editors/ImageGrid';
-import styles from './styles.module.scss';
-import { NodeEditorProps } from '~/types/node';
-import { UploadDropzone } from '~/components/upload/UploadDropzone';
-import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
+
 import { values } from 'ramda';
+
+import { ImageGrid } from '~/components/editors/ImageGrid';
+import { UploadDropzone } from '~/components/upload/UploadDropzone';
+import { NodeEditorProps } from '~/types/node';
+import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
+
+import styles from './styles.module.scss';
 
 type IProps = NodeEditorProps;
 

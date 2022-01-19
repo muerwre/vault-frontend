@@ -1,7 +1,9 @@
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 import { TagAutocomplete } from '~/components/tags/TagAutocomplete';
 import { TagWrapper } from '~/components/tags/TagWrapper';
 import { useTagAutocomplete } from '~/hooks/tag/useTagAutocomplete';
+
 import styles from './styles.module.scss';
 
 const placeholder = 'Добавить';

@@ -1,12 +1,14 @@
 import React, { FC, useState } from 'react';
+
 import { Card } from '~/components/containers/Card';
-import styles from './styles.module.scss';
-import markdown from '~/styles/common/markdown.module.scss';
 import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
-import { useShowModal } from '~/hooks/modal/useShowModal';
 import { Dialog } from '~/constants/modal';
+import { useShowModal } from '~/hooks/modal/useShowModal';
+import markdown from '~/styles/common/markdown.module.scss';
+
+import styles from './styles.module.scss';
 
 interface IProps {}
 

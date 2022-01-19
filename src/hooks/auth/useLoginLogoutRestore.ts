@@ -1,9 +1,9 @@
-import { useAuthStore } from '~/store/auth/useAuthStore';
 import { useCallback } from 'react';
+
 import { apiUserLogin } from '~/api/auth';
-import { showErrorToast } from '~/utils/errors/showToast';
 import { getRandomPhrase } from '~/constants/phrases';
-import { showToastInfo, showToastSuccess } from '~/utils/toast';
+import { useAuthStore } from '~/store/auth/useAuthStore';
+import { showToastInfo } from '~/utils/toast';
 
 export const useLoginLogoutRestore = () => {
   const auth = useAuthStore();

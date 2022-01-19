@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+
 import { Dialog } from '~/constants/modal';
 import { DialogContentProps } from '~/hooks/modal/useModal';
 

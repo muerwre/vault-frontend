@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
+
 import classNames from 'classnames';
+
 import styles from './styles.module.scss';
 
 type IProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -32,20 +34,18 @@ const Grid: FC<IProps> = ({
       [styles.horizontal]: horizontal,
       [styles.vertical]: !horizontal,
       [styles.square]: square,
-      [styles.stretchy]: stretchy
+      [styles.stretchy]: stretchy,
     })}
     style={{
       ...style,
       gridTemplateColumns: square
         ? `repeat(auto-fill, ${(columns !== 'auto' && columns) || size})`
         : columns,
-      gridTemplateRows: square
-        ? `repeat(auto-fill, ${(rows !== 'auto' && rows) || size})`
-        : rows,
+      gridTemplateRows: square ? `repeat(auto-fill, ${(rows !== 'auto' && rows) || size})` : rows,
       gridAutoRows: rows,
       gridAutoColumns: columns,
       gridRowGap: gap,
-      gridColumnGap: gap
+      gridColumnGap: gap,
     }}
     {...props}
   >

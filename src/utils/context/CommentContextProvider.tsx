@@ -1,10 +1,11 @@
-import { IComment, IFile } from '~/types';
 import React, { createContext, FC, useContext } from 'react';
+
+import { IComment, IFile } from '~/types';
 
 export interface CommentProviderProps {
   comments: IComment[];
   hasMore: boolean;
-  lastSeenCurrent?: string;
+  lastSeenCurrent?: string | null;
   isLoading: boolean;
   onShowImageModal: (images: IFile[], index: number) => void;
   onLoadMoreComments: () => void;
@@ -16,7 +17,7 @@ const CommentContext = createContext<CommentProviderProps>({
   // user: EMPTY_USER,
   comments: [],
   hasMore: false,
-  lastSeenCurrent: undefined,
+  lastSeenCurrent: null,
   isLoading: false,
   onSaveComment: async () => {},
   onShowImageModal: () => {},

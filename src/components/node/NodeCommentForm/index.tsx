@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { CommentWrapper } from '~/components/containers/CommentWrapper';
+
 import { CommentForm } from '~/components/comment/CommentForm';
+import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import { IComment } from '~/types';
 import { IUser } from '~/types/auth';
 

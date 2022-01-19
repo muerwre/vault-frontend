@@ -1,15 +1,18 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { RouteComponentProps } from 'react-router';
-import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
-import { Container } from '~/containers/main/Container';
-import { FlowGrid } from '~/components/flow/FlowGrid';
-import { ProfilePageStats } from '~/containers/profile/ProfilePageStats';
-import { Card } from '~/components/containers/Card';
-import { useFlowStore } from '~/store/flow/useFlowStore';
+
 import { observer } from 'mobx-react-lite';
-import { useGetProfile } from '~/hooks/profile/useGetProfile';
+import { RouteComponentProps } from 'react-router';
+
+import { Card } from '~/components/containers/Card';
+import { FlowGrid } from '~/components/flow/FlowGrid';
+import { Container } from '~/containers/main/Container';
+import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
+import { ProfilePageStats } from '~/containers/profile/ProfilePageStats';
 import { useUser } from '~/hooks/auth/useUser';
+import { useGetProfile } from '~/hooks/profile/useGetProfile';
+import { useFlowStore } from '~/store/flow/useFlowStore';
+
+import styles from './styles.module.scss';
 
 type Props = RouteComponentProps<{ username: string }> & {};
 

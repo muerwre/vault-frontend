@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+
 import { normalizeBrightColor } from '~/utils/color';
 import { stringToColour } from '~/utils/dom';
 

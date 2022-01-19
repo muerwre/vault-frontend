@@ -1,9 +1,10 @@
-import { useFlowLayout } from '~/hooks/flow/useFlowLayout';
 import { useMemo } from 'react';
+
+import { useFlowLayout } from '~/hooks/flow/useFlowLayout';
 import { useFlowLoader } from '~/hooks/flow/useFlowLoader';
-import { useFlowStore } from '~/store/flow/useFlowStore';
 import { useFlowSetCellView } from '~/hooks/flow/useFlowSetCellView';
 import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
+import { useFlowStore } from '~/store/flow/useFlowStore';
 
 export const useFlow = () => {
   const { loadMore, isSyncing } = useFlowLoader();

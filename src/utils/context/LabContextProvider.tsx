@@ -1,6 +1,7 @@
-import { ILabNode } from '~/types/lab';
 import React, { createContext, FC, useContext } from 'react';
+
 import { IFlowNode, ITag } from '~/types';
+import { ILabNode } from '~/types/lab';
 
 export interface LabContextProps {
   isLoading: boolean;

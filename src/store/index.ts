@@ -1,9 +1,10 @@
 import { makeAutoObservable } from 'mobx';
-import { FlowStore } from '~/store/flow/FlowStore';
-import { ModalStore } from '~/store/modal/ModalStore';
-import { LabStore } from '~/store/lab/LabStore';
+import { enableStaticRendering } from 'mobx-react-lite';
+
 import { AuthStore } from '~/store/auth/AuthStore';
-import { useStaticRendering } from 'mobx-react-lite';
+import { FlowStore } from '~/store/flow/FlowStore';
+import { LabStore } from '~/store/lab/LabStore';
+import { ModalStore } from '~/store/modal/ModalStore';
 
 export class Store {
   flow = new FlowStore();
@@ -24,5 +25,4 @@ const defaultStore = new Store();
 
 export const getMOBXStore = () => defaultStore;
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
-useStaticRendering(typeof window === 'undefined');
+enableStaticRendering(typeof window === 'undefined');

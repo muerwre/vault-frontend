@@ -1,7 +1,9 @@
 import React, { FC, MouseEventHandler } from 'react';
-import { INode } from '~/types';
-import styles from './styles.module.scss';
+
 import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
+import { INode } from '~/types';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   nodes: INode[];

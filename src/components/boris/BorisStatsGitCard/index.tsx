@@ -1,8 +1,12 @@
 import React, { FC, useMemo } from 'react';
-import styles from './styles.module.scss';
-import { getPrettyDate } from '~/utils/dom';
-import { GithubIssue } from '~/types/boris';
+
 import classNames from 'classnames';
+
+import { GithubIssue } from '~/types/boris';
+import { getPrettyDate } from '~/utils/dom';
+
+import styles from './styles.module.scss';
+
 
 interface IProps {
   data: GithubIssue;

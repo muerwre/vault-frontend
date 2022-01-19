@@ -1,7 +1,9 @@
 import React, { FC, useCallback, useEffect } from 'react';
-import { ButtonGroup } from '~/components/input/ButtonGroup';
+
 import { Button } from '~/components/input/Button';
+import { ButtonGroup } from '~/components/input/ButtonGroup';
 import { useFormatWrapper, wrapTextInsideInput } from '~/hooks/dom/useFormatWrapper';
+
 import styles from './styles.module.scss';
 
 interface IProps {

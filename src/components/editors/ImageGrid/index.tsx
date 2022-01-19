@@ -1,11 +1,14 @@
 import React, { FC, useCallback } from 'react';
+
 import { SortEnd } from 'react-sortable-hoc';
-import styles from './styles.module.scss';
+
+import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
+import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
 import { moveArrItem } from '~/utils/fn';
-import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
-import { UploadStatus } from '~/store/uploader/UploaderStore';
-import { useWindowSize } from '~/hooks/dom/useWindowSize';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   files: IFile[];

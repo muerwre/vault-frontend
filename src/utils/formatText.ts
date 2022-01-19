@@ -1,6 +1,7 @@
 import marked from 'marked';
-import { stripHTMLTags } from '~/utils/stripHTMLTags';
+
 import { EventMessageType } from '~/constants/events';
+import { stripHTMLTags } from '~/utils/stripHTMLTags';
 
 /**
  * Cleans youtube urls

@@ -1,13 +1,16 @@
 import React, { FC } from 'react';
+
+import classNames from 'classnames';
+
 import { FlowGrid } from '~/components/flow/FlowGrid';
-import styles from './styles.module.scss';
+import { FlowSwiperHero } from '~/components/flow/FlowSwiperHero';
 import { FlowStamp } from '~/containers/flow/FlowStamp';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
-import classNames from 'classnames';
-import { FlowSwiperHero } from '~/components/flow/FlowSwiperHero';
-import { useFlowContext } from '~/utils/context/FlowContextProvider';
 import { useUser } from '~/hooks/auth/useUser';
 import { useInfiniteLoader } from '~/hooks/dom/useInfiniteLoader';
+import { useFlowContext } from '~/utils/context/FlowContextProvider';
+
+import styles from './styles.module.scss';
 
 interface Props {
   isFluid: boolean;

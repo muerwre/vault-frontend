@@ -1,27 +1,28 @@
 import { FC } from 'react';
-import { IComment, INode, ValueOf } from '~/types';
-import { NodeTextBlock } from '~/components/node/NodeTextBlock';
-import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
-import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';
-import { NodeAudioImageBlock } from '~/components/node/NodeAudioImageBlock';
+
+import { AudioEditor } from '~/components/editors/AudioEditor';
+import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadButton';
+import { EditorFiller } from '~/components/editors/EditorFiller';
+import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadButton';
+import { EditorPublicSwitch } from '~/components/editors/EditorPublicSwitch';
+import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
 import { ImageEditor } from '~/components/editors/ImageEditor';
 import { TextEditor } from '~/components/editors/TextEditor';
 import { VideoEditor } from '~/components/editors/VideoEditor';
-import { AudioEditor } from '~/components/editors/AudioEditor';
-import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadButton';
-import { EditorAudioUploadButton } from '~/components/editors/EditorAudioUploadButton';
-import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
-import { IEditorComponentProps, NodeEditorProps } from '~/types/node';
-import { EditorFiller } from '~/components/editors/EditorFiller';
-import { EditorPublicSwitch } from '~/components/editors/EditorPublicSwitch';
-import { NodeImageSwiperBlock } from '~/components/node/NodeImageSwiperBlock';
-import { LabNodeTitle } from '~/components/lab/LabNodeTitle';
-import { LabText } from '~/components/lab/LabText';
-import { LabImage } from '~/components/lab/LabImage';
-import { LabPad } from '~/components/lab/LabPad';
-import { LabDescription } from '~/components/lab/LabDescription';
-import { LabVideo } from '~/components/lab/LabVideo';
 import { LabAudio } from '~/components/lab/LabAudioBlock';
+import { LabDescription } from '~/components/lab/LabDescription';
+import { LabImage } from '~/components/lab/LabImage';
+import { LabNodeTitle } from '~/components/lab/LabNodeTitle';
+import { LabPad } from '~/components/lab/LabPad';
+import { LabText } from '~/components/lab/LabText';
+import { LabVideo } from '~/components/lab/LabVideo';
+import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
+import { NodeAudioImageBlock } from '~/components/node/NodeAudioImageBlock';
+import { NodeImageSwiperBlock } from '~/components/node/NodeImageSwiperBlock';
+import { NodeTextBlock } from '~/components/node/NodeTextBlock';
+import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';
+import { IComment, INode, ValueOf } from '~/types';
+import { IEditorComponentProps, NodeEditorProps } from '~/types/node';
 
 export const EMPTY_NODE: INode = {
   id: 0,

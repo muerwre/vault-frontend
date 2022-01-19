@@ -1,30 +1,33 @@
-import React, { FC, useCallback, useMemo } from 'react';
-import { Logo } from '~/components/main/Logo';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Filler } from '~/components/containers/Filler';
-import { UserButton } from '~/components/main/UserButton';
-import { URLS } from '~/constants/urls';
 import classNames from 'classnames';
-
-import styles from './styles.module.scss';
 import isBefore from 'date-fns/isBefore';
-import { Authorized } from '~/components/containers/Authorized';
-import { Button } from '~/components/input/Button';
 import { observer } from 'mobx-react-lite';
+
+import { Anchor } from '~/components/common/Anchor';
+import { Authorized } from '~/components/containers/Authorized';
+import { Filler } from '~/components/containers/Filler';
+import { Button } from '~/components/input/Button';
+import { Logo } from '~/components/main/Logo';
+import { UserButton } from '~/components/main/UserButton';
 import { Dialog } from '~/constants/modal';
-import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
+import { isSSR } from '~/constants/ssr';
+import { URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
-import { useModal } from '~/hooks/modal/useModal';
 import { useScrollTop } from '~/hooks/dom/useScrollTop';
 import { useFlow } from '~/hooks/flow/useFlow';
+import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
+import { useModal } from '~/hooks/modal/useModal';
 import { useUpdates } from '~/hooks/updates/useUpdates';
-import { Anchor } from '~/components/common/Anchor';
+
+import styles from './styles.module.scss';
 
 type HeaderProps = {};
 
 const Header: FC<HeaderProps> = observer(() => {
   const labStats = useGetLabStats();
 
+  const [isScrolled, setIsScrolled] = useState(false);
   const { logout } = useAuth();
   const { showModal } = useModal();
   const { isUser, user } = useAuth();
@@ -51,10 +54,15 @@ const Header: FC<HeaderProps> = observer(() => {
   const hasLabUpdates = useMemo(() => labStats.updates.length > 0, [labStats.updates]);
   const hasFlowUpdates = useMemo(() => flowUpdates.length > 0, [flowUpdates]);
 
+  // Needed for SSR
+  useEffect(() => {
+    setIsScrolled(top > 10);
+  }, [top]);
+
   return (
-    <div className={classNames(styles.wrap, { [styles.is_scrolled]: top > 10 })}>
+    <div className={classNames(styles.wrap, { [styles.is_scrolled]: isScrolled })}>
       <div className={styles.container}>
-        <div className={classNames(styles.logo_wrapper, { [styles.logged_in]: isUser })}>
+        <div className={styles.logo_wrapper}>
           <Logo />
         </div>
 

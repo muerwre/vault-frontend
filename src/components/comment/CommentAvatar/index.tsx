@@ -1,10 +1,13 @@
 import React, { FC, useCallback, useState } from 'react';
-import { IUser } from '~/types/auth';
-import { Avatar } from '~/components/common/Avatar';
+
 import { path } from 'ramda';
 import { Manager, Popper, Reference } from 'react-popper';
-import styles from './styles.module.scss';
+
+import { Avatar } from '~/components/common/Avatar';
 import { useRandomPhrase } from '~/constants/phrases';
+import { IUser } from '~/types/auth';
+
+import styles from './styles.module.scss';
 
 interface Props {
   user: IUser;

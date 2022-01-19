@@ -1,12 +1,15 @@
 import React, { FC, Fragment } from 'react';
+
+import classNames from 'classnames';
+
+import { FlowCell } from '~/components/flow/FlowCell';
+import { PRESETS, URLS } from '~/constants/urls';
 import { FlowDisplay, IFlowNode, INode } from '~/types';
 import { IUser } from '~/types/auth';
-import { PRESETS, URLS } from '~/constants/urls';
-import { FlowCell } from '~/components/flow/FlowCell';
-import classNames from 'classnames';
-import styles from './styles.module.scss';
 import { getURLFromString } from '~/utils/dom';
 import { canEditNode } from '~/utils/node';
+
+import styles from './styles.module.scss';
 
 interface Props {
   nodes: IFlowNode[];

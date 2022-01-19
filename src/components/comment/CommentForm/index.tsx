@@ -1,23 +1,26 @@
 import React, { FC, useCallback, useState } from 'react';
-import { useCommentFormFormik } from '~/hooks/comments/useCommentFormFormik';
+
 import { FormikProvider } from 'formik';
-import { LocalCommentFormTextarea } from '~/components/comment/LocalCommentFormTextarea';
-import { Button } from '~/components/input/Button';
-import { UploadSubject, UploadTarget } from '~/constants/uploads';
-import { CommentFormAttachButtons } from '~/components/comment/CommentFormAttachButtons';
-import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormatButtons';
-import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
-import { IComment, INode } from '~/types';
-import { EMPTY_COMMENT } from '~/constants/node';
-import { UploadDropzone } from '~/components/upload/UploadDropzone';
-import styles from './styles.module.scss';
-import { ERROR_LITERAL } from '~/constants/errors';
-import { useInputPasteUpload } from '~/hooks/dom/useInputPasteUpload';
-import { Filler } from '~/components/containers/Filler';
-import { useUploader } from '~/hooks/data/useUploader';
-import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
 import { observer } from 'mobx-react-lite';
+
+import { CommentFormAttachButtons } from '~/components/comment/CommentFormAttachButtons';
+import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
+import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormatButtons';
+import { LocalCommentFormTextarea } from '~/components/comment/LocalCommentFormTextarea';
+import { Filler } from '~/components/containers/Filler';
+import { Button } from '~/components/input/Button';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { UploadDropzone } from '~/components/upload/UploadDropzone';
+import { ERROR_LITERAL } from '~/constants/errors';
+import { EMPTY_COMMENT } from '~/constants/node';
+import { UploadSubject, UploadTarget } from '~/constants/uploads';
+import { useCommentFormFormik } from '~/hooks/comments/useCommentFormFormik';
+import { useUploader } from '~/hooks/data/useUploader';
+import { useInputPasteUpload } from '~/hooks/dom/useInputPasteUpload';
+import { IComment, INode } from '~/types';
+import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   comment?: IComment;

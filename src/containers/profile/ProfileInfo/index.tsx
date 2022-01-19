@@ -1,13 +1,16 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
+
 import { Group } from '~/components/containers/Group';
 import { Placeholder } from '~/components/placeholders/Placeholder';
-import { getPrettyDate } from '~/utils/dom';
-import { ProfileTabs } from '../ProfileTabs';
 import { ProfileAvatar } from '~/components/profile/ProfileAvatar';
-import { useProfileContext } from '~/utils/providers/ProfileProvider';
 import { usePatchUser } from '~/hooks/auth/usePatchUser';
 import { useUser } from '~/hooks/auth/useUser';
+import { getPrettyDate } from '~/utils/dom';
+import { useProfileContext } from '~/utils/providers/ProfileProvider';
+
+import { ProfileTabs } from '../ProfileTabs';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   isLoading?: boolean;

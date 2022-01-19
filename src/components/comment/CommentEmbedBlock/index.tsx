@@ -1,9 +1,12 @@
 import React, { FC, memo, useMemo } from 'react';
-import { ICommentBlockProps } from '~/constants/comment';
-import styles from './styles.module.scss';
-import { getYoutubeThumb } from '~/utils/dom';
+
 import { Icon } from '~/components/input/Icon';
+import { ICommentBlockProps } from '~/constants/comment';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
+import { getYoutubeThumb } from '~/utils/dom';
+
+import styles from './styles.module.scss';
+
 
 type Props = ICommentBlockProps & {};
 

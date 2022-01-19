@@ -1,8 +1,9 @@
 import useSWR from 'swr';
-import { API } from '~/constants/api';
+
 import { getBorisBackendStats, getGithubIssues } from '~/api/boris';
-import { BorisUsageStats } from '~/types/boris';
+import { API } from '~/constants/api';
 import { initialBackendStats } from '~/constants/boris/constants';
+import { BorisUsageStats } from '~/types/boris';
 
 export const useBorisStats = () => {
   const { data: backend = initialBackendStats, isValidating: isValidatingBackend } = useSWR(

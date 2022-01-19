@@ -1,7 +1,8 @@
-import { INode } from '~/types';
 import { useEffect } from 'react';
-import { useFlowStore } from '~/store/flow/useFlowStore';
+
 import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
+import { useFlowStore } from '~/store/flow/useFlowStore';
+import { INode } from '~/types';
 
 // useOnNodeSeen updates node seen status across all needed places
 export const useOnNodeSeen = (node?: INode) => {

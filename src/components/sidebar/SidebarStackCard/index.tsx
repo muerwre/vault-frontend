@@ -1,7 +1,9 @@
 import React, { FC, useMemo } from 'react';
-import styles from './styles.module.scss';
+
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
+
+import styles from './styles.module.scss';
 
 interface SidebarStackCardProps {
   width?: number;

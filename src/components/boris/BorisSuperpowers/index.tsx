@@ -1,6 +1,8 @@
 import React, { FC, useCallback } from 'react';
-import styles from './styles.module.scss';
+
 import { Toggle } from '~/components/input/Toggle';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   active?: boolean;

@@ -1,10 +1,13 @@
 import React, { FC, useCallback } from 'react';
-import styles from './styles.module.scss';
-import { Textarea } from '~/components/input/Textarea';
+
 import { path } from 'ramda';
-import { NodeEditorProps } from '~/types/node';
-import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+
+import { Textarea } from '~/components/input/Textarea';
 import { useRandomPhrase } from '~/constants/phrases';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+import { NodeEditorProps } from '~/types/node';
+
+import styles from './styles.module.scss';
 
 type IProps = NodeEditorProps & {};
 

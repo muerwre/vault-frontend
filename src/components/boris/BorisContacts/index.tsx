@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
+
 import { BorisContactItem } from '~/components/boris/BorisContactItem';
+
 import styles from './styles.module.scss';
 
 interface Props {}

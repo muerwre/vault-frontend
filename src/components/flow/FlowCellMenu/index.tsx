@@ -1,10 +1,13 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
+
 import classNames from 'classnames';
-import { Toggle } from '~/components/input/Toggle';
+
 import { Group } from '~/components/containers/Group';
+import { Icon } from '~/components/input/Icon';
+import { Toggle } from '~/components/input/Toggle';
 import { FlowDisplayVariant } from '~/types';
+
+import styles from './styles.module.scss';
 
 interface Props {
   onClose: () => void;

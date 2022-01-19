@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
-import { EditorActionsPanel } from '~/components/editors/EditorActionsPanel';
-import { Group } from '~/components/containers/Group';
-import { InputText } from '~/components/input/InputText';
-import { Button } from '~/components/input/Button';
-import { Padder } from '~/components/containers/Padder';
-import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+
 import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
+import { Padder } from '~/components/containers/Padder';
+import { EditorActionsPanel } from '~/components/editors/EditorActionsPanel';
+import { Button } from '~/components/input/Button';
+import { InputText } from '~/components/input/InputText';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 
 const EditorButtons: FC = () => {
   const { values, handleChange, isSubmitting } = useNodeFormContext();

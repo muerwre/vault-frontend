@@ -1,13 +1,15 @@
 import { useCallback, useMemo } from 'react';
-import { OAuthProvider } from '~/types/auth';
-import { API } from '~/constants/api';
-import { apiAttachSocial, apiDropSocial, apiGetSocials, apiLoginWithSocial } from '~/api/auth';
-import { useModal } from '~/hooks/modal/useModal';
-import { Dialog } from '~/constants/modal';
-import { showErrorToast } from '~/utils/errors/showToast';
+
 import { path } from 'ramda';
 import useSWR from 'swr';
+
+import { apiAttachSocial, apiDropSocial, apiGetSocials, apiLoginWithSocial } from '~/api/auth';
+import { API } from '~/constants/api';
+import { Dialog } from '~/constants/modal';
 import { useAuth } from '~/hooks/auth/useAuth';
+import { useModal } from '~/hooks/modal/useModal';
+import { OAuthProvider } from '~/types/auth';
+import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useOAuth = () => {
   const { isUser, setToken } = useAuth();

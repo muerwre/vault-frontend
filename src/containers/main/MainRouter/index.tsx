@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
+
+import { Redirect, Route, Switch, useLocation } from 'react-router';
+
 import { URLS } from '~/constants/urls';
 import { ErrorNotFound } from '~/containers/pages/ErrorNotFound';
-import { Redirect, Route, Switch, useLocation } from 'react-router';
+import { useAuth } from '~/hooks/auth/useAuth';
 import { ProfileLayout } from '~/layouts/ProfileLayout';
 import FlowPage from '~/pages';
 import BorisPage from '~/pages/boris';
-import NodePage from '~/pages/node/[id]';
 import LabPage from '~/pages/lab';
-import { useAuth } from '~/hooks/auth/useAuth';
+import NodePage from '~/pages/node/[id]';
 
 interface IProps {}
 

@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
-import { IMessage } from '~/types';
-import styles from './styles.module.scss';
-import { formatText, getPrettyDate, getURL } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
+
 import classNames from 'classnames';
+
 import { Group } from '~/components/containers/Group';
+import { PRESETS } from '~/constants/urls';
 import markdown from '~/styles/common/markdown.module.scss';
+import { IMessage } from '~/types';
+import { formatText, getPrettyDate, getURL } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   message: IMessage;

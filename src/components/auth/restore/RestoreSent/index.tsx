@@ -1,8 +1,10 @@
 import React, { VFC } from 'react';
-import styles from './styles.module.scss';
-import { Icon } from '~/components/input/Icon';
-import { Button } from '~/components/input/Button';
+
 import { Group } from '~/components/containers/Group';
+import { Button } from '~/components/input/Button';
+import { Icon } from '~/components/input/Icon';
+
+import styles from './styles.module.scss';
 
 interface RestoreSentProps {
   onClose: () => void;

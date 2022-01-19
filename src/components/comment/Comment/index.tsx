@@ -1,11 +1,18 @@
 import React, { FC, HTMLAttributes, memo } from 'react';
-import { CommentWrapper } from '~/components/containers/CommentWrapper';
-import { IComment, ICommentGroup, IFile } from '~/types';
-import { CommentContent } from '~/components/comment/CommentContent';
-import styles from './styles.module.scss';
-import { CommendDeleted } from '../../node/CommendDeleted';
+
 import classNames from 'classnames';
+
+import { CommentContent } from '~/components/comment/CommentContent';
+import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import { NEW_COMMENT_CLASSNAME } from '~/constants/comment';
+import { IComment, ICommentGroup, IFile } from '~/types';
+
+import { CommendDeleted } from '../../node/CommendDeleted';
+
+import styles from './styles.module.scss';
+
+
+
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   nodeId: number;

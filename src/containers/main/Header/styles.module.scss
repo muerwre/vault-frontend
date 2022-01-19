@@ -143,10 +143,7 @@
 }
 
 .logo_wrapper {
-
   @include tablet {
-    &.logged_in {
-      display: none;
-    }
+    display: none;
   }
 }

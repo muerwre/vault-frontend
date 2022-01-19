@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
+
 import { StatsRow } from '~/components/common/StatsRow';
 import { SubTitle } from '~/components/common/SubTitle';
+
+import styles from './styles.module.scss';
 
 interface Props {}
 

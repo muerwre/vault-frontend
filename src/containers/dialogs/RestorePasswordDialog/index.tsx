@@ -1,17 +1,19 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
-import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
-import { Group } from '~/components/containers/Group';
-import { InputText } from '~/components/input/InputText';
-import { Button } from '~/components/input/Button';
-import styles from './styles.module.scss';
 
-import { useCloseOnEscape } from '~/hooks';
-import { DialogComponentProps } from '~/types/modal';
-import { useRestoreCode } from '~/hooks/auth/useRestoreCode';
+import { apiRestoreCode } from '~/api/auth';
 import { RestoreInvalidCode } from '~/components/auth/restore/RestoreInvalidCode';
 import { RestoreSuccess } from '~/components/auth/restore/RestoreSuccess';
+import { Group } from '~/components/containers/Group';
+import { Button } from '~/components/input/Button';
+import { InputText } from '~/components/input/InputText';
+import { useCloseOnEscape } from '~/hooks';
+import { useRestoreCode } from '~/hooks/auth/useRestoreCode';
 import { useRestorePasswordForm } from '~/hooks/auth/useRestorePasswordForm';
-import { apiRestoreCode } from '~/api/auth';
+import { DialogComponentProps } from '~/types/modal';
+
+import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
+
+import styles from './styles.module.scss';
 
 type RestorePasswordDialogProps = DialogComponentProps & {
   code: string;

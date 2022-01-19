@@ -1,5 +1,5 @@
-import { IFile } from '~/types';
 import { Role } from '~/constants/auth';
+import { IFile } from '~/types';
 
 export interface IUser {
   id: number;

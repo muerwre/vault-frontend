@@ -1,13 +1,14 @@
 import React, { FC, useCallback } from 'react';
-import { Placeholder } from '~/components/placeholders/Placeholder';
+
 import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
-import styles from './styles.module.scss';
+import { Placeholder } from '~/components/placeholders/Placeholder';
+import { URLS } from '~/constants/urls';
+import { useNavigation } from '~/hooks/navigation/useNavigation';
 import { INode } from '~/types';
 import { getPrettyDate } from '~/utils/dom';
-import { URLS } from '~/constants/urls';
-import { useHistory } from 'react-router-dom';
-import { useNavigation } from '~/hooks/navigation/useNavigation';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   node?: Partial<INode>;

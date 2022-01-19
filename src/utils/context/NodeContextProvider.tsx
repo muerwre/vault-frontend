@@ -1,6 +1,7 @@
-import { INode } from '~/types';
-import { EMPTY_NODE } from '~/constants/node';
 import React, { createContext, FC, useContext } from 'react';
+
+import { EMPTY_NODE } from '~/constants/node';
+import { INode } from '~/types';
 
 export interface NodeContextProps {
   node: INode;

@@ -1,10 +1,13 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
+
 import { path } from 'ramda';
-import { getURL } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
+
 import { INodeComponentProps } from '~/constants/node';
+import { PRESETS } from '~/constants/urls';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
+import { getURL } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 interface IProps extends INodeComponentProps {}
 

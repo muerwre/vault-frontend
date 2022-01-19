@@ -1,13 +1,16 @@
 import React, { FC, useCallback } from 'react';
-import { EditorDialog } from '~/containers/dialogs/EditorDialog';
+
+import { observer } from 'mobx-react-lite';
+
 import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
-import styles from './styles.module.scss';
+import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useUpdateNode } from '~/hooks/node/useUpdateNode';
 import { INode } from '~/types';
-import { observer } from 'mobx-react-lite';
 import { DialogComponentProps } from '~/types/modal';
+
+import styles from './styles.module.scss';
 
 export interface EditorEditDialogProps extends DialogComponentProps {
   nodeId: number;

@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
+
 import { LoaderCircle } from '~/components/input/LoaderCircle';
+
+import styles from './styles.module.scss';
 
 const NodeImageBlockPlaceholder: FC<{}> = () => (
   <div className={styles.placeholder}>

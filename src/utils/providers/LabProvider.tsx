@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { LabContextProvider } from '~/utils/context/LabContextProvider';
+
 import { useLab } from '~/hooks/lab/useLab';
+import { LabContextProvider } from '~/utils/context/LabContextProvider';
 
 interface LabProviderProps {}
 

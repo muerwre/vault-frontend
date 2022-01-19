@@ -1,11 +1,16 @@
-import React, { FC, forwardRef, useCallback } from 'react';
-import { getURLFromString } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
-import styles from './styles.module.scss';
+import React, { forwardRef, useCallback } from 'react';
+
 import classNames from 'classnames';
-import { openUserProfile } from '~/utils/user';
-import { DivProps } from '~/utils/types';
+
 import { Square } from '~/components/common/Square';
+import { PRESETS } from '~/constants/urls';
+import { getURLFromString } from '~/utils/dom';
+import { DivProps } from '~/utils/types';
+import { openUserProfile } from '~/utils/user';
+
+import styles from './styles.module.scss';
+
+
 
 interface Props extends DivProps {
   url?: string;

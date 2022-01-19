@@ -1,9 +1,12 @@
 import React from 'react';
-import toast from 'react-hot-toast';
-import styles from './styles.module.scss';
-import { ToastOptions } from 'react-hot-toast/dist/core/types';
+
 import classNames from 'classnames';
+import toast from 'react-hot-toast';
+import { ToastOptions } from 'react-hot-toast/dist/core/types';
+
 import { isTablet } from '~/constants/dom';
+
+import styles from './styles.module.scss';
 
 const defaultOptions: ToastOptions = {
   icon: null,

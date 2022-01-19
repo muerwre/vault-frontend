@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+
 import { IFlowNode, ITag } from '~/types';
 import { ILabNode } from '~/types/lab';
 

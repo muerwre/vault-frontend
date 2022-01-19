@@ -1,7 +1,10 @@
 import React, { VFC } from 'react';
-import styles from './styles.module.scss';
+
 import { createPortal } from 'react-dom';
+
 import { GodRays } from '~/components/main/GodRays';
+
+import styles from './styles.module.scss';
 
 const ErrorNotFound: VFC = () =>
   createPortal(

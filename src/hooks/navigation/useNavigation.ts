@@ -1,7 +1,9 @@
 import { useCallback } from 'react';
-import { CONFIG } from '~/utils/config';
+
 import { useRouter } from 'next/router';
 import { useHistory } from 'react-router';
+
+import { CONFIG } from '~/utils/config';
 
 export const useNavigation = () => {
   const nextRouter = useRouter();

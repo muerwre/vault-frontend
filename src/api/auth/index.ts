@@ -1,5 +1,3 @@
-import { api, cleanResult } from '~/utils/api';
-import { API } from '~/constants/api';
 import {
   ApiAttachSocialRequest,
   ApiAttachSocialResult,
@@ -22,6 +20,8 @@ import {
   ApiUserLoginRequest,
   ApiUserLoginResult,
 } from '~/api/auth/types';
+import { API } from '~/constants/api';
+import { api, cleanResult } from '~/utils/api';
 
 export const apiUserLogin = ({ username, password }: ApiUserLoginRequest) =>
   api

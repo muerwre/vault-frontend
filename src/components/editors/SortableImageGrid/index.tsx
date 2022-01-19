@@ -1,13 +1,16 @@
 import React, { useCallback } from 'react';
+
+import classNames from 'classnames';
 import { SortableContainer } from 'react-sortable-hoc';
-import { ImageUpload } from '~/components/upload/ImageUpload';
-import styles from './styles.module.scss';
+
 import { SortableImageGridItem } from '~/components/editors/SortableImageGridItem';
+import { ImageUpload } from '~/components/upload/ImageUpload';
+import { PRESETS } from '~/constants/urls';
+import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
-import classNames from 'classnames';
-import { UploadStatus } from '~/store/uploader/UploaderStore';
+
+import styles from './styles.module.scss';
 
 const SortableImageGrid = SortableContainer(
   ({

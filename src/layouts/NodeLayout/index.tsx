@@ -1,24 +1,21 @@
 import React, { FC } from 'react';
-import { Route } from 'react-router';
+
+import { Superpower } from '~/components/boris/Superpower';
+import { ScrollHelperBottom } from '~/components/common/ScrollHelperBottom';
 import { Card } from '~/components/containers/Card';
-
 import { Footer } from '~/components/main/Footer';
-
-import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import { NodeTitle } from '~/components/node/NodeTitle';
 import { Container } from '~/containers/main/Container';
-import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
+import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { NodeBottomBlock } from '~/containers/node/NodeBottomBlock';
+import { useNodeActions } from '~/hooks/node/useNodeActions';
+import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { useNodeCoverImage } from '~/hooks/node/useNodeCoverImage';
-import { URLS } from '~/constants/urls';
-import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
+import { useNodePermissions } from '~/hooks/node/useNodePermissions';
+import { useNodeContext } from '~/utils/context/NodeContextProvider';
 
 import styles from './styles.module.scss';
-import { useNodeContext } from '~/utils/context/NodeContextProvider';
-import { useNodePermissions } from '~/hooks/node/useNodePermissions';
-import { useNodeActions } from '~/hooks/node/useNodeActions';
-import { NodeTitle } from '~/components/node/NodeTitle';
-import { ScrollHelperBottom } from '~/components/common/ScrollHelperBottom';
-import { Superpower } from '~/components/boris/Superpower';
+
 
 type IProps = {};
 

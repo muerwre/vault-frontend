@@ -1,14 +1,17 @@
 import React, { VFC } from 'react';
-import styles from './styles.module.scss';
-import { ProfileSidebarHead } from '~/containers/profile/ProfileSidebarHead';
-import { Filler } from '~/components/containers/Filler';
+
 import classNames from 'classnames';
-import markdown from '~/styles/common/markdown.module.scss';
-import { Group } from '~/components/containers/Group';
-import { Grid } from '~/components/containers/Grid';
-import { Card } from '~/components/containers/Card';
+
 import { Square } from '~/components/common/Square';
+import { Card } from '~/components/containers/Card';
+import { Filler } from '~/components/containers/Filler';
+import { Grid } from '~/components/containers/Grid';
+import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
+import { ProfileSidebarHead } from '~/containers/profile/ProfileSidebarHead';
+import markdown from '~/styles/common/markdown.module.scss';
+
+import styles from './styles.module.scss';
 
 interface ProfileSidebarMenuProps {
   onClose: () => void;

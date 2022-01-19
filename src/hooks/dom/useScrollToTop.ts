@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { NEW_COMMENT_CLASSNAME } from '~/constants/comment';
 
 export const useScrollToTop = (deps?: any[]) => {
@@ -16,6 +17,7 @@ export const useScrollToTop = (deps?: any[]) => {
         top: bounds.top - 100,
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     deps && Array.isArray(deps) ? deps : []
   );
 };

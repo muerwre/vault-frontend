@@ -1,9 +1,12 @@
 import React, { createElement, FC } from 'react';
-import { INotification, NOTIFICATION_TYPES } from '~/types';
-import styles from './styles.module.scss';
-import { NotificationMessage } from '../NotificationMessage';
+
 import { Icon } from '~/components/input/Icon';
 import { useRandomPhrase } from '~/constants/phrases';
+import { INotification, NOTIFICATION_TYPES } from '~/types';
+
+import { NotificationMessage } from '../NotificationMessage';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   notifications: INotification[];

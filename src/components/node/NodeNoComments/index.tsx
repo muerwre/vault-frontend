@@ -1,9 +1,12 @@
 import React, { FC, useMemo } from 'react';
-import styles from './styles.module.scss';
-import { Group } from '~/components/containers/Group';
+
 import classNames from 'classnames';
+
+import { Group } from '~/components/containers/Group';
 import { ERRORS } from '~/constants/errors';
 import { t } from '~/utils/trans';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   is_loading?: boolean;

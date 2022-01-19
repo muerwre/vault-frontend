@@ -1,9 +1,12 @@
 import React, { FC, ReactElement } from 'react';
-import styles from './styles.module.scss';
-import { Group } from '~/components/containers/Group';
-import { INode } from '~/types';
-import { NodeRelatedItem } from '~/components/node/NodeRelatedItem';
+
 import { SubTitle } from '~/components/common/SubTitle';
+import { Group } from '~/components/containers/Group';
+import { NodeRelatedItem } from '~/components/node/NodeRelatedItem';
+import { INode } from '~/types';
+
+import styles from './styles.module.scss';
+
 
 interface IProps {
   title: ReactElement | string;

@@ -1,9 +1,12 @@
 import React, { createContext, FC, useContext, useState } from 'react';
-import styles from './styles.module.scss';
+
 import { createPortal } from 'react-dom';
-import { getURL } from '~/utils/dom';
+
 import { PRESETS } from '~/constants/urls';
 import { IFile } from '~/types';
+import { getURL } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 interface CoverContextValue {
   cover: IFile | null;

@@ -1,9 +1,10 @@
-import { INode } from '~/types';
 import { useCallback } from 'react';
+
 import { apiLockNode, apiPostNodeHeroic, apiPostNodeLike } from '~/api/node';
-import { showErrorToast } from '~/utils/errors/showToast';
-import { useModal } from '~/hooks/modal/useModal';
 import { Dialog } from '~/constants/modal';
+import { useModal } from '~/hooks/modal/useModal';
+import { INode } from '~/types';
+import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Promise<unknown>) => {
   const { showModal } = useModal();
@@ -41,7 +42,10 @@ export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Pr
     }
   }, [node.deleted_at, node.id, update]);
 
-  const onEdit = useCallback(() => showModal(Dialog.EditNode, { nodeId: node.id! }), [node]);
+  const onEdit = useCallback(() => showModal(Dialog.EditNode, { nodeId: node.id! }), [
+    node,
+    showModal,
+  ]);
 
   return { onLike, onStar, onLock, onEdit };
 };

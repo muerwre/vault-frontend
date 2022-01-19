@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, VFC } from 'react';
 
-import PhotoSwipeJs from 'photoswipe/dist/photoswipe.js';
-import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js';
-import { getURL } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
-import styles from './styles.module.scss';
 import classNames from 'classnames';
-import { useModal } from '~/hooks/modal/useModal';
 import { observer } from 'mobx-react-lite';
+import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js';
+import PhotoSwipeJs from 'photoswipe/dist/photoswipe.js';
+
+import { PRESETS } from '~/constants/urls';
+import { useModal } from '~/hooks/modal/useModal';
 import { IFile } from '~/types';
 import { DialogComponentProps } from '~/types/modal';
+import { getURL } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 export interface PhotoSwipeProps extends DialogComponentProps {
   items: IFile[];

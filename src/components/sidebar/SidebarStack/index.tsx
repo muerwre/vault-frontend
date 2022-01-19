@@ -1,7 +1,6 @@
 import React, { FC, useMemo } from 'react';
+
 import styles from './styles.module.scss';
-import { Button } from '~/components/input/Button';
-import { Filler } from '~/components/containers/Filler';
 
 interface SidebarStackProps {}
 

@@ -1,4 +1,5 @@
 import React, { FC, SVGAttributes } from 'react';
+
 import styles from './styles.module.scss';
 
 interface IProps extends SVGAttributes<SVGElement> {

@@ -1,11 +1,13 @@
-import { Asserts, object, string } from 'yup';
-import { FormikConfig, useFormik } from 'formik';
 import { useCallback } from 'react';
-import { showErrorToast } from '~/utils/errors/showToast';
-import { getValidationErrors } from '~/utils/errors/getValidationErrors';
+
+import { FormikConfig, useFormik } from 'formik';
+import { Asserts, object, string } from 'yup';
+
 import { ERRORS } from '~/constants/errors';
-import { IUser } from '~/types/auth';
 import { useAuthStore } from '~/store/auth/useAuthStore';
+import { IUser } from '~/types/auth';
+import { getValidationErrors } from '~/utils/errors/getValidationErrors';
+import { showErrorToast } from '~/utils/errors/showToast';
 
 const validationSchema = object({
   newPassword: string()

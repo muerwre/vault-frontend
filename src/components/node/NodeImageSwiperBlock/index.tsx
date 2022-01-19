@@ -1,16 +1,16 @@
-import React, { FC, useCallback, useState } from 'react';
-import { INodeComponentProps } from '~/constants/node';
-import { Swiper, SwiperSlide } from 'swiper/react';
-
-import styles from './styles.module.scss';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions } from 'swiper';
-
-import { useNodeImages } from '~/hooks/node/useNodeImages';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
+
 import { ImagePreloader } from '~/components/media/ImagePreloader';
-import { normalizeBrightColor } from '~/utils/color';
+import { INodeComponentProps } from '~/constants/node';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
+import { useNodeImages } from '~/hooks/node/useNodeImages';
+import { normalizeBrightColor } from '~/utils/color';
+
+import styles from './styles.module.scss';
 
 SwiperCore.use([Navigation, Pagination, Keyboard]);
 
@@ -49,6 +49,10 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
     },
     [images, controlledSwiper, showPhotoSwiper]
   );
+
+  useEffect(() => {
+    controlledSwiper?.slideTo(0, 0);
+  }, [images]);
 
   if (!images?.length) {
     return null;

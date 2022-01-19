@@ -1,4 +1,3 @@
-import { api, cleanResult } from '~/utils/api';
 import { API } from '~/constants/api';
 import {
   GetLabNodesRequest,
@@ -6,6 +5,7 @@ import {
   GetLabStatsResult,
   GetLabUpdatesResult,
 } from '~/types/lab';
+import { api, cleanResult } from '~/utils/api';
 
 export const getLabNodes = ({ after }: GetLabNodesRequest) =>
   api

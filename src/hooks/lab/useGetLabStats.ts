@@ -1,9 +1,11 @@
-import useSWR from 'swr';
-import { API } from '~/constants/api';
-import { getLabStats, getLabUpdates } from '~/api/lab';
-import { useLabStore } from '~/store/lab/useLabStore';
 import { useCallback, useMemo } from 'react';
+
+import useSWR from 'swr';
+
+import { getLabStats, getLabUpdates } from '~/api/lab';
+import { API } from '~/constants/api';
 import { useAuth } from '~/hooks/auth/useAuth';
+import { useLabStore } from '~/store/lab/useLabStore';
 
 const refreshInterval = 1000 * 60 * 5; // 5 minutes
 

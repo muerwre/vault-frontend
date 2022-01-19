@@ -1,19 +1,21 @@
 import React, { FC, useCallback, useState } from 'react';
-import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
-import { Padder } from '~/components/containers/Padder';
-import { DialogTitle } from '~/components/dialogs/DialogTitle';
-import { Group } from '~/components/containers/Group';
-import { InputText } from '~/components/input/InputText';
-import styles from './styles.module.scss';
-import { useCloseOnEscape } from '~/hooks';
-import { LoginSocialRegisterButtons } from '~/components/auth/oauth/LoginSocialRegisterButtons';
-import { Toggle } from '~/components/input/Toggle';
-import { DialogComponentProps } from '~/types/modal';
-import { getRandomPhrase } from '~/constants/phrases';
-import { useSocialRegisterForm } from '~/hooks/auth/useSocialRegisterForm';
+
 import { apiLoginWithSocial } from '~/api/auth';
+import { LoginSocialRegisterButtons } from '~/components/auth/oauth/LoginSocialRegisterButtons';
+import { Group } from '~/components/containers/Group';
+import { Padder } from '~/components/containers/Padder';
+import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
+import { DialogTitle } from '~/components/dialogs/DialogTitle';
+import { InputText } from '~/components/input/InputText';
+import { Toggle } from '~/components/input/Toggle';
+import { getRandomPhrase } from '~/constants/phrases';
+import { useCloseOnEscape } from '~/hooks';
+import { useSocialRegisterForm } from '~/hooks/auth/useSocialRegisterForm';
 import { useModal } from '~/hooks/modal/useModal';
 import { useAuthStore } from '~/store/auth/useAuthStore';
+import { DialogComponentProps } from '~/types/modal';
+
+import styles from './styles.module.scss';
 
 type LoginSocialRegisterDialogProps = DialogComponentProps & { token: string };
 

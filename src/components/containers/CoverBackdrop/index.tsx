@@ -1,9 +1,12 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { IUser } from '~/types/auth';
-import styles from './styles.module.scss';
-import { getURL } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
+
 import classNames from 'classnames';
+
+import { PRESETS } from '~/constants/urls';
+import { IUser } from '~/types/auth';
+import { getURL } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   cover: IUser['cover'];
@@ -33,6 +36,9 @@ const CoverBackdrop: FC<IProps> = ({ cover }) => {
       className={classNames(styles.cover, { [styles.active]: is_loaded })}
       style={{ backgroundImage: `url("${image}")` }}
     >
+      {
+        // TODO: use ImageWithSSRLoad here if you will face any bugs
+      }
       <img onLoad={onLoad} ref={ref} alt="" />
     </div>
   );

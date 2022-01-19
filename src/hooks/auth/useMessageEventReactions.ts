@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
-import { EventMessageType } from '~/constants/events';
+
 import { includes, path, values } from 'ramda';
-import { useOAuth } from '~/hooks/auth/useOAuth';
+
+import { EventMessageType } from '~/constants/events';
 import { Dialog } from '~/constants/modal';
-import { useModal } from '~/hooks/modal/useModal';
 import { useAuth } from '~/hooks/auth/useAuth';
+import { useOAuth } from '~/hooks/auth/useOAuth';
+import { useModal } from '~/hooks/modal/useModal';
 
 /** reacts to events passed by window.postMessage */
 export const useMessageEventReactions = () => {

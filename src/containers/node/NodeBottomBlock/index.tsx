@@ -1,22 +1,23 @@
 import React, { FC } from 'react';
-import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
+
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
-import { NodeCommentForm } from '~/components/node/NodeCommentForm';
-import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
-import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
-import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
-import StickyBox from 'react-sticky-box';
-import styles from './styles.module.scss';
-import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
-import { useNodeContext } from '~/utils/context/NodeContextProvider';
-import { useCommentContext } from '~/utils/context/CommentContextProvider';
-import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { NodeComments } from '~/containers/node/NodeComments';
-import { useUserContext } from '~/utils/context/UserContextProvider';
-import { useNodeRelatedContext } from '~/utils/context/NodeRelatedContextProvider';
-import { useAuthProvider } from '~/utils/providers/AuthProvider';
 import { Sticky } from '~/components/containers/Sticky';
+import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
+import { NodeCommentForm } from '~/components/node/NodeCommentForm';
+import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
+import { NodeNoComments } from '~/components/node/NodeNoComments';
+import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
+import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
+import { NodeComments } from '~/containers/node/NodeComments';
+import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
+import { useCommentContext } from '~/utils/context/CommentContextProvider';
+import { useNodeContext } from '~/utils/context/NodeContextProvider';
+import { useNodeRelatedContext } from '~/utils/context/NodeRelatedContextProvider';
+import { useUserContext } from '~/utils/context/UserContextProvider';
+import { useAuthProvider } from '~/utils/providers/AuthProvider';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   commentsOrder: 'ASC' | 'DESC';

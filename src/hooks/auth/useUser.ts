@@ -1,11 +1,13 @@
-import useSWR from 'swr';
-import { useAuthStore } from '~/store/auth/useAuthStore';
-import { API } from '~/constants/api';
-import { apiAuthGetUser } from '~/api/auth';
-import { EMPTY_USER } from '~/constants/auth';
-import { showErrorToast } from '~/utils/errors/showToast';
 import { useCallback } from 'react';
+
+import useSWR from 'swr';
+
+import { apiAuthGetUser } from '~/api/auth';
+import { API } from '~/constants/api';
+import { EMPTY_USER } from '~/constants/auth';
+import { useAuthStore } from '~/store/auth/useAuthStore';
 import { IUser } from '~/types/auth';
+import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useUser = () => {
   const { token, setUser } = useAuthStore();

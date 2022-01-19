@@ -1,8 +1,11 @@
 import React, { createElement, FC } from 'react';
-import styles from './styles.module.scss';
-import { NODE_PANEL_COMPONENTS } from '~/constants/node';
+
 import { has } from 'ramda';
+
+import { NODE_PANEL_COMPONENTS } from '~/constants/node';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+
+import styles from './styles.module.scss';
 
 const EditorActionsPanel: FC = () => {
   const { values } = useNodeFormContext();

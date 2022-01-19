@@ -1,4 +1,5 @@
 import { has, path } from 'ramda';
+
 import { ERROR_LITERAL, ERRORS } from '~/constants/errors';
 
 export const getErrorMessage = (error: unknown): string | undefined => {

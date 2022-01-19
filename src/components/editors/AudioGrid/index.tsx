@@ -1,12 +1,15 @@
 import React, { FC, useCallback } from 'react';
+
 import { SortEnd } from 'react-sortable-hoc';
+
+import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
+import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
 import { moveArrItem } from '~/utils/fn';
-import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
 
 import styles from './styles.module.scss';
-import { UploadStatus } from '~/store/uploader/UploaderStore';
-import { useWindowSize } from '~/hooks/dom/useWindowSize';
+
 
 interface IProps {
   files: IFile[];

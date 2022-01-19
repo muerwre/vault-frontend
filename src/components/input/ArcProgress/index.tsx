@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
-import styles from './styles.module.scss';
+
 import { describeArc } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   size: number;

@@ -1,13 +1,17 @@
 import React, { FC, MouseEventHandler, useCallback, useMemo, useState } from 'react';
+
 import classNames from 'classnames';
-import { getURL } from '~/utils/dom';
-import { PRESETS } from '~/constants/urls';
-import styles from './styles.module.scss';
-import { IFile } from '~/types';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+
+import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 import { Icon } from '~/components/input/Icon';
-import { useResizeHandler } from '~/hooks/dom/useResizeHandler';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
+import { PRESETS } from '~/constants/urls';
+import { useResizeHandler } from '~/hooks/dom/useResizeHandler';
+import { IFile } from '~/types';
+import { getURL } from '~/utils/dom';
+
+import styles from './styles.module.scss';
 
 interface IProps {
   file: IFile;
@@ -21,7 +25,7 @@ const DEFAULT_WIDTH = 1920;
 const DEFAULT_HEIGHT = 1020;
 
 const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className }) => {
-  const [maxHeight, setMaxHeight] = useState(window.innerHeight - 140);
+  const [maxHeight, setMaxHeight] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -83,7 +87,7 @@ const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className })
         </g>
       </svg>
 
-      <img
+      <ImageWithSSRLoad
         className={classNames(styles.image, { [styles.is_loaded]: loaded }, className)}
         src={getURL(file, PRESETS['1600'])}
         alt=""

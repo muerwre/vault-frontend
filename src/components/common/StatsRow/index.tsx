@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
+
 import { Placeholder } from '~/components/placeholders/Placeholder';
+
 import styles from './styles.module.scss';
 
 const StatsRow: FC<{ isLoading: boolean; label: string }> = ({ isLoading, label, children }) => (
