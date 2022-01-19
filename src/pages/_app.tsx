@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Head from 'next/head';
+
 import { PageCoverProvider } from '~/components/containers/PageCoverProvider';
 import { Modal } from '~/containers/dialogs/Modal';
 import { BottomContainer } from '~/containers/main/BottomContainer';
@@ -31,6 +33,13 @@ export default function MyApp({ Component, pageProps }) {
                 <AudioPlayerProvider>
                   <MetadataProvider>
                     <AuthProvider>
+                      <Head>
+                        <meta
+                          name="viewport"
+                          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=0"
+                        />
+                      </Head>
+
                       <MainLayout>
                         <ToastProvider />
                         <Modal />

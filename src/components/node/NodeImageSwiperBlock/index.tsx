@@ -1,6 +1,4 @@
-import React, { FC, useCallback, useState } from 'react';
-
-
+import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -51,6 +49,10 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
     },
     [images, controlledSwiper, showPhotoSwiper]
   );
+
+  useEffect(() => {
+    controlledSwiper?.slideTo(0, 0);
+  }, [images]);
 
   if (!images?.length) {
     return null;
