@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import styles from './styles.module.scss';
-import { NavLink } from 'react-router-dom';
 import { CellShade } from '~/components/flow/CellShade';
 import { FlowDisplay, INode } from '~/types';
 import { FlowCellText } from '~/components/flow/FlowCellText';

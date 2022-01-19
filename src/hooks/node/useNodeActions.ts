@@ -41,7 +41,10 @@ export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Pr
     }
   }, [node.deleted_at, node.id, update]);
 
-  const onEdit = useCallback(() => showModal(Dialog.EditNode, { nodeId: node.id! }), [node]);
+  const onEdit = useCallback(() => showModal(Dialog.EditNode, { nodeId: node.id! }), [
+    node,
+    showModal,
+  ]);
 
   return { onLike, onStar, onLock, onEdit };
 };

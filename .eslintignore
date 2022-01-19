@@ -1,0 +1,4 @@
+build
+.next
+.husky
+node_modules

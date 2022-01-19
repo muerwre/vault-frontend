@@ -1,4 +1,4 @@
-import React, { FC, forwardRef, useCallback } from 'react';
+import React, { forwardRef, useCallback } from 'react';
 import { getURLFromString } from '~/utils/dom';
 import { PRESETS } from '~/constants/urls';
 import styles from './styles.module.scss';

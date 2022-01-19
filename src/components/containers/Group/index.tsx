@@ -31,7 +31,7 @@ const Group: FC<IProps> = ({
         [styles.wrap]: wrap,
         [styles.seamless]: seamless,
       },
-      className,
+      className
     )}
     {...props}
   >

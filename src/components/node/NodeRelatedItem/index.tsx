@@ -1,9 +1,8 @@
-import React, { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { INode } from '~/types';
-import { PRESETS, URLS } from '~/constants/urls';
-import { RouteComponentProps } from 'react-router';
+import { PRESETS } from '~/constants/urls';
 import { getURL, getURLFromString } from '~/utils/dom';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { Square } from '~/components/common/Square';

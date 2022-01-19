@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { getNodeDiff } from '~/api/node';
 import { uniq } from 'ramda';
 import { useFlowStore } from '~/store/flow/useFlowStore';
-import { runInAction, toJS } from 'mobx';
+import { runInAction } from 'mobx';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useFlowLoader = () => {

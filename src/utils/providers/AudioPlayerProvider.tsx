@@ -1,12 +1,4 @@
-import React, {
-  createContext,
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { createContext, FC, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
 import { path } from 'ramda';

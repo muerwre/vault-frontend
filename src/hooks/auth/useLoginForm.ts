@@ -3,8 +3,6 @@ import { ERRORS } from '~/constants/errors';
 import { useCallback } from 'react';
 import { FormikConfig, useFormik } from 'formik';
 import { IUser } from '~/types/auth';
-import { showToastSuccess } from '~/utils/toast';
-import { getRandomPhrase } from '~/constants/phrases';
 import { showErrorToast } from '~/utils/errors/showToast';
 import { getValidationErrors } from '~/utils/errors/getValidationErrors';
 

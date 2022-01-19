@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { ApiGetNodeRequest, ApiGetNodeResponse } from '~/types/node';
+import { ApiGetNodeResponse } from '~/types/node';
 import { API } from '~/constants/api';
 import { useOnNodeSeen } from '~/hooks/node/useOnNodeSeen';
 import { apiGetNode } from '~/api/node';

@@ -16,6 +16,7 @@ export const useScrollToTop = (deps?: any[]) => {
         top: bounds.top - 100,
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     deps && Array.isArray(deps) ? deps : []
   );
 };

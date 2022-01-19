@@ -6,7 +6,6 @@ import { NodeCommentForm } from '~/components/node/NodeCommentForm';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
 import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
-import StickyBox from 'react-sticky-box';
 import styles from './styles.module.scss';
 import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';

@@ -8,7 +8,6 @@ import { getURLFromString } from '~/utils/dom';
 import { PRESETS, URLS } from '~/constants/urls';
 import SwiperClass from 'swiper/types/swiper-class';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
-import { useHistory } from 'react-router';
 import classNames from 'classnames';
 import { IFlowNode } from '~/types';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';

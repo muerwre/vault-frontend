@@ -6,7 +6,6 @@ import styles from './styles.module.scss';
 import { INode } from '~/types';
 import { getPrettyDate } from '~/utils/dom';
 import { URLS } from '~/constants/urls';
-import { useHistory } from 'react-router-dom';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
 
 interface IProps {

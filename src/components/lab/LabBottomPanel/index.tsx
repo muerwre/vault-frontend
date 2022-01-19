@@ -7,7 +7,6 @@ import { INode } from '~/types';
 import { Icon } from '~/components/input/Icon';
 import classNames from 'classnames';
 import { Grid } from '~/components/containers/Grid';
-import { useHistory } from 'react-router';
 import { URLS } from '~/constants/urls';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { useNavigation } from '~/hooks/navigation/useNavigation';

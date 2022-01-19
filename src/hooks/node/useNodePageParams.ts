@@ -4,6 +4,8 @@ import { CONFIG } from '~/utils/config';
 
 export const useNodePageParams = () => {
   return CONFIG.isNextEnvironment
-    ? (useRouter().query.id as string)
-    : useRouteMatch<{ id: string }>().params.id;
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      (useRouter().query.id as string)
+    : // eslint-disable-next-line react-hooks/rules-of-hooks
+      useRouteMatch<{ id: string }>().params.id;
 };

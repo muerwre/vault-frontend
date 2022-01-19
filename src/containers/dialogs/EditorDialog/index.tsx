@@ -26,7 +26,7 @@ const EditorDialog: FC<Props> = observer(({ node, onRequestClose, onSubmit }) =>
 
   const uploader = useUploader(UploadSubject.Editor, UploadTarget.Nodes, node.files);
   const formik = useNodeFormFormik(node, uploader, onRequestClose, onSubmit);
-  const { values, handleSubmit, dirty, status } = formik;
+  const { values, handleSubmit, dirty } = formik;
 
   const component = useMemo(() => node.type && prop(node.type, NODE_EDITORS), [node.type]);
 

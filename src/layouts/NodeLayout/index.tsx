@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { Route } from 'react-router';
 import { Card } from '~/components/containers/Card';
 
 import { Footer } from '~/components/main/Footer';
@@ -9,8 +8,6 @@ import { Container } from '~/containers/main/Container';
 import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { NodeBottomBlock } from '~/containers/node/NodeBottomBlock';
 import { useNodeCoverImage } from '~/hooks/node/useNodeCoverImage';
-import { URLS } from '~/constants/urls';
-import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 
 import styles from './styles.module.scss';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';

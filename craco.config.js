@@ -29,6 +29,29 @@ module.exports = {
           allowSeparatedGroups: false,
         },
       ],
+      'import/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', 'sibling', 'type', 'object'],
+          pathGroups: [
+            {
+              pattern: '~/**',
+              group: 'internal',
+            },
+            {
+              pattern: '../**',
+              group: 'sibling',
+              position: 'after',
+            },
+            {
+              pattern: './**',
+              group: 'sibling',
+              position: 'after',
+            },
+          ],
+          'newlines-between': 'always',
+        },
+      ],
     },
   },
   jest: {
