@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 interface LoadingProgressProps {}
 
 const LoadingProgress: VFC<LoadingProgressProps> = () => {
-  const shown = useSSRLoadingIndicator();
+  const shown = useSSRLoadingIndicator(300);
 
   return shown ? (
     <>

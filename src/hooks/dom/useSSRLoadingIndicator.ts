@@ -2,13 +2,34 @@ import { useEffect, useState } from 'react';
 
 import Router from 'next/router';
 
-export const useSSRLoadingIndicator = () => {
+/** decides to show loader on SSR loading */
+export const useSSRLoadingIndicator = (delay = 0) => {
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
-    Router.events.on('routeChangeStart', () => setShown(true));
-    Router.events.on('routeChangeComplete', () => setShown(false));
-    Router.events.on('routeChangeError', () => setShown(false));
+    let timeout;
+
+    const show = () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+
+      timeout = setTimeout(() => {
+        setShown(true);
+      }, delay);
+    };
+
+    const hide = () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+
+      setShown(false);
+    };
+
+    Router.events.on('routeChangeStart', show);
+    Router.events.on('routeChangeComplete', hide);
+    Router.events.on('routeChangeError', hide);
   }, []);
 
   return shown;
