@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { LoadingProgress } from '~/components/common/LoadingProgress';
 import { Header } from '~/containers/main/Header';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 
@@ -10,6 +11,7 @@ export const MainLayout = ({ children }) => (
     <div className={styles.content}>
       <Header />
       {children}
+      <LoadingProgress />
       <SidebarRouter />
     </div>
   </div>
