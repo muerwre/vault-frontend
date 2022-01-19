@@ -27,7 +27,11 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
     onSaveComment,
   } = useCommentContext();
 
-  const groupped: ICommentGroup[] = useGrouppedComments(comments, order, lastSeenCurrent);
+  const groupped: ICommentGroup[] = useGrouppedComments(
+    comments,
+    order,
+    lastSeenCurrent ?? undefined
+  );
 
   const more = useMemo(
     () =>

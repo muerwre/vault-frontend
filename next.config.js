@@ -1,7 +1,8 @@
+/** used to transpile UMD and CJS modules */
 const withTM = require('next-transpile-modules')(['ramda']);
 
 module.exports = withTM({
-  /* Your Next.js config */
+  /** rewrite old-style node paths */
   async rewrites() {
     return [
       {
@@ -10,4 +11,7 @@ module.exports = withTM({
       },
     ];
   },
+
+  /** don't try to optimize fonts */
+  optimizeFonts: false,
 });
