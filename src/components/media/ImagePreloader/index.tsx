@@ -8,6 +8,7 @@ import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { Icon } from '~/components/input/Icon';
 import { useResizeHandler } from '~/hooks/dom/useResizeHandler';
 import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
+import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 
 interface IProps {
   file: IFile;
@@ -83,7 +84,7 @@ const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className })
         </g>
       </svg>
 
-      <img
+      <ImageWithSSRLoad
         className={classNames(styles.image, { [styles.is_loaded]: loaded }, className)}
         src={getURL(file, PRESETS['1600'])}
         alt=""

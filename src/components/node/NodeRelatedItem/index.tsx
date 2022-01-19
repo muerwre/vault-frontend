@@ -8,6 +8,7 @@ import { getURL, getURLFromString } from '~/utils/dom';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { Square } from '~/components/common/Square';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
+import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 
 type IProps = {
   item: Partial<INode>;
@@ -89,7 +90,7 @@ const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
         </div>
       )}
 
-      <img src={image} alt="loader" onLoad={() => setIsLoaded(true)} />
+      <ImageWithSSRLoad src={image} alt="loader" onLoad={() => setIsLoaded(true)} />
     </div>
   );
 });

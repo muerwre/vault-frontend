@@ -33,6 +33,9 @@ const CoverBackdrop: FC<IProps> = ({ cover }) => {
       className={classNames(styles.cover, { [styles.active]: is_loaded })}
       style={{ backgroundImage: `url("${image}")` }}
     >
+      {
+        // TODO: use ImageWithSSRLoad here if you will face any bugs
+      }
       <img onLoad={onLoad} ref={ref} alt="" />
     </div>
   );
