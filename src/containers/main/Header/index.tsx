@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 import isBefore from 'date-fns/isBefore';
@@ -11,6 +11,7 @@ import { Button } from '~/components/input/Button';
 import { Logo } from '~/components/main/Logo';
 import { UserButton } from '~/components/main/UserButton';
 import { Dialog } from '~/constants/modal';
+import { isSSR } from '~/constants/ssr';
 import { URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useScrollTop } from '~/hooks/dom/useScrollTop';
@@ -26,6 +27,7 @@ type HeaderProps = {};
 const Header: FC<HeaderProps> = observer(() => {
   const labStats = useGetLabStats();
 
+  const [isScrolled, setIsScrolled] = useState(false);
   const { logout } = useAuth();
   const { showModal } = useModal();
   const { isUser, user } = useAuth();
@@ -52,8 +54,13 @@ const Header: FC<HeaderProps> = observer(() => {
   const hasLabUpdates = useMemo(() => labStats.updates.length > 0, [labStats.updates]);
   const hasFlowUpdates = useMemo(() => flowUpdates.length > 0, [flowUpdates]);
 
+  // Needed for SSR
+  useEffect(() => {
+    setIsScrolled(top > 10);
+  }, [top]);
+
   return (
-    <div className={classNames(styles.wrap, { [styles.is_scrolled]: top > 10 })}>
+    <div className={classNames(styles.wrap, { [styles.is_scrolled]: isScrolled })}>
       <div className={styles.container}>
         <div className={styles.logo_wrapper}>
           <Logo />
