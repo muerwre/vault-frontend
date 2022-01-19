@@ -55,7 +55,7 @@ const Header: FC<HeaderProps> = observer(() => {
   return (
     <div className={classNames(styles.wrap, { [styles.is_scrolled]: top > 10 })}>
       <div className={styles.container}>
-        <div className={classNames(styles.logo_wrapper, { [styles.logged_in]: isUser })}>
+        <div className={styles.logo_wrapper}>
           <Logo />
         </div>
 
