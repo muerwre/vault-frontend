@@ -1,10 +1,20 @@
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-export const useWindowSize = () =>
-  useMemo(() => {
-    if (typeof window === 'undefined') {
-      return { innerWidth: 0, innerHeight: 0 };
-    }
+export const useWindowSize = () => {
+  const [size, setSize] = useState({ innerWidth: 0, innerHeight: 0 });
 
-    return { innerWidth: window.innerWidth, innerHeight: window.innerHeight };
-  }, []);
+  const onResize = useCallback(
+    () => setSize({ innerWidth: window.innerWidth, innerHeight: window.innerHeight }),
+    []
+  );
+
+  useEffect(() => {
+    onResize();
+
+    window.addEventListener('resize', onResize);
+
+    return () => window.removeEventListener('resize', onResize);
+  });
+
+  return size;
+};
