@@ -5,13 +5,21 @@ import useSWR from 'swr';
 import { apiGetNode } from '~/api/node';
 import { API } from '~/constants/api';
 import { EMPTY_NODE } from '~/constants/node';
+import { useUser } from '~/hooks/auth/useUser';
 import { useOnNodeSeen } from '~/hooks/node/useOnNodeSeen';
 import { INode } from '~/types';
 import { ApiGetNodeResponse } from '~/types/node';
 
+const getKey = (nodeId: number, userId = 0) =>
+  JSON.stringify({
+    url: API.NODE.GET_NODE(nodeId),
+    userId,
+  });
+
 export const useLoadNode = (id: number, fallbackData?: ApiGetNodeResponse) => {
+  const { user } = useUser();
   const { data, isValidating, mutate } = useSWR<ApiGetNodeResponse>(
-    API.NODE.GET_NODE(id),
+    getKey(id, user.id),
     () => apiGetNode({ id }),
     { fallbackData, revalidateOnMount: true }
   );
