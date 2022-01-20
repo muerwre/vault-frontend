@@ -5,6 +5,7 @@ import { useFlowLoader } from '~/hooks/flow/useFlowLoader';
 import { useFlowSetCellView } from '~/hooks/flow/useFlowSetCellView';
 import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
 import { useFlowStore } from '~/store/flow/useFlowStore';
+import { GetNodeDiffResult } from '~/types/node';
 
 export const useFlow = () => {
   const { loadMore, isSyncing } = useFlowLoader();

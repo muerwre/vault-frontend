@@ -1,44 +1,43 @@
 import React, { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
+import { InferGetStaticPropsType } from 'next';
 
+import { getNodeDiff } from '~/api/node';
 import { PageTitle } from '~/components/common/PageTitle';
 import { useGlobalLoader } from '~/hooks/dom/useGlobalLoader';
-import { useFlow } from '~/hooks/flow/useFlow';
 import { FlowLayout } from '~/layouts/FlowLayout';
-import { FlowContextProvider } from '~/utils/context/FlowContextProvider';
+import { FlowProvider } from '~/utils/providers/FlowProvider';
 import { getPageTitle } from '~/utils/ssr/getPageTitle';
 
-interface Props {}
+export const getStaticProps = async () => {
+  const fallbackData = await getNodeDiff({
+    start: new Date().toISOString(),
+    end: new Date().toISOString(),
+    with_heroes: true,
+    with_updated: true,
+    with_recent: false,
+    with_valid: false,
+  });
 
-const FlowPage: FC<Props> = observer(() => {
+  return {
+    props: {
+      fallbackData,
+    },
+    revalidate: 5 * 60,
+  };
+};
+
+type Props = InferGetStaticPropsType<typeof getStaticProps>;
+
+const FlowPage: FC<Props> = observer(({ fallbackData }) => {
   useGlobalLoader();
 
-  const {
-    updates,
-    nodes,
-    heroes,
-    recent,
-    isFluid,
-    toggleLayout,
-    onChangeCellView,
-    loadMore,
-    isSyncing,
-  } = useFlow();
-
   return (
-    <FlowContextProvider
-      updates={updates}
-      recent={recent}
-      heroes={heroes}
-      nodes={nodes}
-      loadMore={loadMore}
-      isSyncing={isSyncing}
-      onChangeCellView={onChangeCellView}
-    >
+    <FlowProvider fallbackData={fallbackData}>
       <PageTitle title={getPageTitle('Флоу')} />
-      <FlowLayout isFluid={isFluid} onToggleLayout={toggleLayout} />
-    </FlowContextProvider>
+      <FlowLayout />
+    </FlowProvider>
   );
 });
 

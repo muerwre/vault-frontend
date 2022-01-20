@@ -1,6 +1,5 @@
 import React, { FC, FormEvent, useCallback, useMemo } from 'react';
 
-
 import classNames from 'classnames';
 
 import { Superpower } from '~/components/boris/Superpower';
@@ -12,7 +11,7 @@ import { InputText } from '~/components/input/InputText';
 import { Toggle } from '~/components/input/Toggle';
 import { experimentalFeatures } from '~/constants/features';
 import styles from '~/containers/flow/FlowStamp/styles.module.scss';
-import { useFlowContext } from '~/utils/context/FlowContextProvider';
+import { useFlowContext } from '~/utils/providers/FlowProvider';
 import { useSearchContext } from '~/utils/providers/SearchProvider';
 
 interface IProps {

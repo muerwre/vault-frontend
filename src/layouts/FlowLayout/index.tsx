@@ -8,16 +8,13 @@ import { FlowStamp } from '~/containers/flow/FlowStamp';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
 import { useUser } from '~/hooks/auth/useUser';
 import { useInfiniteLoader } from '~/hooks/dom/useInfiniteLoader';
-import { useFlowContext } from '~/utils/context/FlowContextProvider';
+import { useFlowContext } from '~/utils/providers/FlowProvider';
 
 import styles from './styles.module.scss';
 
-interface Props {
-  isFluid: boolean;
-  onToggleLayout: () => void;
-}
+interface Props {}
 
-const FlowLayout: FC<Props> = ({ isFluid, onToggleLayout }) => {
+const FlowLayout: FC<Props> = () => {
   const { heroes, nodes, onChangeCellView, loadMore, isSyncing } = useFlowContext();
   const { user } = useUser();
 
@@ -31,7 +28,7 @@ const FlowLayout: FC<Props> = ({ isFluid, onToggleLayout }) => {
         </div>
 
         <div className={styles.stamp}>
-          <FlowStamp isFluid={isFluid} onToggleLayout={onToggleLayout} />
+          <FlowStamp isFluid={false} onToggleLayout={console.warn} />
         </div>
 
         <FlowGrid nodes={nodes} user={user} onChangeCellView={onChangeCellView} />
