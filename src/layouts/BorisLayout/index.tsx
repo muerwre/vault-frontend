@@ -1,16 +1,12 @@
 import React, { FC } from 'react';
 
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
-import { BorisUIDemo } from '~/components/boris/BorisUIDemo';
-import { Superpower } from '~/components/boris/Superpower';
 import { Card } from '~/components/containers/Card';
 import { Group } from '~/components/containers/Group';
 import { Sticky } from '~/components/containers/Sticky';
-import { Tabs } from '~/components/dialogs/Tabs';
 import { BorisComments } from '~/containers/boris/BorisComments';
 import { Container } from '~/containers/main/Container';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
-import boris from '~/sprites/boris_robot.svg';
 import { BorisUsageStats } from '~/types/boris';
 import { useAuthProvider } from '~/utils/providers/AuthProvider';
 
@@ -37,23 +33,12 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLo
             <div className={styles.caption_text}>{title}</div>
           </div>
 
-          <img src={boris} alt="Борис" />
+          <img src="/images/boris_robot.svg" alt="Борис" />
         </div>
 
         <div className={styles.container}>
           <Card className={styles.content}>
-            <Tabs>
-              <Superpower>
-                <Tabs.List items={['Комментарии', 'ЮАЙ ПЛЭЙГРАУНД']} />
-              </Superpower>
-
-              <Tabs.Content>
-                <BorisComments />
-                <Superpower>
-                  <BorisUIDemo />
-                </Superpower>
-              </Tabs.Content>
-            </Tabs>
+            <BorisComments />
           </Card>
 
           <Group className={styles.stats}>

@@ -10,8 +10,6 @@ import { CommentContextProvider, useCommentContext } from '~/utils/context/Comme
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
 import { useUserContext } from '~/utils/context/UserContextProvider';
 
-import styles from './styles.module.scss';
-
 interface IProps {}
 
 const BorisComments: FC<IProps> = () => {
@@ -30,29 +28,27 @@ const BorisComments: FC<IProps> = () => {
   const { node } = useNodeContext();
 
   return (
-    <>
-      <Group className={styles.grid}>
+    <CommentContextProvider
+      onSaveComment={onSaveComment}
+      comments={comments}
+      hasMore={hasMore}
+      onDeleteComment={onDeleteComment}
+      onLoadMoreComments={onLoadMoreComments}
+      onShowImageModal={onShowImageModal}
+      isLoading={isLoading}
+    >
+      <Group>
         {isUser && <NodeCommentForm user={user} nodeId={node.id} saveComment={onSaveComment} />}
 
-        {isLoading ? (
+        {isLoading || !comments?.length ? (
           <NodeNoComments is_loading count={7} />
         ) : (
-          <CommentContextProvider
-            onSaveComment={onSaveComment}
-            comments={comments}
-            hasMore={hasMore}
-            onDeleteComment={onDeleteComment}
-            onLoadMoreComments={onLoadMoreComments}
-            onShowImageModal={onShowImageModal}
-            isLoading={isLoading}
-          >
-            <NodeComments order="ASC" />
-          </CommentContextProvider>
+          <NodeComments order="ASC" />
         )}
-      </Group>
 
-      <Footer />
-    </>
+        <Footer />
+      </Group>
+    </CommentContextProvider>
   );
 };
 
