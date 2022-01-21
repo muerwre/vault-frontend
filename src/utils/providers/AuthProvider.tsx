@@ -6,6 +6,7 @@ import { EMPTY_USER } from '~/constants/auth';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useMessageEventReactions } from '~/hooks/auth/useMessageEventReactions';
 import { useRestorePasswordRedirect } from '~/hooks/auth/useRestorePasswordRedirect';
+import { useSessionCookie } from '~/hooks/auth/useSessionCookie';
 
 interface AuthProviderContextType extends ReturnType<typeof useAuth> {}
 
@@ -24,6 +25,7 @@ export const AuthProvider: FC = observer(({ children }) => {
 
   useMessageEventReactions();
   useRestorePasswordRedirect();
+  useSessionCookie();
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 });
