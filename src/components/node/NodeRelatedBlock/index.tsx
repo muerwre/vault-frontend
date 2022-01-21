@@ -1,9 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 
 import { Anchor } from '~/components/common/Anchor';
+import { Pressable } from '~/components/common/Pressable';
+import { SubTitle } from '~/components/common/SubTitle';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
+import { Dialog } from '~/constants/modal';
 import { URLS } from '~/constants/urls';
+import { useShowModal } from '~/hooks/modal/useShowModal';
 import { INode } from '~/types';
 import { INodeRelated } from '~/types/node';
 
@@ -14,6 +18,8 @@ interface IProps {
 }
 
 const NodeRelatedBlock: FC<IProps> = ({ isLoading, node, related }) => {
+  const goToTag = useShowModal(Dialog.TagSidebar);
+
   if (isLoading) {
     return <NodeRelatedPlaceholder />;
   }
@@ -27,11 +33,7 @@ const NodeRelatedBlock: FC<IProps> = ({ isLoading, node, related }) => {
           .filter(album => related.albums[album].length > 0)
           .map(album => (
             <NodeRelated
-              title={
-                <Anchor href={URLS.NODE_TAG_URL(node.id!, encodeURIComponent(album))}>
-                  {album}
-                </Anchor>
-              }
+              title={<Pressable onClick={() => goToTag({ tag: album })}>{album}</Pressable>}
               items={related.albums[album]}
               key={album}
             />
