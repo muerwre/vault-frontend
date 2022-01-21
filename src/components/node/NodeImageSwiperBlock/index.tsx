@@ -52,7 +52,8 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
 
   useEffect(() => {
     controlledSwiper?.slideTo(0, 0);
-  }, [images]);
+    return () => controlledSwiper?.slideTo(0, 0);
+  }, [images, node?.id]);
 
   if (!images?.length) {
     return null;
@@ -82,6 +83,7 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         centeredSlides
         observeSlideChildren
         observeParents
+        observer
         resizeObserver
         watchOverflow
         updateOnImagesReady
