@@ -1,5 +1,7 @@
 import React, { FC, useCallback, useState } from 'react';
 
+import { MenuDots } from '~/components/common/MenuDots';
+
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -15,7 +17,7 @@ const CommentMenu: FC<IProps> = ({ onEdit, onDelete }) => {
 
   return (
     <div className={styles.wrap} onFocus={onFocus} onBlur={onBlur} tabIndex={-1}>
-      <div className={styles.dot} />
+      <MenuDots onClick={onFocus} />
 
       {is_menu_opened && (
         <div className={styles.menu}>

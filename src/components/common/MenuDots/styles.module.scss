@@ -1,0 +1,39 @@
+@import "src/styles/variables";
+@import "src/styles/mixins";
+
+.button {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  fill: white;
+  padding: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.dots {
+  @include blur($content_bg, 5px, 0.7);
+
+  padding: 5px 0 0 0;
+  background: $content_bg;
+  border-radius: $radius;
+  width: 18px;
+  height: 30px;
+  position: relative;
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    opacity: 0.3;
+    transition: opacity 0.25s;
+
+    :hover > & {
+      opacity: 1;
+    }
+  }
+}
