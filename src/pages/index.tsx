@@ -10,7 +10,7 @@ import { FlowLayout } from '~/layouts/FlowLayout';
 import { FlowProvider } from '~/utils/providers/FlowProvider';
 import { getPageTitle } from '~/utils/ssr/getPageTitle';
 
-export const getStaticProps = async () => {
+export const getStaticProps = async ctx => {
   const fallbackData = await getNodeDiff({
     start: new Date().toISOString(),
     end: new Date().toISOString(),

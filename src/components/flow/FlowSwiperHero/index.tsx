@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 
-
 import classNames from 'classnames';
 import SwiperCore, { Autoplay, EffectFade, Lazy, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -21,6 +20,18 @@ SwiperCore.use([EffectFade, Lazy, Autoplay, Navigation]);
 interface Props {
   heroes: IFlowNode[];
 }
+
+const autoplay = {
+  delay: 3000,
+  pauseOnMouseEnter: false,
+  stopOnLastSlide: false,
+  disableOnInteraction: false,
+};
+
+const lazy = {
+  loadPrevNextAmount: 5,
+  checkInView: false,
+};
 
 export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
   const { innerWidth } = useWindowSize();
@@ -104,18 +115,10 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
         effect="fade"
         speed={3000}
         className={styles.swiper}
-        lazy={{
-          loadPrevNextAmount: 5,
-          checkInView: false,
-        }}
+        lazy={lazy}
         loop
         slidesPerView={1}
-        autoplay={{
-          delay: 3000,
-          pauseOnMouseEnter: false,
-          stopOnLastSlide: false,
-          disableOnInteraction: false,
-        }}
+        autoplay={autoplay}
         runCallbacksOnInit
         onSwiper={setControlledSwiper}
         onSlidesLengthChange={onIndexChange}
