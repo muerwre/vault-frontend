@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef } from 'react';
 
 import { FormikHelpers, useFormik, useFormikContext } from 'formik';
-import { hasPath, path } from 'ramda';
 import { array, object, string } from 'yup';
 
 import { IComment, INode } from '~/types';
 import { Uploader } from '~/utils/context/UploaderContextProvider';
 import { showErrorToast } from '~/utils/errors/showToast';
+import { hasPath, path } from '~/utils/ramda';
 
 const validationSchema = object().shape({
   text: string(),

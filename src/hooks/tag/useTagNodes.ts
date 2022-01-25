@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react';
 
-import { flatten, isNil } from 'ramda';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 
 import { apiGetNodesOfTag } from '~/api/tags';
 import { API } from '~/constants/api';
 import { INode } from '~/types';
+import { flatten, isNil } from '~/utils/ramda';
 
 const PAGE_SIZE = 10;
 

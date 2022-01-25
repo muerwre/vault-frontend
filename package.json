@@ -51,14 +51,15 @@
     "yup": "^0.32.9"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
     "ts-check": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prepare": "husky install",
     "next:dev": "next dev",
     "next:build": "next build",
-    "next:start": "next start -p 80"
+    "next:start": "next start -p 80",
+    "analyze": "ANALYZE=true next build",
+    "analyze:server": "BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "BUNDLE_ANALYZE=browser next build"
   },
   "eslintConfig": {
     "extends": [
@@ -79,6 +80,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.4.3",
+    "@next/bundle-analyzer": "^12.0.8",
     "@next/eslint-plugin-next": "^12.0.8",
     "@types/classnames": "^2.2.7",
     "@types/marked": "^1.2.2",
@@ -86,6 +88,7 @@
     "@types/ramda": "^0.26.33",
     "@types/throttle-debounce": "^2.1.0",
     "@types/yup": "^0.29.11",
+    "babel-plugin-transform-imports": "^2.0.0",
     "craco-alias": "^2.3.1",
     "eslint-plugin-import": "^2.25.4",
     "husky": "^7.0.4",

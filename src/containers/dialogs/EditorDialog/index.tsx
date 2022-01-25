@@ -2,7 +2,6 @@ import React, { createElement, FC, useCallback, useMemo, useState } from 'react'
 
 import { FormikProvider } from 'formik';
 import { observer } from 'mobx-react-lite';
-import { prop } from 'ramda';
 
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
@@ -16,7 +15,7 @@ import { useNodeFormFormik } from '~/hooks/node/useNodeFormFormik';
 import { INode } from '~/types';
 import { DialogComponentProps } from '~/types/modal';
 import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
-
+import { prop } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 

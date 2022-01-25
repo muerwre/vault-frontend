@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
 
-import { path } from 'ramda';
-
 import { INodeComponentProps } from '~/constants/node';
 import { PRESETS } from '~/constants/urls';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { getURL } from '~/utils/dom';
+import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 

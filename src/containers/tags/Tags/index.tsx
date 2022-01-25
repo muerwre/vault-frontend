@@ -1,11 +1,10 @@
 import React, { FC, HTMLAttributes, useCallback, useMemo, useState } from 'react';
 
-import { uniq } from 'ramda';
-
 import { TagField } from '~/components/containers/TagField';
 import { Tag } from '~/components/tags/Tag';
 import { TagInput } from '~/containers/tags/TagInput';
 import { ITag } from '~/types';
+import { uniq } from '~/utils/ramda';
 import { separateTags } from '~/utils/tag';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {

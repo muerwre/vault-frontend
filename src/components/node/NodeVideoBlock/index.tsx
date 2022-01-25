@@ -1,8 +1,7 @@
 import React, { FC, useMemo } from 'react';
 
-import { path } from 'ramda';
-
 import { INodeComponentProps } from '~/constants/node';
+import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 

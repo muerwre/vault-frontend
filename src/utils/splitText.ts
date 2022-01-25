@@ -1,4 +1,4 @@
-import { flatten, isEmpty } from 'ramda';
+import { flatten, isEmpty } from '~/utils/ramda';
 
 export const splitTextByYoutube = (strings: string[]): string[] =>
   flatten(

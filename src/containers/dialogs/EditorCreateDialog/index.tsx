@@ -1,12 +1,11 @@
 import React, { FC, useCallback, useMemo, useRef } from 'react';
 
-import { values } from 'ramda';
-
 import { EMPTY_NODE, NODE_TYPES } from '~/constants/node';
 import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { useCreateNode } from '~/hooks/node/useCreateNode';
 import { INode } from '~/types';
 import { DialogComponentProps } from '~/types/modal';
+import { values } from '~/utils/ramda';
 
 export interface EditorCreateDialogProps extends DialogComponentProps {
   type: typeof NODE_TYPES[keyof typeof NODE_TYPES];

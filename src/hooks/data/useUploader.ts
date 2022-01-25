@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
 import { useLocalObservable } from 'mobx-react-lite';
-import { keys } from 'ramda';
 import uuid from 'uuid4';
 
 import { apiUploadFile } from '~/api/uploads';
@@ -9,7 +8,7 @@ import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { UploaderStore } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
-
+import { keys } from '~/utils/ramda';
 
 export const useUploader = (
   subject: UploadSubject,

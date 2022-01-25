@@ -1,9 +1,8 @@
 import React, { createElement, FC } from 'react';
 
-import { has } from 'ramda';
-
 import { NODE_PANEL_COMPONENTS } from '~/constants/node';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
+import { has } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 

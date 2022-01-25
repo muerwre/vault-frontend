@@ -2,8 +2,6 @@ import React, { createElement, FC, Fragment, memo, useCallback, useMemo, useStat
 
 import classnames from 'classnames';
 import classNames from 'classnames';
-import { append, assocPath, path } from 'ramda';
-import reduce from 'ramda/es/reduce';
 
 import { CommentForm } from '~/components/comment/CommentForm';
 import { Group } from '~/components/containers/Group';
@@ -13,13 +11,11 @@ import { UploadType } from '~/constants/uploads';
 import { PRESETS } from '~/constants/urls';
 import { IComment, IFile } from '~/types';
 import { formatCommentText, getPrettyDate, getURL } from '~/utils/dom';
+import { append, assocPath, path, reduce } from '~/utils/ramda';
 
 import { CommentMenu } from '../CommentMenu';
 
 import styles from './styles.module.scss';
-
-
-
 
 interface IProps {
   nodeId: number;

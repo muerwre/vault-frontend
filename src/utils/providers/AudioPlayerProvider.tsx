@@ -1,11 +1,18 @@
-import React, { createContext, FC, useCallback, useContext, useEffect, useRef, useState } from 'react';
-
-import { path } from 'ramda';
+import React, {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import { PlayerState } from '~/constants/player';
 import { IFile } from '~/types';
 import { PlayerProgress } from '~/types/player';
 import { getURL } from '~/utils/dom';
+import { path } from '~/utils/ramda';
 
 interface AudioPlayerProps {
   file?: IFile;

@@ -1,11 +1,11 @@
 import React, { createContext, FC, useContext, useMemo } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { uniq } from 'ramda';
 
 import { useFlow } from '~/hooks/flow/useFlow';
 import { FlowDisplay, IFlowNode, INode } from '~/types';
 import { GetNodeDiffResult } from '~/types/node';
+import { uniq } from '~/utils/ramda';
 
 export interface FlowProviderProps {
   fallbackData?: GetNodeDiffResult;

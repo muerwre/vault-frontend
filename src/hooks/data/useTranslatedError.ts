@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 
-import { has } from 'ramda';
-
 import { ERROR_LITERAL } from '~/constants/errors';
+import { has } from '~/utils/ramda';
 
 export const useTranslatedError = (error: string | undefined) => {
   return useMemo(() => {

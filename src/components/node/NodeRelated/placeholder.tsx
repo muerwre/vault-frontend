@@ -1,14 +1,13 @@
 import React, { FC, memo } from 'react';
 
 import classNames from 'classnames';
-import range from 'ramda/es/range';
 
 import { Group } from '~/components/containers/Group';
 import cell_style from '~/components/node/NodeRelatedItem/styles.module.scss';
 import { Placeholder } from '~/components/placeholders/Placeholder';
+import { range } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
-
 
 interface IProps {}
 

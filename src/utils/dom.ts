@@ -4,7 +4,6 @@ import format from 'date-fns/format';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import isAfter from 'date-fns/isAfter';
 import ru from 'date-fns/locale/ru';
-import { pipe } from 'ramda';
 
 import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/constants/comment';
 import { PRESETS } from '~/constants/urls';
@@ -20,6 +19,7 @@ import {
   formatTextSanitizeYoutube,
   formatTextTodos,
 } from '~/utils/formatText';
+import { pipe } from '~/utils/ramda';
 import { splitTextByYoutube, splitTextOmitEmpty } from '~/utils/splitText';
 
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {

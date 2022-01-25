@@ -1,7 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react';
 
-import { values } from 'ramda';
-
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { UploadType } from '~/constants/uploads';
 import { useNodeAudios } from '~/hooks/node/useNodeAudios';
@@ -9,12 +7,12 @@ import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { NodeEditorProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
+import { values } from '~/utils/ramda';
 
 import { AudioGrid } from '../AudioGrid';
 import { ImageGrid } from '../ImageGrid';
 
 import styles from './styles.module.scss';
-
 
 type IProps = NodeEditorProps;
 

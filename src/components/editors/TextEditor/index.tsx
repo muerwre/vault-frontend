@@ -1,11 +1,10 @@
 import React, { FC, useCallback } from 'react';
 
-import { path } from 'ramda';
-
 import { Textarea } from '~/components/input/Textarea';
 import { useRandomPhrase } from '~/constants/phrases';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { NodeEditorProps } from '~/types/node';
+import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 

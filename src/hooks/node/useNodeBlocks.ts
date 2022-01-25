@@ -1,9 +1,14 @@
 import { createElement, FC, useCallback, useMemo } from 'react';
 
-import { isNil, prop } from 'ramda';
-
-import { INodeComponentProps, LAB_PREVIEW_LAYOUT, NODE_COMPONENTS, NODE_HEADS, NODE_INLINES } from '~/constants/node';
+import {
+  INodeComponentProps,
+  LAB_PREVIEW_LAYOUT,
+  NODE_COMPONENTS,
+  NODE_HEADS,
+  NODE_INLINES,
+} from '~/constants/node';
 import { INode } from '~/types';
+import { isNil, prop } from '~/utils/ramda';
 
 // useNodeBlocks returns head, block and inline blocks of node
 export const useNodeBlocks = (node: INode, isLoading: boolean) => {

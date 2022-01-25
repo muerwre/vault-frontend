@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { assocPath } from 'ramda';
 
 import { API } from '~/constants/api';
 import { getMOBXStore } from '~/store';
+import { assocPath } from '~/utils/ramda';
 
 export const api = axios.create({
   baseURL: API.BASE,

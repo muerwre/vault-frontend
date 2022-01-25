@@ -1,9 +1,8 @@
-import { path } from 'ramda';
-
 import { Role } from '~/constants/auth';
 import { NODE_TYPES } from '~/constants/node';
 import { ICommentGroup, INode } from '~/types';
 import { IUser } from '~/types/auth';
+import { path } from '~/utils/ramda';
 
 export const canEditNode = (node?: Partial<INode>, user?: Partial<IUser>): boolean =>
   path(['role'], user) === Role.Admin || path(['user', 'id'], node) === path(['id'], user);

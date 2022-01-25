@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 
-import { values } from 'ramda';
 import Masonry from 'react-masonry-css';
 
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
 import { LabNode } from '~/components/lab/LabNode';
 import { EMPTY_NODE, NODE_TYPES } from '~/constants/node';
 import { useLabContext } from '~/utils/context/LabContextProvider';
+import { values } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 

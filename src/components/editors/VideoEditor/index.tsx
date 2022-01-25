@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useMemo } from 'react';
 
 import classnames from 'classnames';
-import { path } from 'ramda';
 
 import { InputText } from '~/components/input/InputText';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { NodeEditorProps } from '~/types/node';
 import { getYoutubeThumb } from '~/utils/dom';
+import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 

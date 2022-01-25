@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 
 import classNames from 'classnames';
-import { has } from 'ramda';
 
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
@@ -13,7 +12,7 @@ import { ProfileAccounts } from '~/containers/profile/ProfileAccounts';
 import { usePatchUser } from '~/hooks/auth/usePatchUser';
 import { useUser } from '~/hooks/auth/useUser';
 import { useProfileForm } from '~/hooks/profile/useProfileForm';
-
+import { has } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 

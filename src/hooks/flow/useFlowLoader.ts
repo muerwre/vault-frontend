@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 
 import { runInAction } from 'mobx';
-import { uniq } from 'ramda';
 
 import { getNodeDiff } from '~/api/node';
 import { useFlowStore } from '~/store/flow/useFlowStore';
 import { showErrorToast } from '~/utils/errors/showToast';
+import { uniq } from '~/utils/ramda';
 
 export const useFlowLoader = () => {
   const [isSyncing, setIsSyncing] = useState(false);

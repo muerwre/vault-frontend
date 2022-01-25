@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
 import classNames from 'classnames';
-import { path } from 'ramda';
 
 import { CommentAvatar } from '~/components/comment/CommentAvatar';
 import { IUser } from '~/types/auth';
+import { path } from '~/utils/ramda';
 import { DivProps } from '~/utils/types';
 
 import styles from './styles.module.scss';

@@ -1,9 +1,9 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { has, omit, values } from 'ramda';
 
 import { ERROR_LITERAL, ERRORS } from '~/constants/errors';
 import { UploadType } from '~/constants/uploads';
 import { IFile, UUID } from '~/types';
+import { has, omit, values } from '~/utils/ramda';
 import { getFileType, uploadGetThumb } from '~/utils/uploader';
 
 export interface UploadStatus {

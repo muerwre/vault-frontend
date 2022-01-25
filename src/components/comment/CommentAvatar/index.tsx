@@ -1,11 +1,11 @@
 import React, { FC, useCallback, useState } from 'react';
 
-import { path } from 'ramda';
 import { Manager, Popper, Reference } from 'react-popper';
 
 import { Avatar } from '~/components/common/Avatar';
 import { useRandomPhrase } from '~/constants/phrases';
 import { IUser } from '~/types/auth';
+import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
