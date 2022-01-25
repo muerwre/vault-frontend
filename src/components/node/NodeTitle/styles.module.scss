@@ -95,8 +95,7 @@
   min-width: 0;
 }
 
-.buttons,
-.editor_buttons {
+.buttons {
   flex: 0;
   padding-right: $gap;
   fill: transparentize(white, 0.7);
@@ -121,26 +120,6 @@
 
       &::after {
         display: none;
-      }
-    }
-  }
-}
-
-.editor_buttons {
-  @include tablet {
-    display: none;
-
-    & > * {
-      &:last-child {
-        margin-right: 0;
-
-        &::after {
-          display: none;
-        }
-      }
-
-      &:first-child {
-        margin-left: 0;
       }
     }
   }
@@ -232,47 +211,4 @@
   color: transparentize($color: white, $amount: 0.5);
   pointer-events: none;
   touch-action: none;
-}
-
-.star {
-  transition: fill, stroke 0.25s;
-  will-change: transform;
-
-  .is_heroic {
-    svg {
-      fill: $orange;
-    }
-  }
-
-  &:hover {
-    fill: $orange;
-  }
-}
-
-.editor_menu_button {
-  display: none !important;
-
-  @include button();
-
-  @include tablet {
-    display: flex !important;
-  }
-}
-
-.editor_menu {
-  &:hover {
-    .editor_buttons {
-      @include tablet {
-        display: flex;
-        position: absolute;
-        right: 0;
-        top: 100%;
-        background: darken($content_bg, 4%);
-        padding: $gap * 2;
-        border-radius: $radius;
-        box-shadow: transparentize(black, 0.8) 5px 5px 5px;
-        transform: translate(0, -10px);
-      }
-    }
-  }
 }

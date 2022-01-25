@@ -3,6 +3,7 @@ import React, { memo, VFC } from 'react';
 import classNames from 'classnames';
 
 import { Icon } from '~/components/input/Icon';
+import { NodeEditMenu } from '~/components/node/NodeEditMenu';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { getPrettyDate } from '~/utils/dom';
 
@@ -74,29 +75,14 @@ const NodeTitle: VFC<IProps> = memo(
           </div>
 
           {canEdit && (
-            <div className={styles.editor_menu}>
-              <div className={styles.editor_menu_button}>
-                <Icon icon="dots-vertical" size={24} />
-              </div>
-
-              <div className={styles.editor_buttons}>
-                {canStar && (
-                  <div className={classNames(styles.star, { [styles.is_heroic]: isHeroic })}>
-                    {isHeroic ? (
-                      <Icon icon="star_full" size={24} onClick={onStar} />
-                    ) : (
-                      <Icon icon="star" size={24} onClick={onStar} />
-                    )}
-                  </div>
-                )}
-
-                <div>
-                  <Icon icon={isLocked ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
-                </div>
-
-                {!!id && <Icon icon="edit" size={24} onClick={onEdit} />}
-              </div>
-            </div>
+            <NodeEditMenu
+              canStar={canStar}
+              isHeroic={isHeroic}
+              isLocked={isLocked}
+              onStar={onStar}
+              onLock={onLock}
+              onEdit={onEdit}
+            />
           )}
 
           <div className={styles.buttons}>
