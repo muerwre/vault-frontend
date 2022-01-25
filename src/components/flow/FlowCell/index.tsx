@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import classNames from 'classnames';
 
@@ -9,6 +9,7 @@ import { FlowCellImage } from '~/components/flow/FlowCellImage';
 import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
 import { FlowCellText } from '~/components/flow/FlowCellText';
 import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';
 import { FlowDisplay, INode } from '~/types';
 
@@ -38,6 +39,8 @@ const FlowCell: FC<Props> = ({
   canEdit = false,
   onChangeCellView,
 }) => {
+  const { innerWidth } = useWindowSize();
+
   const withText =
     ((!!flow.display && flow.display !== 'single') || !image) && flow.show_description && !!text;
   const {
@@ -49,6 +52,13 @@ const FlowCell: FC<Props> = ({
     toggleViewDescription,
   } = useFlowCellControls(id, text, flow, onChangeCellView);
   const { isActive: isMenuActive, activate, ref, deactivate } = useClickOutsideFocus();
+
+  const shadeSize = useMemo(() => {
+    const min = innerWidth < 768 ? 10 : 15;
+    const max = innerWidth < 768 ? 20 : 50;
+
+    return withText ? min : max;
+  }, [withText, innerWidth]);
 
   return (
     <div className={classNames(styles.cell, styles[flow.display || 'single'])} ref={ref as any}>
@@ -90,7 +100,7 @@ const FlowCell: FC<Props> = ({
           />
         )}
 
-        <CellShade color={color} className={styles.shade} size={withText ? 15 : 50} />
+        <CellShade color={color} className={styles.shade} size={shadeSize} />
 
         {!withText && (
           <div className={styles.title_wrapper}>
