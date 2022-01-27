@@ -115,12 +115,14 @@
 }
 
 @mixin blur($color: $content_bg, $radius: 15px, $opacity: 0.5) {
-  background: transparentize($color, $opacity / 2);
+  background: transparentize($color, $opacity / 1.5);
+  backdrop-filter: blur($radius);
+  -webkit-backdrop-filter: blur($radius);
 
   @include can_backdrop {
     backdrop-filter: blur($radius);
     -webkit-backdrop-filter: blur($radius);
-    background: transparentize($color, $opacity);
+    background-color: transparentize($color, $opacity);
   }
 }
 
@@ -246,9 +248,11 @@
 
 @mixin modal_backdrop {
   @include blur();
-  background: url('../../src/sprites/noise.png');
+  background: transparentize($content_bg, 0.3) url('../../src/sprites/noise.png');
 
   @include can_backdrop {
-    background: url('../../src/sprites/noise.png');
+    @supports (backdrop-filter: blur(5px)) and (background-image: url('../../src/sprites/noise.png')) {
+      background: transparentize($content_bg, 0.5) url('../../src/sprites/noise.png');
+    }
   }
 }

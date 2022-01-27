@@ -5,7 +5,7 @@ $input_text_color: #bbbbbb;
 $input_shadow: inset transparentize(white, 0.9) 0 0 0 1px;
 $input_shadow_error: inset $red 0 0 0 1px;
 $input_shadow_filled: $input_shadow;
-$input_font: $font_16_semibold;
+$input_font: $font_16_medium;
 $input_placeholder_font: $font_16_medium;
 $input_bg_color: darken($content_bg, 2%);
 $input_grey_color: #444444;

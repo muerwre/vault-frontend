@@ -14,7 +14,6 @@
   ::placeholder {
     font: $input_placeholder_font;
     color: $input-grey_color;
-    text-transform: uppercase;
   }
 
   &.has_error {
