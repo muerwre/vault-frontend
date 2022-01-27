@@ -11,7 +11,6 @@ import React, {
 import autosize from 'autosize';
 import classNames from 'classnames';
 
-
 import { InputWrapper } from '~/components/input/InputWrapper';
 import { useForwardRef } from '~/hooks/dom/useForwardRef';
 
@@ -58,14 +57,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, IProps>(
 
     useEffect(() => {
       if (!ref?.current) return;
-      autosize(ref?.current);
+      autosize(ref.current);
       return () => autosize.destroy(ref);
     }, [ref]);
 
     useEffect(() => {
       if (!ref?.current) return;
 
-      autosize.update(ref);
+      autosize.update(ref.current);
     }, [ref, value, forwardRef]);
 
     return (
