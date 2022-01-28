@@ -10,7 +10,7 @@ import { FlowLayout } from '~/layouts/FlowLayout';
 import { FlowProvider } from '~/utils/providers/FlowProvider';
 import { getPageTitle } from '~/utils/ssr/getPageTitle';
 
-export const getStaticProps = async ctx => {
+export const getStaticProps = async () => {
   const fallbackData = await getNodeDiff({
     start: new Date().toISOString(),
     end: new Date().toISOString(),
@@ -24,7 +24,7 @@ export const getStaticProps = async ctx => {
     props: {
       fallbackData,
     },
-    revalidate: 5 * 60,
+    revalidate: 60 * 60, // every hour
   };
 };
 

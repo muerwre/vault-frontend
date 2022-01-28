@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { InferGetServerSidePropsType } from 'next';
+import { InferGetStaticPropsType } from 'next';
 import { RouteComponentProps } from 'react-router';
 
-import { apiGetNode } from '~/api/node';
+import { apiGetNode, getNodeDiff } from '~/api/node';
 import { NodeHeadMetadata } from '~/components/node/NodeHeadMetadata';
 import { useNodeComments } from '~/hooks/comments/useNodeComments';
 import { useScrollToTop } from '~/hooks/dom/useScrollToTop';
@@ -18,8 +18,31 @@ import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
 import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
 import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
+import { uniqBy } from '~/utils/ramda';
 
-export const getServerSideProps = async context => {
+export const getStaticPaths = async () => {
+  const recent = await getNodeDiff({
+    with_heroes: false,
+    with_recent: true,
+    with_updated: true,
+    with_valid: false,
+  });
+
+  const recentIDs = uniqBy(it => it.id, [
+    ...(recent.after || []),
+    ...(recent.before || []),
+    ...(recent.recent || []),
+  ])
+    .filter(it => it.id)
+    .map(it => it.id!.toString());
+
+  return {
+    paths: recentIDs.map(id => ({ params: { id } })),
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps = async context => {
   if (!context.params?.id) {
     return { props: {} };
   }
@@ -39,11 +62,11 @@ export const getServerSideProps = async context => {
         last_seen: fallbackData.last_seen ?? null,
       },
     },
+    revalidate: 7 * 86400, // every week
   };
 };
 
-type Props = RouteComponentProps<{ id: string }> &
-  InferGetServerSidePropsType<typeof getServerSideProps>;
+type Props = RouteComponentProps<{ id: string }> & InferGetStaticPropsType<typeof getStaticProps>;
 
 const NodePage: FC<Props> = observer(props => {
   const id = useNodePageParams();
