@@ -30,4 +30,9 @@ module.exports = {
   },
   plugins: ['import', 'react-hooks'],
   parser: '@typescript-eslint/parser',
+  settings: {
+    react: {
+      version: '17',
+    },
+  },
 };

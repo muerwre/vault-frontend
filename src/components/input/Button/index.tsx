@@ -1,8 +1,7 @@
 import React, { ButtonHTMLAttributes, DetailedHTMLProps, FC, memo, useMemo } from 'react';
 
-import Tippy from '@tippy.js/react';
+import Tippy from '@tippyjs/react';
 import classnames from 'classnames';
-
 
 import { Icon } from '~/components/input/Icon';
 import { IIcon } from '~/types';
@@ -69,7 +68,7 @@ const Button: FC<IButtonProps> = memo(
     );
 
     return (
-      <Tippy content={label || ''} enabled={!!label}>
+      <Tippy content={label || ''} disabled={!label}>
         <button className={computedClassName} {...props}>
           {iconLeft && <Icon icon={iconLeft} size={20} key={0} className={styles.icon_left} />}
           {!!title ? <span>{title}</span> : children}

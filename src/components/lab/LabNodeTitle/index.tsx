@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import Tippy from '@tippy.js/react';
+import Tippy from '@tippyjs/react';
 
 import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
