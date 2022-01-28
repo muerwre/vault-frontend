@@ -1,4 +1,4 @@
-import marked from 'marked';
+import { marked } from 'marked';
 
 import { EventMessageType } from '~/constants/events';
 import { stripHTMLTags } from '~/utils/stripHTMLTags';
