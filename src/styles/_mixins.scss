@@ -1,4 +1,6 @@
 
+@use "sass:math";
+
 @mixin outer_shadow() {
   box-shadow:
           inset transparentize(white, 0.95) 1px 1px,
@@ -96,7 +98,7 @@
     @content;
 
     & > * {
-      margin: $gap/2 0 !important;
+      margin: $gap*0.5 0 !important;
 
       &:first-child {
         margin-top: 0 !important;
@@ -115,7 +117,7 @@
 }
 
 @mixin blur($color: $content_bg, $radius: 15px, $opacity: 0.5) {
-  background: transparentize($color, $opacity / 1.5);
+  background: transparentize($color, math.div($opacity, 1.5));
   backdrop-filter: blur($radius);
   -webkit-backdrop-filter: blur($radius);
 
@@ -172,7 +174,7 @@
 @mixin editor_round_button {
   width: $upload_button_height;
   height: $upload_button_height;
-  border-radius: ($upload_button_height / 2) !important;
+  border-radius: ($upload_button_height * 0.5) !important;
   flex: 0 0 $upload_button_height;
   position: relative;
   border-radius: $radius;

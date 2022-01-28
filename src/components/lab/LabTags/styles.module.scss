@@ -5,6 +5,6 @@
   flex-wrap: wrap;
 
   & > * {
-    margin: $gap / 2;
+    margin: $gap * 0.5;
   }
 }

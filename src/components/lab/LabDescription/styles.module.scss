@@ -1,7 +1,7 @@
 @import "src/styles/variables.scss";
 
 .wrap {
-  padding: $lab_gap / 2 $lab_gap 0;
+  padding: $lab_gap * 0.5 $lab_gap 0;
   line-height: 1.3em;
 
   @include tablet {
@@ -9,6 +9,6 @@
     line-height: 1.3em;
     font: $font_16_regular;
     padding: 0 $lab_gap_mobile;
-    margin: $lab_gap_mobile / 2 0;
+    margin: $lab_gap_mobile * 0.5 0;
   }
 }

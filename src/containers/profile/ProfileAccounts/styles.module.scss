@@ -11,7 +11,7 @@
 .buttons {
   background: transparentize(black, 0.8);
   border-radius: $radius;
-  padding: $gap / 2;
+  padding: $gap * 0.5;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -64,7 +64,7 @@
 
   &__name {
     font: $font_16_semibold;
-    padding-left: $gap / 2;
+    padding-left: $gap * 0.5;
   }
 
   &__drop {
@@ -82,6 +82,6 @@
 }
 
 .info {
-  padding: $gap $gap / 2;
+  padding: $gap $gap * 0.5;
   font: $font_14_regular;
 }

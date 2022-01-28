@@ -1,7 +1,7 @@
 @import "src/styles/variables";
 
 .wrap {
-  padding: $gap / 2 0;
+  padding: $gap * 0.5 0;
   border-bottom: 1px solid #333333;
 
   &:last-child {

@@ -19,7 +19,7 @@
   box-sizing: border-box;
 
   &:global(.logo) {
-    height: (54px * 1.5) + $gap / 2;
+    height: (54px * 1.5) + $gap * 0.5;
     background: $red_gradient;
     background-size: 140px;
     font-weight: 600;

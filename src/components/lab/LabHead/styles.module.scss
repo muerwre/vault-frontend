@@ -5,7 +5,7 @@
 
   border-radius: $radius;
   background-color: $content_bg;
-  padding: $gap / 2;
+  padding: $gap * 0.5;
 }
 
 .group {
@@ -18,6 +18,6 @@
   }
 
   & > * {
-    margin: $gap / 2;
+    margin: $gap * 0.5;
   }
 }

@@ -5,7 +5,7 @@
 }
 
 .check {
-  padding: $gap 0 0 $gap / 2;
+  padding: $gap 0 0 $gap * 0.5;
   font: $font_12_medium;
   display: flex;
   align-items: center;

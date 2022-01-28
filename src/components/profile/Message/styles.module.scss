@@ -95,6 +95,6 @@ $outgoing_color: $comment_bg;
 .deleted {
   background: mix($red, $content_bg, 50%);
   border-radius: $radius $radius $radius 0;
-  padding: $gap / 2;
+  padding: $gap * 0.5;
   z-index: 2;
 }

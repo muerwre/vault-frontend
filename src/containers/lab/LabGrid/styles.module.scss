@@ -6,15 +6,15 @@ div.wrap {
   margin-right: 0;
 
   @include tablet {
-    padding: 0 $gap / 2;
+    padding: 0 $gap * 0.5;
   }
 }
 
 .column {
   background-clip: padding-box;
   box-sizing: border-box;
-  padding: 0 $gap / 2;
-  margin-top: -$gap / 2;
+  padding: 0 $gap * 0.5;
+  margin-top: -$gap * 0.5;
 
   @include tablet {
     padding: 0;

@@ -144,7 +144,7 @@
   height: 20px;
   font: $font_12_semibold;
   padding: 0 15px;
-  border-radius: $radius / 2;
+  border-radius: $radius * 0.5;
 
   &:global(.round) {
     border-radius: 10px;
@@ -153,7 +153,7 @@
 
 .mini {
   height: 26px;
-  border-radius: $radius / 2;
+  border-radius: $radius * 0.5;
 
   &:global(.round) {
     border-radius: 14px;
@@ -204,13 +204,13 @@
 }
 
 .icon_left {
-  margin-right: $gap / 2 !important;
+  margin-right: $gap * 0.5 !important;
   width: 20px;
   height: 20px;
 }
 
 .icon_right {
-  margin-left: $gap / 2 !important;
+  margin-left: $gap * 0.5 !important;
   width: 20px;
   height: 20px;
 }

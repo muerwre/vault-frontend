@@ -9,7 +9,7 @@ $big: 1.2;
   cursor: default;
   height: $tag_height;
   background: $tag_bg;
-  border-radius: ($tag_height / 2) 3px 3px ($tag_height / 2);
+  border-radius: ($tag_height * 0.5) 3px 3px ($tag_height * 0.5);
   font: $font_14_semibold;
   align-self: flex-start;
   position: relative;
@@ -28,7 +28,7 @@ $big: 1.2;
   &:global(.big) {
     height: $tag_height * $big;
     font: $font_16_semibold;
-    border-radius: ($tag_height * $big / 2) 3px 3px ($tag_height * $big / 2);
+    border-radius: ($tag_height * $big * 0.5) 3px 3px ($tag_height * $big * 0.5);
 
     .hole {
       width: $tag_height * $big;

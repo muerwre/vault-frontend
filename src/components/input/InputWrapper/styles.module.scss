@@ -34,20 +34,20 @@
 .error {
   position: absolute;
   font: $font_12_semibold;
-  padding: 0 $gap / 2;
+  padding: 0 $gap * 0.5;
   border-radius: 4px;
   color: white;
   background-color: $red;
   bottom: 0;
-  right: $gap / 2;
+  right: $gap * 0.5;
   transform: translate(0, 50%);
 }
 
 .title {
   position: absolute;
   top: $gap;
-  left: $gap / 2;
-  padding: 0 $gap / 2;
+  left: $gap * 0.5;
+  padding: 0 $gap * 0.5;
   transform: translate(0, 0) scale(1);
   font: $input_font;
   transition: transform 0.25s;

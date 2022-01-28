@@ -4,7 +4,7 @@
   position: fixed;
   bottom: 0;
   left: 50%;
-  transform: translate($content_width / 2 + $gap, 0);
+  transform: translate($content_width * 0.5 + $gap, 0);
   z-index: 14;
 
   @media (max-width: $content_width + ($bar_height + $gap) * 2) {
@@ -17,7 +17,7 @@
   background: $red_gradient;
   width: $bar_height;
   height: $bar_height;
-  border-radius: $bar_height / 2;
+  border-radius: $bar_height * 0.5;
   display: flex;
   align-items: center;
   justify-content: center;

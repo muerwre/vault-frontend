@@ -2,7 +2,7 @@
 
 .item {
   flex: 0 0 auto;
-  padding: $gap / 2;
+  padding: $gap * 0.5;
   fill: currentColor;
   color: darken(white, 50%);
   transition: color 0.25s;

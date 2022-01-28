@@ -47,7 +47,7 @@ div.thumb {
 
 .title {
   text-transform: uppercase;
-  padding: $gap / 2;
+  padding: $gap * 0.5;
   box-sizing: border-box;
   align-items: flex-start;
   justify-content: flex-start;

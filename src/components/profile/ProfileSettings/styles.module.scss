@@ -36,7 +36,7 @@ $pad_usual: mix(white, $content_bg, 10%);
       border-radius: 4px;
       font: $font_10_semibold;
       line-height: 12px;
-      padding: 2px $gap / 2;
+      padding: 2px $gap * 0.5;
       text-transform: uppercase;
     }
   }

@@ -15,7 +15,7 @@
   touch-action: none;
 
   & > * {
-    margin: 0 $gap / 2;
+    margin: 0 $gap * 0.5;
     pointer-events: all;
     touch-action: auto;
 

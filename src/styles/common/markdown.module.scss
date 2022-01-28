@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import "../variables";
 
 $margin: 1em;
@@ -5,7 +7,7 @@ $margin: 1em;
 .wrapper {
   blockquote {
     border-left: 4px solid $wisegreen;
-    padding: $margin / 2 0;
+    padding: $margin * 0.5 0;
     margin-bottom: $margin;
     color: $wisegreen;
     font-size: 0.9em;
@@ -55,10 +57,10 @@ $margin: 1em;
 
   h5, h4, h3, h2, h1 {
     line-height: 1.2em;
-    margin: $margin * 1.5 0 $margin / 2;
+    margin: $margin * 1.5 0 $margin * 0.5;
 
     &:first-child {
-      margin-top: $margin / 4;
+      margin-top: $margin * 0.25;
     }
   }
 
@@ -68,7 +70,7 @@ $margin: 1em;
     margin-bottom: $margin;
 
     li {
-      margin: $margin/3 0;
+      margin: math.div($margin, 3) 0;
     }
   }
 
