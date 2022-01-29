@@ -104,12 +104,12 @@
     }
   }
 
-  &:global(.has_icon_left) {
+  &.has_icon_left {
     padding-left: $gap;
     padding-right: $gap;
   }
 
-  &:global(.has_icon_right) {
+  &.has_icon_right {
     padding-left: $gap;
     padding-right: $gap;
   }
@@ -121,6 +121,16 @@
 
     svg {
       fill: transparentize(white, 0.8);
+    }
+  }
+
+  &.outline-white {
+    background: transparent;
+    box-shadow: inset transparentize(white, 0) 0 0 0 2px;
+    color: transparentize(white, 0);
+
+    svg {
+      fill: transparentize(white, 0);
     }
   }
 
@@ -191,11 +201,16 @@
 
 .giant {
   height: 50px;
-  padding: 0 15px;
+  padding: 0 30px;
   min-width: 50px;
 
   &:global(.round) {
     border-radius: 25px;
+  }
+
+  &.has_icon_left {
+    padding-left: 20px;
+    padding-right: 30px;
   }
 }
 

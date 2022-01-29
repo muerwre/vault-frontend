@@ -15,7 +15,7 @@ type IButtonProps = DetailedHTMLProps<
   HTMLButtonElement
 > & {
   size?: 'mini' | 'normal' | 'big' | 'giant' | 'micro' | 'small';
-  color?: 'primary' | 'secondary' | 'outline' | 'link' | 'gray' | 'lab';
+  color?: 'primary' | 'secondary' | 'outline' | 'link' | 'gray' | 'lab' | 'outline-white';
   iconLeft?: IIcon;
   iconRight?: IIcon;
   title?: string;
@@ -48,8 +48,8 @@ const Button: FC<IButtonProps> = memo(
           disabled,
           stretchy,
           icon: ((iconLeft || iconRight) && !title && !children) || iconOnly,
-          has_icon_left: !!iconLeft,
-          has_icon_right: !!iconRight,
+          [styles.has_icon_left]: !!iconLeft,
+          [styles.has_icon_right]: !!iconRight,
           round,
         }),
       [
