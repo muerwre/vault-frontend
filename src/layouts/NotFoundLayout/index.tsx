@@ -19,7 +19,7 @@ const NotFoundLayout: VFC<NotFoundLayoutProps> = () => {
         <div className={styles.block}>
           <div className={styles.text}>
             <h1>Потерян навсегда</h1>
-            <p className={styles.caption}>Этой страницы никогда не существовало.</p>
+            <p className={styles.caption}>Этой страницы никогда не существовало</p>
 
             <Button
               color="outline-white"
