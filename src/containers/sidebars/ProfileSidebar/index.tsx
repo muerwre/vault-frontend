@@ -1,5 +1,6 @@
 import React, { VFC } from 'react';
 
+import { Tabs } from '~/components/dialogs/Tabs';
 import { ProfileSidebarSettings } from '~/components/profile/ProfileSidebarSettings';
 import { SidebarStack } from '~/components/sidebar/SidebarStack';
 import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
@@ -13,13 +14,13 @@ const ProfileSidebar: VFC<ProfileSidebarProps> = ({ onRequestClose }) => {
   return (
     <SidebarWrapper onClose={onRequestClose}>
       <SidebarStack>
-        <SidebarStackCard headerFeature="close" title="Профиль">
+        <SidebarStackCard headerFeature="close" title="Профиль" onBackPress={onRequestClose}>
           <ProfileSidebarMenu onClose={onRequestClose} />
         </SidebarStackCard>
 
-        <SidebarStackCard width={600} headerFeature="back" title="Настройки">
+        <SidebarStack.Cards>
           <ProfileSidebarSettings />
-        </SidebarStackCard>
+        </SidebarStack.Cards>
       </SidebarStack>
     </SidebarWrapper>
   );

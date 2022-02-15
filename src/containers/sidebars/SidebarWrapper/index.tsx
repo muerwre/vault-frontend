@@ -8,9 +8,10 @@ import styles from './styles.module.scss';
 
 interface IProps {
   onClose?: () => void;
+  closeOnBackdropClick?: boolean;
 }
 
-const SidebarWrapper: FC<IProps> = ({ children, onClose }) => {
+const SidebarWrapper: FC<IProps> = ({ children, onClose, closeOnBackdropClick = true }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useCloseOnEscape(onClose);
@@ -24,6 +25,7 @@ const SidebarWrapper: FC<IProps> = ({ children, onClose }) => {
 
   return (
     <div className={styles.wrapper} ref={ref}>
+      {closeOnBackdropClick && <div className={styles.backdrop} onClick={onClose} />}
       {children}
     </div>
   );

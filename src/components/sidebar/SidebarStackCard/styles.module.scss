@@ -17,10 +17,12 @@
   flex-direction: row;
   align-items: center;
   padding: $gap $gap $gap $gap * 2;
+  height: 48px;
 }
 
 .content {
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }

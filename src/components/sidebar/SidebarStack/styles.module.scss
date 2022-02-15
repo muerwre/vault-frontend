@@ -6,6 +6,12 @@
   flex-direction: row-reverse;
   width: auto;
   border-radius: $radius 0 0 $radius;
+
+  @include sidebar_stack_limit {
+    & > *:not(:last-child) {
+      display: none;
+    }
+  }
 }
 
 .card {

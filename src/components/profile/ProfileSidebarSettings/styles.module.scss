@@ -6,6 +6,7 @@
   justify-content: center;
   flex-direction: column;
   z-index: 4;
+  height: 100%;
 }
 
 .scroller {
@@ -15,6 +16,8 @@
 }
 
 .buttons {
+  @include outer_shadow;
+
   width: 100%;
   padding: $gap;
   box-sizing: border-box;

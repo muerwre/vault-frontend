@@ -9,19 +9,28 @@ interface SidebarStackCardProps {
   width?: number;
   headerFeature?: 'back' | 'close';
   title?: string;
+  onBackPress?: () => void;
 }
 
-const SidebarStackCard: FC<SidebarStackCardProps> = ({ children, title, width, headerFeature }) => {
+const SidebarStackCard: FC<SidebarStackCardProps> = ({
+  children,
+  title,
+  width,
+  headerFeature,
+  onBackPress,
+}) => {
   const style = useMemo(() => ({ maxWidth: width, flexBasis: width }), [width]);
+  const backIcon = headerFeature === 'close' ? 'close' : 'right';
 
   return (
     <div style={style} className={styles.card}>
-      {(headerFeature || title) && (
+      {!!(headerFeature || title) && (
         <div className={styles.head}>
-          <Filler>{!!title && <h5>{title}</h5>}</Filler>
+          <Filler>{!!title && <h6>{title}</h6>}</Filler>
 
-          {headerFeature === 'back' && <Button color="link" iconRight="right" />}
-          {headerFeature === 'close' && <Button color="link" iconRight="close" />}
+          {!!(headerFeature && onBackPress) && (
+            <Button color="link" iconRight={backIcon} onClick={onBackPress} />
+          )}
         </div>
       )}
 

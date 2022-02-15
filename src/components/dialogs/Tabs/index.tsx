@@ -13,7 +13,7 @@ const TabContext = createContext({
   setActiveTab: (activeTab: number) => {},
 });
 
-const List: VFC<TabProps> = ({ items }) => {
+const HorizontalList: VFC<TabProps> = ({ items }) => {
   const { activeTab, setActiveTab } = useContext(TabContext);
 
   return (
@@ -54,7 +54,7 @@ const Tabs = function({ children }) {
   return <TabContext.Provider value={{ activeTab, setActiveTab }}>{children}</TabContext.Provider>;
 };
 
-Tabs.List = List;
+Tabs.Horizontal = HorizontalList;
 Tabs.Content = Content;
 
 export { Tabs };

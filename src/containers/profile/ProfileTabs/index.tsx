@@ -13,7 +13,7 @@ const ProfileTabs: FC<IProps> = ({ is_own }) => {
 
   return (
     <div className={styles.wrap}>
-      <Tabs.List items={items} />
+      <Tabs.Horizontal items={items} />
     </div>
   );
 };
