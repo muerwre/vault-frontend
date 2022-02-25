@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { InferGetStaticPropsType } from 'next';
+import { GetStaticPropsResult, InferGetStaticPropsType } from 'next';
 import { RouteComponentProps } from 'react-router';
 
 import { apiGetNode, getNodeDiff } from '~/api/node';
@@ -14,6 +14,7 @@ import { useNodePageParams } from '~/hooks/node/useNodePageParams';
 import { useNodePermissions } from '~/hooks/node/useNodePermissions';
 import { useNodeTags } from '~/hooks/node/useNodeTags';
 import { NodeLayout } from '~/layouts/NodeLayout';
+import { ApiGetNodeResponse } from '~/types/node';
 import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
 import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
@@ -42,28 +43,37 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async context => {
-  if (!context.params?.id) {
-    return { props: {} };
-  }
+export const getStaticProps = async (
+  context
+): Promise<GetStaticPropsResult<{ fallbackData: ApiGetNodeResponse }>> => {
+  try {
+    if (!context.params?.id) {
+      return { notFound: true };
+    }
 
-  const id = parseInt(context.params.id, 10);
+    const id = parseInt(context.params.id, 10);
 
-  if (!id) {
-    return { props: {} };
-  }
+    if (!id) {
+      return { notFound: true };
+    }
 
-  const fallbackData = await apiGetNode({ id });
+    const fallbackData = await apiGetNode({ id });
 
-  return {
-    props: {
-      fallbackData: {
-        ...fallbackData,
-        last_seen: fallbackData.last_seen ?? null,
+    return {
+      props: {
+        fallbackData: {
+          ...fallbackData,
+          last_seen: fallbackData.last_seen ?? null,
+        },
       },
-    },
-    revalidate: 7 * 86400, // every week
-  };
+      revalidate: 7 * 86400, // every week
+    };
+  } catch (error) {
+    console.warn(`[NEXT] can't generate node: `, error);
+    return {
+      notFound: true,
+    };
+  }
 };
 
 type Props = RouteComponentProps<{ id: string }> & InferGetStaticPropsType<typeof getStaticProps>;
