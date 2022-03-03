@@ -16,7 +16,6 @@ import { useNodeContext } from '~/utils/context/NodeContextProvider';
 
 import styles from './styles.module.scss';
 
-
 type IProps = {};
 
 const NodeLayout: FC<IProps> = () => {
@@ -56,7 +55,9 @@ const NodeLayout: FC<IProps> = () => {
             />
           </div>
 
-          <NodeBottomBlock commentsOrder="DESC" />
+          <section>
+            <NodeBottomBlock commentsOrder="DESC" />
+          </section>
 
           <Footer />
         </Card>

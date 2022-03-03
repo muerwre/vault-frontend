@@ -60,7 +60,7 @@ const Header: FC<HeaderProps> = observer(() => {
   }, [top]);
 
   return (
-    <div className={classNames(styles.wrap, { [styles.is_scrolled]: isScrolled })}>
+    <header className={classNames(styles.wrap, { [styles.is_scrolled]: isScrolled })}>
       <div className={styles.container}>
         <div className={styles.logo_wrapper}>
           <Logo />
@@ -68,7 +68,7 @@ const Header: FC<HeaderProps> = observer(() => {
 
         <Filler className={styles.filler} />
 
-        <div className={styles.plugs}>
+        <nav className={styles.plugs}>
           <Authorized>
             <Anchor
               className={classNames(styles.item, {
@@ -97,7 +97,7 @@ const Header: FC<HeaderProps> = observer(() => {
               БОРИС
             </Anchor>
           </Authorized>
-        </div>
+        </nav>
 
         {isUser && <UserButton user={user} onLogout={logout} authOpenProfile={openProfile} />}
 
@@ -107,7 +107,7 @@ const Header: FC<HeaderProps> = observer(() => {
           </Button>
         )}
       </div>
-    </div>
+    </header>
   );
 });
 

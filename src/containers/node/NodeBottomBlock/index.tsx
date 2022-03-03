@@ -42,18 +42,20 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
           <Group className={styles.comments}>
             {inline && <div className={styles.inline}>{inline}</div>}
 
-            {isLoading || isLoadingComments || (!comments.length && !inline) ? (
-              <NodeNoComments is_loading={isLoadingComments || isLoading} />
-            ) : (
-              <NodeComments order={commentsOrder} />
-            )}
+            <article>
+              {isLoading || isLoadingComments || (!comments.length && !inline) ? (
+                <NodeNoComments is_loading={isLoadingComments || isLoading} />
+              ) : (
+                <NodeComments order={commentsOrder} />
+              )}
+            </article>
 
             {isUser && !isLoading && (
               <NodeCommentForm nodeId={node.id} saveComment={onSaveComment} user={user} />
             )}
           </Group>
 
-          <div className={styles.panel}>
+          <aside className={styles.panel}>
             <div className={styles.left}>
               <Sticky>
                 <div className={styles.left_item}>
@@ -68,7 +70,7 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
                 </div>
               </Sticky>
             </div>
-          </div>
+          </aside>
         </Group>
       </Padder>
     </Group>

@@ -64,13 +64,13 @@ const NodeTitle: VFC<IProps> = memo(
             </div>
 
             {!!username && (
-              <div className={styles.name}>
+              <aside className={styles.name}>
                 {isLoading ? (
                   <Placeholder width="100px" />
                 ) : (
                   `~${username.toLocaleLowerCase()}, ${getPrettyDate(createdAt)}`
                 )}
-              </div>
+              </aside>
             )}
           </div>
 
