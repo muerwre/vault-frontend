@@ -31,11 +31,13 @@ steps:
     environment:
       NEXT_PUBLIC_API_HOST: https://pig.vault48.org/
       NEXT_PUBLIC_REMOTE_CURRENT: https://pig.vault48.org/static/
+      NEXT_PUBLIC_PUBLIC_HOST: https://vault48.org/
     settings:
       dockerfile: docker/nextjs/Dockerfile
       build_args_from_env:
         - NEXT_PUBLIC_API_HOST
         - NEXT_PUBLIC_REMOTE_CURRENT
+        - NEXT_PUBLIC_PUBLIC_HOST
       tag:
         - ${DRONE_BRANCH}
       custom_labels:
@@ -56,11 +58,13 @@ steps:
     environment:
       NEXT_PUBLIC_API_HOST: https://pig.staging.vault48.org/
       NEXT_PUBLIC_REMOTE_CURRENT: https://pig.staging.vault48.org/static/
+      NEXT_PUBLIC_PUBLIC_HOST: https://staging.vault48.org/
     settings:
       dockerfile: docker/nextjs/Dockerfile
       build_args_from_env:
         - NEXT_PUBLIC_API_HOST
         - NEXT_PUBLIC_REMOTE_CURRENT
+        - NEXT_PUBLIC_PUBLIC_HOST
       tag:
         - ${DRONE_BRANCH}
       custom_labels:

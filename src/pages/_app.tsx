@@ -1,5 +1,6 @@
 import React from 'react';
 
+import App from 'next/app';
 import Head from 'next/head';
 
 import { PageCoverProvider } from '~/components/containers/PageCoverProvider';
@@ -9,6 +10,7 @@ import { MainLayout } from '~/containers/main/MainLayout';
 import { DragDetectorProvider } from '~/hooks/dom/useDragDetector';
 import { Sprites } from '~/sprites/Sprites';
 import { getMOBXStore } from '~/store';
+import { CONFIG } from '~/utils/config';
 import { StoreContextProvider } from '~/utils/context/StoreContextProvider';
 import { UserContextProvider } from '~/utils/context/UserContextProvider';
 import { AudioPlayerProvider } from '~/utils/providers/AudioPlayerProvider';
@@ -22,39 +24,47 @@ import '~/styles/main.scss';
 
 const mobxStore = getMOBXStore();
 
-export default function MyApp({ Component, pageProps }) {
-  return (
-    <StoreContextProvider store={mobxStore}>
-      <SWRConfigProvider>
-        <UserContextProvider>
-          <DragDetectorProvider>
-            <PageCoverProvider>
-              <SearchProvider>
-                <AudioPlayerProvider>
-                  <MetadataProvider>
-                    <AuthProvider>
-                      <Head>
-                        <meta
-                          name="viewport"
-                          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=0"
-                        />
-                      </Head>
+export default class MyApp extends App {
+  render() {
+    const { Component, pageProps, router } = this.props;
+    const canonicalURL =
+      !!CONFIG.publicHost && new URL(router.asPath, CONFIG.publicHost).toString();
 
-                      <MainLayout>
-                        <ToastProvider />
-                        <Modal />
-                        <Sprites />
-                        <Component {...pageProps} />
-                      </MainLayout>
-                      <BottomContainer />
-                    </AuthProvider>
-                  </MetadataProvider>
-                </AudioPlayerProvider>
-              </SearchProvider>
-            </PageCoverProvider>
-          </DragDetectorProvider>
-        </UserContextProvider>
-      </SWRConfigProvider>
-    </StoreContextProvider>
-  );
+    return (
+      <StoreContextProvider store={mobxStore}>
+        <SWRConfigProvider>
+          <UserContextProvider>
+            <DragDetectorProvider>
+              <PageCoverProvider>
+                <SearchProvider>
+                  <AudioPlayerProvider>
+                    <MetadataProvider>
+                      <AuthProvider>
+                        <Head>
+                          <meta
+                            name="viewport"
+                            content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=0"
+                          />
+
+                          {!!canonicalURL && <link rel="canonical" href={canonicalURL} />}
+                        </Head>
+
+                        <MainLayout>
+                          <ToastProvider />
+                          <Modal />
+                          <Sprites />
+                          <Component {...pageProps} />
+                        </MainLayout>
+                        <BottomContainer />
+                      </AuthProvider>
+                    </MetadataProvider>
+                  </AudioPlayerProvider>
+                </SearchProvider>
+              </PageCoverProvider>
+            </DragDetectorProvider>
+          </UserContextProvider>
+        </SWRConfigProvider>
+      </StoreContextProvider>
+    );
+  }
 }
