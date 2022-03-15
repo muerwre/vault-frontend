@@ -26,7 +26,6 @@ steps:
         - ${DRONE_BRANCH}
       custom_labels:
         - "commit=${DRONE_COMMIT_SHA}"
-      cache_from: "vault-frontend:${DRONE_BRANCH}"
       username:
         from_secret: global_docker_login
       password:
@@ -54,7 +53,6 @@ steps:
         - ${DRONE_BRANCH}
       custom_labels:
         - "commit=${DRONE_COMMIT_SHA}"
-      cache_from: "vault-frontend:${DRONE_BRANCH}"
       username:
         from_secret: global_docker_login
       password:
