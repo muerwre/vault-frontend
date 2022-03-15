@@ -3,24 +3,22 @@ import React, { forwardRef, useCallback } from 'react';
 import classNames from 'classnames';
 
 import { Square } from '~/components/common/Square';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { getURLFromString } from '~/utils/dom';
 import { DivProps } from '~/utils/types';
 import { openUserProfile } from '~/utils/user';
 
 import styles from './styles.module.scss';
 
-
-
 interface Props extends DivProps {
   url?: string;
   username?: string;
   size?: number;
-  preset?: typeof PRESETS[keyof typeof PRESETS];
+  preset?: typeof ImagePresets[keyof typeof ImagePresets];
 }
 
 const Avatar = forwardRef<HTMLDivElement, Props>(
-  ({ url, username, size, className, preset = PRESETS.avatar, ...rest }, ref) => {
+  ({ url, username, size, className, preset = ImagePresets.avatar, ...rest }, ref) => {
     const onOpenProfile = useCallback(() => openUserProfile(username), [username]);
 
     return (

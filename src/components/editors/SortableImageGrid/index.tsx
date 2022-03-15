@@ -5,7 +5,7 @@ import { SortableContainer } from 'react-sortable-hoc';
 
 import { SortableImageGridItem } from '~/components/editors/SortableImageGridItem';
 import { ImageUpload } from '~/components/upload/ImageUpload';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
@@ -33,7 +33,11 @@ const SortableImageGrid = SortableContainer(
           .filter(file => file && file.id)
           .map((file, index) => (
             <SortableImageGridItem key={file.id} index={index} collection={0}>
-              <ImageUpload id={file.id} thumb={getURL(file, PRESETS.cover)} onDrop={onDelete} />
+              <ImageUpload
+                id={file.id}
+                thumb={getURL(file, ImagePresets.cover)}
+                onDrop={onDelete}
+              />
             </SortableImageGridItem>
           ))}
 

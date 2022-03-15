@@ -6,7 +6,7 @@ import isAfter from 'date-fns/isAfter';
 import ru from 'date-fns/locale/ru';
 
 import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/constants/comment';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { IFile, ValueOf } from '~/types';
 import { CONFIG } from '~/utils/config';
 import {
@@ -66,7 +66,7 @@ export const describeArc = (
 
 export const getURLFromString = (
   url?: string,
-  size?: typeof PRESETS[keyof typeof PRESETS]
+  size?: typeof ImagePresets[keyof typeof ImagePresets]
 ): string => {
   if (size) {
     return (url || '').replace('REMOTE_CURRENT://', `${CONFIG.remoteCurrent}cache/${size}/`);
@@ -77,7 +77,7 @@ export const getURLFromString = (
 
 export const getURL = (
   file: Partial<IFile> | undefined,
-  size?: typeof PRESETS[keyof typeof PRESETS]
+  size?: typeof ImagePresets[keyof typeof ImagePresets]
 ) => {
   return file?.url ? getURLFromString(file.url, size) : '';
 };

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 import { Square } from '~/components/common/Square';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
 import { INode } from '~/types';
@@ -39,7 +39,7 @@ const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const thumb = useMemo(
-    () => (item.thumbnail ? getURL({ url: item.thumbnail }, PRESETS.avatar) : ''),
+    () => (item.thumbnail ? getURL({ url: item.thumbnail }, ImagePresets.avatar) : ''),
     [item]
   );
 
@@ -63,7 +63,9 @@ const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
     return 'small';
   }, [width]);
 
-  const image = useMemo(() => getURL({ url: item.thumbnail }, PRESETS.avatar), [item.thumbnail]);
+  const image = useMemo(() => getURL({ url: item.thumbnail }, ImagePresets.avatar), [
+    item.thumbnail,
+  ]);
 
   return (
     <div

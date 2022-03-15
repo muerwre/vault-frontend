@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 
 import { Icon } from '~/components/input/Icon';
 import { UploadSubject, UploadTarget, UploadType } from '~/constants/uploads';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { useUploader } from '~/hooks/data/useUploader';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { IEditorComponentProps } from '~/types/node';
@@ -21,7 +21,7 @@ const EditorUploadCoverButton: FC<IProps> = () => {
     values.cover ? [values.cover] : []
   );
 
-  const background = values.cover ? getURL(values.cover, PRESETS['300']) : null;
+  const background = values.cover ? getURL(values.cover, ImagePresets['300']) : null;
   const preview = pendingImages?.[0]?.thumbnail || '';
 
   const onDropCover = useCallback(() => {

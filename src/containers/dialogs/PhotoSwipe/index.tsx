@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js';
 import PhotoSwipeJs from 'photoswipe/dist/photoswipe.js';
 
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { useModal } from '~/hooks/modal/useModal';
 import { IFile } from '~/types';
 import { DialogComponentProps } from '~/types/modal';
@@ -32,7 +32,10 @@ const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
 
               img.onload = () => {
                 resolveImage({
-                  src: getURL(image, window.innerWidth < 768 ? PRESETS[900] : PRESETS[1600]),
+                  src: getURL(
+                    image,
+                    window.innerWidth < 768 ? ImagePresets[900] : ImagePresets[1600]
+                  ),
                   h: img.naturalHeight,
                   w: img.naturalWidth,
                 });
@@ -42,7 +45,7 @@ const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
                 resolveImage({});
               };
 
-              img.src = getURL(image, PRESETS[1600]);
+              img.src = getURL(image, ImagePresets[1600]);
             })
         )
       );

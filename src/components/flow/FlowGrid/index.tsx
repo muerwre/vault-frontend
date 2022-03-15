@@ -3,7 +3,7 @@ import React, { FC, Fragment } from 'react';
 import classNames from 'classnames';
 
 import { FlowCell } from '~/components/flow/FlowCell';
-import { PRESETS, URLS } from '~/constants/urls';
+import { flowDisplayToPreset, ImagePresets, URLS } from '~/constants/urls';
 import { FlowDisplay, IFlowNode, INode } from '~/types';
 import { IUser } from '~/types/auth';
 import { getURLFromString } from '~/utils/dom';
@@ -30,7 +30,7 @@ export const FlowGrid: FC<Props> = ({ user, nodes, onChangeCellView }) => {
             id={node.id}
             color={node.flow.dominant_color}
             to={URLS.NODE_URL(node.id)}
-            image={getURLFromString(node.thumbnail, PRESETS.cover)}
+            image={getURLFromString(node.thumbnail, flowDisplayToPreset[node.flow.display])}
             flow={node.flow}
             text={node.description}
             title={node.title}

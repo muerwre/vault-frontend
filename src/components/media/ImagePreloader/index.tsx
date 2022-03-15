@@ -6,7 +6,7 @@ import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 import { Icon } from '~/components/input/Icon';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { useResizeHandler } from '~/hooks/dom/useResizeHandler';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
@@ -78,7 +78,7 @@ const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className })
 
           {!hasError && (
             <image
-              xlinkHref={getURL(file, PRESETS['300'])}
+              xlinkHref={getURL(file, ImagePresets['300'])}
               width="100%"
               height="100%"
               onLoad={onLoad}
@@ -89,7 +89,7 @@ const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className })
 
       <ImageWithSSRLoad
         className={classNames(styles.image, { [styles.is_loaded]: loaded }, className)}
-        src={getURL(file, PRESETS['1600'])}
+        src={getURL(file, ImagePresets['1600'])}
         alt=""
         key={file.id}
         onLoad={onImageLoad}

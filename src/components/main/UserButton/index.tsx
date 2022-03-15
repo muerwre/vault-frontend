@@ -2,7 +2,7 @@ import React, { FC, useCallback } from 'react';
 
 import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { IUser } from '~/types/auth';
 import { getURL } from '~/utils/dom';
 
@@ -30,7 +30,7 @@ const UserButton: FC<IProps> = ({ user: { username, photo }, authOpenProfile, on
 
         <div
           className={styles.user_avatar}
-          style={{ backgroundImage: `url('${getURL(photo, PRESETS.avatar)}')` }}
+          style={{ backgroundImage: `url('${getURL(photo, ImagePresets.avatar)}')` }}
         >
           {(!photo || !photo.id) && <Icon icon="profile" />}
         </div>

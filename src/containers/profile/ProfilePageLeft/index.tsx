@@ -3,12 +3,11 @@ import React, { FC } from 'react';
 import { Avatar } from '~/components/common/Avatar';
 import { Markdown } from '~/components/containers/Markdown';
 import { Placeholder } from '~/components/placeholders/Placeholder';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { IUser } from '~/types/auth';
 import { formatText } from '~/utils/dom';
 
 import styles from './styles.module.scss';
-
 
 interface IProps {
   profile: IUser;
@@ -23,7 +22,7 @@ const ProfilePageLeft: FC<IProps> = ({ username, profile, isLoading }) => {
         username={username}
         url={profile?.photo?.url}
         className={styles.avatar}
-        preset={PRESETS['600']}
+        preset={ImagePresets['600']}
       />
 
       <div className={styles.region}>

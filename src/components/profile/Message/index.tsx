@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import classNames from 'classnames';
 
 import { Group } from '~/components/containers/Group';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import markdown from '~/styles/common/markdown.module.scss';
 import { IMessage } from '~/types';
 import { formatText, getPrettyDate, getURL } from '~/utils/dom';
@@ -27,7 +27,7 @@ const Message: FC<IProps> = ({ message, incoming }) => {
 
       <div
         className={styles.avatar}
-        style={{ backgroundImage: `url("${getURL(message.from.photo, PRESETS.avatar)}")` }}
+        style={{ backgroundImage: `url("${getURL(message.from.photo, ImagePresets.avatar)}")` }}
       />
 
       <div className={styles.stamp}>{getPrettyDate(message.created_at)}</div>

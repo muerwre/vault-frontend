@@ -8,7 +8,7 @@ import { Group } from '~/components/containers/Group';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
 import { UploadType } from '~/constants/uploads';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { IComment, IFile } from '~/types';
 import { formatCommentText, getPrettyDate, getURL } from '~/utils/dom';
 import { append, assocPath, path, reduce } from '~/utils/ramda';
@@ -101,7 +101,7 @@ const CommentContent: FC<IProps> = memo(
             >
               {groupped.image.map((file, index) => (
                 <div key={file.id} onClick={() => onShowImageModal(groupped.image, index)}>
-                  <img src={getURL(file, PRESETS['600'])} alt={file.name} />
+                  <img src={getURL(file, ImagePresets['600'])} alt={file.name} />
                 </div>
               ))}
             </div>

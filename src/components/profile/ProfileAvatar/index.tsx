@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FC, useCallback } from 'react';
 
 import { Button } from '~/components/input/Button';
-import { PRESETS } from '~/constants/urls';
+import { ImagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
 
@@ -26,7 +26,7 @@ const ProfileAvatar: FC<ProfileAvatarProps> = ({ photo, onChangePhoto, canEdit, 
     [onChangePhoto]
   );
 
-  const backgroundImage = photo ? `url("${getURL(photo, PRESETS.avatar)}")` : undefined;
+  const backgroundImage = photo ? `url("${getURL(photo, ImagePresets.avatar)}")` : undefined;
 
   return (
     <div
