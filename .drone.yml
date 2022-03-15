@@ -16,7 +16,7 @@ steps:
     settings:
       restore: true
       mount:
-        - ./node_modules
+        - /app/node_modules
     volumes:
       - name: cache
         path: /cache
@@ -83,7 +83,7 @@ steps:
     settings:
       rebuild: true
       mount:
-        - ./node_modules
+        - /app/node_modules
     volumes:
       - name: cache
         path: /cache
