@@ -16,6 +16,8 @@ steps:
       NEXT_PUBLIC_API_HOST: https://pig.vault48.org/
       NEXT_PUBLIC_REMOTE_CURRENT: https://pig.vault48.org/static/
       NEXT_PUBLIC_PUBLIC_HOST: https://vault48.org/
+      REPO:
+        from_secret: docker_repo
     settings:
       dockerfile: docker/nextjs/Dockerfile
       build_args_from_env:
@@ -26,6 +28,7 @@ steps:
         - ${DRONE_BRANCH}
       custom_labels:
         - "commit=${DRONE_COMMIT_SHA}"
+      cache_from: "${REPO}:${DRONE_BRANCH}"
       username:
         from_secret: global_docker_login
       password:
@@ -43,6 +46,8 @@ steps:
       NEXT_PUBLIC_API_HOST: https://pig.staging.vault48.org/
       NEXT_PUBLIC_REMOTE_CURRENT: https://pig.staging.vault48.org/static/
       NEXT_PUBLIC_PUBLIC_HOST: https://staging.vault48.org/
+      REPO:
+        from_secret: docker_repo
     settings:
       dockerfile: docker/nextjs/Dockerfile
       build_args_from_env:
