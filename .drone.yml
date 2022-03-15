@@ -9,15 +9,17 @@ platform:
 steps:
   - name: restore-cache
     image: drillster/drone-volume-cache
-    restore: true
     when:
       branch:
         - master
         - develop
-    mount:
-      - ./node_modules
+    settings:
+      restore: true
+      mount:
+        - ./node_modules
     volumes:
-      - /tmp/cache:/cache
+      - name: cache
+        path: /cache
   - name: build-master
     image: plugins/docker
     when:
@@ -78,8 +80,15 @@ steps:
       branch:
         - master
         - develop
-    rebuild: true
-    mount:
-      - ./node_modules
+    settings:
+      rebuild: true
+      mount:
+        - ./node_modules
     volumes:
-      - /tmp/cache:/cache
+      - name: cache
+        path: /cache
+
+volumes:
+  - name: cache
+    host:
+      path: /tmp/cache
