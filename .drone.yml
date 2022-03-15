@@ -7,19 +7,6 @@ platform:
   arch: amd64
 
 steps:
-  - name: restore-cache
-    image: drillster/drone-volume-cache
-    when:
-      branch:
-        - master
-        - develop
-    settings:
-      restore: true
-      mount:
-        - /drone/src/node_modules
-    volumes:
-      - name: cache
-        path: /cache
   - name: build-master
     image: plugins/docker
     when:
@@ -74,19 +61,6 @@ steps:
         from_secret: global_docker_registry
       repo:
         from_secret: docker_repo
-  - name: rebuild-cache
-    image: drillster/drone-volume-cache
-    when:
-      branch:
-        - master
-        - develop
-    settings:
-      rebuild: true
-      mount:
-        - /drone/src/node_modules
-    volumes:
-      - name: cache
-        path: /cache
 
 volumes:
   - name: cache
