@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 
+import { Group } from '~/components/containers/Group';
 import { LabHeadItem } from '~/components/lab/LabHeadItem';
 import { LabNodesSort } from '~/types/lab';
 import { useLabContext } from '~/utils/context/LabContextProvider';
@@ -14,7 +15,7 @@ const LabHead: FC<IProps> = ({ isLoading }) => {
   const { sort, setSort } = useLabContext();
 
   return (
-    <div className={styles.wrap}>
+    <Group className={styles.wrap} horizontal>
       <div className={styles.group}>
         <LabHeadItem
           icon="recent"
@@ -34,7 +35,7 @@ const LabHead: FC<IProps> = ({ isLoading }) => {
           Популярные
         </LabHeadItem>
       </div>
-    </div>
+    </Group>
   );
 };
 
