@@ -1,11 +1,13 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 
+import { observer } from 'mobx-react-lite';
 import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
 import { ImagePreloader } from '~/components/media/ImagePreloader';
 import { INodeComponentProps } from '~/constants/node';
+import { useModal } from '~/hooks/modal/useModal';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { normalizeBrightColor } from '~/utils/color';
@@ -22,9 +24,10 @@ const breakpoints: SwiperOptions['breakpoints'] = {
   },
 };
 
-const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
+const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
   const showPhotoSwiper = useImageModal();
+  const { isOpened: isModalActive } = useModal();
 
   const images = useNodeImages(node);
 
@@ -71,6 +74,14 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
     );
   }
 
+  useEffect(() => {
+    if (isModalActive) {
+      controlledSwiper?.keyboard.disable();
+    } else {
+      controlledSwiper?.keyboard.enable();
+    }
+  }, [isModalActive]);
+
   return (
     <div className={styles.wrapper}>
       <Swiper
@@ -88,8 +99,8 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
         watchOverflow
         updateOnImagesReady
         keyboard={{
-          enabled: true,
-          onlyInViewport: false,
+          enabled: !isModalActive,
+          onlyInViewport: true,
         }}
         grabCursor
         autoHeight
@@ -110,6 +121,6 @@ const NodeImageSwiperBlock: FC<IProps> = ({ node }) => {
       </Swiper>
     </div>
   );
-};
+});
 
 export { NodeImageSwiperBlock };

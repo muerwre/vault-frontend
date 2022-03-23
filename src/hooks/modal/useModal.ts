@@ -15,7 +15,7 @@ export type DialogContentProps = {
 };
 
 export const useModal = () => {
-  const { setCurrent, hide } = useModalStore();
+  const { setCurrent, hide, current } = useModalStore();
 
   const showModal = useCallback(
     <T extends Dialog>(dialog: T, props: DialogContentProps[T]) => {
@@ -24,5 +24,5 @@ export const useModal = () => {
     [setCurrent]
   );
 
-  return { showModal, hideModal: hide };
+  return { showModal, hideModal: hide, current, isOpened: !!current };
 };
