@@ -1,7 +1,7 @@
 import React, { createContext, FC, useContext } from 'react';
 
 import { IFlowNode, ITag } from '~/types';
-import { ILabNode } from '~/types/lab';
+import { ILabNode, LabNodesSort } from '~/types/lab';
 
 export interface LabContextProps {
   isLoading: boolean;
@@ -13,6 +13,8 @@ export interface LabContextProps {
   heroes: IFlowNode[];
   isLoadingStats: boolean;
   updates: IFlowNode[];
+  sort: LabNodesSort;
+  setSort: (sort: LabNodesSort) => void;
 }
 
 const defaultValues: LabContextProps = {
@@ -24,6 +26,8 @@ const defaultValues: LabContextProps = {
   heroes: [],
   isLoadingStats: false,
   updates: [],
+  sort: LabNodesSort.New,
+  setSort: () => {},
 };
 
 const LabContext = createContext<LabContextProps>(defaultValues);

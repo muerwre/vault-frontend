@@ -6,7 +6,18 @@ import { LabContextProvider } from '~/utils/context/LabContextProvider';
 interface LabProviderProps {}
 
 const LabProvider: FC<LabProviderProps> = ({ children }) => {
-  const { isLoading, nodes, loadMore, hasMore, tags, heroes, isLoadingStats, updates } = useLab();
+  const {
+    isLoading,
+    nodes,
+    loadMore,
+    hasMore,
+    tags,
+    heroes,
+    isLoadingStats,
+    updates,
+    sort,
+    setSort,
+  } = useLab();
 
   return (
     <LabContextProvider
@@ -18,6 +29,8 @@ const LabProvider: FC<LabProviderProps> = ({ children }) => {
       heroes={heroes}
       isLoadingStats={isLoadingStats}
       updates={updates}
+      sort={sort}
+      setSort={setSort}
     >
       {children}
     </LabContextProvider>
