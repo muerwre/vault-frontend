@@ -25,6 +25,8 @@ export enum LabNodesSort {
 }
 
 export type GetLabNodesRequest = {
+  limit?: number;
+  offset?: number;
   after?: string;
   sort?: LabNodesSort;
 };
