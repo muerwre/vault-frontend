@@ -7,9 +7,9 @@ import {
 } from '~/types/lab';
 import { api, cleanResult } from '~/utils/api';
 
-export const getLabNodes = ({ after }: GetLabNodesRequest) =>
+export const getLabNodes = ({ after, sort }: GetLabNodesRequest) =>
   api
-    .get<GetLabNodesResult>(API.LAB.NODES, { params: { after } })
+    .get<GetLabNodesResult>(API.LAB.NODES, { params: { after, sort } })
     .then(cleanResult);
 
 export const getLabStats = () => api.get<GetLabStatsResult>(API.LAB.STATS).then(cleanResult);

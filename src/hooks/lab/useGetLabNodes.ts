@@ -6,10 +6,13 @@ import { getLabNodes } from '~/api/lab';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useLabStore } from '~/store/lab/useLabStore';
 import { INode } from '~/types';
-import { GetLabNodesRequest, ILabNode } from '~/types/lab';
+import { GetLabNodesRequest, ILabNode, LabNodesSort } from '~/types/lab';
 import { flatten, last, uniqBy } from '~/utils/ramda';
 
-const getKey: (isUser: boolean) => SWRInfiniteKeyLoader = isUser => (index, prev: ILabNode[]) => {
+const getKey: (isUser: boolean, sort?: LabNodesSort) => SWRInfiniteKeyLoader = (isUser, sort) => (
+  index,
+  prev: ILabNode[]
+) => {
   if (!isUser) return null;
   if (index > 0 && !prev?.length) return null;
 
@@ -20,6 +23,7 @@ const getKey: (isUser: boolean) => SWRInfiniteKeyLoader = isUser => (index, prev
 
   const props: GetLabNodesRequest = {
     after: lastNode?.node.commented_at || lastNode?.node.created_at,
+    sort: sort || LabNodesSort.New,
   };
 
   return JSON.stringify(props);
@@ -33,12 +37,12 @@ const parseKey = (key: string): GetLabNodesRequest => {
   }
 };
 
-export const useGetLabNodes = () => {
+export const useGetLabNodes = (sort?: LabNodesSort) => {
   const labStore = useLabStore();
   const { isUser } = useAuth();
 
   const { data, isValidating, size, setSize, mutate } = useSWRInfinite(
-    getKey(isUser),
+    getKey(isUser, sort),
     async (key: string) => {
       const result = await getLabNodes(parseKey(key));
       return result.nodes;

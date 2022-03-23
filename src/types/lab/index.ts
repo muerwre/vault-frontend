@@ -19,8 +19,14 @@ export type ILabState = Readonly<{
   };
 }>;
 
+export enum LabNodesSort {
+  New = 'new',
+  Hot = 'hot',
+}
+
 export type GetLabNodesRequest = {
   after?: string;
+  sort?: LabNodesSort;
 };
 
 export interface ILabNode {
