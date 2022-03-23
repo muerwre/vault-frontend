@@ -53,10 +53,19 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
     [images, controlledSwiper, showPhotoSwiper]
   );
 
+  // TODO: remove it if swiper 8 fixed sliding to first slide on init
+  // useEffect(() => {
+  //   controlledSwiper?.slideTo(0, 0);
+  //   return () => controlledSwiper?.slideTo(0, 0);
+  // }, [images, node?.id]);
+
   useEffect(() => {
-    controlledSwiper?.slideTo(0, 0);
-    return () => controlledSwiper?.slideTo(0, 0);
-  }, [images, node?.id]);
+    if (isModalActive) {
+      controlledSwiper?.keyboard.disable();
+    } else {
+      controlledSwiper?.keyboard.enable();
+    }
+  }, [isModalActive]);
 
   if (!images?.length) {
     return null;
@@ -73,14 +82,6 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
       </div>
     );
   }
-
-  useEffect(() => {
-    if (isModalActive) {
-      controlledSwiper?.keyboard.disable();
-    } else {
-      controlledSwiper?.keyboard.enable();
-    }
-  }, [isModalActive]);
 
   return (
     <div className={styles.wrapper}>
