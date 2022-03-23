@@ -12,7 +12,6 @@ import { getPrettyDate } from '~/utils/dom';
 import styles from './styles.module.scss';
 
 
-
 interface IProps {
   node: Partial<INode>;
   has_new?: boolean;

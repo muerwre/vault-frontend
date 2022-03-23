@@ -12,8 +12,6 @@ import { CommendDeleted } from '../../node/CommendDeleted';
 import styles from './styles.module.scss';
 
 
-
-
 type IProps = HTMLAttributes<HTMLDivElement> & {
   nodeId: number;
   isEmpty?: boolean;

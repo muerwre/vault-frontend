@@ -11,7 +11,6 @@ import { Button } from '~/components/input/Button';
 import { Logo } from '~/components/main/Logo';
 import { UserButton } from '~/components/main/UserButton';
 import { Dialog } from '~/constants/modal';
-import { isSSR } from '~/constants/ssr';
 import { URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useScrollTop } from '~/hooks/dom/useScrollTop';

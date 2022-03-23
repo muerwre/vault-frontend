@@ -7,8 +7,6 @@ import { API } from '~/constants/api';
 import { INode } from '~/types';
 import { ApiGetNodeRelatedResult } from '~/types/node';
 
-
-
 export const useGetNodeRelated = (id?: INode['id']) => {
   const { data, isValidating, mutate } = useSWR<ApiGetNodeRelatedResult>(API.NODE.RELATED(id), () =>
     apiGetNodeRelated({ id })

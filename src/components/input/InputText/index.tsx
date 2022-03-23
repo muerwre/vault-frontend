@@ -10,7 +10,6 @@ import { IInputTextProps } from '~/types';
 
 import styles from './styles.module.scss';
 
-
 const InputText: FC<IInputTextProps> = ({
   className = '',
   handler,

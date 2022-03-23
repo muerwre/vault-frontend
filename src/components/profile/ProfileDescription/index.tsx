@@ -11,8 +11,6 @@ import { useProfileContext } from '~/utils/providers/ProfileProvider';
 
 import styles from './styles.module.scss';
 
-
-
 const ProfileDescription: FC = () => {
   const { profile, isLoading } = useProfileContext();
   const { user } = useUser();

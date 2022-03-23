@@ -27,7 +27,6 @@ import {
 } from '~/types/node';
 import { api, cleanResult } from '~/utils/api';
 
-
 export type ApiPostNodeRequest = { node: INode };
 export type ApiPostNodeResult = {
   node: INode;

@@ -1,12 +1,4 @@
-import React, {
-  createContext,
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { createContext, FC, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { PlayerState } from '~/constants/player';
 import { IFile } from '~/types';

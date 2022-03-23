@@ -1,4 +1,4 @@
-import { FlowDisplay, FlowDisplayVariant, INode } from '~/types';
+import { FlowDisplayVariant, INode } from '~/types';
 
 export const URLS = {
   BASE: '/',

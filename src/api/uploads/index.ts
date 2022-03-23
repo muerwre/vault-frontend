@@ -1,4 +1,3 @@
-
 import { ApiUploadFileRequest, ApiUploadFIleResult } from '~/api/uploads/types';
 import { API } from '~/constants/api';
 import { UploadTarget, UploadType } from '~/constants/uploads';

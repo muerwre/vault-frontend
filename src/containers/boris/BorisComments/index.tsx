@@ -11,8 +11,6 @@ import { CommentContextProvider, useCommentContext } from '~/utils/context/Comme
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
 import { useUserContext } from '~/utils/context/UserContextProvider';
 
-import styles from './styles.module.scss';
-
 interface IProps {}
 
 const BorisComments: FC<IProps> = () => {

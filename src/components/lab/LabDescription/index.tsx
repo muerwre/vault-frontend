@@ -8,7 +8,6 @@ import { formatText } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-
 const LabDescription: FC<INodeComponentProps> = ({ node, isLoading }) => {
   const onClick = useGotoNode(node.id);
 

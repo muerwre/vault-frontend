@@ -1,12 +1,8 @@
-import React, { FC, useCallback } from 'react';
-
-import { Anchor } from '~/components/common/Anchor';
+import React, { FC } from 'react';
 import { Pressable } from '~/components/common/Pressable';
-import { SubTitle } from '~/components/common/SubTitle';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
 import { Dialog } from '~/constants/modal';
-import { URLS } from '~/constants/urls';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { INode } from '~/types';
 import { INodeRelated } from '~/types/node';

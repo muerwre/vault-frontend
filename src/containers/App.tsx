@@ -19,7 +19,6 @@ import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
 import { SearchProvider } from '~/utils/providers/SearchProvider';
 import { ToastProvider } from '~/utils/providers/ToastProvider';
 
-
 const App: VFC = observer(() => {
   useGlobalLoader();
 

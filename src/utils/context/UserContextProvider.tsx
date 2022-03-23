@@ -6,7 +6,6 @@ import { EMPTY_USER } from '~/constants/auth';
 import { useUser } from '~/hooks/auth/useUser';
 import { IUser } from '~/types/auth';
 
-
 const UserContext = createContext<IUser>(EMPTY_USER);
 
 export const UserContextProvider: FC = observer(({ children }) => {

@@ -4,7 +4,6 @@ import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 
-
 type IProps = HTMLAttributes<HTMLDivElement> & {
   children: any;
   size: number;

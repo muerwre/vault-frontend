@@ -11,8 +11,6 @@ import { INode } from '~/types';
 import styles from './styles.module.scss';
 
 
-
-
 interface IProps {
   node: INode;
   lastSeen: string | null | undefined;
