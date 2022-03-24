@@ -32,6 +32,11 @@
 .container {
   width: 100%;
   max-width: $content_width;
+  margin-top: $page_top_offset;
+
+  @include tablet {
+    margin-top: 0;
+  }
 
   &.fluid {
     max-width: 100vw;

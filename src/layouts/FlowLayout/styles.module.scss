@@ -13,9 +13,11 @@ $cols: math.div($content_width, $cell);
 
 .container {
   @include container;
+  margin-top: $page_top_offset;
 
   @include tablet {
     padding: 0 $gap;
+    margin-top: 0;
   }
 }
 
