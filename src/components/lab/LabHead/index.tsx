@@ -18,6 +18,7 @@ const LabHead: FC<IProps> = ({ isLoading }) => {
     <Group className={styles.wrap} horizontal>
       <div className={styles.group}>
         <LabHeadItem
+          color="green"
           icon="recent"
           active={sort === LabNodesSort.New}
           isLoading={isLoading}
@@ -27,12 +28,23 @@ const LabHead: FC<IProps> = ({ isLoading }) => {
         </LabHeadItem>
 
         <LabHeadItem
+          color="orange"
           icon="hot"
           active={sort === LabNodesSort.Hot}
           isLoading={isLoading}
           onClick={() => setSort(LabNodesSort.Hot)}
         >
           Популярные
+        </LabHeadItem>
+
+        <LabHeadItem
+          color="yellow"
+          icon="star_full"
+          isLoading={isLoading}
+          active={sort === LabNodesSort.Heroic}
+          onClick={() => setSort(LabNodesSort.Heroic)}
+        >
+          Важные
         </LabHeadItem>
       </div>
     </Group>

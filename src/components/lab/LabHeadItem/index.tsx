@@ -10,12 +10,13 @@ import styles from './styles.module.scss';
 
 interface IProps {
   icon: string;
+  color: 'green' | 'orange' | 'yellow';
   isLoading?: boolean;
   active?: boolean;
   onClick?: () => void;
 }
 
-const LabHeadItem: FC<IProps> = ({ icon, children, isLoading, active, onClick }) => {
+const LabHeadItem: FC<IProps> = ({ icon, color, children, isLoading, active, onClick }) => {
   if (isLoading) {
     return (
       <Group horizontal className={styles.item} key="loading">
@@ -26,14 +27,13 @@ const LabHeadItem: FC<IProps> = ({ icon, children, isLoading, active, onClick })
   }
 
   return (
-    <Group
-      horizontal
-      className={classNames(styles.item, { [styles.active]: active })}
+    <div
+      className={classNames(styles.item, { [styles.active]: active }, styles[color])}
       onClick={onClick}
     >
       <Icon icon={icon} size={24} />
       <span className={styles.text}>{children}</span>
-    </Group>
+    </div>
   );
 };
 

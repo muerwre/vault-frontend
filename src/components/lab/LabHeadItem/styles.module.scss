@@ -2,21 +2,52 @@
 
 .item {
   flex: 0 0 auto;
-  padding: $gap * 0.5;
+  padding: $gap * 0.5 $gap * 1.5 $gap * 0.5 $gap;
   fill: currentColor;
   color: darken(white, 50%);
   transition: color 0.25s;
   cursor: pointer;
+  border-radius: $radius;
+  min-height: 36px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
   &:hover {
     color: white;
   }
 
+  @include tablet {
+    flex-direction: column;
+    flex: 1;
+  }
+
   &.active {
-    color: $wisegreen;
+    @include outer_shadow;
+    color: white;
+
+    &.green {
+      background: $green_gradient;
+    }
+
+    &.orange {
+      background: $red_gradient;
+    }
+
+    &.yellow {
+      background: $yellow_gradient;
+    }
   }
 }
 
 .text {
-  font: $font_16_semibold;
+  font: $font_14_semibold;
+  text-transform: uppercase;
+  padding-bottom: 1px;
+  padding-left: $gap * 0.75;
+
+  @include tablet {
+    padding-top: $gap * 0.5;
+    font: $font_12_semibold;
+  }
 }

@@ -22,6 +22,7 @@ export type ILabState = Readonly<{
 export enum LabNodesSort {
   New = 'new',
   Hot = 'hot',
+  Heroic = 'heroic',
 }
 
 export type GetLabNodesRequest = {
