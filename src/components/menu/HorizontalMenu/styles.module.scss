@@ -1,8 +1,27 @@
 @import "src/styles/variables.scss";
 
+.menu {
+  @include inner_shadow;
+
+  display: flex;
+  background-color: $content_bg;
+  border-radius: $radius;
+
+  @include tablet {
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    flex: 1;
+  }
+
+  & > * {
+    padding: $gap;
+  }
+}
+
 .item {
   flex: 0 0 auto;
-  padding: $gap * 0.5 $gap * 4 $gap * 0.5 $gap;
+  padding: $gap * 0.5 $gap  $gap * 0.5 $gap;
   fill: currentColor;
   color: darken(white, 50%);
   transition: color 0.25s;
@@ -43,7 +62,6 @@
 .text {
   font: $font_14_semibold;
   text-transform: uppercase;
-  padding-bottom: 1px;
   padding-left: $gap * 0.75;
   padding-right: $gap * 0.35;
 

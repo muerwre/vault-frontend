@@ -11,35 +11,3 @@
 .text {
   margin-top: $gap * 2;
 }
-
-.menu {
-  @include outer_shadow;
-
-  list-style: none;
-  border-radius: $radius;
-  padding: 0 !important;
-
-  & > li {
-    @include row_shadow;
-
-    list-style: none;
-    margin: 0 !important;
-    padding: $gap;
-    font: $font_16_semibold;
-    cursor: pointer;
-    background-color: transparentize($secondary, 1);
-    transition: background-color 0.25s;
-
-    &:hover {
-      background-color: transparentize($secondary, 0.5);
-    }
-
-    &:first-child {
-      border-radius: $radius $radius 0 0;
-    }
-
-    &:last-child {
-      border-radius: 0 0 $radius $radius;
-    }
-  }
-}

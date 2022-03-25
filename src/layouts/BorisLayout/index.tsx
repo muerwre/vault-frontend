@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
 
+import { useRouter } from 'next/router';
+
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
 import { Superpower } from '~/components/boris/Superpower';
 import { Card } from '~/components/containers/Card';
@@ -8,6 +10,7 @@ import { Padder } from '~/components/containers/Padder';
 import { Sticky } from '~/components/containers/Sticky';
 import { Button } from '~/components/input/Button';
 import { Dialog } from '~/constants/modal';
+import { URLS } from '~/constants/urls';
 import { BorisComments } from '~/containers/boris/BorisComments';
 import { Container } from '~/containers/main/Container';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
@@ -28,6 +31,7 @@ type IProps = {
 const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLoadingStats }) => {
   const { isUser } = useAuthProvider();
   const openProfileSidebar = useShowModal(Dialog.ProfileSidebar);
+  const { push } = useRouter();
 
   return (
     <Container>
@@ -46,10 +50,19 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLo
           <Card className={styles.content}>
             <Superpower>
               <Padder>
-                <h2>Тестовые фичи</h2>
-                <Button onClick={() => openProfileSidebar({})}>Профиль в сайдбаре</Button>
+                <Group>
+                  <h2>Тестовые фичи</h2>
+                  <div>
+                    <Button onClick={() => openProfileSidebar({})}>Профиль в сайдбаре</Button>
+                  </div>
+
+                  <div>
+                    <Button onClick={() => push(URLS.SETTINGS.BASE)}>
+                      Профиль на отдельной странице
+                    </Button>
+                  </div>
+                </Group>
               </Padder>
-              <Padder />
             </Superpower>
 
             <BorisComments />

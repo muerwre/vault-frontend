@@ -1,0 +1,13 @@
+@import "src/styles/variables";
+
+.grid {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-column-gap: $gap;
+  grid-row-gap: $gap;
+}
+
+.item {
+  min-width: 0;
+}

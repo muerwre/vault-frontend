@@ -1,22 +1,38 @@
-import React, { FC } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import classNames from 'classnames';
 
-import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
+import { DivProps } from '~/utils/types';
 
 import styles from './styles.module.scss';
 
-interface IProps {
-  icon: string;
-  color: 'green' | 'orange' | 'yellow';
+interface HorizontalMenuProps extends DivProps {}
+interface HorizontalMenuItemProps {
   isLoading?: boolean;
+  icon?: string;
+  color?: 'green' | 'orange' | 'yellow';
   active?: boolean;
   onClick?: () => void;
 }
 
-const LabHeadItem: FC<IProps> = ({ icon, color, children, isLoading, active, onClick }) => {
+function HorizontalMenu({ children, ...props }: HorizontalMenuProps) {
+  return (
+    <div {...props} className={classNames(styles.menu, props.className)}>
+      {children}
+    </div>
+  );
+}
+
+HorizontalMenu.Item = ({
+  icon,
+  color = 'green',
+  children,
+  isLoading,
+  active,
+  onClick,
+}: PropsWithChildren<HorizontalMenuItemProps>) => {
   if (isLoading) {
     return (
       <div className={styles.item} key="loading">
@@ -31,10 +47,9 @@ const LabHeadItem: FC<IProps> = ({ icon, color, children, isLoading, active, onC
       className={classNames(styles.item, { [styles.active]: active }, styles[color])}
       onClick={onClick}
     >
-      <Icon icon={icon} size={24} />
+      {!!icon && <Icon icon={icon} size={24} />}
       <span className={styles.text}>{children}</span>
     </div>
   );
 };
-
-export { LabHeadItem };
+export { HorizontalMenu };

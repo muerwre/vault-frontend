@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { Group } from '~/components/containers/Group';
-import { LabHeadItem } from '~/components/lab/LabHeadItem';
+import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { LabNodesSort } from '~/types/lab';
 import { useLabContext } from '~/utils/context/LabContextProvider';
 
@@ -16,8 +16,8 @@ const LabHead: FC<IProps> = ({ isLoading }) => {
 
   return (
     <Group className={styles.wrap} horizontal>
-      <div className={styles.group}>
-        <LabHeadItem
+      <HorizontalMenu>
+        <HorizontalMenu.Item
           color="green"
           icon="recent"
           active={sort === LabNodesSort.New}
@@ -25,9 +25,9 @@ const LabHead: FC<IProps> = ({ isLoading }) => {
           onClick={() => setSort(LabNodesSort.New)}
         >
           Свежие
-        </LabHeadItem>
+        </HorizontalMenu.Item>
 
-        <LabHeadItem
+        <HorizontalMenu.Item
           color="orange"
           icon="hot"
           active={sort === LabNodesSort.Hot}
@@ -35,9 +35,9 @@ const LabHead: FC<IProps> = ({ isLoading }) => {
           onClick={() => setSort(LabNodesSort.Hot)}
         >
           Популярные
-        </LabHeadItem>
+        </HorizontalMenu.Item>
 
-        <LabHeadItem
+        <HorizontalMenu.Item
           color="yellow"
           icon="star_full"
           isLoading={isLoading}
@@ -45,8 +45,8 @@ const LabHead: FC<IProps> = ({ isLoading }) => {
           onClick={() => setSort(LabNodesSort.Heroic)}
         >
           Важные
-        </LabHeadItem>
-      </div>
+        </HorizontalMenu.Item>
+      </HorizontalMenu>
     </Group>
   );
 };

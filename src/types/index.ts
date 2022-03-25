@@ -23,6 +23,7 @@ export type IInputTextProps = DetailedHTMLProps<
   title?: string;
   error?: string;
   suffix?: ReactElement;
+  prefix?: ReactElement;
 };
 
 export type IIcon = string;

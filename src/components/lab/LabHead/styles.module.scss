@@ -3,21 +3,3 @@
 .wrap {
   border-radius: $radius;
 }
-
-.group {
-  @include inner_shadow;
-  display: flex;
-  background-color: $content_bg;
-  border-radius: $radius;
-
-  @include tablet {
-    flex-wrap: wrap;
-    align-items: stretch;
-    justify-content: center;
-    flex: 1;
-  }
-
-  & > * {
-    padding: $gap;
-  }
-}

@@ -1,0 +1,26 @@
+@import "src/styles/variables";
+
+.menu {
+  flex: 1 0;
+  padding: $gap;
+}
+
+.content {
+  @include outer_shadow;
+
+  border-radius: $radius;
+  flex: 3;
+  background: $content_bg;
+}
+
+.card {
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  margin-top: $page_top_offset;
+  background: darken($content_bg, 2%);
+
+  @include tablet {
+    margin-top: 0;
+  }
+}

@@ -18,6 +18,7 @@ const InputText: FC<IInputTextProps> = ({
   error,
   value = '',
   suffix,
+  prefix,
   ...props
 }) => {
   const { focused, onFocus, onBlur } = useFocusEvent();
@@ -43,6 +44,8 @@ const InputText: FC<IInputTextProps> = ({
   return (
     <InputWrapper title={title} error={translatedError} focused={focused} notEmpty={!!value}>
       <div className={classNames(styles.input, { [styles.has_error]: !!error })}>
+        {!!prefix && <div className={styles.prefix}>{prefix}</div>}
+
         <input
           {...props}
           onFocus={onFocus}

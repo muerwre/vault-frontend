@@ -16,11 +16,12 @@ export const URLS = {
     BACKEND_DOWN: '/oopsie',
   },
   NODE_URL: (id: INode['id'] | string) => `/post${id}`,
-  NODE_EDIT_URL: (id: INode['id'] | string) => `/post${id}/edit`,
-  NODE_CREATE_URL: (type: string) => `/`,
-  NODE_TAG_URL: (id: number, tagName: string) => `/post${id}/tag/${tagName}`,
-  PROFILE: (username: string) => `/~${username}`,
   PROFILE_PAGE: (username: string) => `/profile/${username}`,
+  SETTINGS: {
+    BASE: '/settings',
+    NOTES: '/settings/notes',
+    TRASH: '/settings/trash',
+  },
 };
 
 export const ImagePresets = {
