@@ -19,10 +19,10 @@ interface IProps {
 const LabHeadItem: FC<IProps> = ({ icon, color, children, isLoading, active, onClick }) => {
   if (isLoading) {
     return (
-      <Group horizontal className={styles.item} key="loading">
+      <div className={styles.item} key="loading">
         <Placeholder width="32px" height={32} />
         <Placeholder width="96px" height={18} />
-      </Group>
+      </div>
     );
   }
 
