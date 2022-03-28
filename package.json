@@ -49,7 +49,7 @@
   },
   "scripts": {
     "ts-check": "tsc -p tsconfig.json --noEmit",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "next lint --fix",
     "prepare": "husky install",
     "next:dev": "next dev",
     "next:build": "next build",
@@ -96,7 +96,7 @@
   },
   "lint-staged": {
     "./**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
+      "next lint --fix"
     ]
   }
 }

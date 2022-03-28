@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { PageTitle } from '~/components/common/PageTitle';
+import { SettingsNotes } from '~/containers/settings/SettingsNotes';
 import { SettingsLayout } from '~/layouts/SettingsLayout';
 import { getPageTitle } from '~/utils/ssr/getPageTitle';
-import { SettingsNotes } from '~/containers/settings/SettingsNotes';
 
 const SettingsNotesPage = () => (
   <div>
