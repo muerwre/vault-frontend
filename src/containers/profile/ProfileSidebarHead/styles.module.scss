@@ -1,0 +1,11 @@
+@import "src/styles/variables";
+
+.name {
+  font: $font_20_semibold;
+}
+
+.username {
+  margin-top: 2px;
+  opacity: 0.5;
+  font: $font_14_medium;
+}

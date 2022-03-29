@@ -22,5 +22,6 @@
 
   @include tablet {
     margin-top: 0;
+    flex-direction: column;
   }
 }

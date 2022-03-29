@@ -12,10 +12,10 @@
   margin-top: $gap * 2;
 }
 
-.buttons {
-  flex: 0;
-}
-
 .stats {
-  display: none;
+  margin-top: 1em;
+
+  @include tablet {
+    display: none;
+  }
 }

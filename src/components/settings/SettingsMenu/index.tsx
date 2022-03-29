@@ -1,6 +1,5 @@
 import React, { VFC } from 'react';
 
-import classNames from 'classnames';
 import Link from 'next/link';
 
 import { Filler } from '~/components/containers/Filler';
@@ -9,8 +8,9 @@ import { Button } from '~/components/input/Button';
 import { VerticalMenu } from '~/components/menu/VerticalMenu';
 import { URLS } from '~/constants/urls';
 import { ProfileSidebarHead } from '~/containers/profile/ProfileSidebarHead';
-import styles from '~/containers/profile/ProfileSidebarMenu/styles.module.scss';
 import { ProfileStats } from '~/containers/profile/ProfileStats';
+
+import styles from './styles.module.scss';
 
 interface SettingsMenuProps {}
 
@@ -35,9 +35,9 @@ const SettingsMenu: VFC<SettingsMenuProps> = () => (
         </Link>
       </VerticalMenu>
 
-      <br />
-
-      <ProfileStats />
+      <div className={styles.stats}>
+        <ProfileStats />
+      </div>
 
       <Group horizontal>
         <Filler />

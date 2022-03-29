@@ -1,0 +1,7 @@
+@import "src/styles/variables";
+
+.scroller {
+  flex: 1;
+  overflow: auto;
+  padding: $gap;
+}

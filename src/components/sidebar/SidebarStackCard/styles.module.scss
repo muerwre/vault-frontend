@@ -8,6 +8,8 @@
   flex-direction: column;
   height: 100%;
   min-height: 0;
+  box-shadow: transparentize(black, 0.8) -5px 0 5px;
+  border-radius: $radius;
 }
 
 .head {

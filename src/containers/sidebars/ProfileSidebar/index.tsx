@@ -1,5 +1,6 @@
 import React, { VFC } from 'react';
 
+import { ProfileSidebarNotes } from '~/components/profile/ProfileSidebarNotes';
 import { ProfileSidebarSettings } from '~/components/profile/ProfileSidebarSettings';
 import { SidebarStack } from '~/components/sidebar/SidebarStack';
 import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
@@ -19,6 +20,7 @@ const ProfileSidebar: VFC<ProfileSidebarProps> = ({ onRequestClose }) => {
 
         <SidebarStack.Cards>
           <ProfileSidebarSettings />
+          <ProfileSidebarNotes />
         </SidebarStack.Cards>
       </SidebarStack>
     </SidebarWrapper>

@@ -6,6 +6,8 @@ import { ProfileAvatar } from '~/components/profile/ProfileAvatar';
 import { usePatchUser } from '~/hooks/auth/usePatchUser';
 import { useUser } from '~/hooks/auth/useUser';
 
+import styles from './styles.module.scss';
+
 interface ProfileSidebarHeadProps {}
 
 const ProfileSidebarHead: VFC<ProfileSidebarHeadProps> = () => {
@@ -17,7 +19,8 @@ const ProfileSidebarHead: VFC<ProfileSidebarHeadProps> = () => {
       <ProfileAvatar canEdit onChangePhoto={updatePhoto} photo={user.photo} size={72} />
 
       <Filler>
-        <h2>{user.fullname || user.username}</h2>
+        <div className={styles.name}>{user.fullname || user.username}</div>
+        <div className={styles.username}>{!!user.fullname && `~${user.username}`}</div>
       </Filler>
     </Group>
   );

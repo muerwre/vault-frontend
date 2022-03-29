@@ -37,13 +37,21 @@ const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
             <VerticalMenu.Item onClick={() => setActiveTab(2)}>Удалённые посты</VerticalMenu.Item>
           </VerticalMenu>
 
-          <ProfileStats />
+          <div className={styles.stats}>
+            <ProfileStats />
+          </div>
         </Group>
       </Filler>
 
-      <Button round onClick={onClose} color="secondary">
-        Закрыть
-      </Button>
+      <Group className={styles.buttons}>
+        <Button round onClick={onClose} color="outline">
+          Выйти
+        </Button>
+
+        <Button round onClick={onClose} color="outline-white">
+          Закрыть
+        </Button>
+      </Group>
     </div>
   );
 };
