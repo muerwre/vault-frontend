@@ -4,15 +4,17 @@ import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 
 import { getLabNodes } from '~/api/lab';
 import { useAuth } from '~/hooks/auth/useAuth';
+import { useDebouncedValue } from '~/hooks/data/useDebouncedValue';
 import { useLabStore } from '~/store/lab/useLabStore';
 import { INode } from '~/types';
 import { GetLabNodesRequest, ILabNode, LabNodesSort } from '~/types/lab';
 import { flatten, uniqBy } from '~/utils/ramda';
 
-const getKey: (isUser: boolean, sort?: LabNodesSort) => SWRInfiniteKeyLoader = (isUser, sort) => (
-  index,
-  prev: ILabNode[]
-) => {
+const getKey: (isUser: boolean, sort?: LabNodesSort, search?: string) => SWRInfiniteKeyLoader = (
+  isUser,
+  sort,
+  search
+) => (index, prev: ILabNode[]) => {
   if (!isUser) return null;
   if (index > 0 && (!prev?.length || prev.length < 20)) return null;
 
@@ -20,6 +22,7 @@ const getKey: (isUser: boolean, sort?: LabNodesSort) => SWRInfiniteKeyLoader = (
     limit: 20,
     offset: index * 20,
     sort: sort || LabNodesSort.New,
+    search: search || '',
   };
 
   return JSON.stringify(props);
@@ -33,12 +36,13 @@ const parseKey = (key: string): GetLabNodesRequest => {
   }
 };
 
-export const useGetLabNodes = (sort?: LabNodesSort) => {
+export const useGetLabNodes = (sort?: LabNodesSort, search?: string) => {
   const labStore = useLabStore();
   const { isUser } = useAuth();
+  const searchDebounced = useDebouncedValue(search);
 
   const { data, isValidating, size, setSize, mutate } = useSWRInfinite(
-    getKey(isUser, sort),
+    getKey(isUser, sort, searchDebounced),
     async (key: string) => {
       const result = await getLabNodes(parseKey(key));
       return result.nodes;
@@ -46,6 +50,7 @@ export const useGetLabNodes = (sort?: LabNodesSort) => {
     {
       fallbackData: [labStore.nodes],
       onSuccess: data => labStore.setNodes(flatten(data)),
+      dedupingInterval: 300,
     }
   );
 

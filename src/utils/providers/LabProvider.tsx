@@ -17,6 +17,8 @@ const LabProvider: FC<LabProviderProps> = ({ children }) => {
     updates,
     sort,
     setSort,
+    search,
+    setSearch,
   } = useLab();
 
   return (
@@ -31,6 +33,8 @@ const LabProvider: FC<LabProviderProps> = ({ children }) => {
       updates={updates}
       sort={sort}
       setSort={setSort}
+      search={search}
+      setSearch={setSearch}
     >
       {children}
     </LabContextProvider>

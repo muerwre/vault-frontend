@@ -15,17 +15,6 @@ export interface ITag {
   readonly updated_at: string;
 }
 
-export type IInputTextProps = DetailedHTMLProps<
-  InputHTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
-> & {
-  handler?: (value: string) => void;
-  title?: string;
-  error?: string;
-  suffix?: ReactElement;
-  prefix?: ReactElement;
-};
-
 export type IIcon = string;
 
 export type ValueOf<T> = T[keyof T];

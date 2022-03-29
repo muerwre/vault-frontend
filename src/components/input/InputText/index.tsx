@@ -1,4 +1,13 @@
-import React, { ChangeEvent, FC, useCallback, useState } from 'react';
+import React, {
+  ChangeEvent,
+  DetailedHTMLProps,
+  FC,
+  InputHTMLAttributes,
+  ReactElement,
+  ReactNode,
+  useCallback,
+  useState,
+} from 'react';
 
 import classNames from 'classnames';
 
@@ -6,11 +15,21 @@ import { Icon } from '~/components/input/Icon';
 import { InputWrapper } from '~/components/input/InputWrapper';
 import { useTranslatedError } from '~/hooks/data/useTranslatedError';
 import { useFocusEvent } from '~/hooks/dom/useFocusEvent';
-import { IInputTextProps } from '~/types';
 
 import styles from './styles.module.scss';
 
-const InputText: FC<IInputTextProps> = ({
+export type InputTextProps = Omit<
+  DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
+  'prefix'
+> & {
+  handler?: (value: string) => void;
+  title?: string;
+  error?: string;
+  suffix?: ReactNode;
+  prefix?: ReactNode;
+};
+
+const InputText: FC<InputTextProps> = ({
   className = '',
   handler,
   required = false,
@@ -43,7 +62,12 @@ const InputText: FC<IInputTextProps> = ({
 
   return (
     <InputWrapper title={title} error={translatedError} focused={focused} notEmpty={!!value}>
-      <div className={classNames(styles.input, { [styles.has_error]: !!error })}>
+      <div
+        className={classNames(styles.input, {
+          [styles.has_error]: !!error,
+          [styles.has_prefix]: prefix,
+        })}
+      >
         {!!prefix && <div className={styles.prefix}>{prefix}</div>}
 
         <input

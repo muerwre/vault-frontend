@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
+import { LabNoResults } from '~/components/lab/LabNoResults';
 import { LabNode } from '~/components/lab/LabNode';
 import { EMPTY_NODE, NODE_TYPES } from '~/constants/node';
 import { useLabContext } from '~/utils/context/LabContextProvider';
@@ -30,7 +31,7 @@ const LoadingNode = () => (
 );
 
 const LabGrid: FC<IProps> = () => {
-  const { isLoading, nodes, hasMore, loadMore } = useLabContext();
+  const { isLoading, nodes, hasMore, loadMore, search, setSearch } = useLabContext();
 
   if (isLoading) {
     return (
@@ -50,6 +51,10 @@ const LabGrid: FC<IProps> = () => {
         <LoadingNode />
       </Masonry>
     );
+  }
+
+  if (search && !nodes.length) {
+    return <LabNoResults resetSearch={() => setSearch('')} />;
   }
 
   return (

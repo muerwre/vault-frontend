@@ -30,6 +30,7 @@ export type GetLabNodesRequest = {
   offset?: number;
   after?: string;
   sort?: LabNodesSort;
+  search?: string;
 };
 
 export interface ILabNode {

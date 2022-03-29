@@ -1,6 +1,9 @@
 import React, { FC } from 'react';
 
+import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
+import { InputText } from '~/components/input/InputText';
+import { SearchInput } from '~/components/input/SearchInput';
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { LabNodesSort } from '~/types/lab';
 import { useLabContext } from '~/utils/context/LabContextProvider';
@@ -12,10 +15,10 @@ interface IProps {
 }
 
 const LabHead: FC<IProps> = ({ isLoading }) => {
-  const { sort, setSort } = useLabContext();
+  const { sort, setSort, search, setSearch } = useLabContext();
 
   return (
-    <Group className={styles.wrap} horizontal>
+    <div className={styles.wrap}>
       <HorizontalMenu>
         <HorizontalMenu.Item
           color="green"
@@ -47,7 +50,13 @@ const LabHead: FC<IProps> = ({ isLoading }) => {
           Важные
         </HorizontalMenu.Item>
       </HorizontalMenu>
-    </Group>
+
+      <Filler />
+
+      <div className={styles.search}>
+        <SearchInput value={search} handler={setSearch} placeholder="Поиск" />
+      </div>
+    </div>
   );
 };
 

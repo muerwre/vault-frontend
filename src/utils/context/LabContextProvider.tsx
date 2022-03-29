@@ -15,6 +15,8 @@ export interface LabContextProps {
   updates: IFlowNode[];
   sort: LabNodesSort;
   setSort: (sort: LabNodesSort) => void;
+  search: string;
+  setSearch: (val: string) => void;
 }
 
 const defaultValues: LabContextProps = {
@@ -28,6 +30,8 @@ const defaultValues: LabContextProps = {
   updates: [],
   sort: LabNodesSort.New,
   setSort: () => {},
+  search: '',
+  setSearch: () => {},
 };
 
 const LabContext = createContext<LabContextProps>(defaultValues);

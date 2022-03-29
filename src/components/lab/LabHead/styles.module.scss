@@ -2,4 +2,16 @@
 
 .wrap {
   border-radius: $radius;
+  display: flex;
+  flex-direction: row;
+
+  @include tablet {
+    flex-direction: column;
+  }
+}
+
+.search {
+  @include tablet {
+    margin-top: $gap;
+  }
 }
