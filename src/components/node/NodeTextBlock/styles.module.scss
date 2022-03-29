@@ -4,12 +4,15 @@
   @include outer_shadow();
 
   background: $content_bg;
-  padding: $gap * 4;
+  padding: $lab_gap;
   border-radius: $radius;
 
   p {
-    margin: $gap 0;
     font-size: 18px;
     line-height: 24px;
+
+    &:not(:last-child) {
+      margin-bottom: $gap;
+    }
   }
 }
