@@ -1,24 +1,5 @@
 import { IError, INode, ITag } from '~/types';
 
-export type ILabState = Readonly<{
-  list: {
-    is_loading: boolean;
-    nodes: ILabNode[];
-    count: number;
-    error: IError;
-  };
-  stats: {
-    is_loading: boolean;
-    heroes: Partial<INode>[];
-    tags: ITag[];
-    error?: string;
-  };
-  updates: {
-    nodes: INode[];
-    isLoading: boolean;
-  };
-}>;
-
 export enum LabNodesSort {
   New = 'new',
   Hot = 'hot',

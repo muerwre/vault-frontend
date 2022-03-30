@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
 import { Superpower } from '~/components/boris/Superpower';
+import { BasicCurveChart } from '~/components/charts/BasicCurveChart';
 import { Card } from '~/components/containers/Card';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
@@ -52,6 +53,7 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLo
               <Padder>
                 <Group>
                   <h2>Тестовые фичи</h2>
+
                   <div>
                     <Button onClick={() => openProfileSidebar({})}>Профиль в сайдбаре</Button>
                   </div>
@@ -61,6 +63,14 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLo
                       Профиль на отдельной странице
                     </Button>
                   </div>
+
+                  <Group>
+                    <h4>Количество нод за год</h4>
+                    <BasicCurveChart items={stats.backend.nodes.by_month} width={200} />
+
+                    <h4>Количество комментов за год</h4>
+                    <BasicCurveChart items={stats.backend.comments.by_month} width={200} />
+                  </Group>
                 </Group>
               </Padder>
             </Superpower>

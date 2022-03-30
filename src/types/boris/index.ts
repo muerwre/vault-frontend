@@ -11,12 +11,6 @@ export interface GithubIssue {
 
 export type IGetGithubIssuesResult = GithubIssue[];
 
-export type IStatGitRow = {
-  commit: string;
-  subject: string;
-  timestamp: string;
-};
-
 export type StatBackend = {
   users: {
     total: number;
@@ -28,9 +22,11 @@ export type StatBackend = {
     videos: number;
     texts: number;
     total: number;
+    by_month: number[];
   };
   comments: {
     total: number;
+    by_month: number[];
   };
   files: {
     count: number;
