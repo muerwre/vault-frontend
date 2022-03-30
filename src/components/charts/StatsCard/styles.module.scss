@@ -1,0 +1,22 @@
+@import "src/styles/variables";
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  z-index: 1;
+  position: relative;
+  flex: 1;
+}
+
+.background {
+  top: 32px;
+  left: 0;
+  right: 0;
+  bottom: $gap;
+  position: absolute;
+  z-index: 0;
+}

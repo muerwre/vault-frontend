@@ -22,3 +22,5 @@ export const initialBackendStats: StatBackend = {
     size: 0,
   },
 };
+
+export const foundationDate = '2009-07-21 12:28:58';

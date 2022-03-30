@@ -2,9 +2,11 @@ import React, { FC } from 'react';
 
 import { useRouter } from 'next/router';
 
+import { BorisGraphicStats } from '~/components/boris/BorisGraphicStats';
 import { BorisSidebar } from '~/components/boris/BorisSidebar';
 import { Superpower } from '~/components/boris/Superpower';
 import { BasicCurveChart } from '~/components/charts/BasicCurveChart';
+import { StatsCard } from '~/components/charts/StatsCard';
 import { Card } from '~/components/containers/Card';
 import { Filler } from '~/components/containers/Filler';
 import { Grid } from '~/components/containers/Grid';
@@ -51,42 +53,34 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLo
 
         <div className={styles.container}>
           <Card className={styles.content}>
-            <Superpower>
-              <Padder>
-                <Group>
-                  <h2>Тестовые фичи</h2>
-
-                  <div>
-                    <Button onClick={() => openProfileSidebar({})}>Профиль в сайдбаре</Button>
-                  </div>
-
-                  <div>
-                    <Button onClick={() => push(URLS.SETTINGS.BASE)}>
-                      Профиль на отдельной странице
-                    </Button>
-                  </div>
-
+            <Group>
+              <Superpower>
+                <Padder>
                   <Group>
-                    <h4>Количество нод за год</h4>
-                    <Grid horizontal>
-                      <Card style={{ padding: 0 }}>
-                        <BasicCurveChart items={stats.backend.nodes.by_month} width={200} />
-                      </Card>
+                    <h2>Тестовые фичи</h2>
 
-                      <Card style={{ padding: 0 }}>
-                        <BasicCurveChart items={stats.backend.comments.by_month} width={200} />
-                      </Card>
+                    <div>
+                      <Button onClick={() => openProfileSidebar({})}>Профиль в сайдбаре</Button>
+                    </div>
 
-                      <Filler />
-                    </Grid>
-
-                    <h4>Количество комментов за год</h4>
+                    <div>
+                      <Button onClick={() => push(URLS.SETTINGS.BASE)}>
+                        Профиль на отдельной странице
+                      </Button>
+                    </div>
                   </Group>
-                </Group>
-              </Padder>
-            </Superpower>
+                </Padder>
+              </Superpower>
 
-            <BorisComments />
+              <BorisGraphicStats
+                totalComments={stats.backend.comments.total}
+                commentsByMonth={stats.backend.comments.by_month}
+                totalNodes={stats.backend.nodes.total}
+                nodesByMonth={stats.backend.nodes.by_month}
+              />
+
+              <BorisComments />
+            </Group>
           </Card>
 
           <Group className={styles.stats}>
