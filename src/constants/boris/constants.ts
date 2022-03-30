@@ -11,9 +11,11 @@ export const initialBackendStats: StatBackend = {
     videos: 0,
     texts: 0,
     total: 0,
+    by_month: [],
   },
   comments: {
     total: 0,
+    by_month: [],
   },
   files: {
     count: 0,
