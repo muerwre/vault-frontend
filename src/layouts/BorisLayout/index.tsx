@@ -6,6 +6,8 @@ import { BorisSidebar } from '~/components/boris/BorisSidebar';
 import { Superpower } from '~/components/boris/Superpower';
 import { BasicCurveChart } from '~/components/charts/BasicCurveChart';
 import { Card } from '~/components/containers/Card';
+import { Filler } from '~/components/containers/Filler';
+import { Grid } from '~/components/containers/Grid';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { Sticky } from '~/components/containers/Sticky';
@@ -66,10 +68,19 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLo
 
                   <Group>
                     <h4>Количество нод за год</h4>
-                    <BasicCurveChart items={stats.backend.nodes.by_month} width={200} />
+                    <Grid horizontal>
+                      <Card style={{ padding: 0 }}>
+                        <BasicCurveChart items={stats.backend.nodes.by_month} width={200} />
+                      </Card>
+
+                      <Card style={{ padding: 0 }}>
+                        <BasicCurveChart items={stats.backend.comments.by_month} width={200} />
+                      </Card>
+
+                      <Filler />
+                    </Grid>
 
                     <h4>Количество комментов за год</h4>
-                    <BasicCurveChart items={stats.backend.comments.by_month} width={200} />
                   </Group>
                 </Group>
               </Padder>
