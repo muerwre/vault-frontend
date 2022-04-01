@@ -1,6 +1,6 @@
 import React, { VFC } from 'react';
 
-import { parseISO } from 'date-fns/esm';
+import { parseISO } from 'date-fns';
 
 import { StatsCountdownCard } from '~/components/charts/StatsCountdownCard';
 import { StatsGraphCard } from '~/components/charts/StatsGraphCard';
