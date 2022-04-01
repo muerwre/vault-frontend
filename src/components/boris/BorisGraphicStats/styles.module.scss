@@ -5,8 +5,9 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   grid-column-gap: $gap;
   grid-row-gap: $gap;
-}
+  grid-auto-rows: 140px;
 
-.card {
-  height: 150px;
+  @include tablet {
+    grid-auto-rows: 120px;
+  }
 }
