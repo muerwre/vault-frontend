@@ -11,7 +11,7 @@ import styles from './styles.module.scss';
 
 interface StatsCardProps extends CardProps {
   title?: string;
-  total?: number;
+  total?: string | number;
   background?: ReactNode;
 }
 

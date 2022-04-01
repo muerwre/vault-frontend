@@ -1,8 +1,13 @@
 import React, { VFC } from 'react';
 
 import classNames from 'classnames';
-import { addMonths } from 'date-fns';
-import { addYears, differenceInDays, differenceInMonths, differenceInYears } from 'date-fns/esm';
+import {
+  addMonths,
+  addYears,
+  differenceInDays,
+  differenceInMonths,
+  differenceInYears,
+} from 'date-fns';
 
 import { StatsCard } from '~/components/charts/StatsCard';
 import { CardProps } from '~/components/containers/Card';

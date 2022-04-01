@@ -2,9 +2,8 @@ import React, { VFC } from 'react';
 
 import { parseISO } from 'date-fns/esm';
 
-import { BasicCurveChart } from '~/components/charts/BasicCurveChart';
-import { StatsCard } from '~/components/charts/StatsCard';
 import { StatsCountdownCard } from '~/components/charts/StatsCountdownCard';
+import { StatsGraphCard } from '~/components/charts/StatsGraphCard';
 import { foundationDate } from '~/constants/boris/constants';
 
 import styles from './styles.module.scss';
@@ -22,20 +21,26 @@ const BorisGraphicStats: VFC<BorisGraphicStatsProps> = ({
   totalNodes,
   nodesByMonth,
 }) => {
+  const year = new Date().getFullYear();
+
   return (
     <div className={styles.group}>
-      <StatsCard
-        background={<BasicCurveChart items={nodesByMonth} />}
+      <StatsGraphCard
         title="Посты"
         total={totalNodes}
+        data={nodesByMonth}
         className={styles.card}
+        left={year - 1}
+        right={year}
       />
 
-      <StatsCard
-        background={<BasicCurveChart items={commentsByMonth} />}
-        title="Комментарии"
+      <StatsGraphCard
+        title="Комменты"
         total={totalComments}
+        data={commentsByMonth}
         className={styles.card}
+        left={year - 1}
+        right={year}
       />
 
       <StatsCountdownCard since={parseISO(foundationDate)} className={styles.card} />
