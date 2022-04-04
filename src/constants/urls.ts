@@ -22,6 +22,7 @@ export const URLS = {
     NOTES: '/settings/notes',
     TRASH: '/settings/trash',
   },
+  NOTES: '/notes/',
 };
 
 export const ImagePresets = {

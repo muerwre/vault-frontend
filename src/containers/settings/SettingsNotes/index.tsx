@@ -5,12 +5,16 @@ import Masonry from 'react-masonry-css';
 import { Card } from '~/components/containers/Card';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
+import { Markdown } from '~/components/containers/Markdown';
 import { Padder } from '~/components/containers/Padder';
 import { Button } from '~/components/input/Button';
 import { Icon } from '~/components/input/Icon';
 import { InputText } from '~/components/input/InputText';
 import { Textarea } from '~/components/input/Textarea';
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
+import { NoteCard } from '~/components/notes/NoteCard';
+import { useGetNotes } from '~/hooks/notes/useGetNotes';
+import { formatText } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
@@ -21,14 +25,9 @@ const breakpointCols = {
   1280: 1,
 };
 
-const sampleNotes = [...new Array(40)].map((_, i) => (
-  <Card key={i} style={{ height: Math.random() * 400 + 50 }}>
-    {i}
-  </Card>
-));
-
 const SettingsNotes: VFC<SettingsNotesProps> = () => {
   const [text, setText] = useState('');
+  const { notes } = useGetNotes('');
 
   return (
     <div>
@@ -61,7 +60,9 @@ const SettingsNotes: VFC<SettingsNotesProps> = () => {
           </Group>
         </Card>
 
-        {sampleNotes}
+        {notes.map(note => (
+          <NoteCard key={note.id} content={note.content} createdAt={note.created_at} />
+        ))}
       </Masonry>
     </div>
   );
