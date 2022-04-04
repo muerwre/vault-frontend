@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import Masonry from 'react-masonry-css';
 
+import { Columns } from '~/components/containers/Columns';
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
 import { LabNoResults } from '~/components/lab/LabNoResults';
 import { LabNode } from '~/components/lab/LabNode';
@@ -35,11 +36,7 @@ const LabGrid: FC<IProps> = () => {
 
   if (isLoading) {
     return (
-      <Masonry
-        className={styles.wrap}
-        breakpointCols={breakpointCols}
-        columnClassName={styles.column}
-      >
+      <Columns>
         <LoadingNode />
         <LoadingNode />
         <LoadingNode />
@@ -49,7 +46,7 @@ const LabGrid: FC<IProps> = () => {
         <LoadingNode />
         <LoadingNode />
         <LoadingNode />
-      </Masonry>
+      </Columns>
     );
   }
 
@@ -59,11 +56,7 @@ const LabGrid: FC<IProps> = () => {
 
   return (
     <InfiniteScroll hasMore={hasMore} loadMore={loadMore}>
-      <Masonry
-        className={styles.wrap}
-        breakpointCols={breakpointCols}
-        columnClassName={styles.column}
-      >
+      <Columns>
         {nodes.map(node => (
           <LabNode
             node={node.node}
@@ -72,7 +65,7 @@ const LabGrid: FC<IProps> = () => {
             commentCount={node.comment_count}
           />
         ))}
-      </Masonry>
+      </Columns>
     </InfiniteScroll>
   );
 };

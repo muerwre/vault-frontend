@@ -1,0 +1,62 @@
+@import "src/styles/variables";
+
+.wrap {
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  width: 48px;
+  height: 48px;
+  z-index: 10;
+  outline: none;
+  cursor: pointer;
+
+  &:hover {
+    .dot {
+      background: $secondary;
+    }
+  }
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.menu {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  display: flex;
+  flex-direction: column;
+  z-index: 6;
+  white-space: nowrap;
+
+  animation: appear 0.25s forwards;
+}
+
+.item {
+  user-select: none;
+  font: $font_12_semibold;
+  text-transform: uppercase;
+  padding: 8px $gap;
+  background: $content_bg;
+  cursor: pointer;
+
+  &:first-child {
+    border-top-left-radius: $radius;
+    border-top-right-radius: $radius;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: $radius;
+    border-bottom-right-radius: $radius;
+  }
+
+  &:hover {
+    background: $primary;
+  }
+}

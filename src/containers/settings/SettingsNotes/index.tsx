@@ -3,6 +3,7 @@ import React, { useState, VFC } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { Card } from '~/components/containers/Card';
+import { Columns } from '~/components/containers/Columns';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
 import { Markdown } from '~/components/containers/Markdown';
@@ -19,11 +20,6 @@ import { formatText } from '~/utils/dom';
 import styles from './styles.module.scss';
 
 interface SettingsNotesProps {}
-
-const breakpointCols = {
-  default: 2,
-  1280: 1,
-};
 
 const SettingsNotes: VFC<SettingsNotesProps> = () => {
   const [text, setText] = useState('');
@@ -44,11 +40,7 @@ const SettingsNotes: VFC<SettingsNotesProps> = () => {
         </Group>
       </Padder>
 
-      <Masonry
-        className={styles.wrap}
-        breakpointCols={breakpointCols}
-        columnClassName={styles.column}
-      >
+      <Columns>
         <Card>
           <Group>
             <Textarea handler={setText} value={text} />
@@ -63,7 +55,7 @@ const SettingsNotes: VFC<SettingsNotesProps> = () => {
         {notes.map(note => (
           <NoteCard key={note.id} content={note.content} createdAt={note.created_at} />
         ))}
-      </Masonry>
+      </Columns>
     </div>
   );
 };

@@ -1,13 +1,13 @@
-import React, { FC, useMemo } from 'react';
+import React, { useMemo, VFC } from 'react';
 
 import { CornerMenu } from '~/components/common/CornerMenu';
 
-interface IProps {
+interface NoteMenuProps {
   onEdit: () => void;
   onDelete: () => void;
 }
 
-const CommentMenu: FC<IProps> = ({ onEdit, onDelete }) => {
+const NoteMenu: VFC<NoteMenuProps> = ({ onEdit, onDelete }) => {
   const actions = useMemo(
     () => [
       {
@@ -22,4 +22,4 @@ const CommentMenu: FC<IProps> = ({ onEdit, onDelete }) => {
   return <CornerMenu actions={actions} />;
 };
 
-export { CommentMenu };
+export { NoteMenu };
