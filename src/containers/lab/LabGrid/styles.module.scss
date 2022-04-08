@@ -1,0 +1,10 @@
+@import "src/styles/variables";
+
+.wrap {
+  margin-top: -$gap * 1.5;
+  margin-left: -$gap * 0.5;
+
+  @include tablet {
+    margin: -$gap $gap * 0.5 0 0;
+  }
+}

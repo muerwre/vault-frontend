@@ -56,16 +56,18 @@ const LabGrid: FC<IProps> = () => {
 
   return (
     <InfiniteScroll hasMore={hasMore} loadMore={loadMore}>
-      <Columns>
-        {nodes.map(node => (
-          <LabNode
-            node={node.node}
-            key={node.node.id}
-            lastSeen={node.last_seen}
-            commentCount={node.comment_count}
-          />
-        ))}
-      </Columns>
+      <div className={styles.wrap}>
+        <Columns>
+          {nodes.map(node => (
+            <LabNode
+              node={node.node}
+              key={node.node.id}
+              lastSeen={node.last_seen}
+              commentCount={node.comment_count}
+            />
+          ))}
+        </Columns>
+      </div>
     </InfiniteScroll>
   );
 };

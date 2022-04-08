@@ -119,6 +119,8 @@
 }
 
 .images {
+  cursor: pointer;
+
   img {
     max-height: 400px;
     border-radius: $radius;
