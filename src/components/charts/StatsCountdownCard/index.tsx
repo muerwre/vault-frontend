@@ -21,7 +21,6 @@ interface StatsCountdownCardProps extends CardProps {
 const StatsCountdownCard: VFC<StatsCountdownCardProps> = ({ since, ...props }) => {
   const years = differenceInYears(new Date(), since);
   const months = differenceInMonths(new Date(), addYears(since, years));
-  const days = differenceInDays(new Date(), addMonths(addYears(since, years), months));
 
   return (
     <StatsCard {...props} title="Нам уже" className={classNames(styles.card, props.className)}>
@@ -36,14 +35,7 @@ const StatsCountdownCard: VFC<StatsCountdownCardProps> = ({ since, ...props }) =
         {months > 0 && (
           <>
             <span className={styles.val}>{months}</span>
-            {' мес. '}
-          </>
-        )}
-
-        {days > 0 && (
-          <>
-            <span className={styles.val}>{days}</span>
-            {' дн. '}
+            {' мес '}
           </>
         )}
       </div>

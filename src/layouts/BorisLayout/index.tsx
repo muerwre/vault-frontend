@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 
+import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 
 import { BorisGraphicStats } from '~/components/boris/BorisGraphicStats';
@@ -33,10 +34,13 @@ type IProps = {
   isLoadingStats: boolean;
 };
 
-const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLoadingStats }) => {
+const BorisLayout: FC<IProps> = observer(({ title, setIsBetaTester, isTester, stats, isLoadingStats }) => {
   const { isUser } = useAuthProvider();
   const openProfileSidebar = useShowModal(Dialog.ProfileSidebar);
   const { push } = useRouter();
+
+  const commentsByMonth = useMemo(() => stats.backend.comments.by_month?.slice(0, -1), [stats.backend.comments.by_month]);
+  const nodesByMonth = useMemo(() => stats.backend.nodes.by_month?.slice(0, -1), [stats.backend.comments.by_month]);
 
   return (
     <Container>
@@ -74,9 +78,9 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLo
 
               <BorisGraphicStats
                 totalComments={stats.backend.comments.total}
-                commentsByMonth={stats.backend.comments.by_month}
+                commentsByMonth={commentsByMonth}
                 totalNodes={stats.backend.nodes.total}
-                nodesByMonth={stats.backend.nodes.by_month}
+                nodesByMonth={nodesByMonth}
               />
 
               <BorisComments />
@@ -100,6 +104,6 @@ const BorisLayout: FC<IProps> = ({ title, setIsBetaTester, isTester, stats, isLo
       <SidebarRouter prefix="/" />
     </Container>
   );
-};
+});
 
 export { BorisLayout };
