@@ -221,7 +221,6 @@
   // 2 cells
   @media (max-width: $cell * 3 + $gap * 2 + 55) {
     grid-auto-rows: calc(50vw - 40px);
-    background: yellow;
   }
 
   // < 870px
@@ -238,8 +237,8 @@
   // < 520px
   @media (max-width: $cell_mobile) {
     grid-template-columns: repeat(auto-fill, minmax(calc(50vw - 20px), 1fr));
-    grid-template-rows: calc(100vw - 10px) auto calc(50vw - 10px);
-    background: green;
+    grid-template-rows: calc(100vw - 10px) auto;
+    grid-auto-rows: calc(50vw - 10px);
   }
 }
 
