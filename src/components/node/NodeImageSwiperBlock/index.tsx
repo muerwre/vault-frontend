@@ -53,11 +53,10 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
     [images, controlledSwiper, showPhotoSwiper]
   );
 
-  // TODO: remove it if swiper 8 fixed sliding to first slide on init
-  // useEffect(() => {
-  //   controlledSwiper?.slideTo(0, 0);
-  //   return () => controlledSwiper?.slideTo(0, 0);
-  // }, [images, node?.id]);
+  useEffect(() => {
+    controlledSwiper?.slideTo(0, 0);
+    return () => controlledSwiper?.slideTo(0, 0);
+  }, [images, node?.id]);
 
   useEffect(() => {
     if (isModalActive) {

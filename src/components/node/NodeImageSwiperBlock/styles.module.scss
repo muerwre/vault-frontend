@@ -7,6 +7,10 @@
   justify-content: center;
   width: 100%;
 
+  :global(.swiper) {
+    width: 100%;
+  }
+
   :global(.swiper-pagination) {
     left: 50%;
     bottom: $gap * 2;
