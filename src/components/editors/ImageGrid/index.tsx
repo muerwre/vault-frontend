@@ -2,7 +2,7 @@ import React, { FC, useCallback } from 'react';
 
 import { SortEnd } from 'react-sortable-hoc';
 
-import { SortableImageGrid } from '~/components/editors/SortableImageGrid';
+import { OnSortEnd, SortableImageGrid } from '~/components/editors/SortableImageGrid';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
@@ -19,8 +19,8 @@ interface IProps {
 const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
   const { innerWidth } = useWindowSize();
 
-  const onMove = useCallback(
-    ({ oldIndex, newIndex }: SortEnd) => {
+  const onMove = useCallback<OnSortEnd>(
+    ({ oldIndex, newIndex }) => {
       setFiles(
         moveArrItem(
           oldIndex,
@@ -39,17 +39,7 @@ const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
     [setFiles, files]
   );
 
-  return (
-    <SortableImageGrid
-      onDelete={onDrop}
-      onSortEnd={onMove}
-      axis="xy"
-      items={files}
-      locked={locked}
-      pressDelay={innerWidth < 768 ? 200 : 0}
-      helperClass={styles.helper}
-    />
-  );
+  return <SortableImageGrid onDelete={onDrop} onSortEnd={onMove} items={files} locked={locked} />;
 };
 
 export { ImageGrid };
