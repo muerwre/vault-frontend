@@ -22,7 +22,7 @@ $cols: math.div($content_width, $cell);
 }
 
 .grid {
-  grid-template-rows: 50vh $cell;
+  grid-template-rows: 50vh;
 
   @include flow_grid;
 }
