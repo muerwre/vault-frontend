@@ -1,0 +1,19 @@
+@import "src/styles/variables";
+
+.grid {
+  box-sizing: border-box;
+
+  display: grid;
+  grid-column-gap: $gap;
+  grid-row-gap: $gap;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.overlay {
+  box-shadow: rgba(0, 0, 0, 0.3) 5px 5px 10px 2px;
+  border-radius: $radius;
+}
+
+.dragging {
+  opacity: 0.1;
+}

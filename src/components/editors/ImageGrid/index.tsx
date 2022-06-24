@@ -1,14 +1,9 @@
 import React, { FC, useCallback } from 'react';
 
-import { SortEnd } from 'react-sortable-hoc';
-
-import { OnSortEnd, SortableImageGrid } from '~/components/editors/SortableImageGrid';
+import { SortableImageGrid } from '~/components/sortable';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
-import { moveArrItem } from '~/utils/fn';
-
-import styles from './styles.module.scss';
 
 interface IProps {
   files: IFile[];
@@ -19,15 +14,9 @@ interface IProps {
 const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
   const { innerWidth } = useWindowSize();
 
-  const onMove = useCallback<OnSortEnd>(
-    ({ oldIndex, newIndex }) => {
-      setFiles(
-        moveArrItem(
-          oldIndex,
-          newIndex,
-          files.filter(file => !!file)
-        ) as IFile[]
-      );
+  const onMove = useCallback(
+    (newFiles: IFile[]) => {
+      setFiles(newFiles.filter(it => it));
     },
     [setFiles, files]
   );
@@ -39,7 +28,15 @@ const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
     [setFiles, files]
   );
 
-  return <SortableImageGrid onDelete={onDrop} onSortEnd={onMove} items={files} locked={locked} />;
+  return (
+    <SortableImageGrid
+      onDelete={onDrop}
+      onSortEnd={onMove}
+      items={files}
+      locked={locked}
+      size={innerWidth > 768 ? 220 : 160}
+    />
+  );
 };
 
 export { ImageGrid };

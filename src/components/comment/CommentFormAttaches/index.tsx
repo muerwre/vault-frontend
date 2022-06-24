@@ -3,7 +3,7 @@ import React, { FC, useCallback } from 'react';
 import { SortEnd } from 'react-sortable-hoc';
 
 import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
-import { OnSortEnd, SortableImageGrid } from '~/components/editors/SortableImageGrid';
+import { SortableImageGrid } from '~/components/sortable';
 import { COMMENT_FILE_TYPES } from '~/constants/uploads';
 import { useFileDropZone } from '~/hooks';
 import { IFile } from '~/types';
@@ -29,16 +29,9 @@ const CommentFormAttaches: FC = () => {
   const hasAudioAttaches = filesAudios.length > 0 || pendingAudios.length > 0;
   const hasAttaches = hasImageAttaches || hasAudioAttaches;
 
-  const onImageMove = useCallback<OnSortEnd>(
-    ({ oldIndex, newIndex }) => {
-      setFiles([
-        ...filesAudios,
-        ...(moveArrItem(
-          oldIndex,
-          newIndex,
-          filesImages.filter(file => !!file)
-        ) as IFile[]),
-      ]);
+  const onImageMove = useCallback(
+    (newFiles: IFile[]) => {
+      setFiles([...filesAudios, ...newFiles.filter(it => it)]);
     },
     [setFiles, filesImages, filesAudios]
   );
@@ -85,6 +78,7 @@ const CommentFormAttaches: FC = () => {
           onSortEnd={onImageMove}
           items={filesImages}
           locked={pendingImages}
+          size={160}
         />
       )}
 

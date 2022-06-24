@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import styles from './styles.module.scss';
 
 interface SortableImageGridItemProps {
-  id: number;
+  id: number | string;
   disabled?: boolean;
   className?: string;
 }
