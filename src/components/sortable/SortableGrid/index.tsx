@@ -14,6 +14,8 @@ import { DragEndEvent } from '@dnd-kit/core/dist/types';
 import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import classNames from 'classnames';
 
+import { DragOverlayItem } from '~/components/sortable/DragOverlayItem';
+import { useSortableActions } from '~/hooks/sortable';
 import { moveArrItem } from '~/utils/fn';
 import { DivProps } from '~/utils/types';
 
@@ -44,47 +46,10 @@ const SortableGrid = <T, R>({
   onSortEnd,
   size,
 }: SortableGridProps<T, R>) => {
-  const [draggingItem, setDraggingItem] = useState<T | null>(null);
-
-  const ids = useMemo(() => items.map(getID), [items]);
-
-  const onDragEnd = useCallback(
-    ({ active, over }: DragEndEvent) => {
-      setDraggingItem(null);
-
-      if (!over?.id || active.id === over.id) {
-        return;
-      }
-
-      const oldIndex = items.findIndex(it => getID(it) === active.id);
-      const newIndex = items.findIndex(it => getID(it) === over.id);
-
-      onSortEnd(moveArrItem(oldIndex, newIndex, items));
-    },
-    [items]
-  );
-
-  const onDragStart = useCallback(
-    ({ active }: DragStartEvent) => {
-      if (!active.id) {
-        return;
-      }
-
-      const activeItem = items.find(it => getID(it) === active.id);
-
-      setDraggingItem(activeItem ?? null);
-    },
-    [items]
-  );
-
-  const sensors = useSensors(
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 200,
-        tolerance: 5,
-      },
-    }),
-    useSensor(MouseSensor)
+  const { sensors, onDragEnd, onDragStart, draggingItem, ids } = useSortableActions(
+    items,
+    getID,
+    onSortEnd
   );
 
   const gridStyle = useMemo<DivProps['style']>(
@@ -122,9 +87,7 @@ const SortableGrid = <T, R>({
 
           <DragOverlay>
             {draggingItem ? (
-              <div className={styles.overlay}>
-                {createElement(renderItem, { item: draggingItem })}
-              </div>
+              <DragOverlayItem>{createElement(renderItem, { item: draggingItem })}</DragOverlayItem>
             ) : null}
           </DragOverlay>
         </div>
