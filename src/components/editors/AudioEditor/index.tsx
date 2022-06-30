@@ -2,9 +2,7 @@ import React, { FC, useCallback, useMemo } from 'react';
 
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { UploadType } from '~/constants/uploads';
-import { useNodeAudios } from '~/hooks/node/useNodeAudios';
-import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
-import { useNodeImages } from '~/hooks/node/useNodeImages';
+import { IFile } from '~/types';
 import { NodeEditorProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
 import { values } from '~/utils/ramda';
@@ -17,11 +15,7 @@ import styles from './styles.module.scss';
 type IProps = NodeEditorProps;
 
 const AudioEditor: FC<IProps> = () => {
-  const formik = useNodeFormContext();
-  const { pending, setFiles, uploadFiles } = useUploaderContext()!;
-
-  const images = useNodeImages(formik.values);
-  const audios = useNodeAudios(formik.values);
+  const { pending, filesAudios, filesImages, setFiles, uploadFiles } = useUploaderContext()!;
 
   const pendingImages = useMemo(
     () => values(pending).filter(item => item.type === UploadType.Image),
@@ -33,15 +27,20 @@ const AudioEditor: FC<IProps> = () => {
     [pending]
   );
 
-  const setImages = useCallback(values => setFiles([...values, ...audios]), [setFiles, audios]);
-
-  const setAudios = useCallback(values => setFiles([...values, ...images]), [setFiles, images]);
+  const setImages = useCallback((values: IFile[]) => setFiles([...values, ...filesAudios]), [
+    setFiles,
+    filesAudios,
+  ]);
+  const setAudios = useCallback((values: IFile[]) => setFiles([...values, ...filesImages]), [
+    setFiles,
+    filesImages,
+  ]);
 
   return (
     <UploadDropzone onUpload={uploadFiles} helperClassName={styles.dropzone}>
       <div className={styles.wrap}>
-        <ImageGrid files={images} setFiles={setImages} locked={pendingImages} />
-        <AudioGrid files={audios} setFiles={setAudios} locked={pendingAudios} />
+        <ImageGrid files={filesImages} setFiles={setImages} locked={pendingImages} />
+        <AudioGrid files={filesAudios} setFiles={setAudios} locked={pendingAudios} />
       </div>
     </UploadDropzone>
   );

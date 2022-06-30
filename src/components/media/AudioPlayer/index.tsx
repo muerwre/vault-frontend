@@ -20,15 +20,20 @@ type Props = {
 const AudioPlayer = memo(({ file, onDelete, isEditing, onTitleChange }: Props) => {
   const { toPercent, file: currentFile, setFile, play, status, progress, pause } = useAudioPlayer();
 
-  const onPlay = useCallback(async () => {
-    if (file.id !== currentFile?.id) {
-      setFile(file);
-      setTimeout(() => void play(), 0);
-      return;
-    }
+  const onPlay = useCallback(
+    async event => {
+      event.stopPropagation();
 
-    status === PlayerState.PLAYING ? pause() : await play();
-  }, [play, pause, setFile, file, currentFile, status]);
+      if (file.id !== currentFile?.id) {
+        setFile(file);
+        setTimeout(() => void play(), 0);
+        return;
+      }
+
+      status === PlayerState.PLAYING ? pause() : await play();
+    },
+    [play, pause, setFile, file, currentFile, status]
+  );
 
   const onSeek = useCallback(
     event => {
@@ -65,17 +70,32 @@ const AudioPlayer = memo(({ file, onDelete, isEditing, onTitleChange }: Props) =
     [onTitleChange, file.id]
   );
 
+  const stopPropagation = useCallback(
+    event => {
+      if (!isEditing) {
+        return;
+      }
+
+      event.stopPropagation();
+    },
+    [isEditing]
+  );
+
   const playing = currentFile?.id === file.id;
 
   return (
-    <div onClick={onPlay} className={classNames(styles.wrap, { [styles.playing]: playing })}>
+    <div
+      className={classNames(styles.wrap, {
+        [styles.playing]: playing,
+      })}
+    >
       {onDelete && (
         <div className={styles.drop} onMouseDown={onDropClick}>
           <Icon icon="close" />
         </div>
       )}
 
-      <div className={styles.playpause}>
+      <div className={styles.playpause} onClick={onPlay} onMouseDown={stopPropagation}>
         {playing && status === PlayerState.PLAYING ? <Icon icon="pause" /> : <Icon icon="play" />}
       </div>
 
@@ -85,6 +105,7 @@ const AudioPlayer = memo(({ file, onDelete, isEditing, onTitleChange }: Props) =
             placeholder={title}
             handler={onRename}
             value={file.metadata && file.metadata.title}
+            onMouseDown={stopPropagation}
           />
         </div>
       ) : (
@@ -92,7 +113,12 @@ const AudioPlayer = memo(({ file, onDelete, isEditing, onTitleChange }: Props) =
           <div className={styles.title}>{title || ''}</div>
 
           <div className={styles.progress} onClick={onSeek}>
-            <div className={styles.bar} style={{ width: `${progress.progress}%` }} />
+            <div
+              className={styles.bar}
+              style={{
+                width: `${progress.progress}%`,
+              }}
+            />
           </div>
         </div>
       )}

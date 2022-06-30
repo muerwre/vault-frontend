@@ -1,7 +1,7 @@
 import { IFile } from '~/types';
 
 export const EMPTY_FILE: IFile = {
-  id: undefined,
+  id: 0,
   user_id: undefined,
   node_id: undefined,
 

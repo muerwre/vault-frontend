@@ -7,8 +7,8 @@
   grid-column-gap: $gap;
   grid-row-gap: $gap;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
 
-  @media (max-width: 600px) {
-    grid-template-columns: repeat(auto-fill, minmax(30vw, 1fr));
-  }
+.dragging {
+  opacity: 0.1;
 }

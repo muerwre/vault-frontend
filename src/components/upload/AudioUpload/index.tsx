@@ -4,15 +4,14 @@ import classNames from 'classnames';
 
 import { ArcProgress } from '~/components/input/ArcProgress';
 import { Icon } from '~/components/input/Icon';
-import { IFile } from '~/types';
 
 import styles from './styles.module.scss';
 
 interface IProps {
-  id?: IFile['id'];
+  id?: string;
   title?: string;
   progress?: number;
-  onDrop?: (file_id: IFile['id']) => void;
+  onDrop?: (file_id: string) => void;
 
   is_uploading?: boolean;
 }
