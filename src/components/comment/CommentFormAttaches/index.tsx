@@ -1,14 +1,10 @@
 import React, { FC, useCallback } from 'react';
 
-import { SortEnd } from 'react-sortable-hoc';
-
-import { SortableAudioGrid } from '~/components/editors/SortableAudioGrid';
-import { SortableImageGrid } from '~/components/sortable';
+import { SortableAudioGrid, SortableImageGrid } from '~/components/sortable';
 import { COMMENT_FILE_TYPES } from '~/constants/uploads';
 import { useFileDropZone } from '~/hooks';
 import { IFile } from '~/types';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
-import { moveArrItem } from '~/utils/fn';
 
 import styles from './styles.module.scss';
 
@@ -37,15 +33,8 @@ const CommentFormAttaches: FC = () => {
   );
 
   const onAudioMove = useCallback(
-    ({ oldIndex, newIndex }: SortEnd) => {
-      setFiles([
-        ...filesImages,
-        ...(moveArrItem(
-          oldIndex,
-          newIndex,
-          filesAudios.filter(file => !!file)
-        ) as IFile[]),
-      ]);
+    (newFiles: IFile[]) => {
+      setFiles([...filesImages, ...newFiles]);
     },
     [setFiles, filesImages, filesAudios]
   );
@@ -88,10 +77,7 @@ const CommentFormAttaches: FC = () => {
           onDelete={onFileDelete}
           onTitleChange={onAudioTitleChange}
           onSortEnd={onAudioMove}
-          axis="y"
           locked={pendingAudios}
-          pressDelay={50}
-          helperClass={styles.helper}
         />
       )}
     </div>

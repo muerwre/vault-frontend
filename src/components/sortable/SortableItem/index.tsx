@@ -12,7 +12,7 @@ interface SortableImageGridItemProps {
   className?: string;
 }
 
-const SortableImageGridItem: FC<SortableImageGridItemProps> = ({
+const SortableItem: FC<SortableImageGridItemProps> = ({
   children,
   id,
   disabled = false,
@@ -41,4 +41,4 @@ const SortableImageGridItem: FC<SortableImageGridItemProps> = ({
   );
 };
 
-export { SortableImageGridItem };
+export { SortableItem };

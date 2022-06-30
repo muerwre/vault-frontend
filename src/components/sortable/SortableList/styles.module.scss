@@ -1,0 +1,15 @@
+@import "src/styles/variables";
+
+.grid {
+  box-sizing: border-box;
+
+  display: grid;
+  grid-row-gap: $gap;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-auto-flow: row;
+}
+
+.dragging {
+  opacity: 0.1;
+}

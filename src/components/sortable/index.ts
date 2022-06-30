@@ -1,2 +1,2 @@
 export * from './SortableImageGrid';
-export * from './SortableGrid';
+export * from './SortableAudioGrid';

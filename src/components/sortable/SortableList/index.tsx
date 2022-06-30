@@ -1,18 +1,16 @@
-import React, { createElement, FC, useMemo } from "react";
+import React, { createElement, FC } from 'react';
 
-import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
-import { rectSortingStrategy, SortableContext } from "@dnd-kit/sortable";
-import classNames from "classnames";
+import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import classNames from 'classnames';
 
-import { DragOverlayItem } from "~/components/sortable/DragOverlayItem";
-import { useSortableActions } from "~/hooks/sortable";
-import { DivProps } from "~/utils/types";
+import { DragOverlayItem } from '~/components/sortable/DragOverlayItem';
+import { SortableItem } from '~/components/sortable/SortableItem';
+import { useSortableActions } from '~/hooks/sortable';
 
-import { SortableItem } from "../SortableItem";
+import styles from './styles.module.scss';
 
-import styles from "./styles.module.scss";
-
-interface SortableGridProps<T extends {}, R extends {}> {
+interface SortableListProps<T extends {}, R extends {}> {
   items: T[];
   locked: R[];
   getID: (item: T) => number | string;
@@ -21,10 +19,9 @@ interface SortableGridProps<T extends {}, R extends {}> {
   renderLocked: FC<{ locked: R }>;
   onSortEnd: (newVal: T[]) => void;
   className?: string;
-  size?: number;
 }
 
-const SortableGrid = <T, R>({
+const SortableList = <T, R>({
   items,
   locked,
   getID,
@@ -33,20 +30,11 @@ const SortableGrid = <T, R>({
   renderItem,
   renderLocked,
   onSortEnd,
-  size,
-}: SortableGridProps<T, R>) => {
+}: SortableListProps<T, R>) => {
   const { sensors, onDragEnd, onDragStart, draggingItem, ids } = useSortableActions(
     items,
     getID,
     onSortEnd
-  );
-
-  const gridStyle = useMemo<DivProps['style']>(
-    () =>
-      size
-        ? { gridTemplateColumns: size && `repeat(auto-fill, minmax(${size}px, 1fr))` }
-        : undefined,
-    [size]
   );
 
   return (
@@ -56,8 +44,8 @@ const SortableGrid = <T, R>({
       onDragEnd={onDragEnd}
       onDragStart={onDragStart}
     >
-      <SortableContext items={ids} strategy={rectSortingStrategy}>
-        <div className={classNames(styles.grid, className)} style={gridStyle}>
+      <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+        <div className={classNames(styles.grid, className)}>
           {items.map(item => (
             <SortableItem
               key={getID(item)}
@@ -85,4 +73,4 @@ const SortableGrid = <T, R>({
   );
 };
 
-export { SortableGrid };
+export { SortableList };
