@@ -26,16 +26,28 @@ const SortableAudioGrid: FC<SortableAudioGridProps> = ({
   onSortEnd,
   onTitleChange,
 }) => {
-  const renderItem = useCallback<FC<{ item: IFile }>>(
-    ({ item }) => (
-      <AudioPlayer file={item} onDelete={onDelete} isEditing onTitleChange={onTitleChange} />
+  const renderItem = useCallback<FC<{ item: IFile; key?: string | number }>>(
+    ({ item, key }) => (
+      <AudioPlayer
+        file={item}
+        onDelete={onDelete}
+        isEditing
+        onTitleChange={onTitleChange}
+        key={key}
+      />
     ),
-    []
+    [onTitleChange, onDelete]
   );
 
   const renderLocked = useCallback<FC<{ locked: UploadStatus }>>(
     ({ locked }) => (
-      <AudioUpload id={locked.id} is_uploading title={locked.name} progress={locked.progress} />
+      <AudioUpload
+        id={locked.id}
+        is_uploading
+        title={locked.name}
+        progress={locked.progress}
+        key={locked.id}
+      />
     ),
     []
   );

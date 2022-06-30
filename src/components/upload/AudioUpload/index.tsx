@@ -1,11 +1,11 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback } from 'react';
 
-import classNames from "classnames";
+import classNames from 'classnames';
 
-import { ArcProgress } from "~/components/input/ArcProgress";
-import { Icon } from "~/components/input/Icon";
+import { ArcProgress } from '~/components/input/ArcProgress';
+import { Icon } from '~/components/input/Icon';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface IProps {
   id?: string;
