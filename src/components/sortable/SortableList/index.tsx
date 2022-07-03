@@ -1,27 +1,33 @@
-import React, { createElement, FC } from "react";
+import React, { createElement, FC } from 'react';
 
-import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import classNames from "classnames";
+import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import classNames from 'classnames';
 
-import { DragOverlayItem } from "~/components/sortable/DragOverlayItem";
-import { SortableItem } from "~/components/sortable/SortableItem";
-import { useSortableActions } from "~/hooks/sortable";
+import { DragOverlayItem } from '~/components/sortable/DragOverlayItem';
+import { SortableItem } from '~/components/sortable/SortableItem';
+import { useSortableActions } from '~/hooks/sortable';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
-interface SortableListProps<T extends {}, R extends {}> {
+interface SortableListProps<
+  T extends {},
+  R extends {},
+  P extends {},
+  U extends {},
+> {
   items: T[];
   locked: R[];
   getID: (item: T) => number | string;
   getLockedID: (locked: R) => number | string;
-  renderItem: FC<{ item: T }>;
+  renderItem: FC<P>;
+  renderItemProps: U;
   renderLocked: FC<{ locked: R }>;
   onSortEnd: (newVal: T[]) => void;
   className?: string;
 }
 
-const SortableList = <T, R>({
+const SortableList = <T, R, P extends { item: T }, U>({
   items,
   locked,
   getID,
@@ -29,8 +35,9 @@ const SortableList = <T, R>({
   className,
   renderItem,
   renderLocked,
+  renderItemProps,
   onSortEnd,
-}: SortableListProps<T, R>) => {
+}: SortableListProps<T, R, P, U>) => {
   const { sensors, onDragEnd, onDragStart, draggingItem, ids } = useSortableActions(
     items,
     getID,
@@ -54,7 +61,7 @@ const SortableList = <T, R>({
                 draggingItem && getID(item) === getID(draggingItem) ? styles.dragging : undefined
               }
             >
-              {createElement(renderItem, { item, key: getID(item) })}
+              {createElement(renderItem, { ...renderItemProps, item })}
             </SortableItem>
           ))}
 
@@ -64,7 +71,9 @@ const SortableList = <T, R>({
 
           <DragOverlay>
             {draggingItem ? (
-              <DragOverlayItem>{createElement(renderItem, { item: draggingItem })}</DragOverlayItem>
+              <DragOverlayItem>
+                {createElement(renderItem, { ...(renderItemProps || {}), item: draggingItem })}
+              </DragOverlayItem>
             ) : null}
           </DragOverlay>
         </div>

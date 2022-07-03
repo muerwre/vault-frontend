@@ -18,27 +18,22 @@ interface SortableAudioGridProps {
   onTitleChange: (file_id: IFile['id'], title: string) => void;
 }
 
+const renderItem: FC<{
+  item: IFile;
+  onDelete: (file_id: IFile['id']) => void;
+  onTitleChange: (file_id: IFile['id'], title: string) => void;
+}> = ({ item, onDelete, onTitleChange }) => (
+  <AudioPlayer file={item} onDelete={onDelete} isEditing onTitleChange={onTitleChange} />
+);
+
 const SortableAudioGrid: FC<SortableAudioGridProps> = ({
   items,
   locked,
-  onDelete,
   className,
   onSortEnd,
+  onDelete,
   onTitleChange,
 }) => {
-  const renderItem = useCallback<FC<{ item: IFile; key?: string | number }>>(
-    ({ item, key }) => (
-      <AudioPlayer
-        file={item}
-        onDelete={onDelete}
-        isEditing
-        onTitleChange={onTitleChange}
-        key={key}
-      />
-    ),
-    [onTitleChange, onDelete]
-  );
-
   const renderLocked = useCallback<FC<{ locked: UploadStatus }>>(
     ({ locked }) => (
       <AudioUpload
@@ -62,6 +57,10 @@ const SortableAudioGrid: FC<SortableAudioGridProps> = ({
       renderLocked={renderLocked}
       onSortEnd={onSortEnd}
       className={className}
+      renderItemProps={{
+        onDelete,
+        onTitleChange,
+      }}
     />
   );
 };
