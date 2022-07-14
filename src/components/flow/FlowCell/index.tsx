@@ -39,7 +39,7 @@ const FlowCell: FC<Props> = ({
   canEdit = false,
   onChangeCellView,
 }) => {
-  const { innerWidth } = useWindowSize();
+  const { isMobile } = useWindowSize();
 
   const withText =
     ((!!flow.display && flow.display !== 'single') || !image) && flow.show_description && !!text;
@@ -54,11 +54,11 @@ const FlowCell: FC<Props> = ({
   const { isActive: isMenuActive, activate, ref, deactivate } = useClickOutsideFocus();
 
   const shadeSize = useMemo(() => {
-    const min = innerWidth < 768 ? 10 : 15;
-    const max = innerWidth < 768 ? 20 : 50;
+    const min = isMobile ? 10 : 15;
+    const max = isMobile ? 20 : 50;
 
     return withText ? min : max;
-  }, [withText, innerWidth]);
+  }, [withText, isMobile]);
 
   return (
     <div className={classNames(styles.cell, styles[flow.display || 'single'])} ref={ref as any}>

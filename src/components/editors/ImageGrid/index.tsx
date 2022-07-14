@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
-  const { innerWidth } = useWindowSize();
+  const { isMobile } = useWindowSize();
 
   const onMove = useCallback(
     (newFiles: IFile[]) => {
@@ -34,7 +34,7 @@ const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
       onSortEnd={onMove}
       items={files}
       locked={locked}
-      size={innerWidth > 768 ? 220 : (innerWidth - 60) / 2}
+      size={!isMobile ? 220 : (innerWidth - 60) / 2}
     />
   );
 };

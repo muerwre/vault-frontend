@@ -6,6 +6,7 @@ import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js';
 import PhotoSwipeJs from 'photoswipe/dist/photoswipe.js';
 
 import { ImagePresets } from '~/constants/urls';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useModal } from '~/hooks/modal/useModal';
 import { IFile } from '~/types';
 import { DialogComponentProps } from '~/types/modal';
@@ -21,6 +22,7 @@ export interface PhotoSwipeProps extends DialogComponentProps {
 const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
   let ref = useRef<HTMLDivElement>(null);
   const { hideModal } = useModal();
+  const { isMobile } = useWindowSize();
 
   useEffect(() => {
     new Promise(async resolve => {
@@ -32,10 +34,7 @@ const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
 
               img.onload = () => {
                 resolveImage({
-                  src: getURL(
-                    image,
-                    window.innerWidth < 768 ? ImagePresets[900] : ImagePresets[1600]
-                  ),
+                  src: getURL(image, isMobile ? ImagePresets[900] : ImagePresets[1600]),
                   h: img.naturalHeight,
                   w: img.naturalWidth,
                 });
@@ -62,7 +61,7 @@ const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
       ps.listen('destroy', hideModal);
       ps.listen('close', hideModal);
     });
-  }, [hideModal, items, index]);
+  }, [hideModal, items, index, isMobile]);
 
   return (
     <div className="pswp" tabIndex={-1} role="dialog" aria-hidden="true" ref={ref}>

@@ -34,13 +34,13 @@ const lazy = {
 };
 
 export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
-  const { innerWidth } = useWindowSize();
+  const { isMobile } = useWindowSize();
   const { push } = useNavigation();
 
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
   const [currentIndex, setCurrentIndex] = useState(heroes.length);
-  const preset = useMemo(() => (innerWidth <= 768 ? ImagePresets.cover : ImagePresets.small_hero), [
-    innerWidth,
+  const preset = useMemo(() => (isMobile ? ImagePresets.cover : ImagePresets.small_hero), [
+    isMobile,
   ]);
 
   const onNext = useCallback(() => {

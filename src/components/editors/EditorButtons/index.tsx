@@ -6,10 +6,12 @@ import { Padder } from '~/components/containers/Padder';
 import { EditorActionsPanel } from '~/components/editors/EditorActionsPanel';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 
 const EditorButtons: FC = () => {
   const { values, handleChange, isSubmitting } = useNodeFormContext();
+  const { isMobile } = useWindowSize();
 
   return (
     <Padder style={{ position: 'relative' }}>
@@ -28,7 +30,7 @@ const EditorButtons: FC = () => {
         </Filler>
 
         <Button
-          title="Сохранить"
+          title={isMobile ? undefined : 'Сохранить'}
           iconRight="check"
           color={values.is_promoted ? 'primary' : 'lab'}
           disabled={isSubmitting}
