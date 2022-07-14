@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions } from 'swiper';
@@ -24,12 +24,22 @@ const breakpoints: SwiperOptions['breakpoints'] = {
   },
 };
 
+const pagination = { type: 'fraction' as const };
+
 const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
   const showPhotoSwiper = useImageModal();
   const { isOpened: isModalActive } = useModal();
 
   const images = useNodeImages(node);
+
+  const keyboard = useMemo(
+    () => ({
+      enabled: !isModalActive,
+      onlyInViewport: true,
+    }),
+    [isModalActive]
+  );
 
   const updateSwiper = useCallback(() => {
     if (!controlledSwiper) return;
@@ -90,7 +100,7 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
         slidesPerView="auto"
         onSwiper={setControlledSwiper}
         breakpoints={breakpoints}
-        pagination={{ type: 'fraction' }}
+        pagination={pagination}
         centeredSlides
         observeSlideChildren
         observeParents
@@ -98,14 +108,12 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
         resizeObserver
         watchOverflow
         updateOnImagesReady
-        keyboard={{
-          enabled: !isModalActive,
-          onlyInViewport: true,
-        }}
+        keyboard={keyboard}
         grabCursor
         autoHeight
         zoom
         navigation
+        shortSwipes={false}
       >
         {images.map((file, i) => (
           <SwiperSlide className={styles.slide} key={file.id}>
