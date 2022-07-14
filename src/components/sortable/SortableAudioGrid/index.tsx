@@ -34,7 +34,7 @@ const renderItem = ({
 const renderLocked = ({ locked }: { locked: UploadStatus }) => (
   <AudioUpload
     id={locked.id}
-    is_uploading
+    uploading
     title={locked.name}
     progress={locked.progress}
     key={locked.id}

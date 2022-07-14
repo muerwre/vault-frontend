@@ -29,7 +29,7 @@ const renderLocked = ({
   locked: UploadStatus;
   onDelete: (fileId: number) => void;
 }) => (
-  <ImageUpload thumb={locked.thumbnail} onDrop={onDelete} progress={locked.progress} is_uploading />
+  <ImageUpload thumb={locked.thumbnail} onDrop={onDelete} progress={locked.progress} uploading />
 );
 
 const SortableImageGrid: FC<SortableImageGridProps> = ({

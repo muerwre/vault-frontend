@@ -13,10 +13,10 @@ interface IProps {
   progress?: number;
   onDrop?: (file_id: string) => void;
 
-  is_uploading?: boolean;
+  uploading?: boolean;
 }
 
-const AudioUpload: FC<IProps> = ({ title, progress, is_uploading, id, onDrop }) => {
+const AudioUpload: FC<IProps> = ({ title, progress, uploading, id, onDrop }) => {
   const onDropFile = useCallback(() => {
     if (!id || !onDrop) return;
     onDrop(id);
@@ -30,8 +30,8 @@ const AudioUpload: FC<IProps> = ({ title, progress, is_uploading, id, onDrop }) 
         </div>
       )}
 
-      <div className={classNames(styles.thumb_wrap, { is_uploading })}>
-        {is_uploading && (
+      <div className={classNames(styles.thumb_wrap, { uploading: uploading })}>
+        {uploading && (
           <div className={styles.progress}>
             <ArcProgress size={40} progress={progress} />
           </div>

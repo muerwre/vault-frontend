@@ -14,10 +14,10 @@ interface IProps {
   progress?: number;
   onDrop?: (file_id: IFile['id']) => void;
 
-  is_uploading?: boolean;
+  uploading?: boolean;
 }
 
-const ImageUpload: FC<IProps> = ({ thumb, progress, is_uploading, id, onDrop }) => {
+const ImageUpload: FC<IProps> = ({ thumb, progress, uploading, id, onDrop }) => {
   const onDropFile = useCallback(() => {
     if (!id || !onDrop) return;
     onDrop(id);
@@ -31,9 +31,9 @@ const ImageUpload: FC<IProps> = ({ thumb, progress, is_uploading, id, onDrop }) 
         </div>
       )}
 
-      <div className={classNames(styles.thumb_wrap, { is_uploading })}>
+      <div className={classNames(styles.thumb_wrap, { uploading: uploading })}>
         {thumb && <div className={styles.thumb} style={{ backgroundImage: `url("${thumb}")` }} />}
-        {is_uploading && (
+        {uploading && (
           <div className={styles.progress}>
             <ArcProgress size={72} progress={progress} />
           </div>
