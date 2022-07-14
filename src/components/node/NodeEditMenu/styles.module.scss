@@ -2,7 +2,7 @@
 @import "src/styles/mixins";
 
 @mixin button {
-  margin: 0 $gap;
+  margin: 12px $gap 0 $gap;
   cursor: pointer;
   display: flex;
   align-items: center;

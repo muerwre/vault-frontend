@@ -43,12 +43,12 @@
 .content {
   flex: 0 1 $content_width;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: stretch;
   border-radius: $radius $radius 0 0;
   box-sizing: border-box;
   padding: $gap;
-  height: 64px;
+  min-height: 64px;
   min-width: 0;
 
   @include tablet {
@@ -103,6 +103,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  margin-top: 12px;
 
   & > * {
     @include button;
