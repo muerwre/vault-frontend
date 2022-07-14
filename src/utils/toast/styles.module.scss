@@ -1,6 +1,6 @@
 @import "src/styles/variables";
 
-.toast {
+div.toast {
   @include outer_shadow;
 
   cursor: pointer;
@@ -10,14 +10,14 @@
   color: white;
 }
 
-.error {
+div.toast.error {
   background: $red_gradient_alt;
 }
 
-.success {
+div.toast.success {
   background: $green_gradient;
 }
 
-.info {
+div.toast.info {
   background: $cyan_gradient;
 }
