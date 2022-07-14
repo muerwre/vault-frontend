@@ -23,7 +23,7 @@ const EditorButtons: FC = () => {
             title="Название"
             value={values.title}
             handler={handleChange('title')}
-            autoFocus
+            autoFocus={!isMobile}
             maxLength={256}
             disabled={isSubmitting}
           />
