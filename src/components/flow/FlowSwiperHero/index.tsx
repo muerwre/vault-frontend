@@ -29,7 +29,7 @@ const autoplay = {
 };
 
 const lazy = {
-  loadPrevNextAmount: 5,
+  loadPrevNextAmount: 3,
   checkInView: false,
 };
 
@@ -125,6 +125,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
         onRealIndexChange={onIndexChange}
         onAfterInit={onIndexChange}
         onClick={onClick}
+        followFinger
       >
         {heroes
           .filter(node => node.thumbnail)
