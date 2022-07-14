@@ -113,7 +113,6 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
         autoHeight
         zoom
         navigation
-        shortSwipes={false}
       >
         {images.map((file, i) => (
           <SwiperSlide className={styles.slide} key={file.id}>
