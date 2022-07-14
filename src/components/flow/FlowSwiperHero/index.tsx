@@ -126,6 +126,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
         onAfterInit={onIndexChange}
         onClick={onClick}
         followFinger
+        shortSwipes={false}
       >
         {heroes
           .filter(node => node.thumbnail)
