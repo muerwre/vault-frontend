@@ -1,0 +1,11 @@
+.grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-content: center;
+    grid-row-gap: 10px;
+}
+
+.label {
+    margin-left: 10px;
+}
