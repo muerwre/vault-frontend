@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { AudioUpload } from '~/components/upload/AudioUpload';
@@ -17,6 +17,29 @@ interface SortableAudioGridProps {
   onDelete: (file_id: IFile['id']) => void;
   onTitleChange: (file_id: IFile['id'], title: string) => void;
 }
+const renderItem = ({
+  item,
+  key,
+  onDelete,
+  onTitleChange,
+}: {
+  item: IFile;
+  key?: string | number;
+  onDelete?: (id: IFile['id']) => void;
+  onTitleChange?: (file_id: IFile['id'], title: string) => void;
+}) => (
+  <AudioPlayer file={item} onDelete={onDelete} isEditing onTitleChange={onTitleChange} key={key} />
+);
+
+const renderLocked = ({ locked }: { locked: UploadStatus }) => (
+  <AudioUpload
+    id={locked.id}
+    is_uploading
+    title={locked.name}
+    progress={locked.progress}
+    key={locked.id}
+  />
+);
 
 const SortableAudioGrid: FC<SortableAudioGridProps> = ({
   items,
@@ -26,31 +49,8 @@ const SortableAudioGrid: FC<SortableAudioGridProps> = ({
   onSortEnd,
   onTitleChange,
 }) => {
-  const renderItem = useCallback<FC<{ item: IFile; key?: string | number }>>(
-    ({ item, key }) => (
-      <AudioPlayer
-        file={item}
-        onDelete={onDelete}
-        isEditing
-        onTitleChange={onTitleChange}
-        key={key}
-      />
-    ),
-    [onTitleChange, onDelete]
-  );
-
-  const renderLocked = useCallback<FC<{ locked: UploadStatus }>>(
-    ({ locked }) => (
-      <AudioUpload
-        id={locked.id}
-        is_uploading
-        title={locked.name}
-        progress={locked.progress}
-        key={locked.id}
-      />
-    ),
-    []
-  );
+  const renderItemProps = useMemo(() => ({ onDelete, onTitleChange }), [onDelete, onTitleChange]);
+  const renderLockedProps = useMemo(() => ({}), []);
 
   return (
     <SortableList
@@ -59,7 +59,9 @@ const SortableAudioGrid: FC<SortableAudioGridProps> = ({
       getID={it => it.id}
       getLockedID={it => it.id}
       renderItem={renderItem}
+      renderItemProps={renderItemProps}
       renderLocked={renderLocked}
+      renderLockedProps={renderLockedProps}
       onSortEnd={onSortEnd}
       className={className}
     />

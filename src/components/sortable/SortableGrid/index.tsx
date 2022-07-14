@@ -12,29 +12,38 @@ import { SortableItem } from '../SortableItem';
 
 import styles from './styles.module.scss';
 
-interface SortableGridProps<T extends {}, R extends {}> {
-  items: T[];
-  locked: R[];
-  getID: (item: T) => number | string;
-  getLockedID: (locked: R) => number | string;
-  renderItem: FC<{ item: T }>;
-  renderLocked: FC<{ locked: R }>;
-  onSortEnd: (newVal: T[]) => void;
+interface SortableGridProps<
+  ItemRendererProps extends {},
+  LockedRendererProps extends {},
+  Item extends {},
+  Locked extends {}
+> {
+  items: Item[];
+  locked: Locked[];
+  getID: (item: Item) => number | string;
+  getLockedID: (locked: Locked) => number | string;
+  renderItem: FC<ItemRendererProps & { item: Item }>;
+  renderItemProps: ItemRendererProps;
+  renderLocked: FC<LockedRendererProps & { locked: Locked }>;
+  renderLockedProps: LockedRendererProps;
+  onSortEnd: (newVal: Item[]) => void;
   className?: string;
   size?: number;
 }
 
-const SortableGrid = <T, R>({
+const SortableGrid = <RIP, RLP, I, L>({
   items,
   locked,
   getID,
   getLockedID,
   className,
   renderItem,
+  renderItemProps,
   renderLocked,
+  renderLockedProps,
   onSortEnd,
   size,
-}: SortableGridProps<T, R>) => {
+}: SortableGridProps<RIP, RLP, I, L>) => {
   const { sensors, onDragEnd, onDragStart, draggingItem, ids } = useSortableActions(
     items,
     getID,
@@ -66,17 +75,23 @@ const SortableGrid = <T, R>({
                 draggingItem && getID(item) === getID(draggingItem) ? styles.dragging : undefined
               }
             >
-              {createElement(renderItem, { item })}
+              {createElement(renderItem, { ...renderItemProps, item })}
             </SortableItem>
           ))}
 
           {locked.map(item =>
-            createElement(renderLocked, { locked: item, key: getLockedID(item) })
+            createElement(renderLocked, {
+              ...renderLockedProps,
+              locked: item,
+              key: getLockedID(item),
+            })
           )}
 
           <DragOverlay>
             {draggingItem ? (
-              <DragOverlayItem>{createElement(renderItem, { item: draggingItem })}</DragOverlayItem>
+              <DragOverlayItem>
+                {createElement(renderItem, { ...renderItemProps, item: draggingItem })}
+              </DragOverlayItem>
             ) : null}
           </DragOverlay>
         </div>

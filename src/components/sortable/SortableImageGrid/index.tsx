@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 
 import { ImageUpload } from '~/components/upload/ImageUpload';
 import { ImagePresets } from '~/constants/urls';
@@ -18,6 +18,19 @@ interface SortableImageGridProps {
   className?: string;
   size?: number;
 }
+const renderItem = ({ item, onDelete }: { item: IFile; onDelete: (fileId: number) => void }) => (
+  <ImageUpload id={item.id} thumb={getURL(item, ImagePresets.cover)} onDrop={onDelete} />
+);
+
+const renderLocked = ({
+  locked,
+  onDelete,
+}: {
+  locked: UploadStatus;
+  onDelete: (fileId: number) => void;
+}) => (
+  <ImageUpload thumb={locked.thumbnail} onDrop={onDelete} progress={locked.progress} is_uploading />
+);
 
 const SortableImageGrid: FC<SortableImageGridProps> = ({
   items,
@@ -27,24 +40,7 @@ const SortableImageGrid: FC<SortableImageGridProps> = ({
   onSortEnd,
   size,
 }) => {
-  const renderItem = useCallback<FC<{ item: IFile }>>(
-    ({ item }) => (
-      <ImageUpload id={item.id} thumb={getURL(item, ImagePresets.cover)} onDrop={onDelete} />
-    ),
-    []
-  );
-
-  const renderLocked = useCallback<FC<{ locked: UploadStatus }>>(
-    ({ locked }) => (
-      <ImageUpload
-        thumb={locked.thumbnail}
-        onDrop={onDelete}
-        progress={locked.progress}
-        is_uploading
-      />
-    ),
-    []
-  );
+  const props = useMemo(() => ({ onDelete }), [onDelete]);
 
   return (
     <SortableGrid
@@ -53,7 +49,9 @@ const SortableImageGrid: FC<SortableImageGridProps> = ({
       getID={it => it.id}
       getLockedID={it => it.id}
       renderItem={renderItem}
+      renderItemProps={props}
       renderLocked={renderLocked}
+      renderLockedProps={props}
       onSortEnd={onSortEnd}
       className={className}
       size={size}
