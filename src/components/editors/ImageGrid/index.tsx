@@ -22,8 +22,8 @@ const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
   );
 
   const onDrop = useCallback(
-    (remove_id: IFile['id']) => {
-      setFiles(files.filter(file => file && file.id !== remove_id));
+    (id: IFile['id']) => {
+      setFiles(files.filter(file => file && file.id !== id));
     },
     [setFiles, files]
   );
@@ -34,7 +34,7 @@ const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
       onSortEnd={onMove}
       items={files}
       locked={locked}
-      size={innerWidth > 768 ? 220 : 160}
+      size={innerWidth > 768 ? 220 : (innerWidth - 60) / 2}
     />
   );
 };
