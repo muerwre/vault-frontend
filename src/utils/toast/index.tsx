@@ -1,8 +1,7 @@
 import React from 'react';
 
 import classNames from 'classnames';
-import toast from 'react-hot-toast';
-import { ToastOptions } from 'react-hot-toast/dist/core/types';
+import toast, { ToastOptions } from 'react-hot-toast';
 
 import { isTablet } from '~/constants/dom';
 
