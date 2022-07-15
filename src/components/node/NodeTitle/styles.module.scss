@@ -54,6 +54,7 @@
   @include tablet {
     border-radius: 0;
     height: auto;
+    min-height: 40px;
   }
 }
 
@@ -65,7 +66,8 @@
   text-overflow: ellipsis;
 
   @include tablet {
-    white-space: nowrap;
+    @include clamp(2);
+
     padding-bottom: 0;
     font: $font_16_semibold;
   }
@@ -189,6 +191,10 @@
 .buttons {
   margin-top: 12px;
   margin-right: $gap;
+
+  @include tablet {
+    margin-top: 6px;
+  }
 }
 
 .button {

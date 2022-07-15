@@ -10,8 +10,15 @@
 }
 
 .item {
-  margin-left: $gap * 4;
   position: relative;
+
+  &:not(:first-child) {
+    margin-left: $gap * 4;
+
+    @include tablet {
+      margin-left: $gap * 2;
+    }
+  }
 
   &:not(:last-child)::after {
     @include inner_shadow;
@@ -25,5 +32,9 @@
     top: 5px;
     right: -$gap * 2 - 2px;
     border-radius: 2px;
+
+    @include tablet {
+      right : -$gap - 1px;
+    }
   }
 }
