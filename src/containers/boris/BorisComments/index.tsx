@@ -49,8 +49,6 @@ const BorisComments: FC<IProps> = () => {
           <NodeComments order="ASC" />
         )}
 
-        {comments?.length && <NodeComments order="ASC" />}
-
         <Footer />
       </Group>
     </CommentContextProvider>
