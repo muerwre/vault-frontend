@@ -1,4 +1,13 @@
-import React, { createElement, FC, Fragment, memo, useCallback, useMemo, useState } from 'react';
+import React, {
+  createElement,
+  FC,
+  Fragment,
+  memo,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 
 import classnames from 'classnames';
 import classNames from 'classnames';
@@ -18,6 +27,7 @@ import { CommentMenu } from '../CommentMenu';
 import styles from './styles.module.scss';
 
 interface IProps {
+  prefix?: ReactNode;
   nodeId: number;
   comment: IComment;
   canEdit: boolean;
@@ -27,7 +37,7 @@ interface IProps {
 }
 
 const CommentContent: FC<IProps> = memo(
-  ({ comment, canEdit, nodeId, saveComment, onDelete, onShowImageModal }) => {
+  ({ comment, canEdit, nodeId, saveComment, onDelete, onShowImageModal, prefix }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const startEditing = useCallback(() => setIsEditing(true), [setIsEditing]);
@@ -74,8 +84,10 @@ const CommentContent: FC<IProps> = memo(
 
     return (
       <div className={styles.wrap}>
-        {comment.text && (
+        {comment.text.trim() && (
           <Group className={classnames(styles.block, styles.block_text)}>
+            {!!prefix && <div className={styles.prefix}>{prefix}</div>}
+
             {menu}
 
             <Group className={styles.renderers}>

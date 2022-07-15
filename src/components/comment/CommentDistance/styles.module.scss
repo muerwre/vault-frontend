@@ -1,0 +1,12 @@
+@import "src/styles/variables";
+
+.bar {
+  @include inner_shadow;
+
+  font: $font_12_regular;
+  color: darken(white, 50%);
+  background: $content_bg;
+  display: inline-flex;
+  padding: 1px 10px 3px;
+  border-radius: 12px;
+}

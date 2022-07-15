@@ -1,5 +1,3 @@
-import { DetailedHTMLProps, InputHTMLAttributes, ReactElement } from 'react';
-
 import { ERRORS } from '~/constants/errors';
 import { IUser } from '~/types/auth';
 
@@ -126,6 +124,7 @@ export type IMessage = Omit<IComment, 'user' | 'node'> & {
 export interface ICommentGroup {
   user: IUser;
   comments: IComment[];
+  distancesInDays: number[];
   ids: IComment['id'][];
   hasNew: boolean;
 }
