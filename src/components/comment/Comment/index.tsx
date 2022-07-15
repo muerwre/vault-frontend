@@ -59,7 +59,7 @@ const Comment: FC<IProps> = memo(
             return (
               <CommentContent
                 prefix={
-                  Math.abs(group.distancesInDays[index]) > 7 && (
+                  Math.abs(group.distancesInDays[index]) > 14 && (
                     <CommentDistance
                       firstDate={comment?.created_at ? parseISO(comment.created_at) : undefined}
                       secondDate={
