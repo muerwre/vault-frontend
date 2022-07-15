@@ -84,10 +84,9 @@ const CommentContent: FC<IProps> = memo(
 
     return (
       <div className={styles.wrap}>
+        {!!prefix && <div className={styles.prefix}>{prefix}</div>}
         {comment.text.trim() && (
           <Group className={classnames(styles.block, styles.block_text)}>
-            {!!prefix && <div className={styles.prefix}>{prefix}</div>}
-
             {menu}
 
             <Group className={styles.renderers}>

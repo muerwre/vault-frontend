@@ -2,8 +2,8 @@
 @import "~flexbin/flexbin";
 
 .wrap {
-  position: relative;
   @include row_shadow;
+  position: relative;
 }
 
 .lock,
@@ -163,13 +163,10 @@
 }
 
 .prefix {
-  display: inline-flex;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  transform: translate(0, -50%);
+  @include row_shadow;
+
+  margin-top: 1px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
 }
