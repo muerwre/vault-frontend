@@ -11,11 +11,11 @@
   background-color: darken($content_bg, 4%);
   padding: $gap;
   box-sizing:border-box;
-  z-index: 4;
   touch-action: none;
   pointer-events: none;
   border-radius: $radius;
   animation: appear forwards 250ms;
+  z-index: 100;
 }
 
 .username {

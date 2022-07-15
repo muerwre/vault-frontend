@@ -1,12 +1,17 @@
 import React, { VFC } from 'react';
 
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames';
 
 import { Icon } from '~/components/input/Icon';
+import { MenuButton, MenuItemWithIcon, SeparatedMenu } from '~/components/menu';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
 
 import styles from './styles.module.scss';
 
 interface NodeEditMenuProps {
+  className?: string;
+
   canStar: boolean;
 
   isHeroic: boolean;
@@ -18,36 +23,62 @@ interface NodeEditMenuProps {
 }
 
 const NodeEditMenu: VFC<NodeEditMenuProps> = ({
+  className,
   canStar,
   isHeroic,
   isLocked,
   onStar,
   onLock,
   onEdit,
-}) => (
-  <div className={styles.editor_menu}>
-    <div className={styles.editor_menu_button}>
-      <Icon icon="dots-vertical" size={24} />
-    </div>
+}) => {
+  const { isMobile } = useWindowSize();
 
-    <div className={styles.editor_buttons}>
+  if (isMobile) {
+    return (
+      <MenuButton
+        icon={<Icon icon="dots-vertical" className={styles.icon} size={24} />}
+        className={className}
+      >
+        {canStar && (
+          <MenuItemWithIcon icon={isHeroic ? 'star_full' : 'star'} onClick={onStar}>
+            {isHeroic ? 'Убрать с главной' : 'На главную'}
+          </MenuItemWithIcon>
+        )}
+
+        <MenuItemWithIcon icon="edit" onClick={onEdit}>
+          Редактировать
+        </MenuItemWithIcon>
+
+        <MenuItemWithIcon icon={isLocked ? 'locked' : 'unlocked'} onClick={onLock}>
+          {isLocked ? 'Восстановить' : 'Удалить'}
+        </MenuItemWithIcon>
+      </MenuButton>
+    );
+  }
+
+  return (
+    <SeparatedMenu>
       {canStar && (
-        <div className={classNames(styles.star, { [styles.is_heroic]: isHeroic })}>
-          {isHeroic ? (
-            <Icon icon="star_full" size={24} onClick={onStar} />
-          ) : (
-            <Icon icon="star" size={24} onClick={onStar} />
-          )}
-        </div>
+        <Tippy content={isHeroic ? 'Убрать с главной' : 'На главную'}>
+          <button className={className} onClick={onStar}>
+            <Icon icon={isHeroic ? 'star_full' : 'star'} size={24} />
+          </button>
+        </Tippy>
       )}
 
-      <div>
-        <Icon icon={isLocked ? 'locked' : 'unlocked'} size={24} onClick={onLock} />
-      </div>
+      <Tippy content="Редактировать">
+        <button className={className} onClick={onEdit}>
+          <Icon icon="edit" size={24} />
+        </button>
+      </Tippy>
 
-      <Icon icon="edit" size={24} onClick={onEdit} />
-    </div>
-  </div>
-);
+      <Tippy content={isLocked ? 'Восстановить' : 'Удалить'}>
+        <button className={className} onClick={onLock}>
+          <Icon icon={isLocked ? 'locked' : 'unlocked'} size={24} />
+        </button>
+      </Tippy>
+    </SeparatedMenu>
+  );
+};
 
 export { NodeEditMenu };

@@ -72,7 +72,7 @@
 }
 
 .name {
-  font: $font_14_regular;
+  font: $font_12_regular;
   color: transparentize(white, 0.5);
   text-transform: lowercase;
 
@@ -93,37 +93,6 @@
 .panel {
   flex: 1;
   min-width: 0;
-}
-
-.buttons {
-  flex: 0;
-  padding-right: $gap;
-  fill: transparentize(white, 0.7);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-top: 12px;
-
-  & > * {
-    @include button;
-  }
-
-  @include tablet {
-    align-self: center;
-  }
-}
-
-.buttons {
-  & > * {
-    &:last-child {
-      margin-right: 0;
-
-      &::after {
-        display: none;
-      }
-    }
-  }
 }
 
 .mark {
@@ -177,8 +146,11 @@
   will-change: transform;
   position: relative;
   flex: 0 0 32px;
+  fill: currentColor;
 
   &.is_liked {
+    opacity: 1;
+
     svg {
       fill: $red;
     }
@@ -212,4 +184,14 @@
   color: transparentize($color: white, $amount: 0.5);
   pointer-events: none;
   touch-action: none;
+}
+
+.buttons {
+  margin-top: 12px;
+  margin-right: $gap;
+}
+
+.button {
+  color: white;
+  @include hover_opacity;
 }

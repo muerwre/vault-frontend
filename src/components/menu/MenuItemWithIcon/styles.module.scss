@@ -1,0 +1,29 @@
+@import "src/styles/variables";
+
+.item {
+  @include row_shadow;
+  @include hover_opacity;
+
+  font: $font_14_medium;
+  line-height: 20px;
+  padding: $gap + 2px $gap $gap - 2px;
+  display: flex;
+  flex-direction: row;
+  color: white;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.icon {
+  flex: 0 0 20px;
+  margin-right: $gap;
+}
+
+.text {
+  flex: 1;
+  text-align: left;
+  padding-right: $gap;
+  white-space: nowrap;
+}

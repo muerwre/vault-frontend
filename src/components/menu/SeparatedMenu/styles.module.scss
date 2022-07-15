@@ -1,0 +1,29 @@
+@import "src/styles/mixins";
+@import "src/styles/variables";
+
+.menu {
+  flex: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.item {
+  margin-left: $gap * 4;
+  position: relative;
+
+  &:not(:last-child)::after {
+    @include inner_shadow;
+
+    content: ' ';
+    position: absolute;
+    width: 3px;
+    height: 16px;
+    background: darken($content_bg, 1%);
+    display: flex;
+    top: 5px;
+    right: -$gap * 2 - 2px;
+    border-radius: 2px;
+  }
+}

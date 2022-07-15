@@ -47,7 +47,7 @@ const CommentAvatar: FC<Props> = ({ user, withDetails, className }) => {
       </Reference>
 
       {hovered && withDetails && (
-        <Popper placement="right" modifiers={modifiers}>
+        <Popper placement="right" modifiers={modifiers} strategy="fixed">
           {({ style, ref }) => (
             <div style={style} ref={ref} className={styles.popper}>
               <h4 className={styles.username}>{user.fullname || user.username}</h4>

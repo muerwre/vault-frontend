@@ -274,3 +274,12 @@
     }
   }
 }
+
+@mixin hover_opacity($initial_opacity: 0.5) {
+  opacity: $initial_opacity;
+  transition: opacity 0.25s;
+
+  &:hover {
+    opacity: 1;
+  }
+}

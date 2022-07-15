@@ -3,6 +3,7 @@ import React, { memo, VFC } from 'react';
 import classNames from 'classnames';
 
 import { Icon } from '~/components/input/Icon';
+import { SeparatedMenu } from '~/components/menu';
 import { NodeEditMenu } from '~/components/node/NodeEditMenu';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { getPrettyDate } from '~/utils/dom';
@@ -74,20 +75,23 @@ const NodeTitle: VFC<IProps> = memo(
             )}
           </div>
 
-          {canEdit && (
-            <NodeEditMenu
-              canStar={canStar}
-              isHeroic={isHeroic}
-              isLocked={isLocked}
-              onStar={onStar}
-              onLock={onLock}
-              onEdit={onEdit}
-            />
-          )}
+          <SeparatedMenu className={styles.buttons}>
+            {canEdit && (
+              <NodeEditMenu
+                className={styles.button}
+                canStar={canStar}
+                isHeroic={isHeroic}
+                isLocked={isLocked}
+                onStar={onStar}
+                onLock={onLock}
+                onEdit={onEdit}
+              />
+            )}
 
-          <div className={styles.buttons}>
             {canLike && (
-              <div className={classNames(styles.like, { [styles.is_liked]: isLiked })}>
+              <div
+                className={classNames(styles.button, styles.like, { [styles.is_liked]: isLiked })}
+              >
                 {isLiked ? (
                   <Icon icon="heart_full" size={24} onClick={onLike} />
                 ) : (
@@ -99,7 +103,7 @@ const NodeTitle: VFC<IProps> = memo(
                 )}
               </div>
             )}
-          </div>
+          </SeparatedMenu>
         </div>
       </div>
     );

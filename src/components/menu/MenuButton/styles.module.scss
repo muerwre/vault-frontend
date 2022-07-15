@@ -1,0 +1,40 @@
+.menu {
+  position: relative;
+  cursor: pointer;
+}
+
+@import "src/styles/variables.scss";
+
+@keyframes appear {
+  0% { opacity: 0 }
+  100% { opacity: 1 }
+}
+
+.popper {
+  @include outer_shadow;
+
+  background-color: $menu_bg;
+  box-sizing: border-box;
+  z-index: 12;
+  border-radius: $radius;
+  animation: appear forwards 250ms;
+
+  &::after {
+    content: ' ';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent lighten($menu_bg, 6%) transparent;
+    position: absolute;
+    top: -11px;
+    right: 10px;
+  }
+
+  &.top::after {
+    border-width: 10px 10px 0 10px;
+    border-color: darken($menu_bg, 8%) transparent transparent transparent;
+    top: auto;
+    bottom: -11px;
+  }
+}
