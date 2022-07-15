@@ -16,10 +16,6 @@ const CommentDistance: FC<CommentDistanceProps> = memo(({ firstDate, secondDate 
       return undefined;
     }
 
-    if (differenceInDays(secondDate, firstDate) < 30) {
-      return undefined;
-    }
-
     return formatDistance(secondDate, firstDate, {
       locale: ru,
       addSuffix: false,
