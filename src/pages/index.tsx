@@ -16,7 +16,7 @@ export const getStaticProps = async () => {
     end: new Date().toISOString(),
     with_heroes: true,
     with_updated: true,
-    with_recent: false,
+    with_recent: true,
     with_valid: false,
   });
 
