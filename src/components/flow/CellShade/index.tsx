@@ -12,9 +12,10 @@ import styles from './styles.module.scss';
 interface Props extends DivProps {
   color?: string;
   size?: number;
+  angle?: number;
 }
 
-const CellShade: FC<Props> = ({ color, size = 50, ...rest }) => {
+const CellShade: FC<Props> = ({ color, size = 50, angle = 7, ...rest }) => {
   const background = useMemo(() => {
     const normalized = normalizeBrightColor(color);
 
@@ -22,8 +23,10 @@ const CellShade: FC<Props> = ({ color, size = 50, ...rest }) => {
       return undefined;
     }
 
-    return `linear-gradient(7deg, ${normalized} ${size}px, ${transparentize(normalized, 1)} ${size *
-      5}px)`;
+    return `linear-gradient(${angle}deg, ${normalized} ${size}px, ${transparentize(
+      normalized,
+      1
+    )} ${size * 5}px)`;
   }, [color, size]);
 
   return (

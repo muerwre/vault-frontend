@@ -55,10 +55,22 @@ const FlowCell: FC<Props> = ({
 
   const shadeSize = useMemo(() => {
     const min = isMobile ? 10 : 15;
-    const max = isMobile ? 20 : 50;
+    const max = isMobile ? 20 : 40;
 
     return withText ? min : max;
   }, [withText, isMobile]);
+
+  const shadeAngle = useMemo(() => {
+    if (flow.display === 'vertical') {
+      return 9;
+    }
+
+    if (flow.display === 'horizontal') {
+      return 15;
+    }
+
+    return 7;
+  }, [flow.display]);
 
   return (
     <div className={classNames(styles.cell, styles[flow.display || 'single'])} ref={ref as any}>
@@ -100,7 +112,9 @@ const FlowCell: FC<Props> = ({
           />
         )}
 
-        <CellShade color={color} className={styles.shade} size={shadeSize} />
+        {!!title && (
+          <CellShade color={color} className={styles.shade} size={shadeSize} angle={shadeAngle} />
+        )}
 
         {!withText && (
           <div className={styles.title_wrapper}>
