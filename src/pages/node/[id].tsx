@@ -4,8 +4,9 @@ import { observer } from 'mobx-react-lite';
 import { GetStaticPropsResult, InferGetStaticPropsType } from 'next';
 import { RouteComponentProps } from 'react-router';
 
-import { apiGetNode, getNodeDiff } from '~/api/node';
+import { apiGetNode, apiGetNodeComments, getNodeDiff } from '~/api/node';
 import { NodeHeadMetadata } from '~/components/node/NodeHeadMetadata';
+import { COMMENTS_DISPLAY } from '~/constants/node';
 import { useNodeComments } from '~/hooks/comments/useNodeComments';
 import { useScrollToTop } from '~/hooks/dom/useScrollToTop';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
@@ -14,6 +15,7 @@ import { useNodePageParams } from '~/hooks/node/useNodePageParams';
 import { useNodePermissions } from '~/hooks/node/useNodePermissions';
 import { useNodeTags } from '~/hooks/node/useNodeTags';
 import { NodeLayout } from '~/layouts/NodeLayout';
+import { IComment } from '~/types';
 import { ApiGetNodeResponse } from '~/types/node';
 import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
@@ -45,7 +47,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (
   context
-): Promise<GetStaticPropsResult<{ fallbackData: ApiGetNodeResponse }>> => {
+): Promise<GetStaticPropsResult<{ fallbackData: ApiGetNodeResponse; comments?: IComment[] }>> => {
   try {
     if (!context.params?.id) {
       return { notFound: true };
@@ -59,12 +61,18 @@ export const getStaticProps = async (
 
     const fallbackData = await apiGetNode({ id });
 
+    const comments = await apiGetNodeComments({
+      id,
+      take: COMMENTS_DISPLAY,
+    });
+
     return {
       props: {
         fallbackData: {
           ...fallbackData,
           last_seen: fallbackData.last_seen ?? null,
         },
+        comments: comments.comments,
       },
       revalidate: 7 * 86400, // every week
     };
@@ -91,7 +99,7 @@ const NodePage: FC<Props> = observer(props => {
     comments,
     hasMore,
     isLoading: isLoadingComments,
-  } = useNodeComments(parseInt(id, 10));
+  } = useNodeComments(parseInt(id, 10), props.comments);
 
   const { onDelete: onTagDelete, onChange: onTagsChange, onClick: onTagClick } = useNodeTags(
     parseInt(id, 10)

@@ -27,19 +27,20 @@ const extractKey = (key: string) => {
   return parseInt(match[1], 10) || 0;
 };
 
-export const useGetComments = (nodeId: number) => {
-  // TODO: const postedCommentsLength = Math.min(0, data[data.length - 1] - COMMENTS_DISPLAY);
-
+export const useGetComments = (nodeId: number, fallbackData?: IComment[]) => {
   const { data, isValidating, setSize, size, mutate } = useSWRInfinite(
     getKey(nodeId),
     async (key: string) => {
       const result = await apiGetNodeComments({
         id: nodeId,
         take: COMMENTS_DISPLAY,
-        skip: extractKey(key) * COMMENTS_DISPLAY, // TODO: - postedCommentsLength,
+        skip: extractKey(key) * COMMENTS_DISPLAY,
       });
 
       return result.comments;
+    },
+    {
+      fallbackData: fallbackData && [fallbackData],
     }
   );
 

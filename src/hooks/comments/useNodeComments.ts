@@ -5,8 +5,11 @@ import { useGetComments } from '~/hooks/comments/useGetComments';
 import { IComment } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
 
-export const useNodeComments = (nodeId: number) => {
-  const { comments, isLoading, onLoadMoreComments, hasMore, data, mutate } = useGetComments(nodeId);
+export const useNodeComments = (nodeId: number, fallbackData?: IComment[]) => {
+  const { comments, isLoading, onLoadMoreComments, hasMore, data, mutate } = useGetComments(
+    nodeId,
+    fallbackData
+  );
 
   const onDelete = useCallback(
     async (id: IComment['id'], isLocked: boolean) => {
