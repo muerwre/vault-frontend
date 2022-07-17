@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { SubmitBar } from '~/components/bars/SubmitBar';
+import { SubmitBarSSR } from '~/components/bars/SubmitBar/ssr';
 import { Authorized } from '~/components/containers/Authorized';
 
 interface IProps {
@@ -10,7 +10,7 @@ interface IProps {
 
 const SidebarRouter: FC<IProps> = ({ isLab }) => (
   <Authorized>
-    <SubmitBar isLab={isLab} />
+    <SubmitBarSSR isLab={isLab} />
   </Authorized>
 );
 

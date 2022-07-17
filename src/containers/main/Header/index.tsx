@@ -21,7 +21,7 @@ import { useUpdates } from '~/hooks/updates/useUpdates';
 
 import styles from './styles.module.scss';
 
-type HeaderProps = {};
+export interface HeaderProps {}
 
 const Header: FC<HeaderProps> = observer(() => {
   const labStats = useGetLabStats();

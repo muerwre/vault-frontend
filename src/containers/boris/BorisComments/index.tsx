@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { Group } from '~/components/containers/Group';
 import { Footer } from '~/components/main/Footer';
-import { NodeCommentForm } from '~/components/node/NodeCommentForm';
+import { NodeCommentFormSSR } from '~/components/node/NodeCommentForm/ssr';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { isSSR } from '~/constants/ssr';
 import { NodeComments } from '~/containers/node/NodeComments';
@@ -40,7 +40,7 @@ const BorisComments: FC<IProps> = () => {
     >
       <Group>
         {(isUser || isSSR) && (
-          <NodeCommentForm user={user} nodeId={node.id} saveComment={onSaveComment} />
+          <NodeCommentFormSSR user={user} nodeId={node.id} saveComment={onSaveComment} />
         )}
 
         {isLoading || !comments?.length ? (

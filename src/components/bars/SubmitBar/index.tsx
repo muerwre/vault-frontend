@@ -8,12 +8,11 @@ import { useShowModal } from '~/hooks/modal/useShowModal';
 
 import styles from './styles.module.scss';
 
-
-interface Props {
+export interface SubmitBarProps {
   isLab?: boolean;
 }
 
-const SubmitBar: FC<Props> = ({ isLab }) => {
+const SubmitBar: FC<SubmitBarProps> = ({ isLab }) => {
   const showModal = useShowModal(Dialog.CreateNode);
   const [focused, setFocused] = useState(false);
 

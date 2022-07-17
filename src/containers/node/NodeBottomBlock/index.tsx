@@ -4,7 +4,7 @@ import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { Sticky } from '~/components/containers/Sticky';
 import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
-import { NodeCommentForm } from '~/components/node/NodeCommentForm';
+import { NodeCommentFormSSR } from '~/components/node/NodeCommentForm/ssr';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
@@ -51,7 +51,7 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
             </article>
 
             {isUser && !isLoading && (
-              <NodeCommentForm nodeId={node.id} saveComment={onSaveComment} user={user} />
+              <NodeCommentFormSSR nodeId={node.id} saveComment={onSaveComment} user={user} />
             )}
           </Group>
 
