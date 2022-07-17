@@ -21,6 +21,7 @@ import { SearchProvider } from '~/utils/providers/SearchProvider';
 import { ToastProvider } from '~/utils/providers/ToastProvider';
 
 import '~/styles/main.scss';
+import 'tippy.js/dist/tippy.css';
 
 const mobxStore = getMOBXStore();
 

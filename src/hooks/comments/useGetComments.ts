@@ -45,9 +45,10 @@ export const useGetComments = (nodeId: number, fallbackData?: IComment[]) => {
   );
 
   const comments = useMemo(() => flatten(data || []), [data]);
-  const hasMore = (data?.[size - 1]?.length || 0) >= COMMENTS_DISPLAY;
+  const hasMore = (data?.[size - 1]?.length || 0) >= COMMENTS_DISPLAY ||
+    (!!data?.length && data?.length > 0 && isValidating);
 
   const onLoadMoreComments = useCallback(() => setSize(size + 1), [setSize, size]);
 
-  return { comments, hasMore, onLoadMoreComments, isLoading: !data && isValidating, mutate, data };
+  return { comments, hasMore, onLoadMoreComments, isLoading: !data && isValidating, mutate, data, isLoadingMore: !!data?.length && isValidating };
 };

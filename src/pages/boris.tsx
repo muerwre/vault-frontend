@@ -23,6 +23,7 @@ const BorisPage: VFC = observer(() => {
     comments,
     hasMore,
     isLoading: isLoadingComments,
+    isLoadingMore,
   } = useNodeComments(696);
   const { title, setIsBetaTester, isTester, stats, isLoadingStats } = useBoris(comments);
 
@@ -33,6 +34,7 @@ const BorisPage: VFC = observer(() => {
         comments={comments}
         hasMore={hasMore}
         isLoading={isLoadingComments}
+        isLoadingMore={isLoadingMore}
         onShowImageModal={onShowImageModal}
         onLoadMoreComments={onLoadMoreComments}
         onDeleteComment={onDeleteComment}

@@ -12,25 +12,5 @@
 .icon {
   fill: currentColor;
   stroke: none;
-}
-
-.e0 {
-  animation: spin infinite linear 2s;
-  transform-origin: 50% 50%;
-  opacity: 0.1;
-}
-
-.e1 {
-  animation: spin infinite reverse 2s -0.25s;
-  transform-origin: 50% 50%;
-  opacity: 0.1;
-}
-.e2 {
-  animation: spin infinite linear 2s -0.25s;
-  transform-origin: 50% 50%;
-  opacity: 0.1;
-}
-
-.e {
-  opacity: 0.1;
+  animation: spin 0.75s infinite linear;
 }

@@ -1,6 +1,7 @@
 import React, { FC, memo, useMemo } from 'react';
 
 import { Comment } from '~/components/comment/Comment';
+import { LoadMoreButton } from '~/components/input/LoadMoreButton';
 import { useGrouppedComments } from '~/hooks/node/useGrouppedComments';
 import { ICommentGroup } from '~/types';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
@@ -21,6 +22,8 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
   const {
     comments,
     hasMore,
+    isLoading,
+    isLoadingMore,
     lastSeenCurrent,
     onLoadMoreComments,
     onDeleteComment,
@@ -36,12 +39,10 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
 
   const more = useMemo(
     () =>
-      hasMore && (
-        <div className={styles.more} onClick={onLoadMoreComments}>
-          Показать ещё комментарии
-        </div>
-      ),
-    [hasMore, onLoadMoreComments]
+      hasMore && <div className={styles.more}>
+        <LoadMoreButton isLoading={isLoadingMore} onClick={onLoadMoreComments} />
+      </div>,
+    [hasMore, onLoadMoreComments, isLoadingMore]
   );
 
   if (!node?.id) {

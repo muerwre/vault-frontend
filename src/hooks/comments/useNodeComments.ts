@@ -6,7 +6,7 @@ import { IComment } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useNodeComments = (nodeId: number, fallbackData?: IComment[]) => {
-  const { comments, isLoading, onLoadMoreComments, hasMore, data, mutate } = useGetComments(
+  const { comments, isLoading, onLoadMoreComments, hasMore, data, mutate, isLoadingMore } = useGetComments(
     nodeId,
     fallbackData
   );
@@ -62,5 +62,5 @@ export const useNodeComments = (nodeId: number, fallbackData?: IComment[]) => {
     [data, mutate, nodeId]
   );
 
-  return { onLoadMoreComments, onDelete, comments, hasMore, isLoading, onEdit };
+  return { onLoadMoreComments, onDelete, comments, hasMore, isLoading, onEdit, isLoadingMore };
 };

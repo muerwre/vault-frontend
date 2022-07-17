@@ -7,6 +7,7 @@ export interface CommentProviderProps {
   hasMore: boolean;
   lastSeenCurrent?: string | null;
   isLoading: boolean;
+  isLoadingMore: boolean;
   onShowImageModal: (images: IFile[], index: number) => void;
   onLoadMoreComments: () => void;
   onSaveComment: (comment: IComment) => Promise<unknown>;
@@ -19,6 +20,7 @@ const CommentContext = createContext<CommentProviderProps>({
   hasMore: false,
   lastSeenCurrent: null,
   isLoading: false,
+  isLoadingMore: false,
   onSaveComment: async () => {},
   onShowImageModal: () => {},
   onLoadMoreComments: () => {},

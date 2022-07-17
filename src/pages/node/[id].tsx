@@ -99,6 +99,7 @@ const NodePage: FC<Props> = observer(props => {
     comments,
     hasMore,
     isLoading: isLoadingComments,
+    isLoadingMore: isLoadingMoreComments,
   } = useNodeComments(parseInt(id, 10), props.comments);
 
   const { onDelete: onTagDelete, onChange: onTagsChange, onClick: onTagClick } = useNodeTags(
@@ -122,6 +123,7 @@ const NodePage: FC<Props> = observer(props => {
           hasMore={hasMore}
           lastSeenCurrent={lastSeen}
           isLoading={isLoadingComments}
+          isLoadingMore={isLoadingMoreComments}
           onShowImageModal={onShowImageModal}
           onLoadMoreComments={onLoadMoreComments}
           onDeleteComment={onDeleteComment}

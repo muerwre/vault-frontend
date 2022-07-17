@@ -4,18 +4,17 @@ import Tippy from '@tippyjs/react';
 import classnames from 'classnames';
 
 import { Icon } from '~/components/input/Icon';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { IIcon } from '~/types';
 
 import styles from './styles.module.scss';
-
-import 'tippy.js/dist/tippy.css';
 
 type IButtonProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 > & {
   size?: 'mini' | 'normal' | 'big' | 'giant' | 'micro' | 'small';
-  color?: 'primary' | 'secondary' | 'outline' | 'link' | 'gray' | 'lab' | 'outline-white';
+  color?: 'primary' | 'secondary' | 'outline' | 'link' | 'gray' | 'lab' | 'outline-white' | 'flat';
   iconLeft?: IIcon;
   iconRight?: IIcon;
   title?: string;
@@ -23,6 +22,7 @@ type IButtonProps = DetailedHTMLProps<
   iconOnly?: boolean;
   label?: string;
   round?: boolean;
+  loading?: boolean;
 };
 
 const Button: FC<IButtonProps> = memo(
@@ -40,6 +40,7 @@ const Button: FC<IButtonProps> = memo(
     label,
     ref,
     round,
+    loading,
     ...props
   }) => {
     const computedClassName = useMemo(
@@ -73,6 +74,9 @@ const Button: FC<IButtonProps> = memo(
           {iconLeft && <Icon icon={iconLeft} size={20} key={0} className={styles.icon_left} />}
           {!!title ? <span>{title}</span> : children}
           {iconRight && <Icon icon={iconRight} size={20} key={2} className={styles.icon_right} />}
+          {
+            loading && <div className={styles.loading}><LoaderCircle /></div>
+          }
         </button>
       </Tippy>
     );
