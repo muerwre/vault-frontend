@@ -68,15 +68,25 @@ const Button: FC<IButtonProps> = memo(
       ]
     );
 
+    const loaderSize = useMemo(() => {
+      if (['small', 'micro', 'mini'].includes(size)) {
+        return 16;
+      }
+
+      return 24;
+    }, []);
+
     return (
       <Tippy content={label || ''} disabled={!label}>
         <button className={computedClassName} {...props}>
           {iconLeft && <Icon icon={iconLeft} size={20} key={0} className={styles.icon_left} />}
           {!!title ? <span>{title}</span> : children}
           {iconRight && <Icon icon={iconRight} size={20} key={2} className={styles.icon_right} />}
-          {
-            loading && <div className={styles.loading}><LoaderCircle /></div>
-          }
+          {loading && (
+            <div className={styles.loading}>
+              <LoaderCircle size={loaderSize} />
+            </div>
+          )}
         </button>
       </Tippy>
     );

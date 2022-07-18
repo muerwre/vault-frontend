@@ -12,8 +12,8 @@ interface IProps extends SVGProps {
   className?: string;
 }
 
-export const LoaderCircle: FC<IProps> = ({ size = 24, ...rest }) => (
-  <div className={classNames(styles.wrap, 'loader-circle', rest.className)}>
-    <LoaderCircleInner {...rest} size={size} />
+export const LoaderCircle: FC<IProps> = ({ size = 24, className }) => (
+  <div className={classNames(styles.wrap, 'loader-circle', className)}>
+    <LoaderCircleInner size={size} />
   </div>
 );

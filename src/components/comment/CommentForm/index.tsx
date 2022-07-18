@@ -92,8 +92,6 @@ const CommentForm: FC<IProps> = observer(({ comment, nodeId, saveComment, onCanc
               <Filler />
 
               <div className={styles.button_column}>
-                {isLoading && <LoaderCircle size={20} />}
-
                 {isEditing && (
                   <Button size="small" color="link" type="button" onClick={onCancelEdit}>
                     Отмена
@@ -106,6 +104,7 @@ const CommentForm: FC<IProps> = observer(({ comment, nodeId, saveComment, onCanc
                   color="gray"
                   iconRight={!isEditing ? 'enter' : 'check'}
                   disabled={isLoading}
+                  loading={isLoading}
                 >
                   {!isEditing ? 'Сказать' : 'Сохранить'}
                 </Button>

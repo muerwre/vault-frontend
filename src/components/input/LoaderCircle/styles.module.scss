@@ -21,6 +21,9 @@
 }
 
 .wrap {
-  //animation: spin infinite 1s linear;
+  animation: spin infinite 0.75s linear;
   display: inline-flex;
+  transform-origin: 50% 50%;
+  align-items: center;
+  justify-content: center;
 }
