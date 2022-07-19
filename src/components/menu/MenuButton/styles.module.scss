@@ -31,10 +31,29 @@
     right: 10px;
   }
 
+  &.top-end::after {
+    border-width: 10px 10px 0 10px;
+    border-color: darken($menu_bg, 8%) transparent transparent transparent;
+    top: auto;
+    bottom: -11px;
+  }
+
+  &.top-start::after {
+    border-width: 10px 10px 0 10px;
+    border-color: darken($menu_bg, 8%) transparent transparent transparent;
+    top: auto;
+    bottom: -11px;
+    right: auto;
+    left: 10px;
+  }
+
   &.top::after {
     border-width: 10px 10px 0 10px;
     border-color: darken($menu_bg, 8%) transparent transparent transparent;
     top: auto;
     bottom: -11px;
+    right: auto;
+    left: 50%;
+    margin-left: -10px;
   }
 }

@@ -36,7 +36,7 @@ const CommentWrapper: FC<IProps> = ({
     {...props}
   >
     <div className={styles.thumb}>
-      <CommentAvatar user={user} className={styles.thumb_image} withDetails={!isForm} />
+      <CommentAvatar user={user} className={styles.thumb_image} />
       <div className={styles.thumb_user}>~{path(['username'], user)}</div>
     </div>
 

@@ -9,6 +9,7 @@ import { useFocusEvent } from '~/hooks/dom/useFocusEvent';
 import styles from './styles.module.scss';
 
 interface MenuButtonProps {
+  position?: 'top-end' | 'bottom-end' | 'top-start' | 'bottom-start' | 'top' | 'bottom';
   icon?: ReactNode;
   className?: string;
 }
@@ -23,11 +24,12 @@ const modifiers = [
 ];
 
 const MenuButton: FC<MenuButtonProps> = ({
+  position = 'bottom-end',
   children,
   className,
   icon = <Icon icon="dots-vertical" size={24} />,
 }) => {
-  const { focused, onFocus, onBlur } = useFocusEvent(false, 150);
+  const { focused, onFocus, onBlur } = useFocusEvent(true, 150);
 
   return (
     <Manager>
@@ -45,13 +47,9 @@ const MenuButton: FC<MenuButtonProps> = ({
       </Reference>
 
       {focused && (
-        <Popper placement="bottom-end" modifiers={modifiers}>
+        <Popper placement={position} modifiers={modifiers}>
           {({ style, ref, placement }) => (
-            <div
-              style={style}
-              ref={ref}
-              className={classNames(styles.popper, { [styles.top]: placement === 'top-end' })}
-            >
+            <div style={style} ref={ref} className={classNames(styles.popper, styles[placement])}>
               {children}
             </div>
           )}
