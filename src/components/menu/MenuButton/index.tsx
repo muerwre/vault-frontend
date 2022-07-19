@@ -12,6 +12,7 @@ interface MenuButtonProps {
   position?: 'top-end' | 'bottom-end' | 'top-start' | 'bottom-start' | 'top' | 'bottom';
   icon?: ReactNode;
   className?: string;
+  translucentMenu?: boolean;
 }
 
 const modifiers = [
@@ -28,8 +29,9 @@ const MenuButton: FC<MenuButtonProps> = ({
   children,
   className,
   icon = <Icon icon="dots-vertical" size={24} />,
+  translucentMenu,
 }) => {
-  const { focused, onFocus, onBlur } = useFocusEvent(true, 150);
+  const { focused, onFocus, onBlur } = useFocusEvent(false, 150);
 
   return (
     <Manager>
@@ -49,7 +51,13 @@ const MenuButton: FC<MenuButtonProps> = ({
       {focused && (
         <Popper placement={position} modifiers={modifiers}>
           {({ style, ref, placement }) => (
-            <div style={style} ref={ref} className={classNames(styles.popper, styles[placement])}>
+            <div
+              style={style}
+              ref={ref}
+              className={classNames(styles.popper, styles[placement], {
+                [styles.translucent]: translucentMenu,
+              })}
+            >
               {children}
             </div>
           )}

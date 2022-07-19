@@ -1,10 +1,6 @@
-import { differenceInDays, parseISO } from 'date-fns';
-
 import { useRandomPhrase } from '~/constants/phrases';
-import { INACTIVE_ACCOUNT_DAYS } from '~/constants/user';
+import { useUserActiveStatus } from '~/hooks/auth/useUserActiveStatus';
 import { IUser } from '~/types/auth';
-
-const today = new Date();
 
 export const useUserDescription = (user?: Partial<IUser>) => {
   const randomPhrase = useRandomPhrase('USER_DESCRIPTION');
@@ -13,8 +9,9 @@ export const useUserDescription = (user?: Partial<IUser>) => {
     return '';
   }
 
-  const lastSeen = user.last_seen ? parseISO(user.last_seen) : undefined;
-  if (!lastSeen || differenceInDays(today, lastSeen) > INACTIVE_ACCOUNT_DAYS) {
+  const isActive = useUserActiveStatus(user.last_seen);
+
+  if (!isActive) {
     return 'Юнит деактивирован';
   }
 

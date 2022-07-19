@@ -26,3 +26,19 @@ div.top.top {
 .fullname {
   margin-bottom: 3px;
 }
+
+.status {
+  font: $font_12_regular;
+  margin-top: $gap;
+
+  &.active {
+    color: $olive;
+  }
+
+  &::before {
+    content: '●';
+    margin-right: 5px;
+    padding-top: 1px;
+    font-size: 0.8em;
+  }
+}

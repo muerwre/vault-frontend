@@ -1,4 +1,4 @@
-import { adjustHue, darken, desaturate, parseToHsla } from 'color2k';
+import { adjustHue, darken, desaturate, parseToHsla, transparentize } from 'color2k';
 
 import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
 import { stringToColour } from '~/utils/dom';
@@ -30,8 +30,16 @@ export const generateGradientFromColor = (
   val: string,
   saturation = 3,
   lightness = 3,
-  angle = 155
+  angle = 155,
+  opacity = 1
 ) => {
-  const [color, second, third] = generateColorTriplet(val, saturation, lightness);
-  return `linear-gradient(${angle}deg, ${color}, ${second}, ${third})`;
+  const [first, second, third] = generateColorTriplet(val, saturation, lightness).map(it => {
+    if (opacity > 1 || opacity < 0) {
+      return it;
+    }
+
+    return transparentize(it, 1 - opacity);
+  });
+
+  return `linear-gradient(${angle}deg, ${first}, ${second}, ${third})`;
 };

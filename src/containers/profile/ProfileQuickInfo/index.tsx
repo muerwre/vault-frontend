@@ -1,9 +1,13 @@
 import React, { FC, useMemo } from 'react';
 
+import classNames from 'classnames';
+
 import { Avatar } from '~/components/common/Avatar';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
 import { useRandomPhrase } from '~/constants/phrases';
+import { useUserActiveStatus } from '~/hooks/auth/useUserActiveStatus';
+import { useUserDescription } from '~/hooks/auth/useUserDescription';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { IUser } from '~/types/auth';
 import { generateGradientFromColor } from '~/utils/color';
@@ -16,15 +20,10 @@ interface ProfileQuickInfoProps {
 }
 
 const ProfileQuickInfo: FC<ProfileQuickInfoProps> = ({ user }) => {
-  const style = useMemo(() => {
-    const color = user.photo?.metadata?.dominant_color;
-    const gradient = color && generateGradientFromColor(color);
-
-    return gradient ? { background: gradient } : undefined;
-  }, [user]);
+  const isActive = useUserActiveStatus(user.last_seen);
 
   return (
-    <Group className={styles.wrapper} style={style}>
+    <Group className={styles.wrapper}>
       <Group className={styles.top} horizontal>
         <div>
           <Avatar url={path(['photo', 'url'], user)} username={user.username} />
@@ -33,6 +32,10 @@ const ProfileQuickInfo: FC<ProfileQuickInfoProps> = ({ user }) => {
         <Filler>
           <h5 className={styles.fullname}>{user.fullname || user.username}</h5>
           <div className={styles.username}>~{user.username}</div>
+
+          <div className={classNames(styles.status, { [styles.active]: isActive })}>
+            {isActive ? 'в сознании' : 'деактивирован'}
+          </div>
         </Filler>
       </Group>
     </Group>

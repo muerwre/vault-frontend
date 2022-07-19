@@ -16,10 +16,11 @@ interface Props {
 const CommentAvatar: FC<Props> = ({ user, className }) => {
   return (
     <MenuButton
-      position="top"
+      position="top-start"
       icon={
         <Avatar url={path(['photo', 'url'], user)} username={user.username} className={className} />
       }
+      translucentMenu
     >
       <ProfileQuickInfo user={user} />
     </MenuButton>

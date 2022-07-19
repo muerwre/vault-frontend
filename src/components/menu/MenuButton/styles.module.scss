@@ -5,19 +5,13 @@
 
 @import "src/styles/variables.scss";
 
-@keyframes appear {
-  0% { opacity: 0 }
-  100% { opacity: 1 }
-}
-
 .popper {
   @include outer_shadow;
+  @include blur($content_bg, 15px, 0.5);
 
-  background-color: $menu_bg;
   box-sizing: border-box;
   z-index: 12;
   border-radius: $radius;
-  animation: appear forwards 250ms;
 
   &::after {
     content: ' ';
@@ -27,14 +21,27 @@
     border-width: 0 10px 10px 10px;
     border-color: transparent transparent lighten($menu_bg, 6%) transparent;
     position: absolute;
+  }
+
+  &.bottom-end::after {
     top: -11px;
     right: 10px;
+  }
+
+  &.bottom-start::after {
+    top: -11px;
+    left: 10px;
+  }
+
+  &.bottom::after {
+    top: -11px;
+    left: 50%;
+    margin-left: -15px;
   }
 
   &.top-end::after {
     border-width: 10px 10px 0 10px;
     border-color: darken($menu_bg, 8%) transparent transparent transparent;
-    top: auto;
     bottom: -11px;
   }
 
@@ -43,7 +50,6 @@
     border-color: darken($menu_bg, 8%) transparent transparent transparent;
     top: auto;
     bottom: -11px;
-    right: auto;
     left: 10px;
   }
 
@@ -52,8 +58,7 @@
     border-color: darken($menu_bg, 8%) transparent transparent transparent;
     top: auto;
     bottom: -11px;
-    right: auto;
     left: 50%;
-    margin-left: -10px;
+    margin-left: -15px;
   }
 }
