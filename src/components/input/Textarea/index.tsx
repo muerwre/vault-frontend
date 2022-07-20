@@ -5,7 +5,7 @@ import React, {
   TextareaHTMLAttributes,
   useCallback,
   useEffect,
-  useState,
+  useState
 } from 'react';
 
 import autosize from 'autosize';

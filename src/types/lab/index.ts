@@ -1,4 +1,4 @@
-import { IError, INode, ITag } from '~/types';
+import { INode, ITag } from '~/types';
 
 export enum LabNodesSort {
   New = 'new',

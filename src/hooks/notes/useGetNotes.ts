@@ -1,13 +1,10 @@
 import { useCallback, useMemo } from 'react';
 
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
-
-import { getLabNodes } from '~/api/lab';
 import { apiGetNotes } from '~/api/notes';
 import { ApiGetNotesRequest } from '~/api/notes/types';
 import { useAuth } from '~/hooks/auth/useAuth';
-import { useUser } from '~/hooks/auth/useUser';
-import { GetLabNodesRequest, ILabNode, LabNodesSort } from '~/types/lab';
+import { GetLabNodesRequest, ILabNode } from '~/types/lab';
 import { flatten, uniqBy } from '~/utils/ramda';
 
 const DEFAULT_COUNT = 20;

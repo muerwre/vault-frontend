@@ -1,6 +1,6 @@
 import React, { FC, memo, useMemo } from 'react';
 
-import { differenceInDays, formatDistance } from 'date-fns';
+import { formatDistance } from 'date-fns';
 import ru from 'date-fns/locale/ru';
 
 import styles from './styles.module.scss';

@@ -9,7 +9,6 @@ import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormat
 import { LocalCommentFormTextarea } from '~/components/comment/LocalCommentFormTextarea';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { EMPTY_COMMENT } from '~/constants/node';

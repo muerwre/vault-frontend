@@ -24,15 +24,18 @@ div.top.top {
 .username {
   font: $font_12_regular;
   opacity: 0.5;
+  text-transform: lowercase;
 }
 
 .fullname {
   margin-bottom: 3px;
+  text-transform: capitalize;
 }
 
 .status {
   font: $font_12_regular;
   margin-top: $gap;
+  color: darken(white, 50%);
 
   &.active {
     color: $olive;

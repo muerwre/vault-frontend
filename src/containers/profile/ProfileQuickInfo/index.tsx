@@ -1,16 +1,12 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 
 import classNames from 'classnames';
 
 import { Avatar } from '~/components/common/Avatar';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
-import { useRandomPhrase } from '~/constants/phrases';
 import { useUserActiveStatus } from '~/hooks/auth/useUserActiveStatus';
-import { useUserDescription } from '~/hooks/auth/useUserDescription';
-import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { IUser } from '~/types/auth';
-import { generateGradientFromColor } from '~/utils/color';
 import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
@@ -34,7 +30,7 @@ const ProfileQuickInfo: FC<ProfileQuickInfoProps> = ({ user }) => {
           <div className={styles.username}>~{user.username}</div>
 
           <div className={classNames(styles.status, { [styles.active]: isActive })}>
-            {isActive ? 'в сознании' : 'деактивирован'}
+            {isActive ? 'юнит в сознании' : 'юнит деактивирован'}
           </div>
         </Filler>
       </Group>

@@ -1,12 +1,9 @@
 import React, { useState, VFC } from 'react';
 
-import Masonry from 'react-masonry-css';
-
 import { Card } from '~/components/containers/Card';
 import { Columns } from '~/components/containers/Columns';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
-import { Markdown } from '~/components/containers/Markdown';
 import { Padder } from '~/components/containers/Padder';
 import { Button } from '~/components/input/Button';
 import { Icon } from '~/components/input/Icon';
@@ -15,9 +12,6 @@ import { Textarea } from '~/components/input/Textarea';
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { NoteCard } from '~/components/notes/NoteCard';
 import { useGetNotes } from '~/hooks/notes/useGetNotes';
-import { formatText } from '~/utils/dom';
-
-import styles from './styles.module.scss';
 
 interface SettingsNotesProps {}
 
