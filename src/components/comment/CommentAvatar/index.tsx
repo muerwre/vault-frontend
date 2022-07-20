@@ -16,7 +16,7 @@ interface Props {
 const CommentAvatar: FC<Props> = ({ user, className }) => {
   return (
     <MenuButton
-      position="top-start"
+      position="auto"
       icon={
         <Avatar url={path(['photo', 'url'], user)} username={user.username} className={className} />
       }

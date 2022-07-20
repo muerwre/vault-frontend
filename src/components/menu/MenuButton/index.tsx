@@ -1,7 +1,8 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 
+import { Placement } from '@popperjs/core';
 import classNames from 'classnames';
-import { Manager, Popper, Reference } from 'react-popper';
+import { usePopper } from 'react-popper';
 
 import { Icon } from '~/components/input/Icon';
 import { useFocusEvent } from '~/hooks/dom/useFocusEvent';
@@ -9,20 +10,12 @@ import { useFocusEvent } from '~/hooks/dom/useFocusEvent';
 import styles from './styles.module.scss';
 
 interface MenuButtonProps {
-  position?: 'top-end' | 'bottom-end' | 'top-start' | 'bottom-start' | 'top' | 'bottom';
+  position?: Placement;
   icon?: ReactNode;
   className?: string;
   translucentMenu?: boolean;
+  activate?: 'hover' | 'focus';
 }
-
-const modifiers = [
-  {
-    name: 'offset',
-    options: {
-      offset: [5, 10],
-    },
-  },
-];
 
 const MenuButton: FC<MenuButtonProps> = ({
   position = 'bottom-end',
@@ -30,40 +23,56 @@ const MenuButton: FC<MenuButtonProps> = ({
   className,
   icon = <Icon icon="dots-vertical" size={24} />,
   translucentMenu,
+  activate = 'focus',
 }) => {
-  const { focused, onFocus, onBlur } = useFocusEvent(false, 150);
+  const focus = useFocusEvent(false, 150);
+  const hover = useFocusEvent(false, 150);
+
+  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
+  const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
+
+  const popper = usePopper(referenceElement, popperElement, {
+    placement: position,
+    modifiers: [
+      { name: 'arrow', options: { element: arrowElement } },
+      {
+        name: 'offset',
+        options: {
+          offset: [5, 10],
+        },
+      },
+    ],
+  });
+
+  const visible = activate === 'focus' ? focus.focused : hover.focused;
 
   return (
-    <Manager>
-      <Reference>
-        {({ ref }) => (
-          <button
-            className={classNames(styles.menu, className)}
-            ref={ref}
-            onFocus={onFocus}
-            onBlur={onBlur}
-          >
-            {icon}
-          </button>
-        )}
-      </Reference>
+    <>
+      <button
+        className={classNames(styles.menu, className)}
+        ref={setReferenceElement}
+        onFocus={focus.onFocus}
+        onBlur={focus.onBlur}
+        onMouseOver={hover.onFocus}
+        onMouseOut={hover.onBlur}
+      >
+        {icon}
+      </button>
 
-      {focused && (
-        <Popper placement={position} modifiers={modifiers}>
-          {({ style, ref, placement }) => (
-            <div
-              style={style}
-              ref={ref}
-              className={classNames(styles.popper, styles[placement], {
-                [styles.translucent]: translucentMenu,
-              })}
-            >
-              {children}
-            </div>
-          )}
-        </Popper>
-      )}
-    </Manager>
+      <div
+        style={popper.styles.popper}
+        ref={setPopperElement}
+        {...popper.attributes.popper}
+        className={classNames(styles.popper, {
+          [styles.translucent]: translucentMenu,
+          [styles.visible]: visible,
+        })}
+      >
+        <div style={popper.styles.arrow} ref={setArrowElement} className={styles.arrow} />
+        {children}
+      </div>
+    </>
   );
 };
 

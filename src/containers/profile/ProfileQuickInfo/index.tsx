@@ -29,7 +29,7 @@ const ProfileQuickInfo: FC<ProfileQuickInfoProps> = ({ user }) => {
           <Avatar url={path(['photo', 'url'], user)} username={user.username} />
         </div>
 
-        <Filler>
+        <Filler className={styles.names}>
           <h5 className={styles.fullname}>{user.fullname || user.username}</h5>
           <div className={styles.username}>~{user.username}</div>
 
