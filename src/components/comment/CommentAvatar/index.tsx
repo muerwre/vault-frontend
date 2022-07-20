@@ -1,6 +1,4 @@
-import React, { FC, useCallback, useState } from 'react';
-
-import { Manager, Popper, Reference } from 'react-popper';
+import React, { FC } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
 import { MenuButton } from '~/components/menu';

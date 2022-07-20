@@ -34,7 +34,7 @@ const ProfileQuickInfo: FC<ProfileQuickInfoProps> = ({ user }) => {
           <div className={styles.username}>~{user.username}</div>
 
           <div className={classNames(styles.status, { [styles.active]: isActive })}>
-            {isActive ? 'в сознании' : 'деактивирован'}
+            {isActive ? 'юнит в сознании' : 'юнит деактивирован'}
           </div>
         </Filler>
       </Group>
