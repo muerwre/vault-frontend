@@ -1,0 +1,47 @@
+@import "src/styles/variables";
+
+.wrapper {
+  @include outer_shadow;
+
+  padding: $gap $gap * 2 $gap $gap;
+  border-radius: $radius;
+  min-width: 240px;
+}
+
+div.info {
+  font: $font_12_regular;
+  opacity: 0.5;
+}
+
+div.top.top {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.names {
+}
+
+.username {
+  font: $font_12_regular;
+  opacity: 0.5;
+}
+
+.fullname {
+  margin-bottom: 3px;
+}
+
+.status {
+  font: $font_12_regular;
+  margin-top: $gap;
+
+  &.active {
+    color: $olive;
+  }
+
+  &::before {
+    content: '●';
+    margin-right: 5px;
+    padding-top: 1px;
+    font-size: 0.8em;
+  }
+}

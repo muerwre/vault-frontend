@@ -19,14 +19,11 @@ interface Props extends DivProps {
 
 const Avatar = forwardRef<HTMLDivElement, Props>(
   ({ url, username, size, className, preset = ImagePresets.avatar, ...rest }, ref) => {
-    const onOpenProfile = useCallback(() => openUserProfile(username), [username]);
-
     return (
       <Square
         {...rest}
         image={getURLFromString(url, preset)}
         className={classNames(styles.avatar, className)}
-        onClick={onOpenProfile}
         size={size}
         ref={ref}
       />

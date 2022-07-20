@@ -9,63 +9,6 @@
   }
 }
 
-.menu {
-  position: absolute;
-  right: -$gap;
-  top: 100%;
-  padding: $gap;
-  border-radius: $radius;
-  display: none;
-  z-index: 1;
-  box-sizing: border-box;
-  padding: $gap;
-  display: none;
-  flex-direction: column;
-
-  &::after {
-    content: ' ';
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 0 16px 16px;
-    border-color: transparent transparent $content_bg transparent;
-    position: absolute;
-    right: 0;
-    top: -4px;
-    transform: translate(-20px, 0);
-    z-index: -1;
-  }
-
-  & > div {
-    background: $content_bg;
-    padding: $gap $gap * 2;
-    cursor: pointer;
-    box-sizing: border-box;
-    transition: opacity 0.25s;
-    width: 100%;
-    padding-right: 40px;
-    transition: background-color 0.25s;
-
-    &:first-child {
-      border-top-left-radius: $radius;
-      border-top-right-radius: $radius;
-    }
-
-    &:last-child {
-      border-bottom-left-radius: $radius;
-      border-bottom-right-radius: $radius;
-    }
-
-    &:hover {
-      background-color: $secondary;
-    }
-  }
-
-  &:hover > div {
-    opacity: 1;
-  }
-}
-
 .user_button {
   align-items: center;
   border-radius: $radius;

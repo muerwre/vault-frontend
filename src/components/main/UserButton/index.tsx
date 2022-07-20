@@ -2,6 +2,7 @@ import React, { FC, useCallback } from 'react';
 
 import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
+import { MenuButton, MenuItemWithIcon } from '~/components/menu';
 import { ImagePresets } from '~/constants/urls';
 import { IUser } from '~/types/auth';
 import { getURL } from '~/utils/dom';
@@ -28,19 +29,23 @@ const UserButton: FC<IProps> = ({ user: { username, photo }, authOpenProfile, on
       <Group horizontal className={styles.user_button}>
         <div className={styles.username}>{username}</div>
 
-        <div
-          className={styles.user_avatar}
-          style={{ backgroundImage: `url('${getURL(photo, ImagePresets.avatar)}')` }}
+        <MenuButton
+          position="bottom"
+          translucent={false}
+          icon={
+            <div
+              className={styles.user_avatar}
+              style={{ backgroundImage: `url('${getURL(photo, ImagePresets.avatar)}')` }}
+            >
+              {(!photo || !photo.id) && <Icon icon="profile" />}
+            </div>
+          }
         >
-          {(!photo || !photo.id) && <Icon icon="profile" />}
-        </div>
+          <MenuItemWithIcon onClick={onProfileOpen}>Профиль</MenuItemWithIcon>
+          <MenuItemWithIcon onClick={onSettingsOpen}>Настройки</MenuItemWithIcon>
+          <MenuItemWithIcon onClick={onLogout}>Выдох</MenuItemWithIcon>
+        </MenuButton>
       </Group>
-
-      <div className={styles.menu}>
-        <div onClick={onProfileOpen}>Профиль</div>
-        <div onClick={onSettingsOpen}>Настройки</div>
-        <div onClick={onLogout}>Выдох</div>
-      </div>
     </div>
   );
 };

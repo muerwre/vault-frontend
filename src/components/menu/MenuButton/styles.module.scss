@@ -5,36 +5,59 @@
 
 @import "src/styles/variables.scss";
 
-@keyframes appear {
-  0% { opacity: 0 }
-  100% { opacity: 1 }
-}
-
 .popper {
   @include outer_shadow;
 
-  background-color: $menu_bg;
   box-sizing: border-box;
   z-index: 12;
   border-radius: $radius;
-  animation: appear forwards 250ms;
+  visibility: hidden;
+  pointer-events: none;
+  touch-action: none;
+  background-color: transparentize($content_bg, 0.05);
 
-  &::after {
-    content: ' ';
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 10px 10px 10px;
-    border-color: transparent transparent lighten($menu_bg, 6%) transparent;
-    position: absolute;
-    top: -11px;
-    right: 10px;
+  &.visible {
+    visibility: visible;
+    pointer-events: all;
+    touch-action: initial;
   }
 
-  &.top::after {
+  &.fixed {
+    z-index: 100;
+  }
+
+  &.translucent {
+    @include blur($content_bg, 15px, 0.5);
+  }
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  position: absolute;
+
+  [data-popper-placement*='bottom'] & {
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent lighten($menu_bg, 6%) transparent;
+    top: -10px;
+  }
+
+  [data-popper-placement*='top'] & {
     border-width: 10px 10px 0 10px;
-    border-color: darken($menu_bg, 8%) transparent transparent transparent;
-    top: auto;
-    bottom: -11px;
+    border-color: lighten($menu_bg, 6%) transparent transparent transparent;
+    bottom: -10px;
+  }
+
+  [data-popper-placement*='right'] & {
+    border-width: 10px 10px 10px 0;
+    border-color: transparent lighten($menu_bg, 6%) transparent transparent;
+    left: -10px;
+  }
+
+  [data-popper-placement*='left'] & {
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent lighten($menu_bg, 6%);
+    right: -10px;
   }
 }

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { adjustHue } from 'color2k';
 
-import { normalizeBrightColor } from '~/utils/color';
+import { generateGradientFromColor, normalizeBrightColor } from '~/utils/color';
 import { stringToColour } from '~/utils/dom';
 
 export const useColorGradientFromString = (
@@ -16,9 +16,5 @@ export const useColorGradientFromString = (
       return '';
     }
 
-    const color = normalizeBrightColor(stringToColour(val), saturation, lightness);
-    const second = normalizeBrightColor(adjustHue(color, 45), saturation, lightness);
-    const third = normalizeBrightColor(adjustHue(color, 90), saturation, lightness);
-
-    return `linear-gradient(${angle}deg, ${color}, ${second}, ${third})`;
+    return generateGradientFromColor(val, saturation, lightness, angle);
   }, [angle, lightness, saturation, val]);

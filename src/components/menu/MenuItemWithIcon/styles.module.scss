@@ -18,12 +18,11 @@
 
 .icon {
   flex: 0 0 20px;
-  margin-right: $gap;
 }
 
 .text {
   flex: 1;
   text-align: left;
-  padding-right: $gap;
+  padding: 0 $gap;
   white-space: nowrap;
 }
