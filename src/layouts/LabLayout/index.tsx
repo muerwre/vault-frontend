@@ -1,6 +1,4 @@
 import React, { FC } from 'react';
-
-import { Superpower } from '~/components/boris/Superpower';
 import { Group } from '~/components/containers/Group';
 import { Sticky } from '~/components/containers/Sticky';
 import { LabHead } from '~/components/lab/LabHead';

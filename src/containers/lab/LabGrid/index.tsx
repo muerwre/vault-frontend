@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-import Masonry from 'react-masonry-css';
-
 import { Columns } from '~/components/containers/Columns';
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
 import { LabNoResults } from '~/components/lab/LabNoResults';

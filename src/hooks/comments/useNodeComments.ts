@@ -6,10 +6,15 @@ import { IComment } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useNodeComments = (nodeId: number, fallbackData?: IComment[]) => {
-  const { comments, isLoading, onLoadMoreComments, hasMore, data, mutate, isLoadingMore } = useGetComments(
-    nodeId,
-    fallbackData
-  );
+  const {
+    comments,
+    isLoading,
+    onLoadMoreComments,
+    hasMore,
+    data,
+    mutate,
+    isLoadingMore,
+  } = useGetComments(nodeId, fallbackData);
 
   const onDelete = useCallback(
     async (id: IComment['id'], isLocked: boolean) => {

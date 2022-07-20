@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { ImageUpload } from '~/components/upload/ImageUpload';
 import { ImagePresets } from '~/constants/urls';

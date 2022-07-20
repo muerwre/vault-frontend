@@ -1,12 +1,4 @@
-import React, {
-  createContext,
-  FC,
-  PropsWithChildren,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import React, { createContext, FC, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react';
 
 import { isNil } from '~/utils/ramda';
 

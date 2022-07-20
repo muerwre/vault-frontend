@@ -1,7 +1,6 @@
 import React, { VFC } from 'react';
 
 import Tippy from '@tippyjs/react';
-import classNames from 'classnames';
 
 import { Icon } from '~/components/input/Icon';
 import { MenuButton, MenuItemWithIcon, SeparatedMenu } from '~/components/menu';

@@ -2,10 +2,7 @@ import React, { VFC } from 'react';
 
 import classNames from 'classnames';
 
-import { Square } from '~/components/common/Square';
-import { Card } from '~/components/containers/Card';
 import { Filler } from '~/components/containers/Filler';
-import { Grid } from '~/components/containers/Grid';
 import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
 import { VerticalMenu } from '~/components/menu/VerticalMenu';
