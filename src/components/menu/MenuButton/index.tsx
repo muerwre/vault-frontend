@@ -13,17 +13,19 @@ interface MenuButtonProps {
   position?: Placement;
   icon?: ReactNode;
   className?: string;
-  translucentMenu?: boolean;
   activate?: 'hover' | 'focus';
+  fixed?: boolean;
+  translucent?: boolean;
 }
 
 const MenuButton: FC<MenuButtonProps> = ({
-  position = 'bottom-end',
+  position = 'auto',
   children,
   className,
   icon = <Icon icon="dots-vertical" size={24} />,
-  translucentMenu,
+  translucent = true,
   activate = 'focus',
+  fixed,
 }) => {
   const focus = useFocusEvent(false, 150);
   const hover = useFocusEvent(false, 150);
@@ -34,12 +36,13 @@ const MenuButton: FC<MenuButtonProps> = ({
 
   const popper = usePopper(referenceElement, popperElement, {
     placement: position,
+    strategy: fixed ? 'fixed' : 'absolute',
     modifiers: [
       { name: 'arrow', options: { element: arrowElement } },
       {
         name: 'offset',
         options: {
-          offset: [5, 10],
+          offset: [-10, 10],
         },
       },
     ],
@@ -65,7 +68,8 @@ const MenuButton: FC<MenuButtonProps> = ({
         ref={setPopperElement}
         {...popper.attributes.popper}
         className={classNames(styles.popper, {
-          [styles.translucent]: translucentMenu,
+          [styles.fixed]: fixed,
+          [styles.translucent]: translucent,
           [styles.visible]: visible,
         })}
       >

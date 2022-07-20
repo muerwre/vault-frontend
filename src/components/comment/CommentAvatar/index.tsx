@@ -20,7 +20,6 @@ const CommentAvatar: FC<Props> = ({ user, className }) => {
       icon={
         <Avatar url={path(['photo', 'url'], user)} username={user.username} className={className} />
       }
-      translucentMenu
     >
       <ProfileQuickInfo user={user} />
     </MenuButton>
