@@ -111,7 +111,6 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
         keyboard={keyboard}
         grabCursor
         autoHeight
-        zoom
         navigation
       >
         {images.map((file, i) => (
