@@ -42,7 +42,13 @@ const MenuButton: FC<MenuButtonProps> = ({
       {
         name: 'offset',
         options: {
-          offset: [-10, 10],
+          offset: [0, 10],
+        },
+      },
+      {
+        name: 'preventOverflow',
+        options: {
+          padding: 10,
         },
       },
     ],
