@@ -21,10 +21,6 @@ const ProfileQuickInfo: FC<ProfileQuickInfoProps> = ({ user }) => {
   return (
     <Group className={styles.wrapper}>
       <Group className={styles.top} horizontal>
-        <div>
-          <Avatar url={path(['photo', 'url'], user)} username={user.username} />
-        </div>
-
         <Filler className={styles.names}>
           <h5 className={styles.fullname}>{user.fullname || user.username}</h5>
           <div className={styles.username}>~{user.username}</div>
