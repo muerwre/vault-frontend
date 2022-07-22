@@ -8,7 +8,6 @@ import { apiGetNode, apiGetNodeComments, getNodeDiff } from '~/api/node';
 import { NodeHeadMetadata } from '~/components/node/NodeHeadMetadata';
 import { COMMENTS_DISPLAY } from '~/constants/node';
 import { useNodeComments } from '~/hooks/comments/useNodeComments';
-import { useScrollToTop } from '~/hooks/dom/useScrollToTop';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useNodePageParams } from '~/hooks/node/useNodePageParams';
@@ -106,8 +105,6 @@ const NodePage: FC<Props> = observer(props => {
     parseInt(id, 10)
   );
   const [canEdit] = useNodePermissions(node);
-
-  useScrollToTop([id, isLoadingComments]);
 
   if (!node) {
     // TODO: do something here
