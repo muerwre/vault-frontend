@@ -14,7 +14,7 @@ const prepareInput = (input: string): string[] => {
     .map((title: string) =>
       title
         .trim()
-        .substr(0, 32)
+        .substring(0, 64)
         .toLowerCase()
     )
     .filter(el => el.length > 0);
@@ -42,6 +42,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
       }
 
       const items = prepareInput(value);
+      console.log(items);
 
       if (items.length > 1) {
         onAppend(items.slice(0, items.length - 1));
@@ -69,6 +70,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
         const created = prepareInput(input);
 
         if (created.length) {
+          console.log('appending?!!')
           onAppend(created);
         }
 
@@ -104,6 +106,11 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
   const onAutocompleteSelect = useCallback(
     (val: string) => {
       setInput('');
+
+      if (!val.trim()) {
+        return;
+      }
+      
       onAppend([val]);
     },
     [onAppend, setInput]
