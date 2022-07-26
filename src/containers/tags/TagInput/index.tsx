@@ -42,7 +42,6 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
       }
 
       const items = prepareInput(value);
-      console.log(items);
 
       if (items.length > 1) {
         onAppend(items.slice(0, items.length - 1));
