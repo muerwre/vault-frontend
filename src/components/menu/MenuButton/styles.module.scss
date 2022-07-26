@@ -1,9 +1,9 @@
+@import "src/styles/variables.scss";
+
 .menu {
   position: relative;
   cursor: pointer;
 }
-
-@import "src/styles/variables.scss";
 
 .popper {
   @include outer_shadow;
@@ -32,32 +32,5 @@
 }
 
 .arrow {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  position: absolute;
-
-  [data-popper-placement*='bottom'] & {
-    border-width: 0 10px 10px 10px;
-    border-color: transparent transparent lighten($menu_bg, 6%) transparent;
-    top: -10px;
-  }
-
-  [data-popper-placement*='top'] & {
-    border-width: 10px 10px 0 10px;
-    border-color: lighten($menu_bg, 6%) transparent transparent transparent;
-    bottom: -10px;
-  }
-
-  [data-popper-placement*='right'] & {
-    border-width: 10px 10px 10px 0;
-    border-color: transparent lighten($menu_bg, 6%) transparent transparent;
-    left: -10px;
-  }
-
-  [data-popper-placement*='left'] & {
-    border-width: 10px 0 10px 10px;
-    border-color: transparent transparent transparent lighten($menu_bg, 6%);
-    right: -10px;
-  }
+  @include popper_arrow;
 }

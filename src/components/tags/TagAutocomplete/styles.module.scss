@@ -8,7 +8,9 @@
 $row_height: 24px;
 
 .window {
-  box-shadow: transparentize(white, 0.9) 0 0 0 1px;
+  @include outer_shadow;
+  @include blur;
+
   position: absolute;
   top: -2px;
   right: -2px;
@@ -19,14 +21,22 @@ $row_height: 24px;
   border-radius: 4px;
   animation: appear 0.25s forwards;
   visibility: hidden;
+  pointer-events: none;
+  touch-action: none;
 
   &.visible {
     visibility: visible;
+    pointer-events: all;
+    touch-action: initial;
   }
 }
 
 .scroll {
   overflow: hidden;
-  padding: 0 0 $gap * 0.5;
+  padding: 0;
   border-radius: 4px;
+}
+
+.arrow {
+  @include popper_arrow;
 }

@@ -1,6 +1,6 @@
 @import "src/styles/variables";
 
-$row_height: 24px;
+$row_height: 26px;
 
 .row {
   height: $row_height;
@@ -18,7 +18,7 @@ $row_height: 24px;
 
   &:hover, &.selected {
     opacity: 1;
-    background: transparentize($wisegreen, 0.5);
+    background: transparentize($wisegreen, 0.6);
   }
 
   &.right {

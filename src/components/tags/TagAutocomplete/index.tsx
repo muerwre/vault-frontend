@@ -35,15 +35,17 @@ const TagAutocomplete: VFC<TagAutocompleteProps> = ({
   );
   const scroll = useRef<HTMLDivElement>(null);
   const wrapper = useRef<HTMLDivElement>(null);
+  const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
 
   const pop = usePopper(wrapper?.current?.parentElement, wrapper.current, {
     placement: 'bottom-end',
     strategy: 'fixed',
     modifiers: [
+      { name: 'arrow', options: { element: arrowElement } },
       {
         name: 'offset',
         options: {
-          offset: [0, 4],
+          offset: [0, 10],
         },
       },
     ],
@@ -93,6 +95,7 @@ const TagAutocomplete: VFC<TagAutocompleteProps> = ({
       style={pop.styles.popper}
       {...pop.attributes.popper}
     >
+      <div style={pop.styles.arrow} ref={setArrowElement} className={styles.arrow} />
       <div className={styles.scroll} ref={scroll}>
         <TagAutocompleteRow
           selected={selected === -1}
