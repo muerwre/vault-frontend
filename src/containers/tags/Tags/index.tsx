@@ -9,8 +9,8 @@ import { separateTags } from '~/utils/tag';
 
 type IProps = HTMLAttributes<HTMLDivElement> & {
   tags: Partial<ITag>[];
-  is_deletable?: boolean;
-  is_editable?: boolean;
+  deletable?: boolean;
+  editable?: boolean;
   onTagsChange?: (tags: string[]) => void;
   onTagClick?: (tag: Partial<ITag>) => void;
   onTagDelete?: (id: ITag['ID']) => void;
@@ -18,8 +18,8 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
 
 export const Tags: FC<IProps> = ({
   tags,
-  is_deletable,
-  is_editable,
+  deletable,
+  editable,
   onTagsChange,
   onTagClick,
   onTagDelete,
@@ -78,7 +78,7 @@ export const Tags: FC<IProps> = ({
           key={tag.title}
           tag={tag}
           onClick={onTagClick}
-          is_deletable={is_deletable}
+          deletable={deletable}
           onDelete={onTagDelete}
         />
       ))}
@@ -88,16 +88,16 @@ export const Tags: FC<IProps> = ({
           key={tag.title}
           tag={tag}
           onClick={onTagClick}
-          is_deletable={is_deletable}
+          deletable={deletable}
           onDelete={onTagDelete}
         />
       ))}
 
       {data.map(title => (
-        <Tag key={title} tag={{ title }} is_editing />
+        <Tag key={title} tag={{ title }} editing />
       ))}
 
-      {is_editable && (
+      {editable && (
         <TagInput
           onAppend={onAppendTag}
           onClearTag={onClearTag}

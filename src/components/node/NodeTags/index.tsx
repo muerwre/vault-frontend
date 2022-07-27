@@ -17,11 +17,11 @@ const NodeTags: FC<IProps> = memo(
     return (
       <Tags
         tags={tags}
-        is_editable={is_editable}
+        editable={is_editable}
         onTagsChange={onChange}
         onTagClick={onTagClick}
         onTagDelete={onTagDelete}
-        is_deletable={is_deletable}
+        deletable={is_deletable}
       />
     );
   }

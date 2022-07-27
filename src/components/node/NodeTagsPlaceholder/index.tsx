@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const NodeTagsPlaceholder: FC<IProps> = memo(({ is_editable, tags, onChange }) => (
-  <Tags tags={tags} is_editable={is_editable} onTagsChange={onChange} />
+  <Tags tags={tags} editable={is_editable} onTagsChange={onChange} />
 ));
 
 export { NodeTagsPlaceholder };

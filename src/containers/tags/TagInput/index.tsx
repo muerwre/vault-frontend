@@ -126,7 +126,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
 
   return (
     <div className={styles.wrap} ref={wrapper}>
-      <TagWrapper title={input || placeholder} has_input={true} feature={feature}>
+      <TagWrapper title={input || placeholder} hasInput={true} feature={feature}>
         <input
           type="text"
           value={input}

@@ -9,10 +9,10 @@ import styles from './styles.module.scss';
 interface IProps {
   feature?: string;
   size?: string;
-  is_deletable?: boolean;
-  is_hoverable?: boolean;
-  is_editing?: boolean;
-  has_input?: boolean;
+  deletable?: boolean;
+  hoverable?: boolean;
+  editing?: boolean;
+  hasInput?: boolean;
   onClick?: () => void;
   onDelete?: () => void;
   title?: string;
@@ -22,15 +22,15 @@ const TagWrapper: FC<IProps> = ({
   children,
   feature,
   size,
-  is_deletable,
-  is_hoverable,
-  is_editing,
-  has_input,
+  deletable,
+  hoverable,
+  editing,
+  hasInput,
   onClick,
   onDelete,
   title = '',
 }) => {
-  const deletable = is_deletable && !is_editing && !has_input;
+  const canBeDeleted = deletable && !editing && !hasInput;
   const onDeletePress = useCallback(
     event => {
       if (!onDelete) {
@@ -46,10 +46,10 @@ const TagWrapper: FC<IProps> = ({
   return (
     <div
       className={classNames(styles.tag, feature, size, {
-        is_hoverable,
-        is_editing,
-        deletable,
-        input: has_input,
+        is_hoverable: hoverable,
+        is_editing: editing,
+        deletable: canBeDeleted,
+        input: hasInput,
         clickable: onClick,
       })}
       onClick={onClick}

@@ -13,9 +13,9 @@ interface IProps {
   tag: Partial<ITag>;
   size?: 'normal' | 'big';
 
-  is_deletable?: boolean;
-  is_hoverable?: boolean;
-  is_editing?: boolean;
+  deletable?: boolean;
+  hoverable?: boolean;
+  editing?: boolean;
 
   onBlur?: FocusEventHandler<HTMLInputElement>;
   onClick?: (tag: Partial<ITag>) => void;
@@ -24,9 +24,9 @@ interface IProps {
 
 const Tag: FC<IProps> = ({
   tag,
-  is_deletable,
-  is_hoverable,
-  is_editing,
+  deletable: deletable,
+  hoverable: hoverable,
+  editing: editing,
   size = 'normal',
   onClick,
   onDelete,
@@ -48,9 +48,9 @@ const Tag: FC<IProps> = ({
     <TagWrapper
       feature={getTagFeature(tag)}
       size={size}
-      is_deletable={is_deletable}
-      is_hoverable={is_hoverable}
-      is_editing={is_editing}
+      deletable={deletable}
+      hoverable={hoverable}
+      editing={editing}
       onClick={onClick && onClickHandler}
       onDelete={onDeleteHandler}
       title={tag.title}

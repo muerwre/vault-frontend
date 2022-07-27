@@ -1,5 +1,9 @@
 @import "src/styles/variables";
 
+.container {
+  width: 100vw;
+}
+
 .menu {
   flex: 1 0;
   padding: $gap;

@@ -1,19 +1,22 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 
 import { useRouter } from 'next/router';
 
 import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
-import { Dialog } from '~/constants/modal';
+import { SidebarName } from '~/constants/sidebar';
 import { URLS } from '~/constants/urls';
-import { useShowModal } from '~/hooks/modal/useShowModal';
+import { useSidebar } from '~/utils/providers/SidebarProvider';
 
 import styles from './styles.module.scss';
 
 export interface BorisSuperpowersProps {}
 
 const BorisSuperpowers: FC<BorisSuperpowersProps> = () => {
-  const openProfileSidebar = useShowModal(Dialog.ProfileSidebar);
+  const { open } = useSidebar();
+  const openProfileSidebar = useCallback(() => {
+    open(SidebarName.Settings);
+  }, [open]);
   const { push } = useRouter();
 
   return (
@@ -21,7 +24,7 @@ const BorisSuperpowers: FC<BorisSuperpowersProps> = () => {
       <h2>Штучи, находящиеся в разработке</h2>
 
       <div className={styles.grid}>
-        <Button size="mini" onClick={() => openProfileSidebar({})}>
+        <Button size="mini" onClick={() => openProfileSidebar()}>
           Открыть
         </Button>
         <div className={styles.label}>Профиль в сайдбаре</div>

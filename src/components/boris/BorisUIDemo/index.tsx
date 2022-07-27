@@ -1,11 +1,9 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 
 import { Card } from '~/components/containers/Card';
 import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
-import { Dialog } from '~/constants/modal';
-import { useShowModal } from '~/hooks/modal/useShowModal';
 import markdown from '~/styles/common/markdown.module.scss';
 
 import styles from './styles.module.scss';
@@ -14,7 +12,6 @@ interface IProps {}
 
 const BorisUIDemo: FC<IProps> = () => {
   const [text, setText] = useState('');
-  const openProfileSidebar = useShowModal(Dialog.ProfileSidebar);
 
   return (
     <Card className={styles.card}>
@@ -24,9 +21,6 @@ const BorisUIDemo: FC<IProps> = () => {
           Простая демонстрация элементов интерфейса. Используется, в основном, как подсказка при
           разработке
         </p>
-
-        <h2>Тестовые фичи</h2>
-        <Button onClick={() => openProfileSidebar({})}>Профиль в сайдбаре</Button>
 
         <h2>Инпуты</h2>
 

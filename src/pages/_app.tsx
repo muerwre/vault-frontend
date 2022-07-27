@@ -18,8 +18,9 @@ import { AuthProvider } from '~/utils/providers/AuthProvider';
 import { MetadataProvider } from '~/utils/providers/MetadataProvider';
 import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
 import { SearchProvider } from '~/utils/providers/SearchProvider';
+import { SidebarProvider } from '~/utils/providers/SidebarProvider';
 import { ToastProvider } from '~/utils/providers/ToastProvider';
-
+ 
 import '~/styles/main.scss';
 import 'tippy.js/dist/tippy.css';
 
@@ -41,22 +42,24 @@ export default class MyApp extends App {
                   <AudioPlayerProvider>
                     <MetadataProvider>
                       <AuthProvider>
-                        <Head>
-                          <meta
-                            name="viewport"
-                            content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=0"
-                          />
+                        <SidebarProvider>
+                          <Head>
+                            <meta
+                              name="viewport"
+                              content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=0"
+                              />
 
-                          {!!canonicalURL && <link rel="canonical" href={canonicalURL} />}
-                        </Head>
+                            {!!canonicalURL && <link rel="canonical" href={canonicalURL} />}
+                          </Head>
 
-                        <MainLayout>
-                          <ToastProvider />
-                          <Modal />
-                          <Sprites />
-                          <Component {...pageProps} />
-                        </MainLayout>
-                        <BottomContainer />
+                          <MainLayout>
+                            <ToastProvider />
+                            <Modal />
+                            <Sprites />
+                            <Component {...pageProps} />
+                          </MainLayout>
+                          <BottomContainer />
+                        </SidebarProvider>
                       </AuthProvider>
                     </MetadataProvider>
                   </AudioPlayerProvider>
