@@ -12,7 +12,7 @@ import { ERROR_LITERAL } from '~/constants/errors';
 import { ProfileAccounts } from '~/containers/profile/ProfileAccounts';
 import { usePatchUser } from '~/hooks/auth/usePatchUser';
 import { useUser } from '~/hooks/auth/useUser';
-import { useProfileForm } from '~/hooks/profile/useProfileForm';
+import { useSettingsForm } from '~/utils/providers/SettingsProvider';
 import { has } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
@@ -23,7 +23,7 @@ const ProfileSettings: FC = () => {
   const { user } = useUser();
   const { save } = usePatchUser();
 
-  const { handleSubmit, values, errors, handleChange } = useProfileForm(
+  const { handleSubmit, values, errors, handleChange } = useSettingsForm(
     { ...user, password: '', newPassword: '' },
     save
   );

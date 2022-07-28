@@ -1,10 +1,12 @@
-import { useCallback, useRef } from 'react';
+import { FC, PropsWithChildren, useCallback, useRef } from 'react';
 
-import { FormikConfig, useFormik } from 'formik';
+import { FormikConfig, useFormik, FormikProvider, useFormikContext } from 'formik';
 import { Asserts, object, string } from 'yup';
 
 import { ERRORS } from '~/constants/errors';
 import { getRandomPhrase } from '~/constants/phrases';
+import { usePatchUser } from '~/hooks/auth/usePatchUser';
+import { useUser } from '~/hooks/auth/useUser';
 import { IUser } from '~/types/auth';
 import { getValidationErrors } from '~/utils/errors/getValidationErrors';
 import { showErrorToast } from '~/utils/errors/showToast';
@@ -25,7 +27,7 @@ const validationSchema = object({
 
 export type ProfileFormData = Asserts<typeof validationSchema>;
 
-export const useProfileForm = (
+export const useSettingsForm = (
   values: ProfileFormData,
   submitter: (data: ProfileFormData) => Promise<IUser>
 ) => {
@@ -62,3 +64,17 @@ export const useProfileForm = (
     validationSchema,
   });
 };
+
+export const SettingsProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
+  const { user } = useUser();
+  const { save } = usePatchUser();
+
+  const formik = useSettingsForm(
+    { ...user, password: '', newPassword: '' }, 
+    save
+  );
+
+  return <FormikProvider value={formik}>{children}</FormikProvider>
+}
+
+export const useSettings = () => useFormikContext<ProfileFormData>();
