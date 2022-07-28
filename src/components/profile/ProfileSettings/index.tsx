@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import classNames from 'classnames';
 
+import { Superpower } from '~/components/boris/Superpower';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
@@ -30,29 +31,53 @@ const ProfileSettings: FC = () => {
   return (
     <form className={styles.wrap} onSubmit={handleSubmit}>
       <Group>
-        <Group className={styles.pad}>
-          <div className={styles.pad__title}>
-            <span>О себе</span>
-          </div>
+        <Group horizontal className={styles.base_info}>
+          <Superpower>
+            <div className={classNames(styles.avatar, styles.pad)}>
+              <div className={styles.pad__title}>
+                <span>Фото</span>
+                <small>Будет здесь. Кстати, ты видишь это, потому что включил суперсилы в Борисе.</small>
+              </div>
+            </div>
+          </Superpower>
 
-          <InputText
-            value={values.fullname}
-            handler={handleChange('fullname')}
-            title="Полное имя"
-            error={getError(errors.fullname)}
-          />
+          <Group className={styles.pad}>
+            <div className={styles.pad__title}>
+              <span>О себе</span>
+            </div>
 
-          <Textarea
-            value={values.description}
-            handler={handleChange('description')}
-            title="Описание"
-          />
+            <InputText
+              value={values.fullname}
+              handler={handleChange('fullname')}
+              title="Полное имя"
+              error={getError(errors.fullname)}
+            />
 
-          <div className={styles.small}>
-            Описание будет видно на странице профиля. Здесь работают те же правила оформления, что и
-            в комментариях.
-          </div>
+            <Textarea
+              value={values.description}
+              handler={handleChange('description')}
+              title="Описание"
+            />
+
+            <div className={styles.small}>
+              Описание будет показываться при клике наведении на вашу аватарку.
+            </div>
+          </Group>
         </Group>
+
+        <Superpower>
+          <div className={styles.pad}>
+            <div className={styles.pad__title}>
+              <span>Обложка</span>
+              <small>Будет здесь. Кстати, ты видишь это, потому что включил суперсилы в Борисе.</small>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+            </div>
+          </div>
+        </Superpower>
 
         <Filler />
 
@@ -109,6 +134,16 @@ const ProfileSettings: FC = () => {
 
           <ProfileAccounts />
         </div>
+
+        <Superpower>
+          <div className={styles.pad}>
+            <div className={styles.pad__title}>
+              <span>Всякие приятные штуковины</span>
+              <small>Будут здесь. Кстати, ты видишь это, потому что включил суперсилы в Борисе.</small>
+              <br />
+            </div>
+          </div>
+        </Superpower>
 
         <Group horizontal className={styles.buttons}>
           <Filler />

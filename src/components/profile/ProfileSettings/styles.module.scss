@@ -49,3 +49,11 @@ $pad_usual: mix(white, $content_bg, 10%);
 
 .grid {
 }
+
+div.base_info.base_info {
+  align-items: stretch;
+}
+
+.avatar {
+  flex: 0 0 150px;
+}
