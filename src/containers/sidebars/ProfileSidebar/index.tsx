@@ -15,7 +15,7 @@ interface ProfileSidebarProps extends DialogComponentProps {
 const ProfileSidebar: VFC<ProfileSidebarProps> = ({ onRequestClose }) => {
   return (
     <SidebarWrapper onClose={onRequestClose}>
-      <SidebarStack initialTab={0}>
+      <SidebarStack>
         <SidebarStackCard headerFeature="close" title="Профиль" onBackPress={onRequestClose}>
           <ProfileSidebarMenu onClose={onRequestClose} />
         </SidebarStackCard>

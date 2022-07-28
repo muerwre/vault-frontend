@@ -14,6 +14,8 @@ import { ProfileStats } from '~/containers/profile/ProfileStats';
 import { useAuth } from '~/hooks/auth/useAuth';
 import markdown from '~/styles/common/markdown.module.scss';
 
+import { ProfileSidebarLogoutButton } from '../ProfileSidebarLogoutButton';
+
 import styles from './styles.module.scss';
 
 interface ProfileSidebarMenuProps {
@@ -49,9 +51,7 @@ const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
 
       <Group className={styles.buttons} horizontal>
         <Filler />
-        <MenuButton icon={<Button color="link"><Icon icon="dots-vertical" size={24} /></Button>} position="top-end">
-          <MenuItemWithIcon onClick={onLogout}>Выйти</MenuItemWithIcon>
-        </MenuButton>
+        <ProfileSidebarLogoutButton onLogout={onLogout}/>
       </Group>
     </div>
   );

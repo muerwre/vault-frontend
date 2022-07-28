@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 
 import { Placement } from '@popperjs/core';
 import classNames from 'classnames';
@@ -55,6 +55,10 @@ const MenuButton: FC<MenuButtonProps> = ({
   });
 
   const visible = activate === 'focus' ? focus.focused : hover.focused;
+
+  useEffect(() => {
+    popper.update?.();
+  }, [visible]);
 
   return (
     <>
