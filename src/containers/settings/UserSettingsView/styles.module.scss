@@ -1,0 +1,25 @@
+@import "src/styles/variables";
+
+$pad_danger: mix($red, $content_bg, 70%);
+$pad_usual: mix(white, $content_bg, 10%);
+
+.wrap {
+  padding: $gap;
+  z-index: 4;
+}
+
+.small {
+  font: $font_12_regular;
+  padding: 0 $gap 0;
+}
+
+.grid {
+}
+
+div.base_info.base_info {
+  align-items: stretch;
+}
+
+.avatar {
+  flex: 0 0 150px;
+}

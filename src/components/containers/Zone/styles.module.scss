@@ -1,0 +1,36 @@
+@import "src/styles/variables";
+
+$pad_danger: mix($red, $content_bg, 70%);
+$pad_usual: mix(white, $content_bg, 10%);
+
+.title {
+  position: relative;
+
+  span {
+    position: absolute;
+    top: -5px;
+    left: $radius;
+    transform: translate(0, -100%);
+    background: $pad_usual;
+    border-radius: 4px;
+    font: $font_10_semibold;
+    line-height: 12px;
+    padding: 2px $gap * 0.5;
+    text-transform: uppercase;
+
+    .danger & {
+      background: $pad_danger;
+    }
+  }
+}
+
+.pad {
+  padding: $gap * 1.5 $gap $gap;
+  box-shadow: inset $pad_usual 0 0 0 2px;
+  border-radius: $radius;
+  position: relative;
+
+  &.danger {
+    box-shadow: inset $pad_danger 0 0 0 2px;
+  }
+}
