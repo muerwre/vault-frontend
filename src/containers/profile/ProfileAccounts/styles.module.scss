@@ -48,11 +48,10 @@
   &__photo {
     width: 28px;
     height: 28px;
-    background: 50% 50% no-repeat;
+    background: 50% 50% no-repeat $content_bg;
     background-size: cover;
     border-radius: 2px;
     position: relative;
-    background: $content_bg;
   }
 
   &__provider {
