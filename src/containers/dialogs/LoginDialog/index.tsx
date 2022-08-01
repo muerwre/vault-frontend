@@ -1,6 +1,7 @@
 import React, { FC, useCallback } from "react";
 
 import { LoginDialogButtons } from "~/components/auth/login/LoginDialogButtons";
+import { LoginScene } from "~/components/auth/login/LoginScene";
 import { Group } from "~/components/containers/Group";
 import { Padder } from "~/components/containers/Padder";
 import { BetterScrollDialog } from "~/components/dialogs/BetterScrollDialog";
@@ -45,7 +46,7 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
           width={300}
           onClose={onRequestClose}
           footer={<LoginDialogButtons openOauthWindow={openOauthWindow} />}
-          backdrop={<div className={styles.backdrop} />}
+          backdrop={<LoginScene />}
         >
           <Padder>
             <div className={styles.wrap}>
