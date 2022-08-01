@@ -1,7 +1,6 @@
 import React, {
   FC,
   memo,
-  MouseEventHandler,
   useCallback,
   useEffect,
   useRef,
@@ -55,22 +54,23 @@ const layers: Layer[] = [
 ];
 
 const LoginScene: FC<LoginSceneProps> = memo(() => {
-  const ref = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
+  const imageRefs = useRef<Array<SVGImageElement | null>>([]);
   const { isMobile } = useWindowSize();
 
   const onMouseMove = useCallback(
     (event: MouseEvent): any => {
-      if (!ref.current) {
+      if (!containerRef.current) {
         return;
       }
 
-      const { x, width } = ref.current.getBoundingClientRect();
+      const { x, width } = containerRef.current.getBoundingClientRect();
       const middle = (width - x) / 2;
       const shift = event.pageX / middle / 2 - 0.5;
 
-      layers.map((it, index) => {
-        const target = document.getElementById(`LoginScene__${index}`);
+      layers.forEach((it, index) => {
+        const target = imageRefs.current[index];
 
         if (target) {
           target.style.transform = `translate(${shift *
@@ -79,7 +79,7 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
         }
       });
     },
-    [ref],
+    [containerRef],
   );
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
   }
 
   return (
-    <div className={styles.scene} ref={ref}>
+    <div className={styles.scene} ref={containerRef}>
       <svg
         width="100%"
         height="100%"
@@ -125,7 +125,7 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
 
         {layers.map((it, index) => (
           <image
-            id={`LoginScene__${index}`}
+            ref={it => imageRefs.current.push(it)}
             key={it.src}
             href={it.src}
             width={it.width}
