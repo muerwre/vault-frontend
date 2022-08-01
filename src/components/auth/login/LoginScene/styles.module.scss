@@ -10,6 +10,7 @@
 
 .image {
   transition: opacity 1s;
+  will-change: opacity, transform;
 
   @include tablet {
     display: none;
