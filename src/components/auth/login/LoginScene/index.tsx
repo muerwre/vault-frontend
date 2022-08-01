@@ -8,6 +8,8 @@ import React, {
   useState,
 } from "react";
 
+import { useWindowSize } from "~/hooks/dom/useWindowSize";
+
 import styles from "./styles.module.scss";
 
 interface LoginSceneProps {}
@@ -55,6 +57,7 @@ const layers: Layer[] = [
 const LoginScene: FC<LoginSceneProps> = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
+  const { isMobile } = useWindowSize();
 
   const onMouseMove = useCallback(
     (event: MouseEvent): any => {
@@ -67,9 +70,13 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
       const shift = event.pageX / middle / 2 - 0.5;
 
       layers.map((it, index) => {
-        document.getElementById(
-          `LoginScene__${index}`,
-        )?.style.transform = `translate(${shift * it.velocity * 200}px, 0)`;
+        const target = document.getElementById(`LoginScene__${index}`);
+
+        if (target) {
+          target.style.transform = `translate(${shift *
+            it.velocity *
+            200}px, 0)`;
+        }
       });
     },
     [ref],
@@ -79,6 +86,10 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
     document.addEventListener("mousemove", onMouseMove);
     return () => document.removeEventListener("mousemove", onMouseMove);
   }, []);
+
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div className={styles.scene} ref={ref}>
