@@ -25,9 +25,9 @@
      inkscape:deskcolor="#505050"
      inkscape:document-units="px"
      showgrid="false"
-     inkscape:zoom="0.40049271"
-     inkscape:cx="1425.7438"
-     inkscape:cy="488.14871"
+     inkscape:zoom="0.75321075"
+     inkscape:cx="1096.6386"
+     inkscape:cy="392.32047"
      inkscape:window-width="1440"
      inkscape:window-height="847"
      inkscape:window-x="0"
@@ -1225,12 +1225,21 @@
        x="0"
        y="0"
        ry="0.18190885" />
-    <circle
-       style="opacity:0.16860465;fill:#ffffff;stroke-width:0.264583"
-       id="path6442"
-       cx="326.3584"
-       cy="55.494141"
-       r="17.176758" />
+    <g
+       id="g6014"
+       style="display:inline"
+       transform="matrix(0.28463303,0,0,0.28463303,569.20383,105.49045)">
+      <circle
+         style="opacity:0.168605;fill:#ffffff;stroke-width:0.929558"
+         id="path6442-6"
+         cx="-854.82867"
+         cy="-171.97589"
+         r="60.347027" />
+      <path
+         id="circle3030"
+         style="opacity:0.116279;fill:#ffffff;stroke-width:0.929558"
+         d="m -854.82925,-232.32266 a 60.347027,60.347027 0 0 0 -12.32029,1.4252 60.347027,60.347027 0 0 1 47.38756,58.92172 60.347027,60.347027 0 0 1 -47.7071,58.85273 60.347027,60.347027 0 0 0 12.63983,1.4942 60.347027,60.347027 0 0 0 60.34693,-60.34693 60.347027,60.347027 0 0 0 -60.34693,-60.34692 z" />
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
