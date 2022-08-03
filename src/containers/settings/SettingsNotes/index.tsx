@@ -1,56 +1,69 @@
-import React, { useState, VFC } from 'react';
+import { FC, useState, VFC } from "react";
 
-import { Card } from '~/components/containers/Card';
-import { Columns } from '~/components/containers/Columns';
-import { Filler } from '~/components/containers/Filler';
-import { Group } from '~/components/containers/Group';
-import { Padder } from '~/components/containers/Padder';
-import { Button } from '~/components/input/Button';
-import { Icon } from '~/components/input/Icon';
-import { InputText } from '~/components/input/InputText';
-import { Textarea } from '~/components/input/Textarea';
-import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
-import { NoteCard } from '~/components/notes/NoteCard';
-import { useGetNotes } from '~/hooks/notes/useGetNotes';
+import { Filler } from "~/components/containers/Filler";
+import { Group } from "~/components/containers/Group";
+import { Button } from "~/components/input/Button";
+import { NoteCard } from "~/components/notes/NoteCard";
+import { NoteCreationForm } from "~/components/notes/NoteCreationForm";
+import { NoteProvider, useNotesContext } from "~/utils/providers/NoteProvider";
+
+import styles from "./styles.module.scss";
 
 interface SettingsNotesProps {}
 
-const SettingsNotes: VFC<SettingsNotesProps> = () => {
-  const [text, setText] = useState('');
-  const { notes } = useGetNotes('');
+const List = () => {
+  const { notes } = useNotesContext();
 
   return (
-    <div>
-      <Padder>
-        <Group horizontal>
-          <HorizontalMenu>
-            <HorizontalMenu.Item active>Новые</HorizontalMenu.Item>
-            <HorizontalMenu.Item>Старые</HorizontalMenu.Item>
-          </HorizontalMenu>
+    <>
+      {notes.map(note => (
+        <NoteCard
+          key={note.id}
+          content={note.content}
+          createdAt={note.created_at}
+        />
+      ))}
+    </>
+  );
+};
 
-          <Filler />
+const Form: FC<{ onCancel: () => void }> = ({ onCancel }) => {
+  const { submit } = useNotesContext();
+  return <NoteCreationForm onSubmit={submit} onCancel={onCancel} />;
+};
 
-          <InputText suffix={<Icon icon="search" size={24} />} />
-        </Group>
-      </Padder>
+const SettingsNotes: VFC<SettingsNotesProps> = () => {
+  const [formIsShown, setFormIsShown] = useState(false);
 
-      <Columns>
-        <Card>
-          <Group>
-            <Textarea handler={setText} value={text} />
-
-            <Group horizontal>
+  return (
+    <NoteProvider>
+      <div className={styles.grid}>
+        <div className={styles.head}>
+          {formIsShown ? (
+            <Form onCancel={() => setFormIsShown(false)} />
+          ) : (
+            <Group className={styles.showForm} horizontal>
               <Filler />
-              <Button size="mini">Добавить</Button>
+              <Button
+                onClick={() => setFormIsShown(true)}
+                size="mini"
+                iconRight="plus"
+                color="secondary"
+              >
+                Добавить
+              </Button>
+            </Group>
+          )}
+        </div>
+        <div className={styles.list}>
+          <Group>
+            <Group>
+              <List />
             </Group>
           </Group>
-        </Card>
-
-        {notes.map(note => (
-          <NoteCard key={note.id} content={note.content} createdAt={note.created_at} />
-        ))}
-      </Columns>
-    </div>
+        </div>
+      </div>
+    </NoteProvider>
   );
 };
 
