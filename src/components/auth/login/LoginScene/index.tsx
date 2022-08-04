@@ -1,11 +1,6 @@
-import React, {
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FC, memo, useCallback, useEffect, useRef, useState } from "react";
+
+import { debounce, throttle } from "throttle-debounce";
 
 import { useWindowSize } from "~/hooks/dom/useWindowSize";
 
@@ -58,6 +53,7 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
   const [loaded, setLoaded] = useState(false);
   const imageRefs = useRef<Array<SVGImageElement | null>>([]);
   const { isMobile } = useWindowSize();
+  const domRect = useRef<DOMRect>();
 
   const onMouseMove = useCallback(
     (event: MouseEvent): any => {
@@ -65,7 +61,11 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
         return;
       }
 
-      const { x, width } = containerRef.current.getBoundingClientRect();
+      if (!domRect.current) {
+        domRect.current = containerRef.current.getBoundingClientRect();
+      }
+
+      const { x, width } = domRect.current!;
       const middle = (width - x) / 2;
       const shift = event.pageX / middle / 2 - 0.5;
 
@@ -83,8 +83,9 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
   );
 
   useEffect(() => {
-    document.addEventListener("mousemove", onMouseMove);
-    return () => document.removeEventListener("mousemove", onMouseMove);
+    const listener = throttle(100, onMouseMove);
+    document.addEventListener("mousemove", listener);
+    return () => document.removeEventListener("mousemove", listener);
   }, []);
 
   if (isMobile) {
@@ -123,7 +124,7 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
           fill="url(#fallbackGradient)"
         />
 
-        {layers.map((it, index) => (
+        {layers.map(it => (
           <image
             ref={it => imageRefs.current.push(it)}
             key={it.src}

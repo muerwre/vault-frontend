@@ -9,7 +9,7 @@
 }
 
 .image {
-  transition: opacity 1s;
+  transition: opacity 1s, transform 0.1s;
   will-change: opacity, transform;
 
   @include tablet {
