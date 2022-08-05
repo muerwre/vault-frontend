@@ -11,8 +11,13 @@ export interface ApiGetNotesResponse {
   totalCount: number;
 }
 
-export interface ApiPostNoteRequest {
+export interface ApiCreateNoteRequest {
   text: string;
 }
 
-export interface ApiPostNoteResponse extends Note {}
+export interface ApiUpdateNoteResponse extends Note {}
+
+export interface ApiUpdateNoteRequest {
+  id: number;
+  text: string;
+}

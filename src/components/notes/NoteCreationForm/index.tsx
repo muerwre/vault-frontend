@@ -16,7 +16,8 @@ import { showErrorToast } from "~/utils/errors/showToast";
 import styles from "./styles.module.scss";
 
 interface NoteCreationFormProps {
-  onSubmit: (text: string, callback: (note: Note) => void) => void;
+  text?: string;
+  onSubmit: (text: string, callback: () => void) => void;
   onCancel: () => void;
 }
 
@@ -27,15 +28,16 @@ const validationSchema = object({
 type Values = Asserts<typeof validationSchema>;
 
 const NoteCreationForm: FC<NoteCreationFormProps> = ({
+  text = "",
   onSubmit,
   onCancel,
 }) => {
   const placeholder = useRandomPhrase("SIMPLE");
 
   const submit = useCallback<FormikConfig<Values>["onSubmit"]>(
-    async ({ text }, { resetForm, setSubmitting, setErrors }) => {
+    async (values, { resetForm, setSubmitting, setErrors }) => {
       try {
-        await onSubmit(text, () => resetForm());
+        await onSubmit(values.text, () => resetForm());
       } catch (error) {
         const message = getErrorMessage(error);
         if (message) {
@@ -58,8 +60,9 @@ const NoteCreationForm: FC<NoteCreationFormProps> = ({
     handleSubmit,
     touched,
     handleBlur,
+    isSubmitting,
   } = useFormik<Values>({
-    initialValues: { text: "" },
+    initialValues: { text },
     validationSchema,
     onSubmit: submit,
   });
@@ -85,7 +88,7 @@ const NoteCreationForm: FC<NoteCreationFormProps> = ({
             Отмена
           </Button>
 
-          <Button size="mini" type="submit" color="gray">
+          <Button size="mini" type="submit" color="gray" loading={isSubmitting}>
             ОК
           </Button>
         </Group>

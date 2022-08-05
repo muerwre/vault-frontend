@@ -1,10 +1,11 @@
-import { FC, useState, VFC } from "react";
+import { FC, useCallback, useState, VFC } from "react";
 
 import { Filler } from "~/components/containers/Filler";
 import { Group } from "~/components/containers/Group";
 import { Button } from "~/components/input/Button";
 import { NoteCard } from "~/components/notes/NoteCard";
 import { NoteCreationForm } from "~/components/notes/NoteCreationForm";
+import { useConfirmation } from "~/hooks/dom/useConfirmation";
 import { NoteProvider, useNotesContext } from "~/utils/providers/NoteProvider";
 
 import styles from "./styles.module.scss";
@@ -12,12 +13,22 @@ import styles from "./styles.module.scss";
 interface SettingsNotesProps {}
 
 const List = () => {
-  const { notes } = useNotesContext();
+  const { notes, remove, update } = useNotesContext();
+  const confirm = useConfirmation();
+
+  const onRemove = useCallback(
+    async (id: number) => {
+      confirm("Удалить? Это удалит заметку навсегда", () => remove(id));
+    },
+    [remove],
+  );
 
   return (
     <>
       {notes.map(note => (
         <NoteCard
+          remove={() => onRemove(note.id)}
+          update={(text, callback) => update(note.id, text, callback)}
           key={note.id}
           content={note.content}
           createdAt={note.created_at}
@@ -28,7 +39,7 @@ const List = () => {
 };
 
 const Form: FC<{ onCancel: () => void }> = ({ onCancel }) => {
-  const { submit } = useNotesContext();
+  const { create: submit } = useNotesContext();
   return <NoteCreationForm onSubmit={submit} onCancel={onCancel} />;
 };
 

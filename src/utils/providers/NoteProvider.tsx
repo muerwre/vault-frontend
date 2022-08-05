@@ -7,7 +7,9 @@ const NoteContext = createContext<ReturnType<typeof useNotes>>({
   hasMore: false,
   loadMore: async () => Promise.resolve(undefined),
   isLoading: false,
-  submit: () => Promise.resolve(),
+  create: () => Promise.resolve(),
+  remove: () => Promise.resolve(),
+  update: (id: number, text: string) => Promise.resolve(),
 });
 
 export const NoteProvider: FC = ({ children }) => {

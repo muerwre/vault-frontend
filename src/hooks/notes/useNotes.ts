@@ -1,14 +1,17 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 
-import useSWRInfinite from "swr/infinite";
-import { SWRInfiniteKeyLoader } from "swr/infinite";
+import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
 
-import { apiGetNotes, apiPostNote } from "~/api/notes";
+import {
+  apiCreateNote,
+  apiDeleteNote,
+  apiListNotes,
+  apiUpdateNote,
+} from "~/api/notes";
 import { ApiGetNotesRequest } from "~/api/notes/types";
 import { useAuth } from "~/hooks/auth/useAuth";
 import { GetLabNodesRequest, ILabNode } from "~/types/lab";
 import { Note } from "~/types/notes";
-import { showErrorToast } from "~/utils/errors/showToast";
 import { flatten, uniqBy } from "~/utils/ramda";
 
 const DEFAULT_COUNT = 20;
@@ -43,7 +46,7 @@ export const useNotes = (search: string) => {
   const { data, isValidating, size, setSize, mutate } = useSWRInfinite(
     getKey(isUser, search),
     async (key: string) => {
-      const result = await apiGetNotes(parseKey(key));
+      const result = await apiListNotes(parseKey(key));
       return result.list;
     },
     {
@@ -51,17 +54,44 @@ export const useNotes = (search: string) => {
     },
   );
 
-  const submit = useCallback(
-    async (text: string, onSuccess: (note: Note) => void) => {
-      const result = await apiPostNote({ text });
+  const create = useCallback(
+    async (text: string, onSuccess?: (note: Note) => void) => {
+      const result = await apiCreateNote({ text });
 
       if (data) {
-        mutate(data?.map((it, index) => (index === 0 ? [result, ...it] : it)));
+        await mutate(
+          data?.map((it, index) => (index === 0 ? [result, ...it] : it)),
+          { revalidate: false },
+        );
       }
 
-      onSuccess(result);
+      onSuccess?.(result);
     },
-    [],
+    [mutate, data],
+  );
+
+  const remove = useCallback(
+    async (id: number, onSuccess?: () => void) => {
+      await apiDeleteNote(id);
+      await mutate(
+        data?.map(page => page.filter(it => it.id !== id)),
+        { revalidate: false },
+      );
+      onSuccess?.();
+    },
+    [mutate, data],
+  );
+
+  const update = useCallback(
+    async (id: number, text: string, onSuccess?: () => void) => {
+      const result = await apiUpdateNote({ id, text });
+      await mutate(
+        data?.map(page => page.map(it => (it.id === id ? result : it))),
+        { revalidate: false },
+      );
+      onSuccess?.();
+    },
+    [mutate, data],
   );
 
   const notes = useMemo(() => uniqBy(n => n.id, flatten(data || [])), [data]);
@@ -74,8 +104,10 @@ export const useNotes = (search: string) => {
       hasMore,
       loadMore,
       isLoading: !data && isValidating,
-      submit,
+      create,
+      remove,
+      update,
     }),
-    [notes, hasMore, loadMore, data, isValidating, submit],
+    [notes, hasMore, loadMore, data, isValidating, create, remove],
   );
 };
