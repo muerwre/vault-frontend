@@ -54,10 +54,12 @@ export const SidebarProvider = <T extends SidebarComponent>({
   const close = useCallback(() => {
     const [path] = router.asPath.split("?");
 
-    void router.replace(path, path, {
-      shallow: true,
-      scroll: false,
-    });
+    // void router.replace(path, path, {
+    // shallow: true,
+    // scroll: false,
+    // });
+
+    router.back();
   }, [router]);
 
   const value = useMemo<ContextValue>(
