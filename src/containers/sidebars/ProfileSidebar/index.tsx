@@ -35,7 +35,7 @@ const ProfileSidebar: VFC<ProfileSidebarProps> = ({
         page: !isNil(val) ? tabs[val] : undefined,
       });
     },
-    [open],
+    [open, onRequestClose],
   );
 
   return (

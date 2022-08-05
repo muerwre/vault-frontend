@@ -43,6 +43,16 @@ export const SidebarProvider = <T extends SidebarComponent>({
         .join("&");
       const url = path + "?sidebar=" + name + (query && `&${query}`);
 
+      // don't store history inside the same sidebar
+      if (router.query?.sidebar === name) {
+        void router.replace(url, url, {
+          shallow: true,
+          scroll: false,
+        });
+
+        return;
+      }
+
       void router.push(url, url, {
         shallow: true,
         scroll: false,
@@ -54,12 +64,10 @@ export const SidebarProvider = <T extends SidebarComponent>({
   const close = useCallback(() => {
     const [path] = router.asPath.split("?");
 
-    // void router.replace(path, path, {
-    // shallow: true,
-    // scroll: false,
-    // });
-
-    router.back();
+    void router.replace(path, path, {
+      shallow: true,
+      scroll: false,
+    });
   }, [router]);
 
   const value = useMemo<ContextValue>(
