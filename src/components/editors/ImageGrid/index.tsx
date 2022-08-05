@@ -1,9 +1,9 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback } from "react";
 
-import { SortableImageGrid } from '~/components/sortable';
-import { useWindowSize } from '~/hooks/dom/useWindowSize';
-import { UploadStatus } from '~/store/uploader/UploaderStore';
-import { IFile } from '~/types';
+import { SortableImageGrid } from "~/components/sortable";
+import { useWindowSize } from "~/hooks/dom/useWindowSize";
+import { UploadStatus } from "~/store/uploader/UploaderStore";
+import { IFile } from "~/types";
 
 interface IProps {
   files: IFile[];
@@ -12,20 +12,20 @@ interface IProps {
 }
 
 const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
-  const { isMobile } = useWindowSize();
+  const { isTablet } = useWindowSize();
 
   const onMove = useCallback(
     (newFiles: IFile[]) => {
       setFiles(newFiles.filter(it => it));
     },
-    [setFiles, files]
+    [setFiles, files],
   );
 
   const onDrop = useCallback(
-    (id: IFile['id']) => {
+    (id: IFile["id"]) => {
       setFiles(files.filter(file => file && file.id !== id));
     },
-    [setFiles, files]
+    [setFiles, files],
   );
 
   return (
@@ -34,7 +34,7 @@ const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
       onSortEnd={onMove}
       items={files}
       locked={locked}
-      size={!isMobile ? 220 : (innerWidth - 60) / 2}
+      size={!isTablet ? 220 : (innerWidth - 60) / 2}
     />
   );
 };

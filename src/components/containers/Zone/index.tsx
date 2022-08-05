@@ -16,7 +16,11 @@ const Zone: FC<ZoneProps> = ({
   children,
   color = "normal",
 }) => (
-  <div className={classNames(className, styles.pad, styles[color])}>
+  <div
+    className={classNames(className, styles.pad, styles[color], {
+      [styles.with_title]: !!title,
+    })}
+  >
     {!!title && (
       <div className={styles.title}>
         <span>{title}</span>

@@ -8,6 +8,7 @@ import { InputText } from "~/components/input/InputText";
 import { Textarea } from "~/components/input/Textarea";
 import { ERROR_LITERAL } from "~/constants/errors";
 import { ProfileAccounts } from "~/containers/profile/ProfileAccounts";
+import { useWindowSize } from "~/hooks/dom/useWindowSize";
 import { useSettings } from "~/utils/providers/SettingsProvider";
 import { has } from "~/utils/ramda";
 
@@ -20,10 +21,11 @@ const getError = (error?: string) =>
 
 const UserSettingsView: FC<UserSettingsViewProps> = () => {
   const { values, handleChange, errors } = useSettings();
+  const { isPhone } = useWindowSize();
 
   return (
     <Group>
-      <Group horizontal className={styles.base_info}>
+      <Group horizontal={!isPhone} className={styles.base_info}>
         <Superpower>
           <Zone className={styles.avatar} title="Фото">
             <small>
@@ -33,7 +35,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
           </Zone>
         </Superpower>
 
-        <Zone title="О себе">
+        <Zone title="О себе" className={styles.about}>
           <Group>
             <InputText
               value={values.fullname}

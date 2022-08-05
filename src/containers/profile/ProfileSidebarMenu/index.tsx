@@ -15,6 +15,7 @@ import { useAuth } from "~/hooks/auth/useAuth";
 import markdown from "~/styles/common/markdown.module.scss";
 
 import { ProfileSidebarLogoutButton } from "../ProfileSidebarLogoutButton";
+import { ProfileToggles } from "../ProfileToggles";
 
 import styles from "./styles.module.scss";
 
@@ -48,6 +49,10 @@ const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
               Заметки
             </VerticalMenu.Item>
           </VerticalMenu>
+
+          <div className={styles.toggles}>
+            <ProfileToggles />
+          </div>
 
           <div className={styles.stats}>
             <ProfileStats />

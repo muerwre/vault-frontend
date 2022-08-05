@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, VFC } from "react";
+import React, { useCallback, useEffect, useMemo, VFC } from "react";
 
 import { isNil } from "ramda";
 
@@ -9,6 +9,7 @@ import { SidebarStackCard } from "~/components/sidebar/SidebarStackCard";
 import { SidebarName } from "~/constants/sidebar";
 import { ProfileSidebarMenu } from "~/containers/profile/ProfileSidebarMenu";
 import { SidebarWrapper } from "~/containers/sidebars/SidebarWrapper";
+import { useAuth } from "~/hooks/auth/useAuth";
 import type { SidebarComponentProps } from "~/types/sidebar";
 
 const tabs = ["profile", "bookmarks"] as const;
@@ -24,6 +25,8 @@ const ProfileSidebar: VFC<ProfileSidebarProps> = ({
   page,
   openSidebar,
 }) => {
+  const { isUser } = useAuth();
+
   const tab = useMemo(
     () => (page ? Math.max(tabs.indexOf(page), 0) : undefined),
     [page],
@@ -37,6 +40,16 @@ const ProfileSidebar: VFC<ProfileSidebarProps> = ({
     },
     [open, onRequestClose],
   );
+
+  useEffect(() => {
+    if (!isUser) {
+      onRequestClose();
+    }
+  }, [isUser]);
+
+  if (!isUser) {
+    return null;
+  }
 
   return (
     <SidebarWrapper onClose={onRequestClose}>

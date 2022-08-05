@@ -1,12 +1,12 @@
-import React, { VFC } from 'react';
+import React, { VFC } from "react";
 
-import Tippy from '@tippyjs/react';
+import Tippy from "@tippyjs/react";
 
-import { Icon } from '~/components/input/Icon';
-import { MenuButton, MenuItemWithIcon, SeparatedMenu } from '~/components/menu';
-import { useWindowSize } from '~/hooks/dom/useWindowSize';
+import { Icon } from "~/components/input/Icon";
+import { MenuButton, MenuItemWithIcon, SeparatedMenu } from "~/components/menu";
+import { useWindowSize } from "~/hooks/dom/useWindowSize";
 
-import styles from './styles.module.scss';
+import styles from "./styles.module.scss";
 
 interface NodeEditMenuProps {
   className?: string;
@@ -30,17 +30,20 @@ const NodeEditMenu: VFC<NodeEditMenuProps> = ({
   onLock,
   onEdit,
 }) => {
-  const { isMobile } = useWindowSize();
+  const { isTablet } = useWindowSize();
 
-  if (isMobile) {
+  if (isTablet) {
     return (
       <MenuButton
         icon={<Icon icon="dots-vertical" className={styles.icon} size={24} />}
         className={className}
       >
         {canStar && (
-          <MenuItemWithIcon icon={isHeroic ? 'star_full' : 'star'} onClick={onStar}>
-            {isHeroic ? 'Убрать с главной' : 'На главную'}
+          <MenuItemWithIcon
+            icon={isHeroic ? "star_full" : "star"}
+            onClick={onStar}
+          >
+            {isHeroic ? "Убрать с главной" : "На главную"}
           </MenuItemWithIcon>
         )}
 
@@ -48,8 +51,11 @@ const NodeEditMenu: VFC<NodeEditMenuProps> = ({
           Редактировать
         </MenuItemWithIcon>
 
-        <MenuItemWithIcon icon={isLocked ? 'locked' : 'unlocked'} onClick={onLock}>
-          {isLocked ? 'Восстановить' : 'Удалить'}
+        <MenuItemWithIcon
+          icon={isLocked ? "locked" : "unlocked"}
+          onClick={onLock}
+        >
+          {isLocked ? "Восстановить" : "Удалить"}
         </MenuItemWithIcon>
       </MenuButton>
     );
@@ -58,9 +64,9 @@ const NodeEditMenu: VFC<NodeEditMenuProps> = ({
   return (
     <SeparatedMenu>
       {canStar && (
-        <Tippy content={isHeroic ? 'Убрать с главной' : 'На главную'}>
+        <Tippy content={isHeroic ? "Убрать с главной" : "На главную"}>
           <button className={className} onClick={onStar}>
-            <Icon icon={isHeroic ? 'star_full' : 'star'} size={24} />
+            <Icon icon={isHeroic ? "star_full" : "star"} size={24} />
           </button>
         </Tippy>
       )}
@@ -71,9 +77,9 @@ const NodeEditMenu: VFC<NodeEditMenuProps> = ({
         </button>
       </Tippy>
 
-      <Tippy content={isLocked ? 'Восстановить' : 'Удалить'}>
+      <Tippy content={isLocked ? "Восстановить" : "Удалить"}>
         <button className={className} onClick={onLock}>
-          <Icon icon={isLocked ? 'locked' : 'unlocked'} size={24} />
+          <Icon icon={isLocked ? "locked" : "unlocked"} size={24} />
         </button>
       </Tippy>
     </SeparatedMenu>

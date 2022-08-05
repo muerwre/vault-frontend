@@ -3,6 +3,10 @@
 $pad_danger: mix($red, $content_bg, 70%);
 $pad_usual: mix(white, $content_bg, 10%);
 
+.about {
+  flex: 4;
+}
+
 .wrap {
   padding: $gap;
   z-index: 4;
@@ -21,5 +25,5 @@ div.base_info.base_info {
 }
 
 .avatar {
-  flex: 0 0 150px;
+  flex: 1 0 90px;
 }
