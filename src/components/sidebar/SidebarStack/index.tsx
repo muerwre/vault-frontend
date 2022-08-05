@@ -69,6 +69,7 @@ const SidebarStack = function({
   );
 
   useEffect(() => setActiveTab(tab), [tab]);
+
   return (
     <SidebarStackContext.Provider
       value={{ activeTab, setActiveTab: onChangeTab, closeAllTabs }}

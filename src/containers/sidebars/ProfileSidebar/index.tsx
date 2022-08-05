@@ -1,4 +1,4 @@
-import { useCallback, useMemo, VFC } from "react";
+import React, { useCallback, useMemo, VFC } from "react";
 
 import { isNil } from "ramda";
 
@@ -9,35 +9,38 @@ import { SidebarStackCard } from "~/components/sidebar/SidebarStackCard";
 import { SidebarName } from "~/constants/sidebar";
 import { ProfileSidebarMenu } from "~/containers/profile/ProfileSidebarMenu";
 import { SidebarWrapper } from "~/containers/sidebars/SidebarWrapper";
-import { SidebarComponentProps } from "~/types/sidebar";
-import { useSidebar } from "~/utils/providers/SidebarProvider";
+import type { SidebarComponentProps } from "~/types/sidebar";
 
-type TabName = "profile" | "bookmarks";
-interface ProfileSidebarProps extends SidebarComponentProps {
+const tabs = ["profile", "bookmarks"] as const;
+type TabName = typeof tabs[number];
+
+interface ProfileSidebarProps
+  extends SidebarComponentProps<SidebarName.Settings> {
   page?: TabName;
 }
 
-const tabs: TabName[] = ["profile", "bookmarks"];
-
-const ProfileSidebar: VFC<ProfileSidebarProps> = ({ onRequestClose, page }) => {
-  const initialTab = useMemo(
-    () => (page ? Math.min(tabs.indexOf(page), 0) : undefined),
+const ProfileSidebar: VFC<ProfileSidebarProps> = ({
+  onRequestClose,
+  page,
+  openSidebar,
+}) => {
+  const tab = useMemo(
+    () => (page ? Math.max(tabs.indexOf(page), 0) : undefined),
     [page],
   );
 
-  const { open } = useSidebar();
-
   const onTabChange = useCallback(
     (val: number | undefined) => {
-      console.log({ val });
-      open(SidebarName.Settings, { page: !isNil(val) ? tabs[val] : undefined });
+      openSidebar(SidebarName.Settings, {
+        page: !isNil(val) ? tabs[val] : undefined,
+      });
     },
     [open],
   );
 
   return (
     <SidebarWrapper onClose={onRequestClose}>
-      <SidebarStack tab={initialTab} onTabChange={onTabChange}>
+      <SidebarStack tab={tab} onTabChange={onTabChange}>
         <SidebarStackCard
           headerFeature="close"
           title="Профиль"

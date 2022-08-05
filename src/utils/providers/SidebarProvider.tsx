@@ -2,7 +2,6 @@ import {
   Context,
   createContext,
   createElement,
-  FunctionComponent,
   PropsWithChildren,
   useCallback,
   useContext,
@@ -13,31 +12,19 @@ import { useRouter } from "next/router";
 import { has, omit } from "ramda";
 
 import { ModalWrapper } from "~/components/dialogs/ModalWrapper";
-import { sidebarComponents, SidebarName } from "~/constants/sidebar";
-import { DialogComponentProps } from "~/types/modal";
-import { SidebarComponentProps } from "~/types/sidebar";
+import { SidebarName } from "~/constants/sidebar";
+import { sidebarComponents } from "~/constants/sidebar/components";
+import { SidebarComponent, SidebarProps } from "~/types/sidebar";
 
 type ContextValue = typeof SidebarContext extends Context<infer U> ? U : never;
-type Name = keyof typeof sidebarComponents;
-
-// TODO: use it to store props for sidebar
-type Props<
-  T extends Name
-> = typeof sidebarComponents[T] extends FunctionComponent<infer U>
-  ? U extends object
-    ? U extends SidebarComponentProps
-      ? Omit<U, "onRequestClose">
-      : U
-    : U
-  : {};
 
 const SidebarContext = createContext({
   current: undefined as SidebarName | undefined,
-  open: <T extends Name>(name: T, props: Props<T>) => {},
+  open: <T extends SidebarComponent>(name: T, props: SidebarProps<T>) => {},
   close: () => {},
 });
 
-export const SidebarProvider = <T extends Name>({
+export const SidebarProvider = <T extends SidebarComponent>({
   children,
 }: PropsWithChildren<{}>) => {
   const router = useRouter();
@@ -48,7 +35,7 @@ export const SidebarProvider = <T extends Name>({
   }, [router]);
 
   const open = useCallback(
-    <T extends Name>(name: T, props: Props<T>) => {
+    <T extends SidebarComponent>(name: T, props: SidebarProps<T>) => {
       const [path] = router.asPath.split("?");
       const query = Object.entries(props as {})
         .filter(([, val]) => val)
@@ -89,6 +76,7 @@ export const SidebarProvider = <T extends Name>({
         <ModalWrapper onOverlayClick={close}>
           {createElement(sidebarComponents[current], {
             onRequestClose: close,
+            openSidebar: open,
             ...omit(["sidebar"], router.query),
           } as any)}
         </ModalWrapper>
