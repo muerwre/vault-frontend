@@ -1,21 +1,21 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback } from "react";
 
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
-import { Group } from '~/components/containers/Group';
-import { Button } from '~/components/input/Button';
-import { SidebarName } from '~/constants/sidebar';
-import { URLS } from '~/constants/urls';
-import { useSidebar } from '~/utils/providers/SidebarProvider';
+import { Group } from "~/components/containers/Group";
+import { Button } from "~/components/input/Button";
+import { SidebarName } from "~/constants/sidebar";
+import { URLS } from "~/constants/urls";
+import { useSidebar } from "~/utils/providers/SidebarProvider";
 
-import styles from './styles.module.scss';
+import styles from "./styles.module.scss";
 
 export interface BorisSuperpowersProps {}
 
 const BorisSuperpowers: FC<BorisSuperpowersProps> = () => {
   const { open } = useSidebar();
   const openProfileSidebar = useCallback(() => {
-    open(SidebarName.Settings);
+    open(SidebarName.Settings, { page: "profile" });
   }, [open]);
   const { push } = useRouter();
 
