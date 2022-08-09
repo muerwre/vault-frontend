@@ -38,7 +38,13 @@ export enum UploadType {
 
 export const FILE_MIMES: Record<UploadType, string[]> = {
   [UploadType.Video]: [],
-  [UploadType.Image]: ['image/jpeg', 'image/jpg', 'image/png', 'image/svg+xml'],
+  [UploadType.Image]: [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/svg+xml',
+    'image/webp',
+  ],
   [UploadType.Audio]: ['audio/mpeg3', 'audio/mpeg', 'audio/mp3'],
   [UploadType.Other]: [],
 };
