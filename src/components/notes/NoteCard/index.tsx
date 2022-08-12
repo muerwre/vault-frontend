@@ -1,14 +1,14 @@
-import React, { useCallback, useState, VFC } from "react";
+import React, { useCallback, useState, VFC } from 'react';
 
-import { Card } from "~/components/containers/Card";
-import { Markdown } from "~/components/containers/Markdown";
-import { Padder } from "~/components/containers/Padder";
-import { NoteMenu } from "~/components/notes/NoteMenu";
-import { formatText, getPrettyDate } from "~/utils/dom";
+import { Card } from '~/components/containers/Card';
+import { Markdown } from '~/components/containers/Markdown';
+import { Padder } from '~/components/containers/Padder';
+import { NoteMenu } from '~/components/notes/NoteMenu';
+import { formatText, getPrettyDate } from '~/utils/dom';
 
-import { NoteCreationForm } from "../NoteCreationForm";
+import { NoteCreationForm } from '../NoteCreationForm';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface NoteCardProps {
   content: string;
@@ -48,10 +48,7 @@ const NoteCard: VFC<NoteCardProps> = ({
           <Padder>
             <NoteMenu onEdit={toggleEditing} onDelete={remove} />
 
-            <Markdown
-              className={styles.wrap}
-              dangerouslySetInnerHTML={{ __html: formatText(content) }}
-            />
+            <Markdown className={styles.wrap}>{formatText(content)}</Markdown>
           </Padder>
 
           <Padder className={styles.footer}>{getPrettyDate(createdAt)}</Padder>

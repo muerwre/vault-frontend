@@ -1,21 +1,21 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo } from 'react';
 
-import { observer } from "mobx-react-lite";
+import { observer } from 'mobx-react-lite';
 
-import { BorisGraphicStats } from "~/components/boris/BorisGraphicStats";
-import { Superpower } from "~/components/boris/Superpower";
-import { Card } from "~/components/containers/Card";
-import { Group } from "~/components/containers/Group";
-import { Sticky } from "~/components/containers/Sticky";
-import { BorisComments } from "~/containers/boris/BorisComments";
-import { BorisSidebar } from "~/containers/boris/BorisSidebar";
-import { BorisSuperPowersSSR } from "~/containers/boris/BorisSuperpowers/ssr";
-import { Container } from "~/containers/main/Container";
-import { SidebarRouter } from "~/containers/main/SidebarRouter";
-import { BorisUsageStats } from "~/types/boris";
-import { useAuthProvider } from "~/utils/providers/AuthProvider";
+import { BorisGraphicStats } from '~/components/boris/BorisGraphicStats';
+import { Superpower } from '~/components/boris/Superpower';
+import { Card } from '~/components/containers/Card';
+import { Group } from '~/components/containers/Group';
+import { Sticky } from '~/components/containers/Sticky';
+import { BorisComments } from '~/containers/boris/BorisComments';
+import { BorisSidebar } from '~/containers/boris/BorisSidebar';
+import { BorisSuperPowersSSR } from '~/containers/boris/BorisSuperpowers/ssr';
+import { Container } from '~/containers/main/Container';
+import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import { BorisUsageStats } from '~/types/boris';
+import { useAuthProvider } from '~/utils/providers/AuthProvider';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 type IProps = {
   title: string;
@@ -50,9 +50,11 @@ const BorisLayout: FC<IProps> = observer(({ title, stats, isLoadingStats }) => {
         <div className={styles.container}>
           <Card className={styles.content}>
             <Group>
-              <Superpower>
-                <BorisSuperPowersSSR />
-              </Superpower>
+              <div>
+                <Superpower>
+                  <BorisSuperPowersSSR />
+                </Superpower>
+              </div>
 
               <BorisGraphicStats
                 totalComments={stats.backend.comments.total}

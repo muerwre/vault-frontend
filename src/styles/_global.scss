@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 @import 'photoswipe/dist/photoswipe';
 @import 'photoswipe/dist/default-skin/default-skin';
 
@@ -55,7 +55,8 @@ body {
   color: #555555;
 }
 
-.todo, .done {
+.todo,
+.done {
   color: #333333;
   border-radius: 3px;
   padding: 0 2px;
@@ -76,12 +77,8 @@ h2 {
 }
 
 .username {
-  background: transparentize($color: #000000, $amount: 0.8);
-  padding: 2px 4px;
-  border-radius: 4px;
-  cursor: pointer;
   color: $wisegreen;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 a {
@@ -129,12 +126,16 @@ button {
   outline: none;
 }
 
-h3, h2, h1 {
+h3,
+h2,
+h1 {
   color: white;
   font-weight: 800;
 }
 
-h6, h5, h4 {
+h6,
+h5,
+h4 {
   color: white;
   font-weight: 600;
 }

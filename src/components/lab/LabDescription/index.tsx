@@ -20,11 +20,9 @@ const LabDescription: FC<INodeComponentProps> = ({ node, isLoading }) => {
       <Paragraph />
     </div>
   ) : (
-    <Markdown
-      className={styles.wrap}
-      dangerouslySetInnerHTML={{ __html: formatText(node.description) }}
-      onClick={onClick}
-    />
+    <Markdown className={styles.wrap} onClick={onClick}>
+      {formatText(node.description)}
+    </Markdown>
   );
 };
 

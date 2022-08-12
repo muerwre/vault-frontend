@@ -26,17 +26,19 @@ const ProfilePageLeft: FC<IProps> = ({ username, profile, isLoading }) => {
       />
 
       <div className={styles.region}>
-        <div className={styles.name}>{isLoading ? <Placeholder /> : profile?.fullname}</div>`
+        <div className={styles.name}>
+          {isLoading ? <Placeholder /> : profile?.fullname}
+        </div>
+        `
         <div className={styles.username}>
           {isLoading ? <Placeholder /> : `~${profile?.username}`}
         </div>
       </div>
 
       {!!profile?.description && (
-        <Markdown
-          className={styles.description}
-          dangerouslySetInnerHTML={{ __html: formatText(profile.description) }}
-        />
+        <Markdown className={styles.description}>
+          {formatText(profile.description)}
+        </Markdown>
       )}
     </div>
   );

@@ -1,13 +1,21 @@
-import React, { DetailedHTMLProps, FC, HTMLAttributes } from 'react';
+import React, { DetailedHTMLProps, VFC, HTMLAttributes } from 'react';
 
 import classNames from 'classnames';
 
 import styles from '~/styles/common/markdown.module.scss';
+import { formatText } from '~/utils/dom';
 
-interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}
+interface IProps
+  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+  children?: string;
+}
 
-const Markdown: FC<IProps> = ({ className, ...props }) => (
-  <div className={classNames(styles.wrapper, className)} {...props} />
+const Markdown: VFC<IProps> = ({ className, children = '', ...props }) => (
+  <div
+    className={classNames(styles.wrapper, className)}
+    {...props}
+    dangerouslySetInnerHTML={{ __html: formatText(children) }}
+  />
 );
 
 export { Markdown };
