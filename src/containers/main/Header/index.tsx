@@ -11,6 +11,7 @@ import { Button } from '~/components/input/Button';
 import { Logo } from '~/components/main/Logo';
 import { UserButton } from '~/components/main/UserButton';
 import { Dialog } from '~/constants/modal';
+import { SidebarName } from '~/constants/sidebar';
 import { URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useScrollTop } from '~/hooks/dom/useScrollTop';
@@ -18,6 +19,7 @@ import { useFlow } from '~/hooks/flow/useFlow';
 import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
 import { useModal } from '~/hooks/modal/useModal';
 import { useUpdates } from '~/hooks/updates/useUpdates';
+import { useSidebar } from '~/utils/providers/SidebarProvider';
 
 import styles from './styles.module.scss';
 
@@ -27,15 +29,15 @@ const Header: FC<HeaderProps> = observer(() => {
   const labStats = useGetLabStats();
 
   const [isScrolled, setIsScrolled] = useState(false);
-  const { logout } = useAuth();
   const { showModal } = useModal();
   const { isUser, user } = useAuth();
   const { updates: flowUpdates } = useFlow();
   const { borisCommentedAt } = useUpdates();
+  const { open } = useSidebar();
 
-  const openProfile = useCallback(() => {
-    showModal(Dialog.Profile, { username: user.username });
-  }, [user.username, showModal]);
+  const openProfileSidebar = useCallback(() => {
+    open(SidebarName.Settings, {});
+  }, [open]);
 
   const onLogin = useCallback(() => showModal(Dialog.Login, {}), [showModal]);
 
@@ -47,10 +49,12 @@ const Header: FC<HeaderProps> = observer(() => {
       borisCommentedAt &&
       (!user.last_seen_boris ||
         isBefore(new Date(user.last_seen_boris), new Date(borisCommentedAt))),
-    [borisCommentedAt, isUser, user.last_seen_boris]
+    [borisCommentedAt, isUser, user.last_seen_boris],
   );
 
-  const hasLabUpdates = useMemo(() => labStats.updates.length > 0, [labStats.updates]);
+  const hasLabUpdates = useMemo(() => labStats.updates.length > 0, [
+    labStats.updates,
+  ]);
   const hasFlowUpdates = useMemo(() => flowUpdates.length > 0, [flowUpdates]);
 
   // Needed for SSR
@@ -59,7 +63,9 @@ const Header: FC<HeaderProps> = observer(() => {
   }, [top]);
 
   return (
-    <header className={classNames(styles.wrap, { [styles.is_scrolled]: isScrolled })}>
+    <header
+      className={classNames(styles.wrap, { [styles.is_scrolled]: isScrolled })}
+    >
       <div className={styles.container}>
         <div className={styles.logo_wrapper}>
           <Logo />
@@ -98,10 +104,21 @@ const Header: FC<HeaderProps> = observer(() => {
           </Authorized>
         </nav>
 
-        {isUser && <UserButton user={user} onLogout={logout} authOpenProfile={openProfile} />}
+        {isUser && (
+          <UserButton
+            username={user.username}
+            photo={user.photo}
+            onClick={openProfileSidebar}
+          />
+        )}
 
         {!isUser && (
-          <Button className={styles.user_button} onClick={onLogin} round color="secondary">
+          <Button
+            className={styles.user_button}
+            onClick={onLogin}
+            round
+            color="secondary"
+          >
             ВДОХ
           </Button>
         )}
