@@ -43,6 +43,7 @@ export const ERRORS = {
   MESSAGE_NOT_FOUND: 'MessageNotFound',
   COMMENT_TOO_LONG: 'CommentTooLong',
   NETWORK_ERROR: 'Network Error',
+  NOTE_NOT_FOUND: 'NoteNotFound',
 };
 
 export const ERROR_LITERAL = {
@@ -74,9 +75,12 @@ export const ERROR_LITERAL = {
   [ERRORS.INCORRECT_NODE_TYPE]: 'Ты пытаешься отправить пост неизвестного типа',
   [ERRORS.UNEXPECTED_BEHAVIOR]: 'Что-то пошло не так. Напишите об этом Борису',
   [ERRORS.FILES_IS_TOO_BIG]: 'Файл слишком большой',
-  [ERRORS.OAUTH_CODE_IS_EMPTY]: 'Мы не смогли получить код от социальной сети. Попробуй ещё раз.',
-  [ERRORS.OAUTH_UNKNOWN_PROVIDER]: 'Ты пытаешься войти с помощью неизвестной социальной сети',
-  [ERRORS.OAUTH_INVALID_DATA]: 'Социальная сеть вернула какую-то дичь. Попробуй ещё раз.',
+  [ERRORS.OAUTH_CODE_IS_EMPTY]:
+    'Мы не смогли получить код от социальной сети. Попробуй ещё раз.',
+  [ERRORS.OAUTH_UNKNOWN_PROVIDER]:
+    'Ты пытаешься войти с помощью неизвестной социальной сети',
+  [ERRORS.OAUTH_INVALID_DATA]:
+    'Социальная сеть вернула какую-то дичь. Попробуй ещё раз.',
   [ERRORS.USERNAME_IS_SHORT]: 'Хотя бы 2 символа',
   [ERRORS.USERNAME_CONTAINS_INVALID_CHARS]: 'Буквы, цифры и подчёркивание',
   [ERRORS.PASSWORD_IS_SHORT]: 'Хотя бы 6 символов',
@@ -91,4 +95,5 @@ export const ERROR_LITERAL = {
   [ERRORS.MESSAGE_NOT_FOUND]: 'Сообщение не найдено',
   [ERRORS.COMMENT_TOO_LONG]: 'Комментарий слишком длинный',
   [ERRORS.NETWORK_ERROR]: 'Подключение не удалось',
+  [ERRORS.NOTE_NOT_FOUND]: 'Заметка не найдена',
 };
