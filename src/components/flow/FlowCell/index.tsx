@@ -1,22 +1,22 @@
-import React, { FC, useMemo } from "react";
+import React, { FC, useMemo } from 'react';
 
-import classNames from "classnames";
+import classNames from 'classnames';
 
-import { Anchor } from "~/components/common/Anchor";
-import { MenuDots } from "~/components/common/MenuDots";
-import { CellShade } from "~/components/flow/CellShade";
-import { FlowCellImage } from "~/components/flow/FlowCellImage";
-import { FlowCellMenu } from "~/components/flow/FlowCellMenu";
-import { FlowCellText } from "~/components/flow/FlowCellText";
-import { useClickOutsideFocus } from "~/hooks/dom/useClickOutsideFocus";
-import { useWindowSize } from "~/hooks/dom/useWindowSize";
-import { useFlowCellControls } from "~/hooks/flow/useFlowCellControls";
-import { FlowDisplay, INode } from "~/types";
+import { Anchor } from '~/components/common/Anchor';
+import { MenuDots } from '~/components/common/MenuDots';
+import { CellShade } from '~/components/flow/CellShade';
+import { FlowCellImage } from '~/components/flow/FlowCellImage';
+import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
+import { FlowCellText } from '~/components/flow/FlowCellText';
+import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
+import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';
+import { FlowDisplay, INode } from '~/types';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface Props {
-  id: INode["id"];
+  id: INode['id'];
   to: string;
   title: string;
   image?: string;
@@ -25,7 +25,7 @@ interface Props {
   text?: string;
   flow: FlowDisplay;
   canEdit?: boolean;
-  onChangeCellView: (id: INode["id"], flow: FlowDisplay) => void;
+  onChangeCellView: (id: INode['id'], flow: FlowDisplay) => void;
 }
 
 const FlowCell: FC<Props> = ({
@@ -42,7 +42,7 @@ const FlowCell: FC<Props> = ({
   const { isTablet } = useWindowSize();
 
   const withText =
-    ((!!flow.display && flow.display !== "single") || !image) &&
+    ((!!flow.display && flow.display !== 'single') || !image) &&
     flow.show_description &&
     !!text;
   const {
@@ -68,11 +68,11 @@ const FlowCell: FC<Props> = ({
   }, [withText, isTablet]);
 
   const shadeAngle = useMemo(() => {
-    if (flow.display === "vertical") {
+    if (flow.display === 'vertical') {
       return 9;
     }
 
-    if (flow.display === "horizontal") {
+    if (flow.display === 'horizontal') {
       return 15;
     }
 
@@ -81,7 +81,7 @@ const FlowCell: FC<Props> = ({
 
   return (
     <div
-      className={classNames(styles.cell, styles[flow.display || "single"])}
+      className={classNames(styles.cell, styles[flow.display || 'single'])}
       ref={ref as any}
     >
       {canEdit && !isMenuActive && (

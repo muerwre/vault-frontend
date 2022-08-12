@@ -1,14 +1,14 @@
-import { FC, useCallback, useState, VFC } from "react";
+import { FC, useCallback, useState, VFC } from 'react';
 
-import { Filler } from "~/components/containers/Filler";
-import { Group } from "~/components/containers/Group";
-import { Button } from "~/components/input/Button";
-import { NoteCard } from "~/components/notes/NoteCard";
-import { NoteCreationForm } from "~/components/notes/NoteCreationForm";
-import { useConfirmation } from "~/hooks/dom/useConfirmation";
-import { NoteProvider, useNotesContext } from "~/utils/providers/NoteProvider";
+import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
+import { Button } from '~/components/input/Button';
+import { NoteCard } from '~/components/notes/NoteCard';
+import { NoteCreationForm } from '~/components/notes/NoteCreationForm';
+import { useConfirmation } from '~/hooks/dom/useConfirmation';
+import { NoteProvider, useNotesContext } from '~/utils/providers/NoteProvider';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface SettingsNotesProps {}
 
@@ -18,7 +18,7 @@ const List = () => {
 
   const onRemove = useCallback(
     async (id: number) => {
-      confirm("Удалить? Это удалит заметку навсегда", () => remove(id));
+      confirm('Удалить? Это удалит заметку навсегда', () => remove(id));
     },
     [remove],
   );

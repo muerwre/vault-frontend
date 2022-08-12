@@ -1,17 +1,17 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 
-import { Filler } from "~/components/containers/Filler";
-import { Button } from "~/components/input/Button";
-import { ProfileSettings } from "~/components/profile/ProfileSettings";
-import { useStackContext } from "~/components/sidebar/SidebarStack";
-import { SidebarStackCard } from "~/components/sidebar/SidebarStackCard";
-import { UserSettingsView } from "~/containers/settings/UserSettingsView";
+import { Filler } from '~/components/containers/Filler';
+import { Button } from '~/components/input/Button';
+import { ProfileSettings } from '~/components/profile/ProfileSettings';
+import { useStackContext } from '~/components/sidebar/SidebarStack';
+import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
+import { UserSettingsView } from '~/containers/settings/UserSettingsView';
 import {
   SettingsProvider,
   useSettings,
-} from "~/utils/providers/SettingsProvider";
+} from '~/utils/providers/SettingsProvider';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface IProps {}
 

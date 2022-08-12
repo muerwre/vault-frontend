@@ -1,8 +1,8 @@
-import { VFC } from "react";
+import { VFC } from 'react';
 
-import { useStackContext } from "~/components/sidebar/SidebarStack";
-import { SidebarStackCard } from "~/components/sidebar/SidebarStackCard";
-import { SettingsNotes } from "~/containers/settings/SettingsNotes";
+import { useStackContext } from '~/components/sidebar/SidebarStack';
+import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
+import { SettingsNotes } from '~/containers/settings/SettingsNotes';
 
 interface ProfileSidebarNotesProps {}
 

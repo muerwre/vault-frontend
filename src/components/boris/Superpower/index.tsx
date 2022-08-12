@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 
-import { observer } from "mobx-react-lite";
+import { observer } from 'mobx-react-lite';
 
-import { useAuth } from "~/hooks/auth/useAuth";
+import { useAuth } from '~/hooks/auth/useAuth';
 
 interface IProps {}
 

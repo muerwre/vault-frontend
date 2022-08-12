@@ -6,15 +6,15 @@ import {
   useCallback,
   useContext,
   useMemo,
-} from "react";
+} from 'react';
 
-import { useRouter } from "next/router";
-import { has, omit } from "ramda";
+import { useRouter } from 'next/router';
+import { has, omit } from 'ramda';
 
-import { ModalWrapper } from "~/components/dialogs/ModalWrapper";
-import { SidebarName } from "~/constants/sidebar";
-import { sidebarComponents } from "~/constants/sidebar/components";
-import { SidebarComponent, SidebarProps } from "~/types/sidebar";
+import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
+import { SidebarName } from '~/constants/sidebar';
+import { sidebarComponents } from '~/constants/sidebar/components';
+import { SidebarComponent, SidebarProps } from '~/types/sidebar';
 
 type ContextValue = typeof SidebarContext extends Context<infer U> ? U : never;
 
@@ -36,12 +36,12 @@ export const SidebarProvider = <T extends SidebarComponent>({
 
   const open = useCallback(
     <T extends SidebarComponent>(name: T, props: SidebarProps<T>) => {
-      const [path] = router.asPath.split("?");
+      const [path] = router.asPath.split('?');
       const query = Object.entries(props as {})
         .filter(([, val]) => val)
         .map(([name, val]) => `${name}=${val}`)
-        .join("&");
-      const url = path + "?sidebar=" + name + (query && `&${query}`);
+        .join('&');
+      const url = path + '?sidebar=' + name + (query && `&${query}`);
 
       // don't store history inside the same sidebar
       if (router.query?.sidebar === name) {
@@ -62,7 +62,7 @@ export const SidebarProvider = <T extends SidebarComponent>({
   );
 
   const close = useCallback(() => {
-    const [path] = router.asPath.split("?");
+    const [path] = router.asPath.split('?');
 
     void router.replace(path, path, {
       shallow: true,
@@ -87,7 +87,7 @@ export const SidebarProvider = <T extends SidebarComponent>({
           {createElement(sidebarComponents[current], {
             onRequestClose: close,
             openSidebar: open,
-            ...omit(["sidebar"], router.query),
+            ...omit(['sidebar'], router.query),
           } as any)}
         </ModalWrapper>
       )}

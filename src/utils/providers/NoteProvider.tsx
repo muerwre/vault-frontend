@@ -1,6 +1,6 @@
-import { createContext, FC, useContext } from "react";
+import { createContext, FC, useContext } from 'react';
 
-import { useNotes } from "~/hooks/notes/useNotes";
+import { useNotes } from '~/hooks/notes/useNotes';
 
 const NoteContext = createContext<ReturnType<typeof useNotes>>({
   notes: [],
@@ -13,7 +13,7 @@ const NoteContext = createContext<ReturnType<typeof useNotes>>({
 });
 
 export const NoteProvider: FC = ({ children }) => {
-  const notes = useNotes("");
+  const notes = useNotes('');
 
   return <NoteContext.Provider value={notes}>{children}</NoteContext.Provider>;
 };

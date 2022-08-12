@@ -1,23 +1,23 @@
-import React, { useCallback, VFC } from "react";
+import React, { useCallback, VFC } from 'react';
 
-import classNames from "classnames";
+import classNames from 'classnames';
 
-import { Filler } from "~/components/containers/Filler";
-import { Group } from "~/components/containers/Group";
-import { Button } from "~/components/input/Button";
-import { Icon } from "~/components/input/Icon";
-import { MenuButton, MenuItemWithIcon } from "~/components/menu";
-import { VerticalMenu } from "~/components/menu/VerticalMenu";
-import { useStackContext } from "~/components/sidebar/SidebarStack";
-import { ProfileSidebarHead } from "~/containers/profile/ProfileSidebarHead";
-import { ProfileStats } from "~/containers/profile/ProfileStats";
-import { useAuth } from "~/hooks/auth/useAuth";
-import markdown from "~/styles/common/markdown.module.scss";
+import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
+import { Button } from '~/components/input/Button';
+import { Icon } from '~/components/input/Icon';
+import { MenuButton, MenuItemWithIcon } from '~/components/menu';
+import { VerticalMenu } from '~/components/menu/VerticalMenu';
+import { useStackContext } from '~/components/sidebar/SidebarStack';
+import { ProfileSidebarHead } from '~/containers/profile/ProfileSidebarHead';
+import { ProfileStats } from '~/containers/profile/ProfileStats';
+import { useAuth } from '~/hooks/auth/useAuth';
+import markdown from '~/styles/common/markdown.module.scss';
 
-import { ProfileSidebarLogoutButton } from "../ProfileSidebarLogoutButton";
-import { ProfileToggles } from "../ProfileToggles";
+import { ProfileSidebarLogoutButton } from '../ProfileSidebarLogoutButton';
+import { ProfileToggles } from '../ProfileToggles';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface ProfileSidebarMenuProps {
   onClose: () => void;

@@ -1,19 +1,19 @@
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useMemo, useState } from 'react';
 
-import classNames from "classnames";
-import SwiperCore, { Autoplay, EffectFade, Lazy, Navigation } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperClass from "swiper/types/swiper-class";
+import classNames from 'classnames';
+import SwiperCore, { Autoplay, EffectFade, Lazy, Navigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperClass from 'swiper/types/swiper-class';
 
-import { Icon } from "~/components/input/Icon";
-import { LoaderCircle } from "~/components/input/LoaderCircle";
-import { ImagePresets, URLS } from "~/constants/urls";
-import { useWindowSize } from "~/hooks/dom/useWindowSize";
-import { useNavigation } from "~/hooks/navigation/useNavigation";
-import { IFlowNode } from "~/types";
-import { getURLFromString } from "~/utils/dom";
+import { Icon } from '~/components/input/Icon';
+import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { ImagePresets, URLS } from '~/constants/urls';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
+import { useNavigation } from '~/hooks/navigation/useNavigation';
+import { IFlowNode } from '~/types';
+import { getURLFromString } from '~/utils/dom';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 SwiperCore.use([EffectFade, Lazy, Autoplay, Navigation]);
 
@@ -138,7 +138,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
               <img
                 src={getURLFromString(node.thumbnail!, preset)}
                 alt=""
-                className={classNames(styles.preview, "swiper-lazy")}
+                className={classNames(styles.preview, 'swiper-lazy')}
               />
             </SwiperSlide>
           ))}

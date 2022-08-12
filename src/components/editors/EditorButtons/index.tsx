@@ -1,20 +1,20 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 
-import { Filler } from "~/components/containers/Filler";
-import { Group } from "~/components/containers/Group";
-import { Padder } from "~/components/containers/Padder";
-import { EditorActionsPanel } from "~/components/editors/EditorActionsPanel";
-import { Button } from "~/components/input/Button";
-import { InputText } from "~/components/input/InputText";
-import { useWindowSize } from "~/hooks/dom/useWindowSize";
-import { useNodeFormContext } from "~/hooks/node/useNodeFormFormik";
+import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
+import { Padder } from '~/components/containers/Padder';
+import { EditorActionsPanel } from '~/components/editors/EditorActionsPanel';
+import { Button } from '~/components/input/Button';
+import { InputText } from '~/components/input/InputText';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
+import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 
 const EditorButtons: FC = () => {
   const { values, handleChange, isSubmitting } = useNodeFormContext();
   const { isTablet } = useWindowSize();
 
   return (
-    <Padder style={{ position: "relative" }}>
+    <Padder style={{ position: 'relative' }}>
       <EditorActionsPanel />
 
       <Group horizontal>
@@ -22,7 +22,7 @@ const EditorButtons: FC = () => {
           <InputText
             title="Название"
             value={values.title}
-            handler={handleChange("title")}
+            handler={handleChange('title')}
             autoFocus={!isTablet}
             maxLength={256}
             disabled={isSubmitting}
@@ -30,9 +30,9 @@ const EditorButtons: FC = () => {
         </Filler>
 
         <Button
-          title={isTablet ? undefined : "Сохранить"}
+          title={isTablet ? undefined : 'Сохранить'}
           iconRight="check"
-          color={values.is_promoted ? "primary" : "lab"}
+          color={values.is_promoted ? 'primary' : 'lab'}
           disabled={isSubmitting}
           type="submit"
         />

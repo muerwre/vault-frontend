@@ -6,19 +6,19 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
-import { TagAutocomplete } from "~/components/tags/TagAutocomplete";
-import { TagWrapper } from "~/components/tags/TagWrapper";
-import { useTagAutocomplete } from "~/hooks/tag/useTagAutocomplete";
+import { TagAutocomplete } from '~/components/tags/TagAutocomplete';
+import { TagWrapper } from '~/components/tags/TagWrapper';
+import { useTagAutocomplete } from '~/hooks/tag/useTagAutocomplete';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
-const placeholder = "Добавить";
+const placeholder = 'Добавить';
 
 const prepareInput = (input: string): string[] => {
   return input
-    .split(",")
+    .split(',')
     .map((title: string) =>
       title
         .trim()
@@ -37,7 +37,7 @@ interface IProps {
 
 const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
   const [focused, setFocused] = useState(false);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const ref = useRef<HTMLInputElement>(null);
   const wrapper = useRef<HTMLDivElement>(null);
   const options = useTagAutocomplete(input, exclude);
@@ -45,7 +45,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
   const onInput = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
       if (!value.trim()) {
-        setInput(value || "");
+        setInput(value || '');
         return;
       }
 
@@ -55,32 +55,32 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
         onAppend(items.slice(0, items.length - 1));
       }
 
-      setInput(items[items.length - 1] || "");
+      setInput(items[items.length - 1] || '');
     },
     [onAppend],
   );
 
   const onKeyDown = useCallback(
     ({ key }) => {
-      if (key === "Escape" && ref.current) {
-        setInput("");
+      if (key === 'Escape' && ref.current) {
+        setInput('');
         ref.current.blur();
         return;
       }
 
-      if (key === "Backspace" && input === "") {
-        setInput(onClearTag() || "");
+      if (key === 'Backspace' && input === '') {
+        setInput(onClearTag() || '');
         return;
       }
 
-      if (key === "," || key === "Comma") {
+      if (key === ',' || key === 'Comma') {
         const created = prepareInput(input);
 
         if (created.length) {
           onAppend(created);
         }
 
-        setInput("");
+        setInput('');
       }
     },
     [input, setInput, onClearTag, onAppend],
@@ -101,7 +101,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
       setFocused(false);
 
       if (input.trim()) {
-        setInput("");
+        setInput('');
       }
 
       onSubmit([]);
@@ -111,7 +111,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
 
   const onAutocompleteSelect = useCallback(
     (val: string) => {
-      setInput("");
+      setInput('');
 
       if (!val.trim()) {
         return;
@@ -122,15 +122,15 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
     [onAppend, setInput],
   );
 
-  const feature = useMemo(() => (input?.substr(0, 1) === "/" ? "green" : ""), [
+  const feature = useMemo(() => (input?.substr(0, 1) === '/' ? 'green' : ''), [
     input,
   ]);
 
   useEffect(() => {
     if (!focused) return;
 
-    document.addEventListener("click", onBlur);
-    return () => document.removeEventListener("click", onBlur);
+    document.addEventListener('click', onBlur);
+    return () => document.removeEventListener('click', onBlur);
   }, [onBlur, focused]);
 
   return (

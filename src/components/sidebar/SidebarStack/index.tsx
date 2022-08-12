@@ -7,11 +7,11 @@ import React, {
   useEffect,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
-import { isNil } from "~/utils/ramda";
+import { isNil } from '~/utils/ramda';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface SidebarStackProps extends PropsWithChildren<{}> {
   tab?: number;

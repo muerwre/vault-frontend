@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, VFC } from "react";
+import React, { useEffect, useRef, VFC } from 'react';
 
-import classNames from "classnames";
-import { observer } from "mobx-react-lite";
-import PhotoSwipeUI_Default from "photoswipe/dist/photoswipe-ui-default.js";
-import PhotoSwipeJs from "photoswipe/dist/photoswipe.js";
+import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
+import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js';
+import PhotoSwipeJs from 'photoswipe/dist/photoswipe.js';
 
-import { ImagePresets } from "~/constants/urls";
-import { useWindowSize } from "~/hooks/dom/useWindowSize";
-import { useModal } from "~/hooks/modal/useModal";
-import { IFile } from "~/types";
-import { DialogComponentProps } from "~/types/modal";
-import { getURL } from "~/utils/dom";
+import { ImagePresets } from '~/constants/urls';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
+import { useModal } from '~/hooks/modal/useModal';
+import { IFile } from '~/types';
+import { DialogComponentProps } from '~/types/modal';
+import { getURL } from '~/utils/dom';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 export interface PhotoSwipeProps extends DialogComponentProps {
   items: IFile[];
@@ -61,8 +61,8 @@ const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
       });
 
       ps.init();
-      ps.listen("destroy", hideModal);
-      ps.listen("close", hideModal);
+      ps.listen('destroy', hideModal);
+      ps.listen('close', hideModal);
     });
   }, [hideModal, items, index, isTablet]);
 
@@ -74,8 +74,8 @@ const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
       aria-hidden="true"
       ref={ref}
     >
-      <div className={classNames("pswp__bg", styles.bg)} />
-      <div className={classNames("pswp__scroll-wrap", styles.wrap)}>
+      <div className={classNames('pswp__bg', styles.bg)} />
+      <div className={classNames('pswp__scroll-wrap', styles.wrap)}>
         <div className="pswp__container">
           <div className="pswp__item" />
           <div className="pswp__item" />
@@ -83,7 +83,7 @@ const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
         </div>
 
         <div className="pswp__ui pswp__ui--hidden">
-          <div className={classNames("pswp__top-bar", styles.bar)}>
+          <div className={classNames('pswp__top-bar', styles.bar)}>
             <div className="pswp__counter" />
             <button
               className="pswp__button pswp__button--close"

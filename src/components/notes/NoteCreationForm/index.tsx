@@ -1,19 +1,18 @@
-import React, { FC, useCallback, useState } from "react";
+import { FC, useCallback } from 'react';
 
-import { FormikConfig, useFormik } from "formik";
-import { object, string, Asserts } from "yup";
+import { FormikConfig, useFormik } from 'formik';
+import { Asserts, object, string } from 'yup';
 
-import { Card } from "~/components/containers/Card";
-import { Filler } from "~/components/containers/Filler";
-import { Group } from "~/components/containers/Group";
-import { Button } from "~/components/input/Button";
-import { Textarea } from "~/components/input/Textarea";
-import { useRandomPhrase } from "~/constants/phrases";
-import { Note } from "~/types/notes";
-import { getErrorMessage } from "~/utils/errors/getErrorMessage";
-import { showErrorToast } from "~/utils/errors/showToast";
+import { Card } from '~/components/containers/Card';
+import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
+import { Button } from '~/components/input/Button';
+import { Textarea } from '~/components/input/Textarea';
+import { useRandomPhrase } from '~/constants/phrases';
+import { getErrorMessage } from '~/utils/errors/getErrorMessage';
+import { showErrorToast } from '~/utils/errors/showToast';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface NoteCreationFormProps {
   text?: string;
@@ -22,19 +21,19 @@ interface NoteCreationFormProps {
 }
 
 const validationSchema = object({
-  text: string().required("Напишите что-нибудь"),
+  text: string().required('Напишите что-нибудь'),
 });
 
 type Values = Asserts<typeof validationSchema>;
 
 const NoteCreationForm: FC<NoteCreationFormProps> = ({
-  text = "",
+  text = '',
   onSubmit,
   onCancel,
 }) => {
-  const placeholder = useRandomPhrase("SIMPLE");
+  const placeholder = useRandomPhrase('SIMPLE');
 
-  const submit = useCallback<FormikConfig<Values>["onSubmit"]>(
+  const submit = useCallback<FormikConfig<Values>['onSubmit']>(
     async (values, { resetForm, setSubmitting, setErrors }) => {
       try {
         await onSubmit(values.text, () => resetForm());
@@ -72,10 +71,10 @@ const NoteCreationForm: FC<NoteCreationFormProps> = ({
       <Card className={styles.card}>
         <div className={styles.row}>
           <Textarea
-            handler={handleChange("text")}
+            handler={handleChange('text')}
             value={values.text}
             error={touched.text ? errors.text : undefined}
-            onBlur={handleBlur("text")}
+            onBlur={handleBlur('text')}
             placeholder={placeholder}
             autoFocus
           />

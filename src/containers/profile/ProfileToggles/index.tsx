@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 
-import { Group } from "~/components/containers/Group";
-import { Zone } from "~/components/containers/Zone";
-import { SuperPowersToggle } from "~/containers/auth/SuperPowersToggle";
+import { Group } from '~/components/containers/Group';
+import { Zone } from '~/components/containers/Zone';
+import { SuperPowersToggle } from '~/containers/auth/SuperPowersToggle';
 
 interface ProfileTogglesProps {}
 

@@ -1,11 +1,11 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-import { BorisContacts } from "~/components/boris/BorisContacts";
-import { BorisStats } from "~/components/boris/BorisStats";
-import { Group } from "~/components/containers/Group";
-import { SuperPowersToggle } from "~/containers/auth/SuperPowersToggle";
-import styles from "~/layouts/BorisLayout/styles.module.scss";
-import { BorisUsageStats } from "~/types/boris";
+import { BorisContacts } from '~/components/boris/BorisContacts';
+import { BorisStats } from '~/components/boris/BorisStats';
+import { Group } from '~/components/containers/Group';
+import { SuperPowersToggle } from '~/containers/auth/SuperPowersToggle';
+import styles from '~/layouts/BorisLayout/styles.module.scss';
+import { BorisUsageStats } from '~/types/boris';
 
 interface Props {
   isUser: boolean;

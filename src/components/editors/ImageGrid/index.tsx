@@ -1,9 +1,9 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback } from 'react';
 
-import { SortableImageGrid } from "~/components/sortable";
-import { useWindowSize } from "~/hooks/dom/useWindowSize";
-import { UploadStatus } from "~/store/uploader/UploaderStore";
-import { IFile } from "~/types";
+import { SortableImageGrid } from '~/components/sortable';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
+import { UploadStatus } from '~/store/uploader/UploaderStore';
+import { IFile } from '~/types';
 
 interface IProps {
   files: IFile[];
@@ -22,7 +22,7 @@ const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
   );
 
   const onDrop = useCallback(
-    (id: IFile["id"]) => {
+    (id: IFile['id']) => {
       setFiles(files.filter(file => file && file.id !== id));
     },
     [setFiles, files],
