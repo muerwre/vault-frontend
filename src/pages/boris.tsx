@@ -25,7 +25,7 @@ const BorisPage: VFC = observer(() => {
     isLoading: isLoadingComments,
     isLoadingMore,
   } = useNodeComments(696);
-  const { title, setIsBetaTester, isTester, stats, isLoadingStats } = useBoris(comments);
+  const { title, stats, isLoadingStats } = useBoris(comments);
 
   return (
     <NodeContextProvider node={node} isLoading={isLoading} update={update}>
@@ -43,8 +43,6 @@ const BorisPage: VFC = observer(() => {
 
         <BorisLayout
           title={title}
-          setIsBetaTester={setIsBetaTester}
-          isTester={isTester}
           stats={stats}
           isLoadingStats={isLoadingStats}
         />

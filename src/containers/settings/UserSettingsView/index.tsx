@@ -1,17 +1,18 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-import { Superpower } from "~/components/boris/Superpower";
-import { Filler } from "~/components/containers/Filler";
-import { Group } from "~/components/containers/Group";
-import { Zone } from "~/components/containers/Zone";
-import { InputText } from "~/components/input/InputText";
-import { Textarea } from "~/components/input/Textarea";
-import { ERROR_LITERAL } from "~/constants/errors";
-import { ProfileAccounts } from "~/containers/profile/ProfileAccounts";
-import { useSettings } from "~/utils/providers/SettingsProvider";
-import { has } from "~/utils/ramda";
+import { Superpower } from '~/components/boris/Superpower';
+import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
+import { Zone } from '~/components/containers/Zone';
+import { InputText } from '~/components/input/InputText';
+import { Textarea } from '~/components/input/Textarea';
+import { ERROR_LITERAL } from '~/constants/errors';
+import { ProfileAccounts } from '~/containers/profile/ProfileAccounts';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
+import { useSettings } from '~/utils/providers/SettingsProvider';
+import { has } from '~/utils/ramda';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface UserSettingsViewProps {}
 
@@ -20,10 +21,11 @@ const getError = (error?: string) =>
 
 const UserSettingsView: FC<UserSettingsViewProps> = () => {
   const { values, handleChange, errors } = useSettings();
+  const { isPhone } = useWindowSize();
 
   return (
     <Group>
-      <Group horizontal className={styles.base_info}>
+      <Group horizontal={!isPhone} className={styles.base_info}>
         <Superpower>
           <Zone className={styles.avatar} title="Фото">
             <small>
@@ -33,18 +35,18 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
           </Zone>
         </Superpower>
 
-        <Zone title="О себе">
+        <Zone title="О себе" className={styles.about}>
           <Group>
             <InputText
               value={values.fullname}
-              handler={handleChange("fullname")}
+              handler={handleChange('fullname')}
               title="Полное имя"
               error={getError(errors.fullname)}
             />
 
             <Textarea
               value={values.description}
-              handler={handleChange("description")}
+              handler={handleChange('description')}
               title="Описание"
             />
 
@@ -75,21 +77,21 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
         <Group>
           <InputText
             value={values.username}
-            handler={handleChange("username")}
+            handler={handleChange('username')}
             title="Логин"
             error={getError(errors.username)}
           />
 
           <InputText
             value={values.email}
-            handler={handleChange("email")}
+            handler={handleChange('email')}
             title="E-mail"
             error={getError(errors.email)}
           />
 
           <InputText
             value={values.newPassword}
-            handler={handleChange("newPassword")}
+            handler={handleChange('newPassword')}
             title="Новый пароль"
             type="password"
             error={getError(errors.newPassword)}
@@ -97,7 +99,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
 
           <InputText
             value={values.password}
-            handler={handleChange("password")}
+            handler={handleChange('password')}
             title="Старый пароль"
             type="password"
             error={getError(errors.password)}

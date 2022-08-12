@@ -8,7 +8,7 @@ $pad_usual: mix(white, $content_bg, 10%);
 
   span {
     position: absolute;
-    top: -5px;
+    top: -$gap;
     left: $radius;
     transform: translate(0, -100%);
     background: $pad_usual;
@@ -25,12 +25,16 @@ $pad_usual: mix(white, $content_bg, 10%);
 }
 
 .pad {
-  padding: $gap * 1.5 $gap $gap;
+  padding: $gap;
   box-shadow: inset $pad_usual 0 0 0 2px;
   border-radius: $radius;
   position: relative;
 
   &.danger {
     box-shadow: inset $pad_danger 0 0 0 2px;
+  }
+
+  &.with_title {
+    padding-top: $gap * 2;
   }
 }

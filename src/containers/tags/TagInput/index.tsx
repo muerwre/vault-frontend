@@ -1,4 +1,12 @@
-import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { TagAutocomplete } from '~/components/tags/TagAutocomplete';
 import { TagWrapper } from '~/components/tags/TagWrapper';
@@ -15,7 +23,7 @@ const prepareInput = (input: string): string[] => {
       title
         .trim()
         .substring(0, 64)
-        .toLowerCase()
+        .toLowerCase(),
     )
     .filter(el => el.length > 0);
 };
@@ -49,7 +57,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
 
       setInput(items[items.length - 1] || '');
     },
-    [onAppend]
+    [onAppend],
   );
 
   const onKeyDown = useCallback(
@@ -69,14 +77,13 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
         const created = prepareInput(input);
 
         if (created.length) {
-          console.log('appending?!!')
           onAppend(created);
         }
 
         setInput('');
       }
     },
-    [input, setInput, onClearTag, onAppend]
+    [input, setInput, onClearTag, onAppend],
   );
 
   const onFocus = useCallback(() => setFocused(true), []);
@@ -99,7 +106,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
 
       onSubmit([]);
     },
-    [input, setInput, onSubmit]
+    [input, setInput, onSubmit],
   );
 
   const onAutocompleteSelect = useCallback(
@@ -109,13 +116,15 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
       if (!val.trim()) {
         return;
       }
-      
+
       onAppend([val]);
     },
-    [onAppend, setInput]
+    [onAppend, setInput],
   );
 
-  const feature = useMemo(() => (input?.substr(0, 1) === '/' ? 'green' : ''), [input]);
+  const feature = useMemo(() => (input?.substr(0, 1) === '/' ? 'green' : ''), [
+    input,
+  ]);
 
   useEffect(() => {
     if (!focused) return;
@@ -126,7 +135,11 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
 
   return (
     <div className={styles.wrap} ref={wrapper}>
-      <TagWrapper title={input || placeholder} hasInput={true} feature={feature}>
+      <TagWrapper
+        title={input || placeholder}
+        hasInput={true}
+        feature={feature}
+      >
         <input
           type="text"
           value={input}

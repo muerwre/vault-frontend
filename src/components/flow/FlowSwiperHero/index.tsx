@@ -34,14 +34,17 @@ const lazy = {
 };
 
 export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
-  const { isMobile } = useWindowSize();
+  const { isTablet } = useWindowSize();
   const { push } = useNavigation();
 
-  const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
+  const [controlledSwiper, setControlledSwiper] = useState<
+    SwiperClass | undefined
+  >(undefined);
   const [currentIndex, setCurrentIndex] = useState(heroes.length);
-  const preset = useMemo(() => (isMobile ? ImagePresets.cover : ImagePresets.small_hero), [
-    isMobile,
-  ]);
+  const preset = useMemo(
+    () => (isTablet ? ImagePresets.cover : ImagePresets.small_hero),
+    [isTablet],
+  );
 
   const onNext = useCallback(() => {
     controlledSwiper?.slideNext(1);
@@ -79,7 +82,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
     (sw: SwiperClass) => {
       push(URLS.NODE_URL(heroes[sw.realIndex]?.id));
     },
-    [push, heroes]
+    [push, heroes],
   );
 
   if (!heroes.length) {

@@ -1,4 +1,4 @@
-import { Note } from '~/types/notes';
+import { Note } from "~/types/notes";
 
 export interface ApiGetNotesRequest {
   limit: number;
@@ -9,4 +9,15 @@ export interface ApiGetNotesRequest {
 export interface ApiGetNotesResponse {
   list: Note[];
   totalCount: number;
+}
+
+export interface ApiCreateNoteRequest {
+  text: string;
+}
+
+export interface ApiUpdateNoteResponse extends Note {}
+
+export interface ApiUpdateNoteRequest {
+  id: number;
+  text: string;
 }

@@ -30,16 +30,19 @@ const NodeEditMenu: VFC<NodeEditMenuProps> = ({
   onLock,
   onEdit,
 }) => {
-  const { isMobile } = useWindowSize();
+  const { isTablet } = useWindowSize();
 
-  if (isMobile) {
+  if (isTablet) {
     return (
       <MenuButton
         icon={<Icon icon="dots-vertical" className={styles.icon} size={24} />}
         className={className}
       >
         {canStar && (
-          <MenuItemWithIcon icon={isHeroic ? 'star_full' : 'star'} onClick={onStar}>
+          <MenuItemWithIcon
+            icon={isHeroic ? 'star_full' : 'star'}
+            onClick={onStar}
+          >
             {isHeroic ? 'Убрать с главной' : 'На главную'}
           </MenuItemWithIcon>
         )}
@@ -48,7 +51,10 @@ const NodeEditMenu: VFC<NodeEditMenuProps> = ({
           Редактировать
         </MenuItemWithIcon>
 
-        <MenuItemWithIcon icon={isLocked ? 'locked' : 'unlocked'} onClick={onLock}>
+        <MenuItemWithIcon
+          icon={isLocked ? 'locked' : 'unlocked'}
+          onClick={onLock}
+        >
           {isLocked ? 'Восстановить' : 'Удалить'}
         </MenuItemWithIcon>
       </MenuButton>

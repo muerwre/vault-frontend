@@ -11,7 +11,7 @@ import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 
 const EditorButtons: FC = () => {
   const { values, handleChange, isSubmitting } = useNodeFormContext();
-  const { isMobile } = useWindowSize();
+  const { isTablet } = useWindowSize();
 
   return (
     <Padder style={{ position: 'relative' }}>
@@ -23,14 +23,14 @@ const EditorButtons: FC = () => {
             title="Название"
             value={values.title}
             handler={handleChange('title')}
-            autoFocus={!isMobile}
+            autoFocus={!isTablet}
             maxLength={256}
             disabled={isSubmitting}
           />
         </Filler>
 
         <Button
-          title={isMobile ? undefined : 'Сохранить'}
+          title={isTablet ? undefined : 'Сохранить'}
           iconRight="check"
           color={values.is_promoted ? 'primary' : 'lab'}
           disabled={isSubmitting}

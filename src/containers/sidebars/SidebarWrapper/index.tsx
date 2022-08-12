@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, ReactNode, useEffect, useRef } from 'react';
 
 import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
 
@@ -9,9 +9,15 @@ import styles from './styles.module.scss';
 interface IProps {
   onClose?: () => void;
   closeOnBackdropClick?: boolean;
+  backdrop?: ReactNode;
 }
 
-const SidebarWrapper: FC<IProps> = ({ children, onClose, closeOnBackdropClick = true }) => {
+const SidebarWrapper: FC<IProps> = ({
+  children,
+  onClose,
+  closeOnBackdropClick = true,
+  backdrop,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useCloseOnEscape(onClose);
@@ -25,7 +31,12 @@ const SidebarWrapper: FC<IProps> = ({ children, onClose, closeOnBackdropClick = 
 
   return (
     <div className={styles.wrapper} ref={ref}>
-      {closeOnBackdropClick && <div className={styles.backdrop} onClick={onClose} />}
+      {(closeOnBackdropClick || backdrop) && (
+        <div className={styles.backdrop} onClick={onClose}>
+          {backdrop}
+        </div>
+      )}
+
       {children}
     </div>
   );

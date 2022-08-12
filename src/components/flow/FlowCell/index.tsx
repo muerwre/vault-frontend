@@ -39,10 +39,12 @@ const FlowCell: FC<Props> = ({
   canEdit = false,
   onChangeCellView,
 }) => {
-  const { isMobile } = useWindowSize();
+  const { isTablet } = useWindowSize();
 
   const withText =
-    ((!!flow.display && flow.display !== 'single') || !image) && flow.show_description && !!text;
+    ((!!flow.display && flow.display !== 'single') || !image) &&
+    flow.show_description &&
+    !!text;
   const {
     hasDescription,
     setViewHorizontal,
@@ -51,14 +53,19 @@ const FlowCell: FC<Props> = ({
     setViewSingle,
     toggleViewDescription,
   } = useFlowCellControls(id, text, flow, onChangeCellView);
-  const { isActive: isMenuActive, activate, ref, deactivate } = useClickOutsideFocus();
+  const {
+    isActive: isMenuActive,
+    activate,
+    ref,
+    deactivate,
+  } = useClickOutsideFocus();
 
   const shadeSize = useMemo(() => {
-    const min = isMobile ? 10 : 15;
-    const max = isMobile ? 20 : 40;
+    const min = isTablet ? 10 : 15;
+    const max = isTablet ? 20 : 40;
 
     return withText ? min : max;
-  }, [withText, isMobile]);
+  }, [withText, isTablet]);
 
   const shadeAngle = useMemo(() => {
     if (flow.display === 'vertical') {
@@ -73,7 +80,10 @@ const FlowCell: FC<Props> = ({
   }, [flow.display]);
 
   return (
-    <div className={classNames(styles.cell, styles[flow.display || 'single'])} ref={ref as any}>
+    <div
+      className={classNames(styles.cell, styles[flow.display || 'single'])}
+      ref={ref as any}
+    >
       {canEdit && !isMenuActive && (
         <div className={styles.menu}>
           <MenuDots onClick={activate} />
@@ -98,7 +108,10 @@ const FlowCell: FC<Props> = ({
 
       <Anchor className={styles.link} href={to}>
         {withText && (
-          <FlowCellText className={styles.text} heading={<h4 className={styles.title}>{title}</h4>}>
+          <FlowCellText
+            className={styles.text}
+            heading={<h4 className={styles.title}>{title}</h4>}
+          >
             {text!}
           </FlowCellText>
         )}
@@ -113,7 +126,12 @@ const FlowCell: FC<Props> = ({
         )}
 
         {!!title && (
-          <CellShade color={color} className={styles.shade} size={shadeSize} angle={shadeAngle} />
+          <CellShade
+            color={color}
+            className={styles.shade}
+            size={shadeSize}
+            angle={shadeAngle}
+          />
         )}
 
         {!withText && (

@@ -10,9 +10,10 @@ import { path } from '~/utils/ramda';
 import styles from './styles.module.scss';
 
 const LabText: FC<INodeComponentProps> = ({ node, isLoading }) => {
-  const content = useMemo(() => formatTextParagraphs(path(['blocks', 0, 'text'], node) || ''), [
-    node,
-  ]);
+  const content = useMemo(
+    () => formatTextParagraphs(path(['blocks', 0, 'text'], node) || ''),
+    [node],
+  );
 
   const onClick = useGotoNode(node.id);
 
@@ -21,11 +22,9 @@ const LabText: FC<INodeComponentProps> = ({ node, isLoading }) => {
       <Paragraph lines={5} />
     </div>
   ) : (
-    <Markdown
-      dangerouslySetInnerHTML={{ __html: content }}
-      className={styles.wrap}
-      onClick={onClick}
-    />
+    <Markdown className={styles.wrap} onClick={onClick}>
+      {content}
+    </Markdown>
   );
 };
 

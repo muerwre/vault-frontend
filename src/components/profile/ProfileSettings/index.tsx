@@ -1,14 +1,14 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-import { Filler } from "~/components/containers/Filler";
-import { Group } from "~/components/containers/Group";
-import { Padder } from "~/components/containers/Padder";
-import { Button } from "~/components/input/Button";
-import { UserSettingsView } from "~/containers/settings/UserSettingsView";
+import { Filler } from '~/components/containers/Filler';
+import { Group } from '~/components/containers/Group';
+import { Padder } from '~/components/containers/Padder';
+import { Button } from '~/components/input/Button';
+import { UserSettingsView } from '~/containers/settings/UserSettingsView';
 import {
   SettingsProvider,
   useSettings,
-} from "~/utils/providers/SettingsProvider";
+} from '~/utils/providers/SettingsProvider';
 
 const Form = ({ children }) => {
   const { handleSubmit } = useSettings();

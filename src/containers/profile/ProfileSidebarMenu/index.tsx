@@ -15,6 +15,7 @@ import { useAuth } from '~/hooks/auth/useAuth';
 import markdown from '~/styles/common/markdown.module.scss';
 
 import { ProfileSidebarLogoutButton } from '../ProfileSidebarLogoutButton';
+import { ProfileToggles } from '../ProfileToggles';
 
 import styles from './styles.module.scss';
 
@@ -40,8 +41,18 @@ const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
       <Filler className={classNames(markdown.wrapper, styles.text)}>
         <Group>
           <VerticalMenu className={styles.menu}>
-            <VerticalMenu.Item onClick={() => setActiveTab(0)}>Настройки</VerticalMenu.Item>
+            <VerticalMenu.Item onClick={() => setActiveTab(0)}>
+              Настройки
+            </VerticalMenu.Item>
+
+            <VerticalMenu.Item onClick={() => setActiveTab(1)}>
+              Заметки
+            </VerticalMenu.Item>
           </VerticalMenu>
+
+          <div className={styles.toggles}>
+            <ProfileToggles />
+          </div>
 
           <div className={styles.stats}>
             <ProfileStats />
@@ -51,7 +62,7 @@ const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
 
       <Group className={styles.buttons} horizontal>
         <Filler />
-        <ProfileSidebarLogoutButton onLogout={onLogout}/>
+        <ProfileSidebarLogoutButton onLogout={onLogout} />
       </Group>
     </div>
   );

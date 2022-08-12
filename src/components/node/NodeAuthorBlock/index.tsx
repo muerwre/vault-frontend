@@ -3,7 +3,6 @@ import React, { FC, useCallback } from 'react';
 import { Avatar } from '~/components/common/Avatar';
 import { useUserDescription } from '~/hooks/auth/useUserDescription';
 import { INodeUser } from '~/types';
-import { openUserProfile } from '~/utils/user';
 
 import styles from './styles.module.scss';
 
@@ -12,8 +11,6 @@ interface Props {
 }
 
 const NodeAuthorBlock: FC<Props> = ({ user }) => {
-  const onOpenProfile = useCallback(() => openUserProfile(user?.username), [user]);
-
   const description = useUserDescription(user);
 
   if (!user) {
@@ -23,7 +20,7 @@ const NodeAuthorBlock: FC<Props> = ({ user }) => {
   const { fullname, username, photo } = user;
 
   return (
-    <div className={styles.block} onClick={onOpenProfile}>
+    <div className={styles.block}>
       <Avatar username={username} url={photo?.url} className={styles.avatar} />
 
       <div className={styles.info}>

@@ -35,14 +35,6 @@ export const useMessageEventReactions = () => {
             void createSocialAccount(path(['data', 'payload', 'token'], event));
           }
           break;
-        case EventMessageType.OpenProfile:
-          const username: string | undefined = path(['data', 'username'], event);
-          if (!username) {
-            return;
-          }
-
-          showModal(Dialog.Profile, { username });
-          break;
         default:
           console.log('unknown message', event.data);
       }

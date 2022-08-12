@@ -9,22 +9,20 @@ import { stripHTMLTags } from '~/utils/stripHTMLTags';
 export const formatTextSanitizeYoutube = (text: string): string =>
   text.replace(
     /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-&=]+)/gim,
-    '\n$1\n'
+    '\n$1\n',
   );
 
 /**
  * Removes HTML tags
  */
-export const formatTextSanitizeTags = (text: string): string => stripHTMLTags(text);
+export const formatTextSanitizeTags = (text: string): string =>
+  stripHTMLTags(text);
 
 /**
  * Returns clickable usernames
  */
 export const formatTextClickableUsernames = (text: string): string =>
-  text.replace(
-    /~([\wа-яА-Я-]+)/giu,
-    `<span class="username" onClick="window.postMessage({ type: '${EventMessageType.OpenProfile}', username: '$1'});">~$1</span>`
-  );
+  text.replace(/~([\wа-яА-Я-]+)/giu, `<span class="username">~$1</span>`);
 
 /**
  * Makes gray comments
@@ -41,10 +39,13 @@ export const formatTextComments = (text: string): string =>
  */
 export const formatTextTodos = (text: string): string =>
   text
-    .replace(/\/\/\s*(todo|туду):?\s*([^\n]+)/gim, '// <span class="todo">$1</span> $2')
+    .replace(
+      /\/\/\s*(todo|туду):?\s*([^\n]+)/gim,
+      '// <span class="todo">$1</span> $2',
+    )
     .replace(
       /\/\/\s*(done|сделано|сделал|готово|fixed|пофикшено|фиксед):?\s*([^\n]+)/gim,
-      '// <span class="done">$1</span> $2'
+      '// <span class="done">$1</span> $2',
     );
 
 /**
@@ -56,7 +57,8 @@ export const formatExclamations = (text: string): string =>
 /**
  * Replaces -- with dash
  */
-export const formatTextDash = (text: string): string => text.replace(' -- ', ' — ');
+export const formatTextDash = (text: string): string =>
+  text.replace(' -- ', ' — ');
 
 /**
  * Formats with markdown

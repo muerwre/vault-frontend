@@ -1,0 +1,11 @@
+@import "src/styles/variables";
+
+.card {
+  padding: 0;
+}
+
+.row {
+  @include row_shadow;
+
+  padding: $gap / 2;
+}

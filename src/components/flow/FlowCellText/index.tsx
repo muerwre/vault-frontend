@@ -8,7 +8,6 @@ import { DivProps } from '~/utils/types';
 
 import styles from './styles.module.scss';
 
-
 interface Props extends DivProps {
   children: string;
   heading: string | ReactElement;
@@ -17,10 +16,7 @@ interface Props extends DivProps {
 const FlowCellText: FC<Props> = ({ children, heading, ...rest }) => (
   <div {...rest} className={classNames(styles.text, rest.className)}>
     {heading && <div className={styles.heading}>{heading}</div>}
-    <Markdown
-      className={styles.description}
-      dangerouslySetInnerHTML={{ __html: formatText(children) }}
-    />
+    <Markdown className={styles.description}>{formatText(children)}</Markdown>
   </div>
 );
 

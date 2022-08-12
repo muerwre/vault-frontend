@@ -1,10 +1,10 @@
-import { FC, memo, useCallback, useEffect, useRef, useState } from "react";
+import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
 
-import { debounce, throttle } from "throttle-debounce";
+import { debounce, throttle } from 'throttle-debounce';
 
-import { useWindowSize } from "~/hooks/dom/useWindowSize";
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface LoginSceneProps {}
 
@@ -17,31 +17,31 @@ interface Layer {
 
 const layers: Layer[] = [
   {
-    src: "/images/clouds__bg.svg",
+    src: '/images/clouds__bg.svg',
     velocity: -0.3,
     width: 3840,
     height: 1080,
   },
   {
-    src: "/images/clouds__cube.svg",
+    src: '/images/clouds__cube.svg',
     velocity: -0.1,
     width: 3840,
     height: 1080,
   },
   {
-    src: "/images/clouds__cloud.svg",
+    src: '/images/clouds__cloud.svg',
     velocity: 0.2,
     width: 3840,
     height: 1080,
   },
   {
-    src: "/images/clouds__dudes.svg",
+    src: '/images/clouds__dudes.svg',
     velocity: 0.5,
     width: 3840,
     height: 1080,
   },
   {
-    src: "/images/clouds__trash.svg",
+    src: '/images/clouds__trash.svg',
     velocity: 0.8,
     width: 3840,
     height: 1080,
@@ -52,7 +52,7 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
   const imageRefs = useRef<Array<SVGImageElement | null>>([]);
-  const { isMobile } = useWindowSize();
+  const { isTablet } = useWindowSize();
   const domRect = useRef<DOMRect>();
 
   const onMouseMove = useCallback(
@@ -84,11 +84,11 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
 
   useEffect(() => {
     const listener = throttle(100, onMouseMove);
-    document.addEventListener("mousemove", listener);
-    return () => document.removeEventListener("mousemove", listener);
+    document.addEventListener('mousemove', listener);
+    return () => document.removeEventListener('mousemove', listener);
   }, []);
 
-  if (isMobile) {
+  if (isTablet) {
     return null;
   }
 
@@ -103,16 +103,16 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
       >
         <defs>
           <linearGradient id="fallbackGradient" x1={0} x2={0} y1={1} y2={0}>
-            <stop style={{ stopColor: "#ffccaa", stopOpacity: 1 }} offset="0" />
+            <stop style={{ stopColor: '#ffccaa', stopOpacity: 1 }} offset="0" />
             <stop
-              style={{ stopColor: "#fff6d5", stopOpacity: 1 }}
+              style={{ stopColor: '#fff6d5', stopOpacity: 1 }}
               offset="0.34655526"
             />
             <stop
-              style={{ stopColor: "#afc6e9", stopOpacity: 1 }}
+              style={{ stopColor: '#afc6e9', stopOpacity: 1 }}
               offset="0.765342"
             />
-            <stop style={{ stopColor: "#879fde", stopOpacity: 1 }} offset="1" />
+            <stop style={{ stopColor: '#879fde', stopOpacity: 1 }} offset="1" />
           </linearGradient>
         </defs>
 
