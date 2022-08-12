@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   display: flex;
@@ -100,8 +100,7 @@
 }
 
 .bar {
-  // background: linear-gradient(270deg, $green, $wisegreen);
-  background: $main_gradient;
+  background: $green_gradient;
   position: absolute;
   height: 10px;
   left: 0;

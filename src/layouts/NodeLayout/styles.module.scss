@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   width: 100%;
@@ -24,13 +24,6 @@
   @media (max-width: 1024px) {
     flex: 2 1;
   }
-}
-
-.buttons {
-  background: $node_buttons_bg;
-  flex: 1;
-  border-radius: $panel_radius;
-  box-shadow: $comment_shadow;
 }
 
 .panel {

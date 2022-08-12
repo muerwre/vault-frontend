@@ -16,10 +16,9 @@ html {
 }
 
 body {
-  background: darken($main_bg_color, 12%);
   min-height: 100vh;
-  background: url('../../src/sprites/noise.png') $main_bg_color;
-  color: $main_text_color;
+  background: url('../../src/sprites/noise.png') $content_bg;
+  color: $text_color;
   font: $font_16_regular;
   -webkit-font-smoothing: antialiased;
   fill: white;

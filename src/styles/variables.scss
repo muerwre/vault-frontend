@@ -15,7 +15,6 @@ $lab_gap: $gap * 2;
 $lab_gap_mobile: $gap * 2;
 $grid_line: 5px;
 $content_width: $cell * 5 + $grid_line * 4;
-$spc: $gap * 2;
 $comment_height: 72px;
 $bar_height: 64px;
 $page_top_offset: 32px;
@@ -33,11 +32,14 @@ $panel_size: 64px;
 $node_title_height: $panel_size;
 $upload_button_height: 52px;
 
-$shadow_depth_1: transparentize(black, 0.8) 0 1px, inset transparentize(white, 0.98) 0 1px;
-$shadow_depth_2: transparentize(black, 0.8) 0 2px, inset transparentize(white, 0.98) 0 1px;
+$shadow_depth_1: transparentize(black, 0.8) 0 1px,
+  inset transparentize(white, 0.98) 0 1px;
+$shadow_depth_2: transparentize(black, 0.8) 0 2px,
+  inset transparentize(white, 0.98) 0 1px;
 
 $comment_shadow: $shadow_depth_2;
-$node_shadow: transparentize(black, 0.8) 0 2px, transparentize(black, 0.8) 0 2px 4px;
+$node_shadow: transparentize(black, 0.8) 0 2px,
+  transparentize(black, 0.8) 0 2px 4px;
 
 $tag_height: 26px;
 

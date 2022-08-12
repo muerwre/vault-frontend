@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .container {
   min-height: $info_height;
@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: $text_small;
+  font: $font_14_regular;
   line-height: 1.2em;
   padding: $gap;
   background: transparentize(white, 0.9);

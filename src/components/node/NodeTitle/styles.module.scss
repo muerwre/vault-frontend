@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 @mixin button {
   margin: 0 $gap;
@@ -95,26 +95,6 @@
 .panel {
   flex: 1;
   min-width: 0;
-}
-
-.mark {
-  flex: 0 0 32px;
-  position: relative;
-
-  &::after {
-    content: ' ';
-    position: absolute;
-    top: -38px;
-    right: 4px;
-    width: 24px;
-    height: 52px;
-    background: $main_gradient;
-    box-shadow: transparentize(black, 0.8) 4px 2px;
-    border-radius: 2px;
-  }
-}
-
-.sep {
 }
 
 @keyframes pulse {

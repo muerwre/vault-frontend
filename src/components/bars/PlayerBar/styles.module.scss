@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .place {
   position: relative;
@@ -11,11 +11,8 @@
   @include outer_shadow();
   display: flex;
   border-radius: $radius $radius 0 0;
-  // background: $main_gradient;
   align-items: center;
   background: lighten($content_bg, 6%);
-  // box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px, inset rgba(255, 255, 255, 0.3) 1px 1px,
-  // inset rgba(0, 0, 0, 0.3) 0 -1px;
   position: absolute;
   top: 0;
   left: 0;
