@@ -1,7 +1,4 @@
-@import "src/styles/variables";
-
-$pad_danger: mix($red, $content_bg, 70%);
-$pad_usual: mix(white, $content_bg, 10%);
+@import 'src/styles/variables';
 
 .about {
   flex: 4;
@@ -15,9 +12,6 @@ $pad_usual: mix(white, $content_bg, 10%);
 .small {
   font: $font_12_regular;
   padding: 0 $gap 0;
-}
-
-.grid {
 }
 
 div.base_info.base_info {

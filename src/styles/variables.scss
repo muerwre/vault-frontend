@@ -23,7 +23,7 @@ $radius: 8px;
 $cell_radius: $radius;
 $panel_radius: $radius;
 $dialog_radius: $radius * 2;
-$placeholder_bg: transparentize(white, 0.96);
+$placeholder_bg: $gray_90;
 
 $info_height: 24px;
 $limited_width: 940px;
@@ -32,10 +32,8 @@ $panel_size: 64px;
 $node_title_height: $panel_size;
 $upload_button_height: 52px;
 
-$shadow_depth_1: transparentize(black, 0.8) 0 1px,
-  inset transparentize(white, 0.98) 0 1px;
-$shadow_depth_2: transparentize(black, 0.8) 0 2px,
-  inset transparentize(white, 0.98) 0 1px;
+$shadow_depth_1: transparentize(black, 0.8) 0 1px, inset $gray_90 0 1px;
+$shadow_depth_2: transparentize(black, 0.8) 0 2px, inset $gray_90 0 1px;
 
 $comment_shadow: $shadow_depth_2;
 $node_shadow: transparentize(black, 0.8) 0 2px,
@@ -44,4 +42,4 @@ $node_shadow: transparentize(black, 0.8) 0 2px,
 $tag_height: 26px;
 
 $login_dialog_padding: $gap $gap 30px $gap;
-$sidebar_border: transparentize(white, 0.95);
+$sidebar_border: $gray_90;

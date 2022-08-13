@@ -9,20 +9,20 @@
   font: $font_14_regular;
   line-height: 1.2em;
   padding: $gap;
-  background: transparentize(white, 0.9);
+  background: $gray_90;
 
   &:global(.danger) {
     color: white;
-    background: transparentize($red, 0.5);
+    background: transparentize($color_danger, 0.5);
   }
 
   &:global(.warning) {
     color: white;
-    background: transparentize($red, 0.5);
+    background: transparentize($color_danger, 0.5);
   }
 
   &:global(.primary) {
     color: white;
-    background: transparentize($red, 0.5);
+    background: transparentize($color_danger, 0.5);
   }
 }

@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .text {
   padding: 0 $gap;
@@ -26,12 +26,12 @@
   }
 
   :global(.green) {
-    color: $wisegreen;
+    color: $color_primary;
   }
 
   & > :last-child::after {
     display: inline-block;
-    content: " ";
+    content: ' ';
     height: 1em;
     width: 120px;
     flex: 0 0 120px;

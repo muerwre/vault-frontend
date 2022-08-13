@@ -1,10 +1,10 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 div.block {
   @include inner_shadow_active;
 
   cursor: pointer;
-  background: $inset_bg;
+  background: linear-gradient(135deg, $content_bg_dark, $content_bg);
   padding: $gap;
   border-radius: $radius;
   display: flex;

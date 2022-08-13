@@ -18,9 +18,7 @@ const RestoreSent: VFC<RestoreSentProps> = ({ onClose }) => (
 
     <div />
 
-    <Button color="secondary" onClick={onClose}>
-      Отлично!
-    </Button>
+    <Button onClick={onClose}>Отлично!</Button>
   </Group>
 );
 

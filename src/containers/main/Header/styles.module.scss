@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import '../../../styles/variables';
 
 @keyframes appear {
   from {
@@ -86,7 +86,7 @@
   white-space: nowrap;
 
   &:hover {
-    color: $red;
+    color: $color_danger;
   }
 
   &::before {
@@ -109,7 +109,7 @@
     width: 6px;
     height: 6px;
     border-radius: 4px;
-    background: lighten($red, 10%);
+    background: lighten($color_danger, 10%);
     right: 12px;
     top: 6px;
     transition: opacity 0.5s;
@@ -127,7 +127,7 @@
   }
 
   &.boris::after {
-    background: lighten($wisegreen, 10%);
+    background: lighten($color_primary, 10%);
   }
 
   @include tablet {

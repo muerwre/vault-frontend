@@ -1,8 +1,12 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 @keyframes appear {
-  0% { opacity: 0 }
-  100% { opacity: 100 }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100;
+  }
 }
 
 $row_height: 24px;
@@ -16,7 +20,7 @@ $row_height: 24px;
   right: -2px;
   width: calc(100vw - 15px);
   max-width: 300px;
-  background: darken($content_bg, 2%);
+  background: $content_bg_dark;
   z-index: 10;
   border-radius: 4px;
   animation: appear 0.25s forwards;

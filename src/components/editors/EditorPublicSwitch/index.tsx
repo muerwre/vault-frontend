@@ -12,14 +12,14 @@ interface IProps extends IEditorComponentProps {}
 const EditorPublicSwitch: FC<IProps> = () => {
   const { values, setFieldValue } = useNodeFormContext();
 
-  const onChange = useCallback(() => setFieldValue('is_promoted', !values.is_promoted), [
-    values.is_promoted,
-    setFieldValue,
-  ]);
+  const onChange = useCallback(
+    () => setFieldValue('is_promoted', !values.is_promoted),
+    [values.is_promoted, setFieldValue],
+  );
 
   return (
     <Button
-      color={values.is_promoted ? 'primary' : 'lab'}
+      color={values.is_promoted ? 'danger' : 'info'}
       type="button"
       size="giant"
       label={

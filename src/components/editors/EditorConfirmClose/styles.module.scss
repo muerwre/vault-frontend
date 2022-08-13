@@ -1,4 +1,4 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 @keyframes appear {
   0% {
@@ -37,6 +37,6 @@
 
 .subtitle {
   font: $font_12_medium;
-  color: darken(white, 50%);
+  color: $gray_50;
   max-width: 300px;
 }

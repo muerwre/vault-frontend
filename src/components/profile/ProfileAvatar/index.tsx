@@ -14,7 +14,12 @@ export interface ProfileAvatarProps {
   onChangePhoto: (file: File) => void;
 }
 
-const ProfileAvatar: FC<ProfileAvatarProps> = ({ photo, onChangePhoto, canEdit, size }) => {
+const ProfileAvatar: FC<ProfileAvatarProps> = ({
+  photo,
+  onChangePhoto,
+  canEdit,
+  size,
+}) => {
   const onInputChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       if (!event.target.files?.length) {
@@ -23,10 +28,12 @@ const ProfileAvatar: FC<ProfileAvatarProps> = ({ photo, onChangePhoto, canEdit, 
 
       onChangePhoto(event.target.files[0]);
     },
-    [onChangePhoto]
+    [onChangePhoto],
   );
 
-  const backgroundImage = photo ? `url("${getURL(photo, ImagePresets.avatar)}")` : undefined;
+  const backgroundImage = photo
+    ? `url("${getURL(photo, ImagePresets.avatar)}")`
+    : undefined;
 
   return (
     <div
@@ -38,7 +45,15 @@ const ProfileAvatar: FC<ProfileAvatarProps> = ({ photo, onChangePhoto, canEdit, 
       }}
     >
       {canEdit && <input type="file" onInput={onInputChange} />}
-      {canEdit && <Button iconLeft="photo_add" round iconOnly className={styles.can_edit} />}
+      {canEdit && (
+        <Button
+          color="info"
+          iconLeft="photo_add"
+          round
+          iconOnly
+          className={styles.button}
+        />
+      )}
     </div>
   );
 };

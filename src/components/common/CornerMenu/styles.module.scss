@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   position: absolute;
@@ -9,12 +9,6 @@
   z-index: 10;
   outline: none;
   cursor: pointer;
-
-  &:hover {
-    .dot {
-      background: $secondary;
-    }
-  }
 }
 
 @keyframes appear {
@@ -57,6 +51,6 @@
   }
 
   &:hover {
-    background: $primary;
+    background: $color_primary;
   }
 }

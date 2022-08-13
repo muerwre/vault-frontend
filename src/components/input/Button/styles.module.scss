@@ -25,7 +25,7 @@
   cursor: pointer;
   margin: 0;
 
-  background: $primary;
+  background: $color_primary;
   border-radius: $radius;
 
   fill: white;
@@ -82,7 +82,7 @@
 
   &:global(.disabled),
   &:global(.grey) {
-    background: transparentize(white, 0.9);
+    background: $gray_90;
     color: white;
   }
 
@@ -118,26 +118,26 @@
 
   &.outline {
     background: transparent;
-    box-shadow: inset transparentize(white, 0.8) 0 0 0 2px;
-    color: transparentize(white, 0.8);
+    box-shadow: inset $gray_75 0 0 0 2px;
+    color: $gray_75;
 
     svg {
-      fill: transparentize(white, 0.8);
+      fill: $gray_75;
     }
   }
 
   &.outline-white {
     background: transparent;
-    box-shadow: inset transparentize(white, 0) 0 0 0 2px;
-    color: transparentize(white, 0);
+    box-shadow: inset $white 0 0 0 2px;
+    color: $white;
 
     svg {
-      fill: transparentize(white, 0);
+      fill: $white;
     }
   }
 
   &.gray {
-    background: lighten($content_bg, 8%);
+    background: $content_bg_lightest;
   }
 
   &.link {
@@ -234,12 +234,17 @@
 
 .primary {
   @include outer_shadow;
-  background: $red_gradient_alt;
+  background: $color_primary_gradient;
 }
 
-.secondary {
+.danger {
   @include outer_shadow;
-  background: $red;
+  background: $danger_gradient;
+}
+
+.info {
+  @include outer_shadow;
+  background: $info_gradient;
 }
 
 .lab {
@@ -248,8 +253,8 @@
 
 .flat {
   box-shadow: none;
-  background: $comment_bg;
-  color: darken(white, 20%);
+  background: $content_bg_light;
+  color: $gray_25;
 }
 
 .loading {

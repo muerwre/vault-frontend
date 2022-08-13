@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import '../../../styles/variables';
 
 .wrap {
   display: flex;
@@ -25,7 +25,10 @@
     left: 0;
     height: 60px;
     width: 100%;
-    background: linear-gradient(transparentize($content_bg, 1), $content_bg 90%);
+    background: linear-gradient(
+      transparentize($content_bg, 1),
+      $content_bg 90%
+    );
     pointer-events: none;
     touch-action: none;
 
@@ -73,7 +76,7 @@
 .search {
   @include outer_shadow();
 
-  background: lighten($content_bg, 3%);
+  background: $content_bg_lighter;
   padding: $gap;
   border-radius: $radius;
 }
@@ -91,7 +94,6 @@
 }
 
 .toggles {
-
   & > div {
     padding: $gap;
     font: $font_14_semibold;

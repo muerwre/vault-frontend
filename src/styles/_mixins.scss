@@ -1,25 +1,19 @@
-
-@use "sass:math";
+@use 'sass:math';
 
 @mixin outer_shadow() {
-  box-shadow:
-          inset transparentize(white, 0.95) 1px 1px,
-          transparentize(black, 0.8) 1px 1px,
-          transparentize(black, 0.6) 0 1px 5px;
+  box-shadow: inset $gray_90 1px 1px, transparentize(black, 0.8) 1px 1px,
+    transparentize(black, 0.6) 0 1px 5px;
 }
 
 // same as outer shadow, but higher
 @mixin dropdown_shadow {
-  box-shadow:
-          inset transparentize(white, 0.95) 1px 1px,
-          transparentize(black, 0.8) 1px 1px,
-          transparentize(black, 0.6) 5px 5px 10px;
+  box-shadow: inset $gray_90 1px 1px, transparentize(black, 0.8) 1px 1px,
+    transparentize(black, 0.6) 5px 5px 10px;
 }
 
 @mixin row_shadow() {
   &:not(:last-child) {
-    box-shadow: transparentize(white, 0.95) 0 1px,
-    inset transparentize(black, 0.8) 0 -1px;
+    box-shadow: $gray_90 0 1px, inset transparentize(black, 0.8) 0 -1px;
   }
 
   &:only-child {
@@ -28,10 +22,8 @@
 }
 
 @mixin inner_shadow() {
-  box-shadow:
-          inset transparentize(white, 0.95) -1px -1px,
-          inset transparentize(black, 0.9) 1px 1px,
-          inset transparentize(black, 0.9) 0 0 10px;
+  box-shadow: inset $gray_90 -1px -1px, inset transparentize(black, 0.9) 1px 1px,
+    inset transparentize(black, 0.9) 0 0 10px;
 }
 
 @mixin inner_shadow_active() {
@@ -39,12 +31,12 @@
   transition: background-color 250ms;
 
   &:hover {
-    background: transparentize(white, 0.95);
+    background: $gray_90;
   }
 }
 
 @mixin input_shadow() {
-  box-shadow: inset transparentize(white, 0.92) 0 -1px, inset transparentize(black, 0.8) 0 1px;
+  box-shadow: inset $gray_90 0 -1px, inset transparentize(black, 0.8) 0 1px;
 }
 
 @mixin modal_mixin() {
@@ -104,7 +96,7 @@
     @content;
 
     & > * {
-      margin: $gap*0.5 0 !important;
+      margin: $gap * 0.5 0 !important;
 
       &:first-child {
         margin-top: 0 !important;
@@ -117,7 +109,9 @@
 }
 
 @mixin can_backdrop {
-  @supports ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  @supports (
+    (-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))
+  ) {
     @content;
   }
 }
@@ -137,7 +131,7 @@
 @mixin title_with_line {
   font: $font_14_semibold;
   text-transform: uppercase;
-  color: transparentize(white, 0.3);
+  color: $gray_25;
   flex-direction: row;
   display: flex;
   align-items: center;
@@ -149,7 +143,7 @@
   & > :global(.line) {
     flex: 1;
     height: 2px;
-    background: transparentize(white, 0.95);
+    background: $gray_90;
   }
 }
 
@@ -165,9 +159,7 @@
   @include blur();
 }
 
-@mixin sidebar_content(
-  $width: 400px,
-) {
+@mixin sidebar_content($width: 400px) {
   height: 100%;
   box-sizing: border-box;
   display: flex;
@@ -187,12 +179,8 @@
   cursor: pointer;
 }
 
-@mixin lab_gradient {
-  background: linear-gradient(darken($dark_blue, 0%), darken($blue, 30%));
-}
-
 @mixin hero_gradient {
-  $color: mix($wisegreen, $content_bg, 30%);
+  $color: mix($color_primary, $content_bg, 30%);
   background: linear-gradient(170deg, lighten($color, 10%), $color);
 }
 
@@ -244,8 +232,12 @@
 
 @mixin appear {
   @keyframes __appear {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   animation: __appear 0.25s forwards;
@@ -266,11 +258,14 @@
 
 @mixin modal_backdrop {
   @include blur();
-  background: transparentize($content_bg, 0.3) url('../../src/sprites/noise.png');
+  background: transparentize($content_bg, 0.3)
+    url('../../src/sprites/noise.png');
 
   @include can_backdrop {
-    @supports (backdrop-filter: blur(5px)) and (background-image: url('../../src/sprites/noise.png')) {
-      background: transparentize($content_bg, 0.5) url('../../src/sprites/noise.png');
+    @supports (backdrop-filter: blur(5px)) and
+      (background-image: url('../../src/sprites/noise.png')) {
+      background: transparentize($content_bg, 0.5)
+        url('../../src/sprites/noise.png');
     }
   }
 }
@@ -292,25 +287,29 @@
 
   [data-popper-placement*='bottom'] & {
     border-width: 0 10px 10px 10px;
-    border-color: transparent transparent lighten($menu_bg, 6%) transparent;
+    border-color: transparent transparent lighten($content_bg_light, 6%)
+      transparent;
     top: -10px;
   }
 
   [data-popper-placement*='top'] & {
     border-width: 10px 10px 0 10px;
-    border-color: lighten($menu_bg, 6%) transparent transparent transparent;
+    border-color: lighten($content_bg_light, 6%) transparent transparent
+      transparent;
     bottom: -10px;
   }
 
   [data-popper-placement*='right'] & {
     border-width: 10px 10px 10px 0;
-    border-color: transparent lighten($menu_bg, 6%) transparent transparent;
+    border-color: transparent lighten($content_bg_light, 6%) transparent
+      transparent;
     left: -10px;
   }
 
   [data-popper-placement*='left'] & {
     border-width: 10px 0 10px 10px;
-    border-color: transparent transparent transparent lighten($menu_bg, 6%);
+    border-color: transparent transparent transparent
+      lighten($content_bg_light, 6%);
     right: -10px;
   }
 }

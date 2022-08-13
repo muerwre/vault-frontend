@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   position: fixed;
@@ -14,7 +14,7 @@
 }
 
 .button {
-  background: $red_gradient;
+  background: $danger_gradient;
   width: $bar_height;
   height: $bar_height;
   border-radius: $bar_height * 0.5;
@@ -34,12 +34,12 @@
   }
 
   .lab & {
-    background: $blue_gradient;
+    background: $info_gradient;
   }
 }
 
 .panel {
-  background: lighten($content_bg, 4%);
+  background: $content_bg_lighter;
   position: absolute;
   bottom: 0;
   z-index: 1;

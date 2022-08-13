@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   @include sidebar_content(400px);
@@ -56,7 +56,7 @@
   padding-left: $gap * 2;
 
   svg {
-    fill: transparentize(white, 0.5);
+    fill: $gray_50;
   }
 }
 
@@ -65,19 +65,11 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background: darken($content_bg, 2%);
+  background: $content_bg_dark;
   height: 2px;
   z-index: 2;
   pointer-events: none;
   touch-action: none;
-}
-
-.bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  background: lighten($content_bg, 20%);
 }
 
 .none {
@@ -86,7 +78,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: transparentize(white, 0.9);
+  color: $gray_90;
   fill: currentColor;
   font: $font_18_semibold;
   stroke: none;

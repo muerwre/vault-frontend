@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   @include outer_shadow;
@@ -9,7 +9,7 @@
   align-items: stretch;
   justify-content: stretch;
   flex-direction: column;
-  background: $comment_bg;
+  background: $content_bg_light;
   height: 100%;
   border-radius: $radius;
 }
@@ -39,7 +39,7 @@
   font: $font_14_regular;
   box-sizing: border-box;
   width: 100%;
-  color: transparentize(white, 0.5);
+  color: $gray_50;
 }
 
 .description {

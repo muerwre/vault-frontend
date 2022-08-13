@@ -1,39 +1,47 @@
-// palette
-$red: #ff3344;
+// palette (use inside)
 $yellow: #ffd60f;
 $dark_blue: #592071;
 $blue: #582cd0;
 $green: #00d2b9;
-$olive: #8bc12a;
-$orange: #ff7549;
 $wisegreen: #007962;
-$lightgreen: lighten(adjust_hue($wisegreen, -30deg), 10%);
+$olive: #8bc12a;
+$red: #ff3344;
+$orange: #ff7549;
+$color_primary: #007962;
+$lightgreen: lighten(adjust_hue(#007962, -30deg), 10%);
 $soft_blue: #3c75ff;
+$color_danger_slate: mix(#ff3344, #23201f, 60%);
 
-// main definitions
-$primary: $red;
-$secondary: $wisegreen;
+// main definitions (move to --vars)
+$color_primary: $wisegreen;
+$color_danger: $red;
+$color_online: $olive;
+$color_link: $red;
+$color_flow: $red;
+$color_lab: $blue;
 
-// gradients
-$red_gradient: linear-gradient(165deg, $orange -50%, $red 150%);
-$yellow_gradient: linear-gradient(165deg, $yellow -50%, $red 150%);
-$blue_gradient: linear-gradient(170deg, $blue, $dark_blue);
-$green_gradient: linear-gradient(170deg, $lightgreen -50%, $wisegreen 150%);
-$cyan_gradient: linear-gradient(260deg, $soft_blue -50%, #7b2653 150%);
-$red_gradient_alt: linear-gradient(170deg, #ff4545, #d2004c);
+// gradients (move to --vars)
+$danger_gradient: linear-gradient(165deg, $orange -50%, $color_danger 150%);
+$info_gradient: linear-gradient(170deg, $blue, $dark_blue);
+$warning_gradient: linear-gradient(165deg, $yellow -50%, $color_danger 150%);
+$color_primary_gradient: linear-gradient(
+  170deg,
+  $lightgreen -50%,
+  $color_primary 150%
+);
+$magic_gradient: linear-gradient(260deg, $soft_blue -50%, #7b2653 150%);
 
-$text_color: white;
-$scroll_color: $red_gradient;
-$scroll_inactive_opacity: 0.5;
-
-// --color-base
+// backgrounds (move to --vars)
 $content_bg: #23201f;
+$content_bg_dark: darken($content_bg, 2%);
+$content_bg_darker: darken($content_bg, 4%);
+$content_bg_light: lighten($content_bg, 2%);
+$content_bg_lighter: lighten($content_bg, 4%);
+$content_bg_lightest: lighten($content_bg, 6%);
 
-// --color-base-light
-$comment_bg: lighten($content_bg, 2%);
-$tag_bg: lighten($content_bg, 2%);
-$menu_bg: lighten($content_bg, 2%);
-
-// --color-base-dark
-$node_bg: darken($content_bg, 2%);
-$inset_bg: linear-gradient(135deg, darken($content_bg, 2%), $content_bg);
+// white shades (move to --vars)
+$white: white;
+$gray_25: mix($content_bg, white, 25%);
+$gray_50: mix($content_bg, white, 50%);
+$gray_75: mix($content_bg, white, 75%);
+$gray_90: mix($content_bg, white, 92%);

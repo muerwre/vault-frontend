@@ -1,4 +1,4 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 .wrap {
   padding: $gap $lab_gap $lab_gap;
@@ -10,13 +10,14 @@
 
 .timestamp {
   font: $font_12_regular;
-  color: darken(white, 40%);
+  color: $gray_50;
 }
 
-.comments, .like {
+.comments,
+.like {
   flex: 0;
   font: $font_16_semibold;
-  color: darken(white, 50%);
+  color: $gray_50;
   fill: currentColor;
   stroke: none;
   column-gap: $gap !important;
@@ -25,6 +26,6 @@
   padding-left: $gap;
 
   &.active {
-    color: $red;
+    color: $color_danger;
   }
 }

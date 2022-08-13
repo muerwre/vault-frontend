@@ -8,13 +8,13 @@
   justify-content: center;
 
   svg {
-    fill: darken(white, 50%);
+    fill: $gray_50;
     transition: fill 0.25s;
   }
 
   &:hover {
     svg {
-      fill: $red;
+      fill: $color_danger;
     }
   }
 
@@ -75,7 +75,7 @@
 
 .name {
   font: $font_12_regular;
-  color: transparentize(white, 0.5);
+  color: $gray_50;
   text-transform: lowercase;
 
   @include tablet {
@@ -89,7 +89,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  fill: transparentize(white, 0.5);
+  fill: $gray_50;
 }
 
 .panel {
@@ -134,16 +134,16 @@
     opacity: 1;
 
     svg {
-      fill: $red;
+      fill: $color_danger;
     }
 
     .like_count {
-      color: $red;
+      color: $color_danger;
     }
   }
 
   &:hover {
-    fill: $red;
+    fill: $color_danger;
     animation: pulse 0.75s infinite;
 
     .like_count {
@@ -159,7 +159,7 @@
   bottom: 0;
   opacity: 1;
   transition: opacity 0.25s, color 0.25s;
-  background: $node_bg;
+  background: $content_bg_dark;
   padding: 0 3px;
   border-radius: 10px;
   z-index: 3;

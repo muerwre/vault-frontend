@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .footer {
   display: flex;
@@ -8,7 +8,7 @@
   border-radius: 0 0 $radius $radius;
   align-items: center;
   text-transform: uppercase;
-  color: darken(white, 80%);
+  color: $gray_75;
   padding-top: 2px;
   box-sizing: border-box;
 

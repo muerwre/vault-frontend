@@ -1,10 +1,4 @@
-@import "src/styles/variables";
-
-$secondary_color: darken(desaturate($blue, 100%), 30%);
-$vk_color: $secondary_color;
-
-.dialog {
-}
+@import 'src/styles/variables';
 
 .wrap {
   display: flex;
@@ -17,32 +11,6 @@ $vk_color: $secondary_color;
   }
 }
 
-.secondary_button {
-  background: $content_bg;
-  box-shadow: inset $vk_color 0 0 0 2px;
-  color: $vk_color;
-
-  svg {
-    fill: $vk_color;
-    margin-right: $gap;
-  }
-}
-
 .forgot_button {
   opacity: 0.5;
-}
-
-.buttons {
-  margin: $gap * 2 0 0 0 !important;
-  padding: $gap * 2 0 0 0;
-  border-top: 1px solid black;
-}
-
-.links {
-  font: $font_14_regular;
-  text-align: center;
-
-  a {
-    color: lighten($content_bg, 40%);
-  }
 }

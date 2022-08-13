@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .placeholder {
   height: 320px;
@@ -11,6 +11,6 @@
   justify-content: center;
 
   svg {
-    fill: transparentize(white, 0.95);
+    fill: $gray_90;
   }
 }

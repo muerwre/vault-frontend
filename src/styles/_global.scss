@@ -18,7 +18,7 @@ html {
 body {
   min-height: 100vh;
   background: url('../../src/sprites/noise.png') $content_bg;
-  color: $text_color;
+  color: $white;
   font: $font_16_regular;
   -webkit-font-smoothing: antialiased;
   fill: white;
@@ -64,7 +64,7 @@ body {
 }
 
 .todo {
-  background-color: $red;
+  background-color: $color_danger;
 }
 
 .done {
@@ -76,12 +76,12 @@ h2 {
 }
 
 .username {
-  color: $wisegreen;
+  color: $color_primary;
   font-weight: 600;
 }
 
 a {
-  color: $primary;
+  color: $color_link;
   text-decoration: underline;
 }
 

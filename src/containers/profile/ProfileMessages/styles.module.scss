@@ -1,8 +1,8 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .messages {
   padding: $gap;
-  background: $node_bg;
+  background: $content_bg_dark;
   display: flex;
   flex-direction: column !important;
   overflow: auto;
@@ -28,7 +28,7 @@
 
 div.warning.warning {
   padding: $gap;
-  box-shadow: $red 0 0 0 2px;
+  box-shadow: $color_danger 0 0 0 2px;
   border-radius: $radius;
   font: $font_14_semibold;
   margin-bottom: $gap * 2;

@@ -1,7 +1,7 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
-$incoming_color: transparentize($wisegreen, 0.7);
-$outgoing_color: $comment_bg;
+$incoming_color: transparentize($color_primary, 0.7);
+$outgoing_color: $content_bg_light;
 
 .message {
   align-items: flex-end !important;
@@ -18,7 +18,7 @@ $outgoing_color: $comment_bg;
     height: 0;
     border-style: solid;
     border-width: 20px 0 0 20px;
-    border-color: transparent transparent transparent $comment_bg;
+    border-color: transparent transparent transparent $content_bg_light;
     bottom: 0;
     right: 24px;
   }
@@ -88,12 +88,12 @@ $outgoing_color: $comment_bg;
 }
 
 .restore {
-  color: $red;
-  fill: $red;
+  color: $color_danger;
+  fill: $color_danger;
 }
 
 .deleted {
-  background: mix($red, $content_bg, 50%);
+  background: mix($color_danger, $content_bg, 50%);
   border-radius: $radius $radius $radius 0;
   padding: $gap * 0.5;
   z-index: 2;

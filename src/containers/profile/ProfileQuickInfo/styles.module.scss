@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrapper {
   @include outer_shadow;
@@ -35,10 +35,10 @@ div.top.top {
 .status {
   font: $font_12_regular;
   margin-top: $gap;
-  color: darken(white, 50%);
+  color: $gray_50;
 
   &.active {
-    color: $olive;
+    color: $color_online;
   }
 
   &::before {

@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 @keyframes spin {
   0% {
@@ -34,5 +34,5 @@
   transform: translate(-50%, 0);
   padding: 2px 10px;
   border-radius: 10px;
-  background: $cyan_gradient;
+  background: $magic_gradient;
 }

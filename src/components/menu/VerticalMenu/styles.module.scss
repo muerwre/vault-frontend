@@ -1,5 +1,5 @@
-@import "src/styles/variables";
-@import "src/styles/mixins";
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
 
 .menu {
   border-radius: $radius;
@@ -30,11 +30,11 @@ a.item {
   padding: $gap;
   font: $font_16_semibold;
   cursor: pointer;
-  background-color: transparentize($secondary, 1);
+  background-color: transparentize($color_primary, 1);
   transition: background-color 0.25s;
 
   &:hover {
-    background-color: transparentize($secondary, 0.5);
+    background-color: transparentize($color_primary, 0.5);
   }
 
   &:first-child {

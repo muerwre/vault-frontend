@@ -52,9 +52,10 @@ const Header: FC<HeaderProps> = observer(() => {
     [borisCommentedAt, isUser, user.last_seen_boris],
   );
 
-  const hasLabUpdates = useMemo(() => labStats.updates.length > 0, [
-    labStats.updates,
-  ]);
+  const hasLabUpdates = useMemo(
+    () => labStats.updates.length > 0,
+    [labStats.updates],
+  );
   const hasFlowUpdates = useMemo(() => flowUpdates.length > 0, [flowUpdates]);
 
   // Needed for SSR
@@ -113,12 +114,7 @@ const Header: FC<HeaderProps> = observer(() => {
         )}
 
         {!isUser && (
-          <Button
-            className={styles.user_button}
-            onClick={onLogin}
-            round
-            color="secondary"
-          >
+          <Button className={styles.user_button} onClick={onLogin} round>
             ВДОХ
           </Button>
         )}

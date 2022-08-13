@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .error_shade {
   @include outer_shadow();
@@ -19,17 +19,17 @@
   text-transform: uppercase;
   font: $font_18_semibold;
   text-align: center;
-  color: $wisegreen;
+  color: $color_primary;
 
   svg {
-    fill: $wisegreen;
+    fill: $color_primary;
   }
 }
 
 .error_shade {
-  color: $red;
+  color: $color_danger;
 
   svg {
-    fill: $red;
+    fill: $color_danger;
   }
 }

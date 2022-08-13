@@ -1,5 +1,5 @@
-@import "src/styles/mixins";
-@import "src/styles/variables";
+@import 'src/styles/mixins';
+@import 'src/styles/variables';
 
 .menu {
   flex: 0;
@@ -27,14 +27,14 @@
     position: absolute;
     width: 3px;
     height: 16px;
-    background: darken($content_bg, 1%);
+    background: $content_bg_darker;
     display: flex;
     top: 5px;
     right: -$gap * 2 - 2px;
     border-radius: 2px;
 
     @include tablet {
-      right : -$gap - 1px;
+      right: -$gap - 1px;
     }
   }
 }

@@ -1,10 +1,10 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .badge {
   padding: $gap;
   text-align: center;
   border-radius: $radius;
-  color: $red;
+  color: $color_danger;
   padding: $gap * 4 $gap;
   text-transform: uppercase;
   font: $font_18_semibold;

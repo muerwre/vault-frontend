@@ -1,8 +1,8 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .bar {
   font: $font_12_regular;
-  color: darken(white, 60%);
+  color: $gray_50;
   user-select: none;
   width: 100%;
   text-align: center;

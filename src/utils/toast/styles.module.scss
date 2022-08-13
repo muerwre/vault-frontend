@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 div.toast {
   @include outer_shadow;
@@ -11,13 +11,13 @@ div.toast {
 }
 
 div.toast.error {
-  background: $red_gradient_alt;
+  background: $danger_gradient;
 }
 
 div.toast.success {
-  background: $green_gradient;
+  background: $color_primary_gradient;
 }
 
 div.toast.info {
-  background: $cyan_gradient;
+  background: $magic_gradient;
 }

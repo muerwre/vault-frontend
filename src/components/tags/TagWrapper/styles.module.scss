@@ -8,7 +8,7 @@ $big: 1.2;
   overflow: hidden;
   cursor: default;
   height: $tag_height;
-  background: $tag_bg;
+  background: $content_bg_light;
   border-radius: ($tag_height * 0.5) 3px 3px ($tag_height * 0.5);
   font: $font_14_semibold;
   align-self: flex-start;
@@ -42,29 +42,29 @@ $big: 1.2;
 
   &:global(.is_editing) {
     cursor: pointer;
-    background-color: lighten($tag_bg, 10%);
+    background-color: lighten($content_bg_light, 10%);
   }
 
   &:global(.red) {
-    background: $red_gradient;
+    background: $danger_gradient;
   }
 
   &:global(.blue) {
-    background: $blue_gradient;
+    background: $info_gradient;
   }
 
   &:global(.green) {
-    background: $green_gradient;
+    background: $color_primary_gradient;
   }
 
   &:global(.black) {
     background: transparentize(black, 0.7);
     box-shadow: none;
-    color: transparentize(white, 0.6);
+    color: $gray_75;
     font: $font_14_medium;
 
     .hole::after {
-      background: transparentize(white, 0.98);
+      background: $gray_90;
     }
   }
 
@@ -124,8 +124,7 @@ $big: 1.2;
 }
 
 button.delete {
-  box-shadow: inset transparentize(white, 0.9) 1px 0,
-    transparentize(black, 0.7) -1px 0;
+  box-shadow: inset $gray_90 1px 0, transparentize(black, 0.7) -1px 0;
   width: 24px;
   height: $tag_height;
   background: transparentize($content_bg, 0.75);

@@ -1,11 +1,11 @@
-@import "../../../styles/variables";
+@import '../../../styles/variables';
 
 .wrap {
 }
 
 .list {
   border-radius: $radius;
-  background: transparentize(white, 0.95);
+  background: $gray_90;
 }
 
 .buttons {
@@ -38,7 +38,7 @@
   grid-template-columns: 20px auto 20px;
   grid-column-gap: $gap * 1.5;
   align-items: center;
-  border-bottom: 1px solid transparentize(white, 0.9);
+  border-bottom: 1px solid $gray_90;
   padding: $gap;
 
   &:last-child {
@@ -70,7 +70,7 @@
     cursor: pointer;
     opacity: 0.5;
     transition: opacity 0.25s;
-    fill: $red;
+    fill: $color_danger;
     display: flex;
     align-items: center;
 
