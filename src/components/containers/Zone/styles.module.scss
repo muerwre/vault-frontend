@@ -18,7 +18,7 @@ $pad_usual: $content_bg_lightest;
     text-transform: uppercase;
 
     .danger & {
-      background: $color_danger_slate;
+      background: $content_bg_danger;
     }
   }
 }
@@ -30,7 +30,7 @@ $pad_usual: $content_bg_lightest;
   position: relative;
 
   &.danger {
-    box-shadow: inset $color_danger_slate 0 0 0 2px;
+    box-shadow: inset $content_bg_danger 0 0 0 2px;
   }
 
   &.with_title {

@@ -20,7 +20,7 @@
   z-index: 100;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(90deg, $dark_blue, $soft_blue, $dark_blue);
+  background: $global_loader_gradient;
   animation: spin infinite 1s linear;
 }
 

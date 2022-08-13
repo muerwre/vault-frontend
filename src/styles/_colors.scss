@@ -4,18 +4,18 @@ $dark_blue: #592071;
 $blue: #582cd0;
 $green: #00d2b9;
 $wisegreen: #007962;
-$olive: #8bc12a;
+$olive: #6cb337;
 $red: #ff3344;
 $orange: #ff7549;
-$color_primary: #007962;
 $lightgreen: lighten(adjust_hue(#007962, -30deg), 10%);
 $soft_blue: #3c75ff;
-$color_danger_slate: mix(#ff3344, #23201f, 60%);
+$brown: #23201f;
 
 // main definitions (move to --vars)
 $color_primary: $wisegreen;
 $color_danger: $red;
 $color_online: $olive;
+$color_offline: $red;
 $color_link: $red;
 $color_flow: $red;
 $color_lab: $blue;
@@ -24,20 +24,30 @@ $color_lab: $blue;
 $danger_gradient: linear-gradient(165deg, $orange -50%, $color_danger 150%);
 $info_gradient: linear-gradient(170deg, $blue, $dark_blue);
 $warning_gradient: linear-gradient(165deg, $yellow -50%, $color_danger 150%);
-$color_primary_gradient: linear-gradient(
+$primary_gradient: linear-gradient(
   170deg,
   $lightgreen -50%,
   $color_primary 150%
 );
 $magic_gradient: linear-gradient(260deg, $soft_blue -50%, #7b2653 150%);
+$global_loader_gradient: linear-gradient(
+  90deg,
+  $dark_blue,
+  $soft_blue,
+  $dark_blue
+);
 
 // backgrounds (move to --vars)
-$content_bg: #23201f;
-$content_bg_dark: darken($content_bg, 2%);
-$content_bg_darker: darken($content_bg, 4%);
-$content_bg_light: lighten($content_bg, 2%);
-$content_bg_lighter: lighten($content_bg, 4%);
-$content_bg_lightest: lighten($content_bg, 6%);
+$content_bg: $brown;
+$content_bg_dark: darken($brown, 2%);
+$content_bg_darker: darken($brown, 4%);
+$content_bg_light: lighten($brown, 2%);
+$content_bg_lighter: lighten($brown, 4%);
+$content_bg_lightest: lighten($brown, 6%);
+
+$content_bg_success: mix($brown, $blue, 90%);
+$content_bg_info: mix($brown, $wisegreen, 90%);
+$content_bg_danger: mix($red, $brown, 50%);
 
 // white shades (move to --vars)
 $white: white;

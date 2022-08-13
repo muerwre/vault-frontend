@@ -23,7 +23,7 @@ $margin: 1em;
   }
 
   pre {
-    background-color: transparentize($blue, 0.9);
+    background-color: $content_bg_lighter;
     font-family: monospace;
     font-size: 0.8em;
     border-radius: 2px;
@@ -43,7 +43,7 @@ $margin: 1em;
   p,
   li {
     code {
-      background-color: transparentize($blue, 0.9);
+      background-color: transparentize($color_primary, 0.9);
       padding: 2px 4px;
       border-radius: 0.3em;
       color: transparentize($color_primary, 0.1);

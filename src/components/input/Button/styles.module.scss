@@ -234,7 +234,7 @@
 
 .primary {
   @include outer_shadow;
-  background: $color_primary_gradient;
+  background: $primary_gradient;
 }
 
 .danger {
@@ -248,7 +248,7 @@
 }
 
 .lab {
-  background: $blue;
+  background: $color_lab;
 }
 
 .flat {
