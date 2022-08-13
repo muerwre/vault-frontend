@@ -13,16 +13,16 @@
 
   &:global(.danger) {
     color: white;
-    background: transparentize($color_danger, 0.5);
+    background: $content_bg_danger;
   }
 
   &:global(.warning) {
     color: white;
-    background: transparentize($color_danger, 0.5);
+    background: $content_bg_danger;
   }
 
   &:global(.primary) {
     color: white;
-    background: transparentize($color_danger, 0.5);
+    background: $content_bg_danger;
   }
 }

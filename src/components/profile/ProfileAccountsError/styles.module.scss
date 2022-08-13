@@ -15,7 +15,7 @@
   box-sizing: border-box;
   border-radius: $radius;
 
-  @include blur($color_danger);
+  @include blur;
 }
 
 .title {

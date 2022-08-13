@@ -12,7 +12,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: transparentize($color_primary, 0.7);
+  background: $content_bg_success;
   border-radius: $radius;
   z-index: 10;
   box-shadow: inset $color_primary 0 0 0 2px;

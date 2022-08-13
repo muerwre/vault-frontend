@@ -58,7 +58,7 @@
     left: 0;
     height: 120px;
     width: 100%;
-    background: linear-gradient(transparentize($color, 1), $color);
+    background: linear-gradient(transparent, $color);
     border-radius: $radius;
     pointer-events: none;
     touch-action: none;
@@ -116,15 +116,13 @@
   }
 }
 
-@mixin blur($color: $content_bg, $radius: 15px, $opacity: 0.5) {
-  background: transparentize($color, math.div($opacity, 1.5));
-  backdrop-filter: blur($radius);
-  -webkit-backdrop-filter: blur($radius);
+@mixin blur($color: $content_bg_backdrop, $radius: 15px) {
+  background: $color;
 
   @include can_backdrop {
     backdrop-filter: blur($radius);
     -webkit-backdrop-filter: blur($radius);
-    background-color: transparentize($color, $opacity);
+    background-color: $color;
   }
 }
 
@@ -156,7 +154,7 @@
 }
 
 @mixin sidebar {
-  @include blur();
+  @include blur;
 }
 
 @mixin sidebar_content($width: 400px) {
@@ -177,11 +175,6 @@
   position: relative;
   border-radius: $radius;
   cursor: pointer;
-}
-
-@mixin hero_gradient {
-  $color: mix($color_primary, $content_bg, 30%);
-  background: linear-gradient(170deg, lighten($color, 10%), $color);
 }
 
 @mixin flow_grid {
@@ -253,20 +246,6 @@
   @include tablet {
     padding-left: 0;
     padding-right: 0;
-  }
-}
-
-@mixin modal_backdrop {
-  @include blur();
-  background: transparentize($content_bg, 0.3)
-    url('../../src/sprites/noise.png');
-
-  @include can_backdrop {
-    @supports (backdrop-filter: blur(5px)) and
-      (background-image: url('../../src/sprites/noise.png')) {
-      background: transparentize($content_bg, 0.5)
-        url('../../src/sprites/noise.png');
-    }
   }
 }
 

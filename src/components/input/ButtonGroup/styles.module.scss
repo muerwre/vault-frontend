@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   display: flex;
@@ -6,7 +6,6 @@
 
   & > * {
     border-radius: 0;
-    box-shadow: transparentize($color: #000000, $amount: 0.1) 1px 0;
 
     &:last-child {
       border-radius: 0 $radius $radius 0;

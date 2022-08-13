@@ -2,7 +2,7 @@
 
 .placeholder {
   height: 320px;
-  background: transparentize(black, 0.8);
+  background: $content_bg_dark;
   border: $radius $radius 0 0;
   @include outer_shadow();
 

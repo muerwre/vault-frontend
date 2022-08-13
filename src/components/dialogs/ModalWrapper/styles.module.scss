@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .fixed {
   position: fixed;
@@ -46,7 +46,7 @@
 }
 
 .overlay {
-  @include modal_backdrop();
+  @include blur;
 
   position: absolute;
   top: 0;

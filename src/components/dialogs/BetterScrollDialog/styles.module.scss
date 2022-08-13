@@ -3,7 +3,7 @@
 .wrap {
   width: 100vw;
   height: 100vh;
-  background: transparentize($content_bg_darker, 0.5);
+  background: $content_bg_backdrop;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,11 +105,7 @@
   width: 100%;
   height: 40px;
   pointer-events: none;
-  background: linear-gradient(
-    0deg,
-    $color_danger 50%,
-    transparentize($color_danger, 1)
-  );
+  background: linear-gradient(0deg, $color_danger 50%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,7 +132,7 @@
 
 .shade {
   position: absolute;
-  background: transparentize($content_bg, 0.3);
+  background: $content_bg_backdrop;
   top: 0;
   left: 0;
   width: 100%;

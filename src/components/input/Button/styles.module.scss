@@ -69,10 +69,6 @@
     &:global(.disabled) {
       cursor: auto;
     }
-
-    &:active {
-      box-shadow: transparentize(#e933a5, 0.6) 0 0 0;
-    }
   }
 
   &:global(.stretchy) {
@@ -266,5 +262,5 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparentize($content_bg, 0.1);
+  background: $content_bg_backdrop;
 }

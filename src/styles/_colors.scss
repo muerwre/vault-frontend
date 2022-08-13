@@ -45,9 +45,10 @@ $content_bg_light: lighten($brown, 2%);
 $content_bg_lighter: lighten($brown, 4%);
 $content_bg_lightest: lighten($brown, 6%);
 
-$content_bg_success: mix($brown, $blue, 90%);
-$content_bg_info: mix($brown, $wisegreen, 90%);
-$content_bg_danger: mix($red, $brown, 50%);
+$content_bg_success: transparentize($wisegreen, 0.5);
+$content_bg_info: transparentize($blue, 0.5);
+$content_bg_danger: transparentize($red, 0.5);
+$content_bg_backdrop: transparentize($content_bg, 0.2);
 
 // white shades (move to --vars)
 $white: white;

@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .cell {
   @include inner_shadow;
@@ -57,13 +57,11 @@
   .quadro &,
   .horizontal & {
     max-width: calc(50% - 15px);
-    @include blur(transparentize($content_bg, 0), 10px, 0.5)
   }
 
   .quadro &,
   .vertical & {
     max-height: calc(50% - 15px);
-    @include blur(transparentize($content_bg, 0), 10px, 0.5)
   }
 }
 

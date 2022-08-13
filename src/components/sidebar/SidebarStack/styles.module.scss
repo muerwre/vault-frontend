@@ -1,7 +1,7 @@
 @import 'src/styles/variables';
 
 .stack {
-  background: transparentize($content_bg, 0.2);
+  background: $content_bg_backdrop;
   display: flex;
   flex-direction: row-reverse;
   width: auto;

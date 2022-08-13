@@ -45,7 +45,6 @@
     right: 0;
     bottom: 0;
     animation: highlight 1s 0.5s forwards;
-    background: transparentize($color_primary, 0.7);
     border-radius: $radius;
     pointer-events: none;
     touch-action: none;
@@ -74,7 +73,7 @@
 .thumb {
   flex: 0 0 $comment_height;
   border-radius: $panel_radius 0 0 $panel_radius;
-  background-color: transparentize(black, 0.9);
+  background-color: $content_bg;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;

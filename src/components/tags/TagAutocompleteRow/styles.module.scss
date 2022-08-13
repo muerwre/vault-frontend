@@ -19,7 +19,7 @@ $row_height: 26px;
   &:hover,
   &.selected {
     opacity: 1;
-    background: transparentize($color_primary, 0.6);
+    background: $content_bg_success;
   }
 
   &.right {

@@ -28,7 +28,7 @@
   }
 
   &.is_scrolled {
-    @include blur();
+    @include blur;
   }
 }
 

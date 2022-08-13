@@ -11,7 +11,7 @@ $margin: 1em;
     margin-bottom: $margin;
     color: $color_primary;
     font-size: 0.9em;
-    background-color: transparentize($color_primary, 0.9);
+    background-color: $content_bg_success;
 
     p {
       margin: 0 $margin;
@@ -34,7 +34,7 @@ $margin: 1em;
     margin-bottom: $margin;
 
     code {
-      color: transparentize($color_primary, 0.1);
+      color: $content_bg_info;
       font-family: monospace;
       white-space: pre-wrap;
     }
@@ -43,10 +43,10 @@ $margin: 1em;
   p,
   li {
     code {
-      background-color: transparentize($color_primary, 0.9);
+      background-color: $content_bg_info;
       padding: 2px 4px;
       border-radius: 0.3em;
-      color: transparentize($color_primary, 0.1);
+      color: $gray_25;
       font-size: 0.8em;
     }
   }

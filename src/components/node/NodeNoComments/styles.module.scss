@@ -9,7 +9,7 @@
   &::after {
     content: ' ';
     position: absolute;
-    background: linear-gradient(transparentize($content_bg, 1), $content_bg);
+    background: linear-gradient(transparent, $content_bg);
     border-radius: 0 0 $radius $radius;
     height: 100px;
     width: 100%;

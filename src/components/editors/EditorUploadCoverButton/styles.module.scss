@@ -68,7 +68,7 @@
   justify-content: center;
   box-shadow: inset rgba(255, 255, 255, 0.05) 1px 1px, rgba(0, 0, 0, 0.3) -1px 0;
   border-radius: $upload_button_height;
-  background: transparentize($color: $content_bg_lighter, $amount: 0);
+  background: $content_bg_lighter;
 
   &:hover {
     svg {

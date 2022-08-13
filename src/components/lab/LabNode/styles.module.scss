@@ -9,8 +9,4 @@
 
   min-width: 0;
   border-radius: $radius;
-
-  &.heroic {
-    @include hero_gradient;
-  }
 }

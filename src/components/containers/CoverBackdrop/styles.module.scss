@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .cover {
   position: absolute;
@@ -22,7 +22,7 @@
     height: 100%;
     top: 0;
     left: 0;
-    background: url('../../../sprites/stripes.svg') transparentize($color: #000000, $amount: 0.5);
+    background: url('../../../sprites/stripes.svg') $content_bg_backdrop;
   }
 
   img {

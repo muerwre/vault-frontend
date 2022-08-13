@@ -46,7 +46,7 @@
     background: url('../../../sprites/stripes.svg') rgba(0, 0, 0, 0.3);
     z-index: -1;
     pointer-events: none;
-    box-shadow: inset transparentize($color: white, $amount: 0.85) 0 1px;
+    box-shadow: inset $gray_90 0 1px;
     touch-action: none;
     border-radius: $radius;
   }
@@ -58,11 +58,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      182deg,
-      transparentize($content_bg, 1) 50%,
-      transparentize($content_bg, 0) 95%
-    );
+    background: linear-gradient(182deg, transparent 50%, $content_bg 95%);
     z-index: 4;
     pointer-events: none;
     touch-action: none;

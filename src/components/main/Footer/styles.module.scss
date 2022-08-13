@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: row;
   font: $font_12_semibold;
-  background: transparentize(black, 0.9);
+  background: $content_bg_dark;
   border-radius: 0 0 $radius $radius;
   align-items: center;
   text-transform: uppercase;

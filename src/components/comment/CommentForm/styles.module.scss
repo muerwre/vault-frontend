@@ -21,7 +21,7 @@
   position: relative;
   z-index: 1;
   display: flex;
-  background: transparentize(black, 0.8);
+  background: $content_bg_dark;
   border-radius: 0 0 $radius $radius;
   flex-wrap: wrap;
   padding: $gap * 0.25;
