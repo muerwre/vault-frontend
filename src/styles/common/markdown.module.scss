@@ -23,7 +23,7 @@ $margin: 1em;
   }
 
   pre {
-    background-color: $content_bg_lighter;
+    background-color: $content_bg_info;
     font-family: monospace;
     font-size: 0.8em;
     border-radius: 2px;
@@ -34,7 +34,7 @@ $margin: 1em;
     margin-bottom: $margin;
 
     code {
-      color: $content_bg_info;
+      color: $gray_50;
       font-family: monospace;
       white-space: pre-wrap;
     }
