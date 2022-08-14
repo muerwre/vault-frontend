@@ -19,7 +19,7 @@ export const themeColors: Record<Theme, ThemeColors> = {
     background: `url('/images/noise_top.png') 0% 0% #23201f`,
   },
   [Theme.Horizon]: {
-    name: 'Веспер',
+    name: 'Веспера',
     colors: [
       'linear-gradient(170deg, #f09483 -150%, #e95678 100%)',
       'linear-gradient(165deg, #fab795 -50%, #fab795 150%)',
