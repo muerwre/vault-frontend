@@ -2,6 +2,7 @@
 
 .wrap {
   @include outer_shadow;
+  @include blur;
 
   padding: $gap $gap $gap * 2;
   box-sizing: border-box;
@@ -9,7 +10,6 @@
   align-items: stretch;
   justify-content: stretch;
   flex-direction: column;
-  background: $content_bg_light;
   height: 100%;
   border-radius: $radius;
 }
