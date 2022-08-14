@@ -18,7 +18,7 @@ $_lemon: #fab795;
 $_ocean: #25b0bc;
 
 @mixin apply {
-  :root.theme_horizon {
+  :root.theme-horizon {
     // main definitions (move to --vars)
     --color_primary: #{$_accent};
     --color_danger: #{$_red};

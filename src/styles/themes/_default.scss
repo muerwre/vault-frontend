@@ -73,9 +73,8 @@ $_brown: #23201f;
     --gray_90: #{transparentize(white, 0.95)};
 
     // page background
-    --page-background: url('../../../src/sprites/noise.png') 0% 0% #{$_brown};
-    --page-background-top: 600px 600px url('../../../src/sprites/noise_top.png')
-      0% 0%;
+    --page-background: url('/images/noise.png') 0% 0% #{$_brown};
+    --page-background-top: 600px 600px url('/images/noise_top.png') 0% 0%;
     --boris-background: 50% 0 / cover no-repeat
       url('../../sprites/boris_bg.svg');
   }

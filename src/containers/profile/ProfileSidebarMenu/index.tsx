@@ -4,13 +4,12 @@ import classNames from 'classnames';
 
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
-import { Button } from '~/components/input/Button';
-import { Icon } from '~/components/input/Icon';
-import { MenuButton, MenuItemWithIcon } from '~/components/menu';
+import { Zone } from '~/components/containers/Zone';
 import { VerticalMenu } from '~/components/menu/VerticalMenu';
 import { useStackContext } from '~/components/sidebar/SidebarStack';
 import { ProfileSidebarHead } from '~/containers/profile/ProfileSidebarHead';
 import { ProfileStats } from '~/containers/profile/ProfileStats';
+import { ThemeSwitcher } from '~/containers/settings/ThemeSwitcher';
 import { useAuth } from '~/hooks/auth/useAuth';
 import markdown from '~/styles/common/markdown.module.scss';
 
@@ -50,9 +49,15 @@ const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
             </VerticalMenu.Item>
           </VerticalMenu>
 
-          <div className={styles.toggles}>
-            <ProfileToggles />
-          </div>
+          <Group className={styles.toggles}>
+            <Zone>
+              <ProfileToggles />
+            </Zone>
+
+            <Zone>
+              <ThemeSwitcher />
+            </Zone>
+          </Group>
 
           <div className={styles.stats}>
             <ProfileStats />
