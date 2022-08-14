@@ -13,6 +13,10 @@ module.exports = withBundleAnalyzer(
           source: '/post:id',
           destination: '/node/:id',
         },
+        {
+          source: '/~:username',
+          destination: '/profile/:username',
+        }
       ];
     },
 

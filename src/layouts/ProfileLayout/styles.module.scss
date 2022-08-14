@@ -1,9 +1,10 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   display: grid;
   grid-template-columns: auto;
   grid-column-gap: $gap;
+  margin-top: $page_top_offset;
 }
 
 .grid {
@@ -12,6 +13,7 @@
 
 .row {
   margin-bottom: $gap;
+  height: 100%;
 }
 
 .description {
