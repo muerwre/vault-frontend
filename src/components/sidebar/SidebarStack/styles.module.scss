@@ -1,7 +1,8 @@
 @import 'src/styles/variables';
 
 .stack {
-  background: $content_bg_backdrop;
+  @include blur;
+
   display: flex;
   flex-direction: row-reverse;
   width: auto;

@@ -72,7 +72,8 @@ $_ocean: #25b0bc;
     --content_bg_success: #{transparentize($_accent, 0.7)};
     --content_bg_info: #{transparentize($_lemon, 0.7)};
     --content_bg_danger: #{transparentize($_red, 0.5)};
-    --content_bg_backdrop: #{transparentize($_cold, 0.2)};
+    --content_bg_backdrop: 50% 50% / cover no-repeat
+      url('/images/horizon_bg.svg') #{transparentize($_cold, 0.4)};
 
     // white shades (move to --vars)
     --white: white;
@@ -86,7 +87,15 @@ $_ocean: #25b0bc;
         $_cold,
         4%
       )} fixed;
-    --page-background-top: none;
-    --boris-background: linear-gradient(#{$_ocean} -200%, transparent 50%);
+    --page-background-top: linear-gradient(
+      #{$_accent} -150%,
+      #{transparentize($_ocean, 0.99)} 100px,
+      #{transparentize($_ocean, 1)} 200px
+    );
+    --boris-background: linear-gradient(
+      #{$_accent} -150%,
+      #{transparentize($_ocean, 0.9)} 50px,
+      #{transparentize($_ocean, 1)} 400px
+    );
   }
 }
