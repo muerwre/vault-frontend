@@ -39,7 +39,7 @@ const EditorUploadButton: FC<IProps> = ({
     [type, uploadFiles],
   );
 
-  const color = values.is_promoted ? 'danger' : 'info';
+  const color = values.is_promoted ? 'flow' : 'lab';
 
   return (
     <Button

@@ -1,58 +1,45 @@
-// palette (use inside)
-$yellow: #ffd60f;
-$dark_blue: #592071;
-$blue: #582cd0;
-$green: #00d2b9;
-$wisegreen: #007962;
-$olive: #6cb337;
-$red: #ff3344;
-$orange: #ff7549;
-$lightgreen: lighten(adjust_hue(#007962, -30deg), 10%);
-$soft_blue: #3c75ff;
-$brown: #23201f;
-
 // main definitions (move to --vars)
-$color_primary: $wisegreen;
-$color_danger: $red;
-$color_online: $olive;
-$color_offline: $red;
-$color_link: $red;
-$color_flow: $red;
-$color_lab: $blue;
+$color_primary: var(--color_primary);
+$color_danger: var(--color_danger);
+$color_online: var(--color_online);
+$color_offline: var(--color_offline);
+$color_link: var(--color_link);
+$color_flow: var(--color_flow);
+$color_lab: var(--color_lab);
+$color_boris: var(--color_boris);
+$color_like: var(--color_like);
 
 // gradients (move to --vars)
-$danger_gradient: linear-gradient(165deg, $orange -50%, $color_danger 150%);
-$info_gradient: linear-gradient(170deg, $blue, $dark_blue);
-$warning_gradient: linear-gradient(165deg, $yellow -50%, $color_danger 150%);
-$primary_gradient: linear-gradient(
-  170deg,
-  $lightgreen -50%,
-  $color_primary 150%
-);
-$magic_gradient: linear-gradient(260deg, $soft_blue -50%, #7b2653 150%);
-$global_loader_gradient: linear-gradient(
-  90deg,
-  $dark_blue,
-  $soft_blue,
-  $dark_blue
-);
+$danger_gradient: var(--danger_gradient);
+$info_gradient: var(--info_gradient);
+$warning_gradient: var(--warning_gradient);
+$primary_gradient: var(--primary_gradient);
+$magic_gradient: var(--magic_gradient);
+$global_loader_gradient: var(--global_loader_gradient);
+$flow_gradient: var(--flow_gradient);
+$lab_gradient: var(--lab_gradient);
 
 // backgrounds (move to --vars)
-$content_bg: $brown;
-$content_bg_dark: darken($brown, 2%);
-$content_bg_darker: darken($brown, 4%);
-$content_bg_light: lighten($brown, 2%);
-$content_bg_lighter: lighten($brown, 4%);
-$content_bg_lightest: lighten($brown, 6%);
+$content_bg: var(--content_bg);
+$content_bg_dark: var(--content_bg_dark);
+$content_bg_darker: var(--content_bg_darker);
+$content_bg_light: var(--content_bg_light);
+$content_bg_lighter: var(--content_bg_lighter);
+$content_bg_lightest: var(--content_bg_lightest);
 
-$content_bg_success: transparentize($wisegreen, 0.7);
-$content_bg_info: transparentize($blue, 0.5);
-$content_bg_danger: transparentize($red, 0.5);
-$content_bg_backdrop: transparentize($content_bg, 0.2);
+$content_bg_success: var(--content_bg_success);
+$content_bg_info: var(--content_bg_info);
+$content_bg_danger: var(--content_bg_danger);
+$content_bg_backdrop: var(--content_bg_backdrop);
 
 // white shades (move to --vars)
-$white: white;
-$gray_25: mix($content_bg, white, 25%);
-$gray_50: mix($content_bg, white, 50%);
-$gray_75: mix($content_bg, white, 75%);
-$gray_90: mix($content_bg, white, 92%);
+$white: var(--white);
+$gray_25: var(--gray_25);
+$gray_50: var(--gray_50);
+$gray_75: var(--gray_75);
+$gray_90: var(--gray_90);
+
+// global
+$page_background: var(--page-background);
+$page_background_top: var(--page-background-top);
+$boris_background: var(--boris-background);

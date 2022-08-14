@@ -23,7 +23,7 @@ $row_height: 26px;
   }
 
   &.right {
-    color: lighten($color_primary, 4%);
+    color: $color_primary;
     opacity: 1;
   }
 

@@ -25,39 +25,37 @@ $big: 1.2;
     z-index: 40;
   }
 
-  &:global(.big) {
-    height: $tag_height * $big;
-    font: $font_16_semibold;
-    border-radius: ($tag_height * $big * 0.5) 3px 3px ($tag_height * $big * 0.5);
-
-    .hole {
-      width: $tag_height * $big;
-      height: $tag_height * $big;
-    }
-  }
-
-  &:global(.is_hoverable) {
+  &.hoverable {
     cursor: pointer;
   }
 
-  &:global(.is_editing) {
+  &.editing {
     cursor: pointer;
-    background-color: lighten($content_bg_light, 10%);
+    background-color: $content_bg;
   }
 
-  &:global(.red) {
+  &.input {
+    color: transparent !important;
+    min-width: 100px;
+  }
+
+  &.clickable {
+    cursor: pointer;
+  }
+
+  &.color-danger {
     background: $danger_gradient;
   }
 
-  &:global(.blue) {
+  &.color-info {
     background: $info_gradient;
   }
 
-  &:global(.green) {
+  &.color-primary {
     background: $primary_gradient;
   }
 
-  &:global(.black) {
+  &.color-black {
     background: transparentize(black, 0.7);
     box-shadow: none;
     color: $gray_75;
@@ -68,13 +66,15 @@ $big: 1.2;
     }
   }
 
-  &:global(.input) {
-    color: transparent !important;
-    min-width: 100px;
-  }
+  &.size-big {
+    height: $tag_height * $big;
+    font: $font_16_semibold;
+    border-radius: ($tag_height * $big * 0.5) 3px 3px ($tag_height * $big * 0.5);
 
-  &:global(.clickable) {
-    cursor: pointer;
+    .hole {
+      width: $tag_height * $big;
+      height: $tag_height * $big;
+    }
   }
 
   input {
@@ -124,7 +124,8 @@ $big: 1.2;
 }
 
 button.delete {
-  box-shadow: inset $gray_90 1px 0, transparentize(black, 0.7) -1px 0;
+  box-shadow: inset transparentize(white, 0.95) 1px 0,
+    transparentize(black, 0.7) -1px 0;
   width: 24px;
   height: $tag_height;
   z-index: 24;

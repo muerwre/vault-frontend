@@ -27,6 +27,7 @@ type IButtonProps = DetailedHTMLProps<
     | 'outline'
     | 'link'
     | 'gray'
+    | 'flow'
     | 'lab'
     | 'outline-white'
     | 'flat';

@@ -15,11 +15,19 @@ interface StatsGraphCardProps extends CardProps {
   right?: string | number;
 }
 
-const StatsGraphCard: VFC<StatsGraphCardProps> = ({ total, title, data, left, right }) => (
+const StatsGraphCard: VFC<StatsGraphCardProps> = ({
+  total,
+  title,
+  data,
+  left,
+  right,
+}) => (
   <StatsCard
     title={title}
     total={total}
-    background={<BasicCurveChart items={data} />}
+    background={
+      <BasicCurveChart items={data} stroke={'var(--color_primary)'} />
+    }
     className={styles.card}
   >
     <div className={styles.content}>

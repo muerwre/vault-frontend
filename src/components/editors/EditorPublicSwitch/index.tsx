@@ -19,7 +19,7 @@ const EditorPublicSwitch: FC<IProps> = () => {
 
   return (
     <Button
-      color={values.is_promoted ? 'danger' : 'info'}
+      color={values.is_promoted ? 'flow' : 'lab'}
       type="button"
       size="giant"
       label={

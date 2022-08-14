@@ -32,7 +32,7 @@ const EditorButtons: FC = () => {
         <Button
           title={isTablet ? undefined : 'Сохранить'}
           iconRight="check"
-          color={values.is_promoted ? 'danger' : 'info'}
+          color={values.is_promoted ? 'flow' : 'lab'}
           disabled={isSubmitting}
           type="submit"
         />

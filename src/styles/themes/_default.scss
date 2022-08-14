@@ -1,0 +1,82 @@
+// palette (use inside)
+
+$_yellow: #ffd60f;
+$_dark_blue: #592071;
+$_blue: #582cd0;
+$_green: #00d2b9;
+$_wisegreen: #007962;
+$_olive: #6cb337;
+$_red: #ff3344;
+$_orange: #ff7549;
+$_lightgreen: lighten(adjust_hue(#007962, -30deg), 10%);
+$_soft_blue: #3c75ff;
+$_brown: #23201f;
+
+@mixin apply {
+  :root {
+    // main definitions (move to --vars)
+    --color_primary: #{$_wisegreen};
+    --color_danger: #{$_red};
+    --color_online: #{$_olive};
+    --color_offline: #{$_red};
+    --color_link: #{$_red};
+    --color_like: #{$_red};
+    --color_flow: #{$_red};
+    --color_lab: #{$_blue};
+    --color_boris: #{$_wisegreen};
+
+    // gradients (move to --vars)
+    --danger_gradient: linear-gradient(165deg, #{$_orange} -50%, #{$_red} 150%);
+    --info_gradient: linear-gradient(170deg, #{$_blue}, #{$_dark_blue});
+    --warning_gradient: linear-gradient(
+      165deg,
+      #{$_yellow} -50%,
+      #{$_red} 150%
+    );
+    --primary_gradient: linear-gradient(
+      170deg,
+      #{$_lightgreen} -50%,
+      #{$_wisegreen} 150%
+    );
+    --magic_gradient: linear-gradient(
+      260deg,
+      #{$_soft_blue} -50%,
+      #7b2653 150%
+    );
+    --global_loader_gradient: linear-gradient(
+      90deg,
+      #{$_dark_blue},
+      #{$_soft_blue},
+      #{$_dark_blue}
+    );
+    --flow_gradient: var(--danger_gradient);
+    --lab_gradient: var(--info_gradient);
+
+    // backgrounds (move to --vars)
+    --content_bg: #{$_brown};
+    --content_bg_dark: #{darken($_brown, 2%)};
+    --content_bg_darker: #{darken($_brown, 4%)};
+    --content_bg_light: #{lighten($_brown, 2%)};
+    --content_bg_lighter: #{lighten($_brown, 4%)};
+    --content_bg_lightest: #{lighten($_brown, 6%)};
+
+    --content_bg_success: #{transparentize($_wisegreen, 0.7)};
+    --content_bg_info: #{transparentize($_blue, 0.5)};
+    --content_bg_danger: #{transparentize($_red, 0.5)};
+    --content_bg_backdrop: #{transparentize($_brown, 0.2)};
+
+    // white shades (move to --vars)
+    --white: white;
+    --gray_25: #{transparentize(white, 0.25)};
+    --gray_50: #{transparentize(white, 0.5)};
+    --gray_75: #{transparentize(white, 0.75)};
+    --gray_90: #{transparentize(white, 0.95)};
+
+    // page background
+    --page-background: url('../../../src/sprites/noise.png') 0% 0% #{$_brown};
+    --page-background-top: 600px 600px url('../../../src/sprites/noise_top.png')
+      0% 0%;
+    --boris-background: 50% 0 / cover no-repeat
+      url('../../sprites/boris_bg.svg');
+  }
+}

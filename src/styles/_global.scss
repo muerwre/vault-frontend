@@ -1,3 +1,6 @@
+@use './themes/default' as theme_default;
+@use './themes/horizon' as theme_horizon;
+
 @import 'src/styles/variables';
 @import 'photoswipe/dist/photoswipe';
 @import 'photoswipe/dist/default-skin/default-skin';
@@ -10,6 +13,9 @@
 @import 'swiper/css/zoom';
 @import 'swiper/css/navigation';
 
+@include theme_default.apply();
+@include theme_horizon.apply();
+
 html {
   min-height: 100vh;
   box-sizing: border-box;
@@ -17,7 +23,7 @@ html {
 
 body {
   min-height: 100vh;
-  background: url('../../src/sprites/noise.png') $content_bg;
+  background: $page_background;
   color: $white;
   font: $font_16_regular;
   -webkit-font-smoothing: antialiased;
@@ -32,8 +38,7 @@ body {
     top: 0;
     left: 0;
     z-index: -1;
-    background: url('../../src/sprites/noise_top.png') 0% 0%;
-    background-size: 600px 600px;
+    background: $page_background_top;
     pointer-events: none;
   }
 
@@ -68,7 +73,7 @@ body {
 }
 
 .done {
-  background-color: $green;
+  background-color: $color_primary;
 }
 
 h2 {
@@ -76,7 +81,7 @@ h2 {
 }
 
 .username {
-  color: $color_primary;
+  color: $color_link;
   font-weight: 600;
 }
 

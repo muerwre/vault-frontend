@@ -244,7 +244,11 @@
 }
 
 .lab {
-  background: $color_lab;
+  background: $lab_gradient;
+}
+
+.flow {
+  background: $flow_gradient;
 }
 
 .flat {
