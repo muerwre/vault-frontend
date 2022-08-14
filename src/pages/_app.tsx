@@ -19,11 +19,11 @@ import { MetadataProvider } from '~/utils/providers/MetadataProvider';
 import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
 import { SearchProvider } from '~/utils/providers/SearchProvider';
 import { SidebarProvider } from '~/utils/providers/SidebarProvider';
+import { ThemeProvider } from '~/utils/providers/ThemeProvider';
 import { ToastProvider } from '~/utils/providers/ToastProvider';
 
 import '~/styles/main.scss';
 import 'tippy.js/dist/tippy.css';
-import { ThemeProvider } from '~/utils/providers/ThemeProvider';
 
 const mobxStore = getMOBXStore();
 
