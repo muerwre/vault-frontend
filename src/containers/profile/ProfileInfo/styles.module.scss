@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   justify-content: flex-start;
@@ -25,6 +25,6 @@
 }
 
 .description {
-  color: transparentize($color: white, $amount: 0.7);
+  color: $gray_25;
   font: $font_14_regular;
 }

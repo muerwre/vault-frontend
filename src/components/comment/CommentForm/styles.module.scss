@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   display: flex;
@@ -21,7 +21,7 @@
   position: relative;
   z-index: 1;
   display: flex;
-  background: transparentize(black, 0.8);
+  background: $content_bg_dark;
   border-radius: 0 0 $radius $radius;
   flex-wrap: wrap;
   padding: $gap * 0.25;
@@ -49,7 +49,7 @@
   position: absolute;
   bottom: 0;
   left: 50%;
-  background: $red;
+  background: $color_danger;
   z-index: 10;
   font: $font_12_regular;
   box-sizing: border-box;

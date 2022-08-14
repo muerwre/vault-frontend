@@ -1,7 +1,6 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
-$pad_danger: mix($red, $content_bg, 70%);
-$pad_usual: mix(white, $content_bg, 10%);
+$pad_usual: $content_bg_lightest;
 
 .title {
   position: relative;
@@ -19,7 +18,7 @@ $pad_usual: mix(white, $content_bg, 10%);
     text-transform: uppercase;
 
     .danger & {
-      background: $pad_danger;
+      background: $content_bg_danger;
     }
   }
 }
@@ -31,7 +30,7 @@ $pad_usual: mix(white, $content_bg, 10%);
   position: relative;
 
   &.danger {
-    box-shadow: inset $pad_danger 0 0 0 2px;
+    box-shadow: inset $content_bg_danger 0 0 0 2px;
   }
 
   &.with_title {

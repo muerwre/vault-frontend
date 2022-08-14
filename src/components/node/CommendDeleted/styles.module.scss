@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   display: flex;
@@ -15,9 +15,9 @@
 }
 
 .button {
-  color: $red !important;
+  color: $color_danger !important;
 
   svg {
-    fill: $red !important;
+    fill: $color_danger !important;
   }
 }

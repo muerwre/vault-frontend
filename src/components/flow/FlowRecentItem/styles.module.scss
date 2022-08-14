@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .item {
   display: flex;
@@ -30,7 +30,7 @@
       width: 12px;
       height: 12px;
       border-radius: 100%;
-      background: $red;
+      background: $color_danger;
       box-shadow: $content_bg 0 0 0 5px;
       position: absolute;
       right: -2px;
@@ -40,7 +40,7 @@
 
   &.lab {
     &::after {
-      background: $blue;
+      background: $color_lab;
     }
   }
 }
@@ -61,7 +61,7 @@
 .comment {
   font: $font_12_regular;
   margin-top: 4px;
-  color: darken(white, 50%);
+  color: $gray_50;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

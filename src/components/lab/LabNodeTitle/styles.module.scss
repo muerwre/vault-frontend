@@ -1,4 +1,4 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 .wrap {
   padding: $lab_gap - $gap $lab_gap 0;
@@ -30,6 +30,6 @@
 }
 
 .star {
-  fill: darken(white, 50%);
+  fill: $gray_50;
   flex: 0 0 24px;
 }

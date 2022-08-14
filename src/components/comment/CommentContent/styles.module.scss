@@ -1,5 +1,5 @@
-@import "src/styles/variables";
-@import "~flexbin/flexbin";
+@import 'src/styles/variables';
+@import '~flexbin/flexbin';
 
 .wrap {
   @include row_shadow;
@@ -23,7 +23,7 @@
   touch-action: none;
   transition: opacity 0.25s, transform 0.25s;
   cursor: pointer;
-  background: $red;
+  background: $color_danger;
   z-index: 2;
 
   & > div {
@@ -46,7 +46,7 @@
     border-radius: 0 0 0 $radius;
     opacity: 1;
     transform: translate(0, 0);
-    background: transparentize($red, $amount: 0.5);
+    background: $content_bg_danger;
   }
 }
 
@@ -93,9 +93,9 @@
   padding-bottom: 0 !important;
 
   .date {
-    background: transparentize($color: $content_bg, $amount: 0.2);
+    background: $content_bg;
     border-radius: $radius 0 $radius 0;
-    color: transparentize(white, 0.2);
+    color: $gray_25;
   }
 }
 
@@ -108,10 +108,10 @@
   bottom: 1px;
   right: 0;
   font: $font_12_regular;
-  color: transparentize($color: white, $amount: 0.8);
+  color: $gray_75;
   padding: 0 6px 2px;
   z-index: 2;
-  background: $comment_bg;
+  background: $content_bg_light;
   border-radius: 4px;
   pointer-events: none;
   touch-action: none;

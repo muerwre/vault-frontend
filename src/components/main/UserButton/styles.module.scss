@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   position: relative;
@@ -30,7 +30,7 @@
   background: white;
   border-radius: $radius;
   margin-left: ($gap + 2px) !important;
-  background: 50% 50% no-repeat $wisegreen;
+  background: 50% 50% no-repeat $color_primary;
   display: flex;
   align-items: center;
   justify-content: center;

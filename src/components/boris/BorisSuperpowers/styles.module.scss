@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   display: grid;
@@ -16,5 +16,5 @@
 
 .subtitle {
   font: $font_12_regular;
-  color: transparentize(white, 0.5);
+  color: $gray_50;
 }

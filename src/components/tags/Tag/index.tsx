@@ -3,12 +3,6 @@ import React, { FC, FocusEventHandler, useCallback } from 'react';
 import { TagWrapper } from '~/components/tags/TagWrapper';
 import { ITag } from '~/types';
 
-const getTagFeature = (tag: Partial<ITag>) => {
-  if (tag?.title?.substr(0, 1) === '/') return 'green';
-
-  return '';
-};
-
 interface IProps {
   tag: Partial<ITag>;
   size?: 'normal' | 'big';
@@ -44,9 +38,11 @@ const Tag: FC<IProps> = ({
     onDelete(tag.ID!);
   }, [onDelete, tag]);
 
+  const isAlbumTag = tag?.title?.substr(0, 1) === '/';
+
   return (
     <TagWrapper
-      feature={getTagFeature(tag)}
+      color={isAlbumTag ? 'primary' : undefined}
       size={size}
       deletable={deletable}
       hoverable={hoverable}

@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   padding: $gap * 0.5 0;
@@ -12,7 +12,7 @@
 .time {
   font: $font_12_regular;
   line-height: 17px;
-  color: transparentize(white, 0.7)
+  color: $gray_75;
 }
 
 .subject {
@@ -30,10 +30,10 @@
   text-transform: uppercase;
 
   &.open {
-    color: $red;
+    color: $color_offline;
   }
 
   &.closed {
-    color: $green;
+    color: $color_online;
   }
 }

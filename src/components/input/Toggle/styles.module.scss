@@ -1,11 +1,11 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 .toggle {
   height: 24px;
   width: 48px;
   flex: 0 0 48px;
   border-radius: 12px;
-  background-color: transparentize(white, 0.9);
+  background-color: $gray_90;
   display: flex;
   border: none;
   outline: none;
@@ -33,7 +33,7 @@
     height: 18px;
     width: 18px;
     border-radius: 11px;
-    background-color: darken(white, 50%);
+    background-color: $gray_50;
     transform: translate(0, 0);
     transition: transform 0.25s, color 0.25s, background-color;
   }
@@ -45,19 +45,19 @@
     }
 
     &.primary {
-      background-color: $wisegreen;
+      background-color: $color_primary;
     }
 
     &.secondary {
-      background-color: transparentize(white, 0.85);
+      background-color: $gray_90;
     }
 
     &.lab {
-      background-color: $blue;
+      background-color: $color_lab;
     }
 
     &.danger {
-      background-color: $red;
+      background-color: $color_danger;
     }
 
     &.monochrome {

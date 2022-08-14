@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import '../../../styles/variables';
 
 @keyframes appear {
   from {
@@ -28,7 +28,7 @@
   }
 
   &.is_scrolled {
-    @include blur();
+    @include blur;
   }
 }
 
@@ -86,7 +86,7 @@
   white-space: nowrap;
 
   &:hover {
-    color: $red;
+    color: $color_link;
   }
 
   &::before {
@@ -109,7 +109,7 @@
     width: 6px;
     height: 6px;
     border-radius: 4px;
-    background: lighten($red, 10%);
+    background: $color_link;
     right: 12px;
     top: 6px;
     transition: opacity 0.5s;
@@ -123,11 +123,11 @@
   }
 
   &.lab::after {
-    background: lighten($blue, 10%);
+    background: $color_lab;
   }
 
   &.boris::after {
-    background: lighten($wisegreen, 10%);
+    background: $color_primary;
   }
 
   @include tablet {

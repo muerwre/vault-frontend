@@ -1,4 +1,4 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 .title {
   padding-bottom: $gap;
@@ -16,7 +16,7 @@
   @include outer_shadow;
 
   border-radius: $radius;
-  background: $comment_bg;
+  background: $content_bg_light;
   padding: $gap;
 }
 

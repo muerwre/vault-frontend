@@ -25,7 +25,7 @@ const List = () => {
 
   return (
     <>
-      {notes.map(note => (
+      {notes.map((note) => (
         <NoteCard
           remove={() => onRemove(note.id)}
           update={(text, callback) => update(note.id, text, callback)}
@@ -59,7 +59,6 @@ const SettingsNotes: VFC<SettingsNotesProps> = () => {
                 onClick={() => setFormIsShown(true)}
                 size="mini"
                 iconRight="plus"
-                color="secondary"
               >
                 Добавить
               </Button>

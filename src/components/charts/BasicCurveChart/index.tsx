@@ -29,15 +29,18 @@ const BasicCurveChart: VFC<BasicCurveChartProps> = ({
         (acc, val, index) => [
           ...acc,
           index === 0
-            ? { x: borderGap, y: height - (val / max) * (height - gap * 2) - gap }
+            ? {
+                x: borderGap,
+                y: height - (val / max) * (height - gap * 2) - gap,
+              }
             : {
                 x: ((width - borderGap) / (items.length - 1)) * index,
                 y: height - (val / max) * (height - gap * 2) - gap,
               },
         ],
-        []
+        [],
       ),
-    [height, width, items, gap]
+    [height, width, items, gap],
   );
 
   if (!points.length) {
@@ -49,12 +52,20 @@ const BasicCurveChart: VFC<BasicCurveChartProps> = ({
       {...props}
       width="100%"
       height="100%"
-      viewBox={`0 0 ${width} ${height}`}
+      viewBox={`0 0 ${width} ${height * 1.05}`}
       preserveAspectRatio="none"
     >
       <defs>
         <filter id="f1" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+        </filter>
+
+        <filter id="brighter">
+          <feComponentTransfer>
+            <feFuncR type="linear" slope="3" />
+            <feFuncG type="linear" slope="3" />
+            <feFuncB type="linear" slope="3" />
+          </feComponentTransfer>
         </filter>
       </defs>
 
@@ -62,7 +73,8 @@ const BasicCurveChart: VFC<BasicCurveChartProps> = ({
         d={makeBezierCurve(points)}
         fill="none"
         x={0}
-        y={0}
+        y={gap / 2}
+        opacity={0.5}
         stroke={stroke}
         strokeWidth={2}
         strokeLinecap="round"
@@ -74,6 +86,7 @@ const BasicCurveChart: VFC<BasicCurveChartProps> = ({
         fill="none"
         x={0}
         y={0}
+        opacity={0.3}
         stroke={stroke}
         strokeWidth={2}
         strokeLinecap="round"
@@ -84,9 +97,11 @@ const BasicCurveChart: VFC<BasicCurveChartProps> = ({
         fill="none"
         x={0}
         y={0}
-        stroke={lighten(stroke, 0.1)}
+        stroke={stroke}
+        opacity={1}
         strokeWidth={1}
         strokeLinecap="round"
+        filter="url(#brighter)"
       />
     </svg>
   );

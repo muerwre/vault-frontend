@@ -1,29 +1,29 @@
-@use "sass:math";
+@use 'sass:math';
 
-@import "../variables";
+@import '../variables';
 
 $margin: 1em;
 
 .wrapper {
   blockquote {
-    border-left: 4px solid $wisegreen;
+    border-left: 4px solid $color_primary;
     padding: $margin * 0.5 0;
     margin-bottom: $margin;
-    color: $wisegreen;
+    color: $color_primary;
     font-size: 0.9em;
-    background-color: transparentize($wisegreen, 0.9);
+    background-color: $content_bg_success;
 
     p {
       margin: 0 $margin;
     }
 
-    &+blockquote {
+    & + blockquote {
       margin-top: -$margin;
     }
   }
 
   pre {
-    background-color: transparentize($blue, 0.9);
+    background-color: $content_bg_info;
     font-family: monospace;
     font-size: 0.8em;
     border-radius: 2px;
@@ -34,18 +34,19 @@ $margin: 1em;
     margin-bottom: $margin;
 
     code {
-      color: transparentize($wisegreen, 0.1);
+      color: $gray_50;
       font-family: monospace;
       white-space: pre-wrap;
     }
   }
 
-  p, li {
+  p,
+  li {
     code {
-      background-color: transparentize($blue, 0.9);
+      background-color: $content_bg_info;
       padding: 2px 4px;
       border-radius: 0.3em;
-      color: transparentize($wisegreen, 0.1);
+      color: $gray_25;
       font-size: 0.8em;
     }
   }
@@ -55,7 +56,11 @@ $margin: 1em;
     margin-bottom: $margin;
   }
 
-  h5, h4, h3, h2, h1 {
+  h5,
+  h4,
+  h3,
+  h2,
+  h1 {
     line-height: 1.2em;
     margin: $margin * 1.5 0 $margin * 0.5;
 

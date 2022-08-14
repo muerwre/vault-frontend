@@ -7,11 +7,9 @@ import { SuperPowersToggle } from '~/containers/auth/SuperPowersToggle';
 interface ProfileTogglesProps {}
 
 const ProfileToggles: FC<ProfileTogglesProps> = () => (
-  <Zone>
-    <Group>
-      <SuperPowersToggle />
-    </Group>
-  </Zone>
+  <Group>
+    <SuperPowersToggle />
+  </Group>
 );
 
 export { ProfileToggles };

@@ -19,13 +19,8 @@ const placeholder = 'Добавить';
 const prepareInput = (input: string): string[] => {
   return input
     .split(',')
-    .map((title: string) =>
-      title
-        .trim()
-        .substring(0, 64)
-        .toLowerCase(),
-    )
-    .filter(el => el.length > 0);
+    .map((title: string) => title.trim().substring(0, 64).toLowerCase())
+    .filter((el) => el.length > 0);
 };
 
 interface IProps {
@@ -88,7 +83,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
 
   const onFocus = useCallback(() => setFocused(true), []);
   const onBlur = useCallback(
-    event => {
+    (event) => {
       if (!wrapper.current || !ref.current) {
         return;
       }
@@ -122,9 +117,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
     [onAppend, setInput],
   );
 
-  const feature = useMemo(() => (input?.substr(0, 1) === '/' ? 'green' : ''), [
-    input,
-  ]);
+  const isAlbumTag = useMemo(() => input?.substr(0, 1) === '/', [input]);
 
   useEffect(() => {
     if (!focused) return;
@@ -138,7 +131,7 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
       <TagWrapper
         title={input || placeholder}
         hasInput={true}
-        feature={feature}
+        color={isAlbumTag ? 'primary' : undefined}
       >
         <input
           type="text"

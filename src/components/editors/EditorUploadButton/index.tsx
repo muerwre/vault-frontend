@@ -31,18 +31,25 @@ const EditorUploadButton: FC<IProps> = ({
       event.preventDefault();
 
       const files = Array.from(event.target.files || []).filter(
-        file => !type || getFileType(file) === type
+        (file) => !type || getFileType(file) === type,
       );
 
       uploadFiles(files);
     },
-    [type, uploadFiles]
+    [type, uploadFiles],
   );
 
-  const color = values.is_promoted ? 'primary' : 'lab';
+  const color = values.is_promoted ? 'flow' : 'lab';
 
   return (
-    <Button type="button" round size="giant" className={styles.wrap} label={label} color={color}>
+    <Button
+      type="button"
+      round
+      size="giant"
+      className={styles.wrap}
+      label={label}
+      color={color}
+    >
       <Icon icon={icon} size={24} />
       <input type="file" onChange={onInputChange} accept={accept} multiple />
     </Button>

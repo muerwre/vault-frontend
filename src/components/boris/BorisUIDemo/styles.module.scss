@@ -1,4 +1,4 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 .card {
   flex: 3;
@@ -6,7 +6,7 @@
   position: relative;
   z-index: 1;
   padding: 20px 30px;
-  background-color: lighten($content_bg, 4%);
+  background-color: $content_bg_lighter;
 }
 
 .sample {

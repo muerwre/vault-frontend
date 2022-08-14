@@ -1,10 +1,11 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .container {
   height: 280px;
   width: 100%;
-  background: transparentize(white, 0.9)
-    url('http://37.192.131.144/hero/photos/photo-20140527-1639766.jpg') no-repeat 50% 30%;
+  background: $gray_90
+    url('http://37.192.131.144/hero/photos/photo-20140527-1639766.jpg')
+    no-repeat 50% 30%;
   background-size: cover;
   opacity: 0.7;
   will-change: transform;

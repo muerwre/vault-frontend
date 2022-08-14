@@ -20,9 +20,7 @@ const RestoreSuccess: VFC<RestoreSuccessProps> = ({ username, onClick }) => (
 
     <div />
 
-    <Button color="secondary" onClick={onClick}>
-      Ура!
-    </Button>
+    <Button onClick={onClick}>Ура!</Button>
   </Group>
 );
 

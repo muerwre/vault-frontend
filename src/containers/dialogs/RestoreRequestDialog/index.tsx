@@ -15,24 +15,24 @@ import styles from './styles.module.scss';
 
 interface RestoreRequestDialogProps extends DialogComponentProps {}
 
-const RestoreRequestDialog: VFC<RestoreRequestDialogProps> = ({ onRequestClose }) => {
+const RestoreRequestDialog: VFC<RestoreRequestDialogProps> = ({
+  onRequestClose,
+}) => {
   useCloseOnEscape(onRequestClose);
 
   const [isSent, setIsSent] = useState(false);
   const onSent = useCallback(() => setIsSent(true), [setIsSent]);
 
-  const { isSubmitting, handleSubmit, handleChange, errors, values } = useRestoreRequestForm(
-    apiRequestRestoreCode,
-    onSent
-  );
+  const { isSubmitting, handleSubmit, handleChange, errors, values } =
+    useRestoreRequestForm(apiRequestRestoreCode, onSent);
 
   const buttons = useMemo(
     () => (
       <Group className={styles.buttons}>
-        <Button color="secondary">Восстановить</Button>
+        <Button>Восстановить</Button>
       </Group>
     ),
-    []
+    [],
   );
 
   const header = useMemo(() => <div className={styles.illustration} />, []);
@@ -58,7 +58,8 @@ const RestoreRequestDialog: VFC<RestoreRequestDialogProps> = ({ onRequestClose }
             />
 
             <div className={styles.text}>
-              Введите имя пользователя или адрес почты. Мы пришлем ссылку для сброса пароля.
+              Введите имя пользователя или адрес почты. Мы пришлем ссылку для
+              сброса пароля.
             </div>
           </Group>
         </div>

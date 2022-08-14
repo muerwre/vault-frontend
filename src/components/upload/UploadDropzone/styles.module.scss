@@ -12,17 +12,18 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: transparentize($wisegreen, 0.7);
+  background: $content_bg_success;
   border-radius: $radius;
   z-index: 10;
-  box-shadow: inset $wisegreen 0 0 0 2px;
+  box-shadow: inset $color_primary 0 0 0 2px;
   display: none;
   align-items: center;
   justify-content: center;
   pointer-events: none;
   touch-action: none;
 
-  &.active, :global(.dragging) & {
+  &.active,
+  :global(.dragging) & {
     display: flex;
   }
 }
@@ -30,5 +31,5 @@
 svg.icon {
   width: auto;
   height: 72px;
-  fill: $wisegreen;
+  fill: $color_primary;
 }

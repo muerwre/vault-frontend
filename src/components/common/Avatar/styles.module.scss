@@ -1,11 +1,11 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .avatar {
   @include outer_shadow;
 
   width: $comment_height;
   height: $comment_height;
-  background-color: transparentize(black, 0.9);
+  background-color: $content_bg_dark;
   flex-shrink: 0;
   overflow: hidden;
   border-radius: $radius;

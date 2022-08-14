@@ -1,7 +1,7 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .card {
-  background-color: $card_bg;
+  background-color: $content_bg;
   border-radius: $panel_radius;
   padding: $gap;
 

@@ -1,4 +1,4 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 img.image {
   position: absolute;
@@ -47,14 +47,14 @@ img.image {
   right: 30px;
   bottom: 40px;
   opacity: 0.4;
-  color: $orange;
+  color: $color_offline;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 
   svg {
-    fill: $orange;
+    fill: currentColor;
   }
 
   &__text {

@@ -1,4 +1,4 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 .menu {
   @include inner_shadow;
@@ -21,9 +21,9 @@
 
 .item {
   flex: 0 0 auto;
-  padding: $gap * 0.5 $gap  $gap * 0.5 $gap;
+  padding: $gap * 0.5 $gap $gap * 0.5 $gap;
   fill: currentColor;
-  color: darken(white, 50%);
+  color: $gray_50;
   transition: color 0.25s;
   cursor: pointer;
   border-radius: $radius;
@@ -46,15 +46,15 @@
     color: white;
 
     &.green {
-      background: $green_gradient;
+      background: $primary_gradient;
     }
 
     &.orange {
-      background: $red_gradient;
+      background: $danger_gradient;
     }
 
     &.yellow {
-      background: $yellow_gradient;
+      background: $warning_gradient;
     }
   }
 }

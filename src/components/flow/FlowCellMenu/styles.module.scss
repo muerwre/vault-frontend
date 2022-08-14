@@ -1,8 +1,8 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .dropdown {
   @include outer_shadow;
-  @include blur($red, 15px, 0.3);
+  @include blur($content_bg_info);
 
   width: 100%;
   height: 100%;

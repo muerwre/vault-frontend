@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   user-select: none;
@@ -9,7 +9,7 @@
   &::after {
     content: ' ';
     position: absolute;
-    background: linear-gradient(transparentize($content_bg, 1), $content_bg);
+    background: linear-gradient(transparent, $content_bg);
     border-radius: 0 0 $radius $radius;
     height: 100px;
     width: 100%;
@@ -49,7 +49,7 @@
   transform: translate(-50%, -50%);
   font: $font_18_semibold;
   text-transform: uppercase;
-  color: darken(white, 75%);
+  color: $gray_75;
   height: 20px;
   margin-top: 0 !important;
   text-align: center;

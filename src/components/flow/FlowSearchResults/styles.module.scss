@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   flex: 1;
@@ -12,7 +12,7 @@
   flex-direction: column;
   flex: 1;
   opacity: 0.3;
-  fill: transparentize(white, 0.7);
+  fill: $gray_75;
   stroke: none;
   min-height: 250px;
 }

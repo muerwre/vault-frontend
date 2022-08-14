@@ -17,11 +17,12 @@
   }
 
   &.has_error {
-    box-shadow: inset $red 0 0 0 1px;
+    box-shadow: inset $content_bg_danger 0 0 0 1px;
   }
 }
 
-.error, .title {
+.error,
+.title {
   pointer-events: none;
   touch-action: none;
   user-select: none;
@@ -37,7 +38,7 @@
   padding: 0 $gap * 0.5;
   border-radius: 4px;
   color: white;
-  background-color: $red;
+  background-color: $content_bg_danger;
   bottom: 0;
   right: $gap * 0.5;
   transform: translate(0, 50%);
@@ -57,12 +58,14 @@
   color: $input_grey_color;
   text-transform: uppercase;
 
-  .focused &, .not_empty & {
+  .focused &,
+  .not_empty & {
     transform: translate(0, -100%) scale(0.75);
   }
 
-  .focused.has_error &, .not_empty.has_error & {
+  .focused.has_error &,
+  .not_empty.has_error & {
     color: white;
-    background-color: $red;
+    background-color: $content_bg_danger;
   }
 }

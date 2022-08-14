@@ -1,9 +1,9 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .helper {
   position: fixed;
   bottom: 0;
-  background: radial-gradient($red, transparent) 50% 24px no-repeat;
+  background: radial-gradient($color_danger, transparent) 50% 24px no-repeat;
   background-size: 100% 48px;
   display: none;
   width: calc(100% - 20px);

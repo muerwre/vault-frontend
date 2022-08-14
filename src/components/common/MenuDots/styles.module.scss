@@ -1,5 +1,5 @@
-@import "src/styles/variables";
-@import "src/styles/mixins";
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
 
 .button {
   width: 48px;
@@ -14,7 +14,7 @@
 }
 
 .dots {
-  @include blur($content_bg, 5px, 0.7);
+  @include blur;
 
   padding: 5px 0 0 0;
   background: $content_bg;

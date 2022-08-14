@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .input {
   display: flex;
@@ -6,7 +6,7 @@
   color: inherit;
 
   &.has_error {
-    color: $red;
+    color: $color_danger;
   }
 
   &.has_prefix {
@@ -29,7 +29,8 @@
   }
 }
 
-.suffix, .prefix{
+.suffix,
+.prefix {
   fill: currentColor;
   stroke: currentColor;
 

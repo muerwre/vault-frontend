@@ -8,7 +8,7 @@ interface IProps {}
 
 const LoginSocialRegisterButtons: FC<IProps> = () => (
   <div className={styles.wrap}>
-    <Button color="secondary">Впустите меня!</Button>
+    <Button>Впустите меня!</Button>
   </div>
 );
 

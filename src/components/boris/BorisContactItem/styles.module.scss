@@ -1,4 +1,4 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 .item {
   display: flex;
@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: stretch;
   text-decoration: none;
-  color: darken(white, 50%);
+  color: $gray_50;
   padding: $gap;
   min-height: 42px;
 }

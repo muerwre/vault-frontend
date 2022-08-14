@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 $row_height: 26px;
 
@@ -16,13 +16,14 @@ $row_height: 26px;
   text-overflow: ellipsis;
   overflow: hidden;
 
-  &:hover, &.selected {
+  &:hover,
+  &.selected {
     opacity: 1;
-    background: transparentize($wisegreen, 0.6);
+    background: $content_bg_success;
   }
 
   &.right {
-    color: lighten($wisegreen, 4%);
+    color: $color_primary;
     opacity: 1;
   }
 

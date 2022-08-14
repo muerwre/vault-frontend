@@ -1,7 +1,7 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .item {
-  background: lighten($content_bg, 2%) 50% 50% no-repeat;
+  background: $content_bg_light 50% 50% no-repeat;
   padding-bottom: 100%;
   border-radius: $cell_radius;
   cursor: pointer;
@@ -29,7 +29,8 @@ div.thumb {
   }
 }
 
-.letters, .title {
+.letters,
+.title {
   @include outer_shadow;
 
   position: absolute;
@@ -41,7 +42,7 @@ div.thumb {
   width: 100%;
   height: 100%;
   font: $font_24_semibold;
-  color: transparentize(white, 0.5);
+  color: $gray_50;
   border-radius: $cell_radius;
 }
 
@@ -53,7 +54,7 @@ div.thumb {
   justify-content: flex-start;
   word-break: break-word;
   overflow: hidden;
-  color: transparentize(white, 0.3);
+  color: $gray_25;
 
   .large & {
     font: $font_14_semibold;

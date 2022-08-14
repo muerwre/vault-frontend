@@ -19,8 +19,9 @@ import { MetadataProvider } from '~/utils/providers/MetadataProvider';
 import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
 import { SearchProvider } from '~/utils/providers/SearchProvider';
 import { SidebarProvider } from '~/utils/providers/SidebarProvider';
+import { ThemeProvider } from '~/utils/providers/ThemeProvider';
 import { ToastProvider } from '~/utils/providers/ToastProvider';
- 
+
 import '~/styles/main.scss';
 import 'tippy.js/dist/tippy.css';
 
@@ -30,45 +31,50 @@ export default class MyApp extends App {
   render() {
     const { Component, pageProps, router } = this.props;
     const canonicalURL =
-      !!CONFIG.publicHost && new URL(router.asPath, CONFIG.publicHost).toString();
+      !!CONFIG.publicHost &&
+      new URL(router.asPath, CONFIG.publicHost).toString();
 
     return (
-      <StoreContextProvider store={mobxStore}>
-        <SWRConfigProvider>
-          <UserContextProvider>
-            <DragDetectorProvider>
-              <PageCoverProvider>
-                <SearchProvider>
-                  <AudioPlayerProvider>
-                    <MetadataProvider>
-                      <AuthProvider>
-                        <SidebarProvider>
-                          <Head>
-                            <meta
-                              name="viewport"
-                              content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=0"
+      <ThemeProvider>
+        <StoreContextProvider store={mobxStore}>
+          <SWRConfigProvider>
+            <UserContextProvider>
+              <DragDetectorProvider>
+                <PageCoverProvider>
+                  <SearchProvider>
+                    <AudioPlayerProvider>
+                      <MetadataProvider>
+                        <AuthProvider>
+                          <SidebarProvider>
+                            <Head>
+                              <meta
+                                name="viewport"
+                                content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=0"
                               />
 
-                            {!!canonicalURL && <link rel="canonical" href={canonicalURL} />}
-                          </Head>
+                              {!!canonicalURL && (
+                                <link rel="canonical" href={canonicalURL} />
+                              )}
+                            </Head>
 
-                          <MainLayout>
-                            <ToastProvider />
-                            <Modal />
-                            <Sprites />
-                            <Component {...pageProps} />
-                          </MainLayout>
-                          <BottomContainer />
-                        </SidebarProvider>
-                      </AuthProvider>
-                    </MetadataProvider>
-                  </AudioPlayerProvider>
-                </SearchProvider>
-              </PageCoverProvider>
-            </DragDetectorProvider>
-          </UserContextProvider>
-        </SWRConfigProvider>
-      </StoreContextProvider>
+                            <MainLayout>
+                              <ToastProvider />
+                              <Modal />
+                              <Sprites />
+                              <Component {...pageProps} />
+                            </MainLayout>
+                            <BottomContainer />
+                          </SidebarProvider>
+                        </AuthProvider>
+                      </MetadataProvider>
+                    </AudioPlayerProvider>
+                  </SearchProvider>
+                </PageCoverProvider>
+              </DragDetectorProvider>
+            </UserContextProvider>
+          </SWRConfigProvider>
+        </StoreContextProvider>
+      </ThemeProvider>
     );
   }
 }

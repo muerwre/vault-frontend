@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .content {
   width: 100%;
@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   font: $font_18_semibold;
-  color: transparentize(white, 0.5);
+  color: $gray_50;
 }
 
 span.val {

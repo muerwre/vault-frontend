@@ -7,8 +7,8 @@ import { Icon } from '~/components/input/Icon';
 import styles from './styles.module.scss';
 
 interface IProps {
-  feature?: string;
   size?: string;
+  color?: 'primary' | 'danger' | 'info' | 'black' | 'default';
   deletable?: boolean;
   hoverable?: boolean;
   editing?: boolean;
@@ -19,8 +19,8 @@ interface IProps {
 }
 
 const TagWrapper: FC<IProps> = ({
+  color = 'default',
   children,
-  feature,
   size,
   deletable,
   hoverable,
@@ -32,7 +32,7 @@ const TagWrapper: FC<IProps> = ({
 }) => {
   const canBeDeleted = deletable && !editing && !hasInput;
   const onDeletePress = useCallback(
-    event => {
+    (event) => {
       if (!onDelete) {
         return;
       }
@@ -40,18 +40,23 @@ const TagWrapper: FC<IProps> = ({
       event.stopPropagation();
       onDelete();
     },
-    [onDelete]
+    [onDelete],
   );
 
   return (
     <div
-      className={classNames(styles.tag, feature, size, {
-        is_hoverable: hoverable,
-        is_editing: editing,
-        deletable: canBeDeleted,
-        input: hasInput,
-        clickable: onClick,
-      })}
+      className={classNames(
+        styles.tag,
+        size && styles[`size-${size}`],
+        styles[`color-${color}`],
+        {
+          [styles.hoverable]: hoverable,
+          [styles.editing]: editing,
+          [styles.deletable]: canBeDeleted,
+          [styles.input]: hasInput,
+          [styles.clickable]: onClick,
+        },
+      )}
       onClick={onClick}
     >
       <div className={styles.hole} />

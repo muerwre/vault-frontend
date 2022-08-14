@@ -18,8 +18,8 @@ const BorisUIDemo: FC<IProps> = () => {
       <div className={markdown.wrapper}>
         <h1>UI</h1>
         <p>
-          Простая демонстрация элементов интерфейса. Используется, в основном, как подсказка при
-          разработке
+          Простая демонстрация элементов интерфейса. Используется, в основном,
+          как подсказка при разработке
         </p>
 
         <h2>Инпуты</h2>
@@ -27,8 +27,18 @@ const BorisUIDemo: FC<IProps> = () => {
         <form autoComplete="off">
           <Group>
             <InputText title="Обычный инпут" handler={setText} value={text} />
-            <InputText title="Инпут с ошибкой" error="Ошибка" handler={setText} value={text} />
-            <InputText title="Пароль" type="password" handler={setText} value={text} />
+            <InputText
+              title="Инпут с ошибкой"
+              error="Ошибка"
+              handler={setText}
+              value={text}
+            />
+            <InputText
+              title="Пароль"
+              type="password"
+              handler={setText}
+              value={text}
+            />
           </Group>
         </form>
 
@@ -38,7 +48,6 @@ const BorisUIDemo: FC<IProps> = () => {
 
         <Group horizontal className={styles.sample}>
           <Button>Primary</Button>
-          <Button color="secondary">Secondary</Button>
           <Button color="outline">Outline</Button>
           <Button color="gray">Gray</Button>
           <Button color="link">Link</Button>

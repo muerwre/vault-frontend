@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   padding: $gap $gap $gap * 4;
@@ -11,7 +11,7 @@
 .text {
   font: $font_14_regular;
   padding: $gap;
-  color: darken(white, 50%);
+  color: $gray_50;
 }
 
 .shade,
@@ -34,18 +34,18 @@
   text-transform: uppercase;
   font: $font_18_semibold;
   text-align: center;
-  color: $wisegreen;
+  color: $color_primary;
 
   svg {
-    fill: $wisegreen;
+    fill: $color_primary;
   }
 }
 
 .error_shade {
-  color: $red;
+  color: $color_danger;
 
   svg {
-    fill: $red;
+    fill: $color_danger;
   }
 }
 

@@ -1,7 +1,7 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
-  background: lighten($content_bg, 4%);
+  background: $content_bg_lighter;
   padding-bottom: 100%;
   border-radius: $radius;
   position: relative;
@@ -18,7 +18,7 @@
 
   &:global(.is_uploading) {
     .thumb {
-       filter: blur(10px);
+      filter: blur(10px);
     }
   }
 }
@@ -81,6 +81,6 @@
 
   &:hover {
     opacity: 1;
-    background-color: $red;
+    background-color: $color_danger;
   }
 }

@@ -1,7 +1,7 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .shade {
-  background: linear-gradient(7deg, transparentize($content_bg, 0.05) 30px, transparentize($content_bg, 1) 250px);
+  background: linear-gradient(7deg, $content_bg 30px, transparent 250px);
   pointer-events: none;
   touch-action: none;
 

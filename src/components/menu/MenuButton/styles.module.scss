@@ -1,4 +1,4 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 .menu {
   position: relative;
@@ -14,7 +14,7 @@
   visibility: hidden;
   pointer-events: none;
   touch-action: none;
-  background-color: transparentize($content_bg, 0.05);
+  background-color: $content_bg_backdrop;
 
   &.visible {
     visibility: visible;
@@ -27,7 +27,7 @@
   }
 
   &.translucent {
-    @include blur($content_bg, 15px, 0.5);
+    @include blur;
   }
 }
 

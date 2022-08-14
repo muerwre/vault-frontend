@@ -1,6 +1,6 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
-$notification_color: darken($content_bg, 2%);
+$notification_color: $content_bg_dark;
 
 @keyframes appear {
   0% {

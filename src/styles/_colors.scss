@@ -1,70 +1,45 @@
-// color 0, 0, 68 is pretty cool, btw
-$red: #ff3344;
-$yellow: #ffd60f;
-$dark_blue: #592071;
-$blue: #582cd0;
-$green: #00d2b9;
-$olive: #8bc12a;
-$orange: #ff7549;
-$grass: #41800d;
-$wisegreen: #007962;
-$lightgreen: lighten(adjust_hue($wisegreen, -30deg), 10%);
-$soft_blue: #3c75ff;
+// main definitions (move to --vars)
+$color_primary: var(--color_primary);
+$color_danger: var(--color_danger);
+$color_online: var(--color_online);
+$color_offline: var(--color_offline);
+$color_link: var(--color_link);
+$color_flow: var(--color_flow);
+$color_lab: var(--color_lab);
+$color_boris: var(--color_boris);
+$color_like: var(--color_like);
 
-$primary: $red;
-$secondary: $wisegreen;
+// gradients (move to --vars)
+$danger_gradient: var(--danger_gradient);
+$info_gradient: var(--info_gradient);
+$warning_gradient: var(--warning_gradient);
+$primary_gradient: var(--primary_gradient);
+$magic_gradient: var(--magic_gradient);
+$global_loader_gradient: var(--global_loader_gradient);
+$flow_gradient: var(--flow_gradient);
+$lab_gradient: var(--lab_gradient);
 
-$red_gradient: linear-gradient(165deg, $orange -50%, $red 150%);
-$yellow_gradient: linear-gradient(165deg, $yellow -50%, $red 150%);
-$blue_gradient: linear-gradient(170deg, $blue, $dark_blue);
-$green_gradient: linear-gradient(
-  170deg,
-  $lightgreen -50%,
-  $wisegreen 150%
-);
-$purple_gradient: linear-gradient(170deg, $red, $dark_blue);
-$cyan_gradient: linear-gradient(260deg, $soft_blue -50%, #7b2653 150%);
+// backgrounds (move to --vars)
+$content_bg: var(--content_bg);
+$content_bg_dark: var(--content_bg_dark);
+$content_bg_darker: var(--content_bg_darker);
+$content_bg_light: var(--content_bg_light);
+$content_bg_lighter: var(--content_bg_lighter);
+$content_bg_lightest: var(--content_bg_lightest);
 
-$red_gradient_alt: linear-gradient(170deg, #ff4545, #d2004c);
-$purple_gradient_alt: linear-gradient(90deg, #442294, #ff4545);
+$content_bg_success: var(--content_bg_success);
+$content_bg_info: var(--content_bg_info);
+$content_bg_danger: var(--content_bg_danger);
+$content_bg_backdrop: var(--content_bg_backdrop);
 
-$main_gradient: $green_gradient;
+// white shades (move to --vars)
+$white: var(--white);
+$gray_25: var(--gray_25);
+$gray_50: var(--gray_50);
+$gray_75: var(--gray_75);
+$gray_90: var(--gray_90);
 
-// $main_bg_color: darken(#2c2b2b, 4%);
-$main_bg_color: darken(#332f2d, 6%);
-$main_text_color: white;
-
-$content_bg: darken($main_bg_color, 0%);
-$content_bg_secondary: darken($content_bg, 2%);
-$lab_post_bg: lighten($content_bg, 4%);
-
-$cell_bg: lighten($main_bg_color, 0%);
-$card_bg: lighten($main_bg_color, 0%);
-
-$text_normal: 16px;
-$text_small: 14px;
-$text_big: 20px;
-$text_sign: 22px;
-
-$button_bg_color: $red_gradient;
-
-$inset_bg: linear-gradient(135deg, darken($content_bg, 2%), $content_bg);
-$comment_bg: lighten($content_bg, 2%);
-
-$panel_bg: transparent;
-$node_bg: darken($content_bg, 2%);
-$node_image_bg: darken($main_bg_color, 4%);
-$node_title_background: darken($main_bg_color, 8%);
-
-$editor_bg: $content_bg;
-$editor_panel_bg: darken($editor_bg, 4%);
-$cell_shade: lighten($content_bg, 10%);
-$scroll_color: $red_gradient;
-$scroll_inactive_opacity: 0.5;
-
-$side_pane_btn_color: lighten($main_bg_color, 0%);
-
-$node_buttons_bg: darken($main_bg_color, 6%);
-
-$tag_bg: lighten($main_bg_color, 4%);
-$menu_bg: lighten($main_bg_color, 4%);
+// global
+$page_background: var(--page-background);
+$page_background_top: var(--page-background-top);
+$boris_background: var(--boris-background);

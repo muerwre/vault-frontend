@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .place {
   position: relative;
@@ -11,11 +11,8 @@
   @include outer_shadow();
   display: flex;
   border-radius: $radius $radius 0 0;
-  // background: $main_gradient;
   align-items: center;
-  background: lighten($content_bg, 6%);
-  // box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px, inset rgba(255, 255, 255, 0.3) 1px 1px,
-  // inset rgba(0, 0, 0, 0.3) 0 -1px;
+  background: $content_bg_lightest;
   position: absolute;
   top: 0;
   left: 0;
@@ -48,7 +45,7 @@
   svg {
     width: 32px;
     height: 32px;
-    fill: darken(white, 50%);
+    fill: $gray_50;
     stroke: none;
   }
 }
@@ -71,7 +68,7 @@
 }
 
 .title {
-  color: darken(white, 50%);
+  color: $gray_50;
   font: $font_14_semibold;
   white-space: nowrap;
   overflow: hidden;
@@ -91,7 +88,7 @@
     left: 0;
     width: 100%;
     height: 2px;
-    background: darken(white, 50%);
+    background: $gray_50;
     position: absolute;
     border-radius: 2px;
     opacity: 0.5;
@@ -103,7 +100,7 @@
   left: 0;
   width: 100%;
   height: 6px;
-  background: darken(white, 50%);
+  background: $gray_50;
   position: absolute;
   border-radius: 2px;
 }

@@ -1,0 +1,92 @@
+// palette (use inside)
+
+$_yellow: #ffd60f;
+$_dark_blue: #592071;
+$_blue: #582cd0;
+$_green: #00d2b9;
+$_wisegreen: #007962;
+$_olive: #6cb337;
+$_red: #ff3344;
+$_orange: #ff7549;
+$_lightgreen: lighten(adjust_hue(#007962, -30deg), 10%);
+$_soft_blue: #7693d6;
+
+$_cold: #1c1e26;
+$_accent: #e95678;
+$_mandarine: #f09483;
+$_lemon: #fab795;
+$_ocean: #25b0bc;
+
+@mixin apply {
+  :root.theme-horizon {
+    // main definitions (move to --vars)
+    --color_primary: #{$_accent};
+    --color_danger: #{$_red};
+    --color_online: #{$_ocean};
+    --color_offline: #{$_mandarine};
+    --color_link: #{$_ocean};
+    --color_like: #{$_lemon};
+    --color_flow: #{$_red};
+    --color_lab: #{$_blue};
+    --color_boris: #{$_wisegreen};
+
+    // gradients (move to --vars)
+    --danger_gradient: linear-gradient(165deg, #{$_orange} -50%, #{$_red} 150%);
+    --info_gradient: linear-gradient(170deg, #{$_ocean}, #{$_soft_blue});
+
+    --warning_gradient: linear-gradient(
+      165deg,
+      #{$_yellow} -50%,
+      #{$_red} 150%
+    );
+
+    --primary_gradient: linear-gradient(
+      170deg,
+      #{$_mandarine} -150%,
+      #{$_accent} 100%
+    );
+
+    --magic_gradient: linear-gradient(
+      260deg,
+      #{$_accent} -50%,
+      #{$_orange} 150%
+    );
+
+    --global_loader_gradient: linear-gradient(
+      90deg,
+      #{$_lemon},
+      #{$_accent},
+      #{$_mandarine}
+    );
+    --flow_gradient: var(--primary_gradient);
+    --lab_gradient: var(--info_gradient);
+
+    // backgrounds (move to --vars)
+    --content_bg: #{$_cold};
+    --content_bg_dark: #{darken($_cold, 2%)};
+    --content_bg_darker: #{darken($_cold, 4%)};
+    --content_bg_light: #{lighten($_cold, 2%)};
+    --content_bg_lighter: #{lighten($_cold, 4%)};
+    --content_bg_lightest: #{lighten($_cold, 6%)};
+
+    --content_bg_success: #{transparentize($_accent, 0.7)};
+    --content_bg_info: #{transparentize($_lemon, 0.7)};
+    --content_bg_danger: #{transparentize($_red, 0.5)};
+    --content_bg_backdrop: #{transparentize($_cold, 0.2)};
+
+    // white shades (move to --vars)
+    --white: white;
+    --gray_25: #{transparentize(white, 0.25)};
+    --gray_50: #{transparentize(white, 0.5)};
+    --gray_75: #{transparentize(white, 0.75)};
+    --gray_90: #{transparentize(white, 0.95)};
+
+    // page background
+    --page-background: 50% 50% / cover no-repeat url('/images/horizon_bg.svg') #{darken(
+        $_cold,
+        4%
+      )} fixed;
+    --page-background-top: none;
+    --boris-background: linear-gradient(#{$_ocean} -200%, transparent 50%);
+  }
+}

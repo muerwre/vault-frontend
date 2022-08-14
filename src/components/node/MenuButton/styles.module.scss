@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .button {
   fill: white;
@@ -24,6 +24,6 @@
 
 .description {
   font: $font_12_regular;
-  color: transparentize(white, 0.6);
+  color: $gray_75;
   white-space: nowrap;
 }

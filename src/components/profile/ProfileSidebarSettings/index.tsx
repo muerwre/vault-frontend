@@ -47,9 +47,7 @@ const ProfileSidebarSettings: FC<IProps> = () => {
               Отмена
             </Button>
 
-            <Button color="secondary" type="submit">
-              Сохранить
-            </Button>
+            <Button type="submit">Сохранить</Button>
           </div>
         </Form>
       </SettingsProvider>

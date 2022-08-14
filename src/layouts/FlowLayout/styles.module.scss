@@ -1,6 +1,6 @@
-@use "sass:math";
+@use 'sass:math';
 
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
   max-width: 2000px;
@@ -36,7 +36,7 @@ $cols: math.div($content_width, $cell);
   grid-row-end: 2;
   grid-column-start: 1;
   grid-column-end: -1;
-  background: darken($content_bg, 2%);
+  background: $content_bg_dark;
   border-radius: $radius;
   display: flex;
   align-items: center;
@@ -53,7 +53,7 @@ $cols: math.div($content_width, $cell);
   overflow: hidden;
   position: relative;
 
-  @media(max-width: $flow_hide_recents) {
+  @media (max-width: $flow_hide_recents) {
     grid-column-start: 1;
     grid-row-end: span 1;
   }
