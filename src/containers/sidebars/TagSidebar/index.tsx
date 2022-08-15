@@ -1,18 +1,20 @@
-import React, { useMemo, VFC } from 'react';
+import { useMemo, VFC } from 'react';
 
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
 import { Icon } from '~/components/input/Icon';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { SidebarStack } from '~/components/sidebar/SidebarStack';
+import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
+import { SidebarWrapper } from '~/components/sidebar/SidebarWrapper';
 import { TagSidebarList } from '~/components/sidebar/TagSidebarList';
 import { Tag } from '~/components/tags/Tag';
-import { SidebarWrapper } from '~/containers/sidebars/SidebarWrapper';
+import { SidebarName } from '~/constants/sidebar';
 import { useTagNodes } from '~/hooks/tag/useTagNodes';
-import { DialogComponentProps } from '~/types/modal';
+import { SidebarComponentProps } from '~/types/sidebar';
 
 import styles from './styles.module.scss';
 
-interface TagSidebarProps extends DialogComponentProps {
+interface TagSidebarProps extends SidebarComponentProps<SidebarName.Tag> {
   tag: string;
 }
 
@@ -23,43 +25,35 @@ const TagSidebar: VFC<TagSidebarProps> = ({ tag, onRequestClose }) => {
   return (
     <SidebarWrapper onClose={onRequestClose}>
       <SidebarStack>
-        <div className={styles.wrap}>
-          <div className={styles.content}>
-            <div className={styles.head}>
-              <div className={styles.tag}>
-                <Tag tag={{ title }} size="big" />
-              </div>
-
-              {isLoading && (
-                <div className={styles.sync}>
-                  <LoaderCircle size={20} />
+        <SidebarStackCard
+          headerFeature="close"
+          title={<Tag tag={{ title }} />}
+          onBackPress={onRequestClose}
+        >
+          <div className={styles.wrap}>
+            <div className={styles.content}>
+              {!nodes.length && !isLoading ? (
+                <div className={styles.none}>
+                  <Icon icon="sad" size={120} />
+                  <div>
+                    У этого тэга нет постов
+                    <br />
+                    <br />
+                    Такие дела
+                  </div>
                 </div>
+              ) : (
+                <InfiniteScroll
+                  hasMore={hasMore}
+                  loadMore={loadMore}
+                  className={styles.list}
+                >
+                  <TagSidebarList nodes={nodes} onClick={onRequestClose} />
+                </InfiniteScroll>
               )}
-
-              <div className={styles.close}>
-                <button onClick={onRequestClose}>
-                  <Icon icon="close" size={32} />
-                </button>
-              </div>
             </div>
-
-            {!nodes.length && !isLoading ? (
-              <div className={styles.none}>
-                <Icon icon="sad" size={120} />
-                <div>
-                  У этого тэга нет постов
-                  <br />
-                  <br />
-                  Такие дела
-                </div>
-              </div>
-            ) : (
-              <InfiniteScroll hasMore={hasMore} loadMore={loadMore} className={styles.list}>
-                <TagSidebarList nodes={nodes} onClick={onRequestClose} />
-              </InfiniteScroll>
-            )}
           </div>
-        </div>
+        </SidebarStackCard>
       </SidebarStack>
     </SidebarWrapper>
   );

@@ -7,9 +7,9 @@ import { ProfileSidebarNotes } from '~/components/profile/ProfileSidebarNotes';
 import { ProfileSidebarSettings } from '~/components/profile/ProfileSidebarSettings';
 import { SidebarStack } from '~/components/sidebar/SidebarStack';
 import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
+import { SidebarWrapper } from '~/components/sidebar/SidebarWrapper';
 import { SidebarName } from '~/constants/sidebar';
 import { ProfileSidebarMenu } from '~/containers/profile/ProfileSidebarMenu';
-import { SidebarWrapper } from '~/containers/sidebars/SidebarWrapper';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useUser } from '~/hooks/auth/useUser';
 import type { SidebarComponentProps } from '~/types/sidebar';
@@ -17,12 +17,12 @@ import type { SidebarComponentProps } from '~/types/sidebar';
 const tabs = ['profile', 'bookmarks'] as const;
 type TabName = typeof tabs[number];
 
-interface ProfileSidebarProps
+interface SettingsSidebarProps
   extends SidebarComponentProps<SidebarName.Settings> {
   page?: TabName;
 }
 
-const ProfileSidebar: VFC<ProfileSidebarProps> = ({
+const SettingsSidebar: VFC<SettingsSidebarProps> = ({
   onRequestClose,
   page,
   openSidebar,
@@ -79,4 +79,4 @@ const ProfileSidebar: VFC<ProfileSidebarProps> = ({
   );
 };
 
-export { ProfileSidebar };
+export { SettingsSidebar };

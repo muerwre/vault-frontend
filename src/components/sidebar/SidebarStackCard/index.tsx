@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, ReactNode, useMemo } from 'react';
 
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 interface SidebarStackCardProps {
   width?: number;
   headerFeature?: 'back' | 'close';
-  title?: string;
+  title?: ReactNode;
   onBackPress?: () => void;
 }
 
@@ -26,7 +26,9 @@ const SidebarStackCard: FC<SidebarStackCardProps> = ({
     <div style={style} className={styles.card}>
       {!!(headerFeature || title) && (
         <div className={styles.head}>
-          <Filler>{!!title && <h6>{title}</h6>}</Filler>
+          <Filler className={styles.title}>
+            {typeof title === 'string' ? <h6>{title}</h6> : title}
+          </Filler>
 
           {!!(headerFeature && onBackPress) && (
             <Button color="link" iconRight={backIcon} onClick={onBackPress} />

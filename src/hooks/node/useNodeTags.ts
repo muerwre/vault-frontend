@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 
 import { apiDeleteNodeTag, apiPostNodeTags } from '~/api/node';
-import { Dialog } from '~/constants/modal';
-import { useShowModal } from '~/hooks/modal/useShowModal';
 import { useGetNodeRelated } from '~/hooks/node/useGetNodeRelated';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { ITag } from '~/types';
 
+import { useTagSidebar } from '../sidebar/useTagSidebar';
+
 export const useNodeTags = (id: number) => {
-  const showModal = useShowModal(Dialog.TagSidebar);
+  const openTagSidebar = useTagSidebar();
   const { refresh: refreshRelated } = useGetNodeRelated(id);
   const { update } = useLoadNode(id);
 
@@ -22,7 +22,7 @@ export const useNodeTags = (id: number) => {
         console.warn(error);
       }
     },
-    [id, update, refreshRelated]
+    [id, update, refreshRelated],
   );
 
   const onClick = useCallback(
@@ -31,9 +31,9 @@ export const useNodeTags = (id: number) => {
         return;
       }
 
-      showModal({ tag: tag.title });
+      openTagSidebar(tag.title);
     },
-    [showModal, id]
+    [openTagSidebar, id],
   );
 
   const onDelete = useCallback(
@@ -46,7 +46,7 @@ export const useNodeTags = (id: number) => {
         console.warn(e);
       }
     },
-    [id, update, refreshRelated]
+    [id, update, refreshRelated],
   );
 
   return { onDelete, onChange, onClick };

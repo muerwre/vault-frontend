@@ -1,12 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 
 import { Pressable } from '~/components/common/Pressable';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
 import { Dialog } from '~/constants/modal';
 import { useShowModal } from '~/hooks/modal/useShowModal';
-import { INode } from '~/types';
+import { useTagSidebar } from '~/hooks/sidebar/useTagSidebar';
+import { INode, ITag } from '~/types';
 import { INodeRelated } from '~/types/node';
+import { useSidebar } from '~/utils/providers/SidebarProvider';
 
 interface IProps {
   isLoading: boolean;
@@ -15,7 +17,7 @@ interface IProps {
 }
 
 const NodeRelatedBlock: FC<IProps> = ({ isLoading, node, related }) => {
-  const goToTag = useShowModal(Dialog.TagSidebar);
+  const goToTag = useTagSidebar();
 
   if (isLoading) {
     return <NodeRelatedPlaceholder />;
@@ -27,10 +29,12 @@ const NodeRelatedBlock: FC<IProps> = ({ isLoading, node, related }) => {
         related.albums &&
         !!node?.id &&
         Object.keys(related.albums)
-          .filter(album => related.albums[album].length > 0)
-          .map(album => (
+          .filter((album) => related.albums[album].length > 0)
+          .map((album) => (
             <NodeRelated
-              title={<Pressable onClick={() => goToTag({ tag: album })}>{album}</Pressable>}
+              title={
+                <Pressable onClick={() => goToTag(album)}>{album}</Pressable>
+              }
               items={related.albums[album]}
               key={album}
             />
