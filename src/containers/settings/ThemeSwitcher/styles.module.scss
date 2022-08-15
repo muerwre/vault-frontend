@@ -25,6 +25,16 @@
   @include outer_shadow;
 
   border-radius: 100%;
-  flex: 0 1 20px;
-  height: 20px;
+  flex: 0 1 24px;
+  height: 24px;
+
+  &:not(:last-child) {
+    margin-left: -8px;
+  }
+}
+
+.palette {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
 }

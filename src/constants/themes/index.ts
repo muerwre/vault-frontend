@@ -15,6 +15,7 @@ export const themeColors: Record<Theme, ThemeColors> = {
     colors: [
       'linear-gradient(170deg, #00ac35 -50%, #007962 150%)',
       'linear-gradient(165deg, #ff7549 -50%, #ff3344 150%)',
+      'linear-gradient(170deg, #582cd0, #592071)',
     ],
     background: `url('/images/noise_top.png') 0% 0% #23201f`,
   },

@@ -2,6 +2,7 @@
 @import 'src/styles/mixins';
 
 .menu {
+  background: $content_bg_backdrop;
   border-radius: $radius;
   padding: 0 !important;
   display: flex;
