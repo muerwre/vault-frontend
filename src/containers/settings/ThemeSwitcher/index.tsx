@@ -27,15 +27,15 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = () => {
           onClick={() => setTheme(id as Theme)}
         >
           <Group>
-            <Group horizontal>
-              {item.colors.map((color) => (
+            <div className={styles.palette}>
+              {item.colors.reverse().map((color) => (
                 <div
                   key={color}
                   className={styles.sample}
                   style={{ background: color }}
                 />
               ))}
-            </Group>
+            </div>
             <div className={styles.title}>{item.name}</div>
           </Group>
         </Card>

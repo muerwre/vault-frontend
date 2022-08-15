@@ -73,7 +73,7 @@ $_ocean: #25b0bc;
     --content_bg_info: #{transparentize($_lemon, 0.7)};
     --content_bg_danger: #{transparentize($_red, 0.5)};
     --content_bg_backdrop: 50% 50% / cover no-repeat
-      url('/images/horizon_bg.svg') #{transparentize($_cold, 0.4)};
+      url('/images/horizon_backdrop.svg') #{transparentize($_cold, 0.2)};
 
     // white shades (move to --vars)
     --white: white;

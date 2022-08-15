@@ -19,9 +19,12 @@ function VerticalMenu({
   ...props
 }: PropsWithChildren<VerticalMenuProps>) {
   return (
-    <Card {...props} className={classNames(styles.menu, styles[appearance], props.className)}>
+    <div
+      {...props}
+      className={classNames(styles.menu, styles[appearance], props.className)}
+    >
       {children}
-    </Card>
+    </div>
   );
 }
 
