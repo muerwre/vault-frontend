@@ -7,7 +7,6 @@ import { PhotoSwipe } from '~/containers/dialogs/PhotoSwipe';
 import { RestorePasswordDialog } from '~/containers/dialogs/RestorePasswordDialog';
 import { RestoreRequestDialog } from '~/containers/dialogs/RestoreRequestDialog';
 import { TestDialog } from '~/containers/dialogs/TestDialog';
-import { TagSidebar } from '~/containers/sidebars/TagSidebar';
 
 export enum Dialog {
   Login = 'Login',
@@ -19,7 +18,6 @@ export enum Dialog {
   Photoswipe = 'Photoswipe',
   CreateNode = 'CreateNode',
   EditNode = 'EditNode',
-  TagSidebar = 'TagNodes',
 }
 
 export const DIALOG_CONTENT = {
@@ -32,5 +30,4 @@ export const DIALOG_CONTENT = {
   [Dialog.Photoswipe]: PhotoSwipe,
   [Dialog.CreateNode]: EditorCreateDialog,
   [Dialog.EditNode]: EditorEditDialog,
-  [Dialog.TagSidebar]: TagSidebar,
 } as const;

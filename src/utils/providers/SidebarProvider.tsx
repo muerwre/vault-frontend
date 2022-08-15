@@ -84,11 +84,14 @@ export const SidebarProvider = <T extends SidebarComponent>({
       {children}
       {current && (
         <ModalWrapper onOverlayClick={close}>
-          {createElement(sidebarComponents[current], {
-            onRequestClose: close,
-            openSidebar: open,
-            ...omit(['sidebar'], router.query),
-          } as any)}
+          {createElement(
+            sidebarComponents[current] as any,
+            {
+              onRequestClose: close,
+              openSidebar: open,
+              ...omit(['sidebar'], router.query),
+            } as any,
+          )}
         </ModalWrapper>
       )}
     </SidebarContext.Provider>
