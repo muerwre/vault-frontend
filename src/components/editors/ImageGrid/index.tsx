@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 
-import { SortableImageGrid } from '~/components/sortable';
+import { SortableImageGrid } from '~/components/sortable/SortableImageGrid';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
@@ -16,14 +16,14 @@ const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
 
   const onMove = useCallback(
     (newFiles: IFile[]) => {
-      setFiles(newFiles.filter(it => it));
+      setFiles(newFiles.filter((it) => it));
     },
     [setFiles, files],
   );
 
   const onDrop = useCallback(
     (id: IFile['id']) => {
-      setFiles(files.filter(file => file && file.id !== id));
+      setFiles(files.filter((file) => file && file.id !== id));
     },
     [setFiles, files],
   );

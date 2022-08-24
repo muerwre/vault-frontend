@@ -12,7 +12,7 @@ import { ApiGetNodeResponse } from '~/types/node';
 
 const getKey = (nodeId: number, userId = 0) =>
   JSON.stringify({
-    url: API.NODE.GET_NODE(nodeId),
+    url: API.NODES.GET(nodeId),
     userId,
   });
 
@@ -21,7 +21,7 @@ export const useLoadNode = (id: number, fallbackData?: ApiGetNodeResponse) => {
   const { data, isValidating, mutate } = useSWR<ApiGetNodeResponse>(
     getKey(id, user.id),
     () => apiGetNode({ id }),
-    { fallbackData, revalidateOnMount: true }
+    { fallbackData, revalidateOnMount: true },
   );
 
   const update = useCallback(
@@ -33,7 +33,7 @@ export const useLoadNode = (id: number, fallbackData?: ApiGetNodeResponse) => {
 
       await mutate({ node: { ...data.node, ...node } }, true);
     },
-    [data, mutate]
+    [data, mutate],
   );
 
   useOnNodeSeen(data?.node);

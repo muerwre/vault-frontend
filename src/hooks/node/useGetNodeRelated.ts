@@ -8,8 +8,9 @@ import { INode } from '~/types';
 import { ApiGetNodeRelatedResult } from '~/types/node';
 
 export const useGetNodeRelated = (id?: INode['id']) => {
-  const { data, isValidating, mutate } = useSWR<ApiGetNodeRelatedResult>(API.NODE.RELATED(id), () =>
-    apiGetNodeRelated({ id })
+  const { data, isValidating, mutate } = useSWR<ApiGetNodeRelatedResult>(
+    API.NODES.RELATED(id),
+    () => apiGetNodeRelated({ id }),
   );
 
   const refresh = useCallback(() => mutate(data, true), [data, mutate]);

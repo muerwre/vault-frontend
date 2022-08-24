@@ -23,23 +23,23 @@ export const API = {
     ATTACH_SOCIAL: `/oauth/attach`,
     LOGIN_WITH_SOCIAL: `/oauth/login`,
   },
-  NODE: {
+  NODES: {
     SAVE: '/nodes/',
-    GET_DIFF: '/nodes/',
-    GET_NODE: (id: number | string) => `/nodes/${id}`,
-
+    LIST: '/nodes/',
+    GET: (id: number | string) => `/nodes/${id}`,
+    DELETE: (id: INode['id']) => `/nodes/${id}`,
+    LIKE: (id: INode['id']) => `/nodes/${id}/like`,
+    HEROIC: (id: INode['id']) => `/nodes/${id}/heroic`,
+    SET_CELL_VIEW: (id: INode['id']) => `/nodes/${id}/cell-view`,
     RELATED: (id: INode['id']) => `/nodes/${id}/related`,
+
     UPDATE_TAGS: (id: INode['id']) => `/nodes/${id}/tags`,
     DELETE_TAG: (id: INode['id'], tagId: ITag['ID']) =>
       `/nodes/${id}/tags/${tagId}`,
-    POST_LIKE: (id: INode['id']) => `/nodes/${id}/like`,
-    POST_HEROIC: (id: INode['id']) => `/nodes/${id}/heroic`,
-    POST_LOCK: (id: INode['id']) => `/nodes/${id}/lock`,
-    SET_CELL_VIEW: (id: INode['id']) => `/nodes/${id}/cell-view`,
 
-    COMMENT: (id: INode['id'] | string) => `/nodes/${id}/comment`,
+    COMMENT: (id: INode['id'] | string) => `/nodes/${id}/comments`,
     LOCK_COMMENT: (id: INode['id'], comment_id: IComment['id']) =>
-      `/nodes/${id}/comment/${comment_id}`,
+      `/nodes/${id}/comments/${comment_id}`,
   },
   SEARCH: {
     NODES: '/search/nodes',

@@ -23,6 +23,13 @@ import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
 import { uniqBy } from '~/utils/ramda';
 
 export const getStaticPaths = async () => {
+  if (process.env.NODE_ENV === 'development') {
+    return {
+      paths: [],
+      fallback: 'blocking',
+    };
+  }
+
   const recent = await getNodeDiff({
     with_heroes: false,
     with_recent: true,
@@ -30,40 +37,48 @@ export const getStaticPaths = async () => {
     with_valid: false,
   });
 
-  const recentIDs = uniqBy(it => it.id, [
-    ...(recent.after || []),
-    ...(recent.before || []),
-    ...(recent.recent || []),
-  ])
-    .filter(it => it.id)
-    .map(it => it.id!.toString());
+  const recentIDs = uniqBy(
+    (it) => it.id,
+    [
+      ...(recent.after || []),
+      ...(recent.before || []),
+      ...(recent.recent || []),
+    ],
+  )
+    .filter((it) => it.id)
+    .map((it) => it.id!.toString());
 
   return {
-    paths: recentIDs.map(id => ({ params: { id } })),
+    paths: recentIDs.map((id) => ({ params: { id } })),
     fallback: 'blocking',
   };
 };
 
 export const getStaticProps = async (
-  context
-): Promise<GetStaticPropsResult<{ fallbackData: ApiGetNodeResponse; comments?: IComment[] }>> => {
+  context,
+): Promise<
+  GetStaticPropsResult<{
+    fallbackData: ApiGetNodeResponse;
+    comments?: IComment[];
+  }>
+> => {
   try {
     if (!context.params?.id) {
       return { notFound: true };
     }
 
     const id = parseInt(context.params.id, 10);
-
     if (!id) {
       return { notFound: true };
     }
 
-    const fallbackData = await apiGetNode({ id });
-
-    const comments = await apiGetNodeComments({
-      id,
-      take: COMMENTS_DISPLAY,
-    });
+    const [fallbackData, { comments }] = await Promise.all([
+      apiGetNode({ id }),
+      apiGetNodeComments({
+        id,
+        take: COMMENTS_DISPLAY,
+      }),
+    ]);
 
     return {
       props: {
@@ -71,7 +86,7 @@ export const getStaticProps = async (
           ...fallbackData,
           last_seen: fallbackData.last_seen ?? null,
         },
-        comments: comments.comments,
+        comments,
       },
       revalidate: 7 * 86400, // every week
     };
@@ -83,11 +98,15 @@ export const getStaticProps = async (
   }
 };
 
-type Props = RouteComponentProps<{ id: string }> & InferGetStaticPropsType<typeof getStaticProps>;
+type Props = RouteComponentProps<{ id: string }> &
+  InferGetStaticPropsType<typeof getStaticProps>;
 
-const NodePage: FC<Props> = observer(props => {
+const NodePage: FC<Props> = observer((props) => {
   const id = useNodePageParams();
-  const { node, isLoading, update, lastSeen } = useLoadNode(parseInt(id, 10), props.fallbackData);
+  const { node, isLoading, update, lastSeen } = useLoadNode(
+    parseInt(id, 10),
+    props.fallbackData,
+  );
 
   const onShowImageModal = useImageModal();
 
@@ -101,9 +120,11 @@ const NodePage: FC<Props> = observer(props => {
     isLoadingMore: isLoadingMoreComments,
   } = useNodeComments(parseInt(id, 10), props.comments);
 
-  const { onDelete: onTagDelete, onChange: onTagsChange, onClick: onTagClick } = useNodeTags(
-    parseInt(id, 10)
-  );
+  const {
+    onDelete: onTagDelete,
+    onChange: onTagsChange,
+    onClick: onTagClick,
+  } = useNodeTags(parseInt(id, 10));
   const [canEdit] = useNodePermissions(node);
 
   if (!node) {

@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, VFC } from 'react';
 
-import { isNil } from 'ramda';
-
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { ProfileSidebarNotes } from '~/components/profile/ProfileSidebarNotes';
 import { ProfileSidebarSettings } from '~/components/profile/ProfileSidebarSettings';
@@ -13,6 +11,7 @@ import { ProfileSidebarMenu } from '~/containers/profile/ProfileSidebarMenu';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useUser } from '~/hooks/auth/useUser';
 import type { SidebarComponentProps } from '~/types/sidebar';
+import { isNil } from '~/utils/ramda';
 
 const tabs = ['profile', 'bookmarks'] as const;
 type TabName = typeof tabs[number];

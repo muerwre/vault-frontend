@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
-import { MenuButton } from '~/components/menu';
+import { MenuButton } from '~/components/menu/MenuButton';
 import { ProfileQuickInfo } from '~/containers/profile/ProfileQuickInfo';
 import { IUser } from '~/types/auth';
 import { path } from '~/utils/ramda';
@@ -16,7 +16,11 @@ const CommentAvatar: FC<Props> = ({ user, className }) => {
     <MenuButton
       position="auto"
       icon={
-        <Avatar url={path(['photo', 'url'], user)} username={user.username} className={className} />
+        <Avatar
+          url={path(['photo', 'url'], user)}
+          username={user.username}
+          className={className}
+        />
       }
     >
       <ProfileQuickInfo user={user} />

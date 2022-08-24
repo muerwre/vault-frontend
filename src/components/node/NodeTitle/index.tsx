@@ -3,7 +3,7 @@ import React, { memo, VFC } from 'react';
 import classNames from 'classnames';
 
 import { Icon } from '~/components/input/Icon';
-import { SeparatedMenu } from '~/components/menu';
+import { SeparatedMenu } from '~/components/menu/SeparatedMenu';
 import { NodeEditMenu } from '~/components/node/NodeEditMenu';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { getPrettyDate } from '~/utils/dom';
@@ -35,7 +35,6 @@ interface IProps {
 
 const NodeTitle: VFC<IProps> = memo(
   ({
-    id,
     title,
     username,
     createdAt,
@@ -69,7 +68,9 @@ const NodeTitle: VFC<IProps> = memo(
                 {isLoading ? (
                   <Placeholder width="100px" />
                 ) : (
-                  `~${username.toLocaleLowerCase()}, ${getPrettyDate(createdAt)}`
+                  `~${username.toLocaleLowerCase()}, ${getPrettyDate(
+                    createdAt,
+                  )}`
                 )}
               </aside>
             )}
@@ -90,7 +91,9 @@ const NodeTitle: VFC<IProps> = memo(
 
             {canLike && (
               <div
-                className={classNames(styles.button, styles.like, { [styles.is_liked]: isLiked })}
+                className={classNames(styles.button, styles.like, {
+                  [styles.is_liked]: isLiked,
+                })}
               >
                 {isLiked ? (
                   <Icon icon="heart_full" size={24} onClick={onLike} />
@@ -107,7 +110,7 @@ const NodeTitle: VFC<IProps> = memo(
         </div>
       </div>
     );
-  }
+  },
 );
 
 export { NodeTitle };
