@@ -5,17 +5,17 @@ import { CONFIG } from '~/utils/config';
 export const API = {
   BASE: CONFIG.apiHost,
   USER: {
-    LOGIN: '/users/login',
+    LOGIN: '/auth',
     OAUTH_WINDOW: (provider: OAuthProvider) =>
       `${CONFIG.apiHost}oauth/${provider}/redirect`,
-    ME: '/users/',
-    PROFILE: (username: string) => `/users/user/${username}/profile`,
-    MESSAGES: (username: string) => `/users/user/${username}/messages`,
-    MESSAGE_SEND: (username: string) => `/users/user/${username}/messages`,
+    ME: '/auth',
+    PROFILE: (username: string) => `/users/${username}/profile`,
+    MESSAGES: (username: string) => `/users/${username}/messages`,
+    MESSAGE_SEND: (username: string) => `/users/${username}/messages`,
     MESSAGE_DELETE: (username: string, id: number) =>
-      `/users/user/${username}/messages/${id}`,
-    GET_UPDATES: '/users/updates',
-    REQUEST_CODE: (code?: string) => `/users/restore/${code || ''}`,
+      `/users/${username}/messages/${id}`,
+    GET_UPDATES: '/auth/updates',
+    REQUEST_CODE: (code?: string) => `/auth/restore/${code || ''}`,
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
 
     GET_SOCIALS: '/oauth/',
