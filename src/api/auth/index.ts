@@ -85,7 +85,7 @@ export const apiLoginWithSocial = ({
   password,
 }: ApiLoginWithSocialRequest) =>
   api
-    .post<ApiLoginWithSocialResult>(API.USER.LOGIN_WITH_SOCIAL, {
+    .put<ApiLoginWithSocialResult>(API.USER.LOGIN_WITH_SOCIAL, {
       token,
       username,
       password,

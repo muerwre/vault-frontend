@@ -18,10 +18,10 @@ export const API = {
     REQUEST_CODE: (code?: string) => `/auth/restore/${code || ''}`,
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
 
-    GET_SOCIALS: '/oauth/',
+    GET_SOCIALS: '/oauth',
     DROP_SOCIAL: (provider, id) => `/oauth/${provider}/${id}`,
-    ATTACH_SOCIAL: `/oauth/attach`,
-    LOGIN_WITH_SOCIAL: `/oauth/login`,
+    ATTACH_SOCIAL: `/oauth`,
+    LOGIN_WITH_SOCIAL: `/oauth`,
   },
   NODES: {
     SAVE: '/nodes/',
