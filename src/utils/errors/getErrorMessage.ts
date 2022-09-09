@@ -6,6 +6,10 @@ export const getErrorMessage = (error: unknown): string | undefined => {
     return undefined;
   }
 
+  if (path(['response', 'data', 'message'], error)) {
+    return path(['response', 'data', 'message'], error) as string;
+  }
+
   if (typeof error === 'string' && has(error, ERROR_LITERAL)) {
     return ERROR_LITERAL[error];
   }
