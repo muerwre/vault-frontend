@@ -9,7 +9,10 @@ import { showErrorToast } from '~/utils/errors/showToast';
 
 export const usePatchUser = () => {
   const { update } = useUser();
-  const { uploadFile } = useUploader(UploadSubject.Avatar, UploadTarget.Profiles);
+  const { uploadFile } = useUploader(
+    UploadSubject.Avatar,
+    UploadTarget.Profiles,
+  );
 
   const save = useCallback(
     async (user: Partial<ApiUpdateUserRequest['user']>) => {
@@ -17,7 +20,7 @@ export const usePatchUser = () => {
       await update(result.user);
       return result.user;
     },
-    [update]
+    [update],
   );
 
   const updatePhoto = useCallback(
@@ -29,7 +32,7 @@ export const usePatchUser = () => {
         showErrorToast(error);
       }
     },
-    [uploadFile, save]
+    [uploadFile, save],
   );
 
   return { updatePhoto, save };
