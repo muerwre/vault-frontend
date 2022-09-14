@@ -50,7 +50,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths: recentIDs.map((id) => ({ params: { id } })),
-    fallback: 'blocking',
+    fallback: true,
   };
 };
 
