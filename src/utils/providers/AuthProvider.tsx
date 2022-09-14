@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { EMPTY_USER } from '~/constants/auth';
 import { useAuth } from '~/hooks/auth/useAuth';
-import { useMessageEventReactions } from '~/hooks/auth/useMessageEventReactions';
+import { useOauthEventListeners } from '~/hooks/auth/useOauthEventListeners';
 import { useRestorePasswordRedirect } from '~/hooks/auth/useRestorePasswordRedirect';
 import { useSessionCookie } from '~/hooks/auth/useSessionCookie';
 
@@ -14,7 +14,7 @@ const AuthContext = createContext<AuthProviderContextType>({
   user: EMPTY_USER,
   isUser: false,
   isTester: false,
-  setIsTester: isTester => isTester,
+  setIsTester: (isTester) => isTester,
   logout: () => {},
   login: async () => EMPTY_USER,
   setToken: () => {},
@@ -23,7 +23,7 @@ const AuthContext = createContext<AuthProviderContextType>({
 export const AuthProvider: FC = observer(({ children }) => {
   const value = useAuth();
 
-  useMessageEventReactions();
+  useOauthEventListeners();
   useRestorePasswordRedirect();
   useSessionCookie();
 
