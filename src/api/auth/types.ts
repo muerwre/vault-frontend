@@ -8,7 +8,10 @@ export type ApiAuthGetUserResult = { user: IUser };
 export type ApiUpdateUserRequest = {
   user: Partial<IUser & { password: string; newPassword: string }>;
 };
-export type ApiUpdateUserResult = { user: IUser; errors: Record<Partial<keyof IUser>, string> };
+export type ApiUpdateUserResult = {
+  user: IUser;
+  errors: Record<Partial<keyof IUser>, string>;
+};
 export type ApiAuthGetUserProfileRequest = { username: string };
 export type ApiAuthGetUserProfileResult = { user: IUser };
 export type ApiAuthGetUpdatesRequest = {
@@ -25,7 +28,7 @@ export type ApiRestoreCodeRequest = { code: string; password: string };
 export type ApiRestoreCodeResult = { token: string; user: IUser };
 export type ApiGetSocialsResult = { accounts: ISocialAccount[] };
 export type ApiDropSocialRequest = { id: string; provider: string };
-export type ApiDropSocialResult = { accounts: ISocialAccount[] };
+export type ApiDropSocialResult = {};
 export type ApiAttachSocialRequest = { token: string };
 export type ApiAttachSocialResult = { account: ISocialAccount };
 export type ApiLoginWithSocialRequest = {
