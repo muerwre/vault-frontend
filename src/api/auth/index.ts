@@ -15,6 +15,7 @@ import {
   ApiLoginWithSocialResult,
   ApiRestoreCodeRequest,
   ApiRestoreCodeResult,
+  ApiUpdatePhotoRequest,
   ApiUpdateUserRequest,
   ApiUpdateUserResult,
   ApiUserLoginRequest,
@@ -50,6 +51,12 @@ export const apiAuthGetUpdates = ({
 
 export const apiUpdateUser = ({ user }: ApiUpdateUserRequest) =>
   api.patch<ApiUpdateUserResult>(API.USER.ME, user).then(cleanResult);
+
+export const apiUpdatePhoto = ({ file }: ApiUpdatePhotoRequest) =>
+  api.post<ApiUpdateUserResult>(API.USER.UPDATE_PHOTO, file).then(cleanResult);
+
+export const apiUpdateCover = ({ file }: ApiUpdatePhotoRequest) =>
+  api.post<ApiUpdateUserResult>(API.USER.UPDATE_COVER, file).then(cleanResult);
 
 export const apiRequestRestoreCode = (field: string) =>
   api

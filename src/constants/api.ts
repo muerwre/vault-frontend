@@ -9,6 +9,8 @@ export const API = {
     OAUTH_WINDOW: (provider: OAuthProvider) =>
       `${CONFIG.apiHost}oauth/${provider}/redirect`,
     ME: '/auth',
+    UPDATE_PHOTO: '/auth/photo',
+    UPDATE_COVER: '/auth/photo',
     PROFILE: (username: string) => `/users/${username}/profile`,
     MESSAGES: (username: string) => `/users/${username}/messages`,
     MESSAGE_SEND: (username: string) => `/users/${username}/messages`,

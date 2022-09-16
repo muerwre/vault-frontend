@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 
-import { apiUpdateUser } from '~/api/auth';
+import { apiUpdatePhoto, apiUpdateUser } from '~/api/auth';
 import { ApiUpdateUserRequest } from '~/api/auth/types';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { useUser } from '~/hooks/auth/useUser';
 import { useUploader } from '~/hooks/data/useUploader';
+import { IFile } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 export const usePatchUser = () => {
@@ -24,10 +25,16 @@ export const usePatchUser = () => {
   );
 
   const updatePhoto = useCallback(
-    async (file: File) => {
+    async (photo: File) => {
       try {
-        const photo = await uploadFile(file);
-        await save({ photo });
+        const file = await uploadFile(photo);
+
+        if (!file) {
+          return;
+        }
+
+        const result = await apiUpdatePhoto({ file: file! });
+        await update(result.user);
       } catch (error) {
         showErrorToast(error);
       }

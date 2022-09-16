@@ -1,4 +1,4 @@
-import { INotification } from '~/types';
+import { IFile, INotification } from '~/types';
 import { ISocialAccount, IUser } from '~/types/auth';
 
 export type ApiUserLoginRequest = Record<'username' | 'password', string>;
@@ -7,6 +7,9 @@ export type ApiAuthGetUserRequest = {};
 export type ApiAuthGetUserResult = { user: IUser };
 export type ApiUpdateUserRequest = {
   user: Partial<IUser & { password: string; newPassword: string }>;
+};
+export type ApiUpdatePhotoRequest = {
+  file: IFile;
 };
 export type ApiUpdateUserResult = {
   user: IUser;
