@@ -16,9 +16,6 @@ import styles from './styles.module.scss';
 
 interface UserSettingsViewProps {}
 
-const getError = (error?: string) =>
-  error && has(error, ERROR_LITERAL) ? error : undefined;
-
 const UserSettingsView: FC<UserSettingsViewProps> = () => {
   const { values, handleChange, errors } = useSettings();
   const { isPhone } = useWindowSize();
@@ -41,7 +38,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
               value={values.fullname}
               handler={handleChange('fullname')}
               title="Полное имя"
-              error={getError(errors.fullname)}
+              error={errors.fullname}
             />
 
             <Textarea
@@ -79,14 +76,14 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
             value={values.username}
             handler={handleChange('username')}
             title="Логин"
-            error={getError(errors.username)}
+            error={errors.username}
           />
 
           <InputText
             value={values.email}
             handler={handleChange('email')}
             title="E-mail"
-            error={getError(errors.email)}
+            error={errors.email}
           />
 
           <InputText
@@ -94,7 +91,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
             handler={handleChange('newPassword')}
             title="Новый пароль"
             type="password"
-            error={getError(errors.newPassword)}
+            error={errors.newPassword}
           />
 
           <InputText
@@ -102,7 +99,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
             handler={handleChange('password')}
             title="Старый пароль"
             type="password"
-            error={getError(errors.password)}
+            error={errors.password}
           />
 
           <div className={styles.small}>

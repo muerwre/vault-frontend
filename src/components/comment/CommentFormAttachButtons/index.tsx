@@ -10,26 +10,32 @@ interface IProps {
 
 const CommentFormAttachButtons: FC<IProps> = ({ onUpload }) => {
   const onInputChange = useCallback(
-    event => {
+    (event) => {
       event.preventDefault();
 
-      const files = Array.from(event.target?.files as File[]).filter((file: File) =>
-        COMMENT_FILE_TYPES.includes(file.type)
+      const files = Array.from(event.target?.files as File[]).filter(
+        (file: File) => COMMENT_FILE_TYPES.includes(file.type),
       );
       if (!files || !files.length) return;
 
       onUpload(files);
     },
-    [onUpload]
+    [onUpload],
   );
 
   return (
     <ButtonGroup>
-      <Button iconLeft="photo" size="small" color="gray" iconOnly>
+      <Button iconLeft="photo" size="small" color="gray" iconOnly type="button">
         <input type="file" onInput={onInputChange} multiple accept="image/*" />
       </Button>
 
-      <Button iconRight="audio" size="small" color="gray" iconOnly>
+      <Button
+        iconRight="audio"
+        size="small"
+        color="gray"
+        iconOnly
+        type="button"
+      >
         <input type="file" onInput={onInputChange} multiple accept="audio/*" />
       </Button>
     </ButtonGroup>

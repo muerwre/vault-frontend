@@ -1,6 +1,7 @@
 import React, { FC, useCallback } from 'react';
 
-import { SortableAudioGrid, SortableImageGrid } from '~/components/sortable';
+import { SortableAudioGrid } from '~/components/sortable/SortableAudioGrid';
+import { SortableImageGrid } from '~/components/sortable/SortableImageGrid';
 import { COMMENT_FILE_TYPES } from '~/constants/uploads';
 import { useFileDropZone } from '~/hooks';
 import { IFile } from '~/types';
@@ -27,34 +28,36 @@ const CommentFormAttaches: FC = () => {
 
   const onImageMove = useCallback(
     (newFiles: IFile[]) => {
-      setFiles([...filesAudios, ...newFiles.filter(it => it)]);
+      setFiles([...filesAudios, ...newFiles.filter((it) => it)]);
     },
-    [setFiles, filesImages, filesAudios]
+    [setFiles, filesImages, filesAudios],
   );
 
   const onAudioMove = useCallback(
     (newFiles: IFile[]) => {
       setFiles([...filesImages, ...newFiles]);
     },
-    [setFiles, filesImages, filesAudios]
+    [setFiles, filesImages, filesAudios],
   );
 
   const onFileDelete = useCallback(
     (fileId: IFile['id']) => {
-      setFiles(files.filter(file => file.id !== fileId));
+      setFiles(files.filter((file) => file.id !== fileId));
     },
-    [files, setFiles]
+    [files, setFiles],
   );
 
   const onAudioTitleChange = useCallback(
     (fileId: IFile['id'], title: string) => {
       setFiles(
-        files.map(file =>
-          file.id === fileId ? { ...file, metadata: { ...file.metadata, title } } : file
-        )
+        files.map((file) =>
+          file.id === fileId
+            ? { ...file, metadata: { ...file.metadata, title } }
+            : file,
+        ),
       );
     },
-    [files, setFiles]
+    [files, setFiles],
   );
 
   if (!hasAttaches) return null;

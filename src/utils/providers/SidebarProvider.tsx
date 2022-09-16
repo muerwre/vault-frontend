@@ -9,12 +9,12 @@ import {
 } from 'react';
 
 import { useRouter } from 'next/router';
-import { has, omit } from 'ramda';
 
 import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
 import { SidebarName } from '~/constants/sidebar';
 import { sidebarComponents } from '~/constants/sidebar/components';
 import { SidebarComponent, SidebarProps } from '~/types/sidebar';
+import { has, omit } from '~/utils/ramda';
 
 type ContextValue = typeof SidebarContext extends Context<infer U> ? U : never;
 

@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 
 import { EventMessageType } from '~/constants/events';
-import { Dialog } from '~/constants/modal';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useOAuth } from '~/hooks/auth/useOAuth';
 import { useModal } from '~/hooks/modal/useModal';
 import { includes, path, values } from '~/utils/ramda';
+import { showToastError } from '~/utils/toast';
 
 /** reacts to events passed by window.postMessage */
-export const useMessageEventReactions = () => {
+export const useOauthEventListeners = () => {
   const { loginWithSocial, createSocialAccount, attachAccount } = useOAuth();
   const { showModal } = useModal();
   const { isUser } = useAuth();
@@ -25,7 +25,6 @@ export const useMessageEventReactions = () => {
 
       switch (type) {
         case EventMessageType.OAuthLogin:
-          // TODO: do we really need it?
           loginWithSocial(path(['data', 'payload', 'token'], event));
           break;
         case EventMessageType.OAuthProcessed:
@@ -33,6 +32,12 @@ export const useMessageEventReactions = () => {
             void attachAccount(path(['data', 'payload', 'token'], event));
           } else {
             void createSocialAccount(path(['data', 'payload', 'token'], event));
+          }
+          break;
+        case EventMessageType.OAuthError:
+          const message = path(['data', 'payload', 'error'], event);
+          if (message && typeof message === 'string') {
+            showToastError(message);
           }
           break;
         default:

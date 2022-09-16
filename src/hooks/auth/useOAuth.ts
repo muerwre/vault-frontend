@@ -2,7 +2,12 @@ import { useCallback, useMemo } from 'react';
 
 import useSWR from 'swr';
 
-import { apiAttachSocial, apiDropSocial, apiGetSocials, apiLoginWithSocial } from '~/api/auth';
+import {
+  apiAttachSocial,
+  apiDropSocial,
+  apiGetSocials,
+  apiLoginWithSocial,
+} from '~/api/auth';
 import { API } from '~/constants/api';
 import { Dialog } from '~/constants/modal';
 import { useAuth } from '~/hooks/auth/useAuth';
@@ -15,13 +20,14 @@ export const useOAuth = () => {
   const { isUser, setToken } = useAuth();
   const { showModal, hideModal } = useModal();
 
-  const { data, isValidating: isLoading, mutate } = useSWR(
-    isUser ? API.USER.GET_SOCIALS : null,
-    async () => {
-      const result = await apiGetSocials();
-      return result.accounts;
-    }
-  );
+  const {
+    data,
+    isValidating: isLoading,
+    mutate,
+  } = useSWR(isUser ? API.USER.GET_SOCIALS : null, async () => {
+    const result = await apiGetSocials();
+    return result.accounts;
+  });
 
   const openOauthWindow = useCallback((provider: OAuthProvider) => {
     window.open(API.USER.OAUTH_WINDOW(provider), '', 'width=600,height=400');
@@ -37,10 +43,9 @@ export const useOAuth = () => {
         setToken(result.token);
         hideModal();
       } catch (error) {
-        const needsRegister: string | undefined = path(
-          ['response', 'data', 'needs_register'],
-          error
-        );
+        console.log(path(['response'], error));
+
+        const needsRegister = path(['response', 'status'], error) === 428;
 
         if (needsRegister && token) {
           showModal(Dialog.LoginSocialRegister, { token });
@@ -50,7 +55,7 @@ export const useOAuth = () => {
         showErrorToast(error);
       }
     },
-    [showModal, hideModal, setToken]
+    [showModal, hideModal, setToken],
   );
 
   const loginWithSocial = useCallback(
@@ -62,7 +67,7 @@ export const useOAuth = () => {
       setToken(token);
       hideModal();
     },
-    [setToken, hideModal]
+    [setToken, hideModal],
   );
 
   const attachAccount = useCallback(
@@ -76,7 +81,7 @@ export const useOAuth = () => {
         showErrorToast(error);
       }
     },
-    [mutate]
+    [mutate],
   );
 
   const dropAccount = useCallback(
@@ -88,7 +93,7 @@ export const useOAuth = () => {
         showErrorToast(error);
       }
     },
-    [mutate]
+    [mutate],
   );
 
   const accounts = useMemo(() => data || [], [data]);

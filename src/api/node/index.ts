@@ -38,10 +38,13 @@ export type ApiGetNodeCommentsRequest = {
   take?: number;
   skip?: number;
 };
-export type ApiGetNodeCommentsResponse = { comments: IComment[]; comment_count: number };
+export type ApiGetNodeCommentsResponse = {
+  comments: IComment[];
+  comment_count: number;
+};
 
 export const apiPostNode = ({ node }: ApiPostNodeRequest) =>
-  api.post<ApiPostNodeResult>(API.NODE.SAVE, node).then(cleanResult);
+  api.post<ApiPostNodeResult>(API.NODES.SAVE, node).then(cleanResult);
 
 export const getNodeDiff = ({
   start,
@@ -53,7 +56,7 @@ export const getNodeDiff = ({
   with_valid,
 }: GetNodeDiffRequest) =>
   api
-    .get<GetNodeDiffResult>(API.NODE.GET_DIFF, {
+    .get<GetNodeDiffResult>(API.NODES.LIST, {
       params: {
         start,
         end,
@@ -66,17 +69,20 @@ export const getNodeDiff = ({
     })
     .then(cleanResult);
 
-export const apiGetNode = ({ id }: ApiGetNodeRequest, config?: AxiosRequestConfig) =>
+export const apiGetNode = (
+  { id }: ApiGetNodeRequest,
+  config?: AxiosRequestConfig,
+) =>
   api
-    .get<ApiGetNodeResponse>(API.NODE.GET_NODE(id), config)
+    .get<ApiGetNodeResponse>(API.NODES.GET(id), config)
     .then(cleanResult)
-    .then(data => ({ node: data.node, last_seen: data.last_seen }));
+    .then((data) => ({ node: data.node, last_seen: data.last_seen }));
 
 export const apiGetNodeWithCancel = ({ id }: ApiGetNodeRequest) => {
   const cancelToken = axios.CancelToken.source();
   return {
     request: api
-      .get<ApiGetNodeResponse>(API.NODE.GET_NODE(id), {
+      .get<ApiGetNodeResponse>(API.NODES.GET(id), {
         cancelToken: cancelToken.token,
       })
       .then(cleanResult),
@@ -85,7 +91,7 @@ export const apiGetNodeWithCancel = ({ id }: ApiGetNodeRequest) => {
 };
 
 export const apiPostComment = ({ id, data }: ApiPostCommentRequest) =>
-  api.post<ApiPostCommentResult>(API.NODE.COMMENT(id), data).then(cleanResult);
+  api.post<ApiPostCommentResult>(API.NODES.COMMENT(id), data).then(cleanResult);
 
 export const apiGetNodeComments = ({
   id,
@@ -93,32 +99,44 @@ export const apiGetNodeComments = ({
   skip = 0,
 }: ApiGetNodeCommentsRequest) =>
   api
-    .get<ApiGetNodeCommentsResponse>(API.NODE.COMMENT(id), { params: { take, skip } })
+    .get<ApiGetNodeCommentsResponse>(API.NODES.COMMENT(id), {
+      params: { take, skip },
+    })
     .then(cleanResult);
 
 export const apiGetNodeRelated = ({ id }: ApiGetNodeRelatedRequest) =>
-  api.get<ApiGetNodeRelatedResult>(API.NODE.RELATED(id)).then(cleanResult);
+  api.get<ApiGetNodeRelatedResult>(API.NODES.RELATED(id)).then(cleanResult);
 
 export const apiPostNodeTags = ({ id, tags }: ApiPostNodeTagsRequest) =>
   api
-    .post<ApiPostNodeTagsResult>(API.NODE.UPDATE_TAGS(id), { tags })
+    .post<ApiPostNodeTagsResult>(API.NODES.UPDATE_TAGS(id), { tags })
     .then(cleanResult);
 
 export const apiDeleteNodeTag = ({ id, tagId }: ApiDeleteNodeTagsRequest) =>
-  api.delete<ApiDeleteNodeTagsResult>(API.NODE.DELETE_TAG(id, tagId)).then(cleanResult);
+  api
+    .delete<ApiDeleteNodeTagsResult>(API.NODES.DELETE_TAG(id, tagId))
+    .then(cleanResult);
 
 export const apiPostNodeLike = ({ id }: ApiPostNodeLikeRequest) =>
-  api.post<ApiPostNodeLikeResult>(API.NODE.POST_LIKE(id)).then(cleanResult);
+  api.post<ApiPostNodeLikeResult>(API.NODES.LIKE(id)).then(cleanResult);
 
 export const apiPostNodeHeroic = ({ id }: ApiPostNodeHeroicRequest) =>
-  api.post<ApiPostNodeHeroicResponse>(API.NODE.POST_HEROIC(id)).then(cleanResult);
+  api.post<ApiPostNodeHeroicResponse>(API.NODES.HEROIC(id)).then(cleanResult);
 
 export const apiLockNode = ({ id, is_locked }: ApiLockNodeRequest) =>
   api
-    .post<ApiLockNodeResult>(API.NODE.POST_LOCK(id), { is_locked })
+    .delete<ApiLockNodeResult>(API.NODES.DELETE(id), { params: { is_locked } })
     .then(cleanResult);
 
-export const apiLockComment = ({ id, isLocked, nodeId }: ApiLockCommentRequest) =>
+export const apiLockComment = ({
+  id,
+  isLocked,
+  nodeId,
+}: ApiLockCommentRequest) =>
   api
-    .post<ApiLockcommentResult>(API.NODE.LOCK_COMMENT(nodeId, id), { is_locked: isLocked })
+    .delete<ApiLockcommentResult>(API.NODES.LOCK_COMMENT(nodeId, id), {
+      params: {
+        is_locked: isLocked,
+      },
+    })
     .then(cleanResult);

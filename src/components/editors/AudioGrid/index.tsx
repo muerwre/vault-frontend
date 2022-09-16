@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 
-import { SortableAudioGrid } from '~/components/sortable';
+import { SortableAudioGrid } from '~/components/sortable/SortableAudioGrid';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
 
@@ -15,25 +15,27 @@ const AudioGrid: FC<IProps> = ({ files, setFiles, locked }) => {
     (newFiles: IFile[]) => {
       setFiles(newFiles);
     },
-    [setFiles, files]
+    [setFiles, files],
   );
 
   const onDrop = useCallback(
     (remove_id: IFile['id']) => {
-      setFiles(files.filter(file => file && file.id !== remove_id));
+      setFiles(files.filter((file) => file && file.id !== remove_id));
     },
-    [setFiles, files]
+    [setFiles, files],
   );
 
   const onTitleChange = useCallback(
     (changeId: IFile['id'], title: string) => {
       setFiles(
-        files.map(file =>
-          file && file.id === changeId ? { ...file, metadata: { ...file.metadata, title } } : file
-        )
+        files.map((file) =>
+          file && file.id === changeId
+            ? { ...file, metadata: { ...file.metadata, title } }
+            : file,
+        ),
       );
     },
-    [setFiles, files]
+    [setFiles, files],
   );
 
   return (

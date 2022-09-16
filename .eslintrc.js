@@ -23,6 +23,18 @@ module.exports = {
         pathGroupsExcludedImportTypes: ['react'],
       },
     ],
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: 'ramda',
+            message:
+              'import from \'~/utils/ramda\' instead',
+          },
+        ],
+      },
+    ]
   },
   parserOptions: {
     ecmaVersion: 7,

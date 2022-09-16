@@ -3,7 +3,9 @@ import React, { VFC } from 'react';
 import Tippy from '@tippyjs/react';
 
 import { Icon } from '~/components/input/Icon';
-import { MenuButton, MenuItemWithIcon, SeparatedMenu } from '~/components/menu';
+import { MenuButton } from '~/components/menu/MenuButton';
+import { MenuItemWithIcon } from '~/components/menu/MenuItemWithIcon';
+import { SeparatedMenu } from '~/components/menu/SeparatedMenu';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 
 import styles from './styles.module.scss';

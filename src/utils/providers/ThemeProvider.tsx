@@ -7,9 +7,8 @@ import React, {
   useState,
 } from 'react';
 
-import { keys } from 'ramda';
-
 import { Theme } from '~/constants/themes';
+import { keys } from '~/utils/ramda';
 
 interface ProvidersProps {}
 

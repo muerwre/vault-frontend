@@ -5,38 +5,43 @@ import { CONFIG } from '~/utils/config';
 export const API = {
   BASE: CONFIG.apiHost,
   USER: {
-    LOGIN: '/user/login',
-    OAUTH_WINDOW: (provider: OAuthProvider) => `${CONFIG.apiHost}oauth/${provider}/redirect`,
-    ME: '/user/',
-    PROFILE: (username: string) => `/user/user/${username}/profile`,
-    MESSAGES: (username: string) => `/user/user/${username}/messages`,
-    MESSAGE_SEND: (username: string) => `/user/user/${username}/messages`,
-    MESSAGE_DELETE: (username: string, id: number) => `/user/user/${username}/messages/${id}`,
-    GET_UPDATES: '/user/updates',
-    REQUEST_CODE: (code?: string) => `/user/restore/${code || ''}`,
+    LOGIN: '/auth',
+    OAUTH_WINDOW: (provider: OAuthProvider) =>
+      `${CONFIG.apiHost}oauth/${provider}/redirect`,
+    ME: '/auth',
+    UPDATE_PHOTO: '/auth/photo',
+    UPDATE_COVER: '/auth/photo',
+    PROFILE: (username: string) => `/users/${username}/profile`,
+    MESSAGES: (username: string) => `/users/${username}/messages`,
+    MESSAGE_SEND: (username: string) => `/users/${username}/messages`,
+    MESSAGE_DELETE: (username: string, id: number) =>
+      `/users/${username}/messages/${id}`,
+    GET_UPDATES: '/auth/updates',
+    REQUEST_CODE: (code?: string) => `/auth/restore/${code || ''}`,
     UPLOAD: (target, type) => `/upload/${target}/${type}`,
 
-    GET_SOCIALS: '/oauth/',
+    GET_SOCIALS: '/oauth',
     DROP_SOCIAL: (provider, id) => `/oauth/${provider}/${id}`,
-    ATTACH_SOCIAL: `/oauth/attach`,
-    LOGIN_WITH_SOCIAL: `/oauth/login`,
+    ATTACH_SOCIAL: `/oauth`,
+    LOGIN_WITH_SOCIAL: `/oauth`,
   },
-  NODE: {
-    SAVE: '/node/',
-    GET: '/node/',
-    GET_DIFF: '/flow/diff',
-    GET_NODE: (id: number | string) => `/node/${id}`,
+  NODES: {
+    SAVE: '/nodes/',
+    LIST: '/nodes/',
+    GET: (id: number | string) => `/nodes/${id}`,
+    DELETE: (id: INode['id']) => `/nodes/${id}`,
+    LIKE: (id: INode['id']) => `/nodes/${id}/like`,
+    HEROIC: (id: INode['id']) => `/nodes/${id}/heroic`,
+    SET_CELL_VIEW: (id: INode['id']) => `/nodes/${id}/cell-view`,
+    RELATED: (id: INode['id']) => `/nodes/${id}/related`,
 
-    COMMENT: (id: INode['id'] | string) => `/node/${id}/comment`,
-    RELATED: (id: INode['id']) => `/node/${id}/related`,
-    UPDATE_TAGS: (id: INode['id']) => `/node/${id}/tags`,
-    DELETE_TAG: (id: INode['id'], tagId: ITag['ID']) => `/node/${id}/tags/${tagId}`,
-    POST_LIKE: (id: INode['id']) => `/node/${id}/like`,
-    POST_HEROIC: (id: INode['id']) => `/node/${id}/heroic`,
-    POST_LOCK: (id: INode['id']) => `/node/${id}/lock`,
+    UPDATE_TAGS: (id: INode['id']) => `/nodes/${id}/tags`,
+    DELETE_TAG: (id: INode['id'], tagId: ITag['ID']) =>
+      `/nodes/${id}/tags/${tagId}`,
+
+    COMMENT: (id: INode['id'] | string) => `/nodes/${id}/comments`,
     LOCK_COMMENT: (id: INode['id'], comment_id: IComment['id']) =>
-      `/node/${id}/comment/${comment_id}/lock`,
-    SET_CELL_VIEW: (id: INode['id']) => `/node/${id}/cell-view`,
+      `/nodes/${id}/comments/${comment_id}`,
   },
   SEARCH: {
     NODES: '/search/nodes',
@@ -49,12 +54,12 @@ export const API = {
     GITHUB_ISSUES: 'https://api.github.com/repos/muerwre/vault-frontend/issues',
   },
   TAG: {
-    NODES: `/tag/nodes`,
-    AUTOCOMPLETE: `/tag/autocomplete`,
+    NODES: `/tags/nodes`,
+    AUTOCOMPLETE: `/tags/autocomplete`,
   },
   LAB: {
-    NODES: `/lab/`,
-    STATS: '/lab/stats',
-    UPDATES: '/lab/updates',
+    NODES: `/nodes/lab`,
+    STATS: '/nodes/lab/stats',
+    UPDATES: '/nodes/lab/updates',
   },
 };

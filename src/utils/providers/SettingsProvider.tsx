@@ -1,6 +1,11 @@
 import { FC, PropsWithChildren, useCallback, useRef } from 'react';
 
-import { FormikConfig, useFormik, FormikProvider, useFormikContext } from 'formik';
+import {
+  FormikConfig,
+  useFormik,
+  FormikProvider,
+  useFormikContext,
+} from 'formik';
 import { Asserts, object, string } from 'yup';
 
 import { ERRORS } from '~/constants/errors';
@@ -13,15 +18,11 @@ import { showErrorToast } from '~/utils/errors/showToast';
 import { showToastSuccess } from '~/utils/toast';
 
 const validationSchema = object({
-  username: string()
-    .default('')
-    .required(ERRORS.REQUIRED),
+  username: string().default('').required(ERRORS.REQUIRED),
   fullname: string().default(''),
   newPassword: string().optional(),
   description: string().default(''),
-  email: string()
-    .default('')
-    .email(ERRORS.NOT_AN_EMAIL),
+  email: string().default('').email(ERRORS.NOT_AN_EMAIL),
   password: string().optional(),
 });
 
@@ -29,7 +30,7 @@ export type ProfileFormData = Asserts<typeof validationSchema>;
 
 export const useSettingsForm = (
   values: ProfileFormData,
-  submitter: (data: ProfileFormData) => Promise<IUser>
+  submitter: (data: ProfileFormData) => Promise<IUser>,
 ) => {
   const initialValues = useRef(values).current;
 
@@ -39,7 +40,9 @@ export const useSettingsForm = (
         const fields = {
           ...values,
           password: values.password?.length ? values.password : undefined,
-          new_password: values.newPassword?.length ? values.newPassword : undefined,
+          new_password: values.newPassword?.length
+            ? values.newPassword
+            : undefined,
         };
 
         const result = await submitter(fields);
@@ -51,11 +54,12 @@ export const useSettingsForm = (
 
         const validationErrors = getValidationErrors(error);
         if (validationErrors) {
+          console.log(validationErrors);
           setErrors(validationErrors);
         }
       }
     },
-    [submitter]
+    [submitter],
   );
 
   return useFormik({
@@ -70,11 +74,11 @@ export const SettingsProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   const { save } = usePatchUser();
 
   const formik = useSettingsForm(
-    { ...user, password: '', newPassword: '' }, 
-    save
+    { ...user, password: '', newPassword: '' },
+    save,
   );
 
-  return <FormikProvider value={formik}>{children}</FormikProvider>
-}
+  return <FormikProvider value={formik}>{children}</FormikProvider>;
+};
 
 export const useSettings = () => useFormikContext<ProfileFormData>();
