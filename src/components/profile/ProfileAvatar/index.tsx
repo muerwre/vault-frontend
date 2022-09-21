@@ -32,12 +32,8 @@ const ProfileAvatar: FC<ProfileAvatarProps> = ({
     [onChangePhoto],
   );
 
-  const backgroundImage = photo
-    ? `url("${getURL(photo, ImagePresets.avatar)}")`
-    : undefined;
-
   return (
-    <Avatar url={backgroundImage} size={size} className={styles.avatar}>
+    <Avatar url={photo?.url} size={size} className={styles.avatar}>
       {canEdit && <input type="file" onInput={onInputChange} />}
       {canEdit && (
         <Button
