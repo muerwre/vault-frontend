@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { Avatar } from '~/components/common/Avatar';
 import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
 import { ImagePresets } from '~/constants/urls';
@@ -19,15 +20,7 @@ const UserButton: FC<IProps> = ({ username, photo, onClick }) => {
     <button className={styles.wrap} onClick={onClick}>
       <Group horizontal className={styles.user_button}>
         <div className={styles.username}>{username}</div>
-
-        <div
-          className={styles.user_avatar}
-          style={{
-            backgroundImage: `url('${getURL(photo, ImagePresets.avatar)}')`,
-          }}
-        >
-          {(!photo || !photo.id) && <Icon icon="profile" />}
-        </div>
+        <Avatar url={getURL(photo, ImagePresets.avatar)} size={32} />
       </Group>
     </button>
   );

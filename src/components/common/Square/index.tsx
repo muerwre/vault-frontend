@@ -19,14 +19,14 @@ const Square = forwardRef<HTMLDivElement, SquareProps>(
       <div
         {...rest}
         className={classNames(styles.wrapper, rest.className)}
-        style={{ backgroundImage, width: size }}
+        style={{ backgroundImage, width: size, height: size, flexBasis: size }}
         ref={ref}
       >
         <svg className={styles.svg} viewBox="0 0 1 1" />
         {!!children && <div className={styles.content}>{children}</div>}
       </div>
     );
-  }
+  },
 );
 
 export { Square };

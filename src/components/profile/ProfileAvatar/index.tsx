@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FC, useCallback } from 'react';
 
+import { Avatar } from '~/components/common/Avatar';
 import { Button } from '~/components/input/Button';
 import { ImagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
@@ -36,14 +37,7 @@ const ProfileAvatar: FC<ProfileAvatarProps> = ({
     : undefined;
 
   return (
-    <div
-      className={styles.avatar}
-      style={{
-        backgroundImage,
-        width: size,
-        height: size,
-      }}
-    >
+    <Avatar url={backgroundImage} size={size} className={styles.avatar}>
       {canEdit && <input type="file" onInput={onInputChange} />}
       {canEdit && (
         <Button
@@ -54,7 +48,7 @@ const ProfileAvatar: FC<ProfileAvatarProps> = ({
           className={styles.button}
         />
       )}
-    </div>
+    </Avatar>
   );
 };
 
