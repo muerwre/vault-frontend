@@ -26,12 +26,10 @@ import styles from './styles.module.scss';
 export interface HeaderProps {}
 
 const Header: FC<HeaderProps> = observer(() => {
-  const labStats = useGetLabStats();
-
   const [isScrolled, setIsScrolled] = useState(false);
   const { showModal } = useModal();
   const { isUser, user } = useAuth();
-  const { updates: flowUpdates } = useFlow();
+  const { hasFlowUpdates, hasLabUpdates } = useFlow();
   const { borisCommentedAt } = useUpdates();
   const { open } = useSidebar();
 
@@ -51,12 +49,6 @@ const Header: FC<HeaderProps> = observer(() => {
         isBefore(new Date(user.last_seen_boris), new Date(borisCommentedAt))),
     [borisCommentedAt, isUser, user.last_seen_boris],
   );
-
-  const hasLabUpdates = useMemo(
-    () => labStats.updates.length > 0,
-    [labStats.updates],
-  );
-  const hasFlowUpdates = useMemo(() => flowUpdates.length > 0, [flowUpdates]);
 
   // Needed for SSR
   useEffect(() => {
