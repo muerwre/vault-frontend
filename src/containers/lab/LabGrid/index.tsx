@@ -1,52 +1,17 @@
-import React, { FC } from 'react';
+import { FC, memo } from 'react';
 
 import { Columns } from '~/components/containers/Columns';
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
 import { LabNoResults } from '~/components/lab/LabNoResults';
 import { LabNode } from '~/components/lab/LabNode';
-import { EMPTY_NODE, NODE_TYPES } from '~/constants/node';
 import { useLabContext } from '~/utils/context/LabContextProvider';
-import { values } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
 interface IProps {}
 
-const breakpointCols = {
-  default: 2,
-  1280: 1,
-};
-
-const getRandomNodeType = () =>
-  values(NODE_TYPES)[Math.floor(Math.random() * values(NODE_TYPES).length)];
-
-const LoadingNode = () => (
-  <LabNode
-    node={{ ...EMPTY_NODE, type: getRandomNodeType() }}
-    isLoading
-    lastSeen=""
-    commentCount={0}
-  />
-);
-
-const LabGrid: FC<IProps> = () => {
-  const { isLoading, nodes, hasMore, loadMore, search, setSearch } = useLabContext();
-
-  if (isLoading) {
-    return (
-      <Columns>
-        <LoadingNode />
-        <LoadingNode />
-        <LoadingNode />
-        <LoadingNode />
-        <LoadingNode />
-        <LoadingNode />
-        <LoadingNode />
-        <LoadingNode />
-        <LoadingNode />
-      </Columns>
-    );
-  }
+const LabGrid: FC<IProps> = memo(() => {
+  const { nodes, hasMore, loadMore, search, setSearch } = useLabContext();
 
   if (search && !nodes.length) {
     return <LabNoResults resetSearch={() => setSearch('')} />;
@@ -56,7 +21,7 @@ const LabGrid: FC<IProps> = () => {
     <InfiniteScroll hasMore={hasMore} loadMore={loadMore}>
       <div className={styles.wrap}>
         <Columns>
-          {nodes.map(node => (
+          {nodes.map((node) => (
             <LabNode
               node={node.node}
               key={node.node.id}
@@ -68,6 +33,6 @@ const LabGrid: FC<IProps> = () => {
       </div>
     </InfiniteScroll>
   );
-};
+});
 
 export { LabGrid };

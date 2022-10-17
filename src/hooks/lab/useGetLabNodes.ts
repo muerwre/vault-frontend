@@ -10,23 +10,24 @@ import { INode } from '~/types';
 import { GetLabNodesRequest, ILabNode, LabNodesSort } from '~/types/lab';
 import { flatten, uniqBy } from '~/utils/ramda';
 
-const getKey: (isUser: boolean, sort?: LabNodesSort, search?: string) => SWRInfiniteKeyLoader = (
-  isUser,
-  sort,
-  search
-) => (index, prev: ILabNode[]) => {
-  if (!isUser) return null;
-  if (index > 0 && (!prev?.length || prev.length < 20)) return null;
+const getKey: (
+  isUser: boolean,
+  sort?: LabNodesSort,
+  search?: string,
+) => SWRInfiniteKeyLoader =
+  (isUser, sort, search) => (index, prev: ILabNode[]) => {
+    if (!isUser) return null;
+    if (index > 0 && (!prev?.length || prev.length < 20)) return null;
 
-  const props: GetLabNodesRequest = {
-    limit: 20,
-    offset: index * 20,
-    sort: sort || LabNodesSort.New,
-    search: search || '',
+    const props: GetLabNodesRequest = {
+      limit: 20,
+      offset: index * 20,
+      sort: sort || LabNodesSort.New,
+      search: search || '',
+    };
+
+    return JSON.stringify(props);
   };
-
-  return JSON.stringify(props);
-};
 
 const parseKey = (key: string): GetLabNodesRequest => {
   try {
@@ -49,12 +50,15 @@ export const useGetLabNodes = (sort?: LabNodesSort, search?: string) => {
     },
     {
       fallbackData: [labStore.nodes],
-      onSuccess: data => labStore.setNodes(flatten(data)),
+      onSuccess: (data) => labStore.setNodes(flatten(data)),
       dedupingInterval: 300,
-    }
+    },
   );
 
-  const nodes = useMemo(() => uniqBy(n => n.node.id, flatten(data || [])), [data]);
+  const nodes = useMemo(
+    () => uniqBy((n) => n.node.id, flatten(data || [])),
+    [data],
+  );
   const hasMore = (data?.[size - 1]?.length || 0) >= 1;
   const loadMore = useCallback(() => setSize(size + 1), [setSize, size]);
 
@@ -63,20 +67,29 @@ export const useGetLabNodes = (sort?: LabNodesSort, search?: string) => {
     async (node: ILabNode) => {
       await mutate([[node], ...(data || [])]);
     },
-    [data, mutate]
+    [data, mutate],
   );
 
   /** updates node on cache */
   const updateNode = useCallback(
     async (nodeId: number, node: Partial<INode>) => {
       await mutate(
-        data?.map(page =>
-          page.map(it => (it.node.id === nodeId ? { ...it, node: { ...it.node, node } } : it))
-        )
+        data?.map((page) =>
+          page.map((it) =>
+            it.node.id === nodeId ? { ...it, node: { ...it.node, node } } : it,
+          ),
+        ),
       );
     },
-    [data, mutate]
+    [data, mutate],
   );
 
-  return { nodes, isLoading: !data && isValidating, hasMore, loadMore, unshift, updateNode };
+  return {
+    nodes,
+    isLoading: !!data?.length && isValidating,
+    hasMore,
+    loadMore,
+    unshift,
+    updateNode,
+  };
 };

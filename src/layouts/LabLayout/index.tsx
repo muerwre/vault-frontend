@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { Group } from '~/components/containers/Group';
 import { Sticky } from '~/components/containers/Sticky';
 import { LabHead } from '~/components/lab/LabHead';
 import { LabGrid } from '~/containers/lab/LabGrid';
+import { LabLoading } from '~/containers/lab/LabLoading';
 import { LabStats } from '~/containers/lab/LabStats';
 import { Container } from '~/containers/main/Container';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
@@ -12,6 +13,8 @@ import { useLabContext } from '~/utils/context/LabContextProvider';
 import styles from './styles.module.scss';
 
 interface IProps {}
+
+const loader = <LabLoading />;
 
 const LabLayout: FC<IProps> = () => {
   const { isLoading } = useLabContext();
@@ -25,7 +28,7 @@ const LabLayout: FC<IProps> = () => {
               <LabHead isLoading={isLoading} />
             </div>
 
-            <LabGrid />
+            {isLoading ? loader : <LabGrid />}
           </Group>
 
           <div className={styles.panel}>
