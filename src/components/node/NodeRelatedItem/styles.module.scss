@@ -64,3 +64,17 @@ div.thumb {
     font: $font_12_bold;
   }
 }
+
+.suffix {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--content_bg);
+  height: 16px;
+  width: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $cell_radius 0 $cell_radius 0;
+  fill: var(--gray_25);
+}

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 import { Square } from '~/components/common/Square';
+import { Icon } from '~/components/input/Icon';
 import { ImagePresets } from '~/constants/urls';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
@@ -26,7 +27,7 @@ const getTitleLetters = (title?: string): string => {
   return words.length > 1
     ? words
         .slice(0, 2)
-        .map(word => word[0])
+        .map((word) => word[0])
         .join('')
         .toUpperCase()
     : words[0].substr(0, 2).toUpperCase();
@@ -39,8 +40,11 @@ const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const thumb = useMemo(
-    () => (item.thumbnail ? getURL({ url: item.thumbnail }, ImagePresets.avatar) : ''),
-    [item]
+    () =>
+      item.thumbnail
+        ? getURL({ url: item.thumbnail }, ImagePresets.avatar)
+        : '',
+    [item],
   );
 
   const background = useColorGradientFromString(!thumb ? item.title : '');
@@ -63,13 +67,16 @@ const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
     return 'small';
   }, [width]);
 
-  const image = useMemo(() => getURL({ url: item.thumbnail }, ImagePresets.avatar), [
-    item.thumbnail,
-  ]);
+  const image = useMemo(
+    () => getURL({ url: item.thumbnail }, ImagePresets.avatar),
+    [item.thumbnail],
+  );
 
   return (
     <div
-      className={classNames(styles.item, styles[size], { [styles.is_loaded]: is_loaded })}
+      className={classNames(styles.item, styles[size], {
+        [styles.is_loaded]: is_loaded,
+      })}
       key={item.id}
       onClick={onClick}
       ref={ref}
@@ -78,8 +85,16 @@ const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
         <Square
           image={getURLFromString(item.thumbnail, 'avatar')}
           onClick={onClick}
-          className={classNames(styles.thumb, { [styles.is_loaded]: is_loaded })}
-        />
+          className={classNames(styles.thumb, {
+            [styles.is_loaded]: is_loaded,
+          })}
+        >
+          {!item.is_promoted && (
+            <div className={styles.suffix}>
+              <Icon icon="lab" size={12} />
+            </div>
+          )}
+        </Square>
       )}
 
       {!item.thumbnail && size === 'small' && (
@@ -94,7 +109,11 @@ const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
         </div>
       )}
 
-      <ImageWithSSRLoad src={image} alt="loader" onLoad={() => setIsLoaded(true)} />
+      <ImageWithSSRLoad
+        src={image}
+        alt="loader"
+        onLoad={() => setIsLoaded(true)}
+      />
     </div>
   );
 });
