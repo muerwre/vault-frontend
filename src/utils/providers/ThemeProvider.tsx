@@ -1,6 +1,7 @@
 import React, {
   createContext,
   FC,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -23,8 +24,23 @@ const themeClass: Record<Theme, string> = {
 };
 
 const ThemeProvider: FC<ProvidersProps> = ({ children }) => {
-  const [theme, setTheme] = useState(Theme.Default);
-  const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
+  const [theme, setThemeValue] = useState(Theme.Default);
+
+  const setTheme = useCallback(
+    (val: Theme) => {
+      if (themeClass[theme]) {
+        document.documentElement.classList.remove(themeClass[theme]);
+      }
+
+      localStorage.setItem('vault__theme', val);
+      setThemeValue(val);
+
+      if (themeClass[val]) {
+        document.documentElement.classList.add(themeClass[val]);
+      }
+    },
+    [theme],
+  );
 
   useEffect(() => {
     const stored = localStorage.getItem('vault__theme');
@@ -34,19 +50,7 @@ const ThemeProvider: FC<ProvidersProps> = ({ children }) => {
     setTheme(stored as Theme);
   }, []);
 
-  useEffect(() => {
-    if (!themeClass[theme]) {
-      return;
-    }
-
-    document.documentElement.classList.add(themeClass[theme]);
-
-    try {
-      localStorage.setItem('vault__theme', theme);
-    } catch {}
-
-    return () => document.documentElement.classList.remove(themeClass[theme]);
-  }, [theme]);
+  const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
