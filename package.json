@@ -39,7 +39,7 @@
     "react-router-dom": "^5.1.2",
     "react-sticky-box": "^1.0.2",
     "sass": "^1.49.0",
-    "swiper": "^8.0.7",
+    "swiper": "^8.4.4",
     "swr": "^1.0.1",
     "throttle-debounce": "^2.1.0",
     "typescript": "^4.0.5",
