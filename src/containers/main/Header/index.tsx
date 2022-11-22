@@ -27,7 +27,7 @@ export interface HeaderProps {}
 const Header: FC<HeaderProps> = observer(() => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { showModal } = useModal();
-  const { isUser, user } = useAuth();
+  const { isUser, user, fetched } = useAuth();
   const { hasFlowUpdates, hasLabUpdates } = useFlow();
   const { borisCommentedAt } = useUpdates();
   const { open } = useSidebar();
@@ -44,9 +44,9 @@ const Header: FC<HeaderProps> = observer(() => {
     () =>
       isUser &&
       borisCommentedAt &&
-      (!user.last_seen_boris ||
+      ((fetched && !user.last_seen_boris) ||
         isBefore(new Date(user.last_seen_boris), new Date(borisCommentedAt))),
-    [borisCommentedAt, isUser, user.last_seen_boris],
+    [borisCommentedAt, isUser, user.last_seen_boris, fetched],
   );
 
   // Needed for SSR
