@@ -10,11 +10,19 @@ import { IUser } from '~/types/auth';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 export const useUser = () => {
-  const { token, setUser } = useAuthStore();
-  const { data, mutate } = useSWR(token ? API.USER.ME : null, () => apiAuthGetUser(), {
-    onSuccess: data => setUser(data?.user || EMPTY_USER),
-    onError: error => showErrorToast(error),
-  });
+  const { token, setUser, setFetched, user } = useAuthStore();
+  const { data, mutate } = useSWR(
+    token ? API.USER.ME : null,
+    () => apiAuthGetUser(),
+    {
+      onSuccess: (data) => {
+        setUser(data?.user || EMPTY_USER);
+        setFetched(true);
+      },
+      onError: (error) => showErrorToast(error),
+      fallbackData: { user },
+    },
+  );
 
   const update = useCallback(
     async (user: Partial<IUser>, revalidate?: boolean) => {
@@ -25,7 +33,7 @@ export const useUser = () => {
 
       await mutate({ ...data, user: { ...data.user, ...user } }, revalidate);
     },
-    [data, mutate]
+    [data, mutate],
   );
 
   return { user: data?.user || EMPTY_USER, update };

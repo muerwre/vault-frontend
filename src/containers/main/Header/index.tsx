@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 import isBefore from 'date-fns/isBefore';
@@ -16,7 +16,6 @@ import { URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useScrollTop } from '~/hooks/dom/useScrollTop';
 import { useFlow } from '~/hooks/flow/useFlow';
-import { useGetLabStats } from '~/hooks/lab/useGetLabStats';
 import { useModal } from '~/hooks/modal/useModal';
 import { useUpdates } from '~/hooks/updates/useUpdates';
 import { useSidebar } from '~/utils/providers/SidebarProvider';
@@ -66,8 +65,13 @@ const Header: FC<HeaderProps> = observer(() => {
 
         <Filler className={styles.filler} />
 
-        <nav className={styles.plugs}>
-          <Authorized>
+        <nav
+          className={classNames(styles.plugs, {
+            // [styles.active]: isHydrated && fetched,
+            [styles.active]: true,
+          })}
+        >
+          <Authorized hydratedOnly>
             <Anchor
               className={classNames(styles.item, {
                 [styles.has_dot]: hasFlowUpdates,

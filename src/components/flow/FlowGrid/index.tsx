@@ -1,9 +1,11 @@
 import React, { FC, Fragment } from 'react';
 
 import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 import { FlowCell } from '~/components/flow/FlowCell';
 import { flowDisplayToPreset, URLS } from '~/constants/urls';
+import { useAuth } from '~/hooks/auth/useAuth';
 import { FlowDisplay, IFlowNode, INode } from '~/types';
 import { IUser } from '~/types/auth';
 import { getURLFromString } from '~/utils/dom';
@@ -17,28 +19,38 @@ interface Props {
   onChangeCellView: (id: INode['id'], flow: FlowDisplay) => void;
 }
 
-export const FlowGrid: FC<Props> = ({ user, nodes, onChangeCellView }) => {
-  if (!nodes) {
-    return null;
-  }
+export const FlowGrid: FC<Props> = observer(
+  ({ user, nodes, onChangeCellView }) => {
+    const { fetched, isUser } = useAuth();
 
-  return (
-    <Fragment>
-      {nodes.map(node => (
-        <div className={classNames(styles.cell, styles[node.flow.display])} key={node.id}>
-          <FlowCell
-            id={node.id}
-            color={node.flow.dominant_color}
-            to={URLS.NODE_URL(node.id)}
-            image={getURLFromString(node.thumbnail, flowDisplayToPreset[node.flow.display])}
-            flow={node.flow}
-            text={node.description}
-            title={node.title}
-            canEdit={canEditNode(node, user)}
-            onChangeCellView={onChangeCellView}
-          />
-        </div>
-      ))}
-    </Fragment>
-  );
-};
+    if (!nodes) {
+      return null;
+    }
+
+    return (
+      <Fragment>
+        {nodes.map((node) => (
+          <div
+            className={classNames(styles.cell, styles[node.flow.display])}
+            key={node.id}
+          >
+            <FlowCell
+              id={node.id}
+              color={node.flow.dominant_color}
+              to={URLS.NODE_URL(node.id)}
+              image={getURLFromString(
+                node.thumbnail,
+                flowDisplayToPreset[node.flow.display],
+              )}
+              flow={node.flow}
+              text={node.description}
+              title={node.title}
+              canEdit={fetched && isUser && canEditNode(node, user)}
+              onChangeCellView={onChangeCellView}
+            />
+          </div>
+        ))}
+      </Fragment>
+    );
+  },
+);

@@ -2,6 +2,7 @@ import React, { memo, VFC } from 'react';
 
 import classNames from 'classnames';
 
+import { Authorized } from '~/components/containers/Authorized';
 import { Icon } from '~/components/input/Icon';
 import { SeparatedMenu } from '~/components/menu/SeparatedMenu';
 import { NodeEditMenu } from '~/components/node/NodeEditMenu';
@@ -76,37 +77,39 @@ const NodeTitle: VFC<IProps> = memo(
             )}
           </div>
 
-          <SeparatedMenu className={styles.buttons}>
-            {canEdit && (
-              <NodeEditMenu
-                className={styles.button}
-                canStar={canStar}
-                isHeroic={isHeroic}
-                isLocked={isLocked}
-                onStar={onStar}
-                onLock={onLock}
-                onEdit={onEdit}
-              />
-            )}
+          <Authorized>
+            <SeparatedMenu className={styles.buttons}>
+              {canEdit && (
+                <NodeEditMenu
+                  className={styles.button}
+                  canStar={canStar}
+                  isHeroic={isHeroic}
+                  isLocked={isLocked}
+                  onStar={onStar}
+                  onLock={onLock}
+                  onEdit={onEdit}
+                />
+              )}
 
-            {canLike && (
-              <div
-                className={classNames(styles.button, styles.like, {
-                  [styles.is_liked]: isLiked,
-                })}
-              >
-                {isLiked ? (
-                  <Icon icon="heart_full" size={24} onClick={onLike} />
-                ) : (
-                  <Icon icon="heart" size={24} onClick={onLike} />
-                )}
+              {canLike && (
+                <div
+                  className={classNames(styles.button, styles.like, {
+                    [styles.is_liked]: isLiked,
+                  })}
+                >
+                  {isLiked ? (
+                    <Icon icon="heart_full" size={24} onClick={onLike} />
+                  ) : (
+                    <Icon icon="heart" size={24} onClick={onLike} />
+                  )}
 
-                {!!likeCount && likeCount > 0 && (
-                  <div className={styles.like_count}>{likeCount}</div>
-                )}
-              </div>
-            )}
-          </SeparatedMenu>
+                  {!!likeCount && likeCount > 0 && (
+                    <div className={styles.like_count}>{likeCount}</div>
+                  )}
+                </div>
+              )}
+            </SeparatedMenu>
+          </Authorized>
         </div>
       </div>
     );

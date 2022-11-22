@@ -9,6 +9,7 @@ export class AuthStore {
   token: string = '';
   user: IUser = EMPTY_USER;
   isTesterInternal: boolean = false;
+  fetched = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -45,5 +46,9 @@ export class AuthStore {
   logout = () => {
     this.token = '';
     this.setUser(EMPTY_USER);
+  };
+
+  setFetched = (fetched: boolean) => {
+    this.fetched = fetched;
   };
 }

@@ -1,15 +1,20 @@
 import React, { FC } from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { useAuth } from '~/hooks/auth/useAuth';
 
-interface IProps {}
+interface IProps {
+  // don't wait for user refetch, trust hydration
+  hydratedOnly?: boolean;
+}
 
-const Authorized: FC<IProps> = ({ children }) => {
-  const { isUser } = useAuth();
+const Authorized: FC<IProps> = observer(({ children, hydratedOnly }) => {
+  const { isUser, fetched } = useAuth();
 
-  if (!isUser) return null;
+  if (!isUser || (!hydratedOnly && !fetched)) return null;
 
   return <>{children}</>;
-};
+});
 
 export { Authorized };
