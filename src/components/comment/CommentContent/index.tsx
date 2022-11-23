@@ -70,8 +70,15 @@ const CommentContent: FC<IProps> = memo(
     }, [comment, onDelete]);
 
     const menu = useMemo(
-      () =>
-        canEdit && <CommentMenu onDelete={onLockClick} onEdit={startEditing} />,
+      () => (
+        <div>
+          {canEdit && (
+            <Authorized>
+              <CommentMenu onDelete={onLockClick} onEdit={startEditing} />
+            </Authorized>
+          )}
+        </div>
+      ),
       [canEdit, startEditing, onLockClick],
     );
 
@@ -97,9 +104,10 @@ const CommentContent: FC<IProps> = memo(
     return (
       <div className={styles.wrap}>
         {!!prefix && <div className={styles.prefix}>{prefix}</div>}
+
         {comment.text.trim() && (
           <Group className={classnames(styles.block, styles.block_text)}>
-            <Authorized>{menu}</Authorized>
+            {menu}
 
             <Group className={styles.renderers}>
               {blocks.map(
