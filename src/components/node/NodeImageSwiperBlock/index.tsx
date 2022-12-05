@@ -1,16 +1,24 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions } from 'swiper';
+import Image from 'next/future/image';
+import SwiperCore, {
+  Keyboard,
+  Navigation,
+  Pagination,
+  SwiperOptions,
+} from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
 import { ImagePreloader } from '~/components/media/ImagePreloader';
 import { INodeComponentProps } from '~/constants/node';
+import { ImagePresets } from '~/constants/urls';
 import { useModal } from '~/hooks/modal/useModal';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { normalizeBrightColor } from '~/utils/color';
+import { getURL } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
@@ -27,7 +35,9 @@ const breakpoints: SwiperOptions['breakpoints'] = {
 const pagination = { type: 'fraction' as const };
 
 const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
-  const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
+  const [controlledSwiper, setControlledSwiper] = useState<
+    SwiperClass | undefined
+  >(undefined);
   const showPhotoSwiper = useImageModal();
   const { isOpened: isModalActive } = useModal();
 
@@ -38,7 +48,7 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
       enabled: !isModalActive,
       onlyInViewport: true,
     }),
-    [isModalActive]
+    [isModalActive],
   );
 
   const updateSwiper = useCallback(() => {
@@ -53,14 +63,17 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
 
   const onOpenPhotoSwipe = useCallback(
     (index: number) => {
-      if (index !== controlledSwiper?.activeIndex && controlledSwiper?.slideTo) {
+      if (
+        index !== controlledSwiper?.activeIndex &&
+        controlledSwiper?.slideTo
+      ) {
         controlledSwiper.slideTo(index, 300);
         return;
       }
 
       showPhotoSwiper(images, index);
     },
-    [images, controlledSwiper, showPhotoSwiper]
+    [images, controlledSwiper, showPhotoSwiper],
   );
 
   useEffect(() => {
@@ -116,12 +129,16 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
       >
         {images.map((file, i) => (
           <SwiperSlide className={styles.slide} key={file.id}>
-            <ImagePreloader
-              file={file}
+            <Image
+              src={getURL(file, ImagePresets['1600'])}
+              width={file.metadata?.width}
+              height={file.metadata?.height}
               onLoad={updateSwiper}
               onClick={() => onOpenPhotoSwipe(i)}
               className={styles.image}
               color={normalizeBrightColor(file?.metadata?.dominant_color)}
+              alt=""
+              priority={i < 2}
             />
           </SwiperSlide>
         ))}
