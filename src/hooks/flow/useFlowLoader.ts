@@ -19,6 +19,7 @@ export const useFlowLoader = () => {
       const { before, after, heroes, recent, updated } = await getNodeDiff({
         start: new Date().toISOString(),
         end: new Date().toISOString(),
+        take: 20,
         with_heroes: true,
         with_updated: true,
         with_recent: true,
@@ -45,7 +46,9 @@ export const useFlowLoader = () => {
       setIsSyncing(true);
 
       const start = flow.nodes[0].created_at;
-      const end = flow.nodes[flow.nodes.length - 1] && flow.nodes[flow.nodes.length - 1].created_at;
+      const end =
+        flow.nodes[flow.nodes.length - 1] &&
+        flow.nodes[flow.nodes.length - 1].created_at;
 
       const data = await getNodeDiff({
         start,
@@ -58,7 +61,9 @@ export const useFlowLoader = () => {
 
       const nodes = uniq([
         ...(data.before || []),
-        ...(data.valid ? flow.nodes.filter(node => data.valid.includes(node.id)) : flow.nodes),
+        ...(data.valid
+          ? flow.nodes.filter((node) => data.valid.includes(node.id))
+          : flow.nodes),
         ...(data.after || []),
       ]);
 
@@ -75,7 +80,7 @@ export const useFlowLoader = () => {
       });
 
       // wait a little to debounce
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       showErrorToast(error);
     } finally {
