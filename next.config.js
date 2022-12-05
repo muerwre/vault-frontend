@@ -22,5 +22,14 @@ module.exports = withBundleAnalyzer(
 
     /** don't try to optimize fonts */
     optimizeFonts: false,
+    images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.vault48.org',
+        pathname: '/**',
+      },
+    ],
+  },
   })
 );

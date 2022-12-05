@@ -119,7 +119,6 @@ const FlowCell: FC<Props> = ({
         {image && (
           <FlowCellImage
             src={image}
-            height={400}
             className={styles.thumb}
             style={{ backgroundColor: color }}
           />
