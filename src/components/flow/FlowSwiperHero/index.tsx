@@ -29,8 +29,11 @@ const autoplay = {
 };
 
 const lazy = {
-  loadPrevNextAmount: 3,
-  checkInView: false,
+  enabled: true,
+  loadPrevNextAmount: 2,
+  loadOnTransitionStart: true,
+  loadPrevNext: true,
+  checkInView: true,
 };
 
 export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
@@ -130,13 +133,14 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
         onClick={onClick}
         followFinger
         shortSwipes={false}
+        watchSlidesProgress
       >
         {heroes
-          .filter(node => node.thumbnail)
-          .map(node => (
+          .filter((node) => node.thumbnail)
+          .map((node) => (
             <SwiperSlide key={node.id}>
               <img
-                src={getURLFromString(node.thumbnail!, preset)}
+                data-src={getURLFromString(node.thumbnail!, preset)}
                 alt=""
                 className={classNames(styles.preview, 'swiper-lazy')}
               />
