@@ -130,6 +130,7 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
         {images.map((file, i) => (
           <SwiperSlide className={styles.slide} key={file.id}>
             <Image
+              style={{ backgroundColor: file.metadata?.dominant_color }}
               src={getURL(file, ImagePresets['1600'])}
               width={file.metadata?.width}
               height={file.metadata?.height}
