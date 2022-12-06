@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 
 import classNames from 'classnames';
 
-import { ImagePresets } from '~/constants/urls';
+import { imagePresets } from '~/constants/urls';
 import { IUser } from '~/types/auth';
 import { getURL } from '~/utils/dom';
 
@@ -19,14 +19,14 @@ const CoverBackdrop: FC<IProps> = ({ cover }) => {
 
   const onLoad = useCallback(() => setIsLoaded(true), [setIsLoaded]);
 
-  const image = getURL(cover, ImagePresets.cover);
+  const image = getURL(cover, imagePresets.cover);
 
   useEffect(() => {
     if (!cover || !cover.url || !ref || !ref.current) return;
 
     ref.current.src = '';
     setIsLoaded(false);
-    ref.current.src = getURL(cover, ImagePresets.cover);
+    ref.current.src = getURL(cover, imagePresets.cover);
   }, [cover]);
 
   if (!cover) return null;

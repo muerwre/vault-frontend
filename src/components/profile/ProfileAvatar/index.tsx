@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, useCallback } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
 import { Button } from '~/components/input/Button';
-import { ImagePresets } from '~/constants/urls';
+import { imagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
 

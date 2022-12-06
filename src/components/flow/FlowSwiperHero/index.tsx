@@ -7,7 +7,7 @@ import SwiperClass from 'swiper/types/swiper-class';
 
 import { Icon } from '~/components/input/Icon';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
-import { ImagePresets, URLS } from '~/constants/urls';
+import { imagePresets, URLS } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
 import { IFlowNode } from '~/types';
@@ -45,7 +45,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
   >(undefined);
   const [currentIndex, setCurrentIndex] = useState(heroes.length);
   const preset = useMemo(
-    () => (isTablet ? ImagePresets.cover : ImagePresets.small_hero),
+    () => (isTablet ? imagePresets.cover : imagePresets.small_hero),
     [isTablet],
   );
 

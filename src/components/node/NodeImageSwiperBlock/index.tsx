@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
+import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import Image from 'next/future/image';
 import SwiperCore, {
@@ -7,22 +8,26 @@ import SwiperCore, {
   Navigation,
   Pagination,
   SwiperOptions,
+  Lazy,
 } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
 import { ImagePreloader } from '~/components/media/ImagePreloader';
 import { INodeComponentProps } from '~/constants/node';
-import { ImagePresets } from '~/constants/urls';
+import { imagePresets } from '~/constants/urls';
 import { useModal } from '~/hooks/modal/useModal';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
+import { IFile } from '~/types';
 import { normalizeBrightColor } from '~/utils/color';
 import { getURL } from '~/utils/dom';
 
+import { imageSrcSets, ImagePreset } from '../../../constants/urls';
+
 import styles from './styles.module.scss';
 
-SwiperCore.use([Navigation, Pagination, Keyboard]);
+SwiperCore.use([Navigation, Pagination, Keyboard, Lazy]);
 
 interface IProps extends INodeComponentProps {}
 
@@ -33,6 +38,22 @@ const breakpoints: SwiperOptions['breakpoints'] = {
 };
 
 const pagination = { type: 'fraction' as const };
+
+const lazy = {
+  enabled: true,
+  loadPrevNextAmount: 1,
+  loadOnTransitionStart: true,
+  loadPrevNext: true,
+  checkInView: true,
+};
+
+const generateSrcSet = (file: IFile) =>
+  Object.keys(imageSrcSets)
+    .map(
+      (preset) =>
+        `${getURL(file, preset as ImagePreset)} ${imageSrcSets[preset]}w`,
+    )
+    .join(', ');
 
 const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
   const [controlledSwiper, setControlledSwiper] = useState<
@@ -126,20 +147,22 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
         autoHeight
         zoom
         navigation
+        watchSlidesProgress
+        lazy={lazy}
       >
         {images.map((file, i) => (
           <SwiperSlide className={styles.slide} key={file.id}>
-            <Image
+            <img
               style={{ backgroundColor: file.metadata?.dominant_color }}
-              src={getURL(file, ImagePresets['1600'])}
+              data-srcset={generateSrcSet(file)}
               width={file.metadata?.width}
               height={file.metadata?.height}
               onLoad={updateSwiper}
               onClick={() => onOpenPhotoSwipe(i)}
-              className={styles.image}
+              className={classNames(styles.image, 'swiper-lazy')}
               color={normalizeBrightColor(file?.metadata?.dominant_color)}
               alt=""
-              priority={i < 2}
+              sizes="(max-width: 560px) 100vw, 50vh"
             />
           </SwiperSlide>
         ))}

@@ -5,8 +5,12 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import isAfter from 'date-fns/isAfter';
 import ru from 'date-fns/locale/ru';
 
-import { COMMENT_BLOCK_DETECTORS, COMMENT_BLOCK_TYPES, ICommentBlock } from '~/constants/comment';
-import { ImagePresets } from '~/constants/urls';
+import {
+  COMMENT_BLOCK_DETECTORS,
+  COMMENT_BLOCK_TYPES,
+  ICommentBlock,
+} from '~/constants/comment';
+import { imagePresets } from '~/constants/urls';
 import { IFile, ValueOf } from '~/types';
 import { CONFIG } from '~/utils/config';
 import {
@@ -22,6 +26,8 @@ import {
 import { pipe } from '~/utils/ramda';
 import { splitTextByYoutube, splitTextOmitEmpty } from '~/utils/splitText';
 
+import { ImagePreset } from '../constants/urls';
+
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
   const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
 
@@ -36,7 +42,7 @@ export const describeArc = (
   y: number,
   radius: number,
   startAngle: number = 0,
-  endAngle: number = 360
+  endAngle: number = 360,
 ): string => {
   const start = polarToCartesian(x, y, radius, endAngle);
   const end = polarToCartesian(x, y, radius, startAngle);
@@ -64,12 +70,12 @@ export const describeArc = (
   ].join(' ');
 };
 
-export const getURLFromString = (
-  url?: string,
-  size?: typeof ImagePresets[keyof typeof ImagePresets]
-): string => {
+export const getURLFromString = (url?: string, size?: ImagePreset): string => {
   if (size) {
-    return (url || '').replace('REMOTE_CURRENT://', `${CONFIG.remoteCurrent}cache/${size}/`);
+    return (url || '').replace(
+      'REMOTE_CURRENT://',
+      `${CONFIG.remoteCurrent}cache/${size}/`,
+    );
   }
 
   return (url || '').replace('REMOTE_CURRENT://', CONFIG.remoteCurrent);
@@ -77,7 +83,7 @@ export const getURLFromString = (
 
 export const getURL = (
   file: Partial<IFile> | undefined,
-  size?: typeof ImagePresets[keyof typeof ImagePresets]
+  size?: ImagePreset,
 ) => {
   return file?.url ? getURLFromString(file.url, size) : '';
 };
@@ -90,27 +96,34 @@ export const formatText = pipe(
   formatTextDash,
   formatTextMarkdown,
   formatTextSanitizeTags,
-  formatTextClickableUsernames
+  formatTextClickableUsernames,
 );
 
-export const formatTextParagraphs = (text: string): string => (text && formatText(text)) || '';
+export const formatTextParagraphs = (text: string): string =>
+  (text && formatText(text)) || '';
 
-export const findBlockType = (line: string): ValueOf<typeof COMMENT_BLOCK_TYPES> => {
-  const match = Object.values(COMMENT_BLOCK_DETECTORS).find(detector => line.match(detector.test));
+export const findBlockType = (
+  line: string,
+): ValueOf<typeof COMMENT_BLOCK_TYPES> => {
+  const match = Object.values(COMMENT_BLOCK_DETECTORS).find((detector) =>
+    line.match(detector.test),
+  );
   return (match && match.type) || COMMENT_BLOCK_TYPES.TEXT;
 };
 
 export const splitCommentByBlocks = (text: string): ICommentBlock[] =>
   pipe(
     splitTextByYoutube,
-    splitTextOmitEmpty
-  )([text]).map(line => ({
+    splitTextOmitEmpty,
+  )([text]).map((line) => ({
     type: findBlockType(line),
     content: line,
   }));
 
-export const formatCommentText = (author?: string, text?: string): ICommentBlock[] =>
-  author && text ? splitCommentByBlocks(text) : [];
+export const formatCommentText = (
+  author?: string,
+  text?: string,
+): ICommentBlock[] => (author && text ? splitCommentByBlocks(text) : []);
 
 export const getPrettyDate = (date?: string): string => {
   if (!date) {
@@ -135,10 +148,12 @@ export const getYoutubeThumb = (url: string) => {
   const match =
     url &&
     url.match(
-      /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-_]*)(&(amp;)?[\w?=]*)?/
+      /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-_]*)(&(amp;)?[\w?=]*)?/,
     );
 
-  return match && match[1] ? `https://i.ytimg.com/vi/${match[1]}/hqdefault.jpg` : null;
+  return match && match[1]
+    ? `https://i.ytimg.com/vi/${match[1]}/hqdefault.jpg`
+    : null;
 };
 
 export const stringToColour = (str: string) => {
@@ -191,5 +206,7 @@ export const sizeOf = (bytes: number): string => {
     return '0.00 B';
   }
   let e = Math.floor(Math.log(bytes) / Math.log(1024));
-  return (bytes / Math.pow(1024, e)).toFixed(2) + ' ' + ' KMGTP'.charAt(e) + 'B';
+  return (
+    (bytes / Math.pow(1024, e)).toFixed(2) + ' ' + ' KMGTP'.charAt(e) + 'B'
+  );
 };

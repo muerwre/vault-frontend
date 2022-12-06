@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Avatar } from '~/components/common/Avatar';
 import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
-import { ImagePresets } from '~/constants/urls';
+import { imagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
 
@@ -20,7 +20,7 @@ const UserButton: FC<IProps> = ({ username, photo, onClick }) => {
     <button className={styles.wrap} onClick={onClick}>
       <Group horizontal className={styles.user_button}>
         <div className={styles.username}>{username}</div>
-        <Avatar url={getURL(photo, ImagePresets.avatar)} size={32} />
+        <Avatar url={getURL(photo, imagePresets.avatar)} size={32} />
       </Group>
     </button>
   );
