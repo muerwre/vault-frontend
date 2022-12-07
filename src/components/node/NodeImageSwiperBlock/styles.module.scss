@@ -117,7 +117,8 @@
 }
 
 .image {
-  max-inline-size: min(calc(100vh - 70px - 70px), 100vw);
+  max-inline-size: calc(100vh - 150px);
+  writing-mode: vertical-rl;
   block-size: auto;
   border-radius: $radius;
   transition: box-shadow 1s;
@@ -133,7 +134,9 @@
     max-height: 100vh;
     border-radius: 0;
   }
-}
 
-.loader {
+  @media (orientation: portrait) {
+    max-inline-size: 100vw;
+    writing-mode: horizontal-tb;
+  }
 }
