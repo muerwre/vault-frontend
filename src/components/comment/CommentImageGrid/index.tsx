@@ -1,8 +1,6 @@
-import React, { FC, useMemo } from 'react';
+import { FC } from 'react';
 
 import classNames from 'classnames';
-import Image from 'next/future/image';
-import Gallery, { ImageWithSize } from 'react-easy-image-gallery';
 
 import { imagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
