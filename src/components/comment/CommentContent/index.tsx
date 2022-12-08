@@ -10,7 +10,6 @@ import React, {
 } from 'react';
 
 import classnames from 'classnames';
-import classNames from 'classnames';
 
 import { CommentForm } from '~/components/comment/CommentForm';
 import { Authorized } from '~/components/containers/Authorized';
@@ -23,6 +22,7 @@ import { IComment, IFile } from '~/types';
 import { formatCommentText, getPrettyDate, getURL } from '~/utils/dom';
 import { append, assocPath, path, reduce } from '~/utils/ramda';
 
+import { CommentImageGrid } from '../CommentImageGrid';
 import { CommentMenu } from '../CommentMenu';
 
 import styles from './styles.module.scss';
@@ -130,23 +130,7 @@ const CommentContent: FC<IProps> = memo(
           <div className={classnames(styles.block, styles.block_image)}>
             {menu}
 
-            <div
-              className={classNames(styles.images, {
-                [styles.multiple]: groupped.image.length > 1,
-              })}
-            >
-              {groupped.image.map((file, index) => (
-                <div
-                  key={file.id}
-                  onClick={() => onShowImageModal(groupped.image, index)}
-                >
-                  <img
-                    src={getURL(file, imagePresets['600'])}
-                    alt={file.name}
-                  />
-                </div>
-              ))}
-            </div>
+            <CommentImageGrid files={groupped.image} />
 
             <div className={styles.date}>
               {getPrettyDate(comment.created_at)}
