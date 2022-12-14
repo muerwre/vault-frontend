@@ -12,12 +12,14 @@ import SwiperCore, {
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
-import { ImagePreloader } from '~/components/media/ImagePreloader';
+import { ImageLoadingWrapper } from '~/components/common/ImageLoadingWrapper/index';
 import { INodeComponentProps } from '~/constants/node';
+import { imagePresets } from '~/constants/urls';
 import { useModal } from '~/hooks/modal/useModal';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { normalizeBrightColor } from '~/utils/color';
+import { getURL } from '~/utils/dom';
 import { getFileSrcSet } from '~/utils/srcset';
 
 import styles from './styles.module.scss';
@@ -101,18 +103,6 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
     return null;
   }
 
-  if (images.length === 1) {
-    return (
-      <div className={styles.single}>
-        <ImagePreloader
-          file={images[0]}
-          onClick={() => onOpenPhotoSwipe(0)}
-          className={styles.image}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className={styles.wrapper}>
       <Swiper
@@ -137,20 +127,28 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
         watchSlidesProgress
         lazy={lazy}
       >
-        {images.map((file, i) => (
+        {images.map((file, index) => (
           <SwiperSlide className={styles.slide} key={file.id}>
-            <img
-              style={{ backgroundColor: file.metadata?.dominant_color }}
-              data-srcset={getFileSrcSet(file)}
-              width={file.metadata?.width}
-              height={file.metadata?.height}
-              onLoad={updateSwiper}
-              onClick={() => onOpenPhotoSwipe(i)}
-              className={classNames(styles.image, 'swiper-lazy')}
-              color={normalizeBrightColor(file?.metadata?.dominant_color)}
-              alt=""
-              sizes="(max-width: 560px) 100vw, 50vh"
-            />
+            <ImageLoadingWrapper
+              preview={getURL(file, imagePresets['300'])}
+              color={file.metadata?.dominant_color}
+            >
+              {({ loading, onLoad }) => (
+                <img
+                  data-srcset={getFileSrcSet(file)}
+                  width={file.metadata?.width}
+                  height={file.metadata?.height}
+                  onLoad={onLoad}
+                  onClick={() => onOpenPhotoSwipe(index)}
+                  className={classNames(styles.image, 'swiper-lazy', {
+                    [styles.loading]: loading,
+                  })}
+                  color={normalizeBrightColor(file?.metadata?.dominant_color)}
+                  alt=""
+                  sizes="(max-width: 560px) 100vw, 50vh"
+                />
+              )}
+            </ImageLoadingWrapper>
           </SwiperSlide>
         ))}
       </Swiper>
