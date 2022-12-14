@@ -11,12 +11,13 @@ import styles from './styles.module.scss';
 
 interface CommentImageGridProps {
   files: IFile[];
+  onClick: (file: IFile) => void;
 }
 
 const singleSrcSet = '(max-width: 1024px) 40vw, 20vw';
 const multipleSrcSet = '(max-width: 1024px) 50vw, 20vw';
 
-const CommentImageGrid: FC<CommentImageGridProps> = ({ files }) => {
+const CommentImageGrid: FC<CommentImageGridProps> = ({ files, onClick }) => {
   return (
     <div
       className={classNames(styles.images, {
@@ -24,10 +25,7 @@ const CommentImageGrid: FC<CommentImageGridProps> = ({ files }) => {
       })}
     >
       {files.map((file, index) => (
-        <div
-          key={file.id}
-          // onClick={() => onShowImageModal(groupped.image, index)}
-        >
+        <div key={file.id} onClick={() => onClick(file)}>
           <img
             srcSet={getFileSrcSet(file)}
             src={getURL(file, imagePresets['300'])}

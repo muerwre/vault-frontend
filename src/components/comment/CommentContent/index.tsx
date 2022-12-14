@@ -69,6 +69,12 @@ const CommentContent: FC<IProps> = memo(
       onDelete(comment.id, !comment.deleted_at);
     }, [comment, onDelete]);
 
+    const onImageClick = useCallback(
+      (file: IFile) =>
+        onShowImageModal(groupped.image, groupped.image.indexOf(file)),
+      [onShowImageModal, groupped],
+    );
+
     const menu = useMemo(
       () => (
         <div>
@@ -130,7 +136,7 @@ const CommentContent: FC<IProps> = memo(
           <div className={classnames(styles.block, styles.block_image)}>
             {menu}
 
-            <CommentImageGrid files={groupped.image} />
+            <CommentImageGrid files={groupped.image} onClick={onImageClick} />
 
             <div className={styles.date}>
               {getPrettyDate(comment.created_at)}
