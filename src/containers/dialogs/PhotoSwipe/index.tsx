@@ -28,26 +28,38 @@ const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
     new Promise(async (resolve) => {
       const images = await Promise.all(
         items.map(
-          (image) =>
-            new Promise((resolveImage) => {
+          (file) =>
+            new Promise((resolve) => {
+              const src = getURL(
+                file,
+                isTablet ? imagePresets[900] : imagePresets[1600],
+              );
+
+              if (file.metadata?.width && file.metadata.height) {
+                resolve({
+                  src,
+                  w: file.metadata.width,
+                  h: file.metadata.height,
+                });
+
+                return;
+              }
+
               const img = new Image();
 
               img.onload = () => {
-                resolveImage({
-                  src: getURL(
-                    image,
-                    isTablet ? imagePresets[900] : imagePresets[1600],
-                  ),
+                resolve({
+                  src,
                   h: img.naturalHeight,
                   w: img.naturalWidth,
                 });
               };
 
               img.onerror = () => {
-                resolveImage({});
+                resolve({});
               };
 
-              img.src = getURL(image, imagePresets[1600]);
+              img.src = getURL(file, imagePresets[1600]);
             }),
         ),
       );
