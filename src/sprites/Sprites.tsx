@@ -15,9 +15,33 @@ const Sprites: FC = () => (
     </defs>
 
     <g id="cell-single" stroke="none">
-      <rect x="13.5" y="2.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
-      <rect x="13.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
-      <rect x="2.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect
+        x="13.5"
+        y="2.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
+      <rect
+        x="13.5"
+        y="13.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
+      <rect
+        x="2.5"
+        y="13.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -28,8 +52,24 @@ const Sprites: FC = () => (
     </g>
 
     <g id="cell-double-h" stroke="none">
-      <rect x="13.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
-      <rect x="2.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect
+        x="13.5"
+        y="13.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
+      <rect
+        x="2.5"
+        y="13.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -40,8 +80,24 @@ const Sprites: FC = () => (
     </g>
 
     <g id="cell-double-h-text" stroke="none">
-      <rect x="13.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
-      <rect x="2.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect
+        x="13.5"
+        y="13.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
+      <rect
+        x="2.5"
+        y="13.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -49,14 +105,54 @@ const Sprites: FC = () => (
         fill="currentColor"
         stroke="none"
       />
-      <rect x="4" y="4" width="5" height="1" rx="0.5" fill="currentColor" stroke="none" />
-      <rect x="4" y="6" width="6" height="1" rx="0.5" fill="currentColor" stroke="none" />
-      <rect x="4" y="8" width="6" height="1" rx="0.5" fill="currentColor" stroke="none" />
+      <rect
+        x="4"
+        y="4"
+        width="5"
+        height="1"
+        rx="0.5"
+        fill="currentColor"
+        stroke="none"
+      />
+      <rect
+        x="4"
+        y="6"
+        width="6"
+        height="1"
+        rx="0.5"
+        fill="currentColor"
+        stroke="none"
+      />
+      <rect
+        x="4"
+        y="8"
+        width="6"
+        height="1"
+        rx="0.5"
+        fill="currentColor"
+        stroke="none"
+      />
     </g>
 
     <g id="cell-double-v" stroke="none">
-      <rect x="13.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
-      <rect x="13.5" y="2.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect
+        x="13.5"
+        y="13.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
+      <rect
+        x="13.5"
+        y="2.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -66,8 +162,24 @@ const Sprites: FC = () => (
       />
     </g>
     <g id="cell-double-v-text" stroke="none">
-      <rect x="13.5" y="13.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
-      <rect x="13.5" y="2.5" width="8" height="8" rx="1.5" stroke="currentColor" fill="none" />
+      <rect
+        x="13.5"
+        y="13.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
+      <rect
+        x="13.5"
+        y="2.5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        fill="none"
+      />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -75,9 +187,33 @@ const Sprites: FC = () => (
         fill="currentColor"
         stroke="none"
       />
-      <rect x="4" y="15" width="3" height="1" rx="0.5" fill="currentColor" stroke="none" />
-      <rect x="4" y="17" width="5" height="1" rx="0.5" fill="currentColor" stroke="none" />
-      <rect x="4" y="19" width="5" height="1" rx="0.5" fill="currentColor" stroke="none" />
+      <rect
+        x="4"
+        y="15"
+        width="3"
+        height="1"
+        rx="0.5"
+        fill="currentColor"
+        stroke="none"
+      />
+      <rect
+        x="4"
+        y="17"
+        width="5"
+        height="1"
+        rx="0.5"
+        fill="currentColor"
+        stroke="none"
+      />
+      <rect
+        x="4"
+        y="19"
+        width="5"
+        height="1"
+        rx="0.5"
+        fill="currentColor"
+        stroke="none"
+      />
     </g>
 
     <g id="cell-quadro" stroke="none">
@@ -97,9 +233,33 @@ const Sprites: FC = () => (
         fill="currentColor"
         stroke="none"
       />
-      <rect x="4" y="15" width="4" height="1" rx="0.5" fill="currentColor" stroke="none" />
-      <rect x="4" y="17" width="6" height="1" rx="0.5" fill="currentColor" stroke="none" />
-      <rect x="4" y="19" width="6" height="1" rx="0.5" fill="currentColor" stroke="none" />
+      <rect
+        x="4"
+        y="15"
+        width="4"
+        height="1"
+        rx="0.5"
+        fill="currentColor"
+        stroke="none"
+      />
+      <rect
+        x="4"
+        y="17"
+        width="6"
+        height="1"
+        rx="0.5"
+        fill="currentColor"
+        stroke="none"
+      />
+      <rect
+        x="4"
+        y="19"
+        width="6"
+        height="1"
+        rx="0.5"
+        fill="currentColor"
+        stroke="none"
+      />
     </g>
 
     <g id="play">
@@ -188,6 +348,11 @@ const Sprites: FC = () => (
     <g id="image" stroke="none">
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z" />
+    </g>
+
+    <g id="zoom" stroke="none">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path d="M3 21v-6h2v2.6l3.1-3.1 1.4 1.4L6.4 19H9v2Zm12 0v-2h2.6l-3.1-3.1 1.4-1.4 3.1 3.1V15h2v6ZM8.1 9.5 5 6.4V9H3V3h6v2H6.4l3.1 3.1Zm7.8 0-1.4-1.4L17.6 5H15V3h6v6h-2V6.4Z" />
     </g>
 
     <g id="profile" stroke="none">
@@ -423,8 +588,6 @@ const Sprites: FC = () => (
         d="M11 13q.425 0 .713-.288Q12 12.425 12 12t-.287-.713Q11.425 11 11 11t-.712.287Q10 11.575 10 12t.288.712Q10.575 13 11 13Zm-4 8v-2l6-1V6.875q0-.375-.225-.675-.225-.3-.575-.35L7 5V3l5.5.9q1.1.2 1.8 1.025T15 6.85v12.8Zm-4 0v-2h2V5q0-.85.588-1.425Q6.175 3 7 3h10q.85 0 1.425.575Q19 4.15 19 5v14h2v2Zm4-2h10V5H7Z"
       />
     </g>
-
-    
   </svg>
 );
 

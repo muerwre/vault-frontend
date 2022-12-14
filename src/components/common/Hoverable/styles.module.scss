@@ -1,0 +1,43 @@
+@import 'src/styles/variables';
+
+.hoverable {
+  position: relative;
+  cursor: pointer;
+
+  &::after {
+    content: ' ';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius;
+    opacity: 0;
+    transition: all 100ms;
+    box-shadow: inset $color_primary 0 0 0 2px;
+    touch-action: none;
+    pointer-events: none;
+  }
+
+  &.with_icon::after {
+    background: linear-gradient(325deg, $color_primary 20px, transparent 100px);
+  }
+
+  &:hover {
+    z-index: 10;
+    transition: all 100ms;
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}
+
+.icon {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  z-index: 2;
+  opacity: 0;
+
+  .hoverable:hover & {
+    opacity: 1;
+  }
+}

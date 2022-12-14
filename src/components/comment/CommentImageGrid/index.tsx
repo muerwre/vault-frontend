@@ -2,6 +2,8 @@ import { FC } from 'react';
 
 import classNames from 'classnames';
 
+import { Hoverable } from '~/components/common/Hoverable';
+import { Icon } from '~/components/input/Icon';
 import { imagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
@@ -24,8 +26,13 @@ const CommentImageGrid: FC<CommentImageGridProps> = ({ files, onClick }) => {
         [styles.multiple]: files.length > 1,
       })}
     >
-      {files.map((file, index) => (
-        <div key={file.id} onClick={() => onClick(file)}>
+      {files.map((file) => (
+        <Hoverable
+          key={file.id}
+          onClick={() => onClick(file)}
+          className={styles.item}
+          icon={<Icon icon="zoom" size={30} />}
+        >
           <img
             srcSet={getFileSrcSet(file)}
             src={getURL(file, imagePresets['300'])}
@@ -33,7 +40,7 @@ const CommentImageGrid: FC<CommentImageGridProps> = ({ files, onClick }) => {
             className={styles.image}
             sizes={files.length > 1 ? singleSrcSet : multipleSrcSet}
           />
-        </div>
+        </Hoverable>
       ))}
     </div>
   );
