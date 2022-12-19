@@ -29,6 +29,11 @@ module.exports = withBundleAnalyzer(
         hostname: '*.vault48.org',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: '*.ytimg.com',
+        pathname: '/**',
+      },
     ],
   },
   })
