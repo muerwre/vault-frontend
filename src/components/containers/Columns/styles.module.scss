@@ -1,11 +1,12 @@
-@import "src/styles/variables";
-@import "src/styles/mixins";
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
 
 div.wrap {
   display: flex;
   width: 100%;
   margin-right: 0;
   padding: $gap $gap * 0.5;
+  align-items: flex-start;
 
   @include tablet {
     padding: 0 $gap * 0.5;
