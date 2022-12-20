@@ -1,5 +1,7 @@
 import React, { FC, useMemo } from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { ImageUpload } from '~/components/upload/ImageUpload';
 import { imagePresets } from '~/constants/urls';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
@@ -18,33 +20,31 @@ interface SortableImageGridProps {
   className?: string;
   size?: number;
 }
-const renderItem = ({
-  item,
-  onDelete,
-}: {
-  item: IFile;
-  onDelete: (fileId: number) => void;
-}) => (
-  <ImageUpload
-    id={item.id}
-    thumb={getURL(item, imagePresets.cover)}
-    onDrop={onDelete}
-  />
+const renderItem = observer(
+  ({ item, onDelete }: { item: IFile; onDelete: (fileId: number) => void }) => (
+    <ImageUpload
+      id={item.id}
+      thumb={getURL(item, imagePresets.cover)}
+      onDrop={onDelete}
+    />
+  ),
 );
 
-const renderLocked = ({
-  locked,
-  onDelete,
-}: {
-  locked: UploadStatus;
-  onDelete: (fileId: number) => void;
-}) => (
-  <ImageUpload
-    thumb={locked.thumbnail}
-    onDrop={onDelete}
-    progress={locked.progress}
-    uploading
-  />
+const renderLocked = observer(
+  ({
+    locked,
+    onDelete,
+  }: {
+    locked: UploadStatus;
+    onDelete: (fileId: number) => void;
+  }) => (
+    <ImageUpload
+      thumb={locked.thumbnail}
+      onDrop={onDelete}
+      progress={locked.progress}
+      uploading
+    />
+  ),
 );
 
 const SortableImageGrid: FC<SortableImageGridProps> = ({
