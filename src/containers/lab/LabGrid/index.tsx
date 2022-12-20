@@ -1,5 +1,6 @@
 import { FC, memo } from 'react';
 
+import { Hoverable } from '~/components/common/Hoverable';
 import { Columns } from '~/components/containers/Columns';
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
 import { LabNoResults } from '~/components/lab/LabNoResults';
@@ -22,12 +23,13 @@ const LabGrid: FC<IProps> = memo(() => {
     <div className={styles.wrap}>
       <Columns hasMore={hasMore && !isLoading} onScrollEnd={loadMore}>
         {nodes.map((node) => (
-          <LabNode
-            node={node.node}
-            key={node.node.id}
-            lastSeen={node.last_seen}
-            commentCount={node.comment_count}
-          />
+          <Hoverable key={node.node.id}>
+            <LabNode
+              node={node.node}
+              lastSeen={node.last_seen}
+              commentCount={node.comment_count}
+            />
+          </Hoverable>
         ))}
       </Columns>
     </div>
