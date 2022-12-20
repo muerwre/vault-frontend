@@ -20,7 +20,7 @@ const NodeRelated: FC<IProps> = ({ title, items }) => {
 
       <div className={styles.grid}>
         {items.map((item) => (
-          <Hoverable key={item.id}>
+          <Hoverable key={item.id} className={styles.item}>
             <NodeRelatedItem item={item} />
           </Hoverable>
         ))}
