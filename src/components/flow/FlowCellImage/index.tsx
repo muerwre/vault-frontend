@@ -19,7 +19,14 @@ const FlowCellImage: FC<Props> = ({
   ...rest
 }) => (
   <div className={classNames(styles.wrapper, className)}>
-    <Image {...rest} src={src!} alt={alt} placeholder="empty" layout="fill" />
+    <Image
+      {...rest}
+      src={src!}
+      alt={alt}
+      placeholder="empty"
+      layout="fill"
+      objectFit="cover"
+    />
     {children}
   </div>
 );
