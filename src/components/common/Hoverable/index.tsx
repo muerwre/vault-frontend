@@ -6,19 +6,23 @@ import { DivProps } from '~/utils/types';
 
 import styles from './styles.module.scss';
 
+type HoverableEffect = 'rise' | 'shine';
+
 interface HoverableProps extends DivProps {
   icon?: ReactNode;
+  effect?: HoverableEffect;
 }
 
 const Hoverable: FC<HoverableProps> = ({
   children,
   className,
   icon,
+  effect = 'rise',
   ...rest
 }) => (
   <div
     {...rest}
-    className={classNames(styles.hoverable, className, {
+    className={classNames(styles.hoverable, styles[effect], className, {
       [styles.with_icon]: !!icon,
     })}
   >

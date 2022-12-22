@@ -23,7 +23,7 @@ const LabGrid: FC<IProps> = memo(() => {
     <div className={styles.wrap}>
       <Columns hasMore={hasMore && !isLoading} onScrollEnd={loadMore}>
         {nodes.map((node) => (
-          <Hoverable key={node.node.id}>
+          <Hoverable key={node.node.id} effect="shine">
             <LabNode
               node={node.node}
               lastSeen={node.last_seen}
