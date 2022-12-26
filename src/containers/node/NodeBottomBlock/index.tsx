@@ -26,7 +26,11 @@ interface IProps {
 const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
   const user = useUserContext();
   const { node, isLoading } = useNodeContext();
-  const { comments, isLoading: isLoadingComments, onSaveComment } = useCommentContext();
+  const {
+    comments,
+    isLoading: isLoadingComments,
+    onSaveComment,
+  } = useCommentContext();
   const { related, isLoading: isLoadingRelated } = useNodeRelatedContext();
   const { inline } = useNodeBlocks(node, isLoading);
   const { isUser } = useAuthProvider();
@@ -43,15 +47,21 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
             {inline && <div className={styles.inline}>{inline}</div>}
 
             <article>
-              {isLoading || isLoadingComments || (!comments.length && !inline) ? (
-                <NodeNoComments is_loading={isLoadingComments || isLoading} />
+              {isLoading ||
+              isLoadingComments ||
+              (!comments.length && !inline) ? (
+                <NodeNoComments loading={isLoadingComments || isLoading} />
               ) : (
                 <NodeComments order={commentsOrder} />
               )}
             </article>
 
             {isUser && !isLoading && (
-              <NodeCommentFormSSR nodeId={node.id} saveComment={onSaveComment} user={user} />
+              <NodeCommentFormSSR
+                nodeId={node.id}
+                saveComment={onSaveComment}
+                user={user}
+              />
             )}
           </Group>
 
@@ -66,7 +76,11 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
                   <NodeTagsBlock />
                 </div>
                 <div className={styles.left_item}>
-                  <NodeRelatedBlock isLoading={isLoadingRelated} node={node} related={related} />
+                  <NodeRelatedBlock
+                    isLoading={isLoadingRelated}
+                    node={node}
+                    related={related}
+                  />
                 </div>
               </Sticky>
             </div>
