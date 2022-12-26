@@ -23,7 +23,7 @@ const NodeRelatedPlaceholder: FC<IProps> = memo(() => {
       </div>
 
       <div className={styles.grid}>
-        {range(0, 6).map(el => (
+        {range(0, 6).map((el) => (
           <div className={cell_style.item} key={el} />
         ))}
       </div>
