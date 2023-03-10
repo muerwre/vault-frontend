@@ -62,4 +62,8 @@ export const API = {
     STATS: '/nodes/lab/stats',
     UPDATES: '/nodes/lab/updates',
   },
+  NOTIFICATIONS: {
+    LIST: '/notifications/',
+    SETTINGS: '/notifications/settings',
+  },
 };

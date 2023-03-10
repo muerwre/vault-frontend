@@ -28,3 +28,9 @@ export interface ISocialAccount {
   name: string;
   photo: string;
 }
+
+export interface ShallowUser {
+  id: number;
+  username: string;
+  photo: string;
+}
