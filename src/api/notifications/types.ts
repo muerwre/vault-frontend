@@ -7,7 +7,11 @@ export interface ApiGetNotificationSettingsResponse {
   last_seen?: string | null;
   last_date?: string | null;
 }
+export type ApiUpdateNotificationSettingsResponse =
+  ApiGetNotificationSettingsResponse;
 
+export type ApiUpdateNotificationSettingsRequest =
+  Partial<ApiGetNotificationSettingsResponse>;
 export interface ApiGetNotificationsResponse {
   items?: NotificationItem[];
 }

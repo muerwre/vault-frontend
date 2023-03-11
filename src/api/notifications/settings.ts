@@ -4,6 +4,8 @@ import { api, cleanResult } from '~/utils/api';
 import {
   ApiGetNotificationSettingsResponse,
   ApiGetNotificationsResponse,
+  ApiUpdateNotificationSettingsResponse,
+  ApiUpdateNotificationSettingsRequest,
 } from './types';
 
 export const apiGetNotificationSettings = () =>
@@ -14,4 +16,14 @@ export const apiGetNotificationSettings = () =>
 export const apiGetNotifications = () =>
   api
     .get<ApiGetNotificationsResponse>(API.NOTIFICATIONS.LIST)
+    .then(cleanResult);
+
+export const apiUpdateNotificationSettings = (
+  settings: ApiUpdateNotificationSettingsRequest,
+) =>
+  api
+    .post<ApiUpdateNotificationSettingsResponse>(
+      API.NOTIFICATIONS.SETTINGS,
+      settings,
+    )
     .then(cleanResult);

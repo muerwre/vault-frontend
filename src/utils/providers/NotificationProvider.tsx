@@ -10,6 +10,7 @@ const defaultValue = {
   available: false,
   enabled: false,
   hasNew: false,
+  markAsRead: () => {},
 };
 
 const NotificationContext = createContext(defaultValue);

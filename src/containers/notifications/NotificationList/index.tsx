@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { NotificationComment } from '~/components/notifications/NotificationComment';
 import { useNotificationsList } from '~/hooks/notifications/useNotificationsList';
+import { useNotifications } from '~/utils/providers/NotificationProvider';
 
 import styles from './styles.module.scss';
 
@@ -10,6 +11,11 @@ interface NotificationListProps {}
 
 const NotificationList: FC<NotificationListProps> = () => {
   const { isLoading, items } = useNotificationsList();
+  const { markAsRead } = useNotifications();
+
+  useEffect(() => {
+    return () => markAsRead();
+  }, []);
 
   if (isLoading) {
     return <LoaderCircle />;
