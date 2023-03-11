@@ -45,9 +45,11 @@ const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
               Настройки
             </VerticalMenu.Item>
 
-            <VerticalMenu.Item onClick={() => setActiveTab(1)}>
-              Уведомления
-            </VerticalMenu.Item>
+            <Superpower>
+              <VerticalMenu.Item onClick={() => setActiveTab(1)}>
+                Уведомления
+              </VerticalMenu.Item>
+            </Superpower>
 
             <VerticalMenu.Item onClick={() => setActiveTab(2)}>
               Заметки

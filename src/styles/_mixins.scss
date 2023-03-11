@@ -297,3 +297,11 @@
     right: -10px;
   }
 }
+
+@mixin arrow_left($size: 50, $color: $content_bg) {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: $size $size $size 0;
+  border-color: transparent $color transparent transparent;
+}

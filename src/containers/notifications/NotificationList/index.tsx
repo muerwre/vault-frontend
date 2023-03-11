@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { LoaderCircle } from '~/components/input/LoaderCircle';
-import { NotificationBadge } from '~/components/notifications/NotificationBadge';
+import { NotificationComment } from '~/components/notifications/NotificationComment';
 import { useNotificationsList } from '~/hooks/notifications/useNotificationsList';
 
 import styles from './styles.module.scss';
@@ -22,7 +22,7 @@ const NotificationList: FC<NotificationListProps> = () => {
         <div className={styles.items}>
           {items?.map((item) => (
             <div className={styles.item} key={item.created_at}>
-              <NotificationBadge item={item} />
+              <NotificationComment item={item} />
             </div>
           ))}
         </div>
