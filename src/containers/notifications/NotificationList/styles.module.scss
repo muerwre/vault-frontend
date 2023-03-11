@@ -1,0 +1,41 @@
+@import 'src/styles/variables';
+
+.grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 4;
+  height: 100%;
+}
+
+.head {
+  @include row_shadow;
+
+  width: 100%;
+  padding: $gap;
+}
+
+.list {
+  @include row_shadow;
+
+  overflow-y: auto;
+  flex: 1 1;
+  overflow: auto;
+  width: 100%;
+}
+
+.items {
+  display: grid;
+  grid-auto-flow: row;
+}
+
+.item {
+  @include row_shadow;
+  padding-right: $gap;
+  transition: background-color 0.25s;
+
+  &:hover {
+    background-color: $content_bg_lighter;
+  }
+}

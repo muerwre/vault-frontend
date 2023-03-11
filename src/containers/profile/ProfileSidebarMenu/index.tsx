@@ -2,6 +2,7 @@ import React, { useCallback, VFC } from 'react';
 
 import classNames from 'classnames';
 
+import { Superpower } from '~/components/boris/Superpower';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
 import { Zone } from '~/components/containers/Zone';
@@ -44,7 +45,13 @@ const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
               Настройки
             </VerticalMenu.Item>
 
-            <VerticalMenu.Item onClick={() => setActiveTab(1)}>
+            <Superpower>
+              <VerticalMenu.Item onClick={() => setActiveTab(1)}>
+                Уведомления
+              </VerticalMenu.Item>
+            </Superpower>
+
+            <VerticalMenu.Item onClick={() => setActiveTab(2)}>
               Заметки
             </VerticalMenu.Item>
           </VerticalMenu>

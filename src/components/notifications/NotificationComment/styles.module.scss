@@ -1,0 +1,52 @@
+@import 'src/styles/variables';
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.message {
+  font: $font_14_regular;
+  line-height: 1.3em;
+  padding: $gap/2 $gap/2 $gap/4 $gap/2;
+  min-height: calc(1.3em * 3 + $gap);
+  display: grid;
+  grid-template-columns: 40px auto;
+  column-gap: 0;
+}
+
+.content {
+  background: $content_bg;
+  padding: 5px;
+  border-radius: 0 4px 4px 4px;
+  position: relative;
+
+  &:before {
+    content: ' ';
+    position: absolute;
+    top: $gap;
+    right: 100%;
+    @include arrow_left(10px, $content_bg);
+  }
+}
+
+.text {
+  @include clamp(2, 14px);
+  text-overflow: ellipsis;
+}
+
+.title {
+  font: $font_14_semibold;
+  margin-bottom: $gap / 2;
+}
+
+.time {
+  font: $font_10_regular;
+  text-align: right;
+  margin-top: 2px;
+  color: $gray_75;
+}
+
+.circle {
+  border-radius: 4px 0 0 4px;
+}

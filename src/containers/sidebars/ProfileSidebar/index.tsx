@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, VFC } from 'react';
 
 import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
 import { ProfileSidebarNotes } from '~/components/profile/ProfileSidebarNotes';
+import { ProfileSidebarNotifications } from '~/components/profile/ProfileSidebarNotifications';
 import { ProfileSidebarSettings } from '~/components/profile/ProfileSidebarSettings';
 import { SidebarStack } from '~/components/sidebar/SidebarStack';
 import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
@@ -13,7 +14,7 @@ import { useUser } from '~/hooks/auth/useUser';
 import type { SidebarComponentProps } from '~/types/sidebar';
 import { isNil } from '~/utils/ramda';
 
-const tabs = ['profile', 'bookmarks'] as const;
+const tabs = ['profile', 'notifications', 'bookmarks'] as const;
 type TabName = typeof tabs[number];
 
 interface SettingsSidebarProps
@@ -71,6 +72,7 @@ const SettingsSidebar: VFC<SettingsSidebarProps> = ({
 
         <SidebarStack.Cards>
           <ProfileSidebarSettings />
+          <ProfileSidebarNotifications />
           <ProfileSidebarNotes />
         </SidebarStack.Cards>
       </SidebarStack>

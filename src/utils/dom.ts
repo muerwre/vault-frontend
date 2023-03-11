@@ -88,15 +88,19 @@ export const getURL = (
   return file?.url ? getURLFromString(file.url, size) : '';
 };
 
-export const formatText = pipe(
-  formatTextSanitizeYoutube,
+export const formatTextWithoutImages = pipe(
   formatTextComments,
-  formatTextTodos,
   formatExclamations,
   formatTextDash,
   formatTextMarkdown,
   formatTextSanitizeTags,
   formatTextClickableUsernames,
+);
+
+export const formatText = pipe(
+  formatTextSanitizeYoutube,
+  formatTextTodos,
+  formatTextWithoutImages,
 );
 
 export const formatTextParagraphs = (text: string): string =>
