@@ -9,16 +9,16 @@ import { Authorized } from '~/components/containers/Authorized';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import { Logo } from '~/components/main/Logo';
-import { UserButton } from '~/components/main/UserButton';
 import { Dialog } from '~/constants/modal';
-import { SidebarName } from '~/constants/sidebar';
 import { URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useScrollTop } from '~/hooks/dom/useScrollTop';
 import { useFlow } from '~/hooks/flow/useFlow';
 import { useModal } from '~/hooks/modal/useModal';
 import { useUpdates } from '~/hooks/updates/useUpdates';
-import { useSidebar } from '~/utils/providers/SidebarProvider';
+import { useNotifications } from '~/utils/providers/NotificationProvider';
+
+import { UserButtonWithNotifications } from '../UserButtonWithNotifications';
 
 import styles from './styles.module.scss';
 
@@ -30,11 +30,7 @@ const Header: FC<HeaderProps> = observer(() => {
   const { isUser, user, fetched } = useAuth();
   const { hasFlowUpdates, hasLabUpdates } = useFlow();
   const { borisCommentedAt } = useUpdates();
-  const { open } = useSidebar();
-
-  const openProfileSidebar = useCallback(() => {
-    open(SidebarName.Settings, {});
-  }, [open]);
+  const { indicatorEnabled } = useNotifications();
 
   const onLogin = useCallback(() => showModal(Dialog.Login, {}), [showModal]);
 
@@ -43,6 +39,7 @@ const Header: FC<HeaderProps> = observer(() => {
   const hasBorisUpdates = useMemo(
     () =>
       isUser &&
+      !indicatorEnabled &&
       borisCommentedAt &&
       ((fetched && !user.last_seen_boris) ||
         isBefore(new Date(user.last_seen_boris), new Date(borisCommentedAt))),
@@ -67,14 +64,13 @@ const Header: FC<HeaderProps> = observer(() => {
 
         <nav
           className={classNames(styles.plugs, {
-            // [styles.active]: isHydrated && fetched,
             [styles.active]: true,
           })}
         >
           <Authorized hydratedOnly>
             <Anchor
               className={classNames(styles.item, {
-                [styles.has_dot]: hasFlowUpdates,
+                [styles.has_dot]: hasFlowUpdates && !indicatorEnabled,
               })}
               href={URLS.BASE}
             >
@@ -83,7 +79,7 @@ const Header: FC<HeaderProps> = observer(() => {
 
             <Anchor
               className={classNames(styles.item, styles.lab, {
-                [styles.has_dot]: hasLabUpdates,
+                [styles.has_dot]: hasLabUpdates && !indicatorEnabled,
               })}
               href={URLS.LAB}
             >
@@ -92,7 +88,7 @@ const Header: FC<HeaderProps> = observer(() => {
 
             <Anchor
               className={classNames(styles.item, styles.boris, {
-                [styles.has_dot]: hasBorisUpdates,
+                [styles.has_dot]: hasBorisUpdates && !indicatorEnabled,
               })}
               href={URLS.BORIS}
             >
@@ -101,13 +97,7 @@ const Header: FC<HeaderProps> = observer(() => {
           </Authorized>
         </nav>
 
-        {isUser && (
-          <UserButton
-            username={user.username}
-            photo={user.photo}
-            onClick={openProfileSidebar}
-          />
-        )}
+        {isUser && <UserButtonWithNotifications />}
 
         {!isUser && (
           <Button className={styles.user_button} onClick={onLogin} round>

@@ -13,6 +13,7 @@ import { ProfileStats } from '~/containers/profile/ProfileStats';
 import { ThemeSwitcher } from '~/containers/settings/ThemeSwitcher';
 import { useAuth } from '~/hooks/auth/useAuth';
 import markdown from '~/styles/common/markdown.module.scss';
+import { useNotifications } from '~/utils/providers/NotificationProvider';
 
 import { ProfileSidebarLogoutButton } from '../ProfileSidebarLogoutButton';
 import { ProfileToggles } from '../ProfileToggles';
@@ -26,6 +27,7 @@ interface ProfileSidebarMenuProps {
 const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
   const { logout } = useAuth();
   const { setActiveTab } = useStackContext();
+  const { hasNew } = useNotifications();
 
   const onLogout = useCallback(() => {
     logout();
@@ -46,7 +48,10 @@ const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
             </VerticalMenu.Item>
 
             <Superpower>
-              <VerticalMenu.Item onClick={() => setActiveTab(1)}>
+              <VerticalMenu.Item
+                onClick={() => setActiveTab(1)}
+                hasUpdates={hasNew}
+              >
                 Уведомления
               </VerticalMenu.Item>
             </Superpower>

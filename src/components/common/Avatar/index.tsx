@@ -14,22 +14,37 @@ interface Props extends DivProps {
   url?: string;
   username?: string;
   size?: number;
+  hasUpdates?: boolean;
   preset?: typeof imagePresets[keyof typeof imagePresets];
 }
 
 const Avatar = forwardRef<HTMLDivElement, Props>(
   (
-    { url, username, size, className, preset = imagePresets.avatar, ...rest },
+    {
+      url,
+      username,
+      size,
+      className,
+      preset = imagePresets.avatar,
+      hasUpdates,
+      ...rest
+    },
     ref,
   ) => {
     return (
-      <Square
+      <div
         {...rest}
-        image={getURLFromString(url, preset) || '/images/john_doe.svg'}
-        className={classNames(styles.avatar, className)}
-        size={size}
-        ref={ref}
-      />
+        className={classNames(styles.container, {
+          [styles.has_dot]: hasUpdates,
+        })}
+      >
+        <Square
+          image={getURLFromString(url, preset) || '/images/john_doe.svg'}
+          className={classNames(styles.avatar, className)}
+          size={size}
+          ref={ref}
+        />
+      </div>
     );
   },
 );

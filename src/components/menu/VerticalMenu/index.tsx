@@ -1,8 +1,8 @@
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
 import classNames from 'classnames';
 
-import { Card } from '~/components/containers/Card';
+import { Anchor } from '~/components/common/Anchor';
 import { DivProps, LinkProps } from '~/utils/types';
 
 import styles from './styles.module.scss';
@@ -11,7 +11,9 @@ interface VerticalMenuProps extends DivProps {
   appearance?: 'inset' | 'flat' | 'default';
 }
 
-interface VerticalMenuItemProps extends Omit<LinkProps, 'href'> {}
+interface VerticalMenuItemProps extends Omit<LinkProps, 'href'> {
+  hasUpdates?: boolean;
+}
 
 function VerticalMenu({
   children,
@@ -28,8 +30,13 @@ function VerticalMenu({
   );
 }
 
-VerticalMenu.Item = ({ ...props }: VerticalMenuItemProps) => (
-  <a {...props} className={classNames(styles.item, props.className)} />
+VerticalMenu.Item = ({ hasUpdates, ...props }: VerticalMenuItemProps) => (
+  <a
+    {...props}
+    className={classNames(styles.item, props.className, {
+      [styles.has_dot]: hasUpdates,
+    })}
+  />
 );
 
 export { VerticalMenu };

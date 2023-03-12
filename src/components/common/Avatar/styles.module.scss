@@ -1,5 +1,20 @@
 @import 'src/styles/variables';
 
+.container {
+  &.has_dot::after {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
+    background-color: $color_danger;
+    z-index: 1;
+    box-shadow: $content_bg 0 0 0 2px;
+  }
+}
+
 .avatar {
   @include outer_shadow;
 
@@ -12,6 +27,7 @@
   background-position: center;
   background-size: cover;
   cursor: pointer;
+  position: relative;
 
   img {
     object-fit: cover;
