@@ -69,9 +69,7 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
                   </div>
                 </div>
 
-                <div className={styles.account__name}>
-                  {it.name || it.id} - {it.id} - {it.provider}
-                </div>
+                <div className={styles.account__name}>{it.name || it.id}</div>
 
                 <div className={styles.account__drop}>
                   <Icon

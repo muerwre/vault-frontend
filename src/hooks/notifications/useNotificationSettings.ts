@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { isAfter, isBefore, isEqual, isValid, parse, parseISO } from 'date-fns';
+import { isAfter, isEqual } from 'date-fns';
 
 import { useAuth } from '../auth/useAuth';
 
@@ -17,6 +17,7 @@ export const useNotificationSettings = () => {
     lastDate,
     isLoading: isLoadingSettings,
     update,
+    refresh,
   } = useNotificationSettingsRequest();
 
   const enabled =
@@ -45,5 +46,6 @@ export const useNotificationSettings = () => {
     indicatorEnabled,
     available: isUser,
     markAsRead,
+    refresh,
   };
 };

@@ -63,6 +63,8 @@ export const useNotificationSettingsRequest = () => {
     [data, mutate],
   );
 
+  const refresh = useCallback(() => mutate(), [mutate]);
+
   return {
     isLoading,
     error,
@@ -75,6 +77,7 @@ export const useNotificationSettingsRequest = () => {
         ? parseISO(data?.last_date)
         : undefined,
     enabled: !!data?.enabled && (data.flow || data.comments),
+    refresh,
     update,
     updateError,
     isUpdating,

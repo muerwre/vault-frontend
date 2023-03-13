@@ -12,6 +12,7 @@ const defaultValue = {
   hasNew: false,
   indicatorEnabled: false,
   markAsRead: () => {},
+  refresh: () => Promise.resolve() as Promise<unknown>,
 };
 
 const NotificationContext = createContext(defaultValue);
