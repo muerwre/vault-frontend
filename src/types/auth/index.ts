@@ -20,7 +20,7 @@ export interface IUser {
   is_user: boolean;
 }
 
-export type OAuthProvider = 'vkontakte' | 'google';
+export type OAuthProvider = 'vkontakte' | 'google' | 'telegram';
 
 export interface ISocialAccount {
   provider: OAuthProvider;

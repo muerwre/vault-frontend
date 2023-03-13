@@ -43,8 +43,6 @@ export const useOAuth = () => {
         setToken(result.token);
         hideModal();
       } catch (error) {
-        console.log(path(['response'], error));
-
         const needsRegister = path(['response', 'status'], error) === 428;
 
         if (needsRegister && token) {
@@ -97,6 +95,7 @@ export const useOAuth = () => {
   );
 
   const accounts = useMemo(() => data || [], [data]);
+  const refresh = useCallback(() => mutate(), []);
 
   return {
     openOauthWindow,
@@ -106,5 +105,6 @@ export const useOAuth = () => {
     dropAccount,
     accounts,
     isLoading: !data && isLoading,
+    refresh,
   };
 };

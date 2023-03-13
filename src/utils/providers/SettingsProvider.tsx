@@ -54,7 +54,6 @@ export const useSettingsForm = (
 
         const validationErrors = getValidationErrors(error);
         if (validationErrors) {
-          console.log(validationErrors);
           setErrors(validationErrors);
         }
       }

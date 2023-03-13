@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useCallback } from 'react';
+import React, { FC, Fragment, useCallback, useMemo } from 'react';
 
 import { Superpower } from '~/components/boris/Superpower';
 import { Group } from '~/components/containers/Group';
@@ -17,6 +17,11 @@ type ProfileAccountsProps = {};
 const ProfileAccounts: FC<ProfileAccountsProps> = () => {
   const { isLoading, accounts, dropAccount, openOauthWindow } = useOAuth();
   const { showModal } = useModal();
+
+  const hasTelegram = useMemo(
+    () => accounts.some((acc) => acc.provider === 'telegram'),
+    [accounts],
+  );
 
   const showTelegramModal = useCallback(
     () => showModal(Dialog.TelegramAttach, {}),
@@ -64,7 +69,9 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
                   </div>
                 </div>
 
-                <div className={styles.account__name}>{it.name || it.id}</div>
+                <div className={styles.account__name}>
+                  {it.name || it.id} - {it.id} - {it.provider}
+                </div>
 
                 <div className={styles.account__drop}>
                   <Icon
@@ -86,6 +93,7 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
             iconLeft="telegram"
             color="gray"
             onClick={showTelegramModal}
+            disabled={hasTelegram}
           >
             Телеграм
           </Button>

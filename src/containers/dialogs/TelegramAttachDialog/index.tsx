@@ -1,5 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 
+import { TelegramUser } from '@v9v/ts-react-telegram-login';
+
+import { Padder } from '~/components/containers/Padder';
+import { Button } from '~/components/input/Button';
 import { useTelegramAccount } from '~/hooks/auth/useTelegramAccount';
 import { DialogComponentProps } from '~/types/modal';
 
@@ -15,16 +19,30 @@ const TelegramAttachDialog: FC<TelegramAttachDialogProps> = ({
 }) => {
   const { attach } = useTelegramAccount();
 
+  const onAttach = useCallback(
+    (data: TelegramUser) => attach(data, onRequestClose),
+    [onRequestClose],
+  );
+
+  const buttons = useMemo(
+    () => (
+      <Padder>
+        <Button stretchy onClick={onRequestClose}>
+          Отмена
+        </Button>
+      </Padder>
+    ),
+    [onRequestClose],
+  );
+
   if (!botName) {
-    // TODO: show something
+    onRequestClose();
     return null;
   }
 
   return (
-    <BetterScrollDialog width={300} onClose={onRequestClose}>
-      <div>
-        <TelegramLoginForm botName={botName} onSuccess={attach} />
-      </div>
+    <BetterScrollDialog width={300} onClose={onRequestClose} footer={buttons}>
+      <TelegramLoginForm botName={botName} onSuccess={onAttach} />
     </BetterScrollDialog>
   );
 };
