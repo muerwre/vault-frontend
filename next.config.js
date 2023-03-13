@@ -2,7 +2,7 @@
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
-const withTM = require('next-transpile-modules')(['ramda']);
+const withTM = require('next-transpile-modules')(['ramda', '@v9v/ts-react-telegram-login']);
 
 module.exports = withBundleAnalyzer(
   withTM({

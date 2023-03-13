@@ -1,11 +1,14 @@
-import React, { FC, Fragment } from 'react';
+import React, { FC, Fragment, useCallback } from 'react';
 
+import { Superpower } from '~/components/boris/Superpower';
 import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
 import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { SOCIAL_ICONS } from '~/constants/auth/socials';
+import { Dialog } from '~/constants/modal';
 import { useOAuth } from '~/hooks/auth/useOAuth';
+import { useModal } from '~/hooks/modal/useModal';
 
 import styles from './styles.module.scss';
 
@@ -13,18 +16,24 @@ type ProfileAccountsProps = {};
 
 const ProfileAccounts: FC<ProfileAccountsProps> = () => {
   const { isLoading, accounts, dropAccount, openOauthWindow } = useOAuth();
+  const { showModal } = useModal();
+
+  const showTelegramModal = useCallback(
+    () => showModal(Dialog.TelegramAttach, {}),
+    [],
+  );
 
   return (
     <Group className={styles.wrap}>
       <Group className={styles.info}>
         <p>
-          Ты можешь входить в Убежище, используя аккаунты на других сайтах вместо ввода логина и
-          пароля.
+          Ты можешь входить в Убежище, используя аккаунты на других сайтах
+          вместо ввода логина и пароля.
         </p>
 
         <p>
-          Мы честно украдём и будем хранить твои имя, фото и адрес на этом сайте, но никому о них не
-          расскажем.
+          Мы честно украдём и будем хранить твои имя, фото и адрес на этом
+          сайте, но никому о них не расскажем.
         </p>
       </Group>
 
@@ -42,11 +51,13 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
       {!isLoading && accounts.length > 0 && (
         <div className={styles.list}>
           {!isLoading &&
-            accounts.map(it => (
+            accounts.map((it) => (
               <div className={styles.account} key={`${it.provider}-${it.id}`}>
                 <div
                   className={styles.account__photo}
-                  style={{ backgroundImage: it.photo ? `url(${it.photo})` : 'none' }}
+                  style={{
+                    backgroundImage: it.photo ? `url(${it.photo})` : 'none',
+                  }}
                 >
                   <div className={styles.account__provider}>
                     <Icon icon={SOCIAL_ICONS[it.provider]} size={12} />
@@ -56,7 +67,11 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
                 <div className={styles.account__name}>{it.name || it.id}</div>
 
                 <div className={styles.account__drop}>
-                  <Icon icon="close" size={22} onClick={() => dropAccount(it.provider, it.id)} />
+                  <Icon
+                    icon="close"
+                    size={22}
+                    onClick={() => dropAccount(it.provider, it.id)}
+                  />
                 </div>
               </div>
             ))}
@@ -64,6 +79,18 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
       )}
 
       <Group horizontal className={styles.buttons}>
+        <Superpower>
+          <Button
+            size="small"
+            type="button"
+            iconLeft="telegram"
+            color="gray"
+            onClick={showTelegramModal}
+          >
+            Телеграм
+          </Button>
+        </Superpower>
+
         <Button
           size="small"
           type="button"

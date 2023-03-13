@@ -24,6 +24,7 @@ export const API = {
     DROP_SOCIAL: (provider, id) => `/oauth/${provider}/${id}`,
     ATTACH_SOCIAL: `/oauth`,
     LOGIN_WITH_SOCIAL: `/oauth`,
+    ATTACH_TELEGRAM: '/oauth/telegram/attach',
   },
   NODES: {
     SAVE: '/nodes/',
