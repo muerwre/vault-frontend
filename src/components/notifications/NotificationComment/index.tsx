@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { Anchor } from '~/components/common/Anchor';
+import { Avatar } from '~/components/common/Avatar';
 import { InlineUsername } from '~/components/common/InlineUsername';
 import { Square } from '~/components/common/Square';
 import { NotificationItem } from '~/types/notifications';
@@ -16,8 +17,10 @@ const NotificationComment: FC<NotificationCommentProps> = ({ item }) => (
   <Anchor href={item.url} className={styles.link}>
     <div className={styles.message}>
       <div className={styles.icon}>
-        <Square
-          image={getURLFromString(item.user.photo, 'avatar')}
+        <Avatar
+          size={32}
+          url={item.user?.photo}
+          username={item.user?.username}
           className={styles.circle}
         />
       </div>
@@ -25,9 +28,17 @@ const NotificationComment: FC<NotificationCommentProps> = ({ item }) => (
       <div className={styles.content}>
         <b className={styles.title}>
           <span>
-            <InlineUsername>{item.user.username}</InlineUsername>:
+            <InlineUsername>{item.user.username}</InlineUsername>
           </span>
+          <span>-</span>
+          <Square
+            className={styles.item_image}
+            size={16}
+            image={getURLFromString(item.thumbnail, 'avatar')}
+          />
+          <div className={styles.item_title}>{item.title}</div>
         </b>
+
         <div className={styles.text}>
           <div
             dangerouslySetInnerHTML={{

@@ -4,6 +4,7 @@ export interface NotificationItem {
   id: number;
   url: string;
   type: NotificationType;
+  title: string;
   text: string;
   user: ShallowUser;
   thumbnail: string;

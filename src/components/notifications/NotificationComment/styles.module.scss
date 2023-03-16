@@ -8,7 +8,6 @@
 .message {
   font: $font_14_regular;
   line-height: 1.3em;
-  padding: $gap/2 $gap/2 $gap/4 $gap/2;
   min-height: calc(1.3em * 3 + $gap);
   display: grid;
   grid-template-columns: 32px auto;
@@ -18,15 +17,16 @@
 .content {
   background: $content_bg;
   padding: 5px;
-  border-radius: 0 4px 4px 4px;
+  border-radius: 0 $radius $radius $radius;
   position: relative;
+  min-width: 0;
 
   &:before {
     content: ' ';
     position: absolute;
-    top: $gap;
+    top: 8px;
     right: 100%;
-    @include arrow_left(10px, $content_bg);
+    @include arrow_left(8px, $content_bg);
   }
 }
 
@@ -36,8 +36,28 @@
 }
 
 .title {
-  font: $font_14_semibold;
+  font: $font_14_medium;
   margin-bottom: $gap / 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  & > * {
+    padding-right: 5px;
+  }
+}
+
+.item_title {
+  flex: 1;
+  padding-left: 5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.item_image {
+  flex: 0 0 16px;
+  border-radius: 2px;
 }
 
 .time {
@@ -47,6 +67,6 @@
   color: $gray_75;
 }
 
-.circle {
+div.circle {
   border-radius: 4px 0 0 4px;
 }

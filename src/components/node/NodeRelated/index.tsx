@@ -3,7 +3,7 @@ import React, { FC, ReactElement } from 'react';
 import { Hoverable } from '~/components/common/Hoverable';
 import { SubTitle } from '~/components/common/SubTitle';
 import { Group } from '~/components/containers/Group';
-import { NodeRelatedItem } from '~/components/node/NodeRelatedItem';
+import { NodeThumbnail } from '~/components/node/NodeThumbnail';
 import { INode } from '~/types';
 
 import styles from './styles.module.scss';
@@ -21,7 +21,7 @@ const NodeRelated: FC<IProps> = ({ title, items }) => {
       <div className={styles.grid}>
         {items.map((item) => (
           <Hoverable key={item.id} className={styles.item}>
-            <NodeRelatedItem item={item} />
+            <NodeThumbnail item={item} />
           </Hoverable>
         ))}
       </div>

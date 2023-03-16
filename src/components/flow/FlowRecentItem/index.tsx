@@ -1,10 +1,9 @@
-import React, { FC, MouseEventHandler } from 'react';
+import { FC, MouseEventHandler } from 'react';
 
 import classNames from 'classnames';
 
 import { Anchor } from '~/components/common/Anchor';
-import { Icon } from '~/components/input/Icon';
-import { NodeRelatedItem } from '~/components/node/NodeRelatedItem';
+import { NodeThumbnail } from '~/components/node/NodeThumbnail';
 import { URLS } from '~/constants/urls';
 import { INode } from '~/types';
 import { getPrettyDate } from '~/utils/dom';
@@ -31,7 +30,7 @@ const FlowRecentItem: FC<IProps> = ({ node, has_new, onClick }) => {
           [styles.lab]: !node.is_promoted,
         })}
       >
-        <NodeRelatedItem item={node} />
+        <NodeThumbnail item={node} />
       </div>
 
       <div className={styles.info}>

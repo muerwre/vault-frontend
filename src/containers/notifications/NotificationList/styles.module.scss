@@ -47,8 +47,9 @@
 
 .item {
   @include row_shadow;
-  padding-right: $gap;
+  padding: $gap / 2 $gap $gap / 2 $gap / 2;
   transition: background-color 0.25s;
+  min-width: 0;
 
   &:hover {
     background-color: $content_bg_lighter;

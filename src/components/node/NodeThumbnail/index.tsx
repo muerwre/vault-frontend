@@ -8,13 +8,17 @@ import { Icon } from '~/components/input/Icon';
 import { imagePresets } from '~/constants/urls';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
-import { INode } from '~/types';
 import { getURL, getURLFromString } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-type IProps = {
-  item: Partial<INode>;
+type NodeThumbnailProps = {
+  item: {
+    thumbnail?: string;
+    title?: string;
+    is_promoted?: boolean;
+    id?: number;
+  };
 };
 
 type CellSize = 'small' | 'medium' | 'large';
@@ -33,7 +37,7 @@ const getTitleLetters = (title?: string): string => {
     : words[0].substr(0, 2).toUpperCase();
 };
 
-const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
+const NodeThumbnail: FC<NodeThumbnailProps> = memo(({ item }) => {
   const onClick = useGotoNode(item.id);
   const [is_loaded, setIsLoaded] = useState(false);
   const [width, setWidth] = useState(0);
@@ -118,4 +122,4 @@ const NodeRelatedItem: FC<IProps> = memo(({ item }) => {
   );
 });
 
-export { NodeRelatedItem };
+export { NodeThumbnail };

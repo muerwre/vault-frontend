@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 
 import classNames from 'classnames';
 
@@ -6,7 +6,9 @@ import { Button } from '~/components/input/Button';
 import { InputRow } from '~/components/input/InputRow';
 import { LoaderScreen } from '~/components/input/LoaderScreen';
 import { NotificationComment } from '~/components/notifications/NotificationComment';
+import { NotificationNode } from '~/components/notifications/NotificationNode';
 import { useNotificationsList } from '~/hooks/notifications/useNotificationsList';
+import { NotificationItem, NotificationType } from '~/types/notifications';
 import { useNotifications } from '~/utils/providers/NotificationProvider';
 
 import styles from './styles.module.scss';
@@ -20,6 +22,17 @@ const NotificationList: FC<NotificationListProps> = () => {
 
   useEffect(() => {
     return () => markAsRead();
+  }, []);
+
+  const renderItem = useCallback((item: NotificationItem) => {
+    switch (item.type) {
+      case NotificationType.Comment:
+        return <NotificationComment item={item} />;
+      case NotificationType.Node:
+        return <NotificationNode item={item} />;
+      default:
+        return null;
+    }
   }, []);
 
   if (isLoading) {
@@ -46,7 +59,7 @@ const NotificationList: FC<NotificationListProps> = () => {
         <div className={styles.items}>
           {items?.map((item) => (
             <div className={styles.item} key={item.created_at}>
-              <NotificationComment item={item} />
+              {renderItem(item)}
             </div>
           ))}
         </div>
