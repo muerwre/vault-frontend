@@ -5,7 +5,7 @@ import { Avatar } from '~/components/common/Avatar';
 import { InlineUsername } from '~/components/common/InlineUsername';
 import { Square } from '~/components/common/Square';
 import { NotificationItem } from '~/types/notifications';
-import { formatText, getPrettyDate, getURLFromString } from '~/utils/dom';
+import { formatText, getURLFromString } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
