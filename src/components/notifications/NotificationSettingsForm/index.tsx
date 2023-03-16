@@ -1,5 +1,6 @@
 import React, { FC, useCallback } from 'react';
 
+import { Card } from '~/components/containers/Card';
 import { Group } from '~/components/containers/Group';
 import { Zone } from '~/components/containers/Zone';
 import { Button } from '~/components/input/Button';
@@ -49,11 +50,16 @@ const NotificationSettingsForm: FC<NotificationSettingsFormProps> = ({
 
   return (
     <Group>
-      <Zone title="Уведомления">
+      <Card>
+        <InputRow className={styles.row} input={toggle('enabled')}>
+          Получать уведомления
+        </InputRow>
+      </Card>
+
+      <div />
+
+      <Zone title="Типы уведомлений">
         <Group>
-          <InputRow className={styles.row} input={toggle('enabled')}>
-            Включены
-          </InputRow>
           <InputRow
             className={styles.row}
             input={toggle('flow', !values.enabled)}
@@ -70,7 +76,9 @@ const NotificationSettingsForm: FC<NotificationSettingsFormProps> = ({
         </Group>
       </Zone>
 
-      <Zone title="Уведомления">
+      <div />
+
+      <Zone title="Способы доставки">
         <Group>
           <InputRow
             className={styles.row}

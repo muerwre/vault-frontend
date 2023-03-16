@@ -57,6 +57,11 @@
       background: $warning_gradient;
     }
   }
+
+  &.stretchy {
+    flex: 1;
+    justify-content: center;
+  }
 }
 
 .text {

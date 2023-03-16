@@ -14,13 +14,13 @@ export const useNotificationSettings = () => {
     enabled: settingsEnabled,
     lastSeen,
     lastDate,
-    isLoading: isLoadingSettings,
+    isLoading,
     update,
     refresh,
     settings,
   } = useNotificationSettingsRequest();
 
-  const enabled = !isLoadingSettings && !settingsError && settingsEnabled;
+  const enabled = !isLoading && !settingsError && settingsEnabled;
 
   const hasNew =
     enabled && !!lastDate && (!lastSeen || isAfter(lastDate, lastSeen));
@@ -47,5 +47,6 @@ export const useNotificationSettings = () => {
     markAsRead,
     refresh,
     update,
+    loading: isLoading,
   };
 };

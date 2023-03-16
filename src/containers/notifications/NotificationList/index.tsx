@@ -1,6 +1,6 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { LoaderScreen } from '~/components/input/LoaderScreen';
 import { NotificationComment } from '~/components/notifications/NotificationComment';
 import { useNotificationsList } from '~/hooks/notifications/useNotificationsList';
 import { useNotifications } from '~/utils/providers/NotificationProvider';
@@ -18,7 +18,7 @@ const NotificationList: FC<NotificationListProps> = () => {
   }, []);
 
   if (isLoading) {
-    return <LoaderCircle />;
+    return <LoaderScreen align="top" />;
   }
 
   return (

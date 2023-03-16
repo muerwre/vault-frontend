@@ -66,7 +66,7 @@ export const useNotificationSettingsRequest = () => {
   const refresh = useCallback(() => mutate(), [mutate]);
 
   return {
-    isLoading,
+    isLoading: isLoading && !data,
     error,
     lastSeen:
       data?.lastSeen && isValid(parseISO(data.lastSeen))
