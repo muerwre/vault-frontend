@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 
 import classNames from 'classnames';
+import Image from 'next/image';
 
 import { IMGProps } from '~/utils/types';
 
@@ -10,9 +11,22 @@ interface Props extends IMGProps {
   height?: number;
 }
 
-const FlowCellImage: FC<Props> = ({ className, children, ...rest }) => (
+const FlowCellImage: FC<Props> = ({
+  className,
+  children,
+  src,
+  alt,
+  ...rest
+}) => (
   <div className={classNames(styles.wrapper, className)}>
-    <img {...rest} src={rest.src} alt="" />
+    <Image
+      {...rest}
+      src={src!}
+      alt={alt}
+      placeholder="empty"
+      layout="fill"
+      objectFit="cover"
+    />
     {children}
   </div>
 );

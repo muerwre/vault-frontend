@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 
-interface SeparatedMenuProps {
+export interface SeparatedMenuProps {
   className?: string;
 }
 
@@ -14,7 +14,7 @@ const SeparatedMenu: FC<SeparatedMenuProps> = ({ children, className }) => {
       return [];
     }
 
-    return (Array.isArray(children) ? children : [children]).filter(it => it);
+    return (Array.isArray(children) ? children : [children]).filter((it) => it);
   }, [children]);
 
   return (

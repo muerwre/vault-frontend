@@ -117,35 +117,6 @@
   touch-action: none;
 }
 
-.images {
-  cursor: pointer;
-
-  img {
-    max-height: 400px;
-    border-radius: $radius;
-    max-width: 100%;
-  }
-
-  &.multiple {
-    img {
-      max-height: none;
-    }
-
-    // Desktop devices
-    @include flexbin(25vh, $flexbin-space);
-
-    // Tablet devices
-    @media (max-width: $flexbin-tablet-max) {
-      @include flexbin($flexbin-row-height-tablet, $flexbin-space-tablet);
-    }
-
-    // Phone devices
-    @media (max-width: $flexbin-phone-max) {
-      @include flexbin($flexbin-row-height-phone, $flexbin-space-phone);
-    }
-  }
-}
-
 .audios {
   & > div {
     height: $comment_height;

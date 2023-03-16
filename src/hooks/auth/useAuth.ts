@@ -16,5 +16,6 @@ export const useAuth = () => {
     setToken: auth.setToken,
     isTester: auth.isTester,
     setIsTester: auth.setIsTester,
+    fetched: auth.fetched,
   };
 };

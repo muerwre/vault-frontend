@@ -1,0 +1,37 @@
+@import 'src/styles/variables';
+@import '~flexbin/flexbin';
+
+.images {
+  cursor: pointer;
+  overflow: visible !important;
+
+  &.multiple {
+    // Desktop devices
+    @include flexbin(25vh, $flexbin-space);
+
+    // Tablet devices
+    @media (max-width: $flexbin-tablet-max) {
+      @include flexbin($flexbin-row-height-tablet, $flexbin-space-tablet);
+    }
+
+    // Phone devices
+    @media (max-width: $flexbin-phone-max) {
+      @include flexbin($flexbin-row-height-phone, $flexbin-space-phone);
+    }
+  }
+}
+
+.image {
+  max-height: 400px;
+  border-radius: $radius;
+  max-width: 100%;
+
+  .multiple & {
+    max-height: 250px;
+    max-inline-size: 250px;
+  }
+}
+
+.item {
+  border-radius: $radius;
+}

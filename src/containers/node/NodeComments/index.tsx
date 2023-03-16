@@ -34,15 +34,21 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
   const groupped: ICommentGroup[] = useGrouppedComments(
     comments,
     order,
-    lastSeenCurrent ?? undefined
+    lastSeenCurrent ?? undefined,
   );
 
   const more = useMemo(
     () =>
-      hasMore && <div className={styles.more}>
-        <LoadMoreButton isLoading={isLoadingMore} onClick={onLoadMoreComments} />
-      </div>,
-    [hasMore, onLoadMoreComments, isLoadingMore]
+      hasMore &&
+      !isLoading && (
+        <div className={styles.more}>
+          <LoadMoreButton
+            isLoading={isLoadingMore}
+            onClick={onLoadMoreComments}
+          />
+        </div>
+      ),
+    [hasMore, onLoadMoreComments, isLoadingMore, isLoading],
   );
 
   if (!node?.id) {
@@ -53,7 +59,7 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
     <div className={styles.wrap}>
       {order === 'DESC' && more}
 
-      {groupped.map(group => (
+      {groupped.map((group) => (
         <Comment
           nodeId={node.id!}
           key={group.ids.join()}

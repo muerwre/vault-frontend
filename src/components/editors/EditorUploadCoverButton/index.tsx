@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 
 import { Icon } from '~/components/input/Icon';
 import { UploadSubject, UploadTarget, UploadType } from '~/constants/uploads';
-import { ImagePresets } from '~/constants/urls';
+import { imagePresets } from '~/constants/urls';
 import { useUploader } from '~/hooks/data/useUploader';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { IEditorComponentProps } from '~/types/node';
@@ -18,10 +18,12 @@ const EditorUploadCoverButton: FC<IProps> = () => {
   const { uploadFile, files, pendingImages } = useUploader(
     UploadSubject.Editor,
     UploadTarget.Nodes,
-    values.cover ? [values.cover] : []
+    values.cover ? [values.cover] : [],
   );
 
-  const background = values.cover ? getURL(values.cover, ImagePresets['300']) : null;
+  const background = values.cover
+    ? getURL(values.cover, imagePresets['300'])
+    : null;
   const preview = pendingImages?.[0]?.thumbnail || '';
 
   const onDropCover = useCallback(() => {
@@ -31,13 +33,13 @@ const EditorUploadCoverButton: FC<IProps> = () => {
   const onInputChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(event.target.files || [])
-        .filter(file => getFileType(file) === UploadType.Image)
+        .filter((file) => getFileType(file) === UploadType.Image)
         .slice(0, 1);
 
       const result = await uploadFile(files[0]);
       setFieldValue('cover', result);
     },
-    [uploadFile, setFieldValue]
+    [uploadFile, setFieldValue],
   );
 
   useEffect(() => {

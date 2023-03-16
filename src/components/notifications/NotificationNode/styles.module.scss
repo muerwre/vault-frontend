@@ -1,0 +1,36 @@
+@import 'src/styles/variables';
+
+.card {
+  background-color: $content_bg;
+  display: flex;
+  flex-direction: row;
+  border-radius: $radius;
+  justify-content: center;
+  align-items: center;
+  padding: $gap/2;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  padding-left: $gap;
+  margin-top: -0.2em;
+}
+
+.title {
+  font-size: 1.2em;
+  font-weight: bold;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-transform: capitalize;
+}
+
+.user {
+  font-size: 0.7em;
+  color: $gray_50;
+}
+
+.image {
+  flex: 0 0 48px;
+}

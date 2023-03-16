@@ -21,8 +21,6 @@ export const useOauthEventListeners = () => {
         return;
       }
 
-      console.log('caught event:', type, event.data);
-
       switch (type) {
         case EventMessageType.OAuthLogin:
           loginWithSocial(path(['data', 'payload', 'token'], event));

@@ -1,0 +1,57 @@
+@import 'src/styles/variables';
+
+.grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 4;
+  height: 100%;
+}
+
+.head {
+  @include row_shadow;
+
+  width: 100%;
+  padding: $gap;
+}
+
+.list {
+  @include row_shadow;
+
+  overflow-y: auto;
+  flex: 1 1;
+  overflow: auto;
+  width: 100%;
+  position: relative;
+
+  &.inactive {
+    opacity: 0.3;
+    overflow: hidden;
+
+    &::after {
+      content: ' ';
+      inset: 0;
+      position: absolute;
+      background: linear-gradient(transparent, $content_bg_backdrop);
+      pointer-events: none;
+      touch-action: none;
+    }
+  }
+}
+
+.items {
+  display: grid;
+  grid-auto-flow: row;
+}
+
+.item {
+  @include row_shadow;
+  padding: $gap / 2 $gap $gap / 2 $gap / 2;
+  transition: background-color 0.25s;
+  min-width: 0;
+
+  &:hover {
+    background-color: $content_bg_lighter;
+  }
+}

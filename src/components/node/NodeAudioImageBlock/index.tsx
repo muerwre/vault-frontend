@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { INodeComponentProps } from '~/constants/node';
-import { ImagePresets } from '~/constants/urls';
+import { imagePresets } from '~/constants/urls';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { getURL } from '~/utils/dom';
 import { path } from '~/utils/ramda';
@@ -19,7 +19,12 @@ const NodeAudioImageBlock: FC<IProps> = ({ node }) => {
     <div className={styles.wrap}>
       <div
         className={styles.slide}
-        style={{ backgroundImage: `url("${getURL(path([0], images), ImagePresets.small_hero)}")` }}
+        style={{
+          backgroundImage: `url("${getURL(
+            path([0], images),
+            imagePresets.small_hero,
+          )}")`,
+        }}
       />
     </div>
   );

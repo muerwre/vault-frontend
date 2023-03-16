@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { Superpower } from '~/components/boris/Superpower';
 import { ScrollHelperBottom } from '~/components/common/ScrollHelperBottom';
 import { Card } from '~/components/containers/Card';
@@ -18,7 +20,7 @@ import styles from './styles.module.scss';
 
 type IProps = {};
 
-const NodeLayout: FC<IProps> = () => {
+const NodeLayout: FC<IProps> = observer(() => {
   const { node, isLoading, update } = useNodeContext();
   const { head, block } = useNodeBlocks(node, isLoading);
   const [canEdit, canLike, canStar] = useNodePermissions(node);
@@ -70,6 +72,6 @@ const NodeLayout: FC<IProps> = () => {
       </Superpower>
     </div>
   );
-};
+});
 
 export { NodeLayout };

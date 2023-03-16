@@ -33,6 +33,19 @@ a.item {
   cursor: pointer;
   background-color: transparent;
   transition: background-color 0.25s;
+  position: relative;
+
+  &.has_dot::after {
+    content: ' ';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 8px;
+    height: 8px;
+    background: $color_danger;
+    border-radius: 8px;
+    transform: translate(0, -50%);
+  }
 
   &:hover {
     background-color: $content_bg_success;

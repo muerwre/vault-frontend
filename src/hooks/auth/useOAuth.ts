@@ -43,8 +43,6 @@ export const useOAuth = () => {
         setToken(result.token);
         hideModal();
       } catch (error) {
-        console.log(path(['response'], error));
-
         const needsRegister = path(['response', 'status'], error) === 428;
 
         if (needsRegister && token) {
@@ -97,8 +95,21 @@ export const useOAuth = () => {
   );
 
   const accounts = useMemo(() => data || [], [data]);
+  const refresh = useCallback(() => mutate(), []);
+
+  const hasTelegram = useMemo(
+    () => accounts.some((acc) => acc.provider === 'telegram'),
+    [accounts],
+  );
+
+  const showTelegramModal = useCallback(
+    () => showModal(Dialog.TelegramAttach, {}),
+    [],
+  );
 
   return {
+    hasTelegram,
+    showTelegramModal,
     openOauthWindow,
     loginWithSocial,
     createSocialAccount,
@@ -106,5 +117,6 @@ export const useOAuth = () => {
     dropAccount,
     accounts,
     isLoading: !data && isLoading,
+    refresh,
   };
 };

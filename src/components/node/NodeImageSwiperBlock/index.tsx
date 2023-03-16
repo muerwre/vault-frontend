@@ -1,20 +1,30 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
+import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import SwiperCore, { Keyboard, Navigation, Pagination, SwiperOptions } from 'swiper';
+import SwiperCore, {
+  Keyboard,
+  Lazy,
+  Navigation,
+  Pagination,
+  SwiperOptions,
+} from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
-import { ImagePreloader } from '~/components/media/ImagePreloader';
+import { ImageLoadingWrapper } from '~/components/common/ImageLoadingWrapper/index';
 import { INodeComponentProps } from '~/constants/node';
+import { imagePresets } from '~/constants/urls';
 import { useModal } from '~/hooks/modal/useModal';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { normalizeBrightColor } from '~/utils/color';
+import { getURL } from '~/utils/dom';
+import { getFileSrcSet } from '~/utils/srcset';
 
 import styles from './styles.module.scss';
 
-SwiperCore.use([Navigation, Pagination, Keyboard]);
+SwiperCore.use([Navigation, Pagination, Keyboard, Lazy]);
 
 interface IProps extends INodeComponentProps {}
 
@@ -26,8 +36,18 @@ const breakpoints: SwiperOptions['breakpoints'] = {
 
 const pagination = { type: 'fraction' as const };
 
+const lazy = {
+  enabled: true,
+  loadPrevNextAmount: 1,
+  loadOnTransitionStart: true,
+  loadPrevNext: true,
+  checkInView: true,
+};
+
 const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
-  const [controlledSwiper, setControlledSwiper] = useState<SwiperClass | undefined>(undefined);
+  const [controlledSwiper, setControlledSwiper] = useState<
+    SwiperClass | undefined
+  >(undefined);
   const showPhotoSwiper = useImageModal();
   const { isOpened: isModalActive } = useModal();
 
@@ -38,7 +58,7 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
       enabled: !isModalActive,
       onlyInViewport: true,
     }),
-    [isModalActive]
+    [isModalActive],
   );
 
   const updateSwiper = useCallback(() => {
@@ -53,14 +73,17 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
 
   const onOpenPhotoSwipe = useCallback(
     (index: number) => {
-      if (index !== controlledSwiper?.activeIndex && controlledSwiper?.slideTo) {
+      if (
+        index !== controlledSwiper?.activeIndex &&
+        controlledSwiper?.slideTo
+      ) {
         controlledSwiper.slideTo(index, 300);
         return;
       }
 
       showPhotoSwiper(images, index);
     },
-    [images, controlledSwiper, showPhotoSwiper]
+    [images, controlledSwiper, showPhotoSwiper],
   );
 
   useEffect(() => {
@@ -78,18 +101,6 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
 
   if (!images?.length) {
     return null;
-  }
-
-  if (images.length === 1) {
-    return (
-      <div className={styles.single}>
-        <ImagePreloader
-          file={images[0]}
-          onClick={() => onOpenPhotoSwipe(0)}
-          className={styles.image}
-        />
-      </div>
-    );
   }
 
   return (
@@ -113,16 +124,31 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
         autoHeight
         zoom
         navigation
+        watchSlidesProgress
+        lazy={lazy}
       >
-        {images.map((file, i) => (
+        {images.map((file, index) => (
           <SwiperSlide className={styles.slide} key={file.id}>
-            <ImagePreloader
-              file={file}
-              onLoad={updateSwiper}
-              onClick={() => onOpenPhotoSwipe(i)}
-              className={styles.image}
-              color={normalizeBrightColor(file?.metadata?.dominant_color)}
-            />
+            <ImageLoadingWrapper
+              preview={getURL(file, imagePresets['300'])}
+              color={file.metadata?.dominant_color}
+            >
+              {({ loading, onLoad }) => (
+                <img
+                  data-srcset={getFileSrcSet(file)}
+                  width={file.metadata?.width}
+                  height={file.metadata?.height}
+                  onLoad={onLoad}
+                  onClick={() => onOpenPhotoSwipe(index)}
+                  className={classNames(styles.image, 'swiper-lazy', {
+                    [styles.loading]: loading,
+                  })}
+                  color={normalizeBrightColor(file?.metadata?.dominant_color)}
+                  alt=""
+                  sizes="(max-width: 560px) 100vw, 50vh"
+                />
+              )}
+            </ImageLoadingWrapper>
           </SwiperSlide>
         ))}
       </Swiper>

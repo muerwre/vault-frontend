@@ -7,7 +7,7 @@ import SwiperClass from 'swiper/types/swiper-class';
 
 import { Icon } from '~/components/input/Icon';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
-import { ImagePresets, URLS } from '~/constants/urls';
+import { imagePresets, URLS } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
 import { IFlowNode } from '~/types';
@@ -29,8 +29,11 @@ const autoplay = {
 };
 
 const lazy = {
-  loadPrevNextAmount: 3,
-  checkInView: false,
+  enabled: true,
+  loadPrevNextAmount: 2,
+  loadOnTransitionStart: true,
+  loadPrevNext: true,
+  checkInView: true,
 };
 
 export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
@@ -42,7 +45,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
   >(undefined);
   const [currentIndex, setCurrentIndex] = useState(heroes.length);
   const preset = useMemo(
-    () => (isTablet ? ImagePresets.cover : ImagePresets.small_hero),
+    () => (isTablet ? imagePresets.cover : imagePresets.small_hero),
     [isTablet],
   );
 
@@ -130,13 +133,14 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
         onClick={onClick}
         followFinger
         shortSwipes={false}
+        watchSlidesProgress
       >
         {heroes
-          .filter(node => node.thumbnail)
-          .map(node => (
+          .filter((node) => node.thumbnail)
+          .map((node) => (
             <SwiperSlide key={node.id}>
               <img
-                src={getURLFromString(node.thumbnail!, preset)}
+                data-src={getURLFromString(node.thumbnail!, preset)}
                 alt=""
                 className={classNames(styles.preview, 'swiper-lazy')}
               />

@@ -14,6 +14,7 @@ interface HorizontalMenuItemProps {
   icon?: string;
   color?: 'green' | 'orange' | 'yellow';
   active?: boolean;
+  stretchy?: boolean;
   onClick?: () => void;
 }
 
@@ -31,6 +32,7 @@ HorizontalMenu.Item = ({
   children,
   isLoading,
   active,
+  stretchy,
   onClick,
 }: PropsWithChildren<HorizontalMenuItemProps>) => {
   if (isLoading) {
@@ -44,7 +46,11 @@ HorizontalMenu.Item = ({
 
   return (
     <div
-      className={classNames(styles.item, { [styles.active]: active }, styles[color])}
+      className={classNames(
+        styles.item,
+        { [styles.active]: active, [styles.stretchy]: stretchy },
+        styles[color],
+      )}
       onClick={onClick}
     >
       {!!icon && <Icon icon={icon} size={24} />}

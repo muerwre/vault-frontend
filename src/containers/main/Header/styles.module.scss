@@ -2,10 +2,10 @@
 
 @keyframes appear {
   from {
-    transform: translate(0, -$header_height);
+    opacity: 0;
   }
   to {
-    transform: translate(0, 0);
+    opacity: 1;
   }
 }
 
@@ -55,6 +55,12 @@
   user-select: none;
   text-transform: uppercase;
   align-items: center;
+  opacity: 0;
+  transition: all 250ms;
+
+  &.active {
+    opacity: 1;
+  }
 
   @include tablet {
     flex: 1;

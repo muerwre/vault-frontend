@@ -1,5 +1,14 @@
 @import 'src/styles/variables';
 
+@keyframes fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.2;
+  }
+}
+
 .wrap {
   border-radius: $panel_radius;
   padding: $gap 0;
@@ -39,6 +48,11 @@
   .grid {
     div {
       background: $placeholder_bg;
+      animation: fade 0.5s infinite alternate;
     }
   }
+}
+
+.item {
+  border-radius: $radius;
 }

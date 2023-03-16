@@ -17,27 +17,27 @@ const BorisComments: FC<IProps> = () => {
   const user = useUserContext();
   const { isUser } = useAuth();
 
-  const {
-    isLoading,
-    comments,
-    onSaveComment,
-  } = useCommentContext();
+  const { isLoading, comments, onSaveComment } = useCommentContext();
   const { node } = useNodeContext();
 
   return (
-      <Group>
-        {(isUser || isSSR) && (
-          <NodeCommentFormSSR user={user} nodeId={node.id} saveComment={onSaveComment} />
-        )}
+    <Group>
+      {(isUser || isSSR) && (
+        <NodeCommentFormSSR
+          user={user}
+          nodeId={node.id}
+          saveComment={onSaveComment}
+        />
+      )}
 
-        {isLoading || !comments?.length ? (
-          <NodeNoComments is_loading count={7} />
-        ) : (
-          <NodeComments order="ASC" />
-        )}
+      {isLoading || !comments?.length ? (
+        <NodeNoComments loading count={7} />
+      ) : (
+        <NodeComments order="ASC" />
+      )}
 
-        <Footer />
-      </Group>
+      <Footer />
+    </Group>
   );
 };
 

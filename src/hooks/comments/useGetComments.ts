@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 
@@ -26,6 +26,8 @@ const extractKey = (key: string) => {
 };
 
 export const useGetComments = (nodeId: number, fallbackData?: IComment[]) => {
+  const [isInitialLoaded, setIsInitialLoaded] = useState(false);
+
   const { data, isValidating, setSize, size, mutate } = useSWRInfinite(
     getKey(nodeId),
     async (key: string) => {
@@ -39,6 +41,7 @@ export const useGetComments = (nodeId: number, fallbackData?: IComment[]) => {
     },
     {
       fallbackData: fallbackData && [fallbackData],
+      onSuccess: () => setIsInitialLoaded(true),
     },
   );
 
@@ -52,13 +55,15 @@ export const useGetComments = (nodeId: number, fallbackData?: IComment[]) => {
     [setSize, size],
   );
 
+  const isLoading = isValidating && !isInitialLoaded;
+
   return {
     comments,
     hasMore,
     onLoadMoreComments,
-    isLoading: !data && isValidating,
+    isLoading,
     mutate,
     data,
-    isLoadingMore: !!data?.length && isValidating,
+    isLoadingMore: !!data?.length && isValidating && isInitialLoaded,
   };
 };

@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@tippyjs/react": "^4.2.6",
+    "@v9v/ts-react-telegram-login": "^1.1.1",
     "autosize": "^4.0.2",
     "axios": "^0.21.2",
     "body-scroll-lock": "^2.6.4",
@@ -39,7 +40,7 @@
     "react-router-dom": "^5.1.2",
     "react-sticky-box": "^1.0.2",
     "sass": "^1.49.0",
-    "swiper": "^8.0.7",
+    "swiper": "^8.4.4",
     "swr": "^1.0.1",
     "throttle-debounce": "^2.1.0",
     "typescript": "^4.0.5",
@@ -98,7 +99,10 @@
   },
   "lint-staged": {
     "./**/*.{js,jsx,ts,tsx}": [
-      "next lint --fix"
+      "eslint --fix"
     ]
+  },
+  "husky": {
+    "pre-push": "lint-staged"
   }
 }

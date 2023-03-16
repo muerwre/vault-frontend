@@ -1,0 +1,33 @@
+@import 'src/styles/variables';
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.message {
+  font: $font_14_regular;
+  line-height: 1.3em;
+  padding: $gap/2 $gap/2 $gap/4 $gap/2;
+  min-height: calc(1.3em * 3 + $gap);
+  display: grid;
+  grid-template-columns: 40px auto;
+  column-gap: $gap;
+}
+
+.text {
+  @include clamp(2, 14px);
+  text-overflow: ellipsis;
+}
+
+.title {
+  font: $font_14_semibold;
+  margin-bottom: $gap / 2;
+}
+
+.time {
+  font: $font_10_regular;
+  text-align: right;
+  margin-top: 2px;
+  color: $gray_75;
+}

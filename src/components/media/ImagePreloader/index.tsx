@@ -1,4 +1,10 @@
-import React, { FC, MouseEventHandler, useCallback, useMemo, useState } from 'react';
+import React, {
+  FC,
+  MouseEventHandler,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 
 import classNames from 'classnames';
 
@@ -6,7 +12,7 @@ import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 import { Icon } from '~/components/input/Icon';
 import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
-import { ImagePresets } from '~/constants/urls';
+import { imagePresets } from '~/constants/urls';
 import { useResizeHandler } from '~/hooks/dom/useResizeHandler';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
@@ -24,7 +30,13 @@ interface IProps {
 const DEFAULT_WIDTH = 1920;
 const DEFAULT_HEIGHT = 1020;
 
-const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className }) => {
+const ImagePreloader: FC<IProps> = ({
+  file,
+  color,
+  onLoad,
+  onClick,
+  className,
+}) => {
   const [maxHeight, setMaxHeight] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -47,8 +59,11 @@ const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className })
   }, [setHasError]);
 
   const [width, height] = useMemo(
-    () => [file?.metadata?.width || DEFAULT_WIDTH, file?.metadata?.height || DEFAULT_HEIGHT],
-    [file]
+    () => [
+      file?.metadata?.width || DEFAULT_WIDTH,
+      file?.metadata?.height || DEFAULT_HEIGHT,
+    ],
+    [file],
   );
 
   useResizeHandler(onResize);
@@ -74,11 +89,18 @@ const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className })
         </defs>
 
         <g filter="url(#f1)">
-          <rect fill={fill} width="100%" height="100%" stroke="none" rx="8" ry="8" />
+          <rect
+            fill={fill}
+            width="100%"
+            height="100%"
+            stroke="none"
+            rx="8"
+            ry="8"
+          />
 
           {!hasError && (
             <image
-              xlinkHref={getURL(file, ImagePresets['300'])}
+              xlinkHref={getURL(file, imagePresets['300'])}
               width="100%"
               height="100%"
               onLoad={onLoad}
@@ -88,8 +110,12 @@ const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className })
       </svg>
 
       <ImageWithSSRLoad
-        className={classNames(styles.image, { [styles.is_loaded]: loaded }, className)}
-        src={getURL(file, ImagePresets['1600'])}
+        className={classNames(
+          styles.image,
+          { [styles.is_loaded]: loaded },
+          className,
+        )}
+        src={getURL(file, imagePresets['1600'])}
         alt=""
         key={file.id}
         onLoad={onImageLoad}
@@ -98,7 +124,9 @@ const ImagePreloader: FC<IProps> = ({ file, color, onLoad, onClick, className })
         onError={onError}
       />
 
-      {!loaded && !hasError && <LoaderCircle className={styles.icon} size={64} />}
+      {!loaded && !hasError && (
+        <LoaderCircle className={styles.icon} size={64} />
+      )}
 
       {hasError && (
         <div className={styles.error}>

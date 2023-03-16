@@ -51,6 +51,8 @@
   max-height: calc(100vh - 70px - 70px);
   max-width: 100%;
   transition: box-shadow 1s;
+  max-inline-size: 100%;
+  block-size: auto;
 
   @include tablet {
     padding-bottom: 0;

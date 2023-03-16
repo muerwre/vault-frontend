@@ -1,3 +1,5 @@
+import { TelegramUser } from '@v9v/ts-react-telegram-login';
+
 import {
   ApiAttachSocialRequest,
   ApiAttachSocialResult,
@@ -98,3 +100,6 @@ export const apiLoginWithSocial = ({
       password,
     })
     .then(cleanResult);
+
+export const apiAttachTelegram = (data: TelegramUser) =>
+  api.post(API.USER.ATTACH_TELEGRAM, data);

@@ -2,7 +2,7 @@ import React, { createContext, FC, useContext, useState } from 'react';
 
 import { createPortal } from 'react-dom';
 
-import { ImagePresets } from '~/constants/urls';
+import { imagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
 
@@ -27,9 +27,11 @@ const PageCoverProvider: FC = ({ children }) => {
         createPortal(
           <div
             className={styles.wrap}
-            style={{ backgroundImage: `url("${getURL(cover, ImagePresets.cover)}")` }}
+            style={{
+              backgroundImage: `url("${getURL(cover, imagePresets.cover)}")`,
+            }}
           />,
-          document.body
+          document.body,
         )}
 
       {children}

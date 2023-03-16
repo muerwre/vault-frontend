@@ -1,5 +1,6 @@
 import { FC, memo } from 'react';
 
+import { Hoverable } from '~/components/common/Hoverable';
 import { Columns } from '~/components/containers/Columns';
 import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
 import { LabNoResults } from '~/components/lab/LabNoResults';
@@ -11,27 +12,27 @@ import styles from './styles.module.scss';
 interface IProps {}
 
 const LabGrid: FC<IProps> = memo(() => {
-  const { nodes, hasMore, loadMore, search, setSearch } = useLabContext();
+  const { nodes, hasMore, loadMore, search, setSearch, isLoading } =
+    useLabContext();
 
   if (search && !nodes.length) {
     return <LabNoResults resetSearch={() => setSearch('')} />;
   }
 
   return (
-    <InfiniteScroll hasMore={hasMore} loadMore={loadMore}>
-      <div className={styles.wrap}>
-        <Columns>
-          {nodes.map((node) => (
+    <div className={styles.wrap}>
+      <Columns hasMore={hasMore && !isLoading} onScrollEnd={loadMore}>
+        {nodes.map((node) => (
+          <Hoverable key={node.node.id} effect="shine">
             <LabNode
               node={node.node}
-              key={node.node.id}
               lastSeen={node.last_seen}
               commentCount={node.comment_count}
             />
-          ))}
-        </Columns>
-      </div>
-    </InfiniteScroll>
+          </Hoverable>
+        ))}
+      </Columns>
+    </div>
   );
 });
 

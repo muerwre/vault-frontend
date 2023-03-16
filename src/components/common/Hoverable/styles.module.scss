@@ -1,0 +1,71 @@
+@import 'src/styles/variables';
+
+.hoverable {
+  position: relative;
+  cursor: pointer;
+
+  &::after {
+    content: ' ';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius;
+    opacity: 0;
+    transition: all 100ms;
+    touch-action: none;
+    pointer-events: none;
+  }
+
+  &.with_icon::after {
+    background: linear-gradient(325deg, $color_primary 20px, transparent 100px);
+  }
+}
+
+.hoverable.rise {
+  @media (hover: hover) {
+    &:hover {
+      z-index: 10;
+      transition: all 100ms;
+      transform: scale(1.025) translateY(-2%);
+      box-shadow: rgba(0, 0, 0, 0.5) 0 10px 10px 5px;
+
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.hoverable.shine {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      150deg,
+      #{transparentize(yellow, 0.75)},
+      transparent
+    );
+    z-index: 1;
+    border-radius: $radius;
+    opacity: 0;
+    pointer-events: none;
+    touch-action: none;
+    transition: all 250ms;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+.icon {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  z-index: 2;
+  opacity: 0;
+
+  .hoverable:hover & {
+    opacity: 1;
+  }
+}

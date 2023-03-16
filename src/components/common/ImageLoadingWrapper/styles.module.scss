@@ -1,0 +1,26 @@
+@import 'src/styles/variables';
+
+.wrapper {
+  position: relative;
+}
+
+.preview {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  touch-action: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: $gap;
+}
+
+.thumbnail {
+  filter: blur(10px);
+  position: absolute;
+  inset: 0;
+  border-radius: $radius;
+  background-size: cover;
+  background-position: 50% 50%;
+  box-sizing: border-box;
+}

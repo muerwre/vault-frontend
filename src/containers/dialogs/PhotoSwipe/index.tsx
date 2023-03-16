@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js';
 import PhotoSwipeJs from 'photoswipe/dist/photoswipe.js';
 
-import { ImagePresets } from '~/constants/urls';
+import { imagePresets } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useModal } from '~/hooks/modal/useModal';
 import { IFile } from '~/types';
@@ -25,35 +25,47 @@ const PhotoSwipe: VFC<PhotoSwipeProps> = observer(({ index, items }) => {
   const { isTablet } = useWindowSize();
 
   useEffect(() => {
-    new Promise(async resolve => {
+    new Promise(async (resolve) => {
       const images = await Promise.all(
         items.map(
-          image =>
-            new Promise(resolveImage => {
+          (file) =>
+            new Promise((resolve) => {
+              const src = getURL(
+                file,
+                isTablet ? imagePresets[900] : imagePresets[1600],
+              );
+
+              if (file.metadata?.width && file.metadata.height) {
+                resolve({
+                  src,
+                  w: file.metadata.width,
+                  h: file.metadata.height,
+                });
+
+                return;
+              }
+
               const img = new Image();
 
               img.onload = () => {
-                resolveImage({
-                  src: getURL(
-                    image,
-                    isTablet ? ImagePresets[900] : ImagePresets[1600],
-                  ),
+                resolve({
+                  src,
                   h: img.naturalHeight,
                   w: img.naturalWidth,
                 });
               };
 
               img.onerror = () => {
-                resolveImage({});
+                resolve({});
               };
 
-              img.src = getURL(image, ImagePresets[1600]);
+              img.src = getURL(file, imagePresets[1600]);
             }),
         ),
       );
 
       resolve(images);
-    }).then(images => {
+    }).then((images) => {
       const ps = new PhotoSwipeJs(ref.current, PhotoSwipeUI_Default, images, {
         index: index || 0,
         closeOnScroll: false,

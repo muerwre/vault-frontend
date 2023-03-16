@@ -1,0 +1,9 @@
+@import 'src/styles/variables';
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: $gap;
+  align-items: center;
+  font: $font_14_medium;
+}

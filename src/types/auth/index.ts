@@ -20,11 +20,17 @@ export interface IUser {
   is_user: boolean;
 }
 
-export type OAuthProvider = 'vkontakte' | 'google';
+export type OAuthProvider = 'vkontakte' | 'google' | 'telegram';
 
 export interface ISocialAccount {
   provider: OAuthProvider;
   id: string;
   name: string;
+  photo: string;
+}
+
+export interface ShallowUser {
+  id: number;
+  username: string;
   photo: string;
 }

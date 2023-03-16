@@ -2,7 +2,7 @@
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
-const withTM = require('next-transpile-modules')(['ramda']);
+const withTM = require('next-transpile-modules')(['ramda', '@v9v/ts-react-telegram-login']);
 
 module.exports = withBundleAnalyzer(
   withTM({
@@ -22,5 +22,19 @@ module.exports = withBundleAnalyzer(
 
     /** don't try to optimize fonts */
     optimizeFonts: false,
+    images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.vault48.org',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.ytimg.com',
+        pathname: '/**',
+      },
+    ],
+  },
   })
 );

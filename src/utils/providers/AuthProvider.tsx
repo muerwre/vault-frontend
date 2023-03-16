@@ -1,6 +1,7 @@
 import { createContext, FC, useContext } from 'react';
 
 import { observer } from 'mobx-react-lite';
+import { boolean } from 'yup';
 
 import { EMPTY_USER } from '~/constants/auth';
 import { useAuth } from '~/hooks/auth/useAuth';
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthProviderContextType>({
   logout: () => {},
   login: async () => EMPTY_USER,
   setToken: () => {},
+  fetched: false,
 });
 
 export const AuthProvider: FC = observer(({ children }) => {
