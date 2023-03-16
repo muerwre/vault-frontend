@@ -97,7 +97,19 @@ export const useOAuth = () => {
   const accounts = useMemo(() => data || [], [data]);
   const refresh = useCallback(() => mutate(), []);
 
+  const hasTelegram = useMemo(
+    () => accounts.some((acc) => acc.provider === 'telegram'),
+    [accounts],
+  );
+
+  const showTelegramModal = useCallback(
+    () => showModal(Dialog.TelegramAttach, {}),
+    [],
+  );
+
   return {
+    hasTelegram,
+    showTelegramModal,
     openOauthWindow,
     loginWithSocial,
     createSocialAccount,

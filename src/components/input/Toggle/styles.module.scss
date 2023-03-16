@@ -38,6 +38,10 @@
     transition: transform 0.25s, color 0.25s, background-color;
   }
 
+  &:disabled {
+    opacity: 0.5;
+  }
+
   &.active {
     &::after {
       transform: translate(24px, 0);

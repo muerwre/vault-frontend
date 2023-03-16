@@ -7,8 +7,7 @@ import { useAuth } from '../auth/useAuth';
 import { useNotificationSettingsRequest } from './useNotificationSettingsRequest';
 
 export const useNotificationSettings = () => {
-  // TODO: remove isTester
-  const { isUser, isTester } = useAuth();
+  const { isUser } = useAuth();
 
   const {
     error: settingsError,
@@ -18,16 +17,15 @@ export const useNotificationSettings = () => {
     isLoading: isLoadingSettings,
     update,
     refresh,
+    settings,
   } = useNotificationSettingsRequest();
 
-  const enabled =
-    !isLoadingSettings && !settingsError && settingsEnabled && isTester;
+  const enabled = !isLoadingSettings && !settingsError && settingsEnabled;
 
   const hasNew =
     enabled && !!lastDate && (!lastSeen || isAfter(lastDate, lastSeen));
 
-  // TODO: store `indicator` as option and include it here
-  const indicatorEnabled = enabled && true;
+  const indicatorEnabled = enabled && !!settings?.showIndicator;
 
   const markAsRead = useCallback(() => {
     if (
@@ -37,7 +35,7 @@ export const useNotificationSettings = () => {
       return;
     }
 
-    update({ last_seen: lastDate.toISOString() });
+    update({ lastSeen: lastDate.toISOString() });
   }, [update, lastDate, lastSeen]);
 
   return {
@@ -45,7 +43,9 @@ export const useNotificationSettings = () => {
     hasNew,
     indicatorEnabled,
     available: isUser,
+    settings,
     markAsRead,
     refresh,
+    update,
   };
 };

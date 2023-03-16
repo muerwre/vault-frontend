@@ -4,6 +4,8 @@ export interface ApiGetNotificationSettingsResponse {
   enabled: boolean;
   flow: boolean;
   comments: boolean;
+  send_telegram: boolean;
+  show_indicator: boolean;
   last_seen?: string | null;
   last_date?: string | null;
 }

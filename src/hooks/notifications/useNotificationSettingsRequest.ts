@@ -7,8 +7,8 @@ import {
   apiGetNotificationSettings,
   apiUpdateNotificationSettings,
 } from '~/api/notifications/settings';
-import { ApiUpdateNotificationSettingsRequest } from '~/api/notifications/types';
 import { API } from '~/constants/api';
+import { NotificationSettings } from '~/types/notifications';
 import { getErrorMessage } from '~/utils/errors/getErrorMessage';
 import { showErrorToast } from '~/utils/errors/showToast';
 
@@ -28,12 +28,12 @@ export const useNotificationSettingsRequest = () => {
     mutate,
   } = useSWR(
     isUser ? API.NOTIFICATIONS.SETTINGS : null,
-    async () => apiGetNotificationSettings(),
+    apiGetNotificationSettings,
     { refreshInterval },
   );
 
   const update = useCallback(
-    async (settings: ApiUpdateNotificationSettingsRequest) => {
+    async (settings: Partial<NotificationSettings>) => {
       if (!data) {
         return;
       }
@@ -69,14 +69,15 @@ export const useNotificationSettingsRequest = () => {
     isLoading,
     error,
     lastSeen:
-      data?.last_seen && isValid(parseISO(data.last_seen))
-        ? parseISO(data?.last_seen)
+      data?.lastSeen && isValid(parseISO(data.lastSeen))
+        ? parseISO(data?.lastSeen)
         : undefined,
     lastDate:
-      data?.last_date && isValid(parseISO(data.last_date))
-        ? parseISO(data?.last_date)
+      data?.lastDate && isValid(parseISO(data.lastDate))
+        ? parseISO(data?.lastDate)
         : undefined,
     enabled: !!data?.enabled && (data.flow || data.comments),
+    settings: data,
     refresh,
     update,
     updateError,

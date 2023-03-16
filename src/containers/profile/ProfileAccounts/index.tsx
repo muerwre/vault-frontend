@@ -15,18 +15,14 @@ import styles from './styles.module.scss';
 type ProfileAccountsProps = {};
 
 const ProfileAccounts: FC<ProfileAccountsProps> = () => {
-  const { isLoading, accounts, dropAccount, openOauthWindow } = useOAuth();
-  const { showModal } = useModal();
-
-  const hasTelegram = useMemo(
-    () => accounts.some((acc) => acc.provider === 'telegram'),
-    [accounts],
-  );
-
-  const showTelegramModal = useCallback(
-    () => showModal(Dialog.TelegramAttach, {}),
-    [],
-  );
+  const {
+    isLoading,
+    accounts,
+    dropAccount,
+    openOauthWindow,
+    hasTelegram,
+    showTelegramModal,
+  } = useOAuth();
 
   return (
     <Group className={styles.wrap}>

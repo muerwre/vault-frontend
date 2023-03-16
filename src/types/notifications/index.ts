@@ -14,3 +14,13 @@ export enum NotificationType {
   Node = 'node',
   Comment = 'comment',
 }
+
+export interface NotificationSettings {
+  enabled: boolean;
+  flow: boolean;
+  comments: boolean;
+  sendTelegram: boolean;
+  showIndicator: boolean;
+  lastSeen: string | null;
+  lastDate: string | null;
+}

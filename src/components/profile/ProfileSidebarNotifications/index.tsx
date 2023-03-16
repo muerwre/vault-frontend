@@ -1,9 +1,9 @@
 import { VFC } from 'react';
 
+import { Padder } from '~/components/containers/Padder';
 import { useStackContext } from '~/components/sidebar/SidebarStack';
 import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
-
-import { NotificationList } from '../../../containers/notifications/NotificationList/index';
+import { NotificationSettings } from '~/containers/notifications/NotificationSettings';
 
 interface ProfileSidebarNotificationsProps {}
 
@@ -19,7 +19,7 @@ const ProfileSidebarNotifications: VFC<
       title="Уведомления"
       onBackPress={closeAllTabs}
     >
-      <NotificationList />
+      <NotificationSettings />
     </SidebarStackCard>
   );
 };

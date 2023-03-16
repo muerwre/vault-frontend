@@ -1,17 +1,22 @@
 import { API } from '~/constants/api';
+import { NotificationSettings } from '~/types/notifications';
 import { api, cleanResult } from '~/utils/api';
+import {
+  notificationSettingsFromRequest,
+  notificationSettingsToRequest,
+} from '~/utils/notifications/notificationSettingsFromRequest';
 
 import {
   ApiGetNotificationSettingsResponse,
   ApiGetNotificationsResponse,
   ApiUpdateNotificationSettingsResponse,
-  ApiUpdateNotificationSettingsRequest,
 } from './types';
 
-export const apiGetNotificationSettings = () =>
+export const apiGetNotificationSettings = (): Promise<NotificationSettings> =>
   api
     .get<ApiGetNotificationSettingsResponse>(API.NOTIFICATIONS.SETTINGS)
-    .then(cleanResult);
+    .then(cleanResult)
+    .then(notificationSettingsFromRequest);
 
 export const apiGetNotifications = () =>
   api
@@ -19,11 +24,12 @@ export const apiGetNotifications = () =>
     .then(cleanResult);
 
 export const apiUpdateNotificationSettings = (
-  settings: ApiUpdateNotificationSettingsRequest,
+  settings: Partial<NotificationSettings>,
 ) =>
   api
     .post<ApiUpdateNotificationSettingsResponse>(
       API.NOTIFICATIONS.SETTINGS,
-      settings,
+      notificationSettingsToRequest(settings),
     )
-    .then(cleanResult);
+    .then(cleanResult)
+    .then(notificationSettingsFromRequest);
