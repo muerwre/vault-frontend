@@ -11,6 +11,7 @@ const defaultValue = {
   enabled: false,
   hasNew: false,
   indicatorEnabled: false,
+  toggleEnabled: () => {},
   markAsRead: () => {},
   refresh: () => Promise.resolve() as Promise<unknown>,
 };

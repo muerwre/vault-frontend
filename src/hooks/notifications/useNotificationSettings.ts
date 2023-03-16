@@ -38,6 +38,11 @@ export const useNotificationSettings = () => {
     update({ lastSeen: lastDate.toISOString() });
   }, [update, lastDate, lastSeen]);
 
+  const toggleEnabled = useCallback(
+    () => update({ enabled: !settings?.enabled }),
+    [update, settings],
+  );
+
   return {
     enabled,
     hasNew,
@@ -48,5 +53,6 @@ export const useNotificationSettings = () => {
     refresh,
     update,
     loading: isLoading,
+    toggleEnabled,
   };
 };

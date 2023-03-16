@@ -51,26 +51,18 @@ const NotificationSettingsForm: FC<NotificationSettingsFormProps> = ({
   return (
     <Group>
       <Card>
-        <InputRow className={styles.row} input={toggle('enabled')}>
-          Получать уведомления
-        </InputRow>
+        <InputRow input={toggle('enabled')}>Получать уведомления</InputRow>
       </Card>
 
       <div />
 
       <Zone title="Типы уведомлений">
         <Group>
-          <InputRow
-            className={styles.row}
-            input={toggle('flow', !values.enabled)}
-          >
+          <InputRow input={toggle('flow', !values.enabled)}>
             Новые посты
           </InputRow>
 
-          <InputRow
-            className={styles.row}
-            input={toggle('comments', !values.enabled)}
-          >
+          <InputRow input={toggle('comments', !values.enabled)}>
             Комментарии
           </InputRow>
         </Group>
@@ -80,16 +72,11 @@ const NotificationSettingsForm: FC<NotificationSettingsFormProps> = ({
 
       <Zone title="Способы доставки">
         <Group>
-          <InputRow
-            className={styles.row}
-            input={toggle('showIndicator', !values.enabled)}
-          >
+          <InputRow input={toggle('showIndicator', !values.enabled)}>
             На иконке профиля
           </InputRow>
 
-          <InputRow className={styles.row} input={telegramInput}>
-            Телеграм
-          </InputRow>
+          <InputRow input={telegramInput}>Телеграм</InputRow>
         </Group>
       </Zone>
     </Group>

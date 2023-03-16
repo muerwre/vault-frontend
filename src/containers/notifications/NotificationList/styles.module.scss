@@ -23,6 +23,21 @@
   flex: 1 1;
   overflow: auto;
   width: 100%;
+  position: relative;
+
+  &.inactive {
+    opacity: 0.3;
+    overflow: hidden;
+
+    &::after {
+      content: ' ';
+      inset: 0;
+      position: absolute;
+      background: linear-gradient(transparent, $content_bg_backdrop);
+      pointer-events: none;
+      touch-action: none;
+    }
+  }
 }
 
 .items {

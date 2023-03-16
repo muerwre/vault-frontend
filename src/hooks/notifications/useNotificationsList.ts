@@ -8,13 +8,10 @@ import { useAuth } from '../auth/useAuth';
 export const useNotificationsList = () => {
   const { isUser } = useAuth();
 
-  const {
-    data,
-    isValidating: isLoading,
-    error,
-  } = useSWR(isUser ? API.NOTIFICATIONS.LIST : null, async () =>
-    apiGetNotifications(),
+  const { data, isValidating, error } = useSWR(
+    isUser ? API.NOTIFICATIONS.LIST : null,
+    async () => apiGetNotifications(),
   );
 
-  return { isLoading, error, ...data };
+  return { isLoading: isValidating && !data, error, ...data };
 };
