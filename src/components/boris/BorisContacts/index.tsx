@@ -17,9 +17,9 @@ const BorisContacts: FC<Props> = () => (
 
     <BorisContactItem
       icon="telegram"
-      title="Boris[48]bot"
-      link="https://t.me/boris48bot"
-      subtitle="телеграм-бот"
+      title="Телеграм-бот"
+      link="https://t.me/vault48bot"
+      subtitle="@vault48bot"
     />
 
     <BorisContactItem
