@@ -27,6 +27,7 @@ const Avatar = forwardRef<HTMLDivElement, Props>(
       className,
       preset = imagePresets.avatar,
       hasUpdates,
+      children,
       ...rest
     },
     ref,
@@ -43,7 +44,9 @@ const Avatar = forwardRef<HTMLDivElement, Props>(
           className={classNames(styles.avatar, className)}
           size={size}
           ref={ref}
-        />
+        >
+          {children}
+        </Square>
       </div>
     );
   },

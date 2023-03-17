@@ -1,18 +1,22 @@
 import { useCallback, useEffect } from 'react';
 
-export const useCloseOnEscape = (onRequestClose?: () => void, ignore_inputs = false) => {
+export const useCloseOnEscape = (
+  onRequestClose?: () => void,
+  ignoreInputs = false,
+) => {
   const onEscape = useCallback(
-    event => {
+    (event) => {
       if (event.key !== 'Escape' || !onRequestClose) return;
       if (
-        ignore_inputs &&
-        (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA')
+        !ignoreInputs &&
+        (event.target.tagName === 'INPUT' ||
+          event.target.tagName === 'TEXTAREA')
       )
         return;
 
       onRequestClose();
     },
-    [ignore_inputs, onRequestClose]
+    [ignoreInputs, onRequestClose],
   );
 
   useEffect(() => {
@@ -24,7 +28,10 @@ export const useCloseOnEscape = (onRequestClose?: () => void, ignore_inputs = fa
   }, [onEscape]);
 };
 
-export const useDelayedReady = (setReady: (val: boolean) => void, delay: number = 500) => {
+export const useDelayedReady = (
+  setReady: (val: boolean) => void,
+  delay: number = 500,
+) => {
   useEffect(() => {
     const timer = setTimeout(() => setReady(true), delay);
 
@@ -39,20 +46,26 @@ export const useDelayedReady = (setReady: (val: boolean) => void, delay: number 
  * @param onUpload -- upload callback
  * @param allowedTypes -- list of allowed types
  */
-export const useFileDropZone = (onUpload: (file: File[]) => void, allowedTypes?: string[]) => {
+export const useFileDropZone = (
+  onUpload: (file: File[]) => void,
+  allowedTypes?: string[],
+) => {
   return useCallback(
-    event => {
+    (event) => {
       event.preventDefault();
       event.stopPropagation();
 
-      const files: File[] = Array.from((event.dataTransfer?.files as File[]) || []).filter(
-        (file: File) => file?.type && (!allowedTypes || allowedTypes.includes(file.type))
+      const files: File[] = Array.from(
+        (event.dataTransfer?.files as File[]) || [],
+      ).filter(
+        (file: File) =>
+          file?.type && (!allowedTypes || allowedTypes.includes(file.type)),
       );
 
       if (!files || !files.length) return;
 
       onUpload(files);
     },
-    [allowedTypes, onUpload]
+    [allowedTypes, onUpload],
   );
 };

@@ -27,11 +27,14 @@ const MenuButton: FC<MenuButtonProps> = ({
   activate = 'focus',
   fixed,
 }) => {
-  const focus = useFocusEvent(false, 150);
-  const hover = useFocusEvent(false, 150);
+  const focus = useFocusEvent(false, 300);
+  const hover = useFocusEvent(false, 300);
 
-  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
-  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
+  const [referenceElement, setReferenceElement] =
+    useState<HTMLButtonElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
+    null,
+  );
   const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
 
   const popper = usePopper(referenceElement, popperElement, {
@@ -83,7 +86,11 @@ const MenuButton: FC<MenuButtonProps> = ({
           [styles.visible]: visible,
         })}
       >
-        <div style={popper.styles.arrow} ref={setArrowElement} className={styles.arrow} />
+        <div
+          style={popper.styles.arrow}
+          ref={setArrowElement}
+          className={styles.arrow}
+        />
         {children}
       </div>
     </>
