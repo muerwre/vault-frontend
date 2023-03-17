@@ -80,18 +80,16 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
       )}
 
       <Group horizontal className={styles.buttons}>
-        <Superpower>
-          <Button
-            size="small"
-            type="button"
-            iconLeft="telegram"
-            color="gray"
-            onClick={showTelegramModal}
-            disabled={hasTelegram}
-          >
-            Телеграм
-          </Button>
-        </Superpower>
+        <Button
+          size="small"
+          type="button"
+          iconLeft="telegram"
+          color="gray"
+          onClick={showTelegramModal}
+          disabled={hasTelegram}
+        >
+          Телеграм
+        </Button>
 
         <Button
           size="small"

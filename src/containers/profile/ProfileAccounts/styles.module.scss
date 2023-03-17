@@ -11,14 +11,14 @@
 .buttons {
   background: transparentize(black, 0.8);
   border-radius: $radius;
-  padding: $gap * 0.5;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-}
+  flex-wrap: wrap;
 
-.add {
-  //background-color: $content_bg !important;
+  button {
+    margin: $gap * 0.5 !important;
+  }
 }
 
 .loader {
