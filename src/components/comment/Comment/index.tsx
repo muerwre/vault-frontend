@@ -20,6 +20,7 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
   group: ICommentGroup;
   isSame?: boolean;
   canEdit?: boolean;
+  highlighted?: boolean;
   saveComment: (data: IComment) => Promise<unknown>;
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
   onShowImageModal: (images: IFile[], index: number) => void;
@@ -33,6 +34,7 @@ const Comment: FC<IProps> = memo(
     isSame,
     isLoading,
     className,
+    highlighted,
     canEdit,
     onDelete,
     onShowImageModal,
@@ -41,8 +43,9 @@ const Comment: FC<IProps> = memo(
   }) => {
     return (
       <CommentWrapper
-        className={classNames(className, {
+        className={classNames(styles.container, className, {
           [NEW_COMMENT_CLASSNAME]: group.hasNew,
+          [styles.highlighted]: highlighted,
         })}
         isEmpty={isEmpty}
         isLoading={isLoading}
@@ -53,23 +56,31 @@ const Comment: FC<IProps> = memo(
         <div className={styles.wrap}>
           {group.comments.map((comment, index) => {
             if (comment.deleted_at) {
-              return <CommendDeleted id={comment.id} onDelete={onDelete} key={comment.id} />;
+              return (
+                <CommendDeleted
+                  id={comment.id}
+                  onDelete={onDelete}
+                  key={comment.id}
+                />
+              );
             }
+
+            const prefix = Math.abs(group.distancesInDays[index]) > 14 && (
+              <CommentDistance
+                firstDate={
+                  comment?.created_at ? parseISO(comment.created_at) : undefined
+                }
+                secondDate={
+                  index > 0 && group.comments[index - 1]?.created_at
+                    ? parseISO(group.comments[index - 1].created_at!)
+                    : undefined
+                }
+              />
+            );
 
             return (
               <CommentContent
-                prefix={
-                  Math.abs(group.distancesInDays[index]) > 14 && (
-                    <CommentDistance
-                      firstDate={comment?.created_at ? parseISO(comment.created_at) : undefined}
-                      secondDate={
-                        index > 0 && group.comments[index - 1]?.created_at
-                          ? parseISO(group.comments[index - 1].created_at!)
-                          : undefined
-                      }
-                    />
-                  )
-                }
+                prefix={prefix}
                 saveComment={saveComment}
                 nodeId={nodeId}
                 comment={comment}
@@ -83,7 +94,7 @@ const Comment: FC<IProps> = memo(
         </div>
       </CommentWrapper>
     );
-  }
+  },
 );
 
 export { Comment };

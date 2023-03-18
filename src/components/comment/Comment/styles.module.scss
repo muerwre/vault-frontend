@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 @keyframes appear {
   from {
@@ -10,4 +10,8 @@
 }
 .wrap {
   animation: appear 1s;
+}
+
+.highlighted {
+  box-shadow: $color_primary 0 0 0px 2px;
 }

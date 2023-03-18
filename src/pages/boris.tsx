@@ -3,6 +3,7 @@ import React, { VFC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { PageTitle } from '~/components/common/PageTitle';
+import { BORIS_NODE_ID } from '~/constants/boris/constants';
 import { useBoris } from '~/hooks/boris/useBoris';
 import { useNodeComments } from '~/hooks/comments/useNodeComments';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
@@ -13,7 +14,7 @@ import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
 import { getPageTitle } from '~/utils/ssr/getPageTitle';
 
 const BorisPage: VFC = observer(() => {
-  const { node, isLoading, update } = useLoadNode(696);
+  const { node, isLoading, update } = useLoadNode(BORIS_NODE_ID);
 
   const onShowImageModal = useImageModal();
   const {
@@ -24,7 +25,7 @@ const BorisPage: VFC = observer(() => {
     hasMore,
     isLoading: isLoadingComments,
     isLoadingMore,
-  } = useNodeComments(696);
+  } = useNodeComments(BORIS_NODE_ID);
   const { title, stats, isLoadingStats } = useBoris(comments);
 
   return (

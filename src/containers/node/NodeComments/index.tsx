@@ -2,6 +2,7 @@ import React, { FC, memo, useMemo } from 'react';
 
 import { Comment } from '~/components/comment/Comment';
 import { LoadMoreButton } from '~/components/input/LoadMoreButton';
+import { ANNOUNCE_USER_ID, BORIS_NODE_ID } from '~/constants/boris/constants';
 import { useGrouppedComments } from '~/hooks/node/useGrouppedComments';
 import { ICommentGroup } from '~/types';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
@@ -64,6 +65,9 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
           nodeId={node.id!}
           key={group.ids.join()}
           group={group}
+          highlighted={
+            node.id === BORIS_NODE_ID && group.user.id === ANNOUNCE_USER_ID
+          }
           canEdit={canEditComment(group, user)}
           onDelete={onDeleteComment}
           onShowImageModal={onShowImageModal}

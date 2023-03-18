@@ -24,3 +24,6 @@ export const initialBackendStats: StatBackend = {
 };
 
 export const foundationDate = '2009-07-21 12:28:58';
+
+export const ANNOUNCE_USER_ID = 1;
+export const BORIS_NODE_ID = 696;
