@@ -1,5 +1,7 @@
 import { FC, useMemo } from 'react';
 
+import classNames from 'classnames';
+
 import { NodeThumbnail } from '~/components/node/NodeThumbnail';
 import { NotificationItem } from '~/types/notifications';
 import { getPrettyDate } from '~/utils/dom';
@@ -8,9 +10,10 @@ import styles from './styles.module.scss';
 
 interface NotificationNodeProps {
   item: NotificationItem;
+  isNew?: boolean;
 }
 
-const NotificationNode: FC<NotificationNodeProps> = ({ item }) => {
+const NotificationNode: FC<NotificationNodeProps> = ({ item, isNew }) => {
   const thumbnail = useMemo(
     () => ({
       title: item.title,
@@ -21,7 +24,7 @@ const NotificationNode: FC<NotificationNodeProps> = ({ item }) => {
   );
 
   return (
-    <div className={styles.card}>
+    <div className={classNames(styles.card, { [styles.new]: isNew })}>
       <div className={styles.image}>
         <NodeThumbnail item={thumbnail} />
       </div>

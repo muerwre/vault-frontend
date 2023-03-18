@@ -3,6 +3,7 @@ import { NotificationItem } from '~/types/notifications';
 export interface ApiGetNotificationSettingsResponse {
   enabled: boolean;
   flow: boolean;
+  boris: boolean;
   comments: boolean;
   send_telegram: boolean;
   show_indicator: boolean;

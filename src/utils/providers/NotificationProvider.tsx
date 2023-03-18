@@ -14,6 +14,7 @@ const defaultValue = {
   toggleEnabled: () => {},
   markAsRead: () => {},
   refresh: () => Promise.resolve() as Promise<unknown>,
+  lastSeen: null as Date | null | undefined,
 };
 
 const NotificationContext = createContext(defaultValue);

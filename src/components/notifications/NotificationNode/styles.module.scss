@@ -8,6 +8,17 @@
   justify-content: center;
   align-items: center;
   padding: $gap/2;
+
+  &.new::after {
+    content: ' ';
+    position: absolute;
+    top: $gap;
+    right: $gap;
+    background: $color_danger;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+  }
 }
 
 .text {

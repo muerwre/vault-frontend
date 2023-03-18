@@ -8,6 +8,7 @@ export const notificationSettingsFromRequest = (
 ): NotificationSettings => ({
   enabled: req.enabled,
   flow: req.flow,
+  boris: req.boris,
   comments: req.comments,
   sendTelegram: req.send_telegram,
   showIndicator: req.show_indicator,
@@ -20,6 +21,7 @@ export const notificationSettingsToRequest = (
 ): ApiUpdateNotificationSettingsRequest => ({
   enabled: req.enabled,
   flow: req.flow,
+  boris: req.boris,
   comments: req.comments,
   send_telegram: req.sendTelegram,
   show_indicator: req.showIndicator,

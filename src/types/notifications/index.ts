@@ -14,11 +14,13 @@ export interface NotificationItem {
 export enum NotificationType {
   Node = 'node',
   Comment = 'comment',
+  Boris = 'boris',
 }
 
 export interface NotificationSettings {
   enabled: boolean;
   flow: boolean;
+  boris: boolean;
   comments: boolean;
   sendTelegram: boolean;
   showIndicator: boolean;

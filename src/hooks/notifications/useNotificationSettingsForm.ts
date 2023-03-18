@@ -10,6 +10,7 @@ import { useFormAutoSubmit } from '../useFormAutosubmit';
 const validationSchema = object({
   enabled: boolean().default(false),
   flow: boolean().default(false),
+  boris: boolean().default(false),
   comments: boolean().default(false),
   sendTelegram: boolean().default(false),
   showIndicator: boolean().default(false),

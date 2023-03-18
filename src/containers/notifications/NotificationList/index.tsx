@@ -1,6 +1,7 @@
 import { FC, useCallback, useEffect } from 'react';
 
 import classNames from 'classnames';
+import { isAfter, parseISO } from 'date-fns';
 
 import { Button } from '~/components/input/Button';
 import { InputRow } from '~/components/input/InputRow';
@@ -17,7 +18,7 @@ interface NotificationListProps {}
 
 const NotificationList: FC<NotificationListProps> = () => {
   const { isLoading, items } = useNotificationsList();
-  const { enabled, toggleEnabled } = useNotifications();
+  const { enabled, toggleEnabled, lastSeen } = useNotifications();
   const { markAsRead } = useNotifications();
 
   useEffect(() => {
@@ -25,11 +26,16 @@ const NotificationList: FC<NotificationListProps> = () => {
   }, []);
 
   const renderItem = useCallback((item: NotificationItem) => {
+    const isNew =
+      !lastSeen ||
+      !item.created_at ||
+      isAfter(parseISO(item.created_at), lastSeen);
     switch (item.type) {
       case NotificationType.Comment:
-        return <NotificationComment item={item} />;
+      case NotificationType.Boris:
+        return <NotificationComment item={item} isNew={isNew} />;
       case NotificationType.Node:
-        return <NotificationNode item={item} />;
+        return <NotificationNode item={item} isNew={isNew} />;
       default:
         return null;
     }

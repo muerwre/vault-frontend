@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import classNames from 'classnames';
+
 import { Anchor } from '~/components/common/Anchor';
 import { Avatar } from '~/components/common/Avatar';
 import { InlineUsername } from '~/components/common/InlineUsername';
@@ -11,11 +13,12 @@ import styles from './styles.module.scss';
 
 interface NotificationCommentProps {
   item: NotificationItem;
+  isNew?: boolean;
 }
 
-const NotificationComment: FC<NotificationCommentProps> = ({ item }) => (
+const NotificationComment: FC<NotificationCommentProps> = ({ item, isNew }) => (
   <Anchor href={item.url} className={styles.link}>
-    <div className={styles.message}>
+    <div className={classNames(styles.message, { [styles.new]: isNew })}>
       <div className={styles.icon}>
         <Avatar
           size={32}
@@ -31,11 +34,13 @@ const NotificationComment: FC<NotificationCommentProps> = ({ item }) => (
             <InlineUsername>{item.user.username}</InlineUsername>
           </span>
           <span>-</span>
-          <Square
-            className={styles.item_image}
-            size={16}
-            image={getURLFromString(item.thumbnail, 'avatar')}
-          />
+          {!!item.thumbnail && (
+            <Square
+              className={styles.item_image}
+              size={16}
+              image={getURLFromString(item.thumbnail, 'avatar')}
+            />
+          )}
           <div className={styles.item_title}>{item.title}</div>
         </b>
 

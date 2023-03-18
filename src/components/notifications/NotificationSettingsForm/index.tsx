@@ -9,8 +9,6 @@ import { Toggle } from '~/components/input/Toggle';
 import { useNotificationSettingsForm } from '~/hooks/notifications/useNotificationSettingsForm';
 import { NotificationSettings } from '~/types/notifications';
 
-import styles from './styles.module.scss';
-
 interface NotificationSettingsFormProps {
   value: NotificationSettings;
   onSubmit: (val: Partial<NotificationSettings>) => Promise<unknown>;
@@ -65,6 +63,8 @@ const NotificationSettingsForm: FC<NotificationSettingsFormProps> = ({
           <InputRow input={toggle('comments', !values.enabled)}>
             Комментарии
           </InputRow>
+
+          <InputRow input={toggle('boris', !values.enabled)}>Борис</InputRow>
         </Group>
       </Zone>
 

@@ -54,5 +54,7 @@ export const useNotificationSettings = () => {
     update,
     loading: isLoading,
     toggleEnabled,
+    lastSeen,
+    lastDate,
   };
 };
