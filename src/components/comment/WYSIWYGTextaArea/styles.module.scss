@@ -1,0 +1,5 @@
+@import 'src/styles/markdown.scss';
+
+.editor {
+  @include markdown;
+}

@@ -13,11 +13,14 @@ import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { EMPTY_COMMENT } from '~/constants/node';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
+import { useAuth } from '~/hooks/auth/useAuth';
 import { useCommentFormFormik } from '~/hooks/comments/useCommentFormFormik';
 import { useUploader } from '~/hooks/data/useUploader';
 import { useInputPasteUpload } from '~/hooks/dom/useInputPasteUpload';
 import { IComment, INode } from '~/types';
 import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
+
+import { WYSIWYGTextaArea } from '../WYSIWYGTextaArea';
 
 import styles from './styles.module.scss';
 
@@ -28,92 +31,115 @@ interface IProps {
   onCancelEdit?: () => void;
 }
 
-const CommentForm: FC<IProps> = observer(({ comment, nodeId, saveComment, onCancelEdit }) => {
-  const [textarea, setTextArea] = useState<HTMLTextAreaElement | null>(null);
-  const uploader = useUploader(UploadSubject.Comment, UploadTarget.Comments, comment?.files);
-  const formik = useCommentFormFormik(
-    comment || EMPTY_COMMENT,
-    nodeId,
-    uploader,
-    saveComment,
-    onCancelEdit
-  );
-  const isLoading = formik.isSubmitting || uploader.isUploading;
-  const isEditing = !!comment?.id;
+const CommentForm: FC<IProps> = observer(
+  ({ comment, nodeId, saveComment, onCancelEdit }) => {
+    const [textarea, setTextArea] = useState<HTMLTextAreaElement | null>(null);
+    const uploader = useUploader(
+      UploadSubject.Comment,
+      UploadTarget.Comments,
+      comment?.files,
+    );
+    const formik = useCommentFormFormik(
+      comment || EMPTY_COMMENT,
+      nodeId,
+      uploader,
+      saveComment,
+      onCancelEdit,
+    );
+    const isLoading = formik.isSubmitting || uploader.isUploading;
+    const isEditing = !!comment?.id;
 
-  const clearError = useCallback(() => {
-    if (formik.status) {
-      formik.setStatus('');
-    }
+    const clearError = useCallback(() => {
+      if (formik.status) {
+        formik.setStatus('');
+      }
 
-    if (formik.errors.text) {
-      formik.setErrors({
-        ...formik.errors,
-        text: '',
-      });
-    }
-  }, [formik]);
+      if (formik.errors.text) {
+        formik.setErrors({
+          ...formik.errors,
+          text: '',
+        });
+      }
+    }, [formik]);
 
-  const error = formik.status || formik.errors.text;
-  const onPaste = useInputPasteUpload(uploader.uploadFiles);
+    const error = formik.status || formik.errors.text;
+    const onPaste = useInputPasteUpload(uploader.uploadFiles);
 
-  return (
-    <UploadDropzone onUpload={uploader.uploadFiles}>
-      <form onSubmit={formik.handleSubmit} className={styles.wrap}>
-        <FormikProvider value={formik}>
-          <UploaderContextProvider value={uploader}>
-            <div className={styles.input}>
-              <LocalCommentFormTextarea onPaste={onPaste} ref={setTextArea} />
+    const { isTester } = useAuth();
 
-              {!!error && (
-                <div className={styles.error} onClick={clearError}>
-                  {ERROR_LITERAL[error] || error}
-                </div>
-              )}
-            </div>
-
-            <CommentFormAttaches />
-
-            <div className={styles.buttons}>
-              <div className={styles.button_column}>
-                <CommentFormAttachButtons onUpload={uploader.uploadFiles} />
-              </div>
-
-              <div className={styles.button_column}>
-                {!!textarea && (
-                  <CommentFormFormatButtons
-                    element={textarea}
-                    handler={formik.handleChange('text')}
+    return (
+      <UploadDropzone onUpload={uploader.uploadFiles}>
+        <form onSubmit={formik.handleSubmit} className={styles.wrap}>
+          <FormikProvider value={formik}>
+            <UploaderContextProvider value={uploader}>
+              <div className={styles.input}>
+                {isTester ? (
+                  <WYSIWYGTextaArea
+                    value={formik.values.text}
+                    onChange={formik.handleChange('value')}
+                  />
+                ) : (
+                  <LocalCommentFormTextarea
+                    onPaste={onPaste}
+                    ref={setTextArea}
                   />
                 )}
-              </div>
 
-              <Filler />
-
-              <div className={styles.button_column}>
-                {isEditing && (
-                  <Button size="small" color="link" type="button" onClick={onCancelEdit}>
-                    Отмена
-                  </Button>
+                {!!error && (
+                  <div className={styles.error} onClick={clearError}>
+                    {ERROR_LITERAL[error] || error}
+                  </div>
                 )}
-
-                <Button
-                  type="submit"
-                  size="small"
-                  color="gray"
-                  iconRight={!isEditing ? 'enter' : 'check'}
-                  disabled={isLoading}
-                  loading={isLoading}
-                >
-                  {!isEditing ? 'Сказать' : 'Сохранить'}
-                </Button>
               </div>
-            </div>
-          </UploaderContextProvider>
-        </FormikProvider>
-      </form>
-    </UploadDropzone>
-  );
-});
+
+              <CommentFormAttaches />
+
+              <div className={styles.buttons}>
+                <div className={styles.button_column}>
+                  <CommentFormAttachButtons onUpload={uploader.uploadFiles} />
+                </div>
+
+                <div className={styles.button_column}>
+                  {!!textarea && (
+                    <CommentFormFormatButtons
+                      element={textarea}
+                      handler={formik.handleChange('text')}
+                    />
+                  )}
+                </div>
+
+                <Filler />
+
+                <div className={styles.button_column}>
+                  {isEditing && (
+                    <Button
+                      size="small"
+                      color="link"
+                      type="button"
+                      onClick={onCancelEdit}
+                    >
+                      Отмена
+                    </Button>
+                  )}
+
+                  <Button
+                    type="submit"
+                    size="small"
+                    color="gray"
+                    iconRight={!isEditing ? 'enter' : 'check'}
+                    disabled={isLoading}
+                    loading={isLoading}
+                  >
+                    {!isEditing ? 'Сказать' : 'Сохранить'}
+                  </Button>
+                </div>
+              </div>
+            </UploaderContextProvider>
+          </FormikProvider>
+        </form>
+      </UploadDropzone>
+    );
+  },
+);
 
 export { CommentForm };
