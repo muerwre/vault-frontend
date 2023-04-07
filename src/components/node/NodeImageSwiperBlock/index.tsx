@@ -18,9 +18,9 @@ import { imagePresets } from '~/constants/urls';
 import { useModal } from '~/hooks/modal/useModal';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
-import { normalizeBrightColor } from '~/utils/color';
 import { getURL } from '~/utils/dom';
-import { getFileSrcSet } from '~/utils/srcset';
+
+import { NodeImageLazy } from '../NodeImageLazy';
 
 import styles from './styles.module.scss';
 
@@ -134,18 +134,13 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
               color={file.metadata?.dominant_color}
             >
               {({ loading, onLoad }) => (
-                <img
-                  data-srcset={getFileSrcSet(file)}
-                  width={file.metadata?.width}
-                  height={file.metadata?.height}
+                <NodeImageLazy
+                  file={file}
                   onLoad={onLoad}
                   onClick={() => onOpenPhotoSwipe(index)}
                   className={classNames(styles.image, 'swiper-lazy', {
                     [styles.loading]: loading,
                   })}
-                  color={normalizeBrightColor(file?.metadata?.dominant_color)}
-                  alt=""
-                  sizes="(max-width: 560px) 100vw, 50vh"
                 />
               )}
             </ImageLoadingWrapper>
