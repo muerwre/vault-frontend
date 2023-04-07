@@ -1,7 +1,7 @@
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 
 import { LoginDialogButtons } from '~/components/auth/login/LoginDialogButtons';
-import { LoginScene } from '~/components/auth/login/LoginScene';
+import { LoginStaticScene } from '~/components/auth/login/LoginStaticScene';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
@@ -27,7 +27,7 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
   const { openOauthWindow } = useOAuth();
   const showRestoreDialog = useShowModal(Dialog.RestoreRequest);
   const onRestoreRequest = useCallback(
-    event => {
+    (event) => {
       event.preventDefault();
       showRestoreDialog({});
     },
@@ -46,7 +46,7 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
           width={300}
           onClose={onRequestClose}
           footer={<LoginDialogButtons openOauthWindow={openOauthWindow} />}
-          backdrop={<LoginScene />}
+          backdrop={<LoginStaticScene />}
         >
           <Padder>
             <div className={styles.wrap}>

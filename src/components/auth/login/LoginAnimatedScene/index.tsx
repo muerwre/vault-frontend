@@ -1,6 +1,6 @@
 import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
 
-import { debounce, throttle } from 'throttle-debounce';
+import { throttle } from 'throttle-debounce';
 
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 
@@ -48,7 +48,7 @@ const layers: Layer[] = [
   },
 ];
 
-const LoginScene: FC<LoginSceneProps> = memo(() => {
+const LoginAnimatedScene: FC<LoginSceneProps> = memo(() => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
   const imageRefs = useRef<Array<SVGImageElement | null>>([]);
@@ -73,9 +73,9 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
         const target = imageRefs.current[index];
 
         if (target) {
-          target.style.transform = `translate(${shift *
-            it.velocity *
-            200}px, 0)`;
+          target.style.transform = `translate(${
+            shift * it.velocity * 200
+          }px, 0)`;
         }
       });
     },
@@ -124,9 +124,9 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
           fill="url(#fallbackGradient)"
         />
 
-        {layers.map(it => (
+        {layers.map((it) => (
           <image
-            ref={it => imageRefs.current.push(it)}
+            ref={(it) => imageRefs.current.push(it)}
             key={it.src}
             href={it.src}
             width={it.width}
@@ -143,4 +143,4 @@ const LoginScene: FC<LoginSceneProps> = memo(() => {
   );
 });
 
-export { LoginScene };
+export { LoginAnimatedScene };
