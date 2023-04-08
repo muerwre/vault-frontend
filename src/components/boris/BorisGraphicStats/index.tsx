@@ -43,7 +43,9 @@ const BorisGraphicStats: VFC<BorisGraphicStatsProps> = ({
         right={year}
       />
 
+      {/*
       <StatsCountdownCard since={parseISO(foundationDate)} className={styles.card} />
+  */}
     </div>
   );
 };

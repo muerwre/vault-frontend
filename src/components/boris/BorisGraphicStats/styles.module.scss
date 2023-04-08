@@ -2,7 +2,7 @@
 
 .group {
   display: grid;
-  grid-template-columns: 1fr 1fr 0.5fr;
+  grid-template-columns: 1fr 1fr;
   grid-column-gap: $gap;
   grid-row-gap: $gap;
   grid-auto-rows: 140px;
