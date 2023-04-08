@@ -1,18 +1,21 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { TelegramUser } from '@v9v/ts-react-telegram-login';
 
+import { Dialog } from '~/constants/modal';
 import { showErrorToast } from '~/utils/errors/showToast';
 import { useNotifications } from '~/utils/providers/NotificationProvider';
 
 import { apiAttachTelegram } from '../../api/auth/index';
+import { useModal } from '../modal/useModal';
 
 import { useOAuth } from './useOAuth';
 
 export const useTelegramAccount = () => {
   const [loading, setLoading] = useState(false);
-  const { refresh } = useOAuth();
+  const { refresh, accounts } = useOAuth();
   const { refresh: refreshNotificationSettings } = useNotifications();
+  const { showModal } = useModal();
 
   const attach = useCallback(
     async (data: TelegramUser, callback?: () => void) => {
@@ -30,5 +33,12 @@ export const useTelegramAccount = () => {
     [],
   );
 
-  return { attach, loading };
+  const connect = useCallback(() => showModal(Dialog.TelegramAttach, {}), []);
+
+  const connected = useMemo(
+    () => accounts.some((it) => it.provider === 'telegram'),
+    [accounts],
+  );
+
+  return { attach, loading, connected, connect };
 };
