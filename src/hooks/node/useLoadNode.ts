@@ -40,6 +40,7 @@ export const useLoadNode = (id: number, fallbackData?: ApiGetNodeResponse) => {
 
   return {
     node: data?.node || EMPTY_NODE,
+    backlinks: data?.backlinks,
     isLoading: isValidating && !data,
     update,
     lastSeen: data?.last_seen,

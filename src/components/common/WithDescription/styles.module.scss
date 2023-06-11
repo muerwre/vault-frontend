@@ -9,11 +9,14 @@
   color: $gray_50;
   padding: $gap;
   min-height: 42px;
+
+  &.link {
+    cursor: pointer;
+  }
 }
 
 .icon {
   fill: currentColor;
-  height: 32px;
 }
 
 .info {

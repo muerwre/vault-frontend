@@ -34,6 +34,11 @@ module.exports = withBundleAnalyzer(
         hostname: '*.ytimg.com',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        pathname: '/**',
+      },
     ],
   },
   })

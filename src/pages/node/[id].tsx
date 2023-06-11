@@ -103,7 +103,7 @@ type Props = RouteComponentProps<{ id: string }> &
 
 const NodePage: FC<Props> = observer((props) => {
   const id = useNodePageParams();
-  const { node, isLoading, update, lastSeen } = useLoadNode(
+  const { node, isLoading, update, lastSeen, backlinks } = useLoadNode(
     parseInt(id, 10),
     props.fallbackData,
   );
@@ -133,7 +133,12 @@ const NodePage: FC<Props> = observer((props) => {
   }
 
   return (
-    <NodeContextProvider node={node} isLoading={isLoading} update={update}>
+    <NodeContextProvider
+      node={node}
+      isLoading={isLoading}
+      update={update}
+      backlinks={backlinks}
+    >
       <NodeRelatedProvider id={parseInt(id, 10)} tags={node.tags}>
         <CommentContextProvider
           onSaveComment={onSaveComment}

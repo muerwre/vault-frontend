@@ -46,3 +46,15 @@
 .left_item {
   padding-bottom: $gap * 2;
 }
+
+.subheader {
+  display: flex;
+  gap: $gap;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.backlinks {
+  min-height: 100%;
+  display: flex;
+}

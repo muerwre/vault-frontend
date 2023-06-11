@@ -76,7 +76,11 @@ export const apiGetNode = (
   api
     .get<ApiGetNodeResponse>(API.NODES.GET(id), config)
     .then(cleanResult)
-    .then((data) => ({ node: data.node, last_seen: data.last_seen }));
+    .then((data) => ({
+      node: data.node,
+      last_seen: data.last_seen,
+      backlinks: data.backlinks,
+    }));
 
 export const apiGetNodeWithCancel = ({ id }: ApiGetNodeRequest) => {
   const cancelToken = axios.CancelToken.source();

@@ -1,4 +1,4 @@
-import { IComment, INode, ITag } from '~/types';
+import { IComment, INode, ITag, NodeBackLink } from '~/types';
 
 export interface IEditorComponentProps {}
 
@@ -30,7 +30,11 @@ export type PostCellViewResult = unknown; // TODO: update it with actual type
 export type ApiGetNodeRequest = {
   id: string | number;
 };
-export type ApiGetNodeResponse = { node: INode; last_seen?: string | null };
+export type ApiGetNodeResponse = {
+  node: INode;
+  backlinks?: NodeBackLink[];
+  last_seen?: string | null;
+};
 
 export type ApiGetNodeRelatedRequest = {
   id: INode['id'];

@@ -9,6 +9,7 @@ import { Footer } from '~/components/main/Footer';
 import { NodeTitle } from '~/components/node/NodeTitle';
 import { Container } from '~/containers/main/Container';
 import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import { NodeBacklinks } from '~/containers/node/NodeBacklinks';
 import { NodeBottomBlock } from '~/containers/node/NodeBottomBlock';
 import { useNodeActions } from '~/hooks/node/useNodeActions';
 import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';

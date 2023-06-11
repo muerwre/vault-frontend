@@ -1,6 +1,7 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
+import { Card } from '~/components/containers/Card';
 import { useUserDescription } from '~/hooks/auth/useUserDescription';
 import { INodeUser } from '~/types';
 
@@ -20,14 +21,14 @@ const NodeAuthorBlock: FC<Props> = ({ user }) => {
   const { fullname, username, photo } = user;
 
   return (
-    <div className={styles.block}>
+    <Card className={styles.block} elevation={-1}>
       <Avatar username={username} url={photo?.url} className={styles.avatar} />
 
       <div className={styles.info}>
         <div className={styles.username}>{fullname || username}</div>
         <div className={styles.description}>{description}</div>
       </div>
-    </div>
+    </Card>
   );
 };
 

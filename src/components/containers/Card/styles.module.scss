@@ -5,7 +5,18 @@
   border-radius: $panel_radius;
   padding: $gap;
 
-  @include outer_shadow();
+  &.elevation--1 {
+    @include inner_shadow;
+    background: linear-gradient(135deg, $content_bg_dark, $content_bg);
+  }
+
+  &.elevation-1 {
+    @include outer_shadow();
+  }
+
+  &.elevation-0 {
+    background: $content_bg_light;
+  }
 
   &:global(.seamless) {
     padding: 0;

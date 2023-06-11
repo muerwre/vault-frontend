@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
 
+import { Card } from '~/components/containers/Card';
+import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { Sticky } from '~/components/containers/Sticky';
@@ -9,6 +11,7 @@ import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
 import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
+import { NodeBacklinks } from '~/containers/node/NodeBacklinks';
 import { NodeComments } from '~/containers/node/NodeComments';
 import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
@@ -25,7 +28,7 @@ interface IProps {
 
 const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
   const user = useUserContext();
-  const { node, isLoading } = useNodeContext();
+  const { node, isLoading, backlinks } = useNodeContext();
   const {
     comments,
     isLoading: isLoadingComments,
@@ -63,6 +66,12 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
                 user={user}
               />
             )}
+
+            <div className={styles.subheader}>
+              <Filler className={styles.backlinks}>
+                <NodeBacklinks list={backlinks} />
+              </Filler>
+            </div>
           </Group>
 
           <aside className={styles.panel}>
