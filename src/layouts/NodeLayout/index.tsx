@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 import { observer } from 'mobx-react-lite';
 
@@ -8,8 +8,7 @@ import { Card } from '~/components/containers/Card';
 import { Footer } from '~/components/main/Footer';
 import { NodeTitle } from '~/components/node/NodeTitle';
 import { Container } from '~/containers/main/Container';
-import { SidebarRouter } from '~/containers/main/SidebarRouter';
-import { NodeBacklinks } from '~/containers/node/NodeBacklinks';
+import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
 import { NodeBottomBlock } from '~/containers/node/NodeBottomBlock';
 import { useNodeActions } from '~/hooks/node/useNodeActions';
 import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
@@ -19,9 +18,7 @@ import { useNodeContext } from '~/utils/context/NodeContextProvider';
 
 import styles from './styles.module.scss';
 
-type IProps = {};
-
-const NodeLayout: FC<IProps> = observer(() => {
+const NodeLayout = observer(() => {
   const { node, isLoading, update } = useNodeContext();
   const { head, block } = useNodeBlocks(node, isLoading);
   const [canEdit, canLike, canStar] = useNodePermissions(node);
@@ -66,7 +63,7 @@ const NodeLayout: FC<IProps> = observer(() => {
         </Card>
       </Container>
 
-      <SidebarRouter prefix="/post:id" />
+      <SubmitBarRouter prefix="/post:id" isLab={!node.is_promoted} />
 
       <Superpower>
         <ScrollHelperBottom />

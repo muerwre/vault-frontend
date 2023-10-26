@@ -10,7 +10,7 @@ import { BorisComments } from '~/containers/boris/BorisComments';
 import { BorisSidebar } from '~/containers/boris/BorisSidebar';
 import { BorisSuperPowersSSR } from '~/containers/boris/BorisSuperpowers/ssr';
 import { Container } from '~/containers/main/Container';
-import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
 import { BorisUsageStats } from '~/types/boris';
 import { useAuthProvider } from '~/utils/providers/AuthProvider';
 
@@ -65,7 +65,7 @@ const BorisLayout: FC<IProps> = observer(({ title, stats, isLoadingStats }) => {
         </div>
       </div>
 
-      <SidebarRouter prefix="/" />
+      <SubmitBarRouter prefix="/" />
     </Container>
   );
 });

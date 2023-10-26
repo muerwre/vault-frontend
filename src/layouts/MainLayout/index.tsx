@@ -2,7 +2,6 @@ import React from 'react';
 
 import { LoadingProgress } from '~/components/common/LoadingProgress';
 import { HeaderSSR } from '~/containers/main/Header/ssr';
-import { SidebarRouter } from '~/containers/main/SidebarRouter';
 
 import styles from './styles.module.scss';
 
@@ -14,7 +13,6 @@ export const MainLayout = ({ children }) => (
       {children}
 
       <LoadingProgress />
-      <SidebarRouter />
     </div>
   </div>
 );

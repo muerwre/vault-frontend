@@ -8,10 +8,10 @@ interface IProps {
   isLab?: boolean;
 }
 
-const SidebarRouter: FC<IProps> = ({ isLab }) => (
+const SubmitBarRouter: FC<IProps> = ({ isLab }) => (
   <Authorized>
     <SubmitBarSSR isLab={isLab} />
   </Authorized>
 );
 
-export { SidebarRouter };
+export { SubmitBarRouter };

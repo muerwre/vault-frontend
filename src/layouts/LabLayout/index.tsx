@@ -7,7 +7,7 @@ import { LabGrid } from '~/containers/lab/LabGrid';
 import { LabLoading } from '~/containers/lab/LabLoading';
 import { LabStats } from '~/containers/lab/LabStats';
 import { Container } from '~/containers/main/Container';
-import { SidebarRouter } from '~/containers/main/SidebarRouter';
+import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
 import { useLabContext } from '~/utils/context/LabContextProvider';
 
 import styles from './styles.module.scss';
@@ -39,7 +39,7 @@ const LabLayout: FC<IProps> = () => {
         </div>
       </div>
 
-      <SidebarRouter prefix="/lab" isLab />
+      <SubmitBarRouter prefix="/lab" isLab />
     </Container>
   );
 };

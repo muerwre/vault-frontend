@@ -63,6 +63,7 @@ export default class MyApp extends App {
                                 <Sprites />
                                 <Component {...pageProps} />
                               </MainLayout>
+
                               <BottomContainer />
                             </SidebarProvider>
                           </NotificationProvider>
