@@ -3,6 +3,7 @@ import { FlowDisplayVariant, INode } from '~/types';
 export const URLS = {
   BASE: '/',
   LAB: '/lab',
+  ROOM: '/room',
   BORIS: '/boris',
   AUTH: {
     LOGIN: '/auth/login',

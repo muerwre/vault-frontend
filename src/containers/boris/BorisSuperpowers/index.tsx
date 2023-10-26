@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { Card } from '~/components/containers/Card';
 import { Group } from '~/components/containers/Group';
 import { Markdown } from '~/components/containers/Markdown';
 
@@ -7,13 +8,18 @@ export interface BorisSuperpowersProps {}
 
 const BorisSuperpowers: FC<BorisSuperpowersProps> = () => {
   return (
-    <Group>
-      <h2>Штучки, находящиеся в разработке</h2>
+    <Card elevation={0}>
+      <Group>
+        <h3>Сейчас в разработке</h3>
 
-      <Markdown>
-        {`> На данный момент в разработке нет вещей, которые можно показать.\n\n// Приходите завтра`}
-      </Markdown>
-    </Group>
+        <Markdown>
+          - Раздел [рум](/room) в начальной стадии, смотрю как будет работать
+          концепт. Суть идеи можно посмотреть на
+          [гитхабе](https://github.com/muerwre/vault-frontend/issues/158).
+          Предложения можно оставлять здесь.
+        </Markdown>
+      </Group>
+    </Card>
   );
 };
 
