@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import { FC, useMemo } from 'react';
 
+import { BorisGraphicStats } from '~/components/boris/BorisGraphicStats';
 import { StatsRow } from '~/components/common/StatsRow';
 import { SubTitle } from '~/components/common/SubTitle';
 import { StatBackend } from '~/types/boris';
@@ -13,6 +14,15 @@ interface IProps {
 }
 
 const BorisStatsBackend: FC<IProps> = ({ isLoading, stats }) => {
+  const commentsByMonth = useMemo(
+    () => stats.comments.by_month?.slice(0, -1),
+    [stats.comments.by_month],
+  );
+  const nodesByMonth = useMemo(
+    () => stats.nodes.by_month?.slice(0, -1),
+    [stats.comments.by_month],
+  );
+
   if (!stats && !isLoading) {
     return null;
   }
@@ -54,10 +64,21 @@ const BorisStatsBackend: FC<IProps> = ({ isLoading, stats }) => {
           {stats.nodes.audios}
         </StatsRow>
 
-        <StatsRow isLoading={isLoading} label="Комментарии">
-          {stats.comments.total}
-        </StatsRow>
+        {/*
+          <StatsRow isLoading={isLoading} label="Комментарии">
+            {stats.comments.total}
+          </StatsRow>
+        */}
       </ul>
+
+      <div className={styles.graphs}>
+        <BorisGraphicStats
+          totalComments={stats.comments.total}
+          commentsByMonth={commentsByMonth}
+          totalNodes={stats.nodes.total}
+          nodesByMonth={nodesByMonth}
+        />
+      </div>
 
       <SubTitle isLoading={isLoading} className={styles.title}>
         Сторедж

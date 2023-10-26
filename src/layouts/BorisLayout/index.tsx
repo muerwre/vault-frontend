@@ -1,8 +1,7 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { BorisGraphicStats } from '~/components/boris/BorisGraphicStats';
 import { Superpower } from '~/components/boris/Superpower';
 import { Card } from '~/components/containers/Card';
 import { Group } from '~/components/containers/Group';
@@ -24,15 +23,7 @@ type IProps = {
 };
 
 const BorisLayout: FC<IProps> = observer(({ title, stats, isLoadingStats }) => {
-  const { isUser } = useAuthProvider();
-  const commentsByMonth = useMemo(
-    () => stats.backend.comments.by_month?.slice(0, -1),
-    [stats.backend.comments.by_month],
-  );
-  const nodesByMonth = useMemo(
-    () => stats.backend.nodes.by_month?.slice(0, -1),
-    [stats.backend.comments.by_month],
-  );
+  const { isUser, isTester } = useAuthProvider();
 
   return (
     <Container>
@@ -50,18 +41,13 @@ const BorisLayout: FC<IProps> = observer(({ title, stats, isLoadingStats }) => {
         <div className={styles.container}>
           <Card className={styles.content}>
             <Group>
-              <div>
-                <Superpower>
-                  <BorisSuperPowersSSR />
-                </Superpower>
-              </div>
-
-              <BorisGraphicStats
-                totalComments={stats.backend.comments.total}
-                commentsByMonth={commentsByMonth}
-                totalNodes={stats.backend.nodes.total}
-                nodesByMonth={nodesByMonth}
-              />
+              {isTester && (
+                <div>
+                  <Superpower>
+                    <BorisSuperPowersSSR />
+                  </Superpower>
+                </div>
+              )}
 
               <BorisComments />
             </Group>

@@ -31,9 +31,9 @@ const StatsGraphCard: VFC<StatsGraphCardProps> = ({
     className={styles.card}
   >
     <div className={styles.content}>
-      <span>{left}</span>
+      <span className={styles.legend}>{left}</span>
       <Filler />
-      <span>{right}</span>
+      <span className={styles.legend}>{right}</span>
     </div>
   </StatsCard>
 );

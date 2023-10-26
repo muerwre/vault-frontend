@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .content {
   flex: 1;
@@ -6,9 +6,22 @@
   display: flex;
   align-items: flex-end;
   font: $font_12_medium;
-  opacity: 0.2;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  margin: -2px;
 }
 
 .card {
   height: 100%;
+}
+
+.legend {
+  opacity: 0.5;
+  background: $content_bg_light;
+  backdrop-filter: blur(10px);
+  padding: 2px;
+  border-radius: 4px;
 }

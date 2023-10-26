@@ -15,13 +15,26 @@ interface StatsCardProps extends CardProps {
   background?: ReactNode;
 }
 
-const StatsCard: FC<StatsCardProps> = ({ children, title, background, total, ...props }) => (
-  <Card {...props} className={classNames(styles.card, props.className)}>
+const StatsCard: FC<StatsCardProps> = ({
+  children,
+  title,
+  background,
+  total,
+  ...props
+}) => (
+  <Card
+    {...props}
+    className={classNames(styles.card, props.className)}
+    elevation={0}
+  >
     <div className={styles.content}>
       {(!!title || !!total) && (
         <Group className={styles.title} horizontal>
-          {!!title && <SubTitle>{title}</SubTitle>}
-          <Filler />
+          {!!title && (
+            <Filler>
+              <SubTitle>{title}</SubTitle>
+            </Filler>
+          )}
           {!!total && <SubTitle className={styles.total}>{total}</SubTitle>}
         </Group>
       )}

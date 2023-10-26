@@ -1,14 +1,15 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .title {
   margin: $gap * 2 0 $gap;
-}
-
-.wrap {
 }
 
 .subtitle {
   margin-left: $gap;
   font: $font_12_semibold;
   text-transform: uppercase;
+}
+
+.graphs {
+  padding-top: $gap;
 }
