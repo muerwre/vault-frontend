@@ -130,10 +130,12 @@ const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
     <div className={styles.wrap} ref={wrapper}>
       <TagWrapper
         title={input || placeholder}
-        hasInput={true}
         color={isAlbumTag ? 'primary' : undefined}
+        deletable={false}
+        className={styles.tag}
       >
         <input
+          className={styles.input}
           type="text"
           value={input}
           size={1}

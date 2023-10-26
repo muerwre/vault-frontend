@@ -34,11 +34,6 @@ $big: 1.2;
     background-color: $content_bg;
   }
 
-  &.input {
-    color: transparent !important;
-    min-width: 100px;
-  }
-
   &.clickable {
     cursor: pointer;
   }
@@ -75,26 +70,6 @@ $big: 1.2;
       width: $tag_height * $big;
       height: $tag_height * $big;
     }
-  }
-
-  input {
-    background: none;
-    border: none;
-    color: white;
-    outline: none;
-    display: inline-flex;
-    position: absolute;
-    font: inherit;
-
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    min-width: 100px;
-    padding-left: $tag_height;
-    padding-right: 5px;
-    box-sizing: border-box;
   }
 }
 

@@ -7,30 +7,30 @@ import { Icon } from '~/components/input/Icon';
 import styles from './styles.module.scss';
 
 interface IProps {
+  className?: string;
   size?: string;
   color?: 'primary' | 'danger' | 'info' | 'black' | 'default';
   deletable?: boolean;
   hoverable?: boolean;
   editing?: boolean;
-  hasInput?: boolean;
   onClick?: () => void;
   onDelete?: () => void;
   title?: string;
 }
 
 const TagWrapper: FC<IProps> = ({
+  className,
   color = 'default',
   children,
   size,
   deletable,
   hoverable,
   editing,
-  hasInput,
   onClick,
   onDelete,
   title = '',
 }) => {
-  const canBeDeleted = deletable && !editing && !hasInput;
+  const canBeDeleted = deletable && !editing;
   const onDeletePress = useCallback(
     (event) => {
       if (!onDelete) {
@@ -53,9 +53,9 @@ const TagWrapper: FC<IProps> = ({
           [styles.hoverable]: hoverable,
           [styles.editing]: editing,
           [styles.deletable]: canBeDeleted,
-          [styles.input]: hasInput,
           [styles.clickable]: onClick,
         },
+        className,
       )}
       onClick={onClick}
     >
