@@ -17,6 +17,8 @@ const UploaderContext = createContext<Uploader>({
   pendingImages: [],
   isUploading: false,
   setFiles: (files: IFile[]) => files,
+  setImages: (files: IFile[]) => files,
+  setAudios: (files: IFile[]) => files,
 });
 
 export const UploaderContextProvider: FC<{

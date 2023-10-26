@@ -7,6 +7,7 @@ import { EditorImageUploadButton } from '~/components/editors/EditorImageUploadB
 import { EditorPublicSwitch } from '~/components/editors/EditorPublicSwitch';
 import { EditorUploadCoverButton } from '~/components/editors/EditorUploadCoverButton';
 import { ImageEditor } from '~/components/editors/ImageEditor';
+import { RoomEditor } from '~/components/editors/RoomEditor';
 import { TextEditor } from '~/components/editors/TextEditor';
 import { VideoEditor } from '~/components/editors/VideoEditor';
 import { LabAudio } from '~/components/lab/LabAudioBlock';
@@ -49,6 +50,7 @@ export const NODE_TYPES = {
   AUDIO: 'audio',
   VIDEO: 'video',
   TEXT: 'text',
+  ROOM: 'room',
 };
 
 export type INodeComponentProps = {
@@ -56,12 +58,22 @@ export type INodeComponentProps = {
   isLoading: boolean;
 };
 
-export type INodeComponents = Record<ValueOf<typeof NODE_TYPES>, FC<INodeComponentProps>>;
+export type INodeComponents = Record<
+  ValueOf<typeof NODE_TYPES>,
+  FC<INodeComponentProps>
+>;
 
 export const LAB_PREVIEW_LAYOUT: Record<string, FC<INodeComponentProps>[]> = {
   [NODE_TYPES.IMAGE]: [LabImage, LabPad, LabNodeTitle, LabDescription],
   [NODE_TYPES.VIDEO]: [LabVideo, LabPad, LabNodeTitle, LabDescription],
-  [NODE_TYPES.AUDIO]: [LabPad, LabNodeTitle, LabPad, NodeAudioImageBlock, LabAudio, LabPad],
+  [NODE_TYPES.AUDIO]: [
+    LabPad,
+    LabNodeTitle,
+    LabPad,
+    NodeAudioImageBlock,
+    LabAudio,
+    LabPad,
+  ],
   [NODE_TYPES.TEXT]: [LabPad, LabNodeTitle, LabPad, LabText, LabPad],
 };
 
@@ -94,11 +106,23 @@ export const NODE_EDITORS: Record<
   [NODE_TYPES.TEXT]: TextEditor,
   [NODE_TYPES.VIDEO]: VideoEditor,
   [NODE_TYPES.AUDIO]: AudioEditor,
+  [NODE_TYPES.ROOM]: RoomEditor,
 };
 
-export const NODE_PANEL_COMPONENTS: Record<string, FC<IEditorComponentProps>[]> = {
-  [NODE_TYPES.TEXT]: [EditorFiller, EditorUploadCoverButton, EditorPublicSwitch],
-  [NODE_TYPES.VIDEO]: [EditorFiller, EditorUploadCoverButton, EditorPublicSwitch],
+export const NODE_PANEL_COMPONENTS: Record<
+  string,
+  FC<IEditorComponentProps>[]
+> = {
+  [NODE_TYPES.TEXT]: [
+    EditorFiller,
+    EditorUploadCoverButton,
+    EditorPublicSwitch,
+  ],
+  [NODE_TYPES.VIDEO]: [
+    EditorFiller,
+    EditorUploadCoverButton,
+    EditorPublicSwitch,
+  ],
   [NODE_TYPES.IMAGE]: [
     EditorImageUploadButton,
     EditorFiller,
@@ -111,6 +135,11 @@ export const NODE_PANEL_COMPONENTS: Record<string, FC<IEditorComponentProps>[]> 
     EditorFiller,
     EditorUploadCoverButton,
     EditorPublicSwitch,
+  ],
+  [NODE_TYPES.ROOM]: [
+    EditorAudioUploadButton,
+    EditorImageUploadButton,
+    EditorFiller,
   ],
 };
 

@@ -23,7 +23,21 @@ export class UploaderStore {
   }
 
   addFile = (file: IFile) => this.files.push(file);
-  setFiles = (files: IFile[]) => (this.files = files);
+
+  // replaces all files
+  setFiles = (files: IFile[]) => {
+    this.files = files;
+  };
+
+  // refreshes only images, keeping audios as they was
+  setImages = (newImages: IFile[]) => {
+    this.files = [...newImages, ...this.filesAudios];
+  };
+
+  // refreshes only audios, keeping audios as they was
+  setAudios = (newAudios: IFile[]) => {
+    this.files = [...newAudios, ...this.filesImages];
+  };
 
   /** adds pending from file */
   addPending = async (id: string, file: File) => {
@@ -60,21 +74,25 @@ export class UploaderStore {
 
   /** returns only image files */
   get filesImages() {
-    return this.files.filter(file => file && file.type === UploadType.Image);
+    return this.files.filter((file) => file && file.type === UploadType.Image);
   }
 
   /** returns only image pending */
   get pendingImages() {
-    return values(this.pending).filter(item => item.type === UploadType.Image);
+    return values(this.pending).filter(
+      (item) => item.type === UploadType.Image,
+    );
   }
 
   /** returns only audio files */
   get filesAudios() {
-    return this.files.filter(file => file && file.type === UploadType.Audio);
+    return this.files.filter((file) => file && file.type === UploadType.Audio);
   }
 
   /** returns only audio pending */
   get pendingAudios() {
-    return values(this.pending).filter(item => item.type === UploadType.Audio);
+    return values(this.pending).filter(
+      (item) => item.type === UploadType.Audio,
+    );
   }
 }

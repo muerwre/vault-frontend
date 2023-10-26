@@ -9,7 +9,7 @@ import { ImageGrid } from '../ImageGrid';
 
 import styles from './styles.module.scss';
 
-const AudioEditor: FC<NodeEditorProps> = () => {
+const RoomEditor: FC<NodeEditorProps> = () => {
   const {
     filesImages,
     filesAudios,
@@ -39,4 +39,4 @@ const AudioEditor: FC<NodeEditorProps> = () => {
   );
 };
 
-export { AudioEditor };
+export { RoomEditor };

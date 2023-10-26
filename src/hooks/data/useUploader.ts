@@ -13,7 +13,7 @@ import { keys } from '~/utils/ramda';
 export const useUploader = (
   subject: UploadSubject,
   target: UploadTarget,
-  initialFiles?: IFile[]
+  initialFiles?: IFile[],
 ) => {
   const store = useLocalObservable(() => new UploaderStore(initialFiles));
 
@@ -26,8 +26,14 @@ export const useUploader = (
         // TODO: cancel all uploads on unmount
 
         const pending = await store.addPending(id, file);
-        const onProgress = ({ loaded, total }) => store.updateProgress(id, loaded, total);
-        const result = await apiUploadFile({ file, target, type: pending.type, onProgress });
+        const onProgress = ({ loaded, total }) =>
+          store.updateProgress(id, loaded, total);
+        const result = await apiUploadFile({
+          file,
+          target,
+          type: pending.type,
+          onProgress,
+        });
 
         store.removePending(id);
         store.addFile(result);
@@ -38,14 +44,14 @@ export const useUploader = (
         showErrorToast(error);
       }
     },
-    [store, target]
+    [store, target],
   );
 
   const uploadFiles = useCallback(
     async (files: File[]) => {
-      await Promise.any(files.map(file => uploadFile(file)));
+      await Promise.any(files.map((file) => uploadFile(file)));
     },
-    [uploadFile]
+    [uploadFile],
   );
 
   const isUploading = keys(store.pending).length > 0;
@@ -61,5 +67,7 @@ export const useUploader = (
     pendingAudios: store.pendingAudios,
     isUploading,
     setFiles: store.setFiles,
+    setImages: store.setImages,
+    setAudios: store.setAudios,
   };
 };

@@ -17,6 +17,7 @@ const BorisPage: VFC = observer(() => {
   const { node, isLoading, update } = useLoadNode(BORIS_NODE_ID);
 
   const onShowImageModal = useImageModal();
+
   const {
     onLoadMoreComments,
     onDelete: onDeleteComment,
@@ -26,6 +27,7 @@ const BorisPage: VFC = observer(() => {
     isLoading: isLoadingComments,
     isLoadingMore,
   } = useNodeComments(BORIS_NODE_ID);
+
   const { title, stats, isLoadingStats } = useBoris(comments);
 
   return (
