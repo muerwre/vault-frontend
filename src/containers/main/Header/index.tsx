@@ -27,7 +27,7 @@ export interface HeaderProps {}
 const Header: FC<HeaderProps> = observer(() => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { showModal } = useModal();
-  const { isUser, user, fetched, isTester } = useAuth();
+  const { isUser, user, fetched } = useAuth();
   const { hasFlowUpdates, hasLabUpdates } = useFlow();
   const { borisCommentedAt } = useUpdates();
   const { indicatorEnabled } = useNotifications();
@@ -85,17 +85,6 @@ const Header: FC<HeaderProps> = observer(() => {
             >
               ЛАБ
             </Anchor>
-
-            {isTester && (
-              <Anchor
-                className={classNames(styles.item, styles.lab, {
-                  [styles.has_dot]: hasLabUpdates && !indicatorEnabled,
-                })}
-                href={URLS.ROOM}
-              >
-                РУМ
-              </Anchor>
-            )}
 
             <Anchor
               className={classNames(styles.item, styles.boris, {
