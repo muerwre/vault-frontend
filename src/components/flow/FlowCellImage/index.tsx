@@ -26,6 +26,7 @@ const FlowCellImage: FC<Props> = ({
       placeholder="empty"
       layout="fill"
       objectFit="cover"
+      loading="lazy"
     />
     {children}
   </div>
