@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
+import Image from 'next/image';
 import SwiperCore, { Autoplay, EffectFade, Lazy, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
@@ -35,6 +36,12 @@ const lazy = {
   loadPrevNext: true,
   checkInView: true,
 };
+
+const getSrcSet = (url?: string) =>
+  [
+    `${getURLFromString(url, imagePresets.cover)} 768w`,
+    `${getURLFromString(url, imagePresets.small_hero)}`,
+  ].join(', ');
 
 export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
   const { isTablet } = useWindowSize();
@@ -140,7 +147,11 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
           .map((node) => (
             <SwiperSlide key={node.id}>
               <img
-                data-src={getURLFromString(node.thumbnail!, preset)}
+                data-src={getURLFromString(
+                  node.thumbnail,
+                  imagePresets.small_hero,
+                )}
+                data-srcSet={getSrcSet(node.thumbnail)}
                 alt=""
                 className={classNames(styles.preview, 'swiper-lazy')}
               />

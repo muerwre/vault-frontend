@@ -70,15 +70,15 @@ export const describeArc = (
   ].join(' ');
 };
 
-export const getURLFromString = (url?: string, size?: ImagePreset): string => {
-  if (size) {
-    return (url || '').replace(
-      'REMOTE_CURRENT://',
-      `${CONFIG.remoteCurrent}cache/${size}/`,
-    );
+export const getURLFromString = (url = '', size?: ImagePreset): string => {
+  if (!size) {
+    return url.replace('REMOTE_CURRENT://', CONFIG.remoteCurrent);
   }
 
-  return (url || '').replace('REMOTE_CURRENT://', CONFIG.remoteCurrent);
+  return url.replace(
+    'REMOTE_CURRENT://',
+    `${CONFIG.remoteCurrent}cache/${size}/`,
+  );
 };
 
 export const getURL = (
