@@ -63,7 +63,7 @@ $_brown: #23201f;
     --content_bg_success: #{transparentize($_wisegreen, 0.7)};
     --content_bg_info: #{transparentize($_blue, 0.5)};
     --content_bg_danger: #{transparentize($_red, 0.5)};
-    --content_bg_backdrop: #{transparentize($_brown, 0.05)};
+    --content_bg_backdrop: #{transparentize($_brown, 0.3)};
 
     // white shades (move to --vars)
     --white: white;

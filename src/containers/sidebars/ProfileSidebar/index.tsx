@@ -28,9 +28,7 @@ const SettingsSidebar: VFC<SettingsSidebarProps> = ({
   openSidebar,
 }) => {
   const { isUser } = useAuth();
-  const {
-    user: { cover },
-  } = useUser();
+  const cover = false;
 
   const tab = useMemo(
     () => (page ? Math.max(tabs.indexOf(page), 0) : undefined),

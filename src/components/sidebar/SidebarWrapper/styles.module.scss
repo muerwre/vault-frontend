@@ -1,12 +1,18 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 @keyframes appear {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes slideIn {
-  100% { transform: translate(0, 0); }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 .wrapper {
@@ -17,7 +23,7 @@
   z-index: 26;
   justify-content: flex-end;
   overflow: hidden;
-  animation: appear 0.25s forwards;
+  // animation: appear 0.25s forwards;
 
   & > * {
     z-index: 4;

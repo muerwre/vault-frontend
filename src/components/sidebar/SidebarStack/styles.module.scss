@@ -1,12 +1,11 @@
 @import 'src/styles/variables';
 
 .stack {
-  @include blur;
-
   display: flex;
   flex-direction: row-reverse;
   width: auto;
   border-radius: $radius 0 0 $radius;
+  background: $content_bg_backdrop;
 
   @include sidebar_stack_limit {
     & > *:not(:last-child) {
