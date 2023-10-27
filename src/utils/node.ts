@@ -27,6 +27,6 @@ export const canStarNode = (
   node?: Partial<INode>,
   user?: Partial<IUser>,
 ): boolean =>
-  (path(['type'], node) === NODE_TYPES.IMAGE || !node?.is_public) &&
+  (path(['type'], node) === NODE_TYPES.IMAGE || !node?.is_promoted) &&
   path(['is_promoted'], node) === true &&
   path(['role'], user) === Role.Admin;
