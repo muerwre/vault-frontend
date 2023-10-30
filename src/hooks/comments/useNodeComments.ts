@@ -26,17 +26,19 @@ export const useNodeComments = (nodeId: number, fallbackData?: IComment[]) => {
         }
 
         await mutate(
-          prev =>
-            prev?.map(list =>
-              list.map(comment => (comment.id === id ? { ...comment, deleted_at } : comment))
+          (prev) =>
+            prev?.map((list) =>
+              list.map((comment) =>
+                comment.id === id ? { ...comment, deleted_at } : comment,
+              ),
             ),
-          false
+          false,
         );
       } catch (error) {
         showErrorToast(error);
       }
     },
-    [data, mutate, nodeId]
+    [data, mutate, nodeId],
   );
 
   const onEdit = useCallback(
@@ -50,22 +52,37 @@ export const useNodeComments = (nodeId: number, fallbackData?: IComment[]) => {
       // Comment was created
       if (!comment.id) {
         await mutate(
-          data.map((list, index) => (index === 0 ? [result.comment, ...list] : list)),
-          false
+          data.map((list, index) =>
+            index === 0 ? [result.comment, ...list] : list,
+          ),
+          false,
         );
-        return;
+
+        return result.comment;
       }
 
       await mutate(
-        prev =>
-          prev?.map(list =>
-            list.map(it => (it.id === result.comment.id ? { ...it, ...result.comment } : it))
+        (prev) =>
+          prev?.map((list) =>
+            list.map((it) =>
+              it.id === result.comment.id ? { ...it, ...result.comment } : it,
+            ),
           ),
-        false
+        false,
       );
+
+      return result.comment;
     },
-    [data, mutate, nodeId]
+    [data, mutate, nodeId],
   );
 
-  return { onLoadMoreComments, onDelete, comments, hasMore, isLoading, onEdit, isLoadingMore };
+  return {
+    onLoadMoreComments,
+    onDelete,
+    comments,
+    hasMore,
+    isLoading,
+    onEdit,
+    isLoadingMore,
+  };
 };

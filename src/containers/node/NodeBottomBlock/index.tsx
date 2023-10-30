@@ -1,24 +1,21 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
-import { Card } from '~/components/containers/Card';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { Sticky } from '~/components/containers/Sticky';
 import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
-import { NodeCommentFormSSR } from '~/components/node/NodeCommentForm/ssr';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
 import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
 import { NodeBacklinks } from '~/containers/node/NodeBacklinks';
+import { NodeCommentFormSSR } from '~/containers/node/NodeCommentForm/ssr';
 import { NodeComments } from '~/containers/node/NodeComments';
 import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
 import { useNodeRelatedContext } from '~/utils/context/NodeRelatedContextProvider';
-import { useUserContext } from '~/utils/context/UserContextProvider';
-import { useAuthProvider } from '~/utils/providers/AuthProvider';
 
 import styles from './styles.module.scss';
 
@@ -27,7 +24,6 @@ interface IProps {
 }
 
 const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
-  const user = useUserContext();
   const { node, isLoading, backlinks } = useNodeContext();
   const {
     comments,
@@ -36,7 +32,6 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
   } = useCommentContext();
   const { related, isLoading: isLoadingRelated } = useNodeRelatedContext();
   const { inline } = useNodeBlocks(node, isLoading);
-  const { isUser } = useAuthProvider();
 
   if (node.deleted_at) {
     return <NodeDeletedBadge />;
@@ -59,13 +54,7 @@ const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
               )}
             </article>
 
-            {isUser && !isLoading && (
-              <NodeCommentFormSSR
-                nodeId={node.id}
-                saveComment={onSaveComment}
-                user={user}
-              />
-            )}
+            <NodeCommentFormSSR saveComment={onSaveComment} />
 
             <div className={styles.subheader}>
               <Filler className={styles.backlinks}>

@@ -22,6 +22,7 @@ import { IComment, IFile } from '~/types';
 import { formatCommentText, getPrettyDate, getURL } from '~/utils/dom';
 import { append, assocPath, path, reduce } from '~/utils/ramda';
 
+import { CommentEditingForm } from '../CommentEditingForm';
 import { CommentImageGrid } from '../CommentImageGrid';
 import { CommentMenu } from '../CommentMenu';
 
@@ -32,7 +33,7 @@ interface IProps {
   nodeId: number;
   comment: IComment;
   canEdit: boolean;
-  saveComment: (data: IComment) => Promise<unknown>;
+  saveComment: (data: IComment) => Promise<IComment | undefined>;
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
   onShowImageModal: (images: IFile[], index: number) => void;
 }
@@ -98,7 +99,7 @@ const CommentContent: FC<IProps> = memo(
 
     if (isEditing) {
       return (
-        <CommentForm
+        <CommentEditingForm
           saveComment={saveComment}
           nodeId={nodeId}
           comment={comment}

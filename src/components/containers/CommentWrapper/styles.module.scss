@@ -95,7 +95,7 @@ div.thumb_image {
   background-size: cover;
   flex: 0 0 $comment_height;
   will-change: transform;
-  cursor: pointer;
+  cursor: default;
 
   @include tablet {
     height: 32px;
@@ -103,6 +103,10 @@ div.thumb_image {
     flex: 0 0 32px;
     border-radius: $panel_radius;
   }
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .thumb_user {

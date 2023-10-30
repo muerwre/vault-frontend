@@ -21,7 +21,7 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
   isSame?: boolean;
   canEdit?: boolean;
   highlighted?: boolean;
-  saveComment: (data: IComment) => Promise<unknown>;
+  saveComment: (data: IComment) => Promise<IComment | undefined>;
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
   onShowImageModal: (images: IFile[], index: number) => void;
 };

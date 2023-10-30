@@ -7,11 +7,15 @@ import { IUser } from '~/types/auth';
 import { path } from '~/utils/ramda';
 
 interface Props {
-  user: IUser;
+  user?: IUser;
   className?: string;
 }
 
 const CommentAvatar: FC<Props> = ({ user, className }) => {
+  if (!user) {
+    return <Avatar className={className} />;
+  }
+
   return (
     <MenuButton
       position="auto"

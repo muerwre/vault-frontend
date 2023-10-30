@@ -10,7 +10,7 @@ import { DivProps } from '~/utils/types';
 import styles from './styles.module.scss';
 
 type IProps = DivProps & {
-  user: IUser;
+  user?: IUser;
   isEmpty?: boolean;
   isLoading?: boolean;
   isForm?: boolean;
@@ -36,7 +36,10 @@ const CommentWrapper: FC<IProps> = ({
     {...props}
   >
     <div className={styles.thumb}>
-      <CommentAvatar user={user} className={styles.thumb_image} />
+      <CommentAvatar
+        user={user}
+        className={classNames(styles.thumb_image, { [styles.pointer]: user })}
+      />
       <div className={styles.thumb_user}>~{path(['username'], user)}</div>
     </div>
 
