@@ -151,7 +151,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
                   node.thumbnail,
                   imagePresets.small_hero,
                 )}
-                data-srcSet={getSrcSet(node.thumbnail)}
+                data-srcset={getSrcSet(node.thumbnail)}
                 alt=""
                 className={classNames(styles.preview, 'swiper-lazy')}
               />
