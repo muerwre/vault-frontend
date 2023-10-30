@@ -39,6 +39,7 @@
     margin: 0.5em 0;
     line-height: 1.4em;
     font: $font_16_medium;
+    opacity: 0.7;
 
     @include tablet {
       font: $font_14_medium;
@@ -48,6 +49,11 @@
 
 .button {
   margin-top: 1.4em;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
 
   @include tablet {
     font: $font_12_semibold;
