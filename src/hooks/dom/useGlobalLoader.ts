@@ -29,9 +29,11 @@ export const useGlobalLoader = () => {
     }
 
     hideLoader();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flow.isRefreshed, getInitialNodes]);
 
   useEffect(() => {
     void getInitialNodes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUser]);
 };

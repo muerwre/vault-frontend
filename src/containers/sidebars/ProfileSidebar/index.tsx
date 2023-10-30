@@ -10,7 +10,6 @@ import { SidebarWrapper } from '~/components/sidebar/SidebarWrapper';
 import { SidebarName } from '~/constants/sidebar';
 import { ProfileSidebarMenu } from '~/containers/profile/ProfileSidebarMenu';
 import { useAuth } from '~/hooks/auth/useAuth';
-import { useUser } from '~/hooks/auth/useUser';
 import type { SidebarComponentProps } from '~/types/sidebar';
 import { isNil } from '~/utils/ramda';
 
@@ -41,13 +40,14 @@ const SettingsSidebar: VFC<SettingsSidebarProps> = ({
         page: !isNil(val) ? tabs[val] : undefined,
       });
     },
-    [open, onRequestClose],
+    [openSidebar],
   );
 
   useEffect(() => {
     if (!isUser) {
       onRequestClose();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUser]);
 
   if (!isUser) {

@@ -91,7 +91,7 @@ export const getStaticProps = async (
       revalidate: 7 * 86400, // every week
     };
   } catch (error) {
-    console.warn(`[NEXT] can't generate node: `, error);
+    console.warn('[NEXT] can\'t generate node: ', error);
     return {
       notFound: true,
     };

@@ -4,9 +4,9 @@ import {
   ApiCreateNoteRequest,
   ApiUpdateNoteResponse,
   ApiUpdateNoteRequest,
-} from "~/api/notes/types";
-import { URLS } from "~/constants/urls";
-import { api, cleanResult } from "~/utils/api";
+} from '~/api/notes/types';
+import { URLS } from '~/constants/urls';
+import { api, cleanResult } from '~/utils/api';
 
 export const apiListNotes = ({ limit, offset, search }: ApiListNotesRequest) =>
   api

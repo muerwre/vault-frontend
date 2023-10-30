@@ -89,6 +89,7 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
   useEffect(() => {
     controlledSwiper?.slideTo(0, 0);
     return () => controlledSwiper?.slideTo(0, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images, node?.id]);
 
   useEffect(() => {
@@ -97,6 +98,7 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
     } else {
       controlledSwiper?.keyboard.enable();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalActive]);
 
   if (!images?.length) {

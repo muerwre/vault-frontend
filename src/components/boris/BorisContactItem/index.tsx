@@ -1,9 +1,7 @@
-import React, { FC, ReactNode, useCallback } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { WithDescription } from '~/components/common/WithDescription';
 import { Icon } from '~/components/input/Icon';
-
-import styles from './styles.module.scss';
 
 interface Props {
   icon: string;
@@ -22,12 +20,6 @@ const BorisContactItem: FC<Props> = ({
   prefix,
   suffix,
 }) => {
-  const onClick = useCallback(() => {
-    if (!link) return;
-
-    window.open(link);
-  }, []);
-
   return (
     <div>
       {prefix}

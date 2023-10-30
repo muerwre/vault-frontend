@@ -1,14 +1,11 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 
 import { Pressable } from '~/components/common/Pressable';
 import { NodeRelated } from '~/components/node/NodeRelated';
 import { NodeRelatedPlaceholder } from '~/components/node/NodeRelated/placeholder';
-import { Dialog } from '~/constants/modal';
-import { useShowModal } from '~/hooks/modal/useShowModal';
 import { useTagSidebar } from '~/hooks/sidebar/useTagSidebar';
-import { INode, ITag } from '~/types';
+import { INode } from '~/types';
 import { INodeRelated } from '~/types/node';
-import { useSidebar } from '~/utils/providers/SidebarProvider';
 
 interface IProps {
   isLoading: boolean;

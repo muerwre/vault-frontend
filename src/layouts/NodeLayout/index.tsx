@@ -31,7 +31,10 @@ const NodeLayout = observer(() => {
 
   useNodeCoverImage(node);
 
-  const onUnauthorizedLike = useCallback(() => showRegisterDialog({}), []);
+  const onUnauthorizedLike = useCallback(
+    () => showRegisterDialog({}),
+    [showRegisterDialog],
+  );
 
   return (
     <div className={styles.wrap}>

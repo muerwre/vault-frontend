@@ -20,7 +20,7 @@ const BorisStatsBackend: FC<IProps> = ({ isLoading, stats }) => {
   );
   const nodesByMonth = useMemo(
     () => stats.nodes.by_month?.slice(0, -1),
-    [stats.comments.by_month],
+    [stats.nodes.by_month],
   );
 
   if (!stats && !isLoading) {

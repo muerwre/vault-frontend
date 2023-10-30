@@ -2,7 +2,6 @@ import { PropsWithChildren } from 'react';
 
 import classNames from 'classnames';
 
-import { Anchor } from '~/components/common/Anchor';
 import { DivProps, LinkProps } from '~/utils/types';
 
 import styles from './styles.module.scss';

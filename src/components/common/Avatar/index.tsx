@@ -4,7 +4,6 @@ import classNames from 'classnames';
 
 import { Square } from '~/components/common/Square';
 import { imagePresets } from '~/constants/urls';
-import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { getURLFromString } from '~/utils/dom';
 import { DivProps } from '~/utils/types';
 

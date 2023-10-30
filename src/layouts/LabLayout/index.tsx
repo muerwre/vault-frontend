@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 
 import { Group } from '~/components/containers/Group';
 import { Sticky } from '~/components/containers/Sticky';

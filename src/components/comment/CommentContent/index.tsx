@@ -11,15 +11,13 @@ import React, {
 
 import classnames from 'classnames';
 
-import { CommentForm } from '~/components/comment/CommentForm';
 import { Authorized } from '~/components/containers/Authorized';
 import { Group } from '~/components/containers/Group';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
 import { UploadType } from '~/constants/uploads';
-import { imagePresets } from '~/constants/urls';
 import { IComment, IFile } from '~/types';
-import { formatCommentText, getPrettyDate, getURL } from '~/utils/dom';
+import { formatCommentText, getPrettyDate } from '~/utils/dom';
 import { append, assocPath, path, reduce } from '~/utils/ramda';
 
 import { CommentEditingForm } from '../CommentEditingForm';

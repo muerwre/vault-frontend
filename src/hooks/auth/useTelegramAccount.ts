@@ -30,10 +30,13 @@ export const useTelegramAccount = () => {
         setLoading(false);
       }
     },
-    [],
+    [refresh, refreshNotificationSettings],
   );
 
-  const connect = useCallback(() => showModal(Dialog.TelegramAttach, {}), []);
+  const connect = useCallback(
+    () => showModal(Dialog.TelegramAttach, {}),
+    [showModal],
+  );
 
   const connected = useMemo(
     () => accounts.some((it) => it.provider === 'telegram'),

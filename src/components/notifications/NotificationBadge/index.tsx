@@ -3,8 +3,6 @@ import React, { FC } from 'react';
 import { Anchor } from '~/components/common/Anchor';
 import { InlineUsername } from '~/components/common/InlineUsername';
 import { Square } from '~/components/common/Square';
-import { Card } from '~/components/containers/Card';
-import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
 import { NotificationItem, NotificationType } from '~/types/notifications';
 import { formatText, getPrettyDate, getURLFromString } from '~/utils/dom';
 

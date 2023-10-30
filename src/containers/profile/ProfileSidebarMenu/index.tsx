@@ -2,7 +2,6 @@ import React, { useCallback, VFC } from 'react';
 
 import classNames from 'classnames';
 
-import { Superpower } from '~/components/boris/Superpower';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
 import { Zone } from '~/components/containers/Zone';
@@ -32,7 +31,7 @@ const ProfileSidebarMenu: VFC<ProfileSidebarMenuProps> = ({ onClose }) => {
   const onLogout = useCallback(() => {
     logout();
     onClose();
-  }, [onClose]);
+  }, [logout, onClose]);
 
   return (
     <div className={styles.wrap}>

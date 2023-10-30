@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 
 import { FormikProvider } from 'formik';
 import { observer } from 'mobx-react-lite';
@@ -9,14 +9,12 @@ import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormat
 import { LocalCommentFormTextarea } from '~/components/comment/LocalCommentFormTextarea';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
-import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { EMPTY_COMMENT } from '~/constants/node';
 import { useCommentFormFormik } from '~/hooks/comments/useCommentFormFormik';
 import { useInputPasteUpload } from '~/hooks/dom/useInputPasteUpload';
-import { IComment, INode } from '~/types';
+import { IComment } from '~/types';
 import {
-  UploaderContextProvider,
   useUploaderContext,
 } from '~/utils/context/UploaderContextProvider';
 

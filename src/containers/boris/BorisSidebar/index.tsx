@@ -4,7 +4,6 @@ import { BorisContacts } from '~/components/boris/BorisContacts';
 import { BorisStats } from '~/components/boris/BorisStats';
 import { Group } from '~/components/containers/Group';
 import { SuperPowersToggle } from '~/containers/auth/SuperPowersToggle';
-import { useAuth } from '~/hooks/auth/useAuth';
 import { useTelegramAccount } from '~/hooks/auth/useTelegramAccount';
 import { BorisUsageStats } from '~/types/boris';
 

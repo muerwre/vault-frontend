@@ -5,11 +5,11 @@ import { IUser } from '~/types/auth';
 export const useUserDescription = (user?: Partial<IUser>) => {
   const randomPhrase = useRandomPhrase('USER_DESCRIPTION');
 
+  const isActive = useUserActiveStatus(user?.last_seen);
+
   if (!user) {
     return '';
   }
-
-  const isActive = useUserActiveStatus(user.last_seen);
 
   if (!isActive) {
     return 'Юнит деактивирован';

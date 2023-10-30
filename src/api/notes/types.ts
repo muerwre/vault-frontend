@@ -1,4 +1,4 @@
-import { Note } from "~/types/notes";
+import { Note } from '~/types/notes';
 
 export interface ApiGetNotesRequest {
   limit: number;

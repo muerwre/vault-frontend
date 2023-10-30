@@ -30,14 +30,14 @@ const CommentFormAttaches: FC = () => {
     (newFiles: IFile[]) => {
       setFiles([...filesAudios, ...newFiles.filter((it) => it)]);
     },
-    [setFiles, filesImages, filesAudios],
+    [setFiles, filesAudios],
   );
 
   const onAudioMove = useCallback(
     (newFiles: IFile[]) => {
       setFiles([...filesImages, ...newFiles]);
     },
-    [setFiles, filesImages, filesAudios],
+    [setFiles, filesImages],
   );
 
   const onFileDelete = useCallback(

@@ -15,7 +15,7 @@ const AudioGrid: FC<IProps> = ({ files, setFiles, locked }) => {
     (newFiles: IFile[]) => {
       setFiles(newFiles);
     },
-    [setFiles, files],
+    [setFiles],
   );
 
   const onDrop = useCallback(

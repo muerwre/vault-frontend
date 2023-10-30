@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
@@ -10,7 +10,7 @@ import styles from './styles.module.scss';
 const FlowLoginStamp = () => {
   const showModal = useShowModal(Dialog.Login);
 
-  const onClick = useCallback(() => showModal({}), []);
+  const onClick = useCallback(() => showModal({}), [showModal]);
 
   return (
     <div className={styles.stamp}>

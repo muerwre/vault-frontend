@@ -18,7 +18,7 @@ const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
     (newFiles: IFile[]) => {
       setFiles(newFiles.filter((it) => it));
     },
-    [setFiles, files],
+    [setFiles],
   );
 
   const onDrop = useCallback(

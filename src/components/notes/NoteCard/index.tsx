@@ -25,14 +25,14 @@ const NoteCard: VFC<NoteCardProps> = ({
 }) => {
   const [editing, setEditing] = useState(false);
 
-  const toggleEditing = useCallback(() => setEditing(v => !v), []);
+  const toggleEditing = useCallback(() => setEditing((v) => !v), []);
   const onUpdate = useCallback(
     (text: string, callback?: () => void) =>
       update(text, () => {
         setEditing(false);
         callback?.();
       }),
-    [],
+    [update],
   );
 
   return (

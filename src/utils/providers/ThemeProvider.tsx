@@ -44,10 +44,13 @@ const ThemeProvider: FC<ProvidersProps> = ({ children }) => {
 
   useEffect(() => {
     const stored = localStorage.getItem('vault__theme');
+
     if (!stored || !keys(themeClass).includes(stored as Theme)) {
       return;
     }
+
     setTheme(stored as Theme);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);

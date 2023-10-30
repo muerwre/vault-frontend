@@ -30,7 +30,7 @@ export const useSSRLoadingIndicator = (delay = 0) => {
     Router.events.on('routeChangeStart', show);
     Router.events.on('routeChangeComplete', hide);
     Router.events.on('routeChangeError', hide);
-  }, []);
+  }, [delay]);
 
   return shown;
 };

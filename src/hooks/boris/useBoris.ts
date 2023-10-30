@@ -1,14 +1,14 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from 'react';
 
-import isBefore from "date-fns/isBefore";
+import isBefore from 'date-fns/isBefore';
 
-import { useRandomPhrase } from "~/constants/phrases";
-import { useLastSeenBoris } from "~/hooks/auth/useLastSeenBoris";
-import { useBorisStats } from "~/hooks/boris/useBorisStats";
-import { IComment } from "~/types";
+import { useRandomPhrase } from '~/constants/phrases';
+import { useLastSeenBoris } from '~/hooks/auth/useLastSeenBoris';
+import { useBorisStats } from '~/hooks/boris/useBorisStats';
+import { IComment } from '~/types';
 
 export const useBoris = (comments: IComment[]) => {
-  const title = useRandomPhrase("BORIS_TITLE");
+  const title = useRandomPhrase('BORIS_TITLE');
 
   const { lastSeen, setLastSeen } = useLastSeenBoris();
 

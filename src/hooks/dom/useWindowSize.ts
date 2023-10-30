@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
 export const useWindowSize = () => {
   const [size, setSize] = useState({
@@ -22,9 +22,10 @@ export const useWindowSize = () => {
   useEffect(() => {
     onResize();
 
-    window.addEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
 
-    return () => window.removeEventListener("resize", onResize);
+    return () => window.removeEventListener('resize', onResize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return size;

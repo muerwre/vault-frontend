@@ -23,23 +23,27 @@ const NotificationList: FC<NotificationListProps> = () => {
 
   useEffect(() => {
     return () => markAsRead();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderItem = useCallback((item: NotificationItem) => {
-    const isNew =
-      !lastSeen ||
-      !item.created_at ||
-      isAfter(parseISO(item.created_at), lastSeen);
-    switch (item.type) {
-      case NotificationType.Comment:
-      case NotificationType.Boris:
-        return <NotificationComment item={item} isNew={isNew} />;
-      case NotificationType.Node:
-        return <NotificationNode item={item} isNew={isNew} />;
-      default:
-        return null;
-    }
-  }, []);
+  const renderItem = useCallback(
+    (item: NotificationItem) => {
+      const isNew =
+        !lastSeen ||
+        !item.created_at ||
+        isAfter(parseISO(item.created_at), lastSeen);
+      switch (item.type) {
+        case NotificationType.Comment:
+        case NotificationType.Boris:
+          return <NotificationComment item={item} isNew={isNew} />;
+        case NotificationType.Node:
+          return <NotificationNode item={item} isNew={isNew} />;
+        default:
+          return null;
+      }
+    },
+    [lastSeen],
+  );
 
   if (isLoading) {
     return <LoaderScreen align="top" />;

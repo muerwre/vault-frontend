@@ -10,23 +10,25 @@ interface CommentDistanceProps {
   secondDate?: Date;
 }
 
-const CommentDistance: FC<CommentDistanceProps> = memo(({ firstDate, secondDate }) => {
-  const distance = useMemo(() => {
-    if (!firstDate || !secondDate) {
-      return undefined;
+const CommentDistance: FC<CommentDistanceProps> = memo(
+  ({ firstDate, secondDate }) => {
+    const distance = useMemo(() => {
+      if (!firstDate || !secondDate) {
+        return undefined;
+      }
+
+      return formatDistance(secondDate, firstDate, {
+        locale: ru,
+        addSuffix: false,
+      });
+    }, [firstDate, secondDate]);
+
+    if (!distance) {
+      return null;
     }
 
-    return formatDistance(secondDate, firstDate, {
-      locale: ru,
-      addSuffix: false,
-    });
-  }, []);
-
-  if (!distance) {
-    return null;
-  }
-
-  return <div className={styles.bar}>прошло {distance}</div>;
-});
+    return <div className={styles.bar}>прошло {distance}</div>;
+  },
+);
 
 export { CommentDistance };

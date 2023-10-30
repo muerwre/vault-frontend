@@ -43,7 +43,7 @@ const Header: FC<HeaderProps> = observer(() => {
       borisCommentedAt &&
       ((fetched && !user.last_seen_boris) ||
         isBefore(new Date(user.last_seen_boris), new Date(borisCommentedAt))),
-    [borisCommentedAt, isUser, user.last_seen_boris, fetched],
+    [isUser, indicatorEnabled, borisCommentedAt, fetched, user.last_seen_boris],
   );
 
   // Needed for SSR

@@ -1,11 +1,9 @@
 import React, { FC } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
-import { Markdown } from '~/components/containers/Markdown';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { imagePresets } from '~/constants/urls';
 import { IUser } from '~/types/auth';
-import { formatText } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 

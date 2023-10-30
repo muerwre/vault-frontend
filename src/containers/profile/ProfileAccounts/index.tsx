@@ -1,14 +1,11 @@
-import React, { FC, Fragment, useCallback, useMemo } from 'react';
+import React, { FC, Fragment } from 'react';
 
-import { Superpower } from '~/components/boris/Superpower';
 import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
 import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { SOCIAL_ICONS } from '~/constants/auth/socials';
-import { Dialog } from '~/constants/modal';
 import { useOAuth } from '~/hooks/auth/useOAuth';
-import { useModal } from '~/hooks/modal/useModal';
 
 import styles from './styles.module.scss';
 

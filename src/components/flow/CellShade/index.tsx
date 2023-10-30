@@ -25,12 +25,16 @@ const CellShade: FC<Props> = ({ color, size = 50, angle = 7, ...rest }) => {
 
     return `linear-gradient(${angle}deg, ${normalized} ${size}px, ${transparentize(
       normalized,
-      1
+      1,
     )} ${size * 5}px)`;
-  }, [color, size]);
+  }, [angle, color, size]);
 
   return (
-    <div {...rest} className={classNames(rest.className, styles.shade)} style={{ background }} />
+    <div
+      {...rest}
+      className={classNames(rest.className, styles.shade)}
+      style={{ background }}
+    />
   );
 };
 

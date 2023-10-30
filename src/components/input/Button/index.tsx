@@ -90,7 +90,7 @@ const Button: FC<IButtonProps> = memo(
       }
 
       return 24;
-    }, []);
+    }, [size]);
 
     return (
       <Tippy content={label || ''} disabled={!label}>

@@ -86,6 +86,7 @@ const LoginAnimatedScene: FC<LoginSceneProps> = memo(() => {
     const listener = throttle(100, onMouseMove);
     document.addEventListener('mousemove', listener);
     return () => document.removeEventListener('mousemove', listener);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isTablet) {

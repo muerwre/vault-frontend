@@ -1,5 +1,3 @@
-import { FC } from 'react';
-
 import classNames from 'classnames';
 
 import { FlowGrid } from '~/components/flow/FlowGrid';

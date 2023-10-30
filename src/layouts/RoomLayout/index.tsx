@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 
+import { Anchor } from '~/components/common/Anchor';
 import { Button } from '~/components/input/Button';
 import { Role } from '~/constants/auth';
 import { Dialog } from '~/constants/modal';
@@ -26,7 +27,7 @@ const RoomLayout: FC<RoomLayoutProps> = () => {
 
               <p>
                 Пока ещё концепт, над которым я размышляю, ты видишь его, потому
-                что включил суперсилы в <a href="/boris">Борисе</a>.
+                что включил суперсилы в <Anchor href="/boris">Борисе</Anchor>.
               </p>
 
               <p>

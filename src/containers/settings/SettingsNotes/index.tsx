@@ -20,7 +20,7 @@ const List = () => {
     async (id: number) => {
       confirm('Удалить? Это удалит заметку навсегда', () => remove(id));
     },
-    [remove],
+    [confirm, remove],
   );
 
   return (

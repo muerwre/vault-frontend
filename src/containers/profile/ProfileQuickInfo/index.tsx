@@ -2,12 +2,10 @@ import React, { FC } from 'react';
 
 import classNames from 'classnames';
 
-import { Avatar } from '~/components/common/Avatar';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
 import { useUserActiveStatus } from '~/hooks/auth/useUserActiveStatus';
 import { IUser } from '~/types/auth';
-import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 

@@ -38,7 +38,7 @@ const SidebarCards: FC = ({ children }) => {
       return [];
     }
 
-    return Array.isArray(children) ? children.filter(it => it) : [children];
+    return Array.isArray(children) ? children.filter((it) => it) : [children];
   }, [children]);
 
   if (isNil(activeTab) || !nonEmptyChildren[activeTab]) {
@@ -48,7 +48,7 @@ const SidebarCards: FC = ({ children }) => {
   return <div className={styles.card}>{nonEmptyChildren[activeTab]}</div>;
 };
 
-const SidebarStack = function({
+const SidebarStack = function ({
   children,
   tab,
   onTabChange,
@@ -58,7 +58,7 @@ const SidebarStack = function({
   const closeAllTabs = useCallback(() => {
     setActiveTab(undefined);
     onTabChange?.(undefined);
-  }, []);
+  }, [onTabChange]);
 
   const onChangeTab = useCallback(
     (index: number) => {

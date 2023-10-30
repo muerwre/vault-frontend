@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { throttle } from 'throttle-debounce';
 
@@ -44,5 +44,5 @@ export const useScrollEnd = (
     window.addEventListener('scroll', eventHandler);
 
     return () => window.removeEventListener('scroll', eventHandler);
-  }, [item, active, innerHeight, debouncedCallback]);
+  }, [item, active, innerHeight, debouncedCallback, threshold]);
 };

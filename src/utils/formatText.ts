@@ -1,6 +1,5 @@
 import { marked } from 'marked';
 
-import { EventMessageType } from '~/constants/events';
 import { stripHTMLTags } from '~/utils/stripHTMLTags';
 
 /**
@@ -22,7 +21,7 @@ export const formatTextSanitizeTags = (text: string): string =>
  * Returns clickable usernames
  */
 export const formatTextClickableUsernames = (text: string): string =>
-  text.replace(/~([\wа-яА-Я-]+)/giu, `<span class="username">~$1</span>`);
+  text.replace(/~([\wа-яА-Я-]+)/giu, '<span class="username">~$1</span>');
 
 /**
  * Makes gray comments

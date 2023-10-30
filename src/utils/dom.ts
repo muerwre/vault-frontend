@@ -10,7 +10,6 @@ import {
   COMMENT_BLOCK_TYPES,
   ICommentBlock,
 } from '~/constants/comment';
-import { imagePresets } from '~/constants/urls';
 import { IFile, ValueOf } from '~/types';
 import { CONFIG } from '~/utils/config';
 import {

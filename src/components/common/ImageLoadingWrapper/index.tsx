@@ -1,10 +1,8 @@
 import React, {
   CSSProperties,
   FC,
-  useCallback,
   useMemo,
   useReducer,
-  useState,
 } from 'react';
 
 import classNames from 'classnames';

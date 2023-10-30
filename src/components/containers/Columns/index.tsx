@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 
 import Masonry from 'react-masonry-css';
 
@@ -34,6 +34,7 @@ const Columns: FC<ColumnsProps> = ({
     const timeout = setTimeout(() => setColumns([...childs]), 150);
 
     return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current]);
 
   useScrollEnd(columns, onScrollEnd, { active: hasMore, threshold: 2 });

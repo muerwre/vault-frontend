@@ -22,8 +22,8 @@ export const API = {
 
     GET_SOCIALS: '/oauth',
     DROP_SOCIAL: (provider, id) => `/oauth/${provider}/${id}`,
-    ATTACH_SOCIAL: `/oauth`,
-    LOGIN_WITH_SOCIAL: `/oauth`,
+    ATTACH_SOCIAL: '/oauth',
+    LOGIN_WITH_SOCIAL: '/oauth',
     ATTACH_TELEGRAM: '/oauth/telegram/attach',
   },
   NODES: {
@@ -55,11 +55,11 @@ export const API = {
     GITHUB_ISSUES: 'https://api.github.com/repos/muerwre/vault-frontend/issues',
   },
   TAG: {
-    NODES: `/tags/nodes`,
-    AUTOCOMPLETE: `/tags/autocomplete`,
+    NODES: '/tags/nodes',
+    AUTOCOMPLETE: '/tags/autocomplete',
   },
   LAB: {
-    NODES: `/nodes/lab`,
+    NODES: '/nodes/lab',
     STATS: '/nodes/lab/stats',
     UPDATES: '/nodes/lab/updates',
   },

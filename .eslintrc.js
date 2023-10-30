@@ -1,10 +1,15 @@
 module.exports = {
   extends: ['plugin:react/recommended', 'plugin:@next/next/recommended'],
   rules: {
+    'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
+    'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
     'react/prop-types': 0,
     'react/display-name': 0,
     'react/react-in-jsx-scope': 0,
     '@next/next/no-img-element': 0,
+    'unused-imports/no-unused-imports': 'warn',
+    // 'no-unused-vars': 'warn',
+    'quotes': [2, 'single', { 'avoidEscape': true }],
     'import/order': [
       'error',
       {
@@ -40,7 +45,7 @@ module.exports = {
     ecmaVersion: 7,
     sourceType: 'module',
   },
-  plugins: ['import', 'react-hooks'],
+  plugins: ['import', 'react-hooks', 'unused-imports'],
   parser: '@typescript-eslint/parser',
   settings: {
     react: {

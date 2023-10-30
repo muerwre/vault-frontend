@@ -95,7 +95,6 @@ export const useOAuth = () => {
   );
 
   const accounts = useMemo(() => data || [], [data]);
-  const refresh = useCallback(() => mutate(), []);
 
   const hasTelegram = useMemo(
     () => accounts.some((acc) => acc.provider === 'telegram'),
@@ -104,7 +103,7 @@ export const useOAuth = () => {
 
   const showTelegramModal = useCallback(
     () => showModal(Dialog.TelegramAttach, {}),
-    [],
+    [showModal],
   );
 
   return {
@@ -117,6 +116,6 @@ export const useOAuth = () => {
     dropAccount,
     accounts,
     isLoading: !data && isLoading,
-    refresh,
+    refresh: mutate,
   };
 };

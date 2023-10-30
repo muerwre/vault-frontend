@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite';
 import { CommentForm } from '~/components/comment/CommentForm';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
-import { EMPTY_USER } from '~/constants/auth';
 import { Dialog } from '~/constants/modal';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { useAuth } from '~/hooks/auth/useAuth';

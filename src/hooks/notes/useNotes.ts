@@ -1,42 +1,40 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from 'react';
 
-import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
+import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 
 import {
   apiCreateNote,
   apiDeleteNote,
   apiListNotes,
   apiUpdateNote,
-} from "~/api/notes";
-import { ApiGetNotesRequest } from "~/api/notes/types";
-import { useAuth } from "~/hooks/auth/useAuth";
-import { GetLabNodesRequest, ILabNode } from "~/types/lab";
-import { Note } from "~/types/notes";
-import { flatten, uniqBy } from "~/utils/ramda";
+} from '~/api/notes';
+import { ApiGetNotesRequest } from '~/api/notes/types';
+import { useAuth } from '~/hooks/auth/useAuth';
+import { GetLabNodesRequest, ILabNode } from '~/types/lab';
+import { Note } from '~/types/notes';
+import { flatten, uniqBy } from '~/utils/ramda';
 
 const DEFAULT_COUNT = 20;
 
-const getKey: (isUser: boolean, search: string) => SWRInfiniteKeyLoader = (
-  isUser,
-  search,
-) => (index, prev: ILabNode[]) => {
-  if (!isUser) return null;
-  if (index > 0 && (!prev?.length || prev.length < 20)) return null;
+const getKey: (isUser: boolean, search: string) => SWRInfiniteKeyLoader =
+  (isUser, search) => (index, prev: ILabNode[]) => {
+    if (!isUser) return null;
+    if (index > 0 && (!prev?.length || prev.length < 20)) return null;
 
-  const props: GetLabNodesRequest = {
-    limit: DEFAULT_COUNT,
-    offset: index * DEFAULT_COUNT,
-    search: search || "",
+    const props: GetLabNodesRequest = {
+      limit: DEFAULT_COUNT,
+      offset: index * DEFAULT_COUNT,
+      search: search || '',
+    };
+
+    return JSON.stringify(props);
   };
-
-  return JSON.stringify(props);
-};
 
 const parseKey = (key: string): ApiGetNotesRequest => {
   try {
     return JSON.parse(key);
   } catch (error) {
-    return { limit: DEFAULT_COUNT, offset: 0, search: "" };
+    return { limit: DEFAULT_COUNT, offset: 0, search: '' };
   }
 };
 
@@ -74,7 +72,7 @@ export const useNotes = (search: string) => {
     async (id: number, onSuccess?: () => void) => {
       await apiDeleteNote(id);
       await mutate(
-        data?.map(page => page.filter(it => it.id !== id)),
+        data?.map((page) => page.filter((it) => it.id !== id)),
         { revalidate: false },
       );
       onSuccess?.();
@@ -86,7 +84,7 @@ export const useNotes = (search: string) => {
     async (id: number, text: string, onSuccess?: () => void) => {
       const result = await apiUpdateNote({ id, text });
       await mutate(
-        data?.map(page => page.map(it => (it.id === id ? result : it))),
+        data?.map((page) => page.map((it) => (it.id === id ? result : it))),
         { revalidate: false },
       );
       onSuccess?.();
@@ -94,7 +92,7 @@ export const useNotes = (search: string) => {
     [mutate, data],
   );
 
-  const notes = useMemo(() => uniqBy(n => n.id, flatten(data || [])), [data]);
+  const notes = useMemo(() => uniqBy((n) => n.id, flatten(data || [])), [data]);
   const hasMore = (data?.[size - 1]?.length || 0) >= 1;
   const loadMore = useCallback(() => setSize(size + 1), [setSize, size]);
 
@@ -108,6 +106,6 @@ export const useNotes = (search: string) => {
       remove,
       update,
     }),
-    [notes, hasMore, loadMore, data, isValidating, create, remove],
+    [notes, hasMore, loadMore, data, isValidating, create, remove, update],
   );
 };

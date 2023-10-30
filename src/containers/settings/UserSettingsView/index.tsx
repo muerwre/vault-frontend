@@ -6,11 +6,9 @@ import { Group } from '~/components/containers/Group';
 import { Zone } from '~/components/containers/Zone';
 import { InputText } from '~/components/input/InputText';
 import { Textarea } from '~/components/input/Textarea';
-import { ERROR_LITERAL } from '~/constants/errors';
 import { ProfileAccounts } from '~/containers/profile/ProfileAccounts';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useSettings } from '~/utils/providers/SettingsProvider';
-import { has } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 

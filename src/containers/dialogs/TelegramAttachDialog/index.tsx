@@ -21,7 +21,7 @@ const TelegramAttachDialog: FC<TelegramAttachDialogProps> = ({
 
   const onAttach = useCallback(
     (data: TelegramUser) => attach(data, onRequestClose),
-    [onRequestClose],
+    [attach, onRequestClose],
   );
 
   const buttons = useMemo(

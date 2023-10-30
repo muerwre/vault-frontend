@@ -5,7 +5,6 @@ import { ApiUpdateUserRequest } from '~/api/auth/types';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { useUser } from '~/hooks/auth/useUser';
 import { useUploader } from '~/hooks/data/useUploader';
-import { IFile } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 export const usePatchUser = () => {
@@ -39,7 +38,7 @@ export const usePatchUser = () => {
         showErrorToast(error);
       }
     },
-    [uploadFile, save],
+    [uploadFile, update],
   );
 
   return { updatePhoto, save };

@@ -16,7 +16,7 @@ const WithDescription: FC<Props> = ({ icon, title, subtitle, link }) => {
     if (!link) return;
 
     window.open(link);
-  }, []);
+  }, [link]);
 
   return (
     <div

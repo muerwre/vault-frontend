@@ -1,6 +1,6 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent } from 'react';
 
-import type { SidebarComponents } from "~/constants/sidebar/components";
+import type { SidebarComponents } from '~/constants/sidebar/components';
 
 export type SidebarComponent = keyof SidebarComponents;
 

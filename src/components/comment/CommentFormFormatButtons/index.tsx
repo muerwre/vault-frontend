@@ -115,7 +115,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         label="Коммент"
         className={styles.button}
       >
-        {`/ /`}
+        {'/ /'}
       </Button>
     </ButtonGroup>
   );

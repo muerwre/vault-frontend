@@ -61,6 +61,7 @@ const MenuButton: FC<MenuButtonProps> = ({
 
   useEffect(() => {
     popper.update?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
   return (

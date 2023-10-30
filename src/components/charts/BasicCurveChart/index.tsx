@@ -1,7 +1,5 @@
 import React, { useMemo, VFC } from 'react';
 
-import { lighten } from 'color2k';
-
 import { makeBezierCurve, PathPoint } from '~/utils/dom/makeBezierCurve';
 import { SVGProps } from '~/utils/types';
 
@@ -40,7 +38,7 @@ const BasicCurveChart: VFC<BasicCurveChartProps> = ({
         ],
         [],
       ),
-    [height, width, items, gap],
+    [items, borderGap, height, max, width],
   );
 
   if (!points.length) {

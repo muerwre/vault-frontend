@@ -3,7 +3,6 @@ import React, { FC } from 'react';
 import Image from 'next/future/image';
 import SwiperCore, { A11y, Navigation, Pagination } from 'swiper';
 
-import { ImagePreloader } from '~/components/media/ImagePreloader';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { INodeComponentProps } from '~/constants/node';
 import { imagePresets } from '~/constants/urls';
