@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 import { FlowGrid } from '~/components/flow/FlowGrid';
 import { FlowLoginStamp } from '~/components/flow/FlowLoginStamp';
@@ -11,7 +12,7 @@ import { useFlowContext } from '~/utils/providers/FlowProvider';
 
 import styles from './styles.module.scss';
 
-const FlowLayout = () => {
+const FlowLayout = observer(() => {
   const { heroes, nodes, onChangeCellView, loadMore, isSyncing } =
     useFlowContext();
   const { user, isUser } = useAuth();
@@ -45,6 +46,6 @@ const FlowLayout = () => {
       <SubmitBarRouter prefix="" />
     </div>
   );
-};
+});
 
 export { FlowLayout };

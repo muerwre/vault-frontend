@@ -9,6 +9,7 @@
   border-radius: $cell_radius;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .content {
@@ -16,13 +17,21 @@
   box-sizing: border-box;
   flex: 0 1;
 
+  @include phone {
+    padding: $gap / 2;
+  }
+
   h2 {
     font: $font_cell_title;
     text-transform: uppercase;
     word-break: break-word;
 
     @include tablet {
-      font: $font_18_semibold;
+      font: $font_16_semibold;
+    }
+
+    @include phone {
+      font: $font_14_semibold;
     }
   }
 
@@ -31,7 +40,7 @@
     line-height: 1.4em;
     font: $font_16_medium;
 
-    @include phone {
+    @include tablet {
       font: $font_14_medium;
     }
   }
@@ -39,4 +48,9 @@
 
 .button {
   margin-top: 1.4em;
+
+  @include tablet {
+    font: $font_12_semibold;
+    margin-top: 1em;
+  }
 }
