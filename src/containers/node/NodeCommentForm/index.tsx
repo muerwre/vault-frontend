@@ -20,19 +20,19 @@ export interface Props {
 
 const NodeCommentForm: FC<Props> = observer(({ saveComment }) => {
   const { user, isUser } = useAuth();
-  const showLoginDialog = useShowModal(Dialog.Login);
+  const showRegisterDialog = useShowModal(Dialog.Register);
 
   const uploader = useUploader(UploadSubject.Comment, UploadTarget.Comments);
   const onCommentSave = useCallback(
     async (comment: IComment) => {
       if (!isUser) {
-        showLoginDialog({});
+        showRegisterDialog({});
         return;
       }
 
       return saveComment(comment);
     },
-    [isUser, showLoginDialog, saveComment],
+    [isUser, showRegisterDialog, saveComment],
   );
 
   return (

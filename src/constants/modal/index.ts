@@ -11,6 +11,7 @@ import { TestDialog } from '~/containers/dialogs/TestDialog';
 
 export enum Dialog {
   Login = 'Login',
+  Register = 'Register',
   LoginSocialRegister = 'LoginSocialRegister',
   Loading = 'Loading',
   RestoreRequest = 'RestoreRequest',
@@ -24,6 +25,7 @@ export enum Dialog {
 
 export const DIALOG_CONTENT = {
   [Dialog.Login]: LoginDialog,
+  [Dialog.Register]: LoginDialog, // TODO: make inviting dialog
   [Dialog.LoginSocialRegister]: LoginSocialRegisterDialog,
   [Dialog.Loading]: LoadingDialog,
   [Dialog.Test]: TestDialog,
