@@ -1,5 +1,7 @@
 import { FC, useCallback } from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { CommentForm } from '~/components/comment/CommentForm';
 import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
@@ -16,7 +18,7 @@ export interface Props {
   saveComment: (comment: IComment) => Promise<IComment | undefined>;
 }
 
-const NodeCommentForm: FC<Props> = ({ saveComment }) => {
+const NodeCommentForm: FC<Props> = observer(({ saveComment }) => {
   const { user, isUser } = useAuth();
   const showLoginDialog = useShowModal(Dialog.Login);
 
@@ -42,6 +44,6 @@ const NodeCommentForm: FC<Props> = ({ saveComment }) => {
       </UploaderContextProvider>
     </UploadDropzone>
   );
-};
+});
 
 export { NodeCommentForm };

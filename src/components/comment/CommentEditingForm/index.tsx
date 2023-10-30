@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { CommentForm } from '~/components/comment/CommentForm';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
@@ -14,25 +16,23 @@ interface CommentEditingFormProps {
   onCancelEdit?: () => void;
 }
 
-const CommentEditingForm: FC<CommentEditingFormProps> = ({
-  saveComment,
-  comment,
-  onCancelEdit,
-}) => {
-  const uploader = useUploader(UploadSubject.Comment, UploadTarget.Comments);
+const CommentEditingForm: FC<CommentEditingFormProps> = observer(
+  ({ saveComment, comment, onCancelEdit }) => {
+    const uploader = useUploader(UploadSubject.Comment, UploadTarget.Comments);
 
-  return (
-    <UploadDropzone onUpload={uploader.uploadFiles}>
-      <UploaderContextProvider value={uploader}>
-        <CommentForm
-          saveComment={saveComment}
-          comment={comment}
-          onCancelEdit={onCancelEdit}
-          allowUploads
-        />
-      </UploaderContextProvider>
-    </UploadDropzone>
-  );
-};
+    return (
+      <UploadDropzone onUpload={uploader.uploadFiles}>
+        <UploaderContextProvider value={uploader}>
+          <CommentForm
+            saveComment={saveComment}
+            comment={comment}
+            onCancelEdit={onCancelEdit}
+            allowUploads
+          />
+        </UploaderContextProvider>
+      </UploadDropzone>
+    );
+  },
+);
 
 export { CommentEditingForm };

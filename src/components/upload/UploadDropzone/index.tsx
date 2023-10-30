@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import classNames from 'classnames';
 import Dropzone from 'react-dropzone';
 
-
 import { DropHereIcon } from '~/components/input/DropHereIcon';
 import { useDragDetector } from '~/hooks/dom/useDragDetector';
 import { DivProps } from '~/utils/types';
@@ -16,26 +15,34 @@ interface IProps extends DivProps {
   helperClassName?: string;
 }
 
-const UploadDropzone: FC<IProps> = ({ children, onUpload, helperClassName, ...rest }) => {
+const UploadDropzone: FC<IProps> = ({
+  children,
+  onUpload,
+  helperClassName,
+  ...rest
+}) => {
   const { isDragging: isDraggingOnBody, onStopDragging } = useDragDetector();
   const onDrop = useCallback(
     (files: File[]) => {
       onStopDragging();
       onUpload(files);
     },
-    [onStopDragging, onUpload]
+    [onStopDragging, onUpload],
   );
 
   return (
-    <Dropzone onDrop={onDrop}>
-      {({ getRootProps, isDragActive }) => (
+    <Dropzone onDrop={onDrop} noClick>
+      {({ getRootProps, isDragActive, getInputProps }) => (
         <div
           {...getRootProps({
             ...rest,
             className: classnames(styles.zone),
           })}
         >
+          <input {...getInputProps()} />
+
           {children}
+
           <div
             className={classNames(styles.helper, helperClassName, {
               [styles.active]: isDragActive || isDraggingOnBody,
