@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 
@@ -13,11 +15,16 @@ import { useFlowContext } from '~/utils/providers/FlowProvider';
 import styles from './styles.module.scss';
 
 const FlowLayout = observer(() => {
+  const [showLoginStamp, setShowLoginStamp] = useState(false);
+
   const { heroes, nodes, onChangeCellView, loadMore, isSyncing } =
     useFlowContext();
+
   const { user, isUser } = useAuth();
 
   useInfiniteLoader(loadMore, isSyncing);
+
+  useEffect(() => setShowLoginStamp(!isUser), [isUser]);
 
   return (
     <div className={classNames(styles.container)}>
@@ -30,7 +37,7 @@ const FlowLayout = observer(() => {
           <FlowStamp isFluid={false} onToggleLayout={console.warn} />
         </div>
 
-        {!isUser && (
+        {showLoginStamp && (
           <div className={styles.login}>
             <FlowLoginStamp />
           </div>
