@@ -1,15 +1,17 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useRef } from 'react';
 
 import { LoginDialogButtons } from '~/components/auth/login/LoginDialogButtons';
-import { LoginForm } from '~/components/auth/login/LoginForm';
 import { LoginStaticScene } from '~/components/auth/login/LoginStaticScene';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
 import { DialogTitle } from '~/components/dialogs/DialogTitle';
+import { Button } from '~/components/input/Button';
+import { InputText } from '~/components/input/InputText';
 import { Dialog } from '~/constants/modal';
 import { useCloseOnEscape } from '~/hooks';
 import { useAuth } from '~/hooks/auth/useAuth';
+import { useLoginForm } from '~/hooks/auth/useLoginForm';
 import { useOAuth } from '~/hooks/auth/useOAuth';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { DialogComponentProps } from '~/types/modal';
@@ -19,6 +21,10 @@ import styles from './styles.module.scss';
 type LoginDialogProps = DialogComponentProps & {};
 
 const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
+  const feature = useRef<'clouds' | 'nowhere'>(
+    Math.random() <= 0.5 ? 'clouds' : 'nowhere',
+  ).current;
+
   useCloseOnEscape(onRequestClose);
 
   const { login } = useAuth();
@@ -28,29 +34,55 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
     showRestoreDialog({});
   }, [showRestoreDialog]);
 
+  const backdrop = <LoginStaticScene scene={feature} />;
+
+  const { values, errors, handleSubmit, handleChange } = useLoginForm(
+    login,
+    onRequestClose,
+  );
+
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
       <BetterScrollDialog
         width={300}
         onClose={onRequestClose}
         footer={<LoginDialogButtons openOauthWindow={openOauthWindow} />}
-        backdrop={<LoginStaticScene />}
+        backdrop={backdrop}
       >
         <Padder>
           <div className={styles.wrap}>
             <Group>
               <DialogTitle>Решительно войти</DialogTitle>
 
-              <LoginForm
-                login={login}
-                onRestoreRequest={onRestoreRequest}
-                onSuccess={onRequestClose}
+              <InputText
+                title="Логин"
+                handler={handleChange('username')}
+                value={values.username}
+                error={errors.username}
+                autoFocus
               />
+
+              <InputText
+                title="Пароль"
+                handler={handleChange('password')}
+                value={values.password}
+                error={errors.password}
+                type="password"
+              />
+
+              <Button
+                color="link"
+                type="button"
+                onClick={onRestoreRequest}
+                className={styles.forgot_button}
+              >
+                Вспомнить пароль
+              </Button>
             </Group>
           </div>
         </Padder>
       </BetterScrollDialog>
-    </div>
+    </form>
   );
 };
 
