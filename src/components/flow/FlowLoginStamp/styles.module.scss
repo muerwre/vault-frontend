@@ -1,0 +1,42 @@
+@import 'src/styles/variables';
+
+.stamp {
+  @include outer_shadow;
+
+  background: #2b0011 url('/images/join_us.svg') 50% 100%;
+  background-size: cover;
+  width: 100%;
+  border-radius: $cell_radius;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  padding: $gap;
+  box-sizing: border-box;
+  flex: 0 1;
+
+  h2 {
+    font: $font_cell_title;
+    text-transform: uppercase;
+    word-break: break-word;
+
+    @include tablet {
+      font: $font_18_semibold;
+    }
+  }
+
+  p {
+    margin: 0.5em 0;
+    line-height: 1.4em;
+    font: $font_16_medium;
+
+    @include phone {
+      font: $font_14_medium;
+    }
+  }
+}
+
+.button {
+  margin-top: 1.4em;
+}
