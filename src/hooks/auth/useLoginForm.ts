@@ -17,7 +17,7 @@ export type LoginFormData = Asserts<typeof validationSchema>;
 
 export const useLoginForm = (
   fetcher: (username: string, password: string) => Promise<IUser>,
-  onSuccess: () => void
+  onSuccess: () => void,
 ) => {
   const onSubmit = useCallback<FormikConfig<LoginFormData>['onSubmit']>(
     async (values, { setErrors }) => {
@@ -33,7 +33,7 @@ export const useLoginForm = (
         }
       }
     },
-    [fetcher, onSuccess]
+    [fetcher, onSuccess],
   );
 
   return useFormik({
