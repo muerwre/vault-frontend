@@ -18,7 +18,11 @@ interface CommentEditingFormProps {
 
 const CommentEditingForm: FC<CommentEditingFormProps> = observer(
   ({ saveComment, comment, onCancelEdit }) => {
-    const uploader = useUploader(UploadSubject.Comment, UploadTarget.Comments);
+    const uploader = useUploader(
+      UploadSubject.Comment,
+      UploadTarget.Comments,
+      comment.files,
+    );
 
     return (
       <UploadDropzone onUpload={uploader.uploadFiles}>
