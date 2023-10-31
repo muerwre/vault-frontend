@@ -23,7 +23,7 @@ const NodeImageLazy: FC<NodeImageLazyProps> = ({
   if (file.url.endsWith('svg')) {
     return (
       <img
-        data-src={getURL(file, imagePresets[1600])}
+        data-src={getURL(file)}
         className={className}
         onClick={onClick}
         onLoad={onLoad}
@@ -36,6 +36,7 @@ const NodeImageLazy: FC<NodeImageLazyProps> = ({
   return (
     <img
       data-srcset={getFileSrcSet(file)}
+      data-src={getURL(file, imagePresets[1600])}
       width={file.metadata?.width}
       height={file.metadata?.height}
       onLoad={onLoad}

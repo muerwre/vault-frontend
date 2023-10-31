@@ -45,9 +45,7 @@ const lazy = {
 };
 
 const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
-  const [controlledSwiper, setControlledSwiper] = useState<
-    SwiperClass | undefined
-  >(undefined);
+  const [controlledSwiper, setControlledSwiper] = useState<SwiperClass>();
   const showPhotoSwiper = useImageModal();
   const { isOpened: isModalActive } = useModal();
 
@@ -89,8 +87,7 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
   useEffect(() => {
     controlledSwiper?.slideTo(0, 0);
     return () => controlledSwiper?.slideTo(0, 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images, node?.id]);
+  }, [controlledSwiper, images, node.id]);
 
   useEffect(() => {
     if (isModalActive) {
@@ -98,8 +95,7 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
     } else {
       controlledSwiper?.keyboard.enable();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isModalActive]);
+  }, [controlledSwiper?.keyboard, isModalActive]);
 
   if (!images?.length) {
     return null;

@@ -1,9 +1,4 @@
-import React, {
-  CSSProperties,
-  FC,
-  useMemo,
-  useReducer,
-} from 'react';
+import React, { CSSProperties, FC, useMemo, useReducer } from 'react';
 
 import classNames from 'classnames';
 
@@ -24,7 +19,7 @@ const ImageLoadingWrapper: FC<ImageLoadingWrapperProps> = ({
   color,
   ...props
 }) => {
-  const [loading, onLoad] = useReducer((v) => false, true);
+  const [loading, onLoad] = useReducer(() => false, true);
 
   const style = useMemo<CSSProperties>(
     () => ({
