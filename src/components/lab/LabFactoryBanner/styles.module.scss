@@ -1,0 +1,23 @@
+@import 'src/styles/variables';
+
+.banner {
+  @include outer_shadow;
+
+  display: flex;
+  aspect-ratio: 0.7;
+  background: url('/images/peoples_lab.svg') 50% 100%;
+  background-size: cover;
+  padding: $gap;
+  border-radius: $radius;
+}
+
+.title {
+  font: $font_24_bold;
+  text-transform: uppercase;
+}
+
+.content {
+  font: $font_14_medium;
+  line-height: 19px;
+  opacity: 0.7;
+}

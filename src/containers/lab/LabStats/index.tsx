@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { SubTitle } from '~/components/common/SubTitle';
 import { Group } from '~/components/containers/Group';
 import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
-import { LabBanner } from '~/components/lab/LabBanner';
+import { LabFactoryBanner } from '~/components/lab/LabFactoryBanner';
 import { LabHeroes } from '~/components/lab/LabHeroes';
 import { LabTags } from '~/components/lab/LabTags';
 import { useLabContext } from '~/utils/context/LabContextProvider';
@@ -17,7 +17,7 @@ const LabStats: FC<IProps> = () => {
 
   return (
     <Group>
-      <LabBanner />
+      <LabFactoryBanner />
 
       <div className={styles.card}>
         <Group>
@@ -39,7 +39,7 @@ const LabStats: FC<IProps> = () => {
             <>
               <div className={styles.title}>Новые</div>
               <Group className={styles.updates}>
-                {updates.slice(0, 10).map(node => (
+                {updates.slice(0, 10).map((node) => (
                   <FlowRecentItem node={node} key={node.id} has_new />
                 ))}
               </Group>
