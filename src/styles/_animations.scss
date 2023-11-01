@@ -1,0 +1,29 @@
+@keyframes pulse_animation {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1);
+  }
+
+  60% {
+    transform: scale(1.4);
+  }
+
+  75% {
+    transform: scale(1);
+  }
+
+  90% {
+    transform: scale(1.4);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@mixin pulse {
+  animation: pulse_animation 0.75s infinite;
+}

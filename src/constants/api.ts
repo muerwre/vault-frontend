@@ -41,6 +41,8 @@ export const API = {
       `/nodes/${id}/tags/${tagId}`,
 
     COMMENT: (id: INode['id'] | string) => `/nodes/${id}/comments`,
+    COMMENT_LIKES: (id: INode['id'] | string, cid: number) =>
+      `/nodes/${id}/comments/${cid}/likes`,
     LOCK_COMMENT: (id: INode['id'], comment_id: IComment['id']) =>
       `/nodes/${id}/comments/${comment_id}`,
   },

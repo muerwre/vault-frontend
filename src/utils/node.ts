@@ -18,6 +18,17 @@ export const canEditComment = (
   path(['role'], user) === Role.Admin ||
   path(['user', 'id'], comment) === path(['id'], user);
 
+export const canLikeComment = (
+  comment?: Partial<ICommentGroup>,
+  user?: Partial<IUser>,
+): boolean =>
+  Boolean(
+    user?.role &&
+      user?.id &&
+      user?.role !== Role.Guest &&
+      user.id !== comment?.user?.id,
+  );
+
 export const canLikeNode = (
   node?: Partial<INode>,
   user?: Partial<IUser>,

@@ -22,6 +22,7 @@ const BorisPage: VFC = observer(() => {
     onLoadMoreComments,
     onDelete: onDeleteComment,
     onEdit: onSaveComment,
+    onLike: onLikeComment,
     comments,
     hasMore,
     isLoading: isLoadingComments,
@@ -36,6 +37,7 @@ const BorisPage: VFC = observer(() => {
         onSaveComment={onSaveComment}
         comments={comments}
         hasMore={hasMore}
+        onLike={onLikeComment}
         isLoading={isLoadingComments}
         isLoadingMore={isLoadingMore}
         onShowImageModal={onShowImageModal}

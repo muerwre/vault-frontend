@@ -1,7 +1,6 @@
-import React, {
+import {
   createElement,
   FC,
-  Fragment,
   memo,
   ReactNode,
   useCallback,
@@ -11,7 +10,6 @@ import React, {
 
 import classnames from 'classnames';
 
-import { Authorized } from '~/components/containers/Authorized';
 import { Group } from '~/components/containers/Group';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
@@ -22,6 +20,7 @@ import { append, assocPath, path, reduce } from '~/utils/ramda';
 
 import { CommentEditingForm } from '../CommentEditingForm';
 import { CommentImageGrid } from '../CommentImageGrid';
+import { CommentLike } from '../CommentLike';
 import { CommentMenu } from '../CommentMenu';
 
 import styles from './styles.module.scss';
@@ -31,17 +30,21 @@ interface IProps {
   nodeId: number;
   comment: IComment;
   canEdit: boolean;
+  canLike: boolean;
   saveComment: (data: IComment) => Promise<IComment | undefined>;
-  onDelete: (id: IComment['id'], isLocked: boolean) => void;
+  onDelete: (isLocked: boolean) => void;
+  onLike: () => void;
   onShowImageModal: (images: IFile[], index: number) => void;
 }
 
 const CommentContent: FC<IProps> = memo(
   ({
     comment,
-    canEdit,
     nodeId,
     saveComment,
+    canEdit,
+    canLike,
+    onLike,
     onDelete,
     onShowImageModal,
     prefix,
@@ -65,7 +68,7 @@ const CommentContent: FC<IProps> = memo(
     );
 
     const onLockClick = useCallback(() => {
-      onDelete(comment.id, !comment.deleted_at);
+      onDelete(!comment.deleted_at);
     }, [comment, onDelete]);
 
     const onImageClick = useCallback(
@@ -75,15 +78,12 @@ const CommentContent: FC<IProps> = memo(
     );
 
     const menu = useMemo(
-      () => (
-        <div>
-          {canEdit && (
-            <Authorized>
-              <CommentMenu onDelete={onLockClick} onEdit={startEditing} />
-            </Authorized>
-          )}
-        </div>
-      ),
+      () =>
+        canEdit && (
+          <div className={styles.menu}>
+            <CommentMenu onDelete={onLockClick} onEdit={startEditing} />
+          </div>
+        ),
       [canEdit, startEditing, onLockClick],
     );
 
@@ -110,57 +110,56 @@ const CommentContent: FC<IProps> = memo(
       <div className={styles.wrap}>
         {!!prefix && <div className={styles.prefix}>{prefix}</div>}
 
-        {comment.text.trim() && (
-          <Group className={classnames(styles.block, styles.block_text)}>
-            {menu}
+        <div className={styles.content}>
+          {menu}
 
-            <Group className={styles.renderers}>
-              {blocks.map(
-                (block, key) =>
-                  COMMENT_BLOCK_RENDERERS[block.type] &&
-                  createElement(COMMENT_BLOCK_RENDERERS[block.type], {
-                    block,
-                    key,
-                  }),
-              )}
-            </Group>
+          <div>
+            {comment.text.trim() && (
+              <Group className={classnames(styles.block, styles.block_text)}>
+                <Group className={styles.renderers}>
+                  {blocks.map(
+                    (block, key) =>
+                      COMMENT_BLOCK_RENDERERS[block.type] &&
+                      createElement(COMMENT_BLOCK_RENDERERS[block.type], {
+                        block,
+                        key,
+                      }),
+                  )}
+                </Group>
+              </Group>
+            )}
 
-            <div className={styles.date}>
-              {getPrettyDate(comment.created_at)}
-            </div>
-          </Group>
-        )}
-
-        {groupped.image && groupped.image.length > 0 && (
-          <div className={classnames(styles.block, styles.block_image)}>
-            {menu}
-
-            <CommentImageGrid files={groupped.image} onClick={onImageClick} />
-
-            <div className={styles.date}>
-              {getPrettyDate(comment.created_at)}
-            </div>
-          </div>
-        )}
-
-        {groupped.audio && groupped.audio.length > 0 && (
-          <Fragment>
-            {groupped.audio.map((file) => (
-              <div
-                className={classnames(styles.block, styles.block_audio)}
-                key={file.id}
-              >
-                {menu}
-
-                <AudioPlayer file={file} />
-
-                <div className={styles.date}>
-                  {getPrettyDate(comment.created_at)}
-                </div>
+            {groupped.image && groupped.image.length > 0 && (
+              <div className={classnames(styles.block, styles.block_image)}>
+                <CommentImageGrid
+                  files={groupped.image}
+                  onClick={onImageClick}
+                />
               </div>
-            ))}
-          </Fragment>
-        )}
+            )}
+
+            {groupped.audio &&
+              groupped.audio.length > 0 &&
+              groupped.audio.map((file) => (
+                <div
+                  className={classnames(styles.block, styles.block_audio)}
+                  key={file.id}
+                >
+                  <AudioPlayer file={file} />
+                </div>
+              ))}
+          </div>
+        </div>
+
+        <div className={styles.date}>
+          {getPrettyDate(comment.created_at)}
+          <CommentLike
+            onLike={onLike}
+            count={comment.like_count}
+            active={canLike}
+            liked={comment.liked}
+          />
+        </div>
       </div>
     );
   },

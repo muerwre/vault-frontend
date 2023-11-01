@@ -1,4 +1,6 @@
-import React, { FC, memo, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
+
+import { observer } from 'mobx-react-lite';
 
 import { Comment } from '~/components/comment/Comment';
 import { LoadMoreButton } from '~/components/input/LoadMoreButton';
@@ -8,7 +10,7 @@ import { ICommentGroup } from '~/types';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
 import { useUserContext } from '~/utils/context/UserContextProvider';
-import { canEditComment } from '~/utils/node';
+import { canEditComment, canLikeComment } from '~/utils/node';
 
 import styles from './styles.module.scss';
 
@@ -16,7 +18,7 @@ interface IProps {
   order: 'ASC' | 'DESC';
 }
 
-const NodeComments: FC<IProps> = memo(({ order }) => {
+const NodeComments: FC<IProps> = observer(({ order }) => {
   const user = useUserContext();
   const { node } = useNodeContext();
 
@@ -26,6 +28,7 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
     isLoading,
     isLoadingMore,
     lastSeenCurrent,
+    onLike,
     onLoadMoreComments,
     onDeleteComment,
     onShowImageModal,
@@ -68,6 +71,8 @@ const NodeComments: FC<IProps> = memo(({ order }) => {
           highlighted={
             node.id === BORIS_NODE_ID && group.user.id === ANNOUNCE_USER_ID
           }
+          onLike={onLike}
+          canLike={canLikeComment(group, user)}
           canEdit={canEditComment(group, user)}
           onDelete={onDeleteComment}
           onShowImageModal={onShowImageModal}

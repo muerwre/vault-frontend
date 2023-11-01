@@ -122,6 +122,8 @@ export interface IComment {
   text: string;
   files: IFile[];
   user?: IUser;
+  like_count?: number;
+  liked?: boolean;
 
   created_at?: string;
   update_at?: string;

@@ -47,6 +47,10 @@ export type ApiPostCommentRequest = {
   id: INode['id'];
   data: IComment;
 };
+export type ApiLikeCommentRequest = {
+  liked: boolean;
+};
+
 export type ApiPostCommentResult = {
   comment: IComment;
 };

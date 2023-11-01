@@ -1,31 +1,5 @@
 @import 'src/styles/variables';
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-
-  45% {
-    transform: scale(1);
-  }
-
-  60% {
-    transform: scale(1.4);
-  }
-
-  75% {
-    transform: scale(1);
-  }
-
-  90% {
-    transform: scale(1.4);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
 .like {
   transition: fill, stroke 0.25s;
   will-change: transform;
@@ -46,8 +20,9 @@
   }
 
   &:hover {
+    @include pulse;
+
     fill: $color_like;
-    animation: pulse 0.75s infinite;
 
     .count {
       opacity: 0;

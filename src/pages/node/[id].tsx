@@ -91,7 +91,7 @@ export const getStaticProps = async (
       revalidate: 7 * 86400, // every week
     };
   } catch (error) {
-    console.warn('[NEXT] can\'t generate node: ', error);
+    console.warn("[NEXT] can't generate node: ", error);
     return {
       notFound: true,
     };
@@ -112,6 +112,7 @@ const NodePage: FC<Props> = observer((props) => {
 
   const {
     onLoadMoreComments,
+    onLike: onLikeComment,
     onDelete: onDeleteComment,
     onEdit: onSaveComment,
     comments,
@@ -141,6 +142,7 @@ const NodePage: FC<Props> = observer((props) => {
     >
       <NodeRelatedProvider id={parseInt(id, 10)} tags={node.tags}>
         <CommentContextProvider
+          onLike={onLikeComment}
           onSaveComment={onSaveComment}
           comments={comments}
           hasMore={hasMore}

@@ -25,7 +25,7 @@ const NodeLikeButton: FC<NodeLikeButtonProps> = ({
       [styles.is_liked]: active,
     })}
   >
-    {active ? (
+    {count ? (
       <Icon icon="heart_full" size={24} onClick={onClick} />
     ) : (
       <Icon icon="heart" size={24} onClick={onClick} />

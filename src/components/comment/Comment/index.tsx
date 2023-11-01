@@ -13,20 +13,22 @@ import { CommendDeleted } from '../../node/CommendDeleted';
 
 import styles from './styles.module.scss';
 
-type IProps = HTMLAttributes<HTMLDivElement> & {
+type Props = HTMLAttributes<HTMLDivElement> & {
   nodeId: number;
   isEmpty?: boolean;
   isLoading?: boolean;
   group: ICommentGroup;
   isSame?: boolean;
   canEdit?: boolean;
+  canLike?: boolean;
   highlighted?: boolean;
   saveComment: (data: IComment) => Promise<IComment | undefined>;
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
+  onLike: (id: IComment['id'], isLiked: boolean) => void;
   onShowImageModal: (images: IFile[], index: number) => void;
 };
 
-const Comment: FC<IProps> = memo(
+const Comment: FC<Props> = memo(
   ({
     group,
     nodeId,
@@ -36,7 +38,9 @@ const Comment: FC<IProps> = memo(
     className,
     highlighted,
     canEdit,
+    canLike,
     onDelete,
+    onLike,
     onShowImageModal,
     saveComment,
     ...props
@@ -84,10 +88,12 @@ const Comment: FC<IProps> = memo(
                 saveComment={saveComment}
                 nodeId={nodeId}
                 comment={comment}
-                key={comment.id}
                 canEdit={!!canEdit}
-                onDelete={onDelete}
+                canLike={!!canLike}
+                onLike={() => onLike(comment.id, !comment.liked)}
+                onDelete={(val: boolean) => onDelete(comment.id, val)}
                 onShowImageModal={onShowImageModal}
+                key={comment.id}
               />
             );
           })}

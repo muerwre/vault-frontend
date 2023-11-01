@@ -54,7 +54,14 @@
   top: 28px;
 }
 
+.content {
+  width: 100%;
+  position: relative;
+}
+
 .block {
+  @include row_shadow;
+
   min-height: $comment_height;
   display: flex;
   align-items: flex-start;
@@ -90,13 +97,7 @@
 }
 
 .block_image {
-  padding-bottom: 0 !important;
-
-  .date {
-    background: $content_bg;
-    border-radius: $radius 0 $radius 0;
-    color: $gray_25;
-  }
+  padding: $gap / 2;
 }
 
 .block_text {
@@ -105,16 +106,20 @@
 
 .date {
   position: absolute;
-  bottom: 1px;
+  bottom: 1px; // should not cover block shadow
   right: 0;
-  font: $font_12_regular;
+  font: $font_12_medium;
   color: $gray_75;
-  padding: 0 6px 2px;
+  fill: $gray_75;
+  padding: 3px 6px;
   z-index: 2;
   background: $content_bg_light;
   border-radius: 4px;
-  pointer-events: none;
-  touch-action: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .audios {
@@ -140,4 +145,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  z-index: 10;
+  outline: none;
 }

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, CancelToken } from 'axios';
 
 import { API } from '~/constants/api';
 import { COMMENTS_DISPLAY } from '~/constants/node';
@@ -10,6 +10,7 @@ import {
   ApiGetNodeRelatedResult,
   ApiGetNodeRequest,
   ApiGetNodeResponse,
+  ApiLikeCommentRequest,
   ApiLockCommentRequest,
   ApiLockcommentResult,
   ApiLockNodeRequest,
@@ -96,6 +97,20 @@ export const apiGetNodeWithCancel = ({ id }: ApiGetNodeRequest) => {
 
 export const apiPostComment = ({ id, data }: ApiPostCommentRequest) =>
   api.post<ApiPostCommentResult>(API.NODES.COMMENT(id), data).then(cleanResult);
+
+export const apiLikeComment = (
+  nodeId: number,
+  commentId: number,
+  data: ApiLikeCommentRequest,
+  options?: { cancelToken?: CancelToken },
+) =>
+  api
+    .post<ApiPostCommentResult>(
+      API.NODES.COMMENT_LIKES(nodeId, commentId),
+      data,
+      { cancelToken: options?.cancelToken },
+    )
+    .then(cleanResult);
 
 export const apiGetNodeComments = ({
   id,

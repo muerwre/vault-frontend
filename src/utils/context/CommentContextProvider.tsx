@@ -12,6 +12,7 @@ export interface CommentProviderProps {
   onLoadMoreComments: () => void;
   onSaveComment: (comment: IComment) => Promise<IComment | undefined>;
   onDeleteComment: (id: IComment['id'], isLocked: boolean) => void;
+  onLike: (id: number, liked: boolean) => void;
 }
 
 const CommentContext = createContext<CommentProviderProps>({
@@ -20,6 +21,7 @@ const CommentContext = createContext<CommentProviderProps>({
   lastSeenCurrent: null,
   isLoading: false,
   isLoadingMore: false,
+  onLike: () => {},
   onSaveComment: async () => undefined,
   onShowImageModal: () => {},
   onLoadMoreComments: () => {},
