@@ -34,7 +34,7 @@ const CommentLike: FC<CommentLikeProps> = ({
       })}
     >
       <div className={styles.icon}>
-        <Icon icon={count ? 'heart_full' : 'heart'} size={14} />
+        <Icon icon={count ? 'heart_full' : 'heart'} size={18} />
       </div>
 
       {Boolean(count) && <span className={styles.count}>{count}</span>}

@@ -57,6 +57,7 @@
 .content {
   width: 100%;
   position: relative;
+  z-index: 1;
 }
 
 .block {
@@ -111,7 +112,7 @@
   font: $font_12_medium;
   color: $gray_75;
   fill: $gray_75;
-  padding: 3px 6px;
+  padding: 3px 5px 3px 8px;
   z-index: 2;
   background: $content_bg_light;
   border-radius: 4px;

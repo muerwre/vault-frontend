@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 4px;
   position: relative;
 
   &.active {
@@ -13,7 +13,7 @@
     &::before {
       content: ' ';
       position: absolute;
-      inset: -10px -10px -8px -16px;
+      inset: -16px -10px -8px -40px;
     }
 
     &:not(.liked):hover .icon {
@@ -29,6 +29,10 @@
 
 .icon {
   position: relative;
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
+}
+
+.count {
+  font: $font_12_semibold;
 }
