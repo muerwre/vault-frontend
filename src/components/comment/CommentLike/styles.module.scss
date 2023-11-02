@@ -6,6 +6,7 @@
   justify-content: center;
   gap: 4px;
   position: relative;
+  color: $gray_50;
 
   &.active {
     cursor: pointer;
@@ -23,7 +24,6 @@
 
   &.liked {
     color: $color_like;
-    fill: currentColor;
   }
 }
 
@@ -31,6 +31,7 @@
   position: relative;
   width: 18px;
   height: 18px;
+  fill: currentColor;
 }
 
 .count {
