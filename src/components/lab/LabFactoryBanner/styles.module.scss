@@ -5,10 +5,13 @@
 
   display: flex;
   aspect-ratio: 0.7;
-  background: url('/images/peoples_lab.svg') 50% 100%;
-  background-size: cover;
+  background: url('/images/peoples_lab.svg') 50% 100% / cover;
   padding: $gap;
   border-radius: $radius;
+
+  &.masked {
+    background-image: url('/images/peoples_lab_masked.svg');
+  }
 }
 
 .title {
