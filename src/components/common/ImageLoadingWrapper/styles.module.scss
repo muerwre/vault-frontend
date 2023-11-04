@@ -5,6 +5,8 @@
 }
 
 .preview {
+  @include outer_shadow;
+
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -13,6 +15,8 @@
   align-items: flex-end;
   justify-content: flex-end;
   padding: $gap;
+  overflow: hidden;
+  border-radius: $radius;
 }
 
 .thumbnail {

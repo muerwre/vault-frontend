@@ -14,7 +14,7 @@
   :global(.swiper-pagination) {
     left: 50%;
     bottom: $gap * 2;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, 25%);
     background: $content_bg_darker;
     width: auto;
     padding: 5px 10px;
