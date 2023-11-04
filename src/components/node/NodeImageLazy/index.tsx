@@ -41,6 +41,7 @@ const NodeImageLazy: FC<NodeImageLazyProps> = ({
       quality={quality}
       {...rest}
       placeholder="empty"
+      loading="lazy"
     />
   );
 };
