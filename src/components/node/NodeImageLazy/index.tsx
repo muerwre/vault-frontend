@@ -1,10 +1,11 @@
 import { FC } from 'react';
 
+import Image from 'next/future/image';
+
 import { imagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
 import { normalizeBrightColor } from '~/utils/color';
 import { getURL } from '~/utils/dom';
-import { getFileSrcSet } from '~/utils/srcset';
 
 interface NodeImageLazyProps {
   className?: string;
@@ -34,17 +35,17 @@ const NodeImageLazy: FC<NodeImageLazyProps> = ({
   }
 
   return (
-    <img
-      data-srcset={getFileSrcSet(file)}
-      data-src={getURL(file, imagePresets[1600])}
+    <Image
+      src={getURL(file, imagePresets[1200])}
       width={file.metadata?.width}
       height={file.metadata?.height}
-      onLoad={onLoad}
+      onLoadingComplete={onLoad}
       onClick={onClick}
       className={className}
       color={normalizeBrightColor(file?.metadata?.dominant_color)}
       alt=""
-      sizes="(max-width: 560px) 100vw, 50vh"
+      sizes="100vw"
+      quality={90}
     />
   );
 };
