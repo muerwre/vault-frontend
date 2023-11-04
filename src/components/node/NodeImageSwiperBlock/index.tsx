@@ -2,52 +2,35 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import SwiperCore, {
-  Keyboard,
-  Lazy,
-  Navigation,
-  Pagination,
-  SwiperOptions,
-} from 'swiper';
+import SwiperCore, { Keyboard, Lazy, Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
 import { ImageLoadingWrapper } from '~/components/common/ImageLoadingWrapper/index';
 import { NodeComponentProps } from '~/constants/node';
 import { imagePresets } from '~/constants/urls';
+import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useModal } from '~/hooks/modal/useModal';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
+import { normalizeBrightColor } from '~/utils/color';
 import { getURL } from '~/utils/dom';
 
 import { NodeImageLazy } from '../NodeImageLazy';
 
+import { getNodeSwiperImageSizes } from './helpers';
+import { NODE_SWIPER_OPTIONS } from './options';
 import styles from './styles.module.scss';
 
 SwiperCore.use([Navigation, Pagination, Keyboard, Lazy]);
 
 interface IProps extends NodeComponentProps {}
 
-const breakpoints: SwiperOptions['breakpoints'] = {
-  599: {
-    spaceBetween: 20,
-  },
-};
-
-const pagination = { type: 'fraction' as const };
-
-const lazy = {
-  enabled: true,
-  loadPrevNextAmount: 1,
-  loadOnTransitionStart: true,
-  loadPrevNext: true,
-  checkInView: true,
-};
-
 const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass>();
   const showPhotoSwiper = useImageModal();
   const { isOpened: isModalActive } = useModal();
+  const { innerWidth, innerHeight } = useWindowSize();
 
   const images = useNodeImages(node);
 
@@ -58,16 +41,6 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
     }),
     [isModalActive],
   );
-
-  const updateSwiper = useCallback(() => {
-    if (!controlledSwiper) return;
-
-    controlledSwiper.updateSlides();
-    controlledSwiper.updateSize();
-    controlledSwiper.update();
-    controlledSwiper.updateAutoHeight();
-    controlledSwiper.updateProgress();
-  }, [controlledSwiper]);
 
   const onOpenPhotoSwipe = useCallback(
     (index: number) => {
@@ -108,8 +81,8 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
         initialSlide={0}
         slidesPerView="auto"
         onSwiper={setControlledSwiper}
-        breakpoints={breakpoints}
-        pagination={pagination}
+        breakpoints={NODE_SWIPER_OPTIONS.breakpoints}
+        pagination={NODE_SWIPER_OPTIONS.pagination}
         centeredSlides
         observeSlideChildren
         observeParents
@@ -123,7 +96,7 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
         zoom
         navigation
         watchSlidesProgress
-        lazy={lazy}
+        lazy={NODE_SWIPER_OPTIONS.lazy}
       >
         {images.map((file, index) => (
           <SwiperSlide className={styles.slide} key={file.id}>
@@ -133,12 +106,17 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
             >
               {({ loading, onLoad }) => (
                 <NodeImageLazy
-                  file={file}
+                  src={getURL(file)}
+                  width={file.metadata?.width}
+                  height={file.metadata?.height}
+                  color={normalizeBrightColor(file?.metadata?.dominant_color)}
                   onLoad={onLoad}
                   onClick={() => onOpenPhotoSwipe(index)}
                   className={classNames(styles.image, 'swiper-lazy', {
                     [styles.loading]: loading,
                   })}
+                  sizes={getNodeSwiperImageSizes(file, innerWidth, innerHeight)}
+                  quality={90}
                 />
               )}
             </ImageLoadingWrapper>
