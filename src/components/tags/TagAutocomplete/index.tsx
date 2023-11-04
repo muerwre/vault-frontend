@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState, VFC } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  VFC,
+} from 'react';
 
 import classNames from 'classnames';
 import { usePopper } from 'react-popper';
@@ -29,9 +36,11 @@ const TagAutocomplete: VFC<TagAutocompleteProps> = ({
   const [categories, tags] = useMemo(
     () =>
       separateTagOptions(
-        options.slice(0, 7).filter(option => option !== search && !exclude.includes(option))
+        options
+          .slice(0, 7)
+          .filter((option) => option !== search && !exclude.includes(option)),
       ),
-    [options, search, exclude]
+    [options, search, exclude],
   );
   const scroll = useRef<HTMLDivElement>(null);
   const wrapper = useRef<HTMLDivElement>(null);
@@ -52,7 +61,9 @@ const TagAutocomplete: VFC<TagAutocompleteProps> = ({
   });
 
   const onKeyDown = useCallback(
-    event => {
+    (event) => {
+      pop?.update?.();
+
       const all = [...categories, ...tags];
 
       switch (event.key) {
@@ -69,7 +80,7 @@ const TagAutocomplete: VFC<TagAutocompleteProps> = ({
           onSelect(selected >= 0 ? all[selected] : search);
       }
     },
-    [setSelected, selected, categories, tags, onSelect, search]
+    [pop, categories, tags, selected, onSelect, search],
   );
 
   useEffect(() => {
@@ -83,7 +94,10 @@ const TagAutocomplete: VFC<TagAutocompleteProps> = ({
     const { scrollTop, clientHeight } = scroll.current;
     const { offsetTop } = el;
 
-    if (clientHeight - scrollTop + el.clientHeight < offsetTop || offsetTop < scrollTop) {
+    if (
+      clientHeight - scrollTop + el.clientHeight < offsetTop ||
+      offsetTop < scrollTop
+    ) {
       scroll.current.scrollTo(0, el.offsetTop - el.clientHeight);
     }
   }, [selected]);
@@ -95,7 +109,11 @@ const TagAutocomplete: VFC<TagAutocompleteProps> = ({
       style={pop.styles.popper}
       {...pop.attributes.popper}
     >
-      <div style={pop.styles.arrow} ref={setArrowElement} className={styles.arrow} />
+      <div
+        style={pop.styles.arrow}
+        ref={setArrowElement}
+        className={styles.arrow}
+      />
       <div className={styles.scroll} ref={scroll}>
         <TagAutocompleteRow
           selected={selected === -1}
