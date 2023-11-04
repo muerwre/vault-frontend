@@ -1,4 +1,10 @@
-import React, { CSSProperties, FC, useMemo, useReducer } from 'react';
+import React, {
+  CSSProperties,
+  ReactNode,
+  forwardRef,
+  useMemo,
+  useReducer,
+} from 'react';
 
 import classNames from 'classnames';
 
@@ -8,17 +14,14 @@ import { DivProps } from '~/utils/types';
 import styles from './styles.module.scss';
 
 interface ImageLoadingWrapperProps extends Omit<DivProps, 'children'> {
-  children: (props: { loading: boolean; onLoad: () => void }) => void;
+  children: (props: { loading: boolean; onLoad: () => void }) => ReactNode;
   preview?: string;
 }
 
-const ImageLoadingWrapper: FC<ImageLoadingWrapperProps> = ({
-  className,
-  children,
-  preview,
-  color,
-  ...props
-}) => {
+const ImageLoadingWrapper = forwardRef<
+  HTMLDivElement,
+  ImageLoadingWrapperProps
+>(({ className, children, preview, color, ...props }, ref) => {
   const [loading, onLoad] = useReducer(() => false, true);
 
   const style = useMemo<CSSProperties>(
@@ -30,7 +33,7 @@ const ImageLoadingWrapper: FC<ImageLoadingWrapperProps> = ({
   );
 
   return (
-    <div className={classNames(styles.wrapper, className)} {...props}>
+    <div className={classNames(styles.wrapper, className)} {...props} ref={ref}>
       {!!loading && !!preview && (
         <div className={styles.preview}>
           <div className={styles.thumbnail} style={style} />
@@ -40,6 +43,6 @@ const ImageLoadingWrapper: FC<ImageLoadingWrapperProps> = ({
       {children({ loading, onLoad })}
     </div>
   );
-};
+});
 
 export { ImageLoadingWrapper };

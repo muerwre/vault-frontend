@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
 import { ImageLoadingWrapper } from '~/components/common/ImageLoadingWrapper/index';
+import { PinchZoom } from '~/components/media/PinchZoom';
 import { NodeComponentProps } from '~/constants/node';
 import { imagePresets } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
@@ -100,26 +101,37 @@ const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
       >
         {images.map((file, index) => (
           <SwiperSlide className={styles.slide} key={file.id}>
-            <ImageLoadingWrapper
-              preview={getURL(file, imagePresets['300'])}
-              color={file.metadata?.dominant_color}
-            >
-              {({ loading, onLoad }) => (
-                <NodeImageLazy
-                  src={getURL(file)}
-                  width={file.metadata?.width}
-                  height={file.metadata?.height}
-                  color={normalizeBrightColor(file?.metadata?.dominant_color)}
-                  onLoad={onLoad}
-                  onClick={() => onOpenPhotoSwipe(index)}
-                  className={classNames(styles.image, 'swiper-lazy', {
-                    [styles.loading]: loading,
-                  })}
-                  sizes={getNodeSwiperImageSizes(file, innerWidth, innerHeight)}
-                  quality={90}
-                />
+            <PinchZoom>
+              {({ setRef }) => (
+                <ImageLoadingWrapper
+                  preview={getURL(file, imagePresets['300'])}
+                  color={file.metadata?.dominant_color}
+                  ref={setRef}
+                >
+                  {({ loading, onLoad }) => (
+                    <NodeImageLazy
+                      src={getURL(file)}
+                      width={file.metadata?.width}
+                      height={file.metadata?.height}
+                      color={normalizeBrightColor(
+                        file?.metadata?.dominant_color,
+                      )}
+                      onLoad={onLoad}
+                      onClick={() => onOpenPhotoSwipe(index)}
+                      className={classNames(styles.image, 'swiper-lazy', {
+                        [styles.loading]: loading,
+                      })}
+                      sizes={getNodeSwiperImageSizes(
+                        file,
+                        innerWidth,
+                        innerHeight,
+                      )}
+                      quality={90}
+                    />
+                  )}
+                </ImageLoadingWrapper>
               )}
-            </ImageLoadingWrapper>
+            </PinchZoom>
           </SwiperSlide>
         ))}
       </Swiper>
