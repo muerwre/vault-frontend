@@ -710,7 +710,7 @@ autosize@^4.0.2:
   resolved "https://registry.yarnpkg.com/autosize/-/autosize-4.0.4.tgz#924f13853a466b633b9309330833936d8bccce03"
   integrity sha512-5yxLQ22O0fCRGoxGfeLSNt3J8LB1v+umtpMnPW6XjkTWXKoN0AmXAIhelJcDtFT/Y/wYWmfE+oqU10Q0b8FhaQ==
 
-axios@^0.21.100:
+axios@^0.21.4:
   version "0.21.4"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.4.tgz#c67b90dc0568e5c1cf2b0b858c43ba28e2eda575"
   integrity sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==
@@ -1068,13 +1068,6 @@ dom-accessibility-api@^0.5.6:
   version "0.5.11"
   resolved "https://registry.yarnpkg.com/dom-accessibility-api/-/dom-accessibility-api-0.5.11.tgz#79d5846c4f90eba3e617d9031e921de9324f84ed"
   integrity sha512-7X6GvzjYf4yTdRKuCVScV+aA9Fvh5r8WzWrXBH9w82ZWB/eYDMGCnazoC/YAqAzUJWHzLOnZqr46K3iEyUhUvw==
-
-dom7@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/dom7/-/dom7-4.0.4.tgz#8b68c5d8e5e2ed0fddb1cb93e433bc9060c8f3fb"
-  integrity sha512-DSSgBzQ4rJWQp1u6o+3FVwMNnT5bzQbMb+o31TjYYeRi05uAcpF8koxdfzeoe5ElzPmua7W7N28YJhF7iEKqIw==
-  dependencies:
-    ssr-window "^4.0.0"
 
 duplexer@^0.1.2:
   version "0.1.2"
@@ -2948,11 +2941,6 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-ssr-window@^4.0.0, ssr-window@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/ssr-window/-/ssr-window-4.0.2.tgz#dc6b3ee37be86ac0e3ddc60030f7b3bc9b8553be"
-  integrity sha512-ISv/Ch+ig7SOtw7G2+qkwfVASzazUnvlDTwypdLoPoySv+6MqlOV10VwPSE6EWkGjhW50lUmghPmpYZXMu/+AQ==
-
 streamx@^2.15.0:
   version "2.15.2"
   resolved "https://registry.yarnpkg.com/streamx/-/streamx-2.15.2.tgz#680eacebdc9c43ede7362c2e6695b34dd413c741"
@@ -3091,13 +3079,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-swiper@^8.4.4:
-  version "8.4.5"
-  resolved "https://registry.yarnpkg.com/swiper/-/swiper-8.4.5.tgz#149ca81f67393d3f33abddd0f968fc37e99980b5"
-  integrity sha512-zveyEFBBv4q1sVkbJHnuH4xCtarKieavJ4SxP0QEHvdpPLJRuD7j/Xg38IVVLbp7Db6qrPsLUePvxohYx39Agw==
-  dependencies:
-    dom7 "^4.0.4"
-    ssr-window "^4.0.2"
+swiper@^11.0.3:
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-11.0.3.tgz#9c325154db2a4431f508b7e8e300621365eb4c3d"
+  integrity sha512-MyV9ooQsriAe2EibeamqewLjgCfSvl2xoyratl6S3ln5BXDL4BzlO6mxcbLMCzQL6Z60b/u0AS/nKrepL0+TAg==
 
 swr@^1.0.1:
   version "1.2.0"

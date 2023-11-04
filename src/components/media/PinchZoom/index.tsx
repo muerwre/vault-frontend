@@ -48,6 +48,7 @@ const PinchZoom: FC<Props> = ({ children }) => {
       if (event.touches.length !== 2 || !ref) {
         return;
       }
+
       event.preventDefault(); // Prevent page scroll
 
       // Safari provides event.scale as two fingers move on the screen

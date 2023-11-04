@@ -14,4 +14,4 @@ export const NODE_SWIPER_OPTIONS: SwiperOptions = {
     loadPrevNext: true,
     checkInView: true,
   },
-};
+} as const;
