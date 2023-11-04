@@ -5,7 +5,10 @@ import useSWR from 'swr';
 import { apiGetTagSuggestions } from '~/api/tags';
 import { API } from '~/constants/api';
 
-export const useTagAutocomplete = (input: string, exclude: string[]): string[] => {
+export const useTagAutocomplete = (
+  input: string,
+  exclude: string[],
+): string[] => {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -14,12 +17,14 @@ export const useTagAutocomplete = (input: string, exclude: string[]): string[] =
   }, [input]);
 
   const { data } = useSWR(
-    `${API.TAG.AUTOCOMPLETE}?tag=${search}&exclude=${exclude.join(',')}`,
+    search
+      ? `${API.TAG.AUTOCOMPLETE}?tag=${search}&exclude=${exclude.join(',')}`
+      : null,
     async () => {
       const result = await apiGetTagSuggestions({ search, exclude });
       return result.tags || [];
-    }
+    },
   );
 
-  return useMemo(() => data || [], [data]);
+  return useMemo(() => (search ? data ?? [] : []), [data, search]);
 };
