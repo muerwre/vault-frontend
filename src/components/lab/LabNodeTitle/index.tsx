@@ -5,12 +5,12 @@ import Tippy from '@tippyjs/react';
 import { Group } from '~/components/containers/Group';
 import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
-import { INodeComponentProps } from '~/constants/node';
+import { NodeComponentProps } from '~/constants/node';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
 
 import styles from './styles.module.scss';
 
-const LabNodeTitle: FC<INodeComponentProps> = ({ node, isLoading }) => {
+const LabNodeTitle: FC<NodeComponentProps> = ({ node, isLoading }) => {
   const onClick = useGotoNode(node.id);
 
   if (!node.title) return null;

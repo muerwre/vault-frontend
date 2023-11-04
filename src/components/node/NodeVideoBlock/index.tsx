@@ -1,11 +1,11 @@
 import React, { FC, useMemo } from 'react';
 
-import { INodeComponentProps } from '~/constants/node';
+import { NodeComponentProps } from '~/constants/node';
 import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
-interface IProps extends INodeComponentProps {}
+interface IProps extends NodeComponentProps {}
 
 const NodeVideoBlock: FC<IProps> = ({ node }) => {
   const video = useMemo(() => {
@@ -13,7 +13,7 @@ const NodeVideoBlock: FC<IProps> = ({ node }) => {
     const match =
       url &&
       url.match(
-        /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-_]*)(&(amp;)?[\w?=]*)?/
+        /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-_]*)(&(amp;)?[\w?=]*)?/,
       );
 
     return match && match[1];

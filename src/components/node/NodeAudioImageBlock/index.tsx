@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { INodeComponentProps } from '~/constants/node';
+import { NodeComponentProps } from '~/constants/node';
 import { imagePresets } from '~/constants/urls';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { getURL } from '~/utils/dom';
@@ -8,7 +8,7 @@ import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
-interface IProps extends INodeComponentProps {}
+interface IProps extends NodeComponentProps {}
 
 const NodeAudioImageBlock: FC<IProps> = ({ node }) => {
   const images = useNodeImages(node);

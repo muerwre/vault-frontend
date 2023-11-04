@@ -4,7 +4,7 @@ import Image from 'next/future/image';
 import SwiperCore, { A11y, Navigation, Pagination } from 'swiper';
 
 import { Placeholder } from '~/components/placeholders/Placeholder';
-import { INodeComponentProps } from '~/constants/node';
+import { NodeComponentProps } from '~/constants/node';
 import { imagePresets } from '~/constants/urls';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
@@ -15,7 +15,7 @@ import styles from './styles.module.scss';
 
 SwiperCore.use([Navigation, Pagination, A11y]);
 
-interface IProps extends INodeComponentProps {}
+interface IProps extends NodeComponentProps {}
 
 const LabImage: FC<IProps> = ({ node, isLoading }) => {
   const images = useNodeImages(node);

@@ -13,7 +13,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
 import { ImageLoadingWrapper } from '~/components/common/ImageLoadingWrapper/index';
-import { INodeComponentProps } from '~/constants/node';
+import { NodeComponentProps } from '~/constants/node';
 import { imagePresets } from '~/constants/urls';
 import { useModal } from '~/hooks/modal/useModal';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
@@ -26,7 +26,7 @@ import styles from './styles.module.scss';
 
 SwiperCore.use([Navigation, Pagination, Keyboard, Lazy]);
 
-interface IProps extends INodeComponentProps {}
+interface IProps extends NodeComponentProps {}
 
 const breakpoints: SwiperOptions['breakpoints'] = {
   599: {

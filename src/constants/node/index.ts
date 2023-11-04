@@ -53,17 +53,17 @@ export const NODE_TYPES = {
   ROOM: 'room',
 };
 
-export type INodeComponentProps = {
+export type NodeComponentProps = {
   node: INode;
   isLoading: boolean;
 };
 
 export type INodeComponents = Record<
   ValueOf<typeof NODE_TYPES>,
-  FC<INodeComponentProps>
+  FC<NodeComponentProps>
 >;
 
-export const LAB_PREVIEW_LAYOUT: Record<string, FC<INodeComponentProps>[]> = {
+export const LAB_PREVIEW_LAYOUT: Record<string, FC<NodeComponentProps>[]> = {
   [NODE_TYPES.IMAGE]: [LabImage, LabPad, LabNodeTitle, LabDescription],
   [NODE_TYPES.VIDEO]: [LabVideo, LabPad, LabNodeTitle, LabDescription],
   [NODE_TYPES.AUDIO]: [

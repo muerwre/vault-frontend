@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 import { Placeholder } from '~/components/placeholders/Placeholder';
-import { INodeComponentProps } from '~/constants/node';
+import { NodeComponentProps } from '~/constants/node';
 
-const LabAudio: FC<INodeComponentProps> = ({ node, isLoading }) => (
+const LabAudio: FC<NodeComponentProps> = ({ node, isLoading }) => (
   <Placeholder active={isLoading} width="100%" height={100}>
     <NodeAudioBlock node={node} isLoading={isLoading} />
   </Placeholder>
