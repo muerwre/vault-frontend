@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 
 import Image from 'next/future/image';
-import SwiperCore, { A11y, Navigation, Pagination } from 'swiper';
 
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { NodeComponentProps } from '~/constants/node';
@@ -12,8 +11,6 @@ import { normalizeBrightColor } from '~/utils/color';
 import { getURL } from '~/utils/dom';
 
 import styles from './styles.module.scss';
-
-SwiperCore.use([Navigation, Pagination, A11y]);
 
 interface IProps extends NodeComponentProps {}
 

@@ -1,7 +1,8 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
-import SwiperCore, { Autoplay, EffectFade, Lazy, Navigation } from 'swiper';
+import Image from 'next/future/image';
+import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
@@ -14,8 +15,6 @@ import { IFlowNode } from '~/types';
 import { getURLFromString } from '~/utils/dom';
 
 import styles from './styles.module.scss';
-
-SwiperCore.use([EffectFade, Lazy, Autoplay, Navigation]);
 
 interface Props {
   heroes: IFlowNode[];
@@ -127,7 +126,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
         effect="fade"
         speed={3000}
         className={styles.swiper}
-        lazy={lazy}
+        modules={[EffectFade, Autoplay, Navigation]}
         loop
         slidesPerView={1}
         autoplay={autoplay}
@@ -140,19 +139,20 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
         followFinger
         shortSwipes={false}
         watchSlidesProgress
+        lazyPreloadPrevNext={3}
       >
         {heroes
           .filter((node) => node.thumbnail)
           .map((node) => (
             <SwiperSlide key={node.id}>
-              <img
-                data-src={getURLFromString(
-                  node.thumbnail,
-                  imagePresets.small_hero,
-                )}
-                data-srcset={getSrcSet(node.thumbnail)}
+              <Image
+                width={800}
+                height={300}
+                src={getURLFromString(node.thumbnail, imagePresets.small_hero)}
                 alt=""
                 className={classNames(styles.preview, 'swiper-lazy')}
+                loading="lazy"
+                style={{ objectFit: 'cover' }}
               />
             </SwiperSlide>
           ))}

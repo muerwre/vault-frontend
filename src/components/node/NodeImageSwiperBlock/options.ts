@@ -1,4 +1,4 @@
-import { SwiperOptions } from 'swiper';
+import { SwiperOptions } from 'swiper/types/swiper-options.d';
 
 export const NODE_SWIPER_OPTIONS: SwiperOptions = {
   breakpoints: {
@@ -7,11 +7,4 @@ export const NODE_SWIPER_OPTIONS: SwiperOptions = {
     },
   },
   pagination: { type: 'fraction' as const },
-  lazy: {
-    enabled: true,
-    loadPrevNextAmount: 1,
-    loadOnTransitionStart: true,
-    loadPrevNext: true,
-    checkInView: true,
-  },
 } as const;
