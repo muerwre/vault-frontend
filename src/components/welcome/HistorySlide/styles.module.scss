@@ -1,0 +1,15 @@
+@import 'src/styles/variables';
+
+.card {
+  @include blur();
+
+  flex: 1;
+  padding: $gap;
+  border-radius: $radius;
+  font-size: 0.9em;
+  flex: 0 0 360px;
+}
+
+.wrapper {
+  overflow: hidden;
+}

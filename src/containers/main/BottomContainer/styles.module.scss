@@ -1,7 +1,7 @@
 @import 'src/styles/variables';
 
 .wrap {
-  position: sticky;
+  position: fixed;
   bottom: 0;
   pointer-events: none;
   touch-action: none;

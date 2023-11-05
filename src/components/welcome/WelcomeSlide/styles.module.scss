@@ -1,0 +1,28 @@
+@import 'src/styles/variables';
+
+.content {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.wrap {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  margin: auto;
+}
+
+.left {
+  @include blur();
+
+  flex: 0 1 440px;
+  padding: $gap $gap * 2 $gap * 2;
+  border-radius: $radius;
+  line-height: 1.25em;
+
+  h1 {
+    text-transform: uppercase;
+  }
+}

@@ -1,0 +1,21 @@
+@import 'src/styles/variables';
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.cards {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  gap: $gap;
+}
+
+.card {
+  @include blur;
+
+  border-radius: $radius;
+  padding: $gap $gap * 2 $gap * 2;
+}
