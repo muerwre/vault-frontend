@@ -63,27 +63,11 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
   }, [controlledSwiper]);
 
   const onIndexChange = useCallback((swiper: SwiperClass) => {
-    let activeIndex = swiper.activeIndex;
-    let slidesLen = swiper.slides.length;
-
-    if (slidesLen === 0) {
-      return 0;
+    if (!swiper.slides.length) {
+      return;
     }
 
-    if (swiper.params.loop) {
-      switch (swiper.activeIndex) {
-        case 0:
-          activeIndex = slidesLen - 3;
-          break;
-        case slidesLen - 1:
-          activeIndex = 0;
-          break;
-        default:
-          --activeIndex;
-      }
-    }
-
-    setCurrentIndex(activeIndex);
+    setCurrentIndex(swiper.realIndex);
   }, []);
 
   const onClick = useCallback(
@@ -148,7 +132,7 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
               <Image
                 width={800}
                 height={300}
-                src={getURLFromString(node.thumbnail, imagePresets.small_hero)}
+                src={getURLFromString(node.thumbnail, preset)}
                 alt=""
                 className={classNames(styles.preview, 'swiper-lazy')}
                 loading="lazy"

@@ -67,7 +67,7 @@ $_brown: #23201f;
         $_brown,
         0.3
       )};
-    --content_bg_hero: url('/images/noise.png') #{transparentize($_brown, 0.5)};
+    --content_bg_hero: url('/images/noise.png') #{transparentize($_brown, 0.6)};
 
     // white shades (move to --vars)
     --white: white;
