@@ -21,7 +21,14 @@ const NodeImageLazy: FC<NodeImageLazyProps> = ({
 }) => {
   if (src?.endsWith('svg')) {
     return (
-      <img data-src={src} onLoad={onLoad} color={color} alt="" {...rest} />
+      <img
+        src={src}
+        onLoad={onLoad}
+        color={color}
+        alt=""
+        {...rest}
+        loading="lazy"
+      />
     );
   }
 
