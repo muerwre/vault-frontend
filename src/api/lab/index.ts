@@ -5,12 +5,21 @@ import {
   GetLabStatsResult,
   GetLabUpdatesResult,
 } from '~/types/lab';
-import { api, cleanResult } from '~/utils/api';
+import { api, unwrap } from '~/utils/api';
 
-export const getLabNodes = ({ offset, limit, sort, search }: GetLabNodesRequest) =>
+export const getLabNodes = ({
+  offset,
+  limit,
+  sort,
+  search,
+}: GetLabNodesRequest) =>
   api
-    .get<GetLabNodesResult>(API.LAB.NODES, { params: { offset, limit, sort, search } })
-    .then(cleanResult);
+    .get<GetLabNodesResult>(API.LAB.NODES, {
+      params: { offset, limit, sort, search },
+    })
+    .then(unwrap);
 
-export const getLabStats = () => api.get<GetLabStatsResult>(API.LAB.STATS).then(cleanResult);
-export const getLabUpdates = () => api.get<GetLabUpdatesResult>(API.LAB.UPDATES).then(cleanResult);
+export const getLabStats = () =>
+  api.get<GetLabStatsResult>(API.LAB.STATS).then(unwrap);
+export const getLabUpdates = () =>
+  api.get<GetLabUpdatesResult>(API.LAB.UPDATES).then(unwrap);

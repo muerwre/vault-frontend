@@ -1,12 +1,12 @@
 import { API } from '~/constants/api';
 import { GetSearchResultsRequest, GetSearchResultsResult } from '~/types/flow';
 import { PostCellViewRequest, PostCellViewResult } from '~/types/node';
-import { api, cleanResult } from '~/utils/api';
+import { api, unwrap } from '~/utils/api';
 
 export const postCellView = ({ id, flow }: PostCellViewRequest) =>
   api
     .post<PostCellViewResult>(API.NODES.SET_CELL_VIEW(id), { flow })
-    .then(cleanResult);
+    .then(unwrap);
 
 export const getSearchResults = ({
   text,
@@ -17,4 +17,4 @@ export const getSearchResults = ({
     .get<GetSearchResultsResult>(API.SEARCH.NODES, {
       params: { text, skip, take },
     })
-    .then(cleanResult);
+    .then(unwrap);

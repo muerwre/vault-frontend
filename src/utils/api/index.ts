@@ -9,7 +9,7 @@ export const api = axios.create({
 });
 
 // Pass token to axios
-api.interceptors.request.use(options => {
+api.interceptors.request.use((options) => {
   const token = getMOBXStore().auth.token;
 
   if (!token) {
@@ -20,15 +20,21 @@ api.interceptors.request.use(options => {
 });
 
 // Logout on 401
-api.interceptors.response.use(undefined, (error: AxiosError<{ error: string }>) => {
-  if (error.response?.status === HTTP_RESPONSES.UNAUTHORIZED) {
-    getMOBXStore().auth.logout();
-  }
+api.interceptors.response.use(
+  undefined,
+  (error: AxiosError<{ error: string }>) => {
+    if (error.response?.status === HTTP_RESPONSES.UNAUTHORIZED) {
+      getMOBXStore().auth.logout();
+    }
 
-  error.message = error?.response?.data?.error || error?.response?.statusText || error.message;
+    error.message =
+      error?.response?.data?.error ||
+      error?.response?.statusText ||
+      error.message;
 
-  throw error;
-});
+    throw error;
+  },
+);
 
 export const HTTP_RESPONSES = {
   SUCCESS: 200,
@@ -38,6 +44,7 @@ export const HTTP_RESPONSES = {
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
   TOO_MANY_REQUESTS: 429,
-};
+} as const;
 
-export const cleanResult = <T extends any>(response: AxiosResponse<T>): T => response?.data;
+export const unwrap = <T extends any>(response: AxiosResponse<T>): T =>
+  response?.data;

@@ -1,5 +1,8 @@
 import { TelegramUser } from '@v9v/ts-react-telegram-login';
 
+import { API } from '~/constants/api';
+import { api, unwrap } from '~/utils/api';
+
 import {
   ApiAttachSocialRequest,
   ApiAttachSocialResult,
@@ -22,24 +25,20 @@ import {
   ApiUpdateUserResult,
   ApiUserLoginRequest,
   ApiUserLoginResult,
-} from '~/api/auth/types';
-import { API } from '~/constants/api';
-import { api, cleanResult } from '~/utils/api';
+} from './types';
 
 export const apiUserLogin = ({ username, password }: ApiUserLoginRequest) =>
   api
     .post<ApiUserLoginResult>(API.USER.LOGIN, { username, password })
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiAuthGetUser = () =>
-  api.get<ApiAuthGetUserResult>(API.USER.ME).then(cleanResult);
+  api.get<ApiAuthGetUserResult>(API.USER.ME).then(unwrap);
 
 export const apiAuthGetUserProfile = ({
   username,
 }: ApiAuthGetUserProfileRequest) =>
-  api
-    .get<ApiAuthGetUserProfileResult>(API.USER.PROFILE(username))
-    .then(cleanResult);
+  api.get<ApiAuthGetUserProfileResult>(API.USER.PROFILE(username)).then(unwrap);
 
 export const apiAuthGetUpdates = ({
   exclude_dialogs,
@@ -49,44 +48,40 @@ export const apiAuthGetUpdates = ({
     .get<ApiAuthGetUpdatesResult>(API.USER.GET_UPDATES, {
       params: { exclude_dialogs, last },
     })
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiUpdateUser = ({ user }: ApiUpdateUserRequest) =>
-  api.patch<ApiUpdateUserResult>(API.USER.ME, user).then(cleanResult);
+  api.patch<ApiUpdateUserResult>(API.USER.ME, user).then(unwrap);
 
 export const apiUpdatePhoto = ({ file }: ApiUpdatePhotoRequest) =>
-  api.post<ApiUpdateUserResult>(API.USER.UPDATE_PHOTO, file).then(cleanResult);
+  api.post<ApiUpdateUserResult>(API.USER.UPDATE_PHOTO, file).then(unwrap);
 
 export const apiUpdateCover = ({ file }: ApiUpdatePhotoRequest) =>
-  api.post<ApiUpdateUserResult>(API.USER.UPDATE_COVER, file).then(cleanResult);
+  api.post<ApiUpdateUserResult>(API.USER.UPDATE_COVER, file).then(unwrap);
 
 export const apiRequestRestoreCode = (field: string) =>
-  api
-    .post<{ field: string }>(API.USER.REQUEST_CODE(), { field })
-    .then(cleanResult);
+  api.post<{ field: string }>(API.USER.REQUEST_CODE(), { field }).then(unwrap);
 
 export const apiCheckRestoreCode = ({ code }: ApiCheckRestoreCodeRequest) =>
-  api
-    .get<ApiCheckRestoreCodeResult>(API.USER.REQUEST_CODE(code))
-    .then(cleanResult);
+  api.get<ApiCheckRestoreCodeResult>(API.USER.REQUEST_CODE(code)).then(unwrap);
 
 export const apiRestoreCode = ({ code, password }: ApiRestoreCodeRequest) =>
   api
     .put<ApiRestoreCodeResult>(API.USER.REQUEST_CODE(code), { password })
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiGetSocials = () =>
-  api.get<ApiGetSocialsResult>(API.USER.GET_SOCIALS).then(cleanResult);
+  api.get<ApiGetSocialsResult>(API.USER.GET_SOCIALS).then(unwrap);
 
 export const apiDropSocial = ({ id, provider }: ApiDropSocialRequest) =>
   api
     .delete<ApiDropSocialResult>(API.USER.DROP_SOCIAL(provider, id))
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiAttachSocial = ({ token }: ApiAttachSocialRequest) =>
   api
     .post<ApiAttachSocialResult>(API.USER.ATTACH_SOCIAL, { token })
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiLoginWithSocial = ({
   token,
@@ -99,7 +94,7 @@ export const apiLoginWithSocial = ({
       username,
       password,
     })
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiAttachTelegram = (data: TelegramUser) =>
   api.post(API.USER.ATTACH_TELEGRAM, data);

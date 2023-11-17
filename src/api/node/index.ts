@@ -26,7 +26,7 @@ import {
   GetNodeDiffRequest,
   GetNodeDiffResult,
 } from '~/types/node';
-import { api, cleanResult } from '~/utils/api';
+import { api, unwrap } from '~/utils/api';
 
 export type ApiPostNodeRequest = { node: INode };
 export type ApiPostNodeResult = {
@@ -45,7 +45,7 @@ export type ApiGetNodeCommentsResponse = {
 };
 
 export const apiPostNode = ({ node }: ApiPostNodeRequest) =>
-  api.post<ApiPostNodeResult>(API.NODES.SAVE, node).then(cleanResult);
+  api.post<ApiPostNodeResult>(API.NODES.SAVE, node).then(unwrap);
 
 export const getNodeDiff = ({
   start,
@@ -68,7 +68,7 @@ export const getNodeDiff = ({
         with_valid,
       },
     })
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiGetNode = (
   { id }: ApiGetNodeRequest,
@@ -76,7 +76,7 @@ export const apiGetNode = (
 ) =>
   api
     .get<ApiGetNodeResponse>(API.NODES.GET(id), config)
-    .then(cleanResult)
+    .then(unwrap)
     .then((data) => ({
       node: data.node,
       last_seen: data.last_seen,
@@ -90,13 +90,13 @@ export const apiGetNodeWithCancel = ({ id }: ApiGetNodeRequest) => {
       .get<ApiGetNodeResponse>(API.NODES.GET(id), {
         cancelToken: cancelToken.token,
       })
-      .then(cleanResult),
+      .then(unwrap),
     cancel: cancelToken.cancel,
   };
 };
 
 export const apiPostComment = ({ id, data }: ApiPostCommentRequest) =>
-  api.post<ApiPostCommentResult>(API.NODES.COMMENT(id), data).then(cleanResult);
+  api.post<ApiPostCommentResult>(API.NODES.COMMENT(id), data).then(unwrap);
 
 export const apiLikeComment = (
   nodeId: number,
@@ -110,7 +110,7 @@ export const apiLikeComment = (
       data,
       { cancelToken: options?.cancelToken },
     )
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiGetNodeComments = ({
   id,
@@ -121,31 +121,31 @@ export const apiGetNodeComments = ({
     .get<ApiGetNodeCommentsResponse>(API.NODES.COMMENT(id), {
       params: { take, skip },
     })
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiGetNodeRelated = ({ id }: ApiGetNodeRelatedRequest) =>
-  api.get<ApiGetNodeRelatedResult>(API.NODES.RELATED(id)).then(cleanResult);
+  api.get<ApiGetNodeRelatedResult>(API.NODES.RELATED(id)).then(unwrap);
 
 export const apiPostNodeTags = ({ id, tags }: ApiPostNodeTagsRequest) =>
   api
     .post<ApiPostNodeTagsResult>(API.NODES.UPDATE_TAGS(id), { tags })
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiDeleteNodeTag = ({ id, tagId }: ApiDeleteNodeTagsRequest) =>
   api
     .delete<ApiDeleteNodeTagsResult>(API.NODES.DELETE_TAG(id, tagId))
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiPostNodeLike = ({ id }: ApiPostNodeLikeRequest) =>
-  api.post<ApiPostNodeLikeResult>(API.NODES.LIKE(id)).then(cleanResult);
+  api.post<ApiPostNodeLikeResult>(API.NODES.LIKE(id)).then(unwrap);
 
 export const apiPostNodeHeroic = ({ id }: ApiPostNodeHeroicRequest) =>
-  api.post<ApiPostNodeHeroicResponse>(API.NODES.HEROIC(id)).then(cleanResult);
+  api.post<ApiPostNodeHeroicResponse>(API.NODES.HEROIC(id)).then(unwrap);
 
 export const apiLockNode = ({ id, is_locked }: ApiLockNodeRequest) =>
   api
     .delete<ApiLockNodeResult>(API.NODES.DELETE(id), { params: { is_locked } })
-    .then(cleanResult);
+    .then(unwrap);
 
 export const apiLockComment = ({
   id,
@@ -158,4 +158,4 @@ export const apiLockComment = ({
         is_locked: isLocked,
       },
     })
-    .then(cleanResult);
+    .then(unwrap);

@@ -1,7 +1,7 @@
 import { ApiUploadFileRequest, ApiUploadFIleResult } from '~/api/uploads/types';
 import { API } from '~/constants/api';
 import { UploadTarget, UploadType } from '~/constants/uploads';
-import { api, cleanResult } from '~/utils/api';
+import { api, unwrap } from '~/utils/api';
 
 export const apiUploadFile = ({
   file,
@@ -16,5 +16,5 @@ export const apiUploadFile = ({
     .post<ApiUploadFIleResult>(API.USER.UPLOAD(target, type), data, {
       onUploadProgress: onProgress,
     })
-    .then(cleanResult);
+    .then(unwrap);
 };
