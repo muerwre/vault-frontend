@@ -1,12 +1,12 @@
+import { LoginDialog } from '~/containers/auth/LoginDialog';
+import { LoginSocialRegisterDialog } from '~/containers/auth/LoginSocialRegisterDialog';
+import { RestorePasswordDialog } from '~/containers/auth/RestorePasswordDialog';
+import { RestoreRequestDialog } from '~/containers/auth/RestoreRequestDialog';
+import { TelegramAttachDialog } from '~/containers/auth/TelegramAttachDialog';
 import { EditorCreateDialog } from '~/containers/dialogs/EditorCreateDialog';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
-import { LoginDialog } from '~/containers/dialogs/LoginDialog';
-import { LoginSocialRegisterDialog } from '~/containers/dialogs/LoginSocialRegisterDialog';
 import { PhotoSwipe } from '~/containers/dialogs/PhotoSwipe';
-import { RestorePasswordDialog } from '~/containers/dialogs/RestorePasswordDialog';
-import { RestoreRequestDialog } from '~/containers/dialogs/RestoreRequestDialog';
-import { TelegramAttachDialog } from '~/containers/dialogs/TelegramAttachDialog';
 import { TestDialog } from '~/containers/dialogs/TestDialog';
 
 export enum Dialog {

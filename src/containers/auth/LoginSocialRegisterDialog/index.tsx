@@ -8,7 +8,7 @@ import { DialogTitle } from '~/components/dialogs/DialogTitle';
 import { InputText } from '~/components/input/InputText';
 import { Toggle } from '~/components/input/Toggle';
 import { getRandomPhrase } from '~/constants/phrases';
-import { LoginSocialRegisterButtons } from '~/containers/dialogs/LoginDialog/components/LoginSocialRegisterButtons';
+import { LoginSocialRegisterButtons } from '~/containers/auth/LoginDialog/components/LoginSocialRegisterButtons';
 import { useCloseOnEscape } from '~/hooks';
 import { useSocialRegisterForm } from '~/hooks/auth/useSocialRegisterForm';
 import { useModal } from '~/hooks/modal/useModal';
