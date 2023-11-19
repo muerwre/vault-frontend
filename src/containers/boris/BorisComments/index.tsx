@@ -3,8 +3,8 @@ import { FC } from 'react';
 import { Group } from '~/components/containers/Group';
 import { Footer } from '~/components/main/Footer';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
-import { NodeCommentFormSSR } from '~/containers/node/NodeCommentForm/ssr';
-import { NodeComments } from '~/containers/node/NodeComments';
+import { NodeCommentFormSSR } from '~/containers/comments/NodeCommentForm/ssr';
+import { NodeComments } from '~/containers/comments/NodeComments';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
 
 interface Props {}

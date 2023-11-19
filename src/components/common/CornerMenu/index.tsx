@@ -1,7 +1,8 @@
 import React, { useCallback, useState, VFC } from 'react';
 
-import styles from '~/components/comment/CommentMenu/styles.module.scss';
 import { MenuDots } from '~/components/common/MenuDots';
+
+import styles from './styles.module.scss';
 
 interface MenuAction {
   title: string;
@@ -18,7 +19,12 @@ const CornerMenu: VFC<CornerMenuProps> = ({ actions }) => {
   const onBlur = useCallback(() => setIsMenuOpened(false), [setIsMenuOpened]);
 
   return (
-    <div className={styles.wrap} onFocus={onFocus} onBlur={onBlur} tabIndex={-1}>
+    <div
+      className={styles.wrap}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      tabIndex={-1}
+    >
       <MenuDots onClick={onFocus} />
 
       {is_menu_opened && (

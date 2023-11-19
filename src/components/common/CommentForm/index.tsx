@@ -3,10 +3,6 @@ import { FC, useCallback, useState } from 'react';
 import { FormikProvider } from 'formik';
 import { observer } from 'mobx-react-lite';
 
-import { CommentFormAttachButtons } from '~/components/comment/CommentFormAttachButtons';
-import { CommentFormAttaches } from '~/components/comment/CommentFormAttaches';
-import { CommentFormFormatButtons } from '~/components/comment/CommentFormFormatButtons';
-import { LocalCommentFormTextarea } from '~/components/comment/LocalCommentFormTextarea';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import { ERROR_LITERAL } from '~/constants/errors';
@@ -14,10 +10,12 @@ import { EMPTY_COMMENT } from '~/constants/node';
 import { useCommentFormFormik } from '~/hooks/comments/useCommentFormFormik';
 import { useInputPasteUpload } from '~/hooks/dom/useInputPasteUpload';
 import { IComment } from '~/types';
-import {
-  useUploaderContext,
-} from '~/utils/context/UploaderContextProvider';
+import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
 
+import { CommentFormAttachButtons } from './components/CommentFormAttachButtons';
+import { CommentFormAttaches } from './components/CommentFormAttaches';
+import { CommentFormFormatButtons } from './components/CommentFormFormatButtons';
+import { CommentFormTextarea } from './components/CommentFormTextarea';
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -63,7 +61,7 @@ const CommentForm: FC<IProps> = observer(
       <form onSubmit={formik.handleSubmit} className={styles.wrap}>
         <FormikProvider value={formik}>
           <div className={styles.input}>
-            <LocalCommentFormTextarea onPaste={onPaste} ref={setTextArea} />
+            <CommentFormTextarea onPaste={onPaste} ref={setTextArea} />
 
             {!!error && (
               <div className={styles.error} onClick={clearError}>

@@ -1,6 +1,3 @@
-import { CommentEmbedBlock } from '~/components/comment/CommentEmbedBlock';
-import { CommentTextBlock } from '~/components/comment/CommentTextBlock';
-
 export const COMMENT_BLOCK_TYPES = {
   TEXT: 'TEXT',
   MARK: 'MARK',
@@ -29,12 +26,6 @@ export type ICommentBlock = {
 
 export type ICommentBlockProps = {
   block: ICommentBlock;
-};
-
-export const COMMENT_BLOCK_RENDERERS = {
-  [COMMENT_BLOCK_TYPES.TEXT]: CommentTextBlock,
-  [COMMENT_BLOCK_TYPES.MARK]: CommentTextBlock,
-  [COMMENT_BLOCK_TYPES.EMBED]: CommentEmbedBlock,
 };
 
 export const NEW_COMMENT_CLASSNAME = 'newComment';

@@ -2,9 +2,9 @@ import React, { FC, useMemo } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Comment } from '~/components/comment/Comment';
 import { LoadMoreButton } from '~/components/input/LoadMoreButton';
 import { ANNOUNCE_USER_ID, BORIS_NODE_ID } from '~/constants/boris/constants';
+import { Comment } from '~/containers/comments/NodeComments/components/Comment';
 import { useGrouppedComments } from '~/hooks/node/useGrouppedComments';
 import { ICommentGroup } from '~/types';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';

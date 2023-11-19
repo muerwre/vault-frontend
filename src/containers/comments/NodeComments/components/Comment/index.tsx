@@ -3,14 +3,14 @@ import React, { FC, HTMLAttributes, memo } from 'react';
 import classNames from 'classnames';
 import { parseISO } from 'date-fns';
 
-import { CommentContent } from '~/components/comment/CommentContent';
-import { CommentDistance } from '~/components/comment/CommentDistance';
-import { CommentWrapper } from '~/components/containers/CommentWrapper';
 import { NEW_COMMENT_CLASSNAME } from '~/constants/comment';
+import { CommentWrapper } from '~/containers/comments/CommentWrapper';
 import { IComment, ICommentGroup, IFile } from '~/types';
 
-import { CommendDeleted } from '../../node/CommendDeleted';
+import { CommendDeleted } from '../../../../../components/node/CommendDeleted';
 
+import { CommentContent } from './components/CommentContent';
+import { CommentDistance } from './components/CommentDistance';
 import styles from './styles.module.scss';
 
 type Props = HTMLAttributes<HTMLDivElement> & {

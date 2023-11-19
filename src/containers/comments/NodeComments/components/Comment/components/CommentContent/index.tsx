@@ -12,17 +12,16 @@ import classnames from 'classnames';
 
 import { Group } from '~/components/containers/Group';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
-import { COMMENT_BLOCK_RENDERERS } from '~/constants/comment';
 import { UploadType } from '~/constants/uploads';
 import { IComment, IFile } from '~/types';
 import { formatCommentText, getPrettyDate } from '~/utils/dom';
 import { append, assocPath, path, reduce } from '~/utils/ramda';
 
-import { CommentEditingForm } from '../CommentEditingForm';
-import { CommentImageGrid } from '../CommentImageGrid';
-import { CommentLike } from '../CommentLike';
-import { CommentMenu } from '../CommentMenu';
-
+import { CommentEditingForm } from './components/CommentEditingForm';
+import { CommentImageGrid } from './components/CommentImageGrid';
+import { CommentLike } from './components/CommentLike';
+import { CommentMenu } from './components/CommentMenu';
+import { COMMENT_BLOCK_RENDERERS } from './constants';
 import styles from './styles.module.scss';
 
 interface IProps {

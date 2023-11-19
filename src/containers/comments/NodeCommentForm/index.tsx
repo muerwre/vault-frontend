@@ -2,8 +2,7 @@ import { FC, useCallback } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { CommentForm } from '~/components/comment/CommentForm';
-import { CommentWrapper } from '~/components/containers/CommentWrapper';
+import { CommentForm } from '~/components/common/CommentForm';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { Dialog } from '~/constants/modal';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
@@ -12,6 +11,8 @@ import { useUploader } from '~/hooks/data/useUploader';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { IComment } from '~/types';
 import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
+
+import { CommentWrapper } from '../CommentWrapper';
 
 export interface Props {
   saveComment: (comment: IComment) => Promise<IComment | undefined>;

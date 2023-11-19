@@ -5,7 +5,7 @@ import isBefore from 'date-fns/isBefore';
 import { observer } from 'mobx-react-lite';
 
 import { Anchor } from '~/components/common/Anchor';
-import { Authorized } from '~/components/containers/Authorized';
+import { Authorized } from '~/components/common/Authorized';
 import { Filler } from '~/components/containers/Filler';
 import { Button } from '~/components/input/Button';
 import { Logo } from '~/components/main/Logo';

@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 
 import classNames from 'classnames';
 
-import { CommentAvatar } from '~/components/comment/CommentAvatar';
 import { IUser } from '~/types/auth';
 import { path } from '~/utils/ramda';
 import { DivProps } from '~/utils/types';
 
+import { CommentAvatar } from './components/CommentAvatar';
 import styles from './styles.module.scss';
 
 type IProps = DivProps & {

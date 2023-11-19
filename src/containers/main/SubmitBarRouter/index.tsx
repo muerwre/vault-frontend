@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Authorized } from '~/components/containers/Authorized';
+import { Authorized } from '~/components/common/Authorized';
 
 import { SubmitBarSSR } from './components/SubmitBar/ssr';
 
