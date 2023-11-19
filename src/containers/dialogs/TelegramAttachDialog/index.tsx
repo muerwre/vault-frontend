@@ -7,8 +7,8 @@ import { Button } from '~/components/input/Button';
 import { useTelegramAccount } from '~/hooks/auth/useTelegramAccount';
 import { DialogComponentProps } from '~/types/modal';
 
-import { TelegramLoginForm } from '../../../components/auth/oauth/TelegramLoginForm/index';
 import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
+import { TelegramLoginForm } from '../LoginDialog/components/TelegramLoginForm/index';
 
 interface TelegramAttachDialogProps extends DialogComponentProps {}
 

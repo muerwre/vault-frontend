@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState, VFC } from 'react';
 
 import { apiRequestRestoreCode } from '~/api/auth';
-import { RestoreSent } from '~/components/auth/restore/RestoreSent';
 import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
@@ -11,6 +10,7 @@ import { DialogComponentProps } from '~/types/modal';
 
 import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
 
+import { RestoreSent } from './components/RestoreSent';
 import styles from './styles.module.scss';
 
 interface RestoreRequestDialogProps extends DialogComponentProps {}

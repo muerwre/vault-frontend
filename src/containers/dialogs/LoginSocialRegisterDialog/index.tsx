@@ -1,7 +1,6 @@
 import React, { FC, useCallback, useState } from 'react';
 
 import { apiLoginWithSocial } from '~/api/auth';
-import { LoginSocialRegisterButtons } from '~/components/auth/oauth/LoginSocialRegisterButtons';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
@@ -9,6 +8,7 @@ import { DialogTitle } from '~/components/dialogs/DialogTitle';
 import { InputText } from '~/components/input/InputText';
 import { Toggle } from '~/components/input/Toggle';
 import { getRandomPhrase } from '~/constants/phrases';
+import { LoginSocialRegisterButtons } from '~/containers/dialogs/LoginDialog/components/LoginSocialRegisterButtons';
 import { useCloseOnEscape } from '~/hooks';
 import { useSocialRegisterForm } from '~/hooks/auth/useSocialRegisterForm';
 import { useModal } from '~/hooks/modal/useModal';
@@ -35,13 +35,13 @@ const LoginSocialRegisterDialog: FC<LoginSocialRegisterDialogProps> = ({
       auth.setToken(loginToken);
       hideModal();
     },
-    [auth, hideModal]
+    [auth, hideModal],
   );
 
   const { values, errors, handleChange, handleSubmit } = useSocialRegisterForm(
     token,
     apiLoginWithSocial,
-    onSuccess
+    onSuccess,
   );
 
   return (
@@ -73,12 +73,20 @@ const LoginSocialRegisterDialog: FC<LoginSocialRegisterDialogProps> = ({
                 autoComplete="new-password"
               />
 
-              <div className={styles.check} onClick={() => setIsDryingPants(!isDryingPants)}>
+              <div
+                className={styles.check}
+                onClick={() => setIsDryingPants(!isDryingPants)}
+              >
                 <Toggle value={isDryingPants} color="primary" />
-                <span>Это не мои штаны сушатся на радиаторе в третьей лаборатории</span>
+                <span>
+                  Это не мои штаны сушатся на радиаторе в третьей лаборатории
+                </span>
               </div>
 
-              <div className={styles.check} onClick={() => setIsDryingPants(!isDryingPants)}>
+              <div
+                className={styles.check}
+                onClick={() => setIsDryingPants(!isDryingPants)}
+              >
                 <Toggle value={!isDryingPants} color="primary" />
                 <span>{phrase}</span>
               </div>

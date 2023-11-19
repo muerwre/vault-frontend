@@ -1,7 +1,5 @@
 import { FC, useCallback, useRef } from 'react';
 
-import { LoginDialogButtons } from '~/components/auth/login/LoginDialogButtons';
-import { LoginStaticScene } from '~/components/auth/login/LoginStaticScene';
 import { Group } from '~/components/containers/Group';
 import { Padder } from '~/components/containers/Padder';
 import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
@@ -9,6 +7,8 @@ import { DialogTitle } from '~/components/dialogs/DialogTitle';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
 import { Dialog } from '~/constants/modal';
+import { LoginDialogButtons } from '~/containers/dialogs/LoginDialog/components/LoginDialogButtons';
+import { LoginStaticScene } from '~/containers/dialogs/LoginDialog/components/LoginStaticScene';
 import { useCloseOnEscape } from '~/hooks';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useLoginForm } from '~/hooks/auth/useLoginForm';

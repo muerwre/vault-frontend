@@ -1,8 +1,6 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 
 import { apiRestoreCode } from '~/api/auth';
-import { RestoreInvalidCode } from '~/components/auth/restore/RestoreInvalidCode';
-import { RestoreSuccess } from '~/components/auth/restore/RestoreSuccess';
 import { Group } from '~/components/containers/Group';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
@@ -13,13 +11,18 @@ import { DialogComponentProps } from '~/types/modal';
 
 import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
 
+import { RestoreInvalidCode } from './components/RestoreInvalidCode';
+import { RestoreSuccess } from './components/RestoreSuccess';
 import styles from './styles.module.scss';
 
 type RestorePasswordDialogProps = DialogComponentProps & {
   code: string;
 };
 
-const RestorePasswordDialog: FC<RestorePasswordDialogProps> = ({ onRequestClose, code }) => {
+const RestorePasswordDialog: FC<RestorePasswordDialogProps> = ({
+  onRequestClose,
+  code,
+}) => {
   useCloseOnEscape(onRequestClose);
 
   const { codeUser, isLoading, error } = useRestoreCode(code);
@@ -30,7 +33,7 @@ const RestorePasswordDialog: FC<RestorePasswordDialogProps> = ({ onRequestClose,
   const { handleChange, handleSubmit, values, errors } = useRestorePasswordForm(
     code,
     apiRestoreCode,
-    onSent
+    onSent,
   );
 
   const buttons = useMemo(
@@ -39,12 +42,17 @@ const RestorePasswordDialog: FC<RestorePasswordDialogProps> = ({ onRequestClose,
         <Button color="primary">Восстановить</Button>
       </Group>
     ),
-    []
+    [],
   );
 
   const overlay = useMemo(() => {
     if (isSent) {
-      return <RestoreSuccess username={codeUser?.username} onClick={onRequestClose} />;
+      return (
+        <RestoreSuccess
+          username={codeUser?.username}
+          onClick={onRequestClose}
+        />
+      );
     }
 
     if (error) {
@@ -67,7 +75,9 @@ const RestorePasswordDialog: FC<RestorePasswordDialogProps> = ({ onRequestClose,
       >
         <div className={styles.wrap}>
           <Group>
-            <div className={styles.header}>Пришло время сменить пароль, {codeUser?.username}</div>
+            <div className={styles.header}>
+              Пришло время сменить пароль, {codeUser?.username}
+            </div>
 
             <InputText
               title="Новый пароль"
@@ -89,8 +99,8 @@ const RestorePasswordDialog: FC<RestorePasswordDialogProps> = ({ onRequestClose,
             <Group className={styles.text}>
               <p>Новый пароль должен быть не короче 6 символов.</p>
               <p>
-                Вряд ли кто-нибудь будет пытаться нас взломать, но сложный пароль всегда лучше
-                простого.
+                Вряд ли кто-нибудь будет пытаться нас взломать, но сложный
+                пароль всегда лучше простого.
               </p>
             </Group>
           </Group>
