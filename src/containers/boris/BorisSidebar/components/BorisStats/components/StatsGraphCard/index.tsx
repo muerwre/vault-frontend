@@ -1,9 +1,10 @@
 import React, { VFC } from 'react';
 
-import { BasicCurveChart } from '~/components/charts/BasicCurveChart';
-import { StatsCard } from '~/components/charts/StatsCard';
 import { CardProps } from '~/components/containers/Card';
 import { Filler } from '~/components/containers/Filler';
+
+import { BasicCurveChart } from '../BasicCurveChart';
+import { StatsCard } from '../StatsCard';
 
 import styles from './styles.module.scss';
 

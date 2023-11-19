@@ -2,8 +2,8 @@ import React, { useCallback } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Superpower } from '~/components/boris/Superpower';
 import { ScrollHelperBottom } from '~/components/common/ScrollHelperBottom';
+import { Superpower } from '~/components/common/Superpower';
 import { Card } from '~/components/containers/Card';
 import { Footer } from '~/components/main/Footer';
 import { NodeTitle } from '~/components/node/NodeTitle';

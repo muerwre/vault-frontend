@@ -2,7 +2,7 @@ import React, { FC, FormEvent, useCallback, useMemo } from 'react';
 
 import classNames from 'classnames';
 
-import { Superpower } from '~/components/boris/Superpower';
+import { Superpower } from '~/components/common/Superpower';
 import { Group } from '~/components/containers/Group';
 import { FlowRecent } from '~/components/flow/FlowRecent';
 import { FlowSearchResults } from '~/components/flow/FlowSearchResults';
@@ -38,22 +38,27 @@ const FlowStamp: FC<IProps> = ({ isFluid, onToggleLayout }) => {
   const onClearSearch = useCallback(() => setSearchText(''), [setSearchText]);
 
   const onKeyUp = useCallback(
-    event => {
+    (event) => {
       if (event.key !== 'Escape') return;
       onClearSearch();
       event.target.blur();
     },
-    [onClearSearch]
+    [onClearSearch],
   );
 
   const after = useMemo(
     () =>
       searchText ? (
-        <Icon icon="close" size={24} className={styles.close_icon} onClick={onClearSearch} />
+        <Icon
+          icon="close"
+          size={24}
+          className={styles.close_icon}
+          onClick={onClearSearch}
+        />
       ) : (
         <Icon icon="search" size={24} className={styles.search_icon} />
       ),
-    [onClearSearch, searchText]
+    [onClearSearch, searchText],
   );
 
   return (
@@ -102,7 +107,11 @@ const FlowStamp: FC<IProps> = ({ isFluid, onToggleLayout }) => {
       {experimentalFeatures.liquidFlow && (
         <Superpower>
           <div className={styles.toggles}>
-            <Group horizontal onClick={onToggleLayout} className={styles.fluid_toggle}>
+            <Group
+              horizontal
+              onClick={onToggleLayout}
+              className={styles.fluid_toggle}
+            >
               <Toggle value={isFluid} />
               <div className={styles.toggles__label}>Жидкое течение</div>
             </Group>

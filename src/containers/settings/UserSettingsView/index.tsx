@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Superpower } from '~/components/boris/Superpower';
+import { Superpower } from '~/components/common/Superpower';
 import { Filler } from '~/components/containers/Filler';
 import { Group } from '~/components/containers/Group';
 import { Zone } from '~/components/containers/Zone';

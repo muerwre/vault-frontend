@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Superpower } from '~/components/boris/Superpower';
+import { Superpower } from '~/components/common/Superpower';
 import { Card } from '~/components/containers/Card';
 import { Group } from '~/components/containers/Group';
 import { Sticky } from '~/components/containers/Sticky';

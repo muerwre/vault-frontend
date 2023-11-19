@@ -2,9 +2,10 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { BorisSuperpowers } from '~/components/boris/BorisSuperpowers';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useSuperPowers } from '~/hooks/auth/useSuperPowers';
+
+import { BorisSuperpowers } from './components/BorisSuperpowers';
 
 interface SuperPowersToggleProps {}
 

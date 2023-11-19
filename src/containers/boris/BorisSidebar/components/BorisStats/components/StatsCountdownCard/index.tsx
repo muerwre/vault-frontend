@@ -3,8 +3,9 @@ import React, { VFC } from 'react';
 import classNames from 'classnames';
 import { addYears, differenceInMonths, differenceInYears } from 'date-fns';
 
-import { StatsCard } from '~/components/charts/StatsCard';
 import { CardProps } from '~/components/containers/Card';
+
+import { StatsCard } from '../StatsCard';
 
 import styles from './styles.module.scss';
 
@@ -12,12 +13,19 @@ interface StatsCountdownCardProps extends CardProps {
   since: Date;
 }
 
-const StatsCountdownCard: VFC<StatsCountdownCardProps> = ({ since, ...props }) => {
+const StatsCountdownCard: VFC<StatsCountdownCardProps> = ({
+  since,
+  ...props
+}) => {
   const years = differenceInYears(new Date(), since);
   const months = differenceInMonths(new Date(), addYears(since, years));
 
   return (
-    <StatsCard {...props} title="Нам уже" className={classNames(styles.card, props.className)}>
+    <StatsCard
+      {...props}
+      title="Нам уже"
+      className={classNames(styles.card, props.className)}
+    >
       <div className={styles.content}>
         {years > 0 && (
           <>

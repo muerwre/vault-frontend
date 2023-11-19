@@ -1,7 +1,6 @@
 import React, { VFC } from 'react';
 
-
-import { StatsGraphCard } from '~/components/charts/StatsGraphCard';
+import { StatsGraphCard } from '../StatsGraphCard';
 
 import styles from './styles.module.scss';
 

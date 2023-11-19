@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 
-import { BorisContactItem } from '~/components/boris/BorisContactItem';
 import { Padder } from '~/components/containers/Padder';
 import { Button } from '~/components/input/Button';
 
+import { BorisContactItem } from './components/BorisContactItem';
 import styles from './styles.module.scss';
 
 interface Props {

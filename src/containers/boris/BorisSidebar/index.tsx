@@ -1,12 +1,12 @@
 import { FC } from 'react';
 
-import { BorisContacts } from '~/components/boris/BorisContacts';
-import { BorisStats } from '~/components/boris/BorisStats';
 import { Group } from '~/components/containers/Group';
 import { SuperPowersToggle } from '~/containers/auth/SuperPowersToggle';
 import { useTelegramAccount } from '~/hooks/auth/useTelegramAccount';
 import { BorisUsageStats } from '~/types/boris';
 
+import { BorisContacts } from './components/BorisContacts';
+import { BorisStats } from './components/BorisStats';
 import styles from './styles.module.scss';
 
 interface Props {

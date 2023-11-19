@@ -1,10 +1,11 @@
 import { FC, useMemo } from 'react';
 
-import { BorisGraphicStats } from '~/components/boris/BorisGraphicStats';
 import { StatsRow } from '~/components/common/StatsRow';
 import { SubTitle } from '~/components/common/SubTitle';
 import { StatBackend } from '~/types/boris';
 import { sizeOf } from '~/utils/dom';
+
+import { BorisGraphicStats } from '../BorisGraphicStats';
 
 import styles from './styles.module.scss';
 

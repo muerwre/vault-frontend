@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 
 import { BorisUsageStats } from '~/types/boris';
 
-import { BorisStatsBackend } from '../BorisStatsBackend';
-import { BorisStatsGit } from '../BorisStatsGit';
+import { BorisStatsBackend } from './components/BorisStatsBackend';
+import { BorisStatsGit } from './components/BorisStatsGit';
 
 interface IProps {
   stats: BorisUsageStats;
