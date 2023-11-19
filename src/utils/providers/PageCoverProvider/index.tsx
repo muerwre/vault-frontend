@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useState } from 'react';
+import { createContext, FC, useContext, useState, useEffect } from 'react';
 
 import { createPortal } from 'react-dom';
 
@@ -40,5 +40,14 @@ const PageCoverProvider: FC = ({ children }) => {
 };
 
 const usePageCoverContext = () => useContext(CoverContext);
+
+export const usePageCover = (cover?: IFile) => {
+  const { setCover } = usePageCoverContext();
+
+  useEffect(() => {
+    setCover(cover || null);
+    return () => setCover(null);
+  }, [setCover, cover]);
+};
 
 export { PageCoverProvider, usePageCoverContext };

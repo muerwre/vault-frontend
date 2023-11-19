@@ -1,7 +1,6 @@
 import App from 'next/app';
 import Head from 'next/head';
 
-import { PageCoverProvider } from '~/components/containers/PageCoverProvider';
 import { Modal } from '~/containers/dialogs/Modal';
 import { BottomContainer } from '~/containers/main/BottomContainer';
 import { DragDetectorProvider } from '~/hooks/dom/useDragDetector';
@@ -15,6 +14,7 @@ import { AudioPlayerProvider } from '~/utils/providers/AudioPlayerProvider';
 import { AuthProvider } from '~/utils/providers/AuthProvider';
 import { MetadataProvider } from '~/utils/providers/MetadataProvider';
 import { NotificationProvider } from '~/utils/providers/NotificationProvider';
+import { PageCoverProvider } from '~/utils/providers/PageCoverProvider';
 import { SWRConfigProvider } from '~/utils/providers/SWRConfigProvider';
 import { SearchProvider } from '~/utils/providers/SearchProvider';
 import { SidebarProvider } from '~/utils/providers/SidebarProvider';

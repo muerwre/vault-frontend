@@ -1,5 +1,5 @@
-import { usePageCover } from '~/components/containers/PageCoverProvider/usePageCover';
 import { INode } from '~/types';
+import { usePageCover } from '~/utils/providers/PageCoverProvider';
 
 export const useNodeCoverImage = (node: INode) => {
   usePageCover(node.cover);

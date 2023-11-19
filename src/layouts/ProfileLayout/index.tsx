@@ -2,13 +2,13 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { usePageCover } from '~/components/containers/PageCoverProvider/usePageCover';
 import { FlowGrid } from '~/components/flow/FlowGrid';
 import { Container } from '~/containers/main/Container';
 import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
 import { useUser } from '~/hooks/auth/useUser';
 import { useGetProfile } from '~/hooks/profile/useGetProfile';
 import { useFlowStore } from '~/store/flow/useFlowStore';
+import { usePageCover } from '~/utils/providers/PageCoverProvider';
 
 import styles from './styles.module.scss';
 
