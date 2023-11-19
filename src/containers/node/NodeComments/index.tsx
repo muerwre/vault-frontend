@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { LoadMoreButton } from '~/components/input/LoadMoreButton';
 import { ANNOUNCE_USER_ID, BORIS_NODE_ID } from '~/constants/boris/constants';
-import { Comment } from '~/containers/comments/NodeComments/components/Comment';
+import { Comment } from '~/containers/node/NodeComments/components/Comment';
 import { useGrouppedComments } from '~/hooks/node/useGrouppedComments';
 import { ICommentGroup } from '~/types';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';

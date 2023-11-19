@@ -2,9 +2,9 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { CommentForm } from '~/components/common/CommentForm';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
+import { CommentForm } from '~/containers/comments/CommentForm';
 import { useUploader } from '~/hooks/data/useUploader';
 import { IComment, INode } from '~/types';
 import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';

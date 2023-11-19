@@ -9,13 +9,14 @@ import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
 import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
-import { NodeCommentFormSSR } from '~/containers/comments/NodeCommentForm/ssr';
-import { NodeComments } from '~/containers/comments/NodeComments';
 import { NodeBacklinks } from '~/containers/node/NodeBacklinks';
+import { NodeComments } from '~/containers/node/NodeComments';
 import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
 import { useNodeRelatedContext } from '~/utils/context/NodeRelatedContextProvider';
+
+import { NodeCommentFormSSR } from '../NodeCommentForm/ssr';
 
 import styles from './styles.module.scss';
 
