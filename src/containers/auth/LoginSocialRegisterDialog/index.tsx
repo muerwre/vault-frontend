@@ -1,10 +1,10 @@
 import React, { FC, useCallback, useState } from 'react';
 
 import { apiLoginWithSocial } from '~/api/auth';
-import { Group } from '~/components/containers/Group';
-import { Padder } from '~/components/containers/Padder';
-import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
-import { DialogTitle } from '~/components/dialogs/DialogTitle';
+import { BetterScrollDialog } from '~/components/common/BetterScrollDialog';
+import { DialogTitle } from '~/components/common/DialogTitle';
+import { Group } from '~/components/common/Group';
+import { Padder } from '~/components/common/Padder';
 import { InputText } from '~/components/input/InputText';
 import { Toggle } from '~/components/input/Toggle';
 import { getRandomPhrase } from '~/constants/phrases';

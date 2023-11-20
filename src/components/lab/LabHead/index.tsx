@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Filler } from '~/components/containers/Filler';
+import { Filler } from '~/components/common/Filler';
 import { SearchInput } from '~/components/input/SearchInput';
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { LabNodesSort } from '~/types/lab';

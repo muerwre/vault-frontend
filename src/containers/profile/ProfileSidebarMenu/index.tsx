@@ -2,9 +2,9 @@ import React, { useCallback, VFC } from 'react';
 
 import classNames from 'classnames';
 
-import { Filler } from '~/components/containers/Filler';
-import { Group } from '~/components/containers/Group';
-import { Zone } from '~/components/containers/Zone';
+import { Filler } from '~/components/common/Filler';
+import { Group } from '~/components/common/Group';
+import { Zone } from '~/components/common/Zone';
 import { VerticalMenu } from '~/components/menu/VerticalMenu';
 import { useStackContext } from '~/components/sidebar/SidebarStack';
 import { ProfileSidebarHead } from '~/containers/profile/ProfileSidebarHead';

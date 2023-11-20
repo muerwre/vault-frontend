@@ -2,10 +2,10 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
+import { Card } from '~/components/common/Card';
+import { Group } from '~/components/common/Group';
+import { Sticky } from '~/components/common/Sticky';
 import { Superpower } from '~/components/common/Superpower';
-import { Card } from '~/components/containers/Card';
-import { Group } from '~/components/containers/Group';
-import { Sticky } from '~/components/containers/Sticky';
 import { BorisComments } from '~/containers/boris/BorisComments';
 import { BorisSidebar } from '~/containers/boris/BorisSidebar';
 import { BorisSuperPowersSSR } from '~/containers/boris/BorisSuperpowers/ssr';

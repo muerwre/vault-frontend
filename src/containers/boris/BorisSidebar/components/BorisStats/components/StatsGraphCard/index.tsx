@@ -1,7 +1,7 @@
 import React, { VFC } from 'react';
 
-import { CardProps } from '~/components/containers/Card';
-import { Filler } from '~/components/containers/Filler';
+import { CardProps } from '~/components/common/Card';
+import { Filler } from '~/components/common/Filler';
 
 import { BasicCurveChart } from '../BasicCurveChart';
 import { StatsCard } from '../StatsCard';

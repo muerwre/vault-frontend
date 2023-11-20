@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
-import { Filler } from '~/components/containers/Filler';
-import { Group } from '~/components/containers/Group';
-import { Padder } from '~/components/containers/Padder';
-import { Sticky } from '~/components/containers/Sticky';
+import { Filler } from '~/components/common/Filler';
+import { Group } from '~/components/common/Group';
+import { Padder } from '~/components/common/Padder';
+import { Sticky } from '~/components/common/Sticky';
 import { NodeAuthorBlock } from '~/components/node/NodeAuthorBlock';
 import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeNoComments } from '~/components/node/NodeNoComments';

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Tabs } from '~/components/dialogs/Tabs';
+import { Tabs } from '~/components/common/Tabs';
 
 import styles from './styles.module.scss';
 

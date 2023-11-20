@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
+import { BetterScrollDialog } from '~/components/common/BetterScrollDialog';
 
 import styles from './styles.module.scss';
 

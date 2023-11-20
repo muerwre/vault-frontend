@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-import { EditorUploadButton } from '~/components/editors/EditorUploadButton';
 import { UploadType } from '~/constants/uploads';
+import { EditorUploadButton } from '~/containers/dialogs/EditorDialog/components/EditorButtons/components/EditorActionsPanel/components/EditorUploadButton';
 import { IEditorComponentProps } from '~/types/node';
 
 type IProps = IEditorComponentProps & {};

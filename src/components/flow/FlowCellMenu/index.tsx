@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import classNames from 'classnames';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { Icon } from '~/components/input/Icon';
 import { Toggle } from '~/components/input/Toggle';
 import { FlowDisplayVariant } from '~/types';
@@ -60,7 +60,11 @@ const FlowCellMenu: FC<Props> = ({
         </div>
 
         {hasDescription && (
-          <Group className={styles.description} horizontal onClick={toggleViewDescription}>
+          <Group
+            className={styles.description}
+            horizontal
+            onClick={toggleViewDescription}
+          >
             <Toggle color="white" value={descriptionEnabled} />
             <span>Текст</span>
           </Group>

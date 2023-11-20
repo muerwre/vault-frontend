@@ -2,10 +2,10 @@ import React, { FC, ReactNode } from 'react';
 
 import classNames from 'classnames';
 
+import { Card, CardProps } from '~/components/common/Card';
+import { Filler } from '~/components/common/Filler';
+import { Group } from '~/components/common/Group';
 import { SubTitle } from '~/components/common/SubTitle';
-import { Card, CardProps } from '~/components/containers/Card';
-import { Filler } from '~/components/containers/Filler';
-import { Group } from '~/components/containers/Group';
 
 import styles from './styles.module.scss';
 

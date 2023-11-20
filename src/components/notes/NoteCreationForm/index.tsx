@@ -3,9 +3,9 @@ import { FC, useCallback } from 'react';
 import { FormikConfig, useFormik } from 'formik';
 import { Asserts, object, string } from 'yup';
 
-import { Card } from '~/components/containers/Card';
-import { Filler } from '~/components/containers/Filler';
-import { Group } from '~/components/containers/Group';
+import { Card } from '~/components/common/Card';
+import { Filler } from '~/components/common/Filler';
+import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
 import { Textarea } from '~/components/input/Textarea';
 import { useRandomPhrase } from '~/constants/phrases';

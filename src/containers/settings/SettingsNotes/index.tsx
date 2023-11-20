@@ -1,7 +1,7 @@
 import { FC, useCallback, useState, VFC } from 'react';
 
-import { Filler } from '~/components/containers/Filler';
-import { Group } from '~/components/containers/Group';
+import { Filler } from '~/components/common/Filler';
+import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
 import { NoteCard } from '~/components/notes/NoteCard';
 import { NoteCreationForm } from '~/components/notes/NoteCreationForm';

@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo, useState, VFC } from 'react';
 
 import { apiRequestRestoreCode } from '~/api/auth';
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
 import { useCloseOnEscape } from '~/hooks';
 import { useRestoreRequestForm } from '~/hooks/auth/useRestoreRequestForm';
 import { DialogComponentProps } from '~/types/modal';
 
-import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
+import { BetterScrollDialog } from '../../../components/common/BetterScrollDialog';
 
 import { RestoreSent } from './components/RestoreSent';
 import styles from './styles.module.scss';

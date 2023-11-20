@@ -1,8 +1,8 @@
 import React, { FC, ReactElement } from 'react';
 
+import { Group } from '~/components/common/Group';
 import { Hoverable } from '~/components/common/Hoverable';
 import { SubTitle } from '~/components/common/SubTitle';
-import { Group } from '~/components/containers/Group';
 import { NodeThumbnail } from '~/components/node/NodeThumbnail';
 import { INode } from '~/types';
 

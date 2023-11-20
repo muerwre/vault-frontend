@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { Filler } from '~/components/containers/Filler';
+import { Filler } from '~/components/common/Filler';
 import { Button } from '~/components/input/Button';
 import { Dialog } from '~/constants/modal';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';

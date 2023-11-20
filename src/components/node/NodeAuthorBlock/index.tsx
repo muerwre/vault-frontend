@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
-import { Card } from '~/components/containers/Card';
+import { Card } from '~/components/common/Card';
 import { useUserDescription } from '~/hooks/auth/useUserDescription';
 import { INodeUser } from '~/types';
 

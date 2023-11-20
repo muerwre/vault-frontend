@@ -1,6 +1,12 @@
-import React, { FC, HTMLAttributes, useCallback, useMemo, useState } from 'react';
+import React, {
+  FC,
+  HTMLAttributes,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 
-import { TagField } from '~/components/containers/TagField';
+import { TagField } from '~/components/common/TagField';
 import { Tag } from '~/components/tags/Tag';
 import { TagInput } from '~/containers/tags/TagInput';
 import { ITag } from '~/types';
@@ -35,8 +41,10 @@ export const Tags: FC<IProps> = ({
         return;
       }
 
-      const exist = tags.map(tag => tag.title);
-      const uniqueTags = uniq([...exist, ...data, ...last]).filter(el => el) as string[];
+      const exist = tags.map((tag) => tag.title);
+      const uniqueTags = uniq([...exist, ...data, ...last]).filter(
+        (el) => el,
+      ) as string[];
 
       if (uniqueTags.length === exist.length) {
         return;
@@ -45,18 +53,18 @@ export const Tags: FC<IProps> = ({
       onTagsChange(uniqueTags);
       setData([]);
     },
-    [data, onTagsChange, tags]
+    [data, onTagsChange, tags],
   );
 
   const onAppendTag = useCallback(
     (created: string[]) => {
       setData(
         uniq([...data, ...created]).filter(
-          title => !tags.some(it => it.title?.trim() === title?.trim())
-        )
+          (title) => !tags.some((it) => it.title?.trim() === title?.trim()),
+        ),
       );
     },
-    [data, setData, tags]
+    [data, setData, tags],
   );
 
   const onClearTag = useCallback((): string | undefined => {
@@ -67,13 +75,16 @@ export const Tags: FC<IProps> = ({
   }, [data, setData]);
 
   const exclude = useMemo(
-    () => [...(data || []), ...(tags || []).filter(el => el.title).map(({ title }) => title!)],
-    [data, tags]
+    () => [
+      ...(data || []),
+      ...(tags || []).filter((el) => el.title).map(({ title }) => title!),
+    ],
+    [data, tags],
   );
 
   return (
     <TagField {...props}>
-      {catTags.map(tag => (
+      {catTags.map((tag) => (
         <Tag
           key={tag.title}
           tag={tag}
@@ -83,7 +94,7 @@ export const Tags: FC<IProps> = ({
         />
       ))}
 
-      {ordinaryTags.map(tag => (
+      {ordinaryTags.map((tag) => (
         <Tag
           key={tag.title}
           tag={tag}
@@ -93,7 +104,7 @@ export const Tags: FC<IProps> = ({
         />
       ))}
 
-      {data.map(title => (
+      {data.map((title) => (
         <Tag key={title} tag={{ title }} editing />
       ))}
 

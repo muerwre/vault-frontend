@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { imagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';

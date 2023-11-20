@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useMemo } from 'react';
 
-import { Filler } from '~/components/containers/Filler';
+import { Filler } from '~/components/common/Filler';
 import { Button } from '~/components/input/Button';
 
 import styles from './styles.module.scss';

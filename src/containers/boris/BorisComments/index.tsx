@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { Footer } from '~/components/main/Footer';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeCommentFormSSR } from '~/containers/node/NodeCommentForm/ssr';

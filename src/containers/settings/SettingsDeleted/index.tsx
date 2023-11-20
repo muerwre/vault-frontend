@@ -1,8 +1,8 @@
 import React, { VFC } from 'react';
 
-import { Filler } from '~/components/containers/Filler';
-import { Group } from '~/components/containers/Group';
-import { Padder } from '~/components/containers/Padder';
+import { Filler } from '~/components/common/Filler';
+import { Group } from '~/components/common/Group';
+import { Padder } from '~/components/common/Padder';
 import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
 import { Icon } from '~/components/input/Icon';
 import { InputText } from '~/components/input/InputText';
@@ -32,7 +32,7 @@ const SettingsDeleted: VFC<SettingsDeletedProps> = () => {
       <br />
 
       <div className={styles.grid}>
-        {nodes.map(node => (
+        {nodes.map((node) => (
           <div className={styles.item} key={node.id}>
             <FlowRecentItem node={node} key={node.id} />
           </div>

@@ -2,7 +2,7 @@ import React, { FC, memo } from 'react';
 
 import classNames from 'classnames';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import cell_style from '~/components/node/NodeThumbnail/styles.module.scss';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { range } from '~/utils/ramda';

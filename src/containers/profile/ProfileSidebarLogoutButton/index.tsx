@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-import { Group } from '~/components/containers/Group';
-import { Padder } from '~/components/containers/Padder';
+import { Group } from '~/components/common/Group';
+import { Padder } from '~/components/common/Padder';
 import { Button } from '~/components/input/Button';
 import { MenuButton } from '~/components/menu/MenuButton';
 

@@ -1,8 +1,8 @@
 import React, { FC, useCallback } from 'react';
 
-import { Card } from '~/components/containers/Card';
-import { Group } from '~/components/containers/Group';
-import { Zone } from '~/components/containers/Zone';
+import { Card } from '~/components/common/Card';
+import { Group } from '~/components/common/Group';
+import { Zone } from '~/components/common/Zone';
 import { Button } from '~/components/input/Button';
 import { InputRow } from '~/components/input/InputRow';
 import { Toggle } from '~/components/input/Toggle';

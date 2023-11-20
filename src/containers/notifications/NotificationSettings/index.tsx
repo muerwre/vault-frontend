@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Padder } from '~/components/containers/Padder';
+import { Padder } from '~/components/common/Padder';
 import { NotificationSettingsForm } from '~/components/notifications/NotificationSettingsForm';
 import { useOAuth } from '~/hooks/auth/useOAuth';
 import { useNotificationSettings } from '~/hooks/notifications/useNotificationSettings';

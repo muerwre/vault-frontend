@@ -2,8 +2,8 @@ import React, { FC, FormEvent, useCallback, useMemo } from 'react';
 
 import classNames from 'classnames';
 
+import { Group } from '~/components/common/Group';
 import { Superpower } from '~/components/common/Superpower';
-import { Group } from '~/components/containers/Group';
 import { FlowRecent } from '~/components/flow/FlowRecent';
 import { FlowSearchResults } from '~/components/flow/FlowSearchResults';
 import { Icon } from '~/components/input/Icon';

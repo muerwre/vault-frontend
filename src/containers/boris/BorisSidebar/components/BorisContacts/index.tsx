@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Padder } from '~/components/containers/Padder';
+import { Padder } from '~/components/common/Padder';
 import { Button } from '~/components/input/Button';
 
 import { BorisContactItem } from './components/BorisContactItem';

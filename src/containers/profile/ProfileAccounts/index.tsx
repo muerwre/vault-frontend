@@ -1,6 +1,6 @@
 import React, { FC, Fragment } from 'react';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
 import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';

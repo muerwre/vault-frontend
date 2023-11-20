@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { InfiniteScroll } from '~/components/containers/InfiniteScroll';
+import { InfiniteScroll } from '~/components/common/InfiniteScroll';
 import { Icon } from '~/components/input/Icon';
 import { INode } from '~/types';
 
@@ -15,7 +15,12 @@ interface IProps {
   onLoadMore: () => void;
 }
 
-const FlowSearchResults: FC<IProps> = ({ results, isLoading, onLoadMore, hasMore }) => {
+const FlowSearchResults: FC<IProps> = ({
+  results,
+  isLoading,
+  onLoadMore,
+  hasMore,
+}) => {
   if (!results.length) {
     return (
       <div className={styles.loading}>
@@ -28,7 +33,7 @@ const FlowSearchResults: FC<IProps> = ({ results, isLoading, onLoadMore, hasMore
   return (
     <div className={styles.wrap}>
       <InfiniteScroll hasMore={hasMore} loadMore={onLoadMore}>
-        {results.map(node => (
+        {results.map((node) => (
           <FlowRecentItem node={node} key={node.id} />
         ))}
       </InfiniteScroll>

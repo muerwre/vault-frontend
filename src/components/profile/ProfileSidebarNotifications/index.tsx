@@ -1,6 +1,6 @@
 import { useState, VFC } from 'react';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { useStackContext } from '~/components/sidebar/SidebarStack';

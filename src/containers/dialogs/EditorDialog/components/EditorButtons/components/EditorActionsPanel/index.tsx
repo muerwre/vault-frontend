@@ -1,9 +1,9 @@
 import React, { createElement, FC } from 'react';
 
-import { NODE_PANEL_COMPONENTS } from '~/constants/node';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { has } from '~/utils/ramda';
 
+import { NODE_PANEL_COMPONENTS } from './constants';
 import styles from './styles.module.scss';
 
 const EditorActionsPanel: FC = () => {
@@ -16,7 +16,9 @@ const EditorActionsPanel: FC = () => {
   return (
     <div className={styles.panel}>
       {NODE_PANEL_COMPONENTS[values.type] &&
-        NODE_PANEL_COMPONENTS[values.type].map((el, key) => createElement(el, { key }))}
+        NODE_PANEL_COMPONENTS[values.type].map((el, key) =>
+          createElement(el, { key }),
+        )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
 
 import styles from './styles.module.scss';
@@ -15,8 +15,8 @@ const EditorConfirmClose: FC<IProps> = ({ onApprove, onDecline }) => (
     <Group className={styles.content}>
       <div className={styles.title}>Точно закрыть?</div>
       <div className={styles.subtitle}>
-        Все изменения будут потеряны, воспоминания затёрты, очевидцы умрут, над миром воссияет
-        ядерный рассвет.
+        Все изменения будут потеряны, воспоминания затёрты, очевидцы умрут, над
+        миром воссияет ядерный рассвет.
       </div>
 
       <div />

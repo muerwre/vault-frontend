@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import Tippy from '@tippyjs/react';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { NodeComponentProps } from '~/constants/node';

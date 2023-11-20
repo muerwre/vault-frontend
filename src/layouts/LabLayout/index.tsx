@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-import { Group } from '~/components/containers/Group';
-import { Sticky } from '~/components/containers/Sticky';
+import { Group } from '~/components/common/Group';
+import { Sticky } from '~/components/common/Sticky';
 import { LabHead } from '~/components/lab/LabHead';
 import { LabGrid } from '~/containers/lab/LabGrid';
 import { LabLoading } from '~/containers/lab/LabLoading';

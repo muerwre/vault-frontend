@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 
+import { Card } from '~/components/common/Card';
 import { SubTitle } from '~/components/common/SubTitle';
-import { Card } from '~/components/containers/Card';
 import { Backlink } from '~/components/node/Backlink';
 import { NodeBackLink } from '~/types';
 import { has } from '~/utils/ramda';

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, VFC } from 'react';
 
-import { CoverBackdrop } from '~/components/containers/CoverBackdrop';
+import { CoverBackdrop } from '~/components/common/CoverBackdrop';
 import { ProfileSidebarNotes } from '~/components/profile/ProfileSidebarNotes';
 import { ProfileSidebarNotifications } from '~/components/profile/ProfileSidebarNotifications';
 import { ProfileSidebarSettings } from '~/components/profile/ProfileSidebarSettings';

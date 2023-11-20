@@ -1,7 +1,10 @@
 import React, { FC, useMemo } from 'react';
 
-import { Group } from '~/components/containers/Group';
-import { Placeholder, PlaceholderProps } from '~/components/placeholders/Placeholder';
+import { Group } from '~/components/common/Group';
+import {
+  Placeholder,
+  PlaceholderProps,
+} from '~/components/placeholders/Placeholder';
 
 import styles from './styles.module.scss';
 
@@ -14,17 +17,21 @@ const Paragraph: FC<Props> = ({ lines = 3, wordsLimit = 12, ...props }) => {
   const iters = useMemo(
     () =>
       [...new Array(lines)].map(() =>
-        [...new Array(Math.ceil(Math.random() * wordsLimit))].map((_, i) => i)
+        [...new Array(Math.ceil(Math.random() * wordsLimit))].map((_, i) => i),
       ),
-    [lines, wordsLimit]
+    [lines, wordsLimit],
   );
 
   return (
     <Group>
       {iters.map((words, i) => (
         <div className={styles.para} key={i}>
-          {words.map(word => (
-            <Placeholder key={word} width={`${Math.round(Math.random() * 120) + 60}px`} active />
+          {words.map((word) => (
+            <Placeholder
+              key={word}
+              width={`${Math.round(Math.random() * 120) + 60}px`}
+              active
+            />
           ))}
         </div>
       ))}

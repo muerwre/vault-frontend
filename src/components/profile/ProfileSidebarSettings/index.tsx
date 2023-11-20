@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Filler } from '~/components/containers/Filler';
+import { Filler } from '~/components/common/Filler';
 import { Button } from '~/components/input/Button';
 import { useStackContext } from '~/components/sidebar/SidebarStack';
 import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';

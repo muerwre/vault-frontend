@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
+import { Group } from '~/components/common/Group';
 import { SubTitle } from '~/components/common/SubTitle';
-import { Group } from '~/components/containers/Group';
 import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
 import { LabFactoryBanner } from '~/components/lab/LabFactoryBanner';
 import { LabHeroes } from '~/components/lab/LabHeroes';

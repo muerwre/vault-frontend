@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { LabSquare } from '~/components/lab/LabSquare';
 
 import styles from './styles.module.scss';
@@ -15,8 +15,8 @@ const LabBanner: FC<IProps> = () => (
       <Group className={styles.content}>
         <p>
           <strong>
-            Всё, что происходит здесь &mdash; всего лишь эксперимент, о котором не узнает никто за
-            пределами Убежища.
+            Всё, что происходит здесь &mdash; всего лишь эксперимент, о котором
+            не узнает никто за пределами Убежища.
           </strong>
         </p>
       </Group>

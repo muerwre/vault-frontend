@@ -1,9 +1,9 @@
 import React, { VFC } from 'react';
 
+import { Card } from '~/components/common/Card';
+import { Grid } from '~/components/common/Grid';
+import { Group } from '~/components/common/Group';
 import { Square } from '~/components/common/Square';
-import { Card } from '~/components/containers/Card';
-import { Grid } from '~/components/containers/Grid';
-import { Group } from '~/components/containers/Group';
 
 interface ProfileStatsProps {}
 

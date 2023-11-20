@@ -1,9 +1,9 @@
 import { FC, useCallback, useRef } from 'react';
 
-import { Group } from '~/components/containers/Group';
-import { Padder } from '~/components/containers/Padder';
-import { BetterScrollDialog } from '~/components/dialogs/BetterScrollDialog';
-import { DialogTitle } from '~/components/dialogs/DialogTitle';
+import { BetterScrollDialog } from '~/components/common/BetterScrollDialog';
+import { DialogTitle } from '~/components/common/DialogTitle';
+import { Group } from '~/components/common/Group';
+import { Padder } from '~/components/common/Padder';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
 import { Dialog } from '~/constants/modal';

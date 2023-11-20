@@ -1,6 +1,6 @@
 import React, { VFC } from 'react';
 
-import { Card } from '~/components/containers/Card';
+import { Card } from '~/components/common/Card';
 import { Button } from '~/components/input/Button';
 
 import styles from './styles.module.scss';

@@ -2,9 +2,9 @@ import React, { FC, useCallback } from 'react';
 
 import classNames from 'classnames';
 
-import { Filler } from '~/components/containers/Filler';
-import { Grid } from '~/components/containers/Grid';
-import { Group } from '~/components/containers/Group';
+import { Filler } from '~/components/common/Filler';
+import { Grid } from '~/components/common/Grid';
+import { Group } from '~/components/common/Group';
 import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { URLS } from '~/constants/urls';
@@ -21,14 +21,24 @@ type Props = {
   commentCount: number;
 };
 
-const LabBottomPanel: FC<Props> = ({ node, hasNewComments, commentCount, isLoading }) => {
+const LabBottomPanel: FC<Props> = ({
+  node,
+  hasNewComments,
+  commentCount,
+  isLoading,
+}) => {
   const { push } = useNavigation();
-  const onClick = useCallback(() => push(URLS.NODE_URL(node.id)), [push, node.id]);
+  const onClick = useCallback(
+    () => push(URLS.NODE_URL(node.id)),
+    [push, node.id],
+  );
 
   return (
     <Group horizontal className={styles.wrap} onClick={onClick}>
       <div className={styles.timestamp}>
-        <Placeholder active={isLoading}>{getPrettyDate(node.created_at)}</Placeholder>
+        <Placeholder active={isLoading}>
+          {getPrettyDate(node.created_at)}
+        </Placeholder>
       </div>
 
       <Filler />
@@ -37,7 +47,9 @@ const LabBottomPanel: FC<Props> = ({ node, hasNewComments, commentCount, isLoadi
         {commentCount > 0 && (
           <Grid
             horizontal
-            className={classNames(styles.comments, { [styles.active]: hasNewComments })}
+            className={classNames(styles.comments, {
+              [styles.active]: hasNewComments,
+            })}
           >
             <Icon icon={hasNewComments ? 'comment_new' : 'comment'} size={24} />
             <span>{commentCount}</span>

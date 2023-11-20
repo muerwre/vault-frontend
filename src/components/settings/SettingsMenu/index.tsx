@@ -2,8 +2,8 @@ import { VFC } from 'react';
 
 import Link from 'next/link';
 
-import { Filler } from '~/components/containers/Filler';
-import { Group } from '~/components/containers/Group';
+import { Filler } from '~/components/common/Filler';
+import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
 import { VerticalMenu } from '~/components/menu/VerticalMenu';
 import { URLS } from '~/constants/urls';
@@ -28,7 +28,9 @@ const SettingsMenu: VFC<SettingsMenuProps> = () => (
         </Link>
 
         <Link href={URLS.SETTINGS.TRASH} passHref>
-          <VerticalMenu.Item onClick={console.log}>Удалённые посты</VerticalMenu.Item>
+          <VerticalMenu.Item onClick={console.log}>
+            Удалённые посты
+          </VerticalMenu.Item>
         </Link>
       </VerticalMenu>
 

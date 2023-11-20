@@ -1,8 +1,8 @@
 import React, { useCallback, useState, VFC } from 'react';
 
-import { Card } from '~/components/containers/Card';
-import { Markdown } from '~/components/containers/Markdown';
-import { Padder } from '~/components/containers/Padder';
+import { Card } from '~/components/common/Card';
+import { Markdown } from '~/components/common/Markdown';
+import { Padder } from '~/components/common/Padder';
 import { NoteMenu } from '~/components/notes/NoteMenu';
 import { formatText, getPrettyDate } from '~/utils/dom';
 

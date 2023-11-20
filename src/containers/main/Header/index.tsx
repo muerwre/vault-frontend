@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Anchor } from '~/components/common/Anchor';
 import { Authorized } from '~/components/common/Authorized';
-import { Filler } from '~/components/containers/Filler';
+import { Filler } from '~/components/common/Filler';
 import { Button } from '~/components/input/Button';
 import { Logo } from '~/components/main/Logo';
 import { Dialog } from '~/constants/modal';

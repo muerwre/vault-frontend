@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { SuperPowersToggle } from '~/containers/auth/SuperPowersToggle';
 import { useTelegramAccount } from '~/hooks/auth/useTelegramAccount';
 import { BorisUsageStats } from '~/types/boris';

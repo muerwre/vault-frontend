@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-import { Card } from '~/components/containers/Card';
-import { Sticky } from '~/components/containers/Sticky';
+import { Card } from '~/components/common/Card';
+import { Sticky } from '~/components/common/Sticky';
 import { SettingsMenu } from '~/components/settings/SettingsMenu';
 import { Container } from '~/containers/main/Container';
 

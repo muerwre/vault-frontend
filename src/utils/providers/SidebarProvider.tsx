@@ -10,7 +10,7 @@ import {
 
 import { useRouter } from 'next/router';
 
-import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
+import { ModalWrapper } from '~/components/common/ModalWrapper';
 import { SidebarName } from '~/constants/sidebar';
 import { sidebarComponents } from '~/constants/sidebar/components';
 import { SidebarComponent, SidebarProps } from '~/types/sidebar';

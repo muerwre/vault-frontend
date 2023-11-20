@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react';
 
 import classNames from 'classnames';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { ERRORS } from '~/constants/errors';
 import { t } from '~/utils/trans';
 

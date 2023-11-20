@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { ProfileAvatar } from '~/components/profile/ProfileAvatar';
 import { usePatchUser } from '~/hooks/auth/usePatchUser';
@@ -31,7 +31,11 @@ const ProfileInfo: FC<IProps> = ({ isOwn }) => {
     <div>
       <Group className={styles.wrap} horizontal>
         <div className={styles.avatar}>
-          <ProfileAvatar canEdit={isOwn} onChangePhoto={updatePhoto} photo={photo} />
+          <ProfileAvatar
+            canEdit={isOwn}
+            onChangePhoto={updatePhoto}
+            photo={photo}
+          />
         </div>
 
         <div className={styles.field}>

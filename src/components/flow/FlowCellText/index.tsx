@@ -2,7 +2,7 @@ import React, { FC, ReactElement } from 'react';
 
 import classNames from 'classnames';
 
-import { Markdown } from '~/components/containers/Markdown';
+import { Markdown } from '~/components/common/Markdown';
 import { formatText } from '~/utils/dom';
 import { DivProps } from '~/utils/types';
 

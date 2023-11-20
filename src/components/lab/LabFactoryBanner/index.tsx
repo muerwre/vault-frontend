@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 
 import classNames from 'classnames';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 
 import styles from './styles.module.scss';
 

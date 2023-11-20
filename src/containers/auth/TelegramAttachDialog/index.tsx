@@ -2,12 +2,12 @@ import React, { FC, useCallback, useMemo } from 'react';
 
 import { TelegramUser } from '@v9v/ts-react-telegram-login';
 
-import { Padder } from '~/components/containers/Padder';
+import { Padder } from '~/components/common/Padder';
 import { Button } from '~/components/input/Button';
 import { useTelegramAccount } from '~/hooks/auth/useTelegramAccount';
 import { DialogComponentProps } from '~/types/modal';
 
-import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
+import { BetterScrollDialog } from '../../../components/common/BetterScrollDialog';
 import { TelegramLoginForm } from '../LoginDialog/components/TelegramLoginForm/index';
 
 interface TelegramAttachDialogProps extends DialogComponentProps {}

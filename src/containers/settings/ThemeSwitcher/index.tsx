@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 
 import classNames from 'classnames';
 
-import { Card } from '~/components/containers/Card';
-import { Group } from '~/components/containers/Group';
+import { Card } from '~/components/common/Card';
+import { Group } from '~/components/common/Group';
 import { Theme, themeColors } from '~/constants/themes';
 import { useTheme } from '~/utils/providers/ThemeProvider';
 

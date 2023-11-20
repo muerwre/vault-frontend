@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 
+import { Columns } from '~/components/common/Columns';
 import { Hoverable } from '~/components/common/Hoverable';
-import { Columns } from '~/components/containers/Columns';
 import { LabNoResults } from '~/components/lab/LabNoResults';
 import { LabNode } from '~/components/lab/LabNode';
 import { useLabContext } from '~/utils/context/LabContextProvider';

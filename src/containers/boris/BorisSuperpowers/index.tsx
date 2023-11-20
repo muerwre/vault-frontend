@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
 import { Anchor } from '~/components/common/Anchor';
-import { Card } from '~/components/containers/Card';
-import { Group } from '~/components/containers/Group';
+import { Card } from '~/components/common/Card';
+import { Group } from '~/components/common/Group';
 import markdown from '~/styles/common/markdown.module.scss';
 
 export interface BorisSuperpowersProps {}

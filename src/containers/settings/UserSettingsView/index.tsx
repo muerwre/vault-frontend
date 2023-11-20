@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
+import { Filler } from '~/components/common/Filler';
+import { Group } from '~/components/common/Group';
 import { Superpower } from '~/components/common/Superpower';
-import { Filler } from '~/components/containers/Filler';
-import { Group } from '~/components/containers/Group';
-import { Zone } from '~/components/containers/Zone';
+import { Zone } from '~/components/common/Zone';
 import { InputText } from '~/components/input/InputText';
 import { Textarea } from '~/components/input/Textarea';
 import { ProfileAccounts } from '~/containers/profile/ProfileAccounts';

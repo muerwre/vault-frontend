@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import classNames from 'classnames';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { ProfileLoader } from '~/containers/profile/ProfileLoader';
 import { useUser } from '~/hooks/auth/useUser';
 import markdown from '~/styles/common/markdown.module.scss';

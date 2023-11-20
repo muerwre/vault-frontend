@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { ModalWrapper } from '~/components/dialogs/ModalWrapper';
+import { ModalWrapper } from '~/components/common/ModalWrapper';
 import { DIALOG_CONTENT } from '~/constants/modal';
 import { useModalStore } from '~/store/modal/useModalStore';
 import { has } from '~/utils/ramda';

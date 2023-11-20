@@ -10,7 +10,7 @@ import {
 
 import classnames from 'classnames';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { UploadType } from '~/constants/uploads';
 import { IComment, IFile } from '~/types';

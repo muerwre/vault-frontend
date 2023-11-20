@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { SuperPowersToggle } from '~/containers/auth/SuperPowersToggle';
 
 interface ProfileTogglesProps {}

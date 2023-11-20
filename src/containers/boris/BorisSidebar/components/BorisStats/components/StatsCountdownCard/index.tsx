@@ -3,7 +3,7 @@ import React, { VFC } from 'react';
 import classNames from 'classnames';
 import { addYears, differenceInMonths, differenceInYears } from 'date-fns';
 
-import { CardProps } from '~/components/containers/Card';
+import { CardProps } from '~/components/common/Card';
 
 import { StatsCard } from '../StatsCard';
 

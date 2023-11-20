@@ -3,7 +3,7 @@ import { FC, useCallback, useState } from 'react';
 import { FormikProvider } from 'formik';
 import { observer } from 'mobx-react-lite';
 
-import { Filler } from '~/components/containers/Filler';
+import { Filler } from '~/components/common/Filler';
 import { Button } from '~/components/input/Button';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { EMPTY_COMMENT } from '~/constants/node';

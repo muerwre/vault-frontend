@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { URLS } from '~/constants/urls';
@@ -44,7 +44,9 @@ const LabHero: FC<IProps> = ({ node, isLoading }) => {
 
       <div className={styles.content}>
         <div className={styles.title}>{node.title}</div>
-        <div className={styles.description}>{getPrettyDate(node.created_at)}</div>
+        <div className={styles.description}>
+          {getPrettyDate(node.created_at)}
+        </div>
       </div>
     </Group>
   );

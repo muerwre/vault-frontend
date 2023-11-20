@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 
 import { apiRestoreCode } from '~/api/auth';
-import { Group } from '~/components/containers/Group';
+import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
 import { useCloseOnEscape } from '~/hooks';
@@ -9,7 +9,7 @@ import { useRestoreCode } from '~/hooks/auth/useRestoreCode';
 import { useRestorePasswordForm } from '~/hooks/auth/useRestorePasswordForm';
 import { DialogComponentProps } from '~/types/modal';
 
-import { BetterScrollDialog } from '../../../components/dialogs/BetterScrollDialog';
+import { BetterScrollDialog } from '../../../components/common/BetterScrollDialog';
 
 import { RestoreInvalidCode } from './components/RestoreInvalidCode';
 import { RestoreSuccess } from './components/RestoreSuccess';
