@@ -9,8 +9,8 @@ import React, {
 import Tippy from '@tippyjs/react';
 import classnames from 'classnames';
 
-import { Icon } from '~/components/input/Icon';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { Icon } from '~/components/common/Icon';
+import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { IIcon } from '~/types';
 
 import styles from './styles.module.scss';

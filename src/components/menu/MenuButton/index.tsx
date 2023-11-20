@@ -4,7 +4,7 @@ import { Placement } from '@popperjs/core';
 import classNames from 'classnames';
 import { usePopper } from 'react-popper';
 
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { useFocusEvent } from '~/hooks/dom/useFocusEvent';
 
 import styles from './styles.module.scss';

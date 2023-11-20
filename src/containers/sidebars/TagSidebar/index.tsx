@@ -1,7 +1,7 @@
 import { useMemo, VFC } from 'react';
 
+import { Icon } from '~/components/common/Icon';
 import { InfiniteScroll } from '~/components/common/InfiniteScroll';
-import { Icon } from '~/components/input/Icon';
 import { SidebarStack } from '~/components/sidebar/SidebarStack';
 import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
 import { SidebarWrapper } from '~/components/sidebar/SidebarWrapper';

@@ -1,8 +1,8 @@
 import React, { FC, Fragment } from 'react';
 
 import { Group } from '~/components/common/Group';
+import { Icon } from '~/components/common/Icon';
 import { Button } from '~/components/input/Button';
-import { Icon } from '~/components/input/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { SOCIAL_ICONS } from '~/constants/auth/socials';
 import { useOAuth } from '~/hooks/auth/useOAuth';

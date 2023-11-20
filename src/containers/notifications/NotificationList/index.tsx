@@ -3,9 +3,9 @@ import { FC, useCallback, useEffect } from 'react';
 import classNames from 'classnames';
 import { isAfter, parseISO } from 'date-fns';
 
+import { LoaderScreen } from '~/components/common/LoaderScreen';
 import { Button } from '~/components/input/Button';
 import { InputRow } from '~/components/input/InputRow';
-import { LoaderScreen } from '~/components/input/LoaderScreen';
 import { NotificationComment } from '~/components/notifications/NotificationComment';
 import { NotificationNode } from '~/components/notifications/NotificationNode';
 import { useNotificationsList } from '~/hooks/notifications/useNotificationsList';

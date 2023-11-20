@@ -3,7 +3,7 @@ import { FC } from 'react';
 import classNames from 'classnames';
 
 import { Hoverable } from '~/components/common/Hoverable';
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { imagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';

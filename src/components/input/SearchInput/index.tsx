@@ -1,6 +1,6 @@
 import React, { VFC } from 'react';
 
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { InputText, InputTextProps } from '~/components/input/InputText';
 
 interface SearchInputProps extends Omit<InputTextProps, 'prefix' | 'suffix'> {}

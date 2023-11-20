@@ -2,7 +2,7 @@ import React, { FC, useCallback } from 'react';
 
 import classNames from 'classnames';
 
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 
 import styles from './styles.module.scss';
 

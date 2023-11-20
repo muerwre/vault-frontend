@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import classNames from 'classnames';
 
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { ButtonProps } from '~/utils/types';
 
 import styles from './styles.module.scss';

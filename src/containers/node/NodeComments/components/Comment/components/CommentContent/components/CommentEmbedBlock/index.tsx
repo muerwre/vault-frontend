@@ -1,19 +1,18 @@
 import React, { FC, memo, useMemo } from 'react';
 
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { ICommentBlockProps } from '~/constants/comment';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
 import { getYoutubeThumb } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-
 type Props = ICommentBlockProps & {};
 
 const CommentEmbedBlock: FC<Props> = memo(({ block }) => {
   const id = useMemo(() => {
     const match = block.content.match(
-      /https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?([\w\-=]+)/
+      /https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?([\w\-=]+)/,
     );
 
     return (match && match[1]) || '';
@@ -21,7 +20,10 @@ const CommentEmbedBlock: FC<Props> = memo(({ block }) => {
 
   const url = useMemo(() => `https://youtube.com/watch?v=${id}`, [id]);
 
-  const preview = useMemo(() => getYoutubeThumb(block.content), [block.content]);
+  const preview = useMemo(
+    () => getYoutubeThumb(block.content),
+    [block.content],
+  );
 
   const metadata = useYoutubeMetadata(id);
   const title = metadata?.metadata?.title || '';

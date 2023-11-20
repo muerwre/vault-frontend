@@ -1,8 +1,8 @@
 import React, { VFC } from 'react';
 
 import { Group } from '~/components/common/Group';
+import { Icon } from '~/components/common/Icon';
 import { Button } from '~/components/input/Button';
-import { Icon } from '~/components/input/Icon';
 
 import styles from './styles.module.scss';
 

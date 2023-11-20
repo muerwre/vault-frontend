@@ -3,11 +3,11 @@ import React, { FC, useMemo } from 'react';
 import classNames from 'classnames';
 
 import { Anchor } from '~/components/common/Anchor';
-import { MenuDots } from '~/components/common/MenuDots';
 import { CellShade } from '~/components/flow/CellShade';
 import { FlowCellImage } from '~/components/flow/FlowCellImage';
 import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
 import { FlowCellText } from '~/components/flow/FlowCellText';
+import { MenuDots } from '~/components/menu/MenuDots';
 import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';

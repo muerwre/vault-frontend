@@ -4,7 +4,7 @@ import TelegramLoginButton, {
   TelegramUser,
 } from '@v9v/ts-react-telegram-login';
 
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { LoaderCircle } from '~/components/common/LoaderCircle';
 
 import styles from './styles.module.scss';
 

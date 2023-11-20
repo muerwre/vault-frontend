@@ -2,8 +2,8 @@ import React, { FC, useCallback } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
+import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { ModalWrapper } from '~/components/common/ModalWrapper';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
 import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useUpdateNode } from '~/hooks/node/useUpdateNode';

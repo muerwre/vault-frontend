@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
+import { Icon } from '~/components/common/Icon';
 import { WithDescription } from '~/components/common/WithDescription';
-import { Icon } from '~/components/input/Icon';
 
 interface BacklinkProps {
   icon?: string;

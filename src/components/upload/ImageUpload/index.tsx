@@ -2,8 +2,8 @@ import React, { FC, useCallback } from 'react';
 
 import classNames from 'classnames';
 
-import { ArcProgress } from '~/components/input/ArcProgress';
-import { Icon } from '~/components/input/Icon';
+import { ArcProgress } from '~/components/common/ArcProgress';
+import { Icon } from '~/components/common/Icon';
 import { IFile } from '~/types';
 
 import styles from './styles.module.scss';
@@ -17,7 +17,13 @@ interface IProps {
   uploading?: boolean;
 }
 
-const ImageUpload: FC<IProps> = ({ thumb, progress, uploading, id, onDrop }) => {
+const ImageUpload: FC<IProps> = ({
+  thumb,
+  progress,
+  uploading,
+  id,
+  onDrop,
+}) => {
   const onDropFile = useCallback(() => {
     if (!id || !onDrop) return;
     onDrop(id);
@@ -32,7 +38,12 @@ const ImageUpload: FC<IProps> = ({ thumb, progress, uploading, id, onDrop }) => 
       )}
 
       <div className={classNames(styles.thumb_wrap, { uploading: uploading })}>
-        {thumb && <div className={styles.thumb} style={{ backgroundImage: `url("${thumb}")` }} />}
+        {thumb && (
+          <div
+            className={styles.thumb}
+            style={{ backgroundImage: `url("${thumb}")` }}
+          />
+        )}
         {uploading && (
           <div className={styles.progress}>
             <ArcProgress size={72} progress={progress} />

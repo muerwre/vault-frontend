@@ -2,7 +2,7 @@ import React, { FC, useCallback, useState } from 'react';
 
 import classNames from 'classnames';
 
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { Dialog } from '~/constants/modal';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 
@@ -23,7 +23,7 @@ const SubmitBar: FC<SubmitBarProps> = ({ isLab }) => {
     (type: string) => () => {
       showModal({ type, isInLab: !!isLab });
     },
-    [isLab, showModal]
+    [isLab, showModal],
   );
 
   const icon = isLab ? 'lab' : 'plus';
@@ -48,7 +48,12 @@ const SubmitBar: FC<SubmitBarProps> = ({ isLab }) => {
         </button>
       </div>
 
-      <button className={styles.button} onFocus={onFocus} onBlur={onBlur} type="button">
+      <button
+        className={styles.button}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        type="button"
+      >
         <Icon icon={icon} />
       </button>
     </div>

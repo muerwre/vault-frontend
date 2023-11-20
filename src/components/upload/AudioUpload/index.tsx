@@ -2,8 +2,8 @@ import React, { FC, useCallback } from 'react';
 
 import classNames from 'classnames';
 
-import { ArcProgress } from '~/components/input/ArcProgress';
-import { Icon } from '~/components/input/Icon';
+import { ArcProgress } from '~/components/common/ArcProgress';
+import { Icon } from '~/components/common/Icon';
 
 import styles from './styles.module.scss';
 
@@ -16,7 +16,13 @@ interface IProps {
   uploading?: boolean;
 }
 
-const AudioUpload: FC<IProps> = ({ title, progress, uploading, id, onDrop }) => {
+const AudioUpload: FC<IProps> = ({
+  title,
+  progress,
+  uploading,
+  id,
+  onDrop,
+}) => {
   const onDropFile = useCallback(() => {
     if (!id || !onDrop) return;
     onDrop(id);

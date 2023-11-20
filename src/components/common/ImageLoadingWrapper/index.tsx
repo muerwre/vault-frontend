@@ -8,7 +8,7 @@ import React, {
 
 import classNames from 'classnames';
 
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { DivProps } from '~/utils/types';
 
 import styles from './styles.module.scss';

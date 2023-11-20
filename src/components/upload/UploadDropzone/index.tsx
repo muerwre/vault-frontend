@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import classNames from 'classnames';
 import Dropzone from 'react-dropzone';
 
-import { DropHereIcon } from '~/components/input/DropHereIcon';
+import { DropHereIcon } from '~/components/common/DropHereIcon';
 import { useDragDetector } from '~/hooks/dom/useDragDetector';
 import { DivProps } from '~/utils/types';
 

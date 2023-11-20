@@ -2,9 +2,9 @@ import React, { VFC } from 'react';
 
 import { Filler } from '~/components/common/Filler';
 import { Group } from '~/components/common/Group';
+import { Icon } from '~/components/common/Icon';
 import { Padder } from '~/components/common/Padder';
 import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
-import { Icon } from '~/components/input/Icon';
 import { InputText } from '~/components/input/InputText';
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { useFlowStore } from '~/store/flow/useFlowStore';

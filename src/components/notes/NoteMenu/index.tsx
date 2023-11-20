@@ -1,6 +1,6 @@
 import React, { useMemo, VFC } from 'react';
 
-import { CornerMenu } from '~/components/common/CornerMenu';
+import { CornerMenu } from '~/components/menu/CornerMenu';
 
 interface NoteMenuProps {
   onEdit: () => void;
@@ -16,7 +16,7 @@ const NoteMenu: VFC<NoteMenuProps> = ({ onEdit, onDelete }) => {
       },
       { title: 'Удалить', action: onDelete },
     ],
-    [onEdit, onDelete]
+    [onEdit, onDelete],
   );
 
   return <CornerMenu actions={actions} />;

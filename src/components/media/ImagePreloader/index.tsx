@@ -8,9 +8,9 @@ import React, {
 
 import classNames from 'classnames';
 
+import { Icon } from '~/components/common/Icon';
 import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
-import { Icon } from '~/components/input/Icon';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { DEFAULT_DOMINANT_COLOR } from '~/constants/node';
 import { imagePresets } from '~/constants/urls';
 import { useResizeHandler } from '~/hooks/dom/useResizeHandler';

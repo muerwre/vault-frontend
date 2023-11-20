@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 
+import { Icon } from '~/components/common/Icon';
 import { WithDescription } from '~/components/common/WithDescription';
-import { Icon } from '~/components/input/Icon';
 
 interface Props {
   icon: string;

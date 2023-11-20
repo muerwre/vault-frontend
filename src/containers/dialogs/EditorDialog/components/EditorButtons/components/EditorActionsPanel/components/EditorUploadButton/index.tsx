@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FC, useCallback } from 'react';
 
+import { Icon } from '~/components/common/Icon';
 import { Button } from '~/components/input/Button';
-import { Icon } from '~/components/input/Icon';
 import { UploadType } from '~/constants/uploads';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { IEditorComponentProps } from '~/types/node';

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 
 import styles from './styles.module.scss';
 
@@ -10,7 +10,11 @@ interface MenuItemWithIconProps {
   onClick?: () => void;
 }
 
-const MenuItemWithIcon: FC<MenuItemWithIconProps> = ({ children, icon, onClick }) => (
+const MenuItemWithIcon: FC<MenuItemWithIconProps> = ({
+  children,
+  icon,
+  onClick,
+}) => (
   <button className={styles.item} onClick={onClick}>
     {icon && (
       <div className={styles.icon}>

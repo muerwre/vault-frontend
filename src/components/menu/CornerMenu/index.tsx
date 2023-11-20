@@ -1,6 +1,6 @@
 import React, { useCallback, useState, VFC } from 'react';
 
-import { MenuDots } from '~/components/common/MenuDots';
+import { MenuDots } from '~/components/menu/MenuDots';
 
 import styles from './styles.module.scss';
 

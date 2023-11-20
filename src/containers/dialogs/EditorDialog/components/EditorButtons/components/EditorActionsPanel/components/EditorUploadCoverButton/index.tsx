@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { UploadSubject, UploadTarget, UploadType } from '~/constants/uploads';
 import { imagePresets } from '~/constants/urls';
 import { useUploader } from '~/hooks/data/useUploader';

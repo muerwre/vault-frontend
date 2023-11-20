@@ -10,7 +10,7 @@ import React, {
 
 import classNames from 'classnames';
 
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { InputWrapper } from '~/components/input/InputWrapper';
 import { useTranslatedError } from '~/hooks/data/useTranslatedError';
 import { useFocusEvent } from '~/hooks/dom/useFocusEvent';
@@ -50,17 +50,25 @@ const InputText: FC<InputTextProps> = ({
 
       handler(target.value);
     },
-    [handler]
+    [handler],
   );
 
-  const toggleRevealed = useCallback(() => setRevealed(!revealed), [setRevealed, revealed]);
+  const toggleRevealed = useCallback(
+    () => setRevealed(!revealed),
+    [setRevealed, revealed],
+  );
 
   const translatedError = useTranslatedError(error);
 
   const type = props.type === 'password' && revealed ? 'text' : props.type;
 
   return (
-    <InputWrapper title={title} error={translatedError} focused={focused} notEmpty={!!value}>
+    <InputWrapper
+      title={title}
+      error={translatedError}
+      focused={focused}
+      notEmpty={!!value}
+    >
       <div
         className={classNames(styles.input, {
           [styles.has_error]: !!error,
@@ -83,7 +91,11 @@ const InputText: FC<InputTextProps> = ({
           <div className={styles.suffix}>
             {suffix}
             {props.type === 'password' && (
-              <Icon icon="eye" onClick={toggleRevealed} className={styles.reveal} />
+              <Icon
+                icon="eye"
+                onClick={toggleRevealed}
+                className={styles.reveal}
+              />
             )}
           </div>
         )}

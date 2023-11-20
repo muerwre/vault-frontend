@@ -2,9 +2,9 @@ import { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 
 import classNames from 'classnames';
 
+import { Icon } from '~/components/common/Icon';
 import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 import { Square } from '~/components/common/Square';
-import { Icon } from '~/components/input/Icon';
 import { imagePresets } from '~/constants/urls';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { useGotoNode } from '~/hooks/node/useGotoNode';

@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 
 import classNames from 'classnames';
 
-import { LoaderCircleInner } from '~/components/input/LoaderCircleInner';
 import { SVGProps } from '~/utils/types';
 
+import { LoaderCircleInner } from './components/LoaderCircleInner';
 import styles from './styles.module.scss';
 
 interface IProps extends SVGProps {

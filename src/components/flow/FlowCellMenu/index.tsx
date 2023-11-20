@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import classNames from 'classnames';
 
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { Toggle } from '~/components/input/Toggle';
 import { FlowDisplayVariant } from '~/types';
 

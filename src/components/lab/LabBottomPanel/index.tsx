@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Filler } from '~/components/common/Filler';
 import { Grid } from '~/components/common/Grid';
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { URLS } from '~/constants/urls';
 import { useNavigation } from '~/hooks/navigation/useNavigation';

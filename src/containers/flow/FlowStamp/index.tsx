@@ -3,10 +3,10 @@ import React, { FC, FormEvent, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 
 import { Group } from '~/components/common/Group';
+import { Icon } from '~/components/common/Icon';
 import { Superpower } from '~/components/common/Superpower';
 import { FlowRecent } from '~/components/flow/FlowRecent';
 import { FlowSearchResults } from '~/components/flow/FlowSearchResults';
-import { Icon } from '~/components/input/Icon';
 import { InputText } from '~/components/input/InputText';
 import { Toggle } from '~/components/input/Toggle';
 import { experimentalFeatures } from '~/constants/features';

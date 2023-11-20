@@ -2,7 +2,7 @@ import React, { VFC } from 'react';
 
 import Tippy from '@tippyjs/react';
 
-import { Icon } from '~/components/input/Icon';
+import { Icon } from '~/components/common/Icon';
 import { MenuButton } from '~/components/menu/MenuButton';
 import { MenuItemWithIcon } from '~/components/menu/MenuItemWithIcon';
 import { SeparatedMenu } from '~/components/menu/SeparatedMenu';

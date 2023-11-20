@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 
-import { CornerMenu } from '~/components/common/CornerMenu';
+import { CornerMenu } from '~/components/menu/CornerMenu';
 
 interface IProps {
   onEdit: () => void;
@@ -16,7 +16,7 @@ const CommentMenu: FC<IProps> = ({ onEdit, onDelete }) => {
       },
       { title: 'Удалить', action: onDelete },
     ],
-    [onEdit, onDelete]
+    [onEdit, onDelete],
   );
 
   return <CornerMenu actions={actions} />;

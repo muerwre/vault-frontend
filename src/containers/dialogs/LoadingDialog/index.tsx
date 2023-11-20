@@ -1,6 +1,6 @@
 import React, { VFC } from 'react';
 
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { LoaderCircle } from '~/components/common/LoaderCircle';
 
 import styles from './styles.module.scss';
 

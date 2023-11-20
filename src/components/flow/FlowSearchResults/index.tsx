@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
+import { Icon } from '~/components/common/Icon';
 import { InfiniteScroll } from '~/components/common/InfiniteScroll';
-import { Icon } from '~/components/input/Icon';
 import { INode } from '~/types';
 
 import { FlowRecentItem } from '../FlowRecentItem';

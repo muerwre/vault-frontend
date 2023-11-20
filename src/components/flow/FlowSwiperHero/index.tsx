@@ -6,8 +6,8 @@ import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
-import { Icon } from '~/components/input/Icon';
-import { LoaderCircle } from '~/components/input/LoaderCircle';
+import { Icon } from '~/components/common/Icon';
+import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { imagePresets, URLS } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
