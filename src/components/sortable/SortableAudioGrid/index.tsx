@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { AudioUpload } from '~/components/upload/AudioUpload';
@@ -28,7 +28,13 @@ const renderItem = ({
   onDelete?: (id: IFile['id']) => void;
   onTitleChange?: (file_id: IFile['id'], title: string) => void;
 }) => (
-  <AudioPlayer file={item} onDelete={onDelete} isEditing onTitleChange={onTitleChange} key={key} />
+  <AudioPlayer
+    file={item}
+    onDelete={onDelete}
+    isEditing
+    onTitleChange={onTitleChange}
+    key={key}
+  />
 );
 
 const renderLocked = ({ locked }: { locked: UploadStatus }) => (
@@ -49,15 +55,18 @@ const SortableAudioGrid: FC<SortableAudioGridProps> = ({
   onSortEnd,
   onTitleChange,
 }) => {
-  const renderItemProps = useMemo(() => ({ onDelete, onTitleChange }), [onDelete, onTitleChange]);
+  const renderItemProps = useMemo(
+    () => ({ onDelete, onTitleChange }),
+    [onDelete, onTitleChange],
+  );
   const renderLockedProps = useMemo(() => ({}), []);
 
   return (
     <SortableList
       items={items}
       locked={locked}
-      getID={it => it.id}
-      getLockedID={it => it.id}
+      getID={(it) => it.id}
+      getLockedID={(it) => it.id}
       renderItem={renderItem}
       renderItemProps={renderItemProps}
       renderLocked={renderLocked}

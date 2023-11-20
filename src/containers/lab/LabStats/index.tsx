@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Group } from '~/components/common/Group';
 import { SubTitle } from '~/components/common/SubTitle';

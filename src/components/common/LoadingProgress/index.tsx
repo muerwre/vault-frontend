@@ -1,4 +1,4 @@
-import React, { Fragment, VFC } from 'react';
+import { Fragment, VFC } from 'react';
 
 import { useSSRLoadingIndicator } from '~/hooks/dom/useSSRLoadingIndicator';
 

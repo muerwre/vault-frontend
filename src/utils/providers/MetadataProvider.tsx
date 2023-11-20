@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useEffect } from 'react';
+import { createContext, FC, useContext, useEffect } from 'react';
 
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
@@ -26,7 +26,7 @@ const fetchItems = async (ids: string[]) => {
 
 export const MetadataProvider: FC = observer(({ children }) => {
   const { metadata, enqueue, queue, pending, watch } = useLocalObservable(
-    () => new MetadataStore(fetchItems)
+    () => new MetadataStore(fetchItems),
   );
 
   useEffect(watch, [watch]);

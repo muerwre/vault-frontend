@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext } from 'react';
+import { createContext, FC, useContext } from 'react';
 
 import { useSearch } from '~/hooks/search/useSearch';
 import { INode } from '~/types';
@@ -22,7 +22,8 @@ export const SearchContext = createContext<SearchContextProps>({
 });
 
 export const SearchProvider: FC = ({ children }) => {
-  const { results, searchText, isLoading, loadMore, setSearchText, hasMore } = useSearch();
+  const { results, searchText, isLoading, loadMore, setSearchText, hasMore } =
+    useSearch();
 
   return (
     <SearchContext.Provider

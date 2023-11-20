@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
 import { Markdown } from '~/components/common/Markdown';
 import { Paragraph } from '~/components/placeholders/Paragraph';

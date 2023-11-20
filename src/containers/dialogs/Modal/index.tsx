@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC, createElement } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
@@ -18,7 +18,7 @@ const Modal: FC<IProps> = observer(() => {
 
   return (
     <ModalWrapper onOverlayClick={hide}>
-      {React.createElement(DIALOG_CONTENT[current!]! as any, {
+      {createElement(DIALOG_CONTENT[current!]! as any, {
         onRequestClose: hide,
         ...props,
       })}

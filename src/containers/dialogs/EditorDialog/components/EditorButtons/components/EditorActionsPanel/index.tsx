@@ -1,4 +1,4 @@
-import React, { createElement, FC } from 'react';
+import { createElement, FC } from 'react';
 
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { has } from '~/utils/ramda';

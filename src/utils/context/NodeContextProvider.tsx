@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext } from 'react';
+import { createContext, FC, useContext } from 'react';
 
 import { EMPTY_NODE } from '~/constants/node';
 import { INode, NodeBackLink } from '~/types';

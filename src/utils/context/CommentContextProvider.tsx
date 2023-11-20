@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext } from 'react';
+import { createContext, FC, useContext } from 'react';
 
 import { IComment, IFile } from '~/types';
 

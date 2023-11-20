@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -18,10 +18,11 @@ const SortableItem: FC<SortableImageGridItemProps> = ({
   disabled = false,
   className,
 }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id,
-    disabled,
-  });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id,
+      disabled,
+    });
 
   const style = {
     transform: CSS.Transform.toString(transform),

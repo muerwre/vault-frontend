@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 const Sprites: FC = () => (
   <svg width={0} height={0} viewBox="0 0 24 24">

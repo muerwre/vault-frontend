@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useRef } from 'react';
+import { FC, useCallback, useMemo, useRef } from 'react';
 
 import { EMPTY_NODE, NODE_TYPES } from '~/constants/node';
 import { EditorDialog } from '~/containers/dialogs/EditorDialog';
@@ -12,8 +12,15 @@ export interface EditorCreateDialogProps extends DialogComponentProps {
   isInLab: boolean;
 }
 
-const EditorCreateDialog: FC<EditorCreateDialogProps> = ({ type, isInLab, onRequestClose }) => {
-  const isExist = useMemo(() => values(NODE_TYPES).some(el => el === type), [type]);
+const EditorCreateDialog: FC<EditorCreateDialogProps> = ({
+  type,
+  isInLab,
+  onRequestClose,
+}) => {
+  const isExist = useMemo(
+    () => values(NODE_TYPES).some((el) => el === type),
+    [type],
+  );
 
   const data = useRef({ ...EMPTY_NODE, type, is_promoted: !isInLab });
 
@@ -24,14 +31,20 @@ const EditorCreateDialog: FC<EditorCreateDialogProps> = ({ type, isInLab, onRequ
       await createNode(node);
       onRequestClose();
     },
-    [onRequestClose, createNode]
+    [onRequestClose, createNode],
   );
 
   if (!type || !isExist) {
     return null;
   }
 
-  return <EditorDialog node={data.current} onRequestClose={onRequestClose} onSubmit={onSubmit} />;
+  return (
+    <EditorDialog
+      node={data.current}
+      onRequestClose={onRequestClose}
+      onSubmit={onSubmit}
+    />
+  );
 };
 
 export { EditorCreateDialog };

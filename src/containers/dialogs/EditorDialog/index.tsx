@@ -1,10 +1,4 @@
-import React, {
-  createElement,
-  FC,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { createElement, FC, useCallback, useMemo, useState } from 'react';
 
 import { FormikProvider } from 'formik';
 import { observer } from 'mobx-react-lite';

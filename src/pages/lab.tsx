@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 
 import { PageTitle } from '~/components/common/PageTitle';
 import { LabLayout } from '~/layouts/LabLayout';

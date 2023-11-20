@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useMemo } from 'react';
+import { createContext, FC, useContext, useMemo } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
@@ -32,27 +32,36 @@ export const FlowContext = createContext<FlowContextProps>({
   onChangeCellView: () => {},
 });
 
-export const FlowProvider: FC<FlowProviderProps> = observer(({ fallbackData, children }) => {
-  const flow = useFlow();
+export const FlowProvider: FC<FlowProviderProps> = observer(
+  ({ fallbackData, children }) => {
+    const flow = useFlow();
 
-  const value = useMemo<FlowContextProps>(() => {
-    if (!flow.nodes?.length && fallbackData) {
+    const value = useMemo<FlowContextProps>(() => {
+      if (!flow.nodes?.length && fallbackData) {
+        return {
+          ...flow,
+          heroes: fallbackData.heroes || [],
+          updates: fallbackData.updated || [],
+          recent: fallbackData.recent || [],
+          nodes: uniq([
+            ...(fallbackData.before || []),
+            ...(fallbackData.after || []),
+          ]),
+        };
+      }
+
       return {
         ...flow,
-        heroes: fallbackData.heroes || [],
-        updates: fallbackData.updated || [],
-        recent: fallbackData.recent || [],
-        nodes: uniq([...(fallbackData.before || []), ...(fallbackData.after || [])]),
+        heroes: fallbackData?.heroes?.length
+          ? fallbackData.heroes
+          : flow.heroes,
       };
-    }
+    }, [flow, fallbackData]);
 
-    return {
-      ...flow,
-      heroes: fallbackData?.heroes?.length ? fallbackData.heroes : flow.heroes,
-    };
-  }, [flow, fallbackData]);
-
-  return <FlowContext.Provider value={value}>{children}</FlowContext.Provider>;
-});
+    return (
+      <FlowContext.Provider value={value}>{children}</FlowContext.Provider>
+    );
+  },
+);
 
 export const useFlowContext = () => useContext(FlowContext);

@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
 import { NodeComponentProps } from '~/constants/node';
 import { path } from '~/utils/ramda';

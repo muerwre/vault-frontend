@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from 'react';
+import { FC, Fragment } from 'react';
 
 import { Group } from '~/components/common/Group';
 import { Icon } from '~/components/common/Icon';

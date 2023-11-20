@@ -1,15 +1,13 @@
-import React, { FC } from 'react';
+import { FC, SVGAttributes } from 'react';
 
 import { IIcon } from '~/types';
 
-type IProps = React.SVGAttributes<SVGElement> & {
+type IProps = SVGAttributes<SVGElement> & {
   size?: number;
   icon: IIcon;
 };
 
-export const Icon: FC<IProps> = ({
-  size = 20, icon, style, ...props
-}) => (
+export const Icon: FC<IProps> = ({ size = 20, icon, style, ...props }) => (
   <svg
     width={size}
     height={size}

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { IFlowNode } from '~/types';
 
@@ -15,11 +15,15 @@ const FlowRecent: FC<IProps> = ({ recent, updated }) => {
   return (
     <>
       <div className={styles.updates}>
-        {updated && updated.map(node => <FlowRecentItem node={node} key={node.id} has_new />)}
+        {updated &&
+          updated.map((node) => (
+            <FlowRecentItem node={node} key={node.id} has_new />
+          ))}
       </div>
 
       <div className={styles.recent}>
-        {recent && recent.map(node => <FlowRecentItem node={node} key={node.id} />)}
+        {recent &&
+          recent.map((node) => <FlowRecentItem node={node} key={node.id} />)}
       </div>
     </>
   );

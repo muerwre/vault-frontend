@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { NodeComponentProps } from '~/constants/node';
 import { useGotoNode } from '~/hooks/node/useGotoNode';

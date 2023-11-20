@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import classNames from 'classnames';
 
@@ -24,7 +24,11 @@ const Placeholder: FC<PlaceholderProps> = ({
 }) => {
   return active ? (
     <div
-      className={classNames(styles.placeholder, { [styles.loading]: loading }, className)}
+      className={classNames(
+        styles.placeholder,
+        { [styles.loading]: loading },
+        className,
+      )}
       style={{ height, color, width }}
     />
   ) : (

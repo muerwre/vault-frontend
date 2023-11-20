@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import { FC, memo } from 'react';
 
 import { Tags } from '~/containers/tags/Tags';
 import { ITag } from '~/types';
@@ -24,7 +24,7 @@ const NodeTags: FC<IProps> = memo(
         deletable={is_deletable}
       />
     );
-  }
+  },
 );
 
 export { NodeTags };

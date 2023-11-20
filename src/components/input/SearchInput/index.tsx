@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 
 import { Icon } from '~/components/common/Icon';
 import { InputText, InputTextProps } from '~/components/input/InputText';

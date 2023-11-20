@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import { FC, memo } from 'react';
 
 import { Columns } from '~/components/common/Columns';
 import { LabNode } from '~/components/lab/LabNode';

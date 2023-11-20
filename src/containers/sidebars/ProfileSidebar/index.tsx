@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, VFC } from 'react';
+import { useCallback, useEffect, useMemo, VFC } from 'react';
 
 import { CoverBackdrop } from '~/components/common/CoverBackdrop';
 import { ProfileSidebarNotes } from '~/components/profile/ProfileSidebarNotes';

@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 
 import NextLink from 'next/link';
 import { Link } from 'react-router-dom';

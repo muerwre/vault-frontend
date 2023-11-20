@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Icon } from '~/components/common/Icon';
 import { InfiniteScroll } from '~/components/common/InfiniteScroll';

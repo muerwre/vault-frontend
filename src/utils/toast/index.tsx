@@ -1,5 +1,3 @@
-import React from 'react';
-
 import classNames from 'classnames';
 import toast, { ToastOptions } from 'react-hot-toast';
 
@@ -14,21 +12,30 @@ const defaultOptions: ToastOptions = {
 };
 
 export const showToastError = (message: string) =>
-  toast.error(t => <span onClick={() => toast.dismiss(t.id)}>{message}</span>, {
-    ...defaultOptions,
-    className: classNames(styles.toast, styles.error),
-  });
+  toast.error(
+    (t) => <span onClick={() => toast.dismiss(t.id)}>{message}</span>,
+    {
+      ...defaultOptions,
+      className: classNames(styles.toast, styles.error),
+    },
+  );
 
 export const showToastSuccess = (message: string) =>
-  toast.success(t => <span onClick={() => toast.dismiss(t.id)}>{message}</span>, {
-    ...defaultOptions,
-    className: classNames(styles.toast, styles.success),
-  });
+  toast.success(
+    (t) => <span onClick={() => toast.dismiss(t.id)}>{message}</span>,
+    {
+      ...defaultOptions,
+      className: classNames(styles.toast, styles.success),
+    },
+  );
 
 export const showToastInfo = (message: string) =>
-  toast.success(t => <span onClick={() => toast.dismiss(t.id)}>{message}</span>, {
-    ...defaultOptions,
-    className: classNames(styles.toast, styles.info),
-  });
+  toast.success(
+    (t) => <span onClick={() => toast.dismiss(t.id)}>{message}</span>,
+    {
+      ...defaultOptions,
+      className: classNames(styles.toast, styles.info),
+    },
+  );
 
 export const hideToast = (id: string) => toast.dismiss(id);

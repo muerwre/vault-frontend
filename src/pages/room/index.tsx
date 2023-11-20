@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { InferGetStaticPropsType } from 'next';
 import { RouteComponentProps } from 'react-router';

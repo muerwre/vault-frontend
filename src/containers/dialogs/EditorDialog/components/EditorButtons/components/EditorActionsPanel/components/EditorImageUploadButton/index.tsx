@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { UploadType } from '~/constants/uploads';
 import { IEditorComponentProps } from '~/types/node';

@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useCallback, useMemo } from 'react';
+import { FC, FormEvent, useCallback, useMemo } from 'react';
 
 import classNames from 'classnames';
 

@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  MouseEventHandler,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { FC, MouseEventHandler, useCallback, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 

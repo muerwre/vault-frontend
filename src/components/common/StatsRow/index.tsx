@@ -1,15 +1,24 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Placeholder } from '~/components/placeholders/Placeholder';
 
 import styles from './styles.module.scss';
 
-const StatsRow: FC<{ isLoading: boolean; label: string }> = ({ isLoading, label, children }) => (
+const StatsRow: FC<{ isLoading: boolean; label: string }> = ({
+  isLoading,
+  label,
+  children,
+}) => (
   <li className={styles.row}>
     {isLoading ? (
       <>
         <Placeholder active={isLoading} loading className={styles.label} />
-        <Placeholder active={isLoading} loading className={styles.value} width="24px" />
+        <Placeholder
+          active={isLoading}
+          loading
+          className={styles.value}
+          width="24px"
+        />
       </>
     ) : (
       <>

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 
 import classnames from 'classnames';
 
@@ -15,9 +15,10 @@ type IProps = NodeEditorProps & {};
 const VideoEditor: FC<IProps> = () => {
   const { values, setFieldValue } = useNodeFormContext();
 
-  const setUrl = useCallback((url: string) => setFieldValue('blocks', [{ type: 'video', url }]), [
-    setFieldValue,
-  ]);
+  const setUrl = useCallback(
+    (url: string) => setFieldValue('blocks', [{ type: 'video', url }]),
+    [setFieldValue],
+  );
 
   const url = (path(['blocks', 0, 'url'], values) as string) || '';
   const preview = useMemo(() => getYoutubeThumb(url), [url]);

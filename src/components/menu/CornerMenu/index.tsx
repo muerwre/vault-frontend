@@ -1,4 +1,4 @@
-import React, { useCallback, useState, VFC } from 'react';
+import { useCallback, useState, VFC } from 'react';
 
 import { MenuDots } from '~/components/menu/MenuDots';
 

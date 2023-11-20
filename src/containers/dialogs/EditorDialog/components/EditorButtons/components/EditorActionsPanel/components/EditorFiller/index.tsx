@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Filler } from '~/components/common/Filler';
 import { IEditorComponentProps } from '~/types/node';

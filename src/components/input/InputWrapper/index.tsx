@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import classNames from 'classnames';
 
@@ -11,7 +11,13 @@ interface InputWrapperProps {
   notEmpty: boolean;
 }
 
-const InputWrapper: FC<InputWrapperProps> = ({ children, notEmpty, title, focused, error }) => (
+const InputWrapper: FC<InputWrapperProps> = ({
+  children,
+  notEmpty,
+  title,
+  focused,
+  error,
+}) => (
   <div
     className={classNames(styles.content, {
       [styles.has_error]: !!error,

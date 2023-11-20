@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext } from 'react';
+import { createContext, FC, useContext } from 'react';
 
 import { ITag } from '~/types';
 
@@ -22,8 +22,13 @@ const TagContext = createContext<TagContextProps>({
   onTagDelete: () => {},
 });
 
-export const TagsContextProvider: FC<TagContextProps> = ({ children, ...contextValue }) => {
-  return <TagContext.Provider value={contextValue}>{children}</TagContext.Provider>;
+export const TagsContextProvider: FC<TagContextProps> = ({
+  children,
+  ...contextValue
+}) => {
+  return (
+    <TagContext.Provider value={contextValue}>{children}</TagContext.Provider>
+  );
 };
 
 export const useTagContext = () => useContext(TagContext);

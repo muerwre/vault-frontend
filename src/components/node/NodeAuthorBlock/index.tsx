@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
 import { Card } from '~/components/common/Card';

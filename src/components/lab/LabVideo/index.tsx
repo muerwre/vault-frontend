@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { NodeVideoBlock } from '~/components/node/NodeVideoBlock';
 import { Placeholder } from '~/components/placeholders/Placeholder';

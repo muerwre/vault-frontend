@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 
 import { Card } from '~/components/common/Card';
 import { Group } from '~/components/common/Group';

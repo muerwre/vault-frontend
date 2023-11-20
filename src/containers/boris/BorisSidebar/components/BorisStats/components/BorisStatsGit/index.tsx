@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { GithubIssue } from '~/types/boris';
@@ -14,13 +14,19 @@ interface IProps {
 
 const BorisStatsGit: FC<IProps> = ({ issues, isLoading }) => {
   const open = useMemo(
-    () => issues.filter(el => !el.pull_request && el.state === 'open').slice(0, 5),
-    [issues]
+    () =>
+      issues
+        .filter((el) => !el.pull_request && el.state === 'open')
+        .slice(0, 5),
+    [issues],
   );
 
   const closed = useMemo(
-    () => issues.filter(el => !el.pull_request && el.state === 'closed').slice(0, 5),
-    [issues]
+    () =>
+      issues
+        .filter((el) => !el.pull_request && el.state === 'closed')
+        .slice(0, 5),
+    [issues],
   );
 
   if (!issues.length) return null;
@@ -46,14 +52,17 @@ const BorisStatsGit: FC<IProps> = ({ issues, isLoading }) => {
     <div className={styles.wrap}>
       <div className={styles.stats__title}>
         <span>КОММИТС</span>
-        <img src="https://jenkins.vault48.org/api/badges/muerwre/vault-golang/status.svg" alt="" />
+        <img
+          src="https://jenkins.vault48.org/api/badges/muerwre/vault-golang/status.svg"
+          alt=""
+        />
       </div>
 
-      {open.map(data => (
+      {open.map((data) => (
         <BorisStatsGitCard data={data} key={data.id} />
       ))}
 
-      {closed.map(data => (
+      {closed.map((data) => (
         <BorisStatsGitCard data={data} key={data.id} />
       ))}
     </div>

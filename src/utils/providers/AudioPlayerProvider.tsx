@@ -1,4 +1,12 @@
-import React, { createContext, FC, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import { PlayerState } from '~/constants/player';
 import { IFile } from '~/types';
@@ -35,10 +43,16 @@ const PlayerContext = createContext<AudioPlayerProps>({
 });
 
 export const AudioPlayerProvider: FC = ({ children }) => {
-  const audio = useRef(typeof Audio !== 'undefined' ? new Audio() : undefined).current;
+  const audio = useRef(
+    typeof Audio !== 'undefined' ? new Audio() : undefined,
+  ).current;
   const [status, setStatus] = useState(PlayerState.UNSET);
   const [file, setFile] = useState<IFile | undefined>();
-  const [progress, setProgress] = useState<PlayerProgress>({ progress: 0, current: 0, total: 0 });
+  const [progress, setProgress] = useState<PlayerProgress>({
+    progress: 0,
+    current: 0,
+    total: 0,
+  });
 
   /** controls */
   const play = async () => audio?.play();
@@ -58,14 +72,14 @@ export const AudioPlayerProvider: FC = ({ children }) => {
 
       audio.currentTime = time;
     },
-    [audio]
+    [audio],
   );
 
   const toPercent = useCallback(
     (percent: number) => {
       toTime((progress.total * percent) / 100);
     },
-    [progress, toTime]
+    [progress, toTime],
   );
 
   /** handles progress update */
@@ -109,12 +123,26 @@ export const AudioPlayerProvider: FC = ({ children }) => {
   const metadata: IFile['metadata'] = path(['metadata'], file);
   const title =
     (metadata &&
-      (metadata.title || [metadata.id3artist, metadata.id3title].filter(el => !!el).join(' - '))) ||
+      (metadata.title ||
+        [metadata.id3artist, metadata.id3title]
+          .filter((el) => !!el)
+          .join(' - '))) ||
     '';
 
   return (
     <PlayerContext.Provider
-      value={{ file, setFile, title, progress, toTime, toPercent, play, pause, stop, status }}
+      value={{
+        file,
+        setFile,
+        title,
+        progress,
+        toTime,
+        toPercent,
+        play,
+        pause,
+        stop,
+        status,
+      }}
     >
       {children}
     </PlayerContext.Provider>

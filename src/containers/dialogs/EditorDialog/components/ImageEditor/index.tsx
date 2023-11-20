@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { NodeEditorProps } from '~/types/node';

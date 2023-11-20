@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { PageTitle } from '~/components/common/PageTitle';
 import { SettingsDeleted } from '~/containers/settings/SettingsDeleted';
 import { SettingsLayout } from '~/layouts/SettingsLayout';

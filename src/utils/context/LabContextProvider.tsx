@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext } from 'react';
+import { createContext, FC, useContext } from 'react';
 
 import { IFlowNode, ITag } from '~/types';
 import { ILabNode, LabNodesSort } from '~/types/lab';
@@ -36,8 +36,9 @@ const defaultValues: LabContextProps = {
 
 const LabContext = createContext<LabContextProps>(defaultValues);
 
-export const LabContextProvider: FC<LabContextProps> = ({ children, ...rest }) => (
-  <LabContext.Provider value={rest}>{children}</LabContext.Provider>
-);
+export const LabContextProvider: FC<LabContextProps> = ({
+  children,
+  ...rest
+}) => <LabContext.Provider value={rest}>{children}</LabContext.Provider>;
 
 export const useLabContext = () => useContext(LabContext);

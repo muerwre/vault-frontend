@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { Tag } from '~/components/tags/Tag';
@@ -27,7 +27,7 @@ const LabTags: FC<IProps> = ({ tags, isLoading }) => {
 
   return (
     <div className={styles.tags}>
-      {tags.slice(0, 10).map(tag => (
+      {tags.slice(0, 10).map((tag) => (
         <Tag tag={tag} key={tag.ID} />
       ))}
     </div>

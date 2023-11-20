@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Padder } from '~/components/common/Padder';
 import { Button } from '~/components/input/Button';

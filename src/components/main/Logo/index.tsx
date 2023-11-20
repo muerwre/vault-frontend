@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Anchor } from '~/components/common/Anchor';
 import { URLS } from '~/constants/urls';
 

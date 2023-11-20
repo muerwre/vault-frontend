@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import { FC, HTMLAttributes } from 'react';
 
 import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 
-type IProps = React.HTMLAttributes<HTMLDivElement> & {
+type IProps = HTMLAttributes<HTMLDivElement> & {
   horizontal?: boolean;
   top?: boolean;
   bottom?: boolean;
@@ -33,7 +33,7 @@ const Group: FC<IProps> = ({
         [styles.wrap]: wrap,
         [styles.seamless]: seamless,
       },
-      className
+      className,
     )}
     {...props}
   >

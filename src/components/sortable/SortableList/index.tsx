@@ -1,4 +1,4 @@
-import React, { createElement, FC } from 'react';
+import { createElement, FC } from 'react';
 
 import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
 import {

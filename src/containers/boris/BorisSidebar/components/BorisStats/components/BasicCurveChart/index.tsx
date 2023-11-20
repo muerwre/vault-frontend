@@ -1,4 +1,4 @@
-import React, { useMemo, VFC } from 'react';
+import { useMemo, VFC } from 'react';
 
 import { makeBezierCurve, PathPoint } from '~/utils/dom/makeBezierCurve';
 import { SVGProps } from '~/utils/types';

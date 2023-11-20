@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 
 import classNames from 'classnames';
 import { addYears, differenceInMonths, differenceInYears } from 'date-fns';

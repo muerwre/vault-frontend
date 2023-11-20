@@ -1,11 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  VFC,
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, VFC } from 'react';
 
 import classNames from 'classnames';
 import { usePopper } from 'react-popper';

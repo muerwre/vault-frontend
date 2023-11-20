@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
 import classNames from 'classnames';
 import { isAfter, parseISO } from 'date-fns';
@@ -9,7 +9,6 @@ import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { INode } from '~/types';
 
 import styles from './styles.module.scss';
-
 
 interface IProps {
   node: INode;
@@ -23,8 +22,10 @@ const LabNode: FC<IProps> = ({ node, isLoading, lastSeen, commentCount }) => {
 
   const hasNewComments = useMemo(
     () =>
-      !!node.commented_at && !!lastSeen && isAfter(parseISO(node.commented_at), parseISO(lastSeen)),
-    [node.commented_at, lastSeen]
+      !!node.commented_at &&
+      !!lastSeen &&
+      isAfter(parseISO(node.commented_at), parseISO(lastSeen)),
+    [node.commented_at, lastSeen],
   );
 
   const background = useColorGradientFromString(node.title, 3, 2);

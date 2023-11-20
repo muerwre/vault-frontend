@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 
 import { SortableImageGrid } from '~/components/sortable/SortableImageGrid';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';

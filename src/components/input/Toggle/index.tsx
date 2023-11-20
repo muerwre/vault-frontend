@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 
 import classNames from 'classnames';
 
@@ -31,7 +31,7 @@ const Toggle: FC<IProps> = ({ value, handler, color = 'primary', ...rest }) => {
         styles.toggle,
         { [styles.active]: value },
         styles[color],
-        rest.className
+        rest.className,
       )}
       onClick={onClick}
     />

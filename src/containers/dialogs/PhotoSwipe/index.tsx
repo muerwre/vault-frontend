@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, VFC } from 'react';
+import { useEffect, useRef, VFC } from 'react';
 
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 
 import { TelegramUser } from '@v9v/ts-react-telegram-login';
 

@@ -1,11 +1,11 @@
-import React, {
+import {
   ChangeEvent,
   DetailedHTMLProps,
   forwardRef,
   TextareaHTMLAttributes,
   useCallback,
   useEffect,
-  useState
+  useState,
 } from 'react';
 
 import autosize from 'autosize';
@@ -42,14 +42,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, IProps>(
       value,
       ...props
     },
-    forwardRef
+    forwardRef,
   ) => {
     const ref = useForwardRef(forwardRef);
     const [focused, setFocused] = useState(false);
 
     const onInput = useCallback(
       ({ target }: ChangeEvent<HTMLTextAreaElement>) => handler(target.value),
-      [handler]
+      [handler],
     );
 
     const onFocus = useCallback(() => setFocused(true), [setFocused]);
@@ -68,7 +68,12 @@ const Textarea = forwardRef<HTMLTextAreaElement, IProps>(
     }, [ref, value, forwardRef]);
 
     return (
-      <InputWrapper title={title} error={error} focused={focused} notEmpty={!!value}>
+      <InputWrapper
+        title={title}
+        error={error}
+        focused={focused}
+        notEmpty={!!value}
+      >
         <textarea
           {...props}
           ref={ref}
@@ -85,7 +90,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, IProps>(
         />
       </InputWrapper>
     );
-  }
+  },
 );
 
 export { Textarea };

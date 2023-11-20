@@ -1,4 +1,4 @@
-import React, { FC, memo, useMemo } from 'react';
+import { FC, memo, useMemo } from 'react';
 
 import { Icon } from '~/components/common/Icon';
 import { ICommentBlockProps } from '~/constants/comment';

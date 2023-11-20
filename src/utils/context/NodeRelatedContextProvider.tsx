@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext } from 'react';
+import { createContext, FC, useContext } from 'react';
 
 import { INodeRelated } from '~/types/node';
 
@@ -12,8 +12,14 @@ const NodeRelatedContext = createContext<NodeRelatedProviderProps>({
   isLoading: false,
 });
 
-export const NodeRelatedContextProvider: FC<NodeRelatedProviderProps> = ({ children, ...rest }) => (
-  <NodeRelatedContext.Provider value={rest}>{children}</NodeRelatedContext.Provider>
+export const NodeRelatedContextProvider: FC<NodeRelatedProviderProps> = ({
+  children,
+  ...rest
+}) => (
+  <NodeRelatedContext.Provider value={rest}>
+    {children}
+  </NodeRelatedContext.Provider>
 );
 
-export const useNodeRelatedContext = () => useContext<NodeRelatedProviderProps>(NodeRelatedContext);
+export const useNodeRelatedContext = () =>
+  useContext<NodeRelatedProviderProps>(NodeRelatedContext);

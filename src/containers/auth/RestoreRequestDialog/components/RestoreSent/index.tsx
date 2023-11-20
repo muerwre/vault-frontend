@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 
 import { Group } from '~/components/common/Group';
 import { Icon } from '~/components/common/Icon';

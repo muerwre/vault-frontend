@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Anchor } from '~/components/common/Anchor';
 import { InlineUsername } from '~/components/common/InlineUsername';

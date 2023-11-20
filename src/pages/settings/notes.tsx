@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { PageTitle } from '~/components/common/PageTitle';
 import { SettingsNotes } from '~/containers/settings/SettingsNotes';
 import { SettingsLayout } from '~/layouts/SettingsLayout';

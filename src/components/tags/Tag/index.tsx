@@ -1,4 +1,4 @@
-import React, { FC, FocusEventHandler, useCallback } from 'react';
+import { FC, FocusEventHandler, useCallback } from 'react';
 
 import { TagWrapper } from '~/components/tags/TagWrapper';
 import { ITag } from '~/types';

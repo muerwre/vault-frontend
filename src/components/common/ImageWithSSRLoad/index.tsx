@@ -1,7 +1,16 @@
-import React, { useEffect, useRef, VFC } from 'react';
+import {
+  DetailedHTMLProps,
+  ImgHTMLAttributes,
+  useEffect,
+  useRef,
+  VFC,
+} from 'react';
 
 interface ImgProps
-  extends React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
+  extends DetailedHTMLProps<
+    ImgHTMLAttributes<HTMLImageElement>,
+    HTMLImageElement
+  > {
   onLoad?: () => void;
 }
 

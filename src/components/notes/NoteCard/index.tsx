@@ -1,4 +1,4 @@
-import React, { useCallback, useState, VFC } from 'react';
+import { useCallback, useState, VFC } from 'react';
 
 import { Card } from '~/components/common/Card';
 import { Markdown } from '~/components/common/Markdown';

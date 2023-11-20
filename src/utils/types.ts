@@ -1,23 +1,30 @@
-import React from 'react';
+import {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  DetailedHTMLProps,
+  HTMLAttributes,
+  ImgHTMLAttributes,
+  SVGProps as ReactSVGProps,
+} from 'react';
 
-export type DivProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
+export type DivProps = DetailedHTMLProps<
+  HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 >;
 
-export type SVGProps = React.SVGProps<SVGSVGElement>;
+export type SVGProps = ReactSVGProps<SVGSVGElement>;
 
-export type IMGProps = React.DetailedHTMLProps<
-  React.ImgHTMLAttributes<HTMLImageElement>,
+export type IMGProps = DetailedHTMLProps<
+  ImgHTMLAttributes<HTMLImageElement>,
   HTMLImageElement
 >;
 
-export type ButtonProps = React.DetailedHTMLProps<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
+export type ButtonProps = DetailedHTMLProps<
+  ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 >;
 
-export type LinkProps = React.DetailedHTMLProps<
-  React.AnchorHTMLAttributes<HTMLAnchorElement>,
+export type LinkProps = DetailedHTMLProps<
+  AnchorHTMLAttributes<HTMLAnchorElement>,
   HTMLAnchorElement
 >;

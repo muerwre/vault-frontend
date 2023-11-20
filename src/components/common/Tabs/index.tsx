@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useMemo, useState, VFC } from 'react';
+import { createContext, FC, useContext, useMemo, useState, VFC } from 'react';
 
 import classNames from 'classnames';
 
@@ -20,7 +20,9 @@ const HorizontalList: VFC<TabProps> = ({ items }) => {
     <div className={styles.tabs}>
       {items.map((it, index) => (
         <div
-          className={classNames(styles.tab, { [styles.active]: activeTab === index })}
+          className={classNames(styles.tab, {
+            [styles.active]: activeTab === index,
+          })}
           onClick={() => setActiveTab(index)}
           key={it}
         >
@@ -38,20 +40,27 @@ const Content: FC<any> = ({ children }) => {
       return [children];
     }
 
-    return children.filter(it => it);
+    return children.filter((it) => it);
   }, [children]);
 
-  if (Array.isArray(notEmptyChildren) && notEmptyChildren.length - 1 < activeTab) {
+  if (
+    Array.isArray(notEmptyChildren) &&
+    notEmptyChildren.length - 1 < activeTab
+  ) {
     return notEmptyChildren[notEmptyChildren.length - 1];
   }
 
   return notEmptyChildren[activeTab];
 };
 
-const Tabs = function({ children }) {
+const Tabs = function ({ children }) {
   const [activeTab, setActiveTab] = useState(0);
 
-  return <TabContext.Provider value={{ activeTab, setActiveTab }}>{children}</TabContext.Provider>;
+  return (
+    <TabContext.Provider value={{ activeTab, setActiveTab }}>
+      {children}
+    </TabContext.Provider>
+  );
 };
 
 Tabs.Horizontal = HorizontalList;

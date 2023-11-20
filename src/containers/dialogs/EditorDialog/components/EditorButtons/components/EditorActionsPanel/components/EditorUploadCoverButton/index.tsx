@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
+import { ChangeEvent, FC, useCallback, useEffect } from 'react';
 
 import { Icon } from '~/components/common/Icon';
 import { UploadSubject, UploadTarget, UploadType } from '~/constants/uploads';

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Grid } from '~/components/common/Grid';
 import { Group } from '~/components/common/Group';

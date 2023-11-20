@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useCallback } from 'react';
+import { ChangeEvent, FC, useCallback } from 'react';
 
 import { Icon } from '~/components/common/Icon';
 import { Button } from '~/components/input/Button';

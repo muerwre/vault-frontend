@@ -1,4 +1,4 @@
-import React, { DetailsHTMLAttributes, FC } from 'react';
+import { DetailsHTMLAttributes, FC } from 'react';
 
 import StickyBox from 'react-sticky-box';
 

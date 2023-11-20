@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 
 import { createPortal } from 'react-dom';
 
@@ -13,7 +13,7 @@ const ErrorNotFound: VFC = () =>
       <h2 className={styles.sign}>Страница утеряна</h2>
       <div>Нам очень жаль</div>
     </div>,
-    document.body
+    document.body,
   );
 
 export { ErrorNotFound };

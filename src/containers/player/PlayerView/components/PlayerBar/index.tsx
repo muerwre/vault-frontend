@@ -1,4 +1,4 @@
-import React, { useCallback, VFC } from 'react';
+import { useCallback, VFC } from 'react';
 
 import { Icon } from '~/components/common/Icon';
 import { PlayerState } from '~/constants/player';

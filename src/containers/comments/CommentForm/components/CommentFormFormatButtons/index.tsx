@@ -1,8 +1,11 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 
 import { Button } from '~/components/input/Button';
 import { ButtonGroup } from '~/components/input/ButtonGroup';
-import { useFormatWrapper, wrapTextInsideInput } from '~/hooks/dom/useFormatWrapper';
+import {
+  useFormatWrapper,
+  wrapTextInsideInput,
+} from '~/hooks/dom/useFormatWrapper';
 
 import styles from './styles.module.scss';
 
@@ -14,25 +17,25 @@ interface IProps {
 const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
   const wrapper = useFormatWrapper(handler);
 
-  const wrap = useCallback((prefix = '', suffix = '') => wrapper(element, prefix, suffix), [
-    element,
-    wrapper,
-  ]);
+  const wrap = useCallback(
+    (prefix = '', suffix = '') => wrapper(element, prefix, suffix),
+    [element, wrapper],
+  );
 
   const wrapBold = useCallback(
-    event => {
+    (event) => {
       event.preventDefault();
       wrapTextInsideInput(element, '**', '**', handler);
     },
-    [element, handler]
+    [element, handler],
   );
 
   const wrapItalic = useCallback(
-    event => {
+    (event) => {
       event.preventDefault();
       wrapTextInsideInput(element, '*', '*', handler);
     },
-    [element, handler]
+    [element, handler],
   );
 
   const onKeyPress = useCallback(
@@ -47,7 +50,7 @@ const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
         wrapItalic(event);
       }
     },
-    [wrapBold, wrapItalic]
+    [wrapBold, wrapItalic],
   );
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Markdown } from '~/components/common/Markdown';
 import { Paragraph } from '~/components/placeholders/Paragraph';

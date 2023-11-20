@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { HistorySlide } from '~/components/welcome/HistorySlide';
 import { PersonsSlide } from '~/components/welcome/PersonsSlide';
 import { WelcomeSlide } from '~/components/welcome/WelcomeSlide';

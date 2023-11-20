@@ -1,4 +1,4 @@
-import React, { useCallback, VFC } from 'react';
+import { useCallback, VFC } from 'react';
 
 import classNames from 'classnames';
 

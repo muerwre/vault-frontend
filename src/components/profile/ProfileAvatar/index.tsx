@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useCallback } from 'react';
+import { ChangeEvent, FC, useCallback } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
 import { Button } from '~/components/input/Button';

@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useRef } from 'react';
+import { FC, ReactNode, useEffect, useRef } from 'react';
 
 import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
 

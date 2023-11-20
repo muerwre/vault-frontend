@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { StatsRow } from '~/components/common/StatsRow';
 import { SubTitle } from '~/components/common/SubTitle';

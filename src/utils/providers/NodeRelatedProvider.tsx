@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { useGetNodeRelated } from '~/hooks/node/useGetNodeRelated';
 import { INode, ITag } from '~/types';
@@ -15,11 +15,18 @@ const defaultValue: INodeRelated = {
   similar: [],
 };
 
-const NodeRelatedProvider: FC<NodeRelatedProviderProps> = ({ id, children, tags }) => {
+const NodeRelatedProvider: FC<NodeRelatedProviderProps> = ({
+  id,
+  children,
+  tags,
+}) => {
   const { related, isLoading } = useGetNodeRelated(id);
 
   return (
-    <NodeRelatedContextProvider related={related || defaultValue} isLoading={isLoading}>
+    <NodeRelatedContextProvider
+      related={related || defaultValue}
+      isLoading={isLoading}
+    >
       {children}
     </NodeRelatedContextProvider>
   );

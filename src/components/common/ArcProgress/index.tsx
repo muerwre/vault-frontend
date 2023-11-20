@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { describeArc } from '~/utils/dom';
 
@@ -11,6 +11,14 @@ interface IProps {
 
 export const ArcProgress: FC<IProps> = ({ size, progress = 0 }) => (
   <svg className={styles.icon} width={size} height={size}>
-    <path d={describeArc(size / 2, size / 2, size / 2 - 2, 360 * (1 - progress), 360)} />
+    <path
+      d={describeArc(
+        size / 2,
+        size / 2,
+        size / 2 - 2,
+        360 * (1 - progress),
+        360,
+      )}
+    />
   </svg>
 );

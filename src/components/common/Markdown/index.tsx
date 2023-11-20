@@ -1,4 +1,4 @@
-import React, { DetailedHTMLProps, VFC, HTMLAttributes } from 'react';
+import { DetailedHTMLProps, VFC, HTMLAttributes } from 'react';
 
 import classNames from 'classnames';
 

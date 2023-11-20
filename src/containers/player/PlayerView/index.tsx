@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 
 import { useAudioPlayer } from '~/utils/providers/AudioPlayerProvider';
 

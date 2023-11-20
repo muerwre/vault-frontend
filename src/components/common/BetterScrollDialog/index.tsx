@@ -1,4 +1,4 @@
-import React, { FC, MouseEventHandler, useEffect, useRef } from 'react';
+import { FC, MouseEventHandler, ReactChild, useEffect, useRef } from 'react';
 
 import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
 
@@ -8,7 +8,7 @@ import { LoaderCircle } from '~/components/common/LoaderCircle';
 import styles from './styles.module.scss';
 
 interface IProps {
-  children: React.ReactChild;
+  children: ReactChild;
   header?: JSX.Element;
   footer?: JSX.Element;
   backdrop?: JSX.Element;

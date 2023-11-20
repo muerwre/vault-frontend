@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
 import classNames from 'classnames';
 import { transparentize } from 'color2k';

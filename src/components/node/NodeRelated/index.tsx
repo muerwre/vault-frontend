@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react';
+import { FC, ReactElement } from 'react';
 
 import { Group } from '~/components/common/Group';
 import { Hoverable } from '~/components/common/Hoverable';

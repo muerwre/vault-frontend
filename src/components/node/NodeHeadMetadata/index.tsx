@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 
 import Head from 'next/head';
 
@@ -20,7 +20,10 @@ const NodeHeadMetadata: VFC<NodeHeadMetadataProps> = () => {
         <meta property="og:title" content={node.title} />
         <meta property="og:type" content={node.type} />
         <meta property="og:image" content={getURLFromString(node.thumbnail)} />
-        <meta property="og:image:secure_url" content={getURLFromString(node.thumbnail)} />
+        <meta
+          property="og:image:secure_url"
+          content={getURLFromString(node.thumbnail)}
+        />
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:alt" content={node.description} />
         <meta property="og:description" content={node.description} />

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { NodeComponentProps } from '~/constants/node';

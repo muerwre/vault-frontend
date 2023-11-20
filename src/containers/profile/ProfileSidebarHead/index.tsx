@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 
 import { Filler } from '~/components/common/Filler';
 import { Group } from '~/components/common/Group';

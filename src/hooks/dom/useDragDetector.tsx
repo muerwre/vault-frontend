@@ -1,4 +1,11 @@
-import React, { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 const DragContext = createContext({
   isDragging: false,
@@ -9,19 +16,24 @@ export const DragDetectorProvider: FC = ({ children }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   return (
-    <DragContext.Provider value={{ isDragging, setIsDragging }}>{children}</DragContext.Provider>
+    <DragContext.Provider value={{ isDragging, setIsDragging }}>
+      {children}
+    </DragContext.Provider>
   );
 };
 
 export const useDragDetector = () => {
   const { isDragging, setIsDragging } = useContext(DragContext);
 
-  const onStopDragging = useCallback(() => setIsDragging(false), [setIsDragging]);
+  const onStopDragging = useCallback(
+    () => setIsDragging(false),
+    [setIsDragging],
+  );
 
   useEffect(() => {
     const addClass = () => setIsDragging(true);
 
-    const removeClass = event => {
+    const removeClass = (event) => {
       // Small hack to ignore intersection with child elements
       if (event.pageX !== 0 && event.pageY !== 0) {
         return;

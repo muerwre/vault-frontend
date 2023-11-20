@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 
 import { apiRestoreCode } from '~/api/auth';
 import { Group } from '~/components/common/Group';

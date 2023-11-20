@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Card } from '~/components/common/Card';
 import { Sticky } from '~/components/common/Sticky';

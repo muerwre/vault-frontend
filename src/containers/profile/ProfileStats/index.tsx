@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 
 import { Card } from '~/components/common/Card';
 import { Grid } from '~/components/common/Grid';

@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import { FC, memo } from 'react';
 
 import { Tags } from '~/containers/tags/Tags';
 import { ITag } from '~/types';
@@ -9,8 +9,10 @@ interface IProps {
   onChange?: (tags: string[]) => void;
 }
 
-const NodeTagsPlaceholder: FC<IProps> = memo(({ is_editable, tags, onChange }) => (
-  <Tags tags={tags} editable={is_editable} onTagsChange={onChange} />
-));
+const NodeTagsPlaceholder: FC<IProps> = memo(
+  ({ is_editable, tags, onChange }) => (
+    <Tags tags={tags} editable={is_editable} onTagsChange={onChange} />
+  ),
+);
 
 export { NodeTagsPlaceholder };

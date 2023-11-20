@@ -1,4 +1,4 @@
-import React, { createElement, FC, useMemo } from 'react';
+import { createElement, FC, useMemo } from 'react';
 
 import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
 import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';

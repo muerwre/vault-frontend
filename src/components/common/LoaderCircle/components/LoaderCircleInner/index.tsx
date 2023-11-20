@@ -1,4 +1,4 @@
-import React, { FC, SVGAttributes } from 'react';
+import { FC, SVGAttributes } from 'react';
 
 import classNames from 'classnames';
 
@@ -12,7 +12,12 @@ interface IProps extends SVGAttributes<SVGElement> {
 }
 
 const LoaderCircleInner: FC<IProps> = ({ size, className, ...props }) => (
-  <svg className={classNames(styles.icon, className)} width={size} height={size} {...props}>
+  <svg
+    className={classNames(styles.icon, className)}
+    width={size}
+    height={size}
+    {...props}
+  >
     <path d={describeArc(size / 2, size / 2, size / 2, 0, 90)} />
     <path d={describeArc(size / 2, size / 2, size / 2, 180, 270)} />
   </svg>

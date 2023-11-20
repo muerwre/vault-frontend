@@ -1,4 +1,4 @@
-import React, { FC, MouseEventHandler } from 'react';
+import { FC, MouseEventHandler } from 'react';
 
 import ReactDOM from 'react-dom';
 
@@ -14,7 +14,7 @@ const ModalWrapper: FC<IProps> = ({ children, onOverlayClick }) => {
       <div className={styles.overlay} onClick={onOverlayClick} />
       <div className={styles.content}>{children}</div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

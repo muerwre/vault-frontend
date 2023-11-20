@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  HTMLAttributes,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { FC, HTMLAttributes, useCallback, useMemo, useState } from 'react';
 
 import { TagField } from '~/components/common/TagField';
 import { Tag } from '~/components/tags/Tag';

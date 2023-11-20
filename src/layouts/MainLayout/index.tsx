@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { LoadingProgress } from '~/components/common/LoadingProgress';
 import { HeaderSSR } from '~/containers/main/Header/ssr';
 

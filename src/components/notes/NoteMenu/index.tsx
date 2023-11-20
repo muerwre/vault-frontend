@@ -1,4 +1,4 @@
-import React, { useMemo, VFC } from 'react';
+import { useMemo, VFC } from 'react';
 
 import { CornerMenu } from '~/components/menu/CornerMenu';
 

@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes, useCallback, useEffect, useRef } from 'react';
+import { FC, HTMLAttributes, useCallback, useEffect, useRef } from 'react';
 
 import styles from './styles.module.scss';
 
@@ -8,7 +8,13 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
   loadMore: () => void;
 }
 
-const InfiniteScroll: FC<IProps> = ({ children, hasMore, scrollReactPx, loadMore, ...props }) => {
+const InfiniteScroll: FC<IProps> = ({
+  children,
+  hasMore,
+  scrollReactPx,
+  loadMore,
+  ...props
+}) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const onScrollEnd = useCallback(
@@ -16,7 +22,7 @@ const InfiniteScroll: FC<IProps> = ({ children, hasMore, scrollReactPx, loadMore
       if (!hasMore || !entries[0].isIntersecting) return;
       loadMore();
     },
-    [hasMore, loadMore]
+    [hasMore, loadMore],
   );
 
   useEffect(() => {
