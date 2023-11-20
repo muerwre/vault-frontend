@@ -12,10 +12,6 @@ export const URLS = {
     EDITOR: '/examples/edit',
     IMAGE: '/examples/image',
   },
-  ERRORS: {
-    NOT_FOUND: '/lost',
-    BACKEND_DOWN: '/oopsie',
-  },
   NODE_URL: (id: INode['id'] | string) => `/post${id}`,
   PROFILE_PAGE: (username: string) => `/profile/${username}`,
   SETTINGS: {
