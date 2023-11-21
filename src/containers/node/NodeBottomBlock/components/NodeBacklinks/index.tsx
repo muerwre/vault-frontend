@@ -6,7 +6,10 @@ import { Backlink } from '~/components/node/Backlink';
 import { NodeBackLink } from '~/types';
 import { has } from '~/utils/ramda';
 
-import { BACKLINK_TITLES, SOCIAL_ICONS } from '../../../constants/auth/socials';
+import {
+  BACKLINK_TITLES,
+  SOCIAL_ICONS,
+} from '../../../../../constants/auth/socials';
 
 import styles from './styles.module.scss';
 

@@ -9,7 +9,6 @@ import { NodeDeletedBadge } from '~/components/node/NodeDeletedBadge';
 import { NodeNoComments } from '~/components/node/NodeNoComments';
 import { NodeRelatedBlock } from '~/components/node/NodeRelatedBlock';
 import { NodeTagsBlock } from '~/components/node/NodeTagsBlock';
-import { NodeBacklinks } from '~/containers/node/NodeBacklinks';
 import { NodeComments } from '~/containers/node/NodeComments';
 import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { useCommentContext } from '~/utils/context/CommentContextProvider';
@@ -18,6 +17,7 @@ import { useNodeRelatedContext } from '~/utils/context/NodeRelatedContextProvide
 
 import { NodeCommentFormSSR } from '../NodeCommentForm/ssr';
 
+import { NodeBacklinks } from './components/NodeBacklinks';
 import styles from './styles.module.scss';
 
 interface IProps {
