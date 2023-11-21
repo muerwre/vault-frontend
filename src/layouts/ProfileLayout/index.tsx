@@ -2,7 +2,6 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { FlowGrid } from '~/components/flow/FlowGrid';
 import { Container } from '~/containers/main/Container';
 import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
 import { useUser } from '~/hooks/auth/useUser';
@@ -34,7 +33,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
           </div>
         </div>
 
-        <FlowGrid nodes={nodes} user={user} onChangeCellView={console.log} />
+        <div>here should be grid</div>
       </div>
     </Container>
   );

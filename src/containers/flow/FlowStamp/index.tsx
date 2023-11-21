@@ -5,14 +5,15 @@ import classNames from 'classnames';
 import { Group } from '~/components/common/Group';
 import { Icon } from '~/components/common/Icon';
 import { Superpower } from '~/components/common/Superpower';
-import { FlowRecent } from '~/components/flow/FlowRecent';
-import { FlowSearchResults } from '~/components/flow/FlowSearchResults';
 import { InputText } from '~/components/input/InputText';
 import { Toggle } from '~/components/input/Toggle';
 import { experimentalFeatures } from '~/constants/features';
 import styles from '~/containers/flow/FlowStamp/styles.module.scss';
 import { useFlowContext } from '~/utils/providers/FlowProvider';
 import { useSearchContext } from '~/utils/providers/SearchProvider';
+
+import { FlowRecent } from './components/FlowRecent';
+import { FlowSearchResults } from './components/FlowSearchResults';
 
 interface IProps {
   isFluid: boolean;

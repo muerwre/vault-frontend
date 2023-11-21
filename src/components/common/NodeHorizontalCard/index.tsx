@@ -10,13 +10,13 @@ import { getPrettyDate } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   node: Partial<INode>;
-  has_new?: boolean;
+  hasNew?: boolean;
   onClick?: MouseEventHandler;
 }
 
-const FlowRecentItem: FC<IProps> = ({ node, has_new, onClick }) => {
+const NodeHorizontalCard: FC<Props> = ({ node, hasNew, onClick }) => {
   return (
     <Anchor
       key={node.id}
@@ -26,7 +26,7 @@ const FlowRecentItem: FC<IProps> = ({ node, has_new, onClick }) => {
     >
       <div
         className={classNames(styles.thumb, {
-          [styles.new]: has_new,
+          [styles.new]: hasNew,
           [styles.lab]: !node.is_promoted,
         })}
       >
@@ -44,4 +44,4 @@ const FlowRecentItem: FC<IProps> = ({ node, has_new, onClick }) => {
   );
 };
 
-export { FlowRecentItem };
+export { NodeHorizontalCard };

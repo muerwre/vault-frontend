@@ -3,16 +3,16 @@ import { FC, useMemo } from 'react';
 import classNames from 'classnames';
 
 import { Anchor } from '~/components/common/Anchor';
-import { CellShade } from '~/components/flow/CellShade';
-import { FlowCellImage } from '~/components/flow/FlowCellImage';
-import { FlowCellMenu } from '~/components/flow/FlowCellMenu';
-import { FlowCellText } from '~/components/flow/FlowCellText';
 import { MenuDots } from '~/components/menu/MenuDots';
 import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';
 import { FlowDisplay, INode } from '~/types';
 
+import { CellShade } from './components/CellShade';
+import { FlowCellImage } from './components/FlowCellImage';
+import { FlowCellMenu } from './components/FlowCellMenu';
+import { FlowCellText } from './components/FlowCellText';
 import styles from './styles.module.scss';
 
 interface Props {

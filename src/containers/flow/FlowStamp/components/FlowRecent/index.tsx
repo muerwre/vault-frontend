@@ -1,8 +1,7 @@
 import { FC } from 'react';
 
+import { NodeHorizontalCard } from '~/components/common/NodeHorizontalCard';
 import { IFlowNode } from '~/types';
-
-import { FlowRecentItem } from '../FlowRecentItem';
 
 import styles from './styles.module.scss';
 
@@ -17,13 +16,15 @@ const FlowRecent: FC<IProps> = ({ recent, updated }) => {
       <div className={styles.updates}>
         {updated &&
           updated.map((node) => (
-            <FlowRecentItem node={node} key={node.id} has_new />
+            <NodeHorizontalCard node={node} key={node.id} hasNew />
           ))}
       </div>
 
       <div className={styles.recent}>
         {recent &&
-          recent.map((node) => <FlowRecentItem node={node} key={node.id} />)}
+          recent.map((node) => (
+            <NodeHorizontalCard node={node} key={node.id} />
+          ))}
       </div>
     </>
   );

@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
 import { Group } from '~/components/common/Group';
+import { NodeHorizontalCard } from '~/components/common/NodeHorizontalCard';
 import { SubTitle } from '~/components/common/SubTitle';
-import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
 import { LabFactoryBanner } from '~/components/lab/LabFactoryBanner';
 import { LabHeroes } from '~/components/lab/LabHeroes';
 import { LabTags } from '~/components/lab/LabTags';
@@ -40,7 +40,7 @@ const LabStats: FC<IProps> = () => {
               <div className={styles.title}>Новые</div>
               <Group className={styles.updates}>
                 {updates.slice(0, 10).map((node) => (
-                  <FlowRecentItem node={node} key={node.id} has_new />
+                  <NodeHorizontalCard node={node} key={node.id} hasNew />
                 ))}
               </Group>
             </>

@@ -3,8 +3,8 @@ import { VFC } from 'react';
 import { Filler } from '~/components/common/Filler';
 import { Group } from '~/components/common/Group';
 import { Icon } from '~/components/common/Icon';
+import { NodeHorizontalCard } from '~/components/common/NodeHorizontalCard';
 import { Padder } from '~/components/common/Padder';
-import { FlowRecentItem } from '~/components/flow/FlowRecentItem';
 import { InputText } from '~/components/input/InputText';
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { useFlowStore } from '~/store/flow/useFlowStore';
@@ -34,7 +34,7 @@ const SettingsDeleted: VFC<SettingsDeletedProps> = () => {
       <div className={styles.grid}>
         {nodes.map((node) => (
           <div className={styles.item} key={node.id}>
-            <FlowRecentItem node={node} key={node.id} />
+            <NodeHorizontalCard node={node} key={node.id} />
           </div>
         ))}
       </div>

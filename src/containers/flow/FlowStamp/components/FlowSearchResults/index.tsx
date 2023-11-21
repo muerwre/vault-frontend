@@ -2,9 +2,8 @@ import { FC } from 'react';
 
 import { Icon } from '~/components/common/Icon';
 import { InfiniteScroll } from '~/components/common/InfiniteScroll';
+import { NodeHorizontalCard } from '~/components/common/NodeHorizontalCard';
 import { INode } from '~/types';
-
-import { FlowRecentItem } from '../FlowRecentItem';
 
 import styles from './styles.module.scss';
 
@@ -15,12 +14,7 @@ interface IProps {
   onLoadMore: () => void;
 }
 
-const FlowSearchResults: FC<IProps> = ({
-  results,
-  isLoading,
-  onLoadMore,
-  hasMore,
-}) => {
+const FlowSearchResults: FC<IProps> = ({ results, onLoadMore, hasMore }) => {
   if (!results.length) {
     return (
       <div className={styles.loading}>
@@ -34,7 +28,7 @@ const FlowSearchResults: FC<IProps> = ({
     <div className={styles.wrap}>
       <InfiniteScroll hasMore={hasMore} loadMore={onLoadMore}>
         {results.map((node) => (
-          <FlowRecentItem node={node} key={node.id} />
+          <NodeHorizontalCard node={node} key={node.id} />
         ))}
       </InfiniteScroll>
     </div>

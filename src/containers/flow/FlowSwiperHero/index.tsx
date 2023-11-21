@@ -27,20 +27,6 @@ const autoplay = {
   disableOnInteraction: false,
 };
 
-const lazy = {
-  enabled: true,
-  loadPrevNextAmount: 2,
-  loadOnTransitionStart: true,
-  loadPrevNext: true,
-  checkInView: true,
-};
-
-const getSrcSet = (url?: string) =>
-  [
-    `${getURLFromString(url, imagePresets.cover)} 768w`,
-    `${getURLFromString(url, imagePresets.small_hero)}`,
-  ].join(', ');
-
 export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
   const { isTablet } = useWindowSize();
   const { push } = useNavigation();

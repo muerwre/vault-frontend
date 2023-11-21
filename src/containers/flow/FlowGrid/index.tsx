@@ -3,7 +3,6 @@ import { FC, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { FlowCell } from '~/components/flow/FlowCell';
 import { flowDisplayToPreset, URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { FlowDisplay, IFlowNode, INode } from '~/types';
@@ -11,6 +10,7 @@ import { IUser } from '~/types/auth';
 import { getURLFromString } from '~/utils/dom';
 import { canEditNode } from '~/utils/node';
 
+import { FlowCell } from './components/FlowCell';
 import styles from './styles.module.scss';
 
 interface Props {

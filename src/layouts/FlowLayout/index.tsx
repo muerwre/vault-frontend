@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { FlowGrid } from '~/components/flow/FlowGrid';
-import { FlowLoginStamp } from '~/components/flow/FlowLoginStamp';
-import { FlowSwiperHero } from '~/components/flow/FlowSwiperHero';
+import { FlowGrid } from '~/containers/flow/FlowGrid';
+import { FlowLoginStamp } from '~/containers/flow/FlowLoginStamp';
 import { FlowStamp } from '~/containers/flow/FlowStamp';
+import { FlowSwiperHero } from '~/containers/flow/FlowSwiperHero';
 import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useInfiniteLoader } from '~/hooks/dom/useInfiniteLoader';
