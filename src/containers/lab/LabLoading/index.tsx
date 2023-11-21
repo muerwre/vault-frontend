@@ -1,9 +1,10 @@
 import { FC, memo } from 'react';
 
 import { Columns } from '~/components/common/Columns';
-import { LabNode } from '~/components/lab/LabNode';
 import { EMPTY_NODE, NODE_TYPES } from '~/constants/node';
 import { values } from '~/utils/ramda';
+
+import { LabNode } from '../LabGrid/components/LabNode';
 
 interface LabLoadingProps {}
 

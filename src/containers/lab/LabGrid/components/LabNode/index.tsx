@@ -3,22 +3,22 @@ import { FC, useMemo } from 'react';
 import classNames from 'classnames';
 import { isAfter, parseISO } from 'date-fns';
 
-import { LabBottomPanel } from '~/components/lab/LabBottomPanel';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
-import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { INode } from '~/types';
 
+import { LabBottomPanel } from './components/LabBottomPanel';
+import { useLabNodeBlocks } from './hooks/useLabNodeBlocks';
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   node: INode;
   lastSeen: string | null | undefined;
   isLoading?: boolean;
   commentCount: number;
 }
 
-const LabNode: FC<IProps> = ({ node, isLoading, lastSeen, commentCount }) => {
-  const { lab } = useNodeBlocks(node, !!isLoading);
+const LabNode: FC<Props> = ({ node, isLoading, lastSeen, commentCount }) => {
+  const blocks = useLabNodeBlocks(node, !!isLoading);
 
   const hasNewComments = useMemo(
     () =>
@@ -32,7 +32,8 @@ const LabNode: FC<IProps> = ({ node, isLoading, lastSeen, commentCount }) => {
 
   return (
     <div className={classNames(styles.wrap)} style={{ background }}>
-      {lab}
+      {blocks}
+
       <LabBottomPanel
         node={node}
         isLoading={isLoading}

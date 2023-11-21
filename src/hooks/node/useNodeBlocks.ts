@@ -2,7 +2,6 @@ import { createElement, FC, useCallback, useMemo } from 'react';
 
 import {
   NodeComponentProps,
-  LAB_PREVIEW_LAYOUT,
   NODE_COMPONENTS,
   NODE_HEADS,
   NODE_INLINES,
@@ -43,15 +42,5 @@ export const useNodeBlocks = (node: INode, isLoading: boolean) => {
     [node, createNodeBlock],
   );
 
-  const lab = useMemo(
-    () =>
-      node?.type && prop(node.type, LAB_PREVIEW_LAYOUT)
-        ? prop(node.type, LAB_PREVIEW_LAYOUT).map((comp, i) =>
-            createNodeBlock(comp, i),
-          )
-        : undefined,
-    [node, createNodeBlock],
-  );
-
-  return { head, block, inline, lab };
+  return { head, block, inline };
 };

@@ -1,12 +1,5 @@
 import { FC } from 'react';
 
-import { LabAudio } from '~/components/lab/LabAudioBlock';
-import { LabDescription } from '~/components/lab/LabDescription';
-import { LabImage } from '~/components/lab/LabImage';
-import { LabNodeTitle } from '~/components/lab/LabNodeTitle';
-import { LabPad } from '~/components/lab/LabPad';
-import { LabText } from '~/components/lab/LabText';
-import { LabVideo } from '~/components/lab/LabVideo';
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 import { NodeAudioImageBlock } from '~/components/node/NodeAudioImageBlock';
 import { NodeImageSwiperBlock } from '~/components/node/NodeImageSwiperBlock';
@@ -51,20 +44,6 @@ export type INodeComponents = Record<
   ValueOf<typeof NODE_TYPES>,
   FC<NodeComponentProps>
 >;
-
-export const LAB_PREVIEW_LAYOUT: Record<string, FC<NodeComponentProps>[]> = {
-  [NODE_TYPES.IMAGE]: [LabImage, LabPad, LabNodeTitle, LabDescription],
-  [NODE_TYPES.VIDEO]: [LabVideo, LabPad, LabNodeTitle, LabDescription],
-  [NODE_TYPES.AUDIO]: [
-    LabPad,
-    LabNodeTitle,
-    LabPad,
-    NodeAudioImageBlock,
-    LabAudio,
-    LabPad,
-  ],
-  [NODE_TYPES.TEXT]: [LabPad, LabNodeTitle, LabPad, LabText, LabPad],
-};
 
 export const NODE_HEADS: INodeComponents = {
   [NODE_TYPES.IMAGE]: NodeImageSwiperBlock,

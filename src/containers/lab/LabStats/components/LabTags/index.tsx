@@ -4,7 +4,7 @@ import { Placeholder } from '~/components/placeholders/Placeholder';
 import { Tag } from '~/components/tags/Tag';
 import { ITag } from '~/types';
 
-import styles from './/styles.module.scss';
+import styles from './styles.module.scss';
 
 interface IProps {
   tags: ITag[];

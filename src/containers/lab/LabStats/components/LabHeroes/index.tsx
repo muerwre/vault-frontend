@@ -1,9 +1,10 @@
 import { FC } from 'react';
 
 import { Group } from '~/components/common/Group';
-import { LabHero } from '~/components/lab/LabHero';
 import styles from '~/containers/lab/LabStats/styles.module.scss';
 import { INode } from '~/types';
+
+import { LabHero } from './components/LabHero';
 
 interface IProps {
   nodes: Partial<INode>[];

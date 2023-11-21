@@ -1,13 +1,9 @@
-import { FC } from 'react';
-
 import { Group } from '~/components/common/Group';
-import { LabSquare } from '~/components/lab/LabSquare';
 
+import { LabSquare } from './components/LabSquare';
 import styles from './styles.module.scss';
 
-interface IProps {}
-
-const LabBanner: FC<IProps> = () => (
+const LabBanner = () => (
   <LabSquare className={styles.wrap}>
     <Group>
       <div className={styles.title}>Лаборатория!</div>

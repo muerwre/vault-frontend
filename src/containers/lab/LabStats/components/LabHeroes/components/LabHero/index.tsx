@@ -10,12 +10,12 @@ import { getPrettyDate } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   node?: Partial<INode>;
   isLoading?: boolean;
 }
 
-const LabHero: FC<IProps> = ({ node, isLoading }) => {
+const LabHero: FC<Props> = ({ node, isLoading }) => {
   const { push } = useNavigation();
   const onClick = useCallback(() => {
     push(URLS.NODE_URL(node?.id));

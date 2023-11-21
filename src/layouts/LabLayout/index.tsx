@@ -2,8 +2,8 @@ import { FC } from 'react';
 
 import { Group } from '~/components/common/Group';
 import { Sticky } from '~/components/common/Sticky';
-import { LabHead } from '~/components/lab/LabHead';
 import { LabGrid } from '~/containers/lab/LabGrid';
+import { LabHead } from '~/containers/lab/LabHead';
 import { LabLoading } from '~/containers/lab/LabLoading';
 import { LabStats } from '~/containers/lab/LabStats';
 import { Container } from '~/containers/main/Container';

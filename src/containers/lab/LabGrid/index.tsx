@@ -2,10 +2,10 @@ import { FC, memo } from 'react';
 
 import { Columns } from '~/components/common/Columns';
 import { Hoverable } from '~/components/common/Hoverable';
-import { LabNoResults } from '~/components/lab/LabNoResults';
-import { LabNode } from '~/components/lab/LabNode';
 import { useLabContext } from '~/utils/context/LabContextProvider';
 
+import { LabNoResults } from './components/LabNoResults';
+import { LabNode } from './components/LabNode';
 import styles from './styles.module.scss';
 
 interface IProps {}

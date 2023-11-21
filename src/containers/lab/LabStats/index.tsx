@@ -3,11 +3,11 @@ import { FC } from 'react';
 import { Group } from '~/components/common/Group';
 import { NodeHorizontalCard } from '~/components/common/NodeHorizontalCard';
 import { SubTitle } from '~/components/common/SubTitle';
-import { LabFactoryBanner } from '~/components/lab/LabFactoryBanner';
-import { LabHeroes } from '~/components/lab/LabHeroes';
-import { LabTags } from '~/components/lab/LabTags';
+import { LabHeroes } from '~/containers/lab/LabStats/components/LabHeroes';
 import { useLabContext } from '~/utils/context/LabContextProvider';
 
+import { LabFactoryBanner } from './components/LabFactoryBanner';
+import { LabTags } from './components/LabTags';
 import styles from './styles.module.scss';
 
 interface IProps {}
