@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import { AudioPlayer } from '~/components/media/AudioPlayer';
+import { AudioPlayer } from '~/components/common/AudioPlayer';
 import { AudioUpload } from '~/components/upload/AudioUpload';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';

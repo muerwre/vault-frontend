@@ -20,17 +20,15 @@ const SettingsMenu: VFC<SettingsMenuProps> = () => (
     <Group>
       <VerticalMenu className={styles.menu}>
         <Link href={URLS.SETTINGS.BASE} passHref>
-          <VerticalMenu.Item onClick={console.log}>Настройки</VerticalMenu.Item>
+          <VerticalMenu.Item>Настройки</VerticalMenu.Item>
         </Link>
 
         <Link href={URLS.SETTINGS.NOTES} passHref>
-          <VerticalMenu.Item onClick={console.log}>Заметки</VerticalMenu.Item>
+          <VerticalMenu.Item>Заметки</VerticalMenu.Item>
         </Link>
 
         <Link href={URLS.SETTINGS.TRASH} passHref>
-          <VerticalMenu.Item onClick={console.log}>
-            Удалённые посты
-          </VerticalMenu.Item>
+          <VerticalMenu.Item>Удалённые посты</VerticalMenu.Item>
         </Link>
       </VerticalMenu>
 

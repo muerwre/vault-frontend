@@ -10,8 +10,8 @@ import {
 
 import classnames from 'classnames';
 
+import { AudioPlayer } from '~/components/common/AudioPlayer';
 import { Group } from '~/components/common/Group';
-import { AudioPlayer } from '~/components/media/AudioPlayer';
 import { UploadType } from '~/constants/uploads';
 import { IComment, IFile } from '~/types';
 import { formatCommentText, getPrettyDate } from '~/utils/dom';

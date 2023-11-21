@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { AudioPlayer } from '~/components/media/AudioPlayer';
+import { AudioPlayer } from '~/components/common/AudioPlayer';
 import { NodeComponentProps } from '~/constants/node';
 import { useNodeAudios } from '~/hooks/node/useNodeAudios';
 
