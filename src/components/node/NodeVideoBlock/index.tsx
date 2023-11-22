@@ -5,9 +5,9 @@ import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
-interface IProps extends NodeComponentProps {}
+interface Props extends NodeComponentProps {}
 
-const NodeVideoBlock: FC<IProps> = ({ node }) => {
+const NodeVideoBlock: FC<Props> = ({ node }) => {
   const video = useMemo(() => {
     const url: string = path(['blocks', 0, 'url'], node) || '';
     const match =

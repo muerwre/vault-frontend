@@ -4,11 +4,11 @@ import { Button } from '~/components/input/Button';
 import { ButtonGroup } from '~/components/input/ButtonGroup';
 import { COMMENT_FILE_TYPES } from '~/constants/uploads';
 
-interface IProps {
+interface Props {
   onUpload: (files: File[]) => void;
 }
 
-const CommentFormAttachButtons: FC<IProps> = ({ onUpload }) => {
+const CommentFormAttachButtons: FC<Props> = ({ onUpload }) => {
   const onInputChange = useCallback(
     (event) => {
       event.preventDefault();

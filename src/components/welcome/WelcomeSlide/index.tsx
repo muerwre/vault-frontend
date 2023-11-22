@@ -2,8 +2,8 @@ import { FC } from 'react';
 
 import classNames from 'classnames';
 
+import { Container } from '~/components/common/Container';
 import { Filler } from '~/components/common/Filler';
-import { Container } from '~/containers/main/Container';
 import { useAuth } from '~/hooks/auth/useAuth';
 import markdown from '~/styles/common/markdown.module.scss';
 

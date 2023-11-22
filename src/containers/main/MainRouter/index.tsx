@@ -10,9 +10,9 @@ import BorisPage from '~/pages/boris';
 import LabPage from '~/pages/lab';
 import NodePage from '~/pages/node/[id]';
 
-interface IProps {}
+interface Props {}
 
-const MainRouter: FC<IProps> = () => {
+const MainRouter: FC<Props> = () => {
   const { isUser } = useAuth();
   const location = useLocation();
 

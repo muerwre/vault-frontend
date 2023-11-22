@@ -12,12 +12,12 @@ import { ProfileTabs } from '../ProfileTabs';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   isLoading?: boolean;
   isOwn: boolean;
 }
 
-const ProfileInfo: FC<IProps> = ({ isOwn }) => {
+const ProfileInfo: FC<Props> = ({ isOwn }) => {
   const { user } = useUser();
   const { updatePhoto } = usePatchUser();
   const { profile, isLoading } = useProfileContext();

@@ -5,12 +5,12 @@ import { IFlowNode } from '~/types';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   recent: IFlowNode[];
   updated: IFlowNode[];
 }
 
-const FlowRecent: FC<IProps> = ({ recent, updated }) => {
+const FlowRecent: FC<Props> = ({ recent, updated }) => {
   return (
     <>
       <div className={styles.updates}>

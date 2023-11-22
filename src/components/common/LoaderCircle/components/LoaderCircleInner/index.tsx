@@ -6,12 +6,12 @@ import { describeArc } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-interface IProps extends SVGAttributes<SVGElement> {
+interface Props extends SVGAttributes<SVGElement> {
   size: number;
   className?: string;
 }
 
-const LoaderCircleInner: FC<IProps> = ({ size, className, ...props }) => (
+const LoaderCircleInner: FC<Props> = ({ size, className, ...props }) => (
   <svg
     className={classNames(styles.icon, className)}
     width={size}

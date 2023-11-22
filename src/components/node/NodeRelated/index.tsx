@@ -8,12 +8,12 @@ import { INode } from '~/types';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   title: ReactElement | string;
   items: Partial<INode>[];
 }
 
-const NodeRelated: FC<IProps> = ({ title, items }) => {
+const NodeRelated: FC<Props> = ({ title, items }) => {
   return (
     <Group className={styles.wrap}>
       <SubTitle className={styles.title}>{title}</SubTitle>

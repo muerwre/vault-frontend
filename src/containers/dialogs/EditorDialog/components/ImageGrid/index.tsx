@@ -5,13 +5,13 @@ import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
 
-interface IProps {
+interface Props {
   files: IFile[];
   setFiles: (val: IFile[]) => void;
   locked: UploadStatus[];
 }
 
-const ImageGrid: FC<IProps> = ({ files, setFiles, locked }) => {
+const ImageGrid: FC<Props> = ({ files, setFiles, locked }) => {
   const { isTablet } = useWindowSize();
 
   const onMove = useCallback(

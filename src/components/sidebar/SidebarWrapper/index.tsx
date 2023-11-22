@@ -6,13 +6,13 @@ import { useCloseOnEscape } from '~/hooks';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   onClose?: () => void;
   closeOnBackdropClick?: boolean;
   backdrop?: ReactNode;
 }
 
-const SidebarWrapper: FC<IProps> = ({
+const SidebarWrapper: FC<Props> = ({
   children,
   onClose,
   closeOnBackdropClick = true,

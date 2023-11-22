@@ -7,7 +7,7 @@ import { Icon } from '~/components/common/Icon';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   id?: string;
   title?: string;
   progress?: number;
@@ -16,13 +16,7 @@ interface IProps {
   uploading?: boolean;
 }
 
-const AudioUpload: FC<IProps> = ({
-  title,
-  progress,
-  uploading,
-  id,
-  onDrop,
-}) => {
+const AudioUpload: FC<Props> = ({ title, progress, uploading, id, onDrop }) => {
   const onDropFile = useCallback(() => {
     if (!id || !onDrop) return;
     onDrop(id);

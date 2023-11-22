@@ -2,13 +2,13 @@ import { FC, HTMLAttributes, useCallback, useEffect, useRef } from 'react';
 
 import styles from './styles.module.scss';
 
-interface IProps extends HTMLAttributes<HTMLDivElement> {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   hasMore: boolean;
   scrollReactPx?: number;
   loadMore: () => void;
 }
 
-const InfiniteScroll: FC<IProps> = ({
+const InfiniteScroll: FC<Props> = ({
   children,
   hasMore,
   scrollReactPx,

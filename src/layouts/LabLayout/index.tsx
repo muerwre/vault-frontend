@@ -1,22 +1,22 @@
 import { FC } from 'react';
 
+import { Container } from '~/components/common/Container';
 import { Group } from '~/components/common/Group';
 import { Sticky } from '~/components/common/Sticky';
 import { LabGrid } from '~/containers/lab/LabGrid';
 import { LabHead } from '~/containers/lab/LabHead';
 import { LabLoading } from '~/containers/lab/LabLoading';
 import { LabStats } from '~/containers/lab/LabStats';
-import { Container } from '~/containers/main/Container';
 import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
 import { useLabContext } from '~/utils/context/LabContextProvider';
 
 import styles from './styles.module.scss';
 
-interface IProps {}
+interface Props {}
 
 const loader = <LabLoading />;
 
-const LabLayout: FC<IProps> = () => {
+const LabLayout: FC<Props> = () => {
   const { isLoading } = useLabContext();
 
   return (

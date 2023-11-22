@@ -7,14 +7,14 @@ import { INode } from '~/types';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   isLoading: boolean;
   results: INode[];
   hasMore: boolean;
   onLoadMore: () => void;
 }
 
-const FlowSearchResults: FC<IProps> = ({ results, onLoadMore, hasMore }) => {
+const FlowSearchResults: FC<Props> = ({ results, onLoadMore, hasMore }) => {
   if (!results.length) {
     return (
       <div className={styles.loading}>

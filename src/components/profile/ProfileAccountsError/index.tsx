@@ -6,12 +6,12 @@ import { ERROR_LITERAL } from '~/constants/errors';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   onClose: () => void;
   error: string;
 }
 
-const ProfileAccountsError: FC<IProps> = ({ onClose, error }) => (
+const ProfileAccountsError: FC<Props> = ({ onClose, error }) => (
   <div className={styles.wrap}>
     <Group className={styles.content}>
       <div className={styles.title}>О НЕТ!</div>

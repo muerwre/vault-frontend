@@ -10,9 +10,9 @@ import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
-interface IProps extends NodeComponentProps {}
+interface Props extends NodeComponentProps {}
 
-const NodeTextBlock: FC<IProps> = ({ node }) => {
+const NodeTextBlock: FC<Props> = ({ node }) => {
   const content = useMemo(
     () => formatTextParagraphs(path(['blocks', 0, 'text'], node) || ''),
     [node],

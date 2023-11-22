@@ -8,7 +8,7 @@ import { IFile } from '~/types';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   id?: IFile['id'];
   thumb?: string;
   progress?: number;
@@ -17,13 +17,7 @@ interface IProps {
   uploading?: boolean;
 }
 
-const ImageUpload: FC<IProps> = ({
-  thumb,
-  progress,
-  uploading,
-  id,
-  onDrop,
-}) => {
+const ImageUpload: FC<Props> = ({ thumb, progress, uploading, id, onDrop }) => {
   const onDropFile = useCallback(() => {
     if (!id || !onDrop) return;
     onDrop(id);

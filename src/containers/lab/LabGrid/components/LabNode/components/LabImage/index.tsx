@@ -12,9 +12,9 @@ import { getURL } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-interface IProps extends NodeComponentProps {}
+interface Props extends NodeComponentProps {}
 
-const LabImage: FC<IProps> = ({ node, isLoading }) => {
+const LabImage: FC<Props> = ({ node, isLoading }) => {
   const images = useNodeImages(node);
   const onClick = useGotoNode(node.id);
 

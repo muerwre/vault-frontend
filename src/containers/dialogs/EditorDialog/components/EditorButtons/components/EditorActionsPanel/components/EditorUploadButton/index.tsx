@@ -10,14 +10,14 @@ import { getFileType } from '~/utils/uploader';
 
 import styles from './styles.module.scss';
 
-type IProps = IEditorComponentProps & {
+type Props = IEditorComponentProps & {
   accept?: string;
   icon?: string;
   type?: UploadType;
   label?: string;
 };
 
-const EditorUploadButton: FC<IProps> = ({
+const EditorUploadButton: FC<Props> = ({
   accept = 'image/*',
   icon = 'plus',
   type = UploadType.Image,

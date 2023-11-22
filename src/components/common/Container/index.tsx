@@ -4,11 +4,11 @@ import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   className?: string;
 }
 
-const Container: FC<IProps> = ({ className, children }) => (
+const Container: FC<Props> = ({ className, children }) => (
   <div className={classNames(styles.container, className)}>{children}</div>
 );
 

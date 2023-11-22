@@ -10,9 +10,9 @@ import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
-type IProps = NodeEditorProps & {};
+type Props = NodeEditorProps & {};
 
-const VideoEditor: FC<IProps> = () => {
+const VideoEditor: FC<Props> = () => {
   const { values, setFieldValue } = useNodeFormContext();
 
   const setUrl = useCallback(

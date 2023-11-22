@@ -8,13 +8,13 @@ import styles from './styles.module.scss';
 
 type ToggleColor = 'primary' | 'secondary' | 'lab' | 'danger' | 'white';
 
-type IProps = Omit<ButtonProps, 'value' | 'color'> & {
+type Props = Omit<ButtonProps, 'value' | 'color'> & {
   value?: boolean;
   handler?: (val: boolean) => void;
   color?: ToggleColor;
 };
 
-const Toggle: FC<IProps> = ({ value, handler, color = 'primary', ...rest }) => {
+const Toggle: FC<Props> = ({ value, handler, color = 'primary', ...rest }) => {
   const onClick = useCallback(() => {
     if (!handler) {
       return;

@@ -6,14 +6,14 @@ import { INode } from '~/types';
 
 import { LabHero } from './components/LabHero';
 
-interface IProps {
+interface Props {
   nodes: Partial<INode>[];
   isLoading: boolean;
 }
 
 const empty = [...new Array(5)].map((_, i) => i);
 
-const LabHeroes: FC<IProps> = ({ nodes, isLoading }) => {
+const LabHeroes: FC<Props> = ({ nodes, isLoading }) => {
   if (isLoading) {
     return (
       <Group className={styles.heroes}>

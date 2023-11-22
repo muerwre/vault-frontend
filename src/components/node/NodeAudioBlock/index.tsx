@@ -6,9 +6,9 @@ import { useNodeAudios } from '~/hooks/node/useNodeAudios';
 
 import styles from './styles.module.scss';
 
-interface IProps extends NodeComponentProps {}
+interface Props extends NodeComponentProps {}
 
-const NodeAudioBlock: FC<IProps> = ({ node }) => {
+const NodeAudioBlock: FC<Props> = ({ node }) => {
   const audios = useNodeAudios(node);
 
   return (

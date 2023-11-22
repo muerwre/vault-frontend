@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Container } from '~/containers/main/Container';
+import { Container } from '~/components/common/Container';
 import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
 import { useUser } from '~/hooks/auth/useUser';
 import { useGetProfile } from '~/hooks/profile/useGetProfile';

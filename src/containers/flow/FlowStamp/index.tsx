@@ -15,12 +15,12 @@ import { useSearchContext } from '~/utils/providers/SearchProvider';
 import { FlowRecent } from './components/FlowRecent';
 import { FlowSearchResults } from './components/FlowSearchResults';
 
-interface IProps {
+interface Props {
   isFluid: boolean;
   onToggleLayout: () => void;
 }
 
-const FlowStamp: FC<IProps> = ({ isFluid, onToggleLayout }) => {
+const FlowStamp: FC<Props> = ({ isFluid, onToggleLayout }) => {
   const {
     searchText,
     hasMore: searchHasMore,

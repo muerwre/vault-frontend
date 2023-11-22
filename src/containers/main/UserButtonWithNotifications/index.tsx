@@ -1,10 +1,11 @@
 import { FC, useCallback } from 'react';
 
-import { UserButton } from '~/components/main/UserButton';
 import { SidebarName } from '~/constants/sidebar';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useNotifications } from '~/utils/providers/NotificationProvider';
 import { useSidebar } from '~/utils/providers/SidebarProvider';
+
+import { UserButton } from './components/UserButton';
 
 interface UserButtonWithNotificationsProps {}
 

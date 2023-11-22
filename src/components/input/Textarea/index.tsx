@@ -16,7 +16,7 @@ import { useForwardRef } from '~/hooks/dom/useForwardRef';
 
 import styles from './styles.module.scss';
 
-type IProps = DetailedHTMLProps<
+type Props = DetailedHTMLProps<
   TextareaHTMLAttributes<HTMLTextAreaElement>,
   HTMLTextAreaElement
 > & {
@@ -29,7 +29,7 @@ type IProps = DetailedHTMLProps<
   title?: string;
 };
 
-const Textarea = forwardRef<HTMLTextAreaElement, IProps>(
+const Textarea = forwardRef<HTMLTextAreaElement, Props>(
   (
     {
       placeholder,

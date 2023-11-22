@@ -4,12 +4,12 @@ import { describeArc } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   size: number;
   progress?: number;
 }
 
-export const ArcProgress: FC<IProps> = ({ size, progress = 0 }) => (
+export const ArcProgress: FC<Props> = ({ size, progress = 0 }) => (
   <svg className={styles.icon} width={size} height={size}>
     <path
       d={describeArc(

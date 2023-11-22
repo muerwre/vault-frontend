@@ -4,9 +4,9 @@ import { Button } from '~/components/input/Button';
 
 import styles from './styles.module.scss';
 
-interface IProps {}
+interface Props {}
 
-const LoginSocialRegisterButtons: FC<IProps> = () => (
+const LoginSocialRegisterButtons: FC<Props> = () => (
   <div className={styles.wrap}>
     <Button>Впустите меня!</Button>
   </div>

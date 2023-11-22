@@ -9,7 +9,7 @@ import { DivProps } from '~/utils/types';
 import { CommentAvatar } from './components/CommentAvatar';
 import styles from './styles.module.scss';
 
-type IProps = DivProps & {
+type Props = DivProps & {
   user?: IUser;
   isEmpty?: boolean;
   isLoading?: boolean;
@@ -17,7 +17,7 @@ type IProps = DivProps & {
   isNew?: boolean;
 };
 
-const CommentWrapper: FC<IProps> = ({
+const CommentWrapper: FC<Props> = ({
   user,
   className,
   isEmpty,

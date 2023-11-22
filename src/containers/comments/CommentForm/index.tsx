@@ -18,7 +18,7 @@ import { CommentFormFormatButtons } from './components/CommentFormFormatButtons'
 import { CommentFormTextarea } from './components/CommentFormTextarea';
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   comment?: IComment;
   allowUploads?: boolean;
 
@@ -26,7 +26,7 @@ interface IProps {
   onCancelEdit?: () => void;
 }
 
-const CommentForm: FC<IProps> = observer(
+const CommentForm: FC<Props> = observer(
   ({ comment, allowUploads, saveComment, onCancelEdit }) => {
     const [textarea, setTextArea] = useState<HTMLTextAreaElement | null>(null);
     const uploader = useUploaderContext();

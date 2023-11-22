@@ -7,11 +7,11 @@ import { OAuthProvider } from '~/types/auth';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   openOauthWindow: (provider: OAuthProvider) => void;
 }
 
-const LoginDialogButtons: FC<IProps> = ({ openOauthWindow }) => (
+const LoginDialogButtons: FC<Props> = ({ openOauthWindow }) => (
   <Group className={styles.footer}>
     <Button>Войти</Button>
 

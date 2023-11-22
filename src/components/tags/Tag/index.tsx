@@ -3,7 +3,7 @@ import { FC, FocusEventHandler, useCallback } from 'react';
 import { TagWrapper } from '~/components/tags/TagWrapper';
 import { ITag } from '~/types';
 
-interface IProps {
+interface Props {
   tag: Partial<ITag>;
   size?: 'normal' | 'big';
 
@@ -16,7 +16,7 @@ interface IProps {
   onDelete?: (id: ITag['ID']) => void;
 }
 
-const Tag: FC<IProps> = ({
+const Tag: FC<Props> = ({
   tag,
   deletable: deletable,
   hoverable: hoverable,

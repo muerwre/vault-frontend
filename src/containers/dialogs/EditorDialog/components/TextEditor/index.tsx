@@ -8,9 +8,9 @@ import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
-type IProps = NodeEditorProps & {};
+type Props = NodeEditorProps & {};
 
-const TextEditor: FC<IProps> = () => {
+const TextEditor: FC<Props> = () => {
   const { values, setFieldValue } = useNodeFormContext();
   const placeholder = useRandomPhrase('SIMPLE');
 

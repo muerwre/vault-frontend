@@ -1,8 +1,9 @@
 import App from 'next/app';
 import Head from 'next/head';
 
+import { BottomContainer } from '~/components/common/BottomContainer';
 import { Modal } from '~/containers/dialogs/Modal';
-import { BottomContainer } from '~/containers/main/BottomContainer';
+import { PlayerView } from '~/containers/player/PlayerView';
 import { DragDetectorProvider } from '~/hooks/dom/useDragDetector';
 import { MainLayout } from '~/layouts/MainLayout';
 import { Sprites } from '~/sprites/Sprites';
@@ -64,7 +65,9 @@ export default class MyApp extends App {
                                 <Component {...pageProps} />
                               </MainLayout>
 
-                              <BottomContainer />
+                              <BottomContainer>
+                                <PlayerView />
+                              </BottomContainer>
                             </SidebarProvider>
                           </NotificationProvider>
                         </AuthProvider>

@@ -10,12 +10,12 @@ import { DivProps } from '~/utils/types';
 
 import styles from './styles.module.scss';
 
-interface IProps extends DivProps {
+interface Props extends DivProps {
   onUpload: (files: File[]) => void;
   helperClassName?: string;
 }
 
-const UploadDropzone: FC<IProps> = ({
+const UploadDropzone: FC<Props> = ({
   children,
   onUpload,
   helperClassName,

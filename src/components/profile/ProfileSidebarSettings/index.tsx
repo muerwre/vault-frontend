@@ -12,7 +12,7 @@ import {
 
 import styles from './styles.module.scss';
 
-interface IProps {}
+interface Props {}
 
 const Form = ({ children, className }) => {
   const { handleSubmit } = useSettings();
@@ -24,7 +24,7 @@ const Form = ({ children, className }) => {
   );
 };
 
-const ProfileSidebarSettings: FC<IProps> = () => {
+const ProfileSidebarSettings: FC<Props> = () => {
   const { closeAllTabs } = useStackContext();
 
   return (

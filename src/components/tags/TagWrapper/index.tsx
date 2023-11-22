@@ -6,7 +6,7 @@ import { Icon } from '~/components/common/Icon';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   className?: string;
   size?: string;
   color?: 'primary' | 'danger' | 'info' | 'black' | 'default';
@@ -18,7 +18,7 @@ interface IProps {
   title?: string;
 }
 
-const TagWrapper: FC<IProps> = ({
+const TagWrapper: FC<Props> = ({
   className,
   color = 'default',
   children,

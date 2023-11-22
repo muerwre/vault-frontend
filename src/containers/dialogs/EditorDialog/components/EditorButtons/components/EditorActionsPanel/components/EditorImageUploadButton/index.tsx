@@ -5,9 +5,9 @@ import { IEditorComponentProps } from '~/types/node';
 
 import { EditorUploadButton } from '../EditorUploadButton';
 
-type IProps = IEditorComponentProps & {};
+type Props = IEditorComponentProps & {};
 
-const EditorImageUploadButton: FC<IProps> = () => (
+const EditorImageUploadButton: FC<Props> = () => (
   <EditorUploadButton
     accept="image/*"
     icon="image"

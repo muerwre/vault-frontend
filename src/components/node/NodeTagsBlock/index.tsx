@@ -3,9 +3,9 @@ import { FC } from 'react';
 import { NodeTags } from '~/components/node/NodeTags';
 import { useTagContext } from '~/utils/context/TagsContextProvider';
 
-interface IProps {}
+interface Props {}
 
-const NodeTagsBlock: FC<IProps> = () => {
+const NodeTagsBlock: FC<Props> = () => {
   const {
     tags,
     canAppend,

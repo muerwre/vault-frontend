@@ -5,11 +5,11 @@ import { INode } from '~/types';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   nodes: INode[];
 }
 
-const TagSidebarList: FC<IProps> = ({ nodes }) => (
+const TagSidebarList: FC<Props> = ({ nodes }) => (
   <div className={styles.list}>
     {nodes.map((node) => (
       <NodeHorizontalCard node={node} key={node.id} />

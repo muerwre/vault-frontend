@@ -5,12 +5,12 @@ import classNames from 'classnames';
 import styles from '~/styles/common/markdown.module.scss';
 import { formatText } from '~/utils/dom';
 
-interface IProps
+interface Props
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   children?: string;
 }
 
-const Markdown: VFC<IProps> = ({ className, children = '', ...props }) => (
+const Markdown: VFC<Props> = ({ className, children = '', ...props }) => (
   <div
     className={classNames(styles.wrapper, className)}
     {...props}

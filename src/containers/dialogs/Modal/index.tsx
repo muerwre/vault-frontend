@@ -7,9 +7,9 @@ import { DIALOG_CONTENT } from '~/constants/modal';
 import { useModalStore } from '~/store/modal/useModalStore';
 import { has } from '~/utils/ramda';
 
-type IProps = {};
+type Props = {};
 
-const Modal: FC<IProps> = observer(() => {
+const Modal: FC<Props> = observer(() => {
   const { current, hide, props } = useModalStore();
 
   if (!current || !has(current, DIALOG_CONTENT)) {

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 
-type IProps = HTMLAttributes<HTMLDivElement> & {
+type Props = HTMLAttributes<HTMLDivElement> & {
   horizontal?: boolean;
   top?: boolean;
   bottom?: boolean;
@@ -12,7 +12,7 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
   seamless?: boolean;
 };
 
-const Group: FC<IProps> = ({
+const Group: FC<Props> = ({
   children,
   className = '',
   horizontal = false,

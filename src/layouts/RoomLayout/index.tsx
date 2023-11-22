@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
 import { Anchor } from '~/components/common/Anchor';
+import { Container } from '~/components/common/Container';
 import { Button } from '~/components/input/Button';
 import { Role } from '~/constants/auth';
 import { Dialog } from '~/constants/modal';
 import { NODE_TYPES } from '~/constants/node';
-import { Container } from '~/containers/main/Container';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import markdown from '~/styles/common/markdown.module.scss';

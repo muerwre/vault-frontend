@@ -8,9 +8,9 @@ import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
-interface IProps extends NodeComponentProps {}
+interface Props extends NodeComponentProps {}
 
-const NodeAudioImageBlock: FC<IProps> = ({ node }) => {
+const NodeAudioImageBlock: FC<Props> = ({ node }) => {
   const images = useNodeImages(node);
 
   if (images.length === 0) return null;

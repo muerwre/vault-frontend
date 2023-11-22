@@ -7,7 +7,7 @@ import { LoaderCircle } from '~/components/common/LoaderCircle';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   children: ReactChild;
   header?: JSX.Element;
   footer?: JSX.Element;
@@ -23,7 +23,7 @@ interface IProps {
   onClose?: () => void;
 }
 
-const BetterScrollDialog: FC<IProps> = ({
+const BetterScrollDialog: FC<Props> = ({
   children,
   header,
   footer,

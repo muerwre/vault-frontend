@@ -24,7 +24,7 @@ import { CommentMenu } from './components/CommentMenu';
 import { COMMENT_BLOCK_RENDERERS } from './constants';
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   prefix?: ReactNode;
   nodeId: number;
   comment: IComment;
@@ -36,7 +36,7 @@ interface IProps {
   onShowImageModal: (images: IFile[], index: number) => void;
 }
 
-const CommentContent: FC<IProps> = memo(
+const CommentContent: FC<Props> = memo(
   ({
     comment,
     nodeId,

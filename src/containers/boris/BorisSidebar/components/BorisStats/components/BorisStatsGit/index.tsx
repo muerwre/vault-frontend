@@ -7,12 +7,12 @@ import { BorisStatsGitCard } from '../BorisStatsGitCard';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   issues: GithubIssue[];
   isLoading: boolean;
 }
 
-const BorisStatsGit: FC<IProps> = ({ issues, isLoading }) => {
+const BorisStatsGit: FC<Props> = ({ issues, isLoading }) => {
   const open = useMemo(
     () =>
       issues

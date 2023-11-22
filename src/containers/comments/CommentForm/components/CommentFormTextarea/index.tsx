@@ -9,11 +9,11 @@ import { Textarea } from '~/components/input/Textarea';
 import { useRandomPhrase } from '~/constants/phrases';
 import { useCommentFormContext } from '~/hooks/comments/useCommentFormFormik';
 
-interface IProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   isLoading?: boolean;
 }
 
-const CommentFormTextarea = forwardRef<HTMLTextAreaElement, IProps>(
+const CommentFormTextarea = forwardRef<HTMLTextAreaElement, Props>(
   ({ ...rest }, ref) => {
     const { values, handleChange, handleSubmit, isSubmitting } =
       useCommentFormContext();

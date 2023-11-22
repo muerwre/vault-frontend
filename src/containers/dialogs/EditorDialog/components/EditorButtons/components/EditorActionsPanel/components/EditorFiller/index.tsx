@@ -5,8 +5,8 @@ import { IEditorComponentProps } from '~/types/node';
 
 import styles from './styles.module.scss';
 
-type IProps = IEditorComponentProps & {};
+type Props = IEditorComponentProps & {};
 
-const EditorFiller: FC<IProps> = () => <Filler className={styles.filler} />;
+const EditorFiller: FC<Props> = () => <Filler className={styles.filler} />;
 
 export { EditorFiller };

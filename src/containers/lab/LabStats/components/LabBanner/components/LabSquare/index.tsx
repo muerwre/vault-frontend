@@ -6,9 +6,9 @@ import { DivProps } from '~/utils/types';
 
 import styles from './styles.module.scss';
 
-interface IProps extends DivProps {}
+interface Props extends DivProps {}
 
-const LabSquare: FC<IProps> = ({ children, ...rest }) => (
+const LabSquare: FC<Props> = ({ children, ...rest }) => (
   <div className={styles.square}>
     <div {...rest} className={classNames(styles.content, rest.className)}>
       {children}

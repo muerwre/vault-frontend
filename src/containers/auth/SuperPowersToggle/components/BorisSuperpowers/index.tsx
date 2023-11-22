@@ -4,12 +4,12 @@ import { Toggle } from '~/components/input/Toggle';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   active?: boolean;
   onChange?: (val: boolean) => void;
 }
 
-const BorisSuperpowers: FC<IProps> = ({ active, onChange }) => {
+const BorisSuperpowers: FC<Props> = ({ active, onChange }) => {
   const onToggle = useCallback(() => {
     if (!onChange) {
       return;

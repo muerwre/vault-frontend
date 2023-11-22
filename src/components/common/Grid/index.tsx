@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 
-type IProps = HTMLAttributes<HTMLDivElement> & {
+type Props = HTMLAttributes<HTMLDivElement> & {
   horizontal?: boolean;
   vertical?: boolean;
   columns?: string;
@@ -15,7 +15,7 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
   stretchy?: boolean;
 };
 
-const Grid: FC<IProps> = ({
+const Grid: FC<Props> = ({
   children,
   className = '',
   horizontal = false,

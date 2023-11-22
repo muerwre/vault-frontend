@@ -23,14 +23,14 @@ const prepareInput = (input: string): string[] => {
     .filter((el) => el.length > 0);
 };
 
-interface IProps {
+interface Props {
   onAppend: (tags: string[]) => void;
   onClearTag: () => string | undefined;
   onSubmit: (last: string[]) => void;
   exclude: string[];
 }
 
-const TagInput: FC<IProps> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
+const TagInput: FC<Props> = ({ exclude, onAppend, onClearTag, onSubmit }) => {
   const [focused, setFocused] = useState(false);
   const [input, setInput] = useState('');
   const ref = useRef<HTMLInputElement>(null);

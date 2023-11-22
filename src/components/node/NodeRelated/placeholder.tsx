@@ -9,9 +9,9 @@ import { range } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
-interface IProps {}
+interface Props {}
 
-const NodeRelatedPlaceholder: FC<IProps> = memo(() => {
+const NodeRelatedPlaceholder: FC<Props> = memo(() => {
   return (
     <Group className={classNames(styles.wrap, styles.placeholder)}>
       <div className={styles.title}>

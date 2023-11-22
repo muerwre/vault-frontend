@@ -2,12 +2,12 @@ import { FC, useMemo } from 'react';
 
 import { CornerMenu } from '~/components/menu/CornerMenu';
 
-interface IProps {
+interface Props {
   onEdit: () => void;
   onDelete: () => void;
 }
 
-const CommentMenu: FC<IProps> = ({ onEdit, onDelete }) => {
+const CommentMenu: FC<Props> = ({ onEdit, onDelete }) => {
   const actions = useMemo(
     () => [
       {

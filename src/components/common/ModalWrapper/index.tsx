@@ -4,11 +4,11 @@ import ReactDOM from 'react-dom';
 
 import styles from './styles.module.scss';
 
-type IProps = {
+type Props = {
   onOverlayClick: MouseEventHandler;
 };
 
-const ModalWrapper: FC<IProps> = ({ children, onOverlayClick }) => {
+const ModalWrapper: FC<Props> = ({ children, onOverlayClick }) => {
   return ReactDOM.createPortal(
     <div className={styles.fixed}>
       <div className={styles.overlay} onClick={onOverlayClick} />

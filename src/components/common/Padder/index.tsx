@@ -4,13 +4,13 @@ import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 
-type IProps = HTMLAttributes<HTMLDivElement> & {
+type Props = HTMLAttributes<HTMLDivElement> & {
   padding?: number;
   vertical?: boolean;
   horizontal?: boolean;
 };
 
-const Padder: FC<IProps> = ({
+const Padder: FC<Props> = ({
   padding,
   children,
   className,

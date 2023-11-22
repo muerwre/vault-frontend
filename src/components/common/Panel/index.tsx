@@ -4,12 +4,12 @@ import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 
-type IProps = HTMLAttributes<HTMLDivElement> & {
+type Props = HTMLAttributes<HTMLDivElement> & {
   seamless?: boolean;
   stretchy?: boolean;
 };
 
-const Panel: FC<IProps> = ({
+const Panel: FC<Props> = ({
   className,
   children,
   seamless,

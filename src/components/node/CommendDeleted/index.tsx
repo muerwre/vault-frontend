@@ -5,12 +5,12 @@ import { IComment } from '~/types';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   id: IComment['id'];
   onDelete: (id: IComment['id'], isLocked: boolean) => void;
 }
 
-const CommendDeleted: FC<IProps> = ({ id, onDelete }) => {
+const CommendDeleted: FC<Props> = ({ id, onDelete }) => {
   const onRestore = useCallback(() => onDelete(id, false), [id, onDelete]);
 
   return (

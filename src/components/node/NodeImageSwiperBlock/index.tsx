@@ -22,9 +22,9 @@ import { getNodeSwiperImageSizes } from './helpers';
 import { NODE_SWIPER_OPTIONS } from './options';
 import styles from './styles.module.scss';
 
-interface IProps extends NodeComponentProps {}
+interface Props extends NodeComponentProps {}
 
-const NodeImageSwiperBlock: FC<IProps> = observer(({ node }) => {
+const NodeImageSwiperBlock: FC<Props> = observer(({ node }) => {
   const [controlledSwiper, setControlledSwiper] = useState<SwiperClass>();
   const showPhotoSwiper = useImageModal();
   const { isOpened: isModalActive } = useModal();

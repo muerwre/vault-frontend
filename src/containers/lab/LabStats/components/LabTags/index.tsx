@@ -6,12 +6,12 @@ import { ITag } from '~/types';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   tags: ITag[];
   isLoading: boolean;
 }
 
-const LabTags: FC<IProps> = ({ tags, isLoading }) => {
+const LabTags: FC<Props> = ({ tags, isLoading }) => {
   if (isLoading) {
     return (
       <div className={styles.tags}>

@@ -10,9 +10,9 @@ import { LabFactoryBanner } from './components/LabFactoryBanner';
 import { LabTags } from './components/LabTags';
 import styles from './styles.module.scss';
 
-interface IProps {}
+interface Props {}
 
-const LabStats: FC<IProps> = () => {
+const LabStats: FC<Props> = () => {
   const { isLoadingStats, tags, heroes, updates } = useLabContext();
 
   return (

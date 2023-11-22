@@ -20,11 +20,11 @@ import { NodeCommentFormSSR } from '../NodeCommentForm/ssr';
 import { NodeBacklinks } from './components/NodeBacklinks';
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   commentsOrder: 'ASC' | 'DESC';
 }
 
-const NodeBottomBlock: FC<IProps> = ({ commentsOrder }) => {
+const NodeBottomBlock: FC<Props> = ({ commentsOrder }) => {
   const { node, isLoading, backlinks } = useNodeContext();
   const {
     comments,

@@ -8,7 +8,7 @@ import { getURL } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   username: string;
   photo?: IFile;
   hasUpdates?: boolean;
@@ -16,7 +16,7 @@ interface IProps {
   onClick?: () => void;
 }
 
-const UserButton: FC<IProps> = ({ username, photo, hasUpdates, onClick }) => {
+const UserButton: FC<Props> = ({ username, photo, hasUpdates, onClick }) => {
   return (
     <button className={styles.wrap} onClick={onClick}>
       <Group horizontal className={styles.user_button}>

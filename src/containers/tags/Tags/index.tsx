@@ -7,7 +7,7 @@ import { ITag } from '~/types';
 import { uniq } from '~/utils/ramda';
 import { separateTags } from '~/utils/tag';
 
-type IProps = HTMLAttributes<HTMLDivElement> & {
+type Props = HTMLAttributes<HTMLDivElement> & {
   tags: Partial<ITag>[];
   deletable?: boolean;
   editable?: boolean;
@@ -16,7 +16,7 @@ type IProps = HTMLAttributes<HTMLDivElement> & {
   onTagDelete?: (id: ITag['ID']) => void;
 };
 
-export const Tags: FC<IProps> = ({
+export const Tags: FC<Props> = ({
   tags,
   deletable,
   editable,

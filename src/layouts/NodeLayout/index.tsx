@@ -3,12 +3,12 @@ import { useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Card } from '~/components/common/Card';
+import { Container } from '~/components/common/Container';
+import { Footer } from '~/components/common/Footer';
 import { ScrollHelperBottom } from '~/components/common/ScrollHelperBottom';
 import { Superpower } from '~/components/common/Superpower';
-import { Footer } from '~/components/main/Footer';
 import { NodeTitle } from '~/components/node/NodeTitle';
 import { Dialog } from '~/constants/modal';
-import { Container } from '~/containers/main/Container';
 import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
 import { NodeBottomBlock } from '~/containers/node/NodeBottomBlock';
 import { useAuth } from '~/hooks/auth/useAuth';

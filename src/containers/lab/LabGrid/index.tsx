@@ -8,9 +8,9 @@ import { LabNoResults } from './components/LabNoResults';
 import { LabNode } from './components/LabNode';
 import styles from './styles.module.scss';
 
-interface IProps {}
+interface Props {}
 
-const LabGrid: FC<IProps> = memo(() => {
+const LabGrid: FC<Props> = memo(() => {
   const { nodes, hasMore, loadMore, search, setSearch, isLoading } =
     useLabContext();
 

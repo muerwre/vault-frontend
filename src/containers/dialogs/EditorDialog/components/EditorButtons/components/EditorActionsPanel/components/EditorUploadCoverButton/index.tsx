@@ -11,9 +11,9 @@ import { getFileType } from '~/utils/uploader';
 
 import styles from './styles.module.scss';
 
-type IProps = IEditorComponentProps & {};
+type Props = IEditorComponentProps & {};
 
-const EditorUploadCoverButton: FC<IProps> = () => {
+const EditorUploadCoverButton: FC<Props> = () => {
   const { values, setFieldValue } = useNodeFormContext();
   const { uploadFile, files, pendingImages } = useUploader(
     UploadSubject.Editor,

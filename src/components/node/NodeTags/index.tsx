@@ -3,7 +3,7 @@ import { FC, memo } from 'react';
 import { Tags } from '~/containers/tags/Tags';
 import { ITag } from '~/types';
 
-interface IProps {
+interface Props {
   is_deletable?: boolean;
   is_editable?: boolean;
   tags: ITag[];
@@ -12,7 +12,7 @@ interface IProps {
   onTagDelete?: (id: ITag['ID']) => void;
 }
 
-const NodeTags: FC<IProps> = memo(
+const NodeTags: FC<Props> = memo(
   ({ is_editable, is_deletable, tags, onChange, onTagClick, onTagDelete }) => {
     return (
       <Tags

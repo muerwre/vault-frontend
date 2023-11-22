@@ -7,9 +7,9 @@ import { IEditorComponentProps } from '~/types/node';
 
 import styles from './styles.module.scss';
 
-interface IProps extends IEditorComponentProps {}
+interface Props extends IEditorComponentProps {}
 
-const EditorPublicSwitch: FC<IProps> = () => {
+const EditorPublicSwitch: FC<Props> = () => {
   const { values, setFieldValue } = useNodeFormContext();
 
   const onChange = useCallback(

@@ -3,26 +3,26 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Card } from '~/components/common/Card';
+import { Container } from '~/components/common/Container';
 import { Group } from '~/components/common/Group';
 import { Sticky } from '~/components/common/Sticky';
 import { Superpower } from '~/components/common/Superpower';
 import { BorisComments } from '~/containers/boris/BorisComments';
 import { BorisSidebar } from '~/containers/boris/BorisSidebar';
 import { BorisSuperPowersSSR } from '~/containers/boris/BorisSuperpowers/ssr';
-import { Container } from '~/containers/main/Container';
 import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
 import { BorisUsageStats } from '~/types/boris';
 import { useAuthProvider } from '~/utils/providers/AuthProvider';
 
 import styles from './styles.module.scss';
 
-type IProps = {
+type Props = {
   title: string;
   stats: BorisUsageStats;
   isLoadingStats: boolean;
 };
 
-const BorisLayout: FC<IProps> = observer(({ title, stats, isLoadingStats }) => {
+const BorisLayout: FC<Props> = observer(({ title, stats, isLoadingStats }) => {
   const { isUser, isTester } = useAuthProvider();
 
   return (

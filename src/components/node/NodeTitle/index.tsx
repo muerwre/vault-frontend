@@ -11,7 +11,7 @@ import { NodeLikeButton } from '../NodeLikeButton';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   id?: number;
   title: string;
   username?: string;
@@ -34,7 +34,7 @@ interface IProps {
   onEdit: () => void;
 }
 
-const NodeTitle: VFC<IProps> = memo(
+const NodeTitle: VFC<Props> = memo(
   ({
     title,
     username,

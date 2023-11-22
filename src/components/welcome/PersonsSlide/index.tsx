@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-import { Container } from '~/containers/main/Container';
+import { Container } from '~/components/common/Container';
 import markdown from '~/styles/common/markdown.module.scss';
 
 import { WelcomeSlideWrapper } from '../WelcomeSlideWrapper';

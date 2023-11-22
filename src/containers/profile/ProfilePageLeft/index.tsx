@@ -7,13 +7,13 @@ import { IUser } from '~/types/auth';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   profile: IUser;
   isLoading: boolean;
   username: string;
 }
 
-const ProfilePageLeft: FC<IProps> = ({ username, profile, isLoading }) => {
+const ProfilePageLeft: FC<Props> = ({ username, profile, isLoading }) => {
   return (
     <div className={styles.wrap}>
       <Avatar

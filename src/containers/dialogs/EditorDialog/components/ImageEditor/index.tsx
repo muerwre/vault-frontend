@@ -9,9 +9,9 @@ import { ImageGrid } from '../ImageGrid';
 
 import styles from './styles.module.scss';
 
-type IProps = NodeEditorProps;
+type Props = NodeEditorProps;
 
-const ImageEditor: FC<IProps> = () => {
+const ImageEditor: FC<Props> = () => {
   const { pending, files, setFiles, uploadFiles } = useUploaderContext()!;
 
   return (

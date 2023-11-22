@@ -9,12 +9,12 @@ import {
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   element: HTMLTextAreaElement;
   handler: (val: string) => void;
 }
 
-const CommentFormFormatButtons: FC<IProps> = ({ element, handler }) => {
+const CommentFormFormatButtons: FC<Props> = ({ element, handler }) => {
   const wrapper = useFormatWrapper(handler);
 
   const wrap = useCallback(

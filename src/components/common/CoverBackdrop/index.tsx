@@ -8,11 +8,11 @@ import { getURL } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   cover: IUser['cover'];
 }
 
-const CoverBackdrop: FC<IProps> = ({ cover }) => {
+const CoverBackdrop: FC<Props> = ({ cover }) => {
   const ref = useRef<HTMLImageElement>(null);
 
   const [is_loaded, setIsLoaded] = useState(false);

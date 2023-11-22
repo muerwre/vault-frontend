@@ -7,7 +7,7 @@ import { getPrettyDate } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   data: GithubIssue;
 }
 
@@ -16,7 +16,7 @@ const stateLabels: Record<GithubIssue['state'], string> = {
   closed: 'Сделано',
 };
 
-const BorisStatsGitCard: FC<IProps> = ({
+const BorisStatsGitCard: FC<Props> = ({
   data: { created_at, title, html_url, state },
 }) => {
   const date = useMemo(() => getPrettyDate(created_at), [created_at]);

@@ -14,11 +14,11 @@ import { canEditComment, canLikeComment } from '~/utils/node';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   order: 'ASC' | 'DESC';
 }
 
-const NodeComments: FC<IProps> = observer(({ order }) => {
+const NodeComments: FC<Props> = observer(({ order }) => {
   const user = useUserContext();
   const { node } = useNodeContext();
 

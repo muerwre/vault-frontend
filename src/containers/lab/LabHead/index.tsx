@@ -8,11 +8,11 @@ import { useLabContext } from '~/utils/context/LabContextProvider';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   isLoading?: boolean;
 }
 
-const LabHead: FC<IProps> = ({ isLoading }) => {
+const LabHead: FC<Props> = ({ isLoading }) => {
   const { sort, setSort, search, setSearch } = useLabContext();
 
   return (

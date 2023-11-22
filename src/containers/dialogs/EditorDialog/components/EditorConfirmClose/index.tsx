@@ -5,12 +5,12 @@ import { Button } from '~/components/input/Button';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   onApprove: () => void;
   onDecline: () => void;
 }
 
-const EditorConfirmClose: FC<IProps> = ({ onApprove, onDecline }) => (
+const EditorConfirmClose: FC<Props> = ({ onApprove, onDecline }) => (
   <div className={styles.wrap}>
     <Group className={styles.content}>
       <div className={styles.title}>Точно закрыть?</div>

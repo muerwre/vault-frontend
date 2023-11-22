@@ -9,12 +9,12 @@ import { BorisGraphicStats } from '../BorisGraphicStats';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   stats: StatBackend;
   isLoading: boolean;
 }
 
-const BorisStatsBackend: FC<IProps> = ({ isLoading, stats }) => {
+const BorisStatsBackend: FC<Props> = ({ isLoading, stats }) => {
   const commentsByMonth = useMemo(
     () => stats.comments.by_month?.slice(0, -1),
     [stats.comments.by_month],

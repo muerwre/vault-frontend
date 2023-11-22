@@ -7,13 +7,13 @@ import { useTagSidebar } from '~/hooks/sidebar/useTagSidebar';
 import { INode } from '~/types';
 import { INodeRelated } from '~/types/node';
 
-interface IProps {
+interface Props {
   isLoading: boolean;
   node: INode;
   related: INodeRelated;
 }
 
-const NodeRelatedBlock: FC<IProps> = ({ isLoading, node, related }) => {
+const NodeRelatedBlock: FC<Props> = ({ isLoading, node, related }) => {
   const goToTag = useTagSidebar();
 
   if (isLoading) {

@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
 import { Card } from '~/components/common/Card';
+import { Container } from '~/components/common/Container';
 import { Sticky } from '~/components/common/Sticky';
 import { SettingsMenu } from '~/components/settings/SettingsMenu';
-import { Container } from '~/containers/main/Container';
 
 import styles from './styles.module.scss';
 

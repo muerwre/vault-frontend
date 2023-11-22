@@ -4,13 +4,13 @@ import { SortableAudioGrid } from '~/components/sortable/SortableAudioGrid';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
 
-interface IProps {
+interface Props {
   files: IFile[];
   setFiles: (val: IFile[]) => void;
   locked: UploadStatus[];
 }
 
-const AudioGrid: FC<IProps> = ({ files, setFiles, locked }) => {
+const AudioGrid: FC<Props> = ({ files, setFiles, locked }) => {
   const onMove = useCallback(
     (newFiles: IFile[]) => {
       setFiles(newFiles);

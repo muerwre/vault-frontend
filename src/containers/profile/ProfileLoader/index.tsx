@@ -4,9 +4,9 @@ import { LoaderCircle } from '~/components/common/LoaderCircle';
 
 import styles from './styles.module.scss';
 
-interface IProps {}
+interface Props {}
 
-const ProfileLoader: FC<IProps> = () => {
+const ProfileLoader: FC<Props> = () => {
   return (
     <div className={styles.loader}>
       <LoaderCircle size={40} />

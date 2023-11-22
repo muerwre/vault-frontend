@@ -8,12 +8,12 @@ import { t } from '~/utils/trans';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface Props {
   loading?: boolean;
   count?: number;
 }
 
-const NodeNoComments: FC<IProps> = ({ loading = false, count = 3 }) => {
+const NodeNoComments: FC<Props> = ({ loading = false, count = 3 }) => {
   const items = useMemo(
     () =>
       [...new Array(count)].map((_, i) => (
