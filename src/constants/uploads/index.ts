@@ -44,6 +44,8 @@ export const FILE_MIMES: Record<UploadType, string[]> = {
     'image/png',
     'image/svg+xml',
     'image/webp',
+    'image/heic',
+    'image/heif',
   ],
   [UploadType.Audio]: ['audio/mpeg3', 'audio/mpeg', 'audio/mp3'],
   [UploadType.Other]: [],
