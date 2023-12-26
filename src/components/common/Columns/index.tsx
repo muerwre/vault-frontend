@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 
 const defaultColumns = {
   default: 2,
-  1280: 1,
+  840: 1,
 };
 
 interface ColumnsProps {
