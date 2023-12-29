@@ -53,6 +53,12 @@ export default class MyApp extends App {
                                   content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=0"
                                 />
 
+                                <script
+                                  async
+                                  src="https://anal.vault48.org/script.js"
+                                  data-website-id="609209de-4241-48ba-9317-769f45a632a5"
+                                />
+
                                 {!!canonicalURL && (
                                   <link rel="canonical" href={canonicalURL} />
                                 )}
