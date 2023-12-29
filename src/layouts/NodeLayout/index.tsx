@@ -31,10 +31,10 @@ const NodeLayout = observer(() => {
 
   useNodeCoverImage(node);
 
-  const onUnauthorizedLike = useCallback(
-    () => showRegisterDialog({}),
-    [showRegisterDialog],
-  );
+  const onUnauthorizedLike = useCallback(() => {
+    umami.track('register-dialog-from-like');
+    showRegisterDialog({});
+  }, [showRegisterDialog]);
 
   return (
     <div className={styles.wrap}>

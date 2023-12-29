@@ -25,6 +25,7 @@ const NodeCommentForm: FC<Props> = observer(({ saveComment }) => {
   const onCommentSave = useCallback(
     async (comment: IComment) => {
       if (!isUser) {
+        umami.track('register-dialog-from-comment');
         showRegisterDialog({});
         return;
       }

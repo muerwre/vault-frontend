@@ -32,7 +32,10 @@ const Header: FC<HeaderProps> = observer(() => {
   const { borisCommentedAt } = useUpdates();
   const { indicatorEnabled } = useNotifications();
 
-  const onLogin = useCallback(() => showModal(Dialog.Login, {}), [showModal]);
+  const onLogin = useCallback(() => {
+    umami.track('login-button');
+    showModal(Dialog.Login, {});
+  }, [showModal]);
 
   const top = useScrollTop();
 
