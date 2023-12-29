@@ -12,7 +12,7 @@
     "@tippyjs/react": "^4.2.6",
     "@v9v/ts-react-telegram-login": "^1.1.1",
     "autosize": "^4.0.2",
-    "axios": "^0.21.4",
+    "axios": "^1.6.0",
     "body-scroll-lock": "^2.6.4",
     "classnames": "^2.2.6",
     "color2k": "^1.2.4",
