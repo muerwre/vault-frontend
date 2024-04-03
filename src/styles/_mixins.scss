@@ -116,16 +116,16 @@
   @supports (
     (-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))
   ) {
-    @supports not (-moz-appearance: none) {
-      @content;
-    }
+    // @supports not (-moz-appearance: none) {
+    @content;
+    // }
 
     // disable blur on firefox mobile (until they fix its performance)
-    @supports (-moz-appearance: none) {
-      @media (hover: hover) {
-        @content;
-      }
-    }
+    // @supports (-moz-appearance: none) {
+    // @media (hover: hover) {
+    // @content;
+    // }
+    // }
   }
 }
 
@@ -203,22 +203,22 @@
   grid-auto-rows: $cell;
 
   // 4 cells
-  @media (max-width: $cell * 5 + $gap * 4 + 55) {
+  @media (max-width: ($cell * 5 + $gap * 4 + 55)) {
     grid-auto-rows: calc(25vw - 30px);
   }
 
   // 3 cells
-  @media (max-width: $cell * 4 + $gap * 3 + 55) {
+  @media (max-width: ($cell * 4 + $gap * 3 + 55)) {
     grid-auto-rows: calc(33vw - 30px);
   }
 
   // 2 cells
-  @media (max-width: $cell * 3 + $gap * 2 + 55) {
+  @media (max-width: ($cell * 3 + $gap * 2 + 55)) {
     grid-auto-rows: calc(50vw - 40px);
   }
 
   // < 870px
-  @media (max-width: ($cell + 10) * 3) {
+  @media (max-width: (($cell + 10) * 3)) {
     grid-template-columns: repeat(auto-fill, minmax($fluid_cell - 20, 1fr));
     grid-template-rows: calc(50vw - 10px) $fluid_cell;
   }
