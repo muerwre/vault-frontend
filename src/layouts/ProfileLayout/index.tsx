@@ -2,7 +2,10 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
+import { Card } from '~/components/common/Card';
 import { Container } from '~/components/common/Container';
+import { Sticky } from '~/components/common/Sticky';
+import { FlowGrid } from '~/containers/flow/FlowGrid';
 import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
 import { useUser } from '~/hooks/auth/useUser';
 import { useGetProfile } from '~/hooks/profile/useGetProfile';
@@ -24,16 +27,21 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
     <Container className={styles.wrap}>
       <div className={styles.grid}>
         <div className={styles.stamp}>
-          <div className={styles.row}>
+          <Sticky>
             <ProfilePageLeft
+              description={profile.description}
               profile={profile}
               username={username}
               isLoading={isLoading}
             />
-          </div>
+          </Sticky>
         </div>
 
-        <div>here should be grid</div>
+        <Card className={styles.description}>{profile.description}</Card>
+
+        <div className={styles.nodes}>
+          <FlowGrid nodes={nodes} user={user} onChangeCellView={() => {}} />
+        </div>
       </div>
     </Container>
   );

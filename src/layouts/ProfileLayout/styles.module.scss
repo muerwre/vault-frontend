@@ -8,7 +8,10 @@
 }
 
 .grid {
-  @include flow_grid;
+  grid-template-columns: 250px 5fr;
+  display: grid;
+  column-gap: $gap;
+  row-gap: $gap;
 }
 
 .row {
@@ -18,10 +21,18 @@
 
 .description {
   font: $font_14_semibold;
-  text-align: center;
-  padding: $gap * 2 $gap;
 }
 
 .stamp {
   grid-row-end: span 2;
+}
+
+.nodes {
+  @include flow_grid();
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
 }
