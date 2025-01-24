@@ -22,7 +22,7 @@ interface Props {
   order: 'ASC' | 'DESC';
 }
 
-const isFirstGroupWithNewCommentt = (
+const isFirstGroupWithNewComment = (
   group: ICommentGroup,
   prevGroup: ICommentGroup | undefined,
 ) => group.hasNew && (!prevGroup || !prevGroup.hasNew);
@@ -88,7 +88,7 @@ const NodeComments: FC<Props> = observer(({ order }) => {
 
       {groupped.map((group, index) => (
         <>
-          {isFirstGroupWithNewCommentt(group, groupped.at(index - 1)) && (
+          {isFirstGroupWithNewComment(group, groupped[index - 1]) && (
             <a
               id={NEW_COMMENT_ANCHOR_NAME}
               className={styles.newCommentAnchor}
