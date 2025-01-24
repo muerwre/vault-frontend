@@ -8,6 +8,7 @@ import { CommentWrapper } from '~/containers/comments/CommentWrapper';
 import { IComment, ICommentGroup, IFile } from '~/types';
 
 import { CommendDeleted } from '../../../../../components/node/CommendDeleted';
+import { getCommentId } from '../../../../../constants/dom/links';
 
 import { CommentContent } from './components/CommentContent';
 import { CommentDistance } from './components/CommentDistance';
@@ -83,18 +84,22 @@ const Comment: FC<Props> = memo(
             );
 
             return (
-              <CommentContent
-                prefix={prefix}
-                saveComment={saveComment}
-                nodeId={nodeId}
-                comment={comment}
-                canEdit={!!canEdit}
-                canLike={!!canLike}
-                onLike={() => onLike(comment.id, !comment.liked)}
-                onDelete={(val: boolean) => onDelete(comment.id, val)}
-                onShowImageModal={onShowImageModal}
-                key={comment.id}
-              />
+              <>
+                <a id={getCommentId(comment.id)} className={styles.anchor} />
+
+                <CommentContent
+                  prefix={prefix}
+                  saveComment={saveComment}
+                  nodeId={nodeId}
+                  comment={comment}
+                  canEdit={!!canEdit}
+                  canLike={!!canLike}
+                  onLike={() => onLike(comment.id, !comment.liked)}
+                  onDelete={(val: boolean) => onDelete(comment.id, val)}
+                  onShowImageModal={onShowImageModal}
+                  key={comment.id}
+                />
+              </>
             );
           })}
         </div>

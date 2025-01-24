@@ -2,6 +2,7 @@ import { ShallowUser } from '../auth';
 
 export interface NotificationItem {
   id: number;
+  itemId: number;
   url: string;
   type: NotificationType;
   title: string;

@@ -1,9 +1,13 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
 import { LoadMoreButton } from '~/components/input/LoadMoreButton';
 import { ANNOUNCE_USER_ID, BORIS_NODE_ID } from '~/constants/boris/constants';
+import {
+  isCommentAnchor,
+  NEW_COMMENT_ANCHOR_NAME,
+} from '~/constants/dom/links';
 import { Comment } from '~/containers/node/NodeComments/components/Comment';
 import { useGrouppedComments } from '~/hooks/node/useGrouppedComments';
 import { ICommentGroup } from '~/types';
@@ -17,6 +21,11 @@ import styles from './styles.module.scss';
 interface Props {
   order: 'ASC' | 'DESC';
 }
+
+const isFirstGroupWithNewCommentt = (
+  group: ICommentGroup,
+  prevGroup: ICommentGroup | undefined,
+) => group.hasNew && (!prevGroup || !prevGroup.hasNew);
 
 const NodeComments: FC<Props> = observer(({ order }) => {
   const user = useUserContext();
@@ -35,7 +44,7 @@ const NodeComments: FC<Props> = observer(({ order }) => {
     onSaveComment,
   } = useCommentContext();
 
-  const groupped: ICommentGroup[] = useGrouppedComments(
+  const groupped = useGrouppedComments(
     comments,
     order,
     lastSeenCurrent ?? undefined,
@@ -59,26 +68,49 @@ const NodeComments: FC<Props> = observer(({ order }) => {
     return null;
   }
 
+  useEffect(() => {
+    const anchor = location.hash?.replace('#', '');
+
+    if (!isLoading && isCommentAnchor(anchor)) {
+      setTimeout(
+        () =>
+          document
+            .getElementById(anchor)
+            ?.scrollIntoView({ behavior: 'smooth' }),
+        300,
+      );
+    }
+  }, [isLoading]);
+
   return (
     <div className={styles.wrap}>
       {order === 'DESC' && more}
 
-      {groupped.map((group) => (
-        <Comment
-          nodeId={node.id!}
-          key={group.ids.join()}
-          group={group}
-          highlighted={
-            node.id === BORIS_NODE_ID && group.user.id === ANNOUNCE_USER_ID
-          }
-          onLike={onLike}
-          canLike={canLikeComment(group, user)}
-          canEdit={canEditComment(group, user)}
-          onDelete={onDeleteComment}
-          onShowImageModal={onShowImageModal}
-          isSame={group.user.id === user.id}
-          saveComment={onSaveComment}
-        />
+      {groupped.map((group, index) => (
+        <>
+          {isFirstGroupWithNewCommentt(group, groupped.at(index - 1)) && (
+            <a
+              id={NEW_COMMENT_ANCHOR_NAME}
+              className={styles.newCommentAnchor}
+            />
+          )}
+
+          <Comment
+            nodeId={node.id!}
+            key={group.ids.join()}
+            group={group}
+            highlighted={
+              node.id === BORIS_NODE_ID && group.user.id === ANNOUNCE_USER_ID
+            }
+            onLike={onLike}
+            canLike={canLikeComment(group, user)}
+            canEdit={canEditComment(group, user)}
+            onDelete={onDeleteComment}
+            onShowImageModal={onShowImageModal}
+            isSame={group.user.id === user.id}
+            saveComment={onSaveComment}
+          />
+        </>
       ))}
 
       {order === 'ASC' && more}

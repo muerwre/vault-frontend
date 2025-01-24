@@ -15,3 +15,9 @@
 .highlighted {
   box-shadow: $color_primary 0 0 0px 2px;
 }
+
+.anchor {
+  display: block;
+  position: relative;
+  top: -($header_height * 2);
+}

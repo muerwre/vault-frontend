@@ -9,6 +9,8 @@ import { Square } from '~/components/common/Square';
 import { NotificationItem } from '~/types/notifications';
 import { formatText, getURLFromString } from '~/utils/dom';
 
+import { getCommentAnchor } from '../../../constants/dom/links';
+
 import styles from './styles.module.scss';
 
 interface NotificationCommentProps {
@@ -17,7 +19,10 @@ interface NotificationCommentProps {
 }
 
 const NotificationComment: FC<NotificationCommentProps> = ({ item, isNew }) => (
-  <Anchor href={item.url} className={styles.link}>
+  <Anchor
+    href={getCommentAnchor(item.url, item.itemId)}
+    className={styles.link}
+  >
     <div className={classNames(styles.message, { [styles.new]: isNew })}>
       <div className={styles.icon}>
         <Avatar

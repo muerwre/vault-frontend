@@ -13,3 +13,9 @@
 .more {
   margin-bottom: $gap;
 }
+
+.newCommentAnchor {
+  position: relative;
+  top: -($header_height * 2);
+  display: block;
+}
