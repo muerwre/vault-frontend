@@ -2,10 +2,12 @@ import { flatten, isEmpty } from '~/utils/ramda';
 
 export const splitTextByYoutube = (strings: string[]): string[] =>
   flatten(
-    strings.map(str =>
-      str.split(/(https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?[\w\-&=]+)/)
-    )
+    strings.map((str) =>
+      str.split(
+        /(https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?[\w\-&=]+)/,
+      ),
+    ),
   );
 
 export const splitTextOmitEmpty = (strings: string[]): string[] =>
-  strings.map(el => el.trim()).filter(el => !isEmpty(el));
+  strings.map((el) => el.trim()).filter((el) => !isEmpty(el));

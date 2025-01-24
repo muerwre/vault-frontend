@@ -11,6 +11,6 @@ export const useImageModal = () => {
     (images: IFile[], index: number) => {
       showModal({ items: images, index });
     },
-    [showModal]
+    [showModal],
   );
 };

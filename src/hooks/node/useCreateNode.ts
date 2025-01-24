@@ -16,9 +16,13 @@ export const useCreateNode = () => {
       if (node.is_promoted) {
         flow.setNodes([result.node, ...flow.nodes]);
       } else {
-        await lab.unshift({ node: result.node, comment_count: 0, last_seen: node.created_at });
+        await lab.unshift({
+          node: result.node,
+          comment_count: 0,
+          last_seen: node.created_at,
+        });
       }
     },
-    [flow, lab]
+    [flow, lab],
   );
 };

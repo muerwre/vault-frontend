@@ -1,6 +1,7 @@
 module.exports = {
   extends: ['plugin:react/recommended', 'plugin:@next/next/recommended'],
   rules: {
+    'prettier/prettier': 'error',
     'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
     'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
     'react/prop-types': 0,
@@ -9,13 +10,21 @@ module.exports = {
     '@next/next/no-img-element': 0,
     'unused-imports/no-unused-imports': 'warn',
     // 'no-unused-vars': 'warn',
-    'quotes': [2, 'single', { 'avoidEscape': true }],
+    quotes: [2, 'single', { avoidEscape: true }],
     'import/order': [
       'error',
       {
         alphabetize: { order: 'asc' },
         'newlines-between': 'always',
-        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'unknown'],
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+          'unknown',
+        ],
         pathGroups: [
           {
             pattern: 'react',
@@ -34,18 +43,17 @@ module.exports = {
         paths: [
           {
             name: 'ramda',
-            message:
-              'import from \'~/utils/ramda\' instead',
+            message: "import from '~/utils/ramda' instead",
           },
         ],
       },
-    ]
+    ],
   },
   parserOptions: {
     ecmaVersion: 7,
     sourceType: 'module',
   },
-  plugins: ['import', 'react-hooks', 'unused-imports'],
+  plugins: ['import', 'react-hooks', 'unused-imports', 'prettier'],
   parser: '@typescript-eslint/parser',
   settings: {
     react: {

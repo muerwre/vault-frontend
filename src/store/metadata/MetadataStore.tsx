@@ -12,7 +12,9 @@ export class MetadataStore {
   pending: string[] = [];
 
   constructor(
-    protected apiMetadataLoader: (ids: string[]) => Promise<Record<string, EmbedMetadata>>
+    protected apiMetadataLoader: (
+      ids: string[],
+    ) => Promise<Record<string, EmbedMetadata>>,
   ) {
     makeAutoObservable(this);
   }
@@ -59,7 +61,7 @@ export class MetadataStore {
 
     try {
       const result = await this.apiMetadataLoader(items);
-      const fetchedIDs = values(result).map(it => it.address);
+      const fetchedIDs = values(result).map((it) => it.address);
 
       runInAction(() => {
         this.pushMetadataItems(result);
@@ -72,7 +74,11 @@ export class MetadataStore {
 
   /** adds items to queue */
   enqueue = (id: string) => {
-    if (this.queue.includes(id) || keys(this.metadata).includes(id) || this.pending.includes(id)) {
+    if (
+      this.queue.includes(id) ||
+      keys(this.metadata).includes(id) ||
+      this.pending.includes(id)
+    ) {
       return;
     }
 

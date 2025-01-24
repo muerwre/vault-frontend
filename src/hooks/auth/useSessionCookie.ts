@@ -13,6 +13,6 @@ export const useSessionCookie = () => {
       autorun(() => {
         setCookie('session', auth.token, 30);
       }),
-    [auth]
+    [auth],
   );
 };

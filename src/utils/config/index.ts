@@ -6,5 +6,6 @@ export const CONFIG = {
   // image storage endpoint (sames as backend, but with /static usualy)
   remoteCurrent: process.env.NEXT_PUBLIC_REMOTE_CURRENT || '',
   // transitional prop, marks migration to nextjs
-  isNextEnvironment: !!process.env.NEXT_PUBLIC_REMOTE_CURRENT || typeof window === 'undefined',
+  isNextEnvironment:
+    !!process.env.NEXT_PUBLIC_REMOTE_CURRENT || typeof window === 'undefined',
 };

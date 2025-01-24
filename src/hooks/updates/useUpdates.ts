@@ -9,7 +9,7 @@ export const useUpdates = () => {
   const { data } = useSWR(
     isUser ? API.USER.GET_UPDATES : null,
     () => apiAuthGetUpdates({ exclude_dialogs: 0, last: '' }),
-    { refreshInterval: 5 * 60 * 1000 }
+    { refreshInterval: 5 * 60 * 1000 },
   );
 
   const borisCommentedAt = data?.boris?.commented_at || '';

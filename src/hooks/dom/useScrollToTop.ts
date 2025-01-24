@@ -18,6 +18,6 @@ export const useScrollToTop = (deps?: any[]) => {
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    deps && Array.isArray(deps) ? deps : []
+    deps && Array.isArray(deps) ? deps : [],
   );
 };

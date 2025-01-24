@@ -6,7 +6,10 @@ import { useModal } from '~/hooks/modal/useModal';
 import { INode } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
 
-export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Promise<unknown>) => {
+export const useNodeActions = (
+  node: INode,
+  update: (node: Partial<INode>) => Promise<unknown>,
+) => {
   const { showModal } = useModal();
 
   const onLike = useCallback(async () => {
@@ -35,17 +38,20 @@ export const useNodeActions = (node: INode, update: (node: Partial<INode>) => Pr
 
   const onLock = useCallback(async () => {
     try {
-      const result = await apiLockNode({ id: node.id, is_locked: !node.deleted_at });
+      const result = await apiLockNode({
+        id: node.id,
+        is_locked: !node.deleted_at,
+      });
       await update({ deleted_at: result.deleted_at });
     } catch (error) {
       showErrorToast(error);
     }
   }, [node.deleted_at, node.id, update]);
 
-  const onEdit = useCallback(() => showModal(Dialog.EditNode, { nodeId: node.id! }), [
-    node,
-    showModal,
-  ]);
+  const onEdit = useCallback(
+    () => showModal(Dialog.EditNode, { nodeId: node.id! }),
+    [node, showModal],
+  );
 
   return { onLike, onStar, onLock, onEdit };
 };

@@ -21,15 +21,19 @@ export const useGetLabStats = () => {
         heroes: lab.heroes,
         tags: lab.tags,
       },
-      onSuccess: data => {
+      onSuccess: (data) => {
         lab.setHeroes(data.heroes);
         lab.setTags(data.tags);
       },
       refreshInterval,
-    }
+    },
   );
 
-  const { data: updatesData, isValidating: isValidatingUpdates, mutate: mutateUpdates } = useSWR(
+  const {
+    data: updatesData,
+    isValidating: isValidatingUpdates,
+    mutate: mutateUpdates,
+  } = useSWR(
     isUser ? API.LAB.UPDATES : null,
     async () => {
       const result = await getLabUpdates();
@@ -37,26 +41,27 @@ export const useGetLabStats = () => {
     },
     {
       fallbackData: lab.updates,
-      onSuccess: data => {
+      onSuccess: (data) => {
         lab.setUpdates(data);
       },
       refreshInterval,
-    }
+    },
   );
 
   const heroes = useMemo(() => stats?.heroes || [], [stats]);
   const tags = useMemo(() => stats?.tags || [], [stats]);
   const updates = useMemo(() => updatesData || [], [updatesData]);
 
-  const isLoading = (!stats || !updates) && (isValidatingStats || isValidatingUpdates);
+  const isLoading =
+    (!stats || !updates) && (isValidatingStats || isValidatingUpdates);
   const seenNode = useCallback(
     async (nodeId: number) => {
       await mutateUpdates(
-        updates.filter(it => it.id !== nodeId),
-        false
+        updates.filter((it) => it.id !== nodeId),
+        false,
       );
     },
-    [mutateUpdates, updates]
+    [mutateUpdates, updates],
   );
 
   return { heroes, tags, updates, isLoading, seenNode };

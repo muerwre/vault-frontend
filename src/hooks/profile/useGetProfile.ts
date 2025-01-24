@@ -20,7 +20,7 @@ export const useGetProfile = (username?: string) => {
     },
     {
       refreshInterval: 60000,
-    }
+    },
   );
 
   const profile = data || EMPTY_USER;
@@ -29,7 +29,7 @@ export const useGetProfile = (username?: string) => {
     async (user: Partial<IUser>) => {
       await mutate({ ...profile, ...user });
     },
-    [mutate, profile]
+    [mutate, profile],
   );
 
   return { profile, isLoading: !data && isValidating, update };

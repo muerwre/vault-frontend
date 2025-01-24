@@ -153,13 +153,13 @@ export const NOTIFICATION_TYPES = {
 };
 
 export type IMessageNotification = {
-  type: typeof NOTIFICATION_TYPES['message'];
+  type: (typeof NOTIFICATION_TYPES)['message'];
   content: Partial<IMessage>;
   created_at: string;
 };
 
 export type ICommentNotification = {
-  type: typeof NOTIFICATION_TYPES['comment'];
+  type: (typeof NOTIFICATION_TYPES)['comment'];
   content: Partial<IComment>;
   created_at: string;
 };

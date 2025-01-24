@@ -17,6 +17,6 @@ export const useFlowSetCellView = () => {
         showErrorToast(error);
       }
     },
-    [updateNode]
+    [updateNode],
   );
 };

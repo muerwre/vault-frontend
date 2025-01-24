@@ -14,7 +14,7 @@ import type { SidebarComponentProps } from '~/types/sidebar';
 import { isNil } from '~/utils/ramda';
 
 const tabs = ['profile', 'notifications', 'bookmarks'] as const;
-type TabName = typeof tabs[number];
+type TabName = (typeof tabs)[number];
 
 interface SettingsSidebarProps
   extends SidebarComponentProps<SidebarName.Settings> {

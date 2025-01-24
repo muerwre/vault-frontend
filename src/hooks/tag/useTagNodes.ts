@@ -9,13 +9,11 @@ import { flatten, isNil } from '~/utils/ramda';
 
 const PAGE_SIZE = 10;
 
-const getKey: (tag: string) => SWRInfiniteKeyLoader = tag => (
-  pageIndex,
-  previousPageData: INode[]
-) => {
-  if (pageIndex > 0 && !previousPageData?.length) return null;
-  return `${API.TAG.NODES}?tag=${tag}&page=${pageIndex}`;
-};
+const getKey: (tag: string) => SWRInfiniteKeyLoader =
+  (tag) => (pageIndex, previousPageData: INode[]) => {
+    if (pageIndex > 0 && !previousPageData?.length) return null;
+    return `${API.TAG.NODES}?tag=${tag}&page=${pageIndex}`;
+  };
 
 const extractKey = (key: string) => {
   const re = new RegExp(`${API.TAG.NODES}\\?tag=[^&]+&page=(\\d+)`);
@@ -39,7 +37,7 @@ export const useTagNodes = (tag: string) => {
       });
 
       return result.nodes;
-    }
+    },
   );
 
   const nodes = useMemo(() => flatten(data || []), [data]);
@@ -47,5 +45,12 @@ export const useTagNodes = (tag: string) => {
 
   const loadMore = useCallback(() => setSize(size + 1), [setSize, size]);
 
-  return { nodes, hasMore, loadMore, isLoading: !data && isValidating, mutate, data };
+  return {
+    nodes,
+    hasMore,
+    loadMore,
+    isLoading: !data && isValidating,
+    mutate,
+    data,
+  };
 };

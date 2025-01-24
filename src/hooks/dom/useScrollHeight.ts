@@ -11,7 +11,7 @@ const getHeight = () => {
     body.offsetHeight,
     html.clientHeight,
     html.scrollHeight,
-    html.offsetHeight
+    html.offsetHeight,
   );
 };
 export const useScrollHeight = () => getHeight();

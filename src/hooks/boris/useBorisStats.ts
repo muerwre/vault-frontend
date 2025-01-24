@@ -6,12 +6,14 @@ import { initialBackendStats } from '~/constants/boris/constants';
 import { BorisUsageStats } from '~/types/boris';
 
 export const useBorisStats = () => {
-  const { data: backend = initialBackendStats, isValidating: isValidatingBackend } = useSWR(
-    API.BORIS.GET_BACKEND_STATS,
-    () => getBorisBackendStats()
-  );
+  const {
+    data: backend = initialBackendStats,
+    isValidating: isValidatingBackend,
+  } = useSWR(API.BORIS.GET_BACKEND_STATS, () => getBorisBackendStats());
 
-  const { data: issues = [] } = useSWR(API.BORIS.GITHUB_ISSUES, () => getGithubIssues());
+  const { data: issues = [] } = useSWR(API.BORIS.GITHUB_ISSUES, () =>
+    getGithubIssues(),
+  );
 
   const stats: BorisUsageStats = {
     backend,

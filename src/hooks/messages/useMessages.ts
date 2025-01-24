@@ -11,7 +11,7 @@ const getKey = (username: string): string | null => {
 };
 export const useMessages = (username: string) => {
   const { data, isValidating } = useSWR(getKey(username), async () =>
-    apiGetUserMessages({ username })
+    apiGetUserMessages({ username }),
   );
 
   const messages: IMessage[] = useMemo(() => data?.messages || [], [data]);

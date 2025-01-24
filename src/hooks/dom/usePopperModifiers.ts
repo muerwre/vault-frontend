@@ -17,7 +17,11 @@ const sameWidth = {
   },
 };
 
-export const usePopperModifiers = (offsetX = 0, offsetY = 10, justify?: boolean): Modifier<any>[] =>
+export const usePopperModifiers = (
+  offsetX = 0,
+  offsetY = 10,
+  justify?: boolean,
+): Modifier<any>[] =>
   useMemo(
     () =>
       [
@@ -35,5 +39,5 @@ export const usePopperModifiers = (offsetX = 0, offsetY = 10, justify?: boolean)
         },
         ...(justify ? [sameWidth] : []),
       ] as Modifier<any>[],
-    [offsetX, offsetY, justify]
+    [offsetX, offsetY, justify],
   );

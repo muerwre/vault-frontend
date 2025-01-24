@@ -2,10 +2,10 @@ import { FILE_MIMES, UploadType } from '~/constants/uploads';
 import { isMimeOfImage } from '~/utils/validators';
 
 /** if file is image, returns data-uri of thumbnail */
-export const uploadGetThumb = async file => {
+export const uploadGetThumb = async (file) => {
   if (!file.type || !isMimeOfImage(file.type)) return '';
 
-  return new Promise<string>(resolve => {
+  return new Promise<string>((resolve) => {
     const reader = new FileReader();
     reader.onloadend = () => resolve(reader.result?.toString() || '');
     reader.readAsDataURL(file);
@@ -15,14 +15,17 @@ export const uploadGetThumb = async file => {
 /** returns UploadType by file */
 export const getFileType = (file: File): UploadType | undefined =>
   ((file.type &&
-    Object.keys(FILE_MIMES).find(mime => FILE_MIMES[mime].includes(file.type))) as UploadType) ||
-  undefined;
+    Object.keys(FILE_MIMES).find((mime) =>
+      FILE_MIMES[mime].includes(file.type),
+    )) as UploadType) || undefined;
 
 /** getImageFromPaste returns any images from paste event */
-export const getImageFromPaste = (event: ClipboardEvent): Promise<File | undefined> => {
+export const getImageFromPaste = (
+  event: ClipboardEvent,
+): Promise<File | undefined> => {
   const items = event.clipboardData?.items;
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     for (let index in items) {
       const item = items[index];
 
@@ -31,7 +34,7 @@ export const getImageFromPaste = (event: ClipboardEvent): Promise<File | undefin
         const reader = new FileReader();
         const type = item.type;
 
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           if (!e.target?.result) {
             return;
           }
@@ -40,7 +43,7 @@ export const getImageFromPaste = (event: ClipboardEvent): Promise<File | undefin
             new File([e.target?.result], 'paste.png', {
               type,
               lastModified: new Date().getTime(),
-            })
+            }),
           );
         };
 

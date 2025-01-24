@@ -8,7 +8,7 @@ import { DialogComponentProps } from '~/types/modal';
 import { values } from '~/utils/ramda';
 
 export interface EditorCreateDialogProps extends DialogComponentProps {
-  type: typeof NODE_TYPES[keyof typeof NODE_TYPES];
+  type: (typeof NODE_TYPES)[keyof typeof NODE_TYPES];
   isInLab: boolean;
 }
 

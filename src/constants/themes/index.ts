@@ -17,7 +17,7 @@ export const themeColors: Record<Theme, ThemeColors> = {
       'linear-gradient(165deg, #ff7549 -50%, #ff3344 150%)',
       'linear-gradient(170deg, #582cd0, #592071)',
     ],
-    background: 'url(\'/images/noise_top.png\') 0% 0% #23201f',
+    background: "url('/images/noise_top.png') 0% 0% #23201f",
   },
   [Theme.Horizon]: {
     name: 'Веспера',

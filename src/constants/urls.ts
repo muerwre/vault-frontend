@@ -37,7 +37,7 @@ export const imagePresets = {
   flow_horizontal: 'flow_horizontal',
 } as const;
 
-export type ImagePreset = typeof imagePresets[keyof typeof imagePresets];
+export type ImagePreset = (typeof imagePresets)[keyof typeof imagePresets];
 
 export const imageSrcSets: Partial<Record<ImagePreset, number>> = {
   [imagePresets[1600]]: 1600,
@@ -49,7 +49,7 @@ export const imageSrcSets: Partial<Record<ImagePreset, number>> = {
 
 export const flowDisplayToPreset: Record<
   FlowDisplayVariant,
-  typeof imagePresets[keyof typeof imagePresets]
+  (typeof imagePresets)[keyof typeof imagePresets]
 > = {
   single: 'flow_square',
   quadro: 'flow_square',

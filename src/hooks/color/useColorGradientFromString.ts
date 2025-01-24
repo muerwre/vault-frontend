@@ -6,7 +6,7 @@ export const useColorGradientFromString = (
   val?: string,
   saturation = 3,
   lightness = 3,
-  angle = 155
+  angle = 155,
 ) =>
   useMemo(() => {
     if (!val) {

@@ -9,20 +9,18 @@ import { flatten } from '~/utils/ramda';
 
 const RESULTS_COUNT = 20;
 
-const getKey: (text: string) => SWRInfiniteKeyLoader = text => (
-  pageIndex,
-  previousPageData: INode[]
-) => {
-  if ((pageIndex > 0 && !previousPageData?.length) || !text) return null;
+const getKey: (text: string) => SWRInfiniteKeyLoader =
+  (text) => (pageIndex, previousPageData: INode[]) => {
+    if ((pageIndex > 0 && !previousPageData?.length) || !text) return null;
 
-  const props: GetSearchResultsRequest = {
-    text,
-    skip: pageIndex * RESULTS_COUNT,
-    take: RESULTS_COUNT,
+    const props: GetSearchResultsRequest = {
+      text,
+      skip: pageIndex * RESULTS_COUNT,
+      take: RESULTS_COUNT,
+    };
+
+    return JSON.stringify(props);
   };
-
-  return JSON.stringify(props);
-};
 
 export const useSearch = () => {
   const [searchText, setSearchText] = useState('');
@@ -40,7 +38,7 @@ export const useSearch = () => {
       const result = await getSearchResults(props);
 
       return result.nodes;
-    }
+    },
   );
 
   const loadMore = useCallback(() => setSize(size + 1), [setSize, size]);

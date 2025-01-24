@@ -7,12 +7,13 @@ export const useFormatWrapper = (onChange: (val: string) => void) => {
       target: HTMLTextAreaElement,
 
       prefix = '',
-      suffix = ''
-    ) => event => {
-      event.preventDefault();
-      wrapTextInsideInput(target, prefix, suffix, onChange);
-    },
-    [onChange]
+      suffix = '',
+    ) =>
+      (event) => {
+        event.preventDefault();
+        wrapTextInsideInput(target, prefix, suffix, onChange);
+      },
+    [onChange],
   );
 };
 
@@ -21,7 +22,7 @@ export const wrapTextInsideInput = (
   target: HTMLTextAreaElement,
   prefix: string,
   suffix: string,
-  onChange: (val: string) => void
+  onChange: (val: string) => void,
 ) => {
   if (!target) return;
 
@@ -34,7 +35,7 @@ export const wrapTextInsideInput = (
   onChange(
     target.value.substring(0, start) +
       replacement +
-      target.value.substring(end, target.value.length)
+      target.value.substring(end, target.value.length),
   );
 
   target.focus();

@@ -14,7 +14,7 @@ interface Props extends DivProps {
   username?: string;
   size?: number;
   hasUpdates?: boolean;
-  preset?: typeof imagePresets[keyof typeof imagePresets];
+  preset?: (typeof imagePresets)[keyof typeof imagePresets];
 }
 
 const Avatar = forwardRef<HTMLDivElement, Props>(

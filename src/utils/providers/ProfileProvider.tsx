@@ -18,11 +18,16 @@ const ProfileContext = createContext<ProfileContextValue>({
   isLoading: false,
 });
 
-export const ProfileProvider: FC<ProfileProviderProps> = ({ children, username }) => {
+export const ProfileProvider: FC<ProfileProviderProps> = ({
+  children,
+  username,
+}) => {
   const { profile, isLoading } = useGetProfile(username);
 
   return (
-    <ProfileContext.Provider value={{ profile, isLoading }}>{children}</ProfileContext.Provider>
+    <ProfileContext.Provider value={{ profile, isLoading }}>
+      {children}
+    </ProfileContext.Provider>
   );
 };
 

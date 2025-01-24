@@ -4,7 +4,8 @@ import { UploadType } from '~/constants/uploads';
 import { INode } from '~/types';
 
 export const useNodeImages = (node: INode) => {
-  return useMemo(() => node.files.filter(file => file && file.type === UploadType.Image), [
-    node.files,
-  ]);
+  return useMemo(
+    () => node.files.filter((file) => file && file.type === UploadType.Image),
+    [node.files],
+  );
 };

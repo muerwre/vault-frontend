@@ -18,7 +18,7 @@ const validationSchema = object({
     .test(
       'sameAsPassword',
       'Должен совпадать с паролем',
-      (val, ctx) => val === ctx.parent.newPassword
+      (val, ctx) => val === ctx.parent.newPassword,
     ),
 });
 
@@ -26,15 +26,21 @@ export type RestorePasswordData = Asserts<typeof validationSchema>;
 
 export const useRestorePasswordForm = (
   code: string,
-  fetcher: (props: { code: string; password: string }) => Promise<{ token: string; user: IUser }>,
-  onSuccess: () => void
+  fetcher: (props: {
+    code: string;
+    password: string;
+  }) => Promise<{ token: string; user: IUser }>,
+  onSuccess: () => void,
 ) => {
   const auth = useAuthStore();
 
   const onSubmit = useCallback<FormikConfig<RestorePasswordData>['onSubmit']>(
     async (values, { setErrors }) => {
       try {
-        const { token, user } = await fetcher({ password: values.newPassword, code });
+        const { token, user } = await fetcher({
+          password: values.newPassword,
+          code,
+        });
         auth.setUser(user);
         auth.setToken(token);
         onSuccess();
@@ -47,7 +53,7 @@ export const useRestorePasswordForm = (
         }
       }
     },
-    [onSuccess, fetcher, code, auth]
+    [onSuccess, fetcher, code, auth],
   );
 
   return useFormik<RestorePasswordData>({

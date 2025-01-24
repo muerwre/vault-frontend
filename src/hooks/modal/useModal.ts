@@ -5,7 +5,9 @@ import { useModalStore } from '~/store/modal/useModalStore';
 import { DialogComponentProps } from '~/types/modal';
 
 export type DialogContentProps = {
-  [K in keyof typeof DIALOG_CONTENT]: typeof DIALOG_CONTENT[K] extends (props: infer U) => any
+  [K in keyof typeof DIALOG_CONTENT]: (typeof DIALOG_CONTENT)[K] extends (
+    props: infer U,
+  ) => any
     ? U extends DialogComponentProps
       ? keyof Omit<U, 'onRequestClose' | 'children'> extends never
         ? {}
@@ -21,7 +23,7 @@ export const useModal = () => {
     <T extends Dialog>(dialog: T, props: DialogContentProps[T]) => {
       setCurrent(dialog, props);
     },
-    [setCurrent]
+    [setCurrent],
   );
 
   return { showModal, hideModal: hide, current, isOpened: !!current };

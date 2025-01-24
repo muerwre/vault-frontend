@@ -11,7 +11,7 @@ import { TextEditor } from '../components/TextEditor';
 import { VideoEditor } from '../components/VideoEditor';
 
 export const NODE_EDITORS: Record<
-  typeof NODE_TYPES[keyof typeof NODE_TYPES],
+  (typeof NODE_TYPES)[keyof typeof NODE_TYPES],
   FC<NodeEditorProps>
 > = {
   [NODE_TYPES.IMAGE]: ImageEditor,
@@ -22,7 +22,7 @@ export const NODE_EDITORS: Record<
 };
 
 export const NODE_EDITOR_DATA: Record<
-  typeof NODE_TYPES[keyof typeof NODE_TYPES],
+  (typeof NODE_TYPES)[keyof typeof NODE_TYPES],
   Partial<INode>
 > = {
   [NODE_TYPES.TEXT]: {

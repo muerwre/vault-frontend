@@ -10,7 +10,7 @@ export const useLastSeenBoris = () => {
     async (date: string) => {
       await update({ last_seen_boris: date }, false);
     },
-    [update]
+    [update],
   );
 
   return { setLastSeen, lastSeen };

@@ -6,11 +6,12 @@ export const useFlowCellControls = (
   id: INode['id'],
   description: string | undefined,
   flow: FlowDisplay,
-  onChangeCellView: (id: INode['id'], flow: FlowDisplay) => void
+  onChangeCellView: (id: INode['id'], flow: FlowDisplay) => void,
 ) => {
   const onChange = useCallback(
-    (value: Partial<FlowDisplay>) => onChangeCellView(id, { ...flow, ...value }),
-    [flow, id, onChangeCellView]
+    (value: Partial<FlowDisplay>) =>
+      onChangeCellView(id, { ...flow, ...value }),
+    [flow, id, onChangeCellView],
   );
 
   const hasDescription = !!description && description.length > 32;

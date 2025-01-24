@@ -15,7 +15,7 @@ type RestoreRequestData = Asserts<typeof validationSchema>;
 
 export const useRestoreRequestForm = (
   fetcher: (field: string) => Promise<unknown>,
-  onSuccess: () => void
+  onSuccess: () => void,
 ) => {
   const onSubmit = useCallback<FormikConfig<RestoreRequestData>['onSubmit']>(
     async (values, { setErrors }) => {
@@ -31,7 +31,7 @@ export const useRestoreRequestForm = (
         }
       }
     },
-    [fetcher, onSuccess]
+    [fetcher, onSuccess],
   );
 
   return useFormik({

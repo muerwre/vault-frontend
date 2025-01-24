@@ -27,6 +27,6 @@ export const useUpdateNode = (id: number) => {
         await lab.updateNode(result.node.id!, result.node);
       }
     },
-    [update, flow, lab]
+    [update, flow, lab],
   );
 };

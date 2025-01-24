@@ -20,7 +20,7 @@ export const useLoginLogoutRestore = () => {
       showToastInfo(getRandomPhrase('WELCOME'));
       return result.user;
     },
-    [auth]
+    [auth],
   );
 
   return { logout, login };

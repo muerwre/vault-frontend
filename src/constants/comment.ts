@@ -20,7 +20,7 @@ export const COMMENT_BLOCK_DETECTORS = [
 ];
 
 export type ICommentBlock = {
-  type: typeof COMMENT_BLOCK_TYPES[keyof typeof COMMENT_BLOCK_TYPES];
+  type: (typeof COMMENT_BLOCK_TYPES)[keyof typeof COMMENT_BLOCK_TYPES];
   content: string;
 };
 

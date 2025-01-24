@@ -10,6 +10,6 @@ export const useShowModal = <T extends Dialog>(dialog: T) => {
     (props: DialogContentProps[T]) => {
       modal.showModal(dialog, props);
     },
-    [dialog, modal]
+    [dialog, modal],
   );
 };

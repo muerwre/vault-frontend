@@ -17,7 +17,7 @@ export const useNavigation = () => {
         craHistory.push(url);
       }
     },
-    [craHistory, nextRouter]
+    [craHistory, nextRouter],
   );
 
   return { push };

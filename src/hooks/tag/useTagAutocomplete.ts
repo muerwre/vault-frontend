@@ -26,5 +26,5 @@ export const useTagAutocomplete = (
     },
   );
 
-  return useMemo(() => (search ? data ?? [] : []), [data, search]);
+  return useMemo(() => (search ? (data ?? []) : []), [data, search]);
 };
