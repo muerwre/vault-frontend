@@ -4,14 +4,19 @@
 @import 'mixins';
 @import 'animations';
 
+$gap: 8px;
+
 $header_height: 64px;
 $cell: 250px;
 $fluid_cell: $cell; // smaller cell for fluid flow
 $cell_tablet: ($fluid_cell + 5) * 3 + 10; // flow breakpoint for tablet
 $cell_mobile: ($fluid_cell + 5) * 2 + 10; // flow breakpoint for mobile
-$flow_hide_recents: $cell_tablet; // breakpoint, there recents will be hidden
 
-$gap: 10px;
+$target_flow_cell_width: 225px;
+$flow_tablet_cell_count: 3;
+$flow_hide_recents: $target_flow_cell_width * $flow_tablet_cell_count +
+  ($flow_tablet_cell_count - 1) * $gap;
+
 $lab_gap: $gap * 2;
 $lab_gap_mobile: $gap * 2;
 $grid_line: 5px;
@@ -33,11 +38,16 @@ $panel_size: 64px;
 $node_title_height: $panel_size;
 $upload_button_height: 52px;
 
-$shadow_depth_1: transparentize(black, 0.8) 0 1px, inset $gray_90 0 1px;
-$shadow_depth_2: transparentize(black, 0.8) 0 2px, inset $gray_90 0 1px;
+$shadow_depth_1:
+  transparentize(black, 0.8) 0 1px,
+  inset $gray_90 0 1px;
+$shadow_depth_2:
+  transparentize(black, 0.8) 0 2px,
+  inset $gray_90 0 1px;
 
 $comment_shadow: $shadow_depth_2;
-$node_shadow: transparentize(black, 0.8) 0 2px,
+$node_shadow:
+  transparentize(black, 0.8) 0 2px,
   transparentize(black, 0.8) 0 2px 4px;
 
 $tag_height: 26px;

@@ -2,6 +2,19 @@
 
 @import 'src/styles/variables';
 
+$target_flow_cell_width: 225px;
+
+/** Makes a breakpoint for target cell width **/
+@mixin breakpoint($columns) {
+  @container sizer (max-width: #{$target_flow_cell_width* $columns}) {
+    grid-template-columns: repeat(#{$columns}, 1fr);
+    grid-auto-rows: calc(
+      (100cqw - #{$columns - 1} * #{$gap} / 2) / #{$columns}
+    );
+    @content;
+  }
+}
+
 .wrap {
   max-width: 2000px;
   padding: 0 40px 40px 40px;
@@ -14,6 +27,7 @@ $cols: math.div($content_width, $cell);
 .container {
   @include container;
   margin-top: $page_top_offset;
+  container: sizer / size;
 
   @include tablet {
     padding: 0 $gap;
@@ -22,9 +36,37 @@ $cols: math.div($content_width, $cell);
 }
 
 .grid {
-  grid-template-rows: 50vh;
+  width: 100%;
+  min-height: 200px;
+  display: grid;
+  gap: #{$gap};
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: calc((100cqw - 4 * #{$gap} / 2) / 5);
+  grid-template-rows: 40vh;
+  grid-auto-flow: row dense;
 
-  @include flow_grid;
+  @include breakpoint(5);
+  @include breakpoint(4);
+  @include breakpoint(3) {
+    grid-template-rows: calc(66cqw - #{$gap}) auto;
+  }
+
+  @include breakpoint(2) {
+    grid-template-rows: calc(100cqw - #{$gap}) auto;
+  }
+
+  @container sizer (width < #{$flow_hide_recents}) {
+    .stamp {
+      grid-column-start: 1;
+      grid-row-end: span 1;
+    }
+
+    .login {
+      display: flex;
+      grid-column: 1 / 2;
+      grid-row-end: span 2;
+    }
+  }
 }
 
 .pad_last {
@@ -52,11 +94,6 @@ $cols: math.div($content_width, $cell);
   justify-content: stretch;
   overflow: hidden;
   position: relative;
-
-  @media (max-width: $flow_hide_recents) {
-    grid-column-start: 1;
-    grid-row-end: span 1;
-  }
 }
 
 .login {
@@ -71,11 +108,5 @@ $cols: math.div($content_width, $cell);
 
   @include desktop {
     display: none;
-  }
-
-  @media (max-width: $flow_hide_recents) {
-    display: flex;
-    grid-column: 1 / 2;
-    grid-row-end: span 2;
   }
 }

@@ -1,11 +1,7 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .recent {
-  @media (max-width: $flow_hide_recents) {
+  @container sizer (width < #{$flow_hide_recents}) {
     display: none;
   }
-}
-
-.updates {
-
 }

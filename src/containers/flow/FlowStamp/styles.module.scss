@@ -108,7 +108,7 @@
 }
 
 .whatsnew {
-  @media (max-width: $flow_hide_recents) {
+  @container sizer (width < #{$flow_hide_recents}) {
     display: none;
   }
 }
