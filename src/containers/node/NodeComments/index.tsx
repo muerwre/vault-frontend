@@ -68,6 +68,7 @@ const NodeComments: FC<Props> = observer(({ order }) => {
     return null;
   }
 
+  /** Scrolls down to new comments or specific one from anchor */
   useEffect(() => {
     const anchor = location.hash?.replace('#', '');
 

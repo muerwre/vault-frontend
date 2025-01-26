@@ -20,7 +20,7 @@ interface NotificationCommentProps {
 
 const NotificationComment: FC<NotificationCommentProps> = ({ item, isNew }) => (
   <Anchor
-    href={isNew ? getCommentAnchor(item.url, item.itemId) : item.url}
+    href={getCommentAnchor(item.url, item.itemId)}
     className={styles.link}
   >
     <div className={classNames(styles.message, { [styles.new]: isNew })}>

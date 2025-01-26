@@ -22,7 +22,11 @@ const NodeHorizontalCard: FC<Props> = ({ node, hasNew, onClick }) => (
   <Anchor
     key={node.id}
     className={styles.item}
-    href={getNewCommentAnchor(URLS.NODE_URL(node.id))}
+    href={
+      hasNew
+        ? getNewCommentAnchor(URLS.NODE_URL(node.id))
+        : URLS.NODE_URL(node.id)
+    }
     onClick={onClick}
   >
     <div
