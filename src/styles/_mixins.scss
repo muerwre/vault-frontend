@@ -1,19 +1,25 @@
 @use 'sass:math';
 
 @mixin outer_shadow() {
-  box-shadow: inset $gray_90 1px 1px, transparentize(black, 0.8) 1px 1px,
+  box-shadow:
+    inset $gray_90 1px 1px,
+    transparentize(black, 0.8) 1px 1px,
     transparentize(black, 0.6) 0 1px 5px;
 }
 
 // same as outer shadow, but higher
 @mixin dropdown_shadow {
-  box-shadow: inset $gray_90 1px 1px, transparentize(black, 0.8) 1px 1px,
+  box-shadow:
+    inset $gray_90 1px 1px,
+    transparentize(black, 0.8) 1px 1px,
     transparentize(black, 0.6) 5px 5px 10px;
 }
 
 @mixin row_shadow() {
   &:not(:last-child) {
-    box-shadow: $gray_90 0 1px, inset transparentize(black, 0.8) 0 -1px;
+    box-shadow:
+      $gray_90 0 1px,
+      inset transparentize(black, 0.8) 0 -1px;
   }
 
   &:only-child {
@@ -22,7 +28,9 @@
 }
 
 @mixin inner_shadow() {
-  box-shadow: inset $gray_90 -1px -1px, inset transparentize(black, 0.9) 1px 1px,
+  box-shadow:
+    inset $gray_90 -1px -1px,
+    inset transparentize(black, 0.9) 1px 1px,
     inset transparentize(black, 0.9) 0 0 10px;
 }
 
@@ -36,7 +44,9 @@
 }
 
 @mixin input_shadow() {
-  box-shadow: inset $gray_90 0 -1px, inset transparentize(black, 0.8) 0 1px;
+  box-shadow:
+    inset $gray_90 0 -1px,
+    inset transparentize(black, 0.8) 0 1px;
 }
 
 @mixin modal_mixin() {
@@ -190,49 +200,49 @@
   cursor: pointer;
 }
 
+/** Creates container for container-query flow. 
+
+Should wrap div with @flow_grid and @flow_breakpoint mixins
+**/
+@mixin flow_container {
+  container: sizer / size;
+}
+
+/** Setups flow grid. 
+
+Should be wrapped with div that uses @include flow_container() for correct work
+
+Pass your custom rows here, like:
+
+@include flow_grid {
+   grid-template-rows: 220px; // will add 220px first row
+}
+**/
 @mixin flow_grid {
-  width: 100%;
-  box-sizing: border-box;
   display: grid;
-
-  grid-template-columns: repeat(auto-fit, minmax($cell - 5, 1fr));
-
+  gap: #{$gap};
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: calc((100cqw - 4 * #{$gap} / 2) / 5);
   grid-auto-flow: row dense;
-  grid-column-gap: $gap;
-  grid-row-gap: $gap;
-  grid-auto-rows: $cell;
 
-  // 4 cells
-  @media (max-width: ($cell * 5 + $gap * 4 + 55)) {
-    grid-auto-rows: calc(25vw - 30px);
-  }
+  @content;
+}
 
-  // 3 cells
-  @media (max-width: ($cell * 4 + $gap * 3 + 55)) {
-    grid-auto-rows: calc(33vw - 30px);
-  }
+/** Makes a breakpoint for target cell width,
 
-  // 2 cells
-  @media (max-width: ($cell * 3 + $gap * 2 + 55)) {
-    grid-auto-rows: calc(50vw - 40px);
-  }
+Pass your rules for that breakpoint in @content: 
 
-  // < 870px
-  @media (max-width: (($cell + 10) * 3)) {
-    grid-template-columns: repeat(auto-fill, minmax($fluid_cell - 20, 1fr));
-    grid-template-rows: calc(50vw - 10px) $fluid_cell;
-  }
-
-  // < 776px
-  @media (max-width: $cell_tablet) {
-    grid-template-rows: calc(66vw - 10px) auto calc(50vw - 40px);
-  }
-
-  // < 520px
-  @media (max-width: $cell_mobile) {
-    grid-template-columns: repeat(auto-fill, minmax(calc(50vw - 20px), 1fr));
-    grid-template-rows: calc(100vw - 10px) auto;
-    grid-auto-rows: calc(50vw - 10px);
+@include flow_breakpoint(2) { // defines breakpoint for 2 cells
+  background: red; // will paint element red at 2 cells resolution;
+}
+**/
+@mixin flow_breakpoint($columns) {
+  @container sizer (max-width: #{$target_flow_cell_width* $columns}) {
+    grid-template-columns: repeat(#{$columns}, 1fr);
+    grid-auto-rows: calc(
+      (100cqw - #{$columns - 1} * #{$gap} / 2) / #{$columns}
+    );
+    @content;
   }
 }
 

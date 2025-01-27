@@ -1,17 +1,29 @@
 @import 'src/styles/variables';
 
 .wrap {
-  display: grid;
-  grid-template-columns: auto;
-  grid-column-gap: $gap;
+  @include flow_container();
   margin-top: $page_top_offset;
 }
 
+.description {
+  grid-column: 2 / -3;
+  grid-row: 1 / 4;
+  height: 100%;
+  font: $font_14_medium;
+  overflow: auto;
+  height: 100%;
+}
+
 .grid {
-  grid-template-columns: 250px 5fr;
-  display: grid;
-  column-gap: $gap;
-  row-gap: $gap;
+  @include flow_grid();
+
+  @include flow_breakpoint(4);
+  @include flow_breakpoint(3);
+  @include flow_breakpoint(2) {
+    .left {
+      grid-column: 1 / -1;
+    }
+  }
 }
 
 .row {
@@ -19,20 +31,7 @@
   height: 100%;
 }
 
-.description {
-  font: $font_14_semibold;
-}
-
-.stamp {
-  grid-row-end: span 2;
-}
-
-.nodes {
-  @include flow_grid();
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: $gap;
+.left {
+  grid-row-start: 1;
+  grid-row-end: span 3;
 }
