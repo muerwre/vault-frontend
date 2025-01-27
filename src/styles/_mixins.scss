@@ -205,7 +205,7 @@
 Should wrap div with @flow_grid and @flow_breakpoint mixins
 **/
 @mixin flow_container {
-  container: sizer / size;
+  container: sizer / inline-size;
 }
 
 /** Setups flow grid. 
