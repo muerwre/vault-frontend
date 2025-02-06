@@ -10,6 +10,7 @@ import {
   COMMENT_BLOCK_TYPES,
   ICommentBlock,
 } from '~/constants/comment';
+import { headerHeight } from '~/constants/dom';
 import { IFile, ValueOf } from '~/types';
 import { CONFIG } from '~/utils/config';
 import {
@@ -212,4 +213,15 @@ export const sizeOf = (bytes: number): string => {
   return (
     (bytes / Math.pow(1024, e)).toFixed(2) + ' ' + ' KMGTP'.charAt(e) + 'B'
   );
+};
+
+/** Tells if element is in view */
+export const isFullyVisible = (element?: HTMLElement): boolean => {
+  if (!element) {
+    return false;
+  }
+
+  const rect = element.getBoundingClientRect();
+
+  return rect?.top > headerHeight && rect?.bottom < window.innerHeight;
 };

@@ -46,7 +46,7 @@ export const FlowGrid: FC<Props> = observer(
               text={node.description}
               title={node.title}
               canEdit={fetched && isUser && canEditNode(node, user)}
-              onChangeCellView={onChangeCellView}
+              onChange={onChangeCellView}
             />
           </div>
         ))}

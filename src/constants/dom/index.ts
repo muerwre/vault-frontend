@@ -5,3 +5,5 @@ export const isTablet = () => {
 
   return window.innerWidth < 599;
 };
+
+export const headerHeight = 64; // px

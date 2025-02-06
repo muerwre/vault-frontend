@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 
 import classNames from 'classnames';
 
@@ -8,6 +8,8 @@ import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';
 import { FlowDisplay, INode } from '~/types';
+
+import { isFullyVisible } from '../../../../../utils/dom';
 
 import { CellShade } from './components/CellShade';
 import { FlowCellImage } from './components/FlowCellImage';
@@ -25,7 +27,7 @@ interface Props {
   text?: string;
   flow: FlowDisplay;
   canEdit?: boolean;
-  onChangeCellView: (id: INode['id'], flow: FlowDisplay) => void;
+  onChange: (id: INode['id'], flow: FlowDisplay) => void;
 }
 
 const FlowCell: FC<Props> = ({
@@ -37,7 +39,7 @@ const FlowCell: FC<Props> = ({
   text,
   title,
   canEdit = false,
-  onChangeCellView,
+  onChange,
 }) => {
   const { isTablet } = useWindowSize();
 
@@ -45,6 +47,30 @@ const FlowCell: FC<Props> = ({
     ((!!flow.display && flow.display !== 'single') || !image) &&
     flow.show_description &&
     !!text;
+
+  const {
+    isActive: isMenuActive,
+    activate,
+    ref,
+    deactivate,
+  } = useClickOutsideFocus();
+
+  const onChangeWithScroll = useCallback<typeof onChange>(
+    (...args) => {
+      onChange(...args);
+
+      setTimeout(() => {
+        if (!isFullyVisible(ref.current)) {
+          ref.current?.scrollIntoView({
+            behavior: 'auto',
+            block: 'center',
+          });
+        }
+      }, 0);
+    },
+    [onChange, ref],
+  );
+
   const {
     hasDescription,
     setViewHorizontal,
@@ -52,13 +78,7 @@ const FlowCell: FC<Props> = ({
     setViewQuadro,
     setViewSingle,
     toggleViewDescription,
-  } = useFlowCellControls(id, text, flow, onChangeCellView);
-  const {
-    isActive: isMenuActive,
-    activate,
-    ref,
-    deactivate,
-  } = useClickOutsideFocus();
+  } = useFlowCellControls(id, text, flow, onChangeWithScroll);
 
   const shadeSize = useMemo(() => {
     const min = isTablet ? 10 : 15;
