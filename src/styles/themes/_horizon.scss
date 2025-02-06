@@ -85,10 +85,8 @@ $_ocean: #25b0bc;
     --gray_90: #{transparentize(white, 0.95)};
 
     // page background
-    --page-background: 50% 50% / cover no-repeat url('/images/horizon_bg.svg') #{darken(
-        $_cold,
-        4%
-      )} fixed;
+    --page-background: 50% 50% / cover no-repeat url('/images/horizon_bg.svg')
+      #{darken($_cold, 4%)} fixed;
     --page-background-top: linear-gradient(
       #{$_accent} -150%,
       #{transparentize($_ocean, 0.99)} 100px,

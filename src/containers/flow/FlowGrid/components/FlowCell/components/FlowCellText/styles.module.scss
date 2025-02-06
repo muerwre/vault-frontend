@@ -1,10 +1,16 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .text {
-  padding: $gap;
+  @include blur;
+
+  padding: $gap / 2 $gap $gap $gap;
   line-height: 1.3em;
 }
 
 .heading {
-  margin-bottom: 0.4em;
+  margin-bottom: 0.25em;
+
+  h4 {
+    // line-height: 1.1em;
+  }
 }

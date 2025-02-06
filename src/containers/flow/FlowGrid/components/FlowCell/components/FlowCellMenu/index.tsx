@@ -23,6 +23,7 @@ interface Props {
 
 const FlowCellMenu: FC<Props> = ({
   onClose,
+  currentView,
   hasDescription,
   toggleViewDescription,
   descriptionEnabled,
@@ -59,7 +60,7 @@ const FlowCellMenu: FC<Props> = ({
           />
         </div>
 
-        {hasDescription && (
+        {hasDescription && currentView !== 'single' && (
           <Group
             className={styles.description}
             horizontal

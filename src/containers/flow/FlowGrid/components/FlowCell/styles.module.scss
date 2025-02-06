@@ -33,18 +33,20 @@
 
 .text {
   position: absolute;
-  bottom: 5px;
-  left: 5px;
   z-index: 1;
   overflow: hidden;
   border-radius: $radius;
-  max-height: calc(100% - 10px);
-  max-width: calc(100% - 10px);
   box-sizing: border-box;
-  font: $font_16_regular;
+  font: $font_14_medium;
+  line-height: 1.25em;
+  inset: 50% 0 0 0;
+
+  &.bright {
+    color: var(--content_bg_lightest);
+  }
 
   @include tablet {
-    font: $font_14_regular;
+    font: $font_12_medium;
     left: 5px;
     bottom: 5px;
   }
@@ -54,14 +56,19 @@
     opacity: 0.5;
   }
 
-  .quadro &,
   .horizontal & {
-    max-width: calc(50% - 15px);
+    inset: 0 calc(50% + $gap / 2) 0 0;
+    border-radius: $radius 0 0 $radius;
   }
 
-  .quadro &,
   .vertical & {
-    max-height: calc(50% - 15px);
+    inset: calc(50% + $gap / 2) 0 0 0;
+    border-radius: 0 0 $radius $radius;
+  }
+
+  .quadro & {
+    inset: calc(50% + $gap / 2) calc(50% + $gap / 2) 0 0;
+    border-radius: 0 $radius 0 $radius;
   }
 }
 
@@ -76,11 +83,13 @@
 
 .title {
   font: $font_cell_title;
+  line-height: 1.2em;
   text-transform: uppercase;
   word-break: break-word;
+  color: inherit;
 
   @include tablet {
-    font: $font_18_semibold;
+    font: $font_16_semibold;
   }
 }
 

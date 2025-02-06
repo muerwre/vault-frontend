@@ -111,8 +111,9 @@ const FlowCell: FC<Props> = ({
           <FlowCellText
             className={styles.text}
             heading={<h4 className={styles.title}>{title}</h4>}
+            color={color}
           >
-            {text!}
+            {text}
           </FlowCellText>
         )}
 
