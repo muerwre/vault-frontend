@@ -1,22 +1,24 @@
-@import '../../../styles/variables';
+@import '~/styles/variables';
 
 .wrap {
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-radius: $radius;
+  gap: $gap;
+}
+
+.search {
+  background-color: var(--content_bg_lighter);
 }
 
 .grid {
-  @include outer_shadow();
   display: flex;
   justify-content: stretch;
   flex-direction: column;
   flex: 1;
-  border-radius: $radius;
-  position: relative;
-  background: $content_bg;
   overflow: hidden;
+  gap: $gap;
+  padding: $gap;
 
   &::after {
     content: '';
@@ -33,49 +35,25 @@
       display: none;
     }
   }
+
+  &.noUpdates {
+    @container sizer (width < #{$flow_hide_recents}) {
+      display: none;
+    }
+  }
+}
+
+.items.recent {
+  @container sizer (width < #{$flow_hide_recents}) {
+    display: none;
+    background-color: red;
+  }
 }
 
 .items {
-  padding: 0 $gap 0 $gap;
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-}
-
-.label {
-  display: flex;
-  flex-direction: row;
-  min-width: 0;
-  padding: $gap;
-  border-radius: $radius;
-
-  @include title_with_line();
-
-  color: transparentize(white, $amount: 0.8);
-
-  &_search {
-    color: white;
-    padding-left: $gap * 1.2;
-  }
-
-  & > :global(.line) {
-    margin-right: $gap;
-  }
-}
-
-.label_text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.search {
-  @include outer_shadow();
-
-  background: $content_bg_lighter;
-  padding: $gap;
-  border-radius: $radius;
 }
 
 .search_icon {
@@ -88,35 +66,4 @@
   cursor: pointer;
   stroke-width: 0.5;
   transition: opacity 0.25s;
-}
-
-.toggles {
-  & > div {
-    padding: $gap;
-    font: $font_14_semibold;
-  }
-
-  &__label {
-    cursor: pointer;
-  }
-}
-
-.fluid_toggle {
-  @include desktop {
-    display: none;
-  }
-}
-
-.whatsnew {
-  @container sizer (width < #{$flow_hide_recents}) {
-    display: none;
-  }
-}
-
-.search_results {
-  overflow: auto;
-
-  @include tablet {
-    margin-top: $gap;
-  }
 }

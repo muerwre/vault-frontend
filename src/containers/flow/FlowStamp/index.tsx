@@ -2,17 +2,15 @@ import { FC, FormEvent, useCallback, useMemo } from 'react';
 
 import classNames from 'classnames';
 
-import { Group } from '~/components/common/Group';
+import { Card } from '~/components/common/Card';
 import { Icon } from '~/components/common/Icon';
-import { Superpower } from '~/components/common/Superpower';
+import { NodeHorizontalCard } from '~/components/common/NodeHorizontalCard';
+import { SubTitle } from '~/components/common/SubTitle';
 import { InputText } from '~/components/input/InputText';
-import { Toggle } from '~/components/input/Toggle';
-import { experimentalFeatures } from '~/constants/features';
 import styles from '~/containers/flow/FlowStamp/styles.module.scss';
 import { useFlowContext } from '~/utils/providers/FlowProvider';
 import { useSearchContext } from '~/utils/providers/SearchProvider';
 
-import { FlowRecent } from './components/FlowRecent';
 import { FlowSearchResults } from './components/FlowSearchResults';
 
 interface Props {
@@ -64,60 +62,55 @@ const FlowStamp: FC<Props> = ({ isFluid, onToggleLayout }) => {
 
   return (
     <div className={styles.wrap}>
-      <form className={styles.search} onSubmit={onSearchSubmit}>
-        <InputText
-          title="Поиск"
-          value={searchText}
-          handler={setSearchText}
-          suffix={after}
-          onKeyUp={onKeyUp}
-        />
-      </form>
+      <Card className={styles.search}>
+        <form onSubmit={onSearchSubmit}>
+          <InputText
+            title="Поиск"
+            value={searchText}
+            handler={setSearchText}
+            suffix={after}
+            onKeyUp={onKeyUp}
+          />
+        </form>
+      </Card>
 
       {searchText ? (
-        <div className={styles.search_results}>
-          <div className={styles.grid}>
-            <div className={styles.label}>
-              <span className={styles.label_text}>Результаты поиска</span>
-              <span className="line" />
-            </div>
-
-            <div className={styles.items}>
-              <FlowSearchResults
-                hasMore={searchHasMore}
-                isLoading={searchIsLoading}
-                results={searchResults}
-                onLoadMore={onSearchLoadMore}
-              />
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className={styles.grid}>
-          <div className={classNames(styles.label, styles.whatsnew)}>
-            <span className={styles.label_text}>Что нового?</span>
-            <span className="line" />
-          </div>
+        <Card className={styles.grid}>
+          <SubTitle>Результаты поиска</SubTitle>
 
           <div className={styles.items}>
-            <FlowRecent updated={updates} recent={recent} />
+            <FlowSearchResults
+              hasMore={searchHasMore}
+              isLoading={searchIsLoading}
+              results={searchResults}
+              onLoadMore={onSearchLoadMore}
+            />
           </div>
-        </div>
-      )}
+        </Card>
+      ) : (
+        <Card
+          className={classNames(styles.grid, {
+            [styles.noUpdates]: !updates.length,
+          })}
+        >
+          <SubTitle>Что нового?</SubTitle>
 
-      {experimentalFeatures.liquidFlow && (
-        <Superpower>
-          <div className={styles.toggles}>
-            <Group
-              horizontal
-              onClick={onToggleLayout}
-              className={styles.fluid_toggle}
-            >
-              <Toggle value={isFluid} />
-              <div className={styles.toggles__label}>Жидкое течение</div>
-            </Group>
-          </div>
-        </Superpower>
+          {updates.length > 0 && (
+            <div className={classNames(styles.items, styles.updates)}>
+              {updates.map((node) => (
+                <NodeHorizontalCard node={node} key={node.id} hasNew />
+              ))}
+            </div>
+          )}
+
+          {recent.length > 0 && (
+            <div className={classNames(styles.items, styles.recent)}>
+              {recent.map((node) => (
+                <NodeHorizontalCard node={node} key={node.id} />
+              ))}
+            </div>
+          )}
+        </Card>
       )}
     </div>
   );

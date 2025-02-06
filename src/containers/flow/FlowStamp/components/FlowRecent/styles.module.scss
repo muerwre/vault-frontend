@@ -1,7 +1,0 @@
-@import 'src/styles/variables';
-
-.recent {
-  @container sizer (width < #{$flow_hide_recents}) {
-    display: none;
-  }
-}

@@ -13,9 +13,11 @@ interface Props extends DivProps {
 
 const SubTitle: FC<Props> = ({ isLoading, children, ...rest }) => (
   <div {...rest} className={classNames(styles.title, rest.className)}>
-    <Placeholder active={isLoading} loading>
-      {children}
-    </Placeholder>
+    <span className={styles.name}>
+      <Placeholder active={isLoading} loading>
+        {children}
+      </Placeholder>
+    </span>
   </div>
 );
 

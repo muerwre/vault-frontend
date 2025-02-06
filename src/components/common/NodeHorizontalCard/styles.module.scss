@@ -27,8 +27,8 @@
   &.new {
     &::after {
       content: ' ';
-      width: 12px;
-      height: 12px;
+      width: 8px;
+      height: 8px;
       border-radius: 100%;
       background: $color_danger;
       box-shadow: $content_bg 0 0 0 5px;

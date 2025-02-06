@@ -1,7 +1,25 @@
-@import "src/styles/variables.scss";
+@import 'src/styles/variables.scss';
 
 .title {
   font: $font_12_semibold;
   text-transform: uppercase;
-  opacity: 0.3;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $gap / 2;
+  color: var(--gray_75);
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &::after {
+    content: ' ';
+    display: flex;
+    height: 2px;
+    background-color: var(--gray_90);
+    flex: 1;
+    border-radius: 2px;
+  }
 }
