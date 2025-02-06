@@ -145,7 +145,7 @@ const FlowCell: FC<Props> = ({
           />
         )}
 
-        {!!title && (
+        {!!title && !withText && (
           <CellShade
             color={color}
             className={styles.shade}

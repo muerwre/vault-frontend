@@ -1,4 +1,3 @@
-
 $bold: 700;
 $semibold: 600;
 $regular: 400;
@@ -6,10 +5,20 @@ $medium: 500;
 $light: 300;
 $extra_light: 200;
 
-
-$font: Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-'Noto Color Emoji';
+$font:
+  Montserrat,
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  'Helvetica Neue',
+  Arial,
+  'Noto Sans',
+  sans-serif,
+  'Apple Color Emoji',
+  'Segoe UI Emoji',
+  'Segoe UI Symbol',
+  'Noto Color Emoji';
 
 $font_48_semibold: $semibold 48px $font;
 $font_48_bold: $bold 48px $font;
@@ -39,5 +48,6 @@ $font_8_regular: $regular 8px $font;
 $font_8_semibold: $semibold 8px $font;
 
 $font_cell_title: $font_24_semibold;
+$font_cell_title_compact: $font_18_semibold;
 $font_hero_title: $bold 40px $font;
 $font_boris: $bold 72px $font;

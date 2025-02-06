@@ -1,5 +1,7 @@
 @import 'src/styles/variables';
 
+$compact_size: 200px;
+
 .cell {
   @include inner_shadow;
 
@@ -9,6 +11,7 @@
   width: 100%;
   height: 100%;
   background: $content_bg;
+  container: cell / inline-size;
 }
 
 .thumb {
@@ -37,23 +40,29 @@
   overflow: hidden;
   border-radius: $radius;
   box-sizing: border-box;
+  inset: 50% 0 0 0;
+  padding: $gap $gap * 1.5 0 $gap * 1.5;
   font: $font_14_medium;
   line-height: 1.25em;
-  inset: 50% 0 0 0;
 
-  &.bright {
-    color: var(--content_bg_lightest);
-  }
-
-  @include tablet {
-    font: $font_12_medium;
-    left: 5px;
-    bottom: 5px;
+  @container (max-width: $compact_size) {
+    padding: $gap / 2 $gap 0 $gap;
   }
 
   & :global(.grey) {
     color: inherit;
     opacity: 0.5;
+  }
+
+  @container (max-width: #{$compact_size}) {
+    padding: $gap / 2 $gap 0 $gap;
+  }
+
+  .horizontal &,
+  .quadro & {
+    @container (max-width: #{$compact_size * 2}) {
+      padding: $gap / 2 $gap 0 $gap;
+    }
   }
 
   .horizontal & {
@@ -69,6 +78,10 @@
   .quadro & {
     inset: calc(50% + $gap / 2) calc(50% + $gap / 2) 0 0;
     border-radius: 0 $radius 0 $radius;
+  }
+
+  .title {
+    margin-bottom: 0.1em;
   }
 }
 
@@ -87,9 +100,17 @@
   text-transform: uppercase;
   word-break: break-word;
   color: inherit;
+  margin-bottom: -0.125em;
 
-  @include tablet {
-    font: $font_16_semibold;
+  @container (max-width: #{$compact_size}) {
+    font: $font_cell_title_compact;
+  }
+
+  .horizontal &,
+  .quadro & {
+    @container (max-width: #{$compact_size * 2}) {
+      font: $font_cell_title_compact;
+    }
   }
 }
 

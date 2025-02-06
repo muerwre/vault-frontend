@@ -3,8 +3,20 @@
 .text {
   @include blur;
 
-  padding: $gap / 2 $gap $gap $gap;
   line-height: 1.3em;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.description {
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(0, 0, 0, 0) 95%
+  );
+  flex: 1;
+  overflow: hidden;
 }
 
 .heading {
