@@ -30,7 +30,7 @@ $cols: math.div($content_width, $cell);
   min-height: 200px;
 
   @include flow_grid() {
-    grid-template-rows: 40vh;
+    grid-template-rows: min(50vh, 33cqw);
   }
 
   @include flow_breakpoint(5);
