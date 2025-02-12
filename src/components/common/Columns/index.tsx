@@ -31,7 +31,7 @@ const Columns: FC<ColumnsProps> = ({
 
     if (!childs) return;
 
-    const timeout = setTimeout(() => setColumns([...childs]), 150);
+    const timeout = setTimeout(() => setColumns([...childs.values()]), 150);
 
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps

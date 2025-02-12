@@ -57,7 +57,9 @@ const NodeImageSwiperBlock: FC<Props> = observer(({ node }) => {
 
   useEffect(() => {
     controlledSwiper?.slideTo(0, 0);
-    return () => controlledSwiper?.slideTo(0, 0);
+    return () => {
+      controlledSwiper?.slideTo(0, 0);
+    };
   }, [controlledSwiper, images, node.id]);
 
   useEffect(() => {
