@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 
-import { observer } from 'mobx-react-lite';
-import { SlideData } from 'photoswipe/dist/types/slide/slide';
-
 import 'photoswipe/style.css';
 
+import { observer } from 'mobx-react-lite';
+import { SlideData } from 'photoswipe/dist/types/slide/slide';
+import { renderToStaticMarkup } from 'react-dom/server';
+
+import { Icon } from '~/components/common/Icon';
 import { imagePresets } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useModal } from '~/hooks/modal/useModal';
@@ -13,11 +15,14 @@ import { DialogComponentProps } from '~/types/modal';
 import { getURL } from '~/utils/dom';
 
 import styles from './styles.module.scss';
-
 export interface Props extends DialogComponentProps {
   items: IFile[];
   index: number;
 }
+
+const arrowNextSVG = renderToStaticMarkup(<Icon icon="right" size={40} />);
+const arrowPrevSVG = renderToStaticMarkup(<Icon icon="left" size={40} />);
+const closeSVG = renderToStaticMarkup(<Icon icon="close" size={32} />);
 
 const padding = { top: 10, left: 10, right: 10, bottom: 10 } as const;
 
@@ -74,6 +79,9 @@ const PhotoSwipe = observer(({ index, items }: Props) => {
         zoom: false,
         counter: false,
         bgOpacity: 0.1,
+        arrowNextSVG,
+        arrowPrevSVG,
+        closeSVG,
       });
 
       ps.on('destroy', hideModal);
