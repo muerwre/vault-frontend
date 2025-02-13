@@ -1,3 +1,5 @@
+import { lazy } from 'react';
+
 import { LoginDialog } from '~/containers/auth/LoginDialog';
 import { LoginSocialRegisterDialog } from '~/containers/auth/LoginSocialRegisterDialog';
 import { RestorePasswordDialog } from '~/containers/auth/RestorePasswordDialog';
@@ -6,8 +8,13 @@ import { TelegramAttachDialog } from '~/containers/auth/TelegramAttachDialog';
 import { EditorCreateDialog } from '~/containers/dialogs/EditorCreateDialog';
 import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
-import { PhotoSwipe } from '~/containers/dialogs/PhotoSwipe';
 import { TestDialog } from '~/containers/dialogs/TestDialog';
+
+const PhotoSwipe = lazy(() =>
+  import('~/containers/dialogs/PhotoSwipe').then((it) => ({
+    default: it.PhotoSwipe,
+  })),
+);
 
 export enum Dialog {
   Login = 'Login',

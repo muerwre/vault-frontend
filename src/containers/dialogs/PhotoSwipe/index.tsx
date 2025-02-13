@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import 'photoswipe/style.css';
 
 import { observer } from 'mobx-react-lite';
-import { SlideData } from 'photoswipe/dist/types/slide/slide';
+import PSWP from 'photoswipe';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import { Icon } from '~/components/common/Icon';
@@ -29,66 +29,37 @@ const padding = { top: 10, left: 10, right: 10, bottom: 10 } as const;
 const PhotoSwipe = observer(({ index, items }: Props) => {
   const { hideModal } = useModal();
   const { isTablet } = useWindowSize();
+  const pswp = useRef(new PSWP());
 
   useEffect(() => {
-    Promise.all(
-      items.map(
-        (file): Promise<SlideData> =>
-          new Promise((resolve) => {
-            const src = getURL(
-              file,
-              isTablet ? imagePresets[900] : imagePresets[1600],
-            );
+    const dataSource = items.map((file) => ({
+      src: getURL(file, imagePresets[1600]),
+      width: file.metadata?.width,
+      height: file.metadata?.height,
+    }));
 
-            if (file.metadata?.width && file.metadata.height) {
-              resolve({
-                src,
-                width: file.metadata.width,
-                height: file.metadata.height,
-              });
+    pswp.current.options = {
+      ...pswp.current.options,
+      dataSource,
+      index: index || 0,
+      closeOnVerticalDrag: true,
+      padding,
+      mainClass: styles.wrap,
+      zoom: false,
+      counter: false,
+      bgOpacity: 0.1,
+      arrowNextSVG,
+      arrowPrevSVG,
+      closeSVG,
+    };
 
-              return;
-            }
+    pswp.current.on('closingAnimationEnd', hideModal);
+    pswp.current.init();
 
-            const img = new Image();
-
-            img.onload = () => {
-              resolve({
-                src,
-                height: img.naturalHeight,
-                width: img.naturalWidth,
-              });
-            };
-
-            img.onerror = () => {
-              resolve({});
-            };
-
-            img.src = getURL(file, imagePresets[1600]);
-          }),
-      ),
-    ).then(async (images: SlideData[]) => {
-      const PSWP = await import('photoswipe').then((it) => it.default);
-
-      const ps = new PSWP({
-        dataSource: images,
-        index: index || 0,
-        closeOnVerticalDrag: true,
-        padding,
-        mainClass: styles.wrap,
-        zoom: false,
-        counter: false,
-        bgOpacity: 0.1,
-        arrowNextSVG,
-        arrowPrevSVG,
-        closeSVG,
-      });
-
-      ps.on('destroy', hideModal);
-      ps.on('close', hideModal);
-
-      ps.init();
-    });
+    return () => {
+      pswp.current?.off('close', hideModal);
+      pswp.current?.destroy();
+    };
   }, [hideModal, items, index, isTablet]);
 
   return null;

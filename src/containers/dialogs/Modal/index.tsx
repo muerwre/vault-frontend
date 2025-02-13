@@ -1,7 +1,8 @@
-import { FC, createElement } from 'react';
+import { FC, createElement, Suspense } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
+import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { ModalWrapper } from '~/components/common/ModalWrapper';
 import { DIALOG_CONTENT } from '~/constants/modal';
 import { useModalStore } from '~/store/modal/useModalStore';
@@ -18,10 +19,12 @@ const Modal: FC<Props> = observer(() => {
 
   return (
     <ModalWrapper onOverlayClick={hide}>
-      {createElement(DIALOG_CONTENT[current!]! as any, {
-        onRequestClose: hide,
-        ...props,
-      })}
+      <Suspense fallback={<LoaderCircle />}>
+        {createElement(DIALOG_CONTENT[current!]! as any, {
+          onRequestClose: hide,
+          ...props,
+        })}
+      </Suspense>
     </ModalWrapper>
   );
 });
