@@ -54,6 +54,12 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+
+  @container sizer (width >= #{$flow_hide_recents}) {
+    &.scrollable {
+      overflow: auto;
+    }
+  }
 }
 
 .search_icon {

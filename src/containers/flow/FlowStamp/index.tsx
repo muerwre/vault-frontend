@@ -78,7 +78,7 @@ const FlowStamp: FC<Props> = ({ isFluid, onToggleLayout }) => {
         <Card className={styles.grid}>
           <SubTitle>Результаты поиска</SubTitle>
 
-          <div className={styles.items}>
+          <div className={classNames(styles.items, styles.scrollable)}>
             <FlowSearchResults
               hasMore={searchHasMore}
               isLoading={searchIsLoading}
