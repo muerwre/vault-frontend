@@ -106,7 +106,9 @@
     transform: translate(50%, 0) scaleX(0);
     opacity: 0;
     border-radius: 3px;
-    transition: transform 0.5s, opacity 0.25s;
+    transition:
+      transform 0.5s,
+      opacity 0.25s;
   }
 
   &::after {
@@ -159,7 +161,7 @@
   }
 }
 
-.logo_wrapper {
+.logo_wrapper:not(.guest) {
   @include tablet {
     display: none;
   }

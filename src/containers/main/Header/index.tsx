@@ -59,7 +59,11 @@ const Header: FC<HeaderProps> = observer(() => {
       className={classNames(styles.wrap, { [styles.is_scrolled]: isScrolled })}
     >
       <div className={styles.container}>
-        <div className={styles.logo_wrapper}>
+        <div
+          className={classNames(styles.logo_wrapper, {
+            [styles.guest]: !isUser,
+          })}
+        >
           <Logo />
         </div>
 
