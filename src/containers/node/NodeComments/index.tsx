@@ -15,6 +15,7 @@ import { useCommentContext } from '~/utils/context/CommentContextProvider';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
 import { useUserContext } from '~/utils/context/UserContextProvider';
 import { canEditComment, canLikeComment } from '~/utils/node';
+import { VideoPlayerProvider } from '~/utils/providers/VideoPlayerProvider';
 
 import styles from './styles.module.scss';
 
@@ -84,38 +85,40 @@ const NodeComments: FC<Props> = observer(({ order }) => {
   }, [isLoading]);
 
   return (
-    <div className={styles.wrap}>
-      {order === 'DESC' && more}
+    <VideoPlayerProvider>
+      <div className={styles.wrap}>
+        {order === 'DESC' && more}
 
-      {groupped.map((group, index) => (
-        <>
-          {isFirstGroupWithNewComment(group, groupped[index - 1]) && (
-            <a
-              id={NEW_COMMENT_ANCHOR_NAME}
-              className={styles.newCommentAnchor}
+        {groupped.map((group, index) => (
+          <>
+            {isFirstGroupWithNewComment(group, groupped[index - 1]) && (
+              <a
+                id={NEW_COMMENT_ANCHOR_NAME}
+                className={styles.newCommentAnchor}
+              />
+            )}
+
+            <Comment
+              nodeId={node.id!}
+              key={group.ids.join()}
+              group={group}
+              highlighted={
+                node.id === BORIS_NODE_ID && group.user.id === ANNOUNCE_USER_ID
+              }
+              onLike={onLike}
+              canLike={canLikeComment(group, user)}
+              canEdit={canEditComment(group, user)}
+              onDelete={onDeleteComment}
+              onShowImageModal={onShowImageModal}
+              isSame={group.user.id === user.id}
+              saveComment={onSaveComment}
             />
-          )}
+          </>
+        ))}
 
-          <Comment
-            nodeId={node.id!}
-            key={group.ids.join()}
-            group={group}
-            highlighted={
-              node.id === BORIS_NODE_ID && group.user.id === ANNOUNCE_USER_ID
-            }
-            onLike={onLike}
-            canLike={canLikeComment(group, user)}
-            canEdit={canEditComment(group, user)}
-            onDelete={onDeleteComment}
-            onShowImageModal={onShowImageModal}
-            isSame={group.user.id === user.id}
-            saveComment={onSaveComment}
-          />
-        </>
-      ))}
-
-      {order === 'ASC' && more}
-    </div>
+        {order === 'ASC' && more}
+      </div>
+    </VideoPlayerProvider>
   );
 });
 

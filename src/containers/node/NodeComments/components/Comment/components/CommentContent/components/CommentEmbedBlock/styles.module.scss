@@ -1,8 +1,8 @@
 @import 'src/styles/variables';
 
 .embed {
-  padding: 0 $gap;
-  height: $comment_height;
+  padding: 0 0;
+  min-height: $comment_height;
   width: 100%;
   box-sizing: border-box;
   background: 50% 50% no-repeat;
@@ -69,6 +69,7 @@
   justify-content: stretch;
   box-sizing: border-box;
   z-index: 2;
+  cursor: pointer;
 
   & > div {
     width: 100%;
@@ -97,4 +98,48 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@keyframes appear {
+  0% {
+    grid-template-columns: 0fr;
+    opacity: 0;
+  }
+
+  50% {
+    grid-template-columns: 1fr;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.video {
+  width: 100%;
+  position: relative;
+  padding: $gap / 2;
+}
+
+.close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color_danger);
+  width: 64px;
+  height: 24px;
+  position: absolute;
+  bottom: calc(100% - #{$gap / 2});
+  right: 24px;
+  border-radius: $radius $radius 0 0;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.animation {
+  background-color: var(--content_bg_darker);
+  display: grid;
+  animation: appear 0.5s forwards;
+  width: 100%;
+  border-radius: $radius;
 }
