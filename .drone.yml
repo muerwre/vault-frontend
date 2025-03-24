@@ -11,7 +11,7 @@ steps:
     image: plugins/docker
     when:
       branch:
-        - master
+        - never
     environment:
       NEXT_PUBLIC_API_HOST: https://vault48.org/api/
       NEXT_PUBLIC_REMOTE_CURRENT: https://vault48.org/static/

@@ -9,6 +9,7 @@ const withTM = require('next-transpile-modules')([
 
 module.exports = withBundleAnalyzer(
   withTM({
+    output: 'standalone',
     /** rewrite old-style node paths */
     async rewrites() {
       return [

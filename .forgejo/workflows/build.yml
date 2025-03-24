@@ -2,7 +2,7 @@ name: Build & Publish
 
 on:
   push:
-    branches: [master]
+    branches: [standalone]
 
 jobs:
   push_to_registry:
@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./docker/nextjs/Dockerfile
+          file: ./docker/nextjs-standalone/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

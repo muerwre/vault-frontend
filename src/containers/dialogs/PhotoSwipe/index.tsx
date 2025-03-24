@@ -58,6 +58,7 @@ const PhotoSwipe = observer(({ index, items }: Props) => {
 
     return () => {
       pswp.current?.off('close', hideModal);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       pswp.current?.destroy();
     };
   }, [hideModal, items, index, isTablet]);
