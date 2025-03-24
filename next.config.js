@@ -2,7 +2,10 @@
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
-const withTM = require('next-transpile-modules')(['ramda', '@v9v/ts-react-telegram-login']);
+const withTM = require('next-transpile-modules')([
+  'ramda',
+  '@v9v/ts-react-telegram-login',
+]);
 
 module.exports = withBundleAnalyzer(
   withTM({
@@ -10,36 +13,37 @@ module.exports = withBundleAnalyzer(
     async rewrites() {
       return [
         {
-          source: '/post:id',
+          // everything except 'post' is for backwards compatibility here
+          source: '/(post|photo|blog|song|video|cell):id',
           destination: '/node/:id',
         },
         {
           source: '/~:username',
           destination: '/profile/:username',
-        }
+        },
       ];
     },
 
     /** don't try to optimize fonts */
     optimizeFonts: false,
     images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '*.vault48.org',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.ytimg.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        pathname: '/**',
-      },
-    ],
-  },
-  })
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'vault48.org',
+          pathname: '/static/**',
+        },
+        {
+          protocol: 'https',
+          hostname: '*.ytimg.com',
+          pathname: '/**',
+        },
+        {
+          protocol: 'http',
+          hostname: 'localhost',
+          pathname: '/**',
+        },
+      ],
+    },
+  }),
 );

@@ -13,8 +13,8 @@ steps:
       branch:
         - master
     environment:
-      NEXT_PUBLIC_API_HOST: https://pig.vault48.org/
-      NEXT_PUBLIC_REMOTE_CURRENT: https://pig.vault48.org/static/
+      NEXT_PUBLIC_API_HOST: https://vault48.org/api/
+      NEXT_PUBLIC_REMOTE_CURRENT: https://vault48.org/static/
       NEXT_PUBLIC_PUBLIC_HOST: https://vault48.org/
       NEXT_PUBLIC_BOT_USERNAME: vault48bot
     settings:
