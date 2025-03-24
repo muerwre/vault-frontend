@@ -49,7 +49,9 @@ export const getStaticPaths = async () => {
     .map((it) => it.id!.toString());
 
   return {
-    paths: recentIDs.map((id) => ({ params: { id } })),
+    // this was generating too much garbage, so skip it
+    // paths: recentIDs.map((id) => ({ params: { id } })),
+    paths: [],
     fallback: true,
   };
 };
