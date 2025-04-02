@@ -7,7 +7,7 @@ export const API = {
   USER: {
     LOGIN: '/auth',
     OAUTH_WINDOW: (provider: OAuthProvider) =>
-      `${CONFIG.apiHost}oauth/${provider}/redirect`,
+      `${CONFIG.apiHost}oauth/${provider}/redirect/`,
     ME: '/auth',
     UPDATE_PHOTO: '/auth/photo',
     UPDATE_COVER: '/auth/photo',
