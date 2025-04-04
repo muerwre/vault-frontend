@@ -7,7 +7,7 @@
 
   &.multiple {
     // Desktop devices
-    @include flexbin(25vh, $flexbin-space);
+    @include flexbin(300px, $flexbin-space);
 
     // Tablet devices
     @media (max-width: $flexbin-tablet-max) {
@@ -22,13 +22,16 @@
 }
 
 .image {
-  max-height: 500px;
+  max-height: 300px;
   border-radius: $radius;
   max-width: 100%;
 
   .multiple & {
-    max-height: 250px;
-    max-inline-size: 250px;
+    // both of that were 250px,
+    // if you know why it should be like this, tell me
+    // it messes up with the flexbin above
+    max-height: 300px;
+    max-inline-size: 300px;
   }
 }
 
