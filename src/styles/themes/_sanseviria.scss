@@ -1,0 +1,51 @@
+@mixin apply {
+  :root.theme-sansevieria {
+    --color_primary: #e28166;
+    --color_danger: rgb(180, 109, 99);
+    --color_online: #1eb1ac;
+    --color_offline: #a3584b;
+    --color_link: #7199d7;
+    --color_like: #d56c68;
+    --color_flow: rgb(123, 60, 65);
+    --color_lab: #2c2f4c;
+    --color_boris: #5c827f;
+    --danger_gradient: linear-gradient(165deg, #ff7e56 -50%, #280003 150%);
+    --info_gradient: linear-gradient(170deg, #476695, #22252d);
+    --warning_gradient: linear-gradient(165deg, #f4e7aa -50%, #a23500 150%);
+    --primary_gradient: linear-gradient(170deg, #fd9bce -150%, #59361c);
+    --magic_gradient: linear-gradient(260deg, #e95678 -50%, #ff7549 150%);
+    --global_loader_gradient: linear-gradient(90deg, #c9ab8e, #694b5a, #43040a);
+    --flow_gradient: var(--primary_gradient);
+    --lab_gradient: var(--info_gradient);
+    --content_bg: #181e1d;
+    --content_bg_dark: #181d1e;
+    --content_bg_darker: #151a13;
+    --content_bg_light: #23292b;
+    --content_bg_lighter: #2f3530;
+    --content_bg_lightest: #2e2c31;
+    --content_bg_success: #e956784d;
+    --content_bg_info: #fab7954d;
+    --content_bg_danger: #ff334480;
+    --content_bg_backdrop: 50% 50% / cover no-repeat
+      url('/images/sansivieria.svg') #1f2625dd;
+    --content_bg_hero: url('/images/noise.png') #4d322677;
+    --white: #fff;
+    --gray_25: #ffffffbf;
+    --gray_50: #ffffff80;
+    --gray_75: #ffffff40;
+    --gray_90: #ffffff0d;
+    --page-background: 50% 50% / cover no-repeat url('/images/sansivieria.svg')
+      #101315 fixed;
+    --page-background-top: linear-gradient(
+      #050505 -150%,
+      #25b0bc03 100px,
+      #25b0bc00 200px
+    );
+    --boris-background: linear-gradient(
+      170deg,
+      #080332 -150%,
+      #54302850 250px,
+      #00000000 600px
+    );
+  }
+}

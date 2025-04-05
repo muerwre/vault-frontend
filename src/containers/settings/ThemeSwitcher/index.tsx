@@ -28,7 +28,7 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = () => {
         >
           <Group>
             <div className={styles.palette}>
-              {item.colors.map((color) => (
+              {[...item.colors].reverse().map((color) => (
                 <div
                   key={color}
                   className={styles.sample}

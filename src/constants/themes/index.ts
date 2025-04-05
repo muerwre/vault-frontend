@@ -1,6 +1,7 @@
 export enum Theme {
   Default = 'Default',
   Horizon = 'Horizon',
+  Sansevieria = 'Sansevieria',
 }
 
 interface ThemeColors {
@@ -27,5 +28,14 @@ export const themeColors: Record<Theme, ThemeColors> = {
       'linear-gradient(170deg, #25b0bc, #7693d6)',
     ],
     background: 'url("/images/horizon_bg.svg") 50% 50% / cover rgb(28, 30, 38)',
+  },
+  [Theme.Sansevieria]: {
+    name: 'Сансевирия',
+    colors: [
+      'linear-gradient(165deg, #f4e7aa -50%, #a23500 150%)',
+      'linear-gradient(165deg, #ff7e56 -50%, #280003 150%)',
+      'linear-gradient(170deg, #476695, #22252d)',
+    ],
+    background: '#1f2625',
   },
 };

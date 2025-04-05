@@ -1,5 +1,6 @@
 @use './themes/default' as theme_default;
 @use './themes/horizon' as theme_horizon;
+@use './themes/sanseviria' as theme_sanseviria;
 
 @import 'src/styles/variables';
 
@@ -12,6 +13,7 @@
 
 @include theme_default.apply();
 @include theme_horizon.apply();
+@include theme_sanseviria.apply();
 
 html {
   min-height: 100vh;

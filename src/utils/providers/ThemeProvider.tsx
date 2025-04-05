@@ -21,6 +21,7 @@ const ThemeContext = createContext({
 const themeClass: Record<Theme, string> = {
   [Theme.Default]: '',
   [Theme.Horizon]: 'theme-horizon',
+  [Theme.Sansevieria]: 'theme-sansevieria',
 };
 
 const ThemeProvider: FC<ProvidersProps> = ({ children }) => {
