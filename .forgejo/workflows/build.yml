@@ -34,8 +34,8 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ./docker/nextjs-standalone/Dockerfile
+          context: ./packages/frontend
+          file: ./packages/frontend/docker/nextjs-standalone/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
