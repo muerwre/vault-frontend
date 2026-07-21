@@ -1,0 +1,21 @@
+{
+  "name": "@vault/common",
+  "version": "0.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./constants": "./dist/constants/index.js",
+    "./types": "./dist/types/index.js",
+    "./types/*": "./dist/types/*.js"
+  },
+  "scripts": {
+    "build": "rm -rf ./dist && tsc",
+    "dev": "tsc -w --preserveWatchOutput",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}

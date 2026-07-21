@@ -1,11 +1,18 @@
-/node_modules
-/npm-debug.log
-/.idea
-/dist
-/build
-/.next
-/.vscode
-/.history
+# dependencies & build output (matched at any depth for workspaces)
+node_modules
+npm-debug.log
+.idea
+dist
+build
+.next
+.vscode
+.history
 .DS_Store
-/tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# env
 .env.local
+.env.*.local
+
+# intermediate migration spec / reference material (dump, example repos)
+/examples

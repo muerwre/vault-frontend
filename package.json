@@ -1,113 +1,32 @@
 {
-  "name": "vault-frontend",
+  "name": "vault",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@dnd-kit/core": "^6.0.5",
-    "@dnd-kit/sortable": "^7.0.1",
-    "@popperjs/core": "^2.11.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@tippyjs/react": "^4.2.6",
-    "@v9v/ts-react-telegram-login": "^1.1.1",
-    "autosize": "^4.0.2",
-    "axios": "^0.21.4",
-    "body-scroll-lock": "^2.6.4",
-    "classnames": "^2.2.6",
-    "color2k": "^1.2.4",
-    "date-fns": "^2.4.1",
-    "file-loader": "^6.2.0",
-    "flexbin": "^0.2.0",
-    "formik": "^2.2.6",
-    "insane": "^2.6.2",
-    "marked": "^4.0.12",
-    "mobx": "^6.3.10",
-    "mobx-persist-store": "^1.0.4",
-    "mobx-react-lite": "^3.2.3",
-    "next": "^12.3.0",
-    "photoswipe": "^5.4.4",
-    "raleway-cyrillic": "^4.0.2",
-    "ramda": "^0.26.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-dropzone": "^11.4.2",
-    "react-hot-toast": "^2.3.0",
-    "react-lazyload": "^3.2.0",
-    "react-masonry-css": "^1.0.16",
-    "react-popper": "^2.2.3",
-    "react-resize-detector": "^12.0.2",
-    "react-router": "^5.1.2",
-    "react-router-dom": "^5.1.2",
-    "react-sticky-box": "^1.0.2",
-    "sass": "^1.49.0",
-    "sharp": "^0.32.6",
-    "swiper": "^11.2.2",
-    "swr": "^1.0.1",
-    "throttle-debounce": "^2.1.0",
-    "typescript": "^4.0.5",
-    "uuid4": "^1.1.4",
-    "web-vitals": "^0.2.4",
-    "yup": "^0.32.9"
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "ts-check": "tsc -p tsconfig.json --noEmit",
-    "lint": "next lint --fix",
     "prepare": "husky install",
-    "next:dev": "next dev",
-    "next:build": "next build",
-    "next:start": "next start -p 80",
-    "analyze": "ANALYZE=true next build",
-    "analyze:server": "BUNDLE_ANALYZE=server next build",
-    "analyze:browser": "BUNDLE_ANALYZE=browser next build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">1%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "build": "yarn lerna run build",
+    "dev": "lerna run dev --parallel",
+    "typecheck": "yarn lerna run typecheck",
+    "lint": "yarn lerna run lint --no-bail",
+    "frontend:dev": "yarn workspace @vault/frontend run dev",
+    "frontend:build": "yarn workspace @vault/frontend run build",
+    "backend:dev": "yarn workspace @vault/backend run dev",
+    "backend:build": "yarn workspace @vault/backend run build",
+    "common:build": "yarn workspace @vault/common run build"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^12.3.0",
-    "@next/eslint-plugin-next": "^12.3.0",
-    "@types/marked": "^4.0.1",
-    "@types/node": "^11.13.22",
-    "@types/ramda": "^0.26.33",
-    "@types/react": "^17.0.2",
-    "@types/react-router-dom": "^5.1.7",
-    "@types/throttle-debounce": "^2.1.0",
-    "@types/umami": "^0.1.5",
-    "@types/yup": "^0.29.11",
-    "@typescript-eslint/eslint-plugin": "^5.10.1",
-    "@typescript-eslint/parser": "^5.10.1",
-    "eslint": "^7.32.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-prettier": "^5.2.3",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-unused-imports": "^3.0.0",
     "husky": "^7.0.4",
+    "lerna": "^8.1.8",
     "lint-staged": "^12.1.6",
-    "next-transpile-modules": "^9.0.0",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "typescript": "^5.3.3"
   },
   "lint-staged": {
-    "./**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
+    "packages/frontend/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix --no-error-on-unmatched-pattern"
     ]
-  },
-  "husky": {
-    "pre-push": "lint-staged"
   }
 }
