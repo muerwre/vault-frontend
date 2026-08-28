@@ -11,14 +11,9 @@ import { legacyVarchar, TIMESTAMP_NULLABLE } from './columns';
 import { User } from './user.entity';
 
 /**
- * `token` — **legacy stateful sessions, not used for authentication.**
- *
- * Left over from the original TypeORM app (632 rows). The Go backend replaced it
- * with stateless JWTs and so does this one; the entity exists only so the
- * baseline migration fully describes the production schema.
- *
- * Do **not** resurrect DB-backed sessions off the back of this table — auth stays
- * stateless (see examples/migration-spec/data-model.md).
+ * Legacy stateful sessions. **Not used for authentication** — auth is stateless
+ * JWT, and this table is retained only so the baseline migration fully describes
+ * the schema. Do not resurrect DB-backed sessions from it.
  */
 @Entity('token')
 export class Token {

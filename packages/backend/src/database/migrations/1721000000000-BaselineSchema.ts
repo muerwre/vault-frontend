@@ -1,34 +1,19 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 /**
- * Baseline schema — the production schema as of the 2026-07-15 dump.
+ * Baseline schema, establishing a migration history for a database that had none.
  *
- * ## What this is for
+ * Idempotent by design:
+ * - Against a populated database it only records itself as applied, and must
+ *   never ALTER an existing column.
+ * - Against an empty one (CI, e2e, a fresh machine) it creates the full schema.
  *
- * The live database was created by an old TypeORM app and then extended in place
- * by Go's GORM AutoMigrate, so it has no migration history. This migration
- * establishes one, and it is deliberately **idempotent**:
+ * Raw SQL rather than generated output, because entity metadata cannot express
+ * `tinyint` display widths or signed vs unsigned key widths.
  *
- * - Against the **existing production database** (or a copy of the dump) it
- *   detects the schema is already there and does nothing but record itself as
- *   applied. It must never ALTER a production column.
- * - Against an **empty database** (CI, e2e, a fresh dev machine) it creates the
- *   full schema, byte-identical to production.
- *
- * ## Why it is raw SQL rather than generated
- *
- * `migration:generate` reports zero drift against production — that empty diff is
- * the compatibility proof (verify with `yarn schema:drift`), and it also means
- * the generator has nothing to emit. The DDL below is therefore lifted verbatim
- * from `mysqldump`, which is also the only way to preserve details TypeORM cannot
- * express in entity metadata: `tinyint` display widths (legacy tables use
- * `tinyint(4)`, GORM tables `tinyint(1)`) and signed `int(11)` vs
- * `int(10) unsigned` key widths.
- *
- * Do not "tidy" this SQL. Every oddity in it — the mixed utf8mb3/utf8mb4
- * charsets, the snake_case `node_social_publications.node_id`, the four dead
- * tables, the missing unique indexes on `notification_settings` and `node_watch`
- * — is a faithful copy of production. See examples/migration-spec/data-model.md.
+ * **Do not tidy this SQL.** The mixed utf8mb3/utf8mb4 charsets, the snake_case
+ * `node_social_publications.node_id`, the dead tables and the missing unique
+ * indexes are all faithful to the live schema. Verify with `yarn schema:drift`.
  */
 export class BaselineSchema1721000000000 implements MigrationInterface {
   name = 'BaselineSchema1721000000000';
@@ -484,8 +469,8 @@ CREATE TABLE \`user_notifications_sent\` (
     const existing = await BaselineSchema1721000000000.existingTables(queryRunner);
 
     if (existing.length > 0) {
-      // Pre-existing database. Recording this migration as applied is the whole
-      // point — subsequent migrations then run against a known starting state.
+      // Pre-existing database: recording this as applied is the whole point, so
+      // later migrations run from a known starting state.
       if (existing.length !== BaselineSchema1721000000000.TABLES.length) {
         const missing = BaselineSchema1721000000000.TABLES.filter(
           t => !existing.includes(t),
@@ -501,9 +486,8 @@ CREATE TABLE \`user_notifications_sent\` (
       return;
     }
 
-    // Foreign keys are switched off for the duration so the tables can be created
-    // in dump order without topologically sorting the (circular: user↔file)
-    // dependency graph — exactly what mysqldump does on restore.
+    // Foreign keys off so tables can be created in any order despite the
+    // circular user↔file dependency.
     await queryRunner.query('SET FOREIGN_KEY_CHECKS = 0');
 
     try {

@@ -35,18 +35,13 @@ export * from './user.entity';
 export * from './views.entity';
 
 /**
- * Every entity, listed explicitly.
+ * Every entity, listed explicitly — globs break under ncc bundling.
  *
- * Not a glob: globs break under ncc bundling (the production build is a single
- * file, so there is no directory left to scan at runtime).
- *
- * This list covers all 27 tables in the production dump, including the four dead
- * ones (`comment_likes`, `notifications`, `user_notifications_sent`, `token`) so
- * that the baseline migration is a complete description of the live schema and
- * `migration:generate` can prove zero drift.
+ * Covers all 27 tables, including the dead ones, so `migration:generate` can
+ * prove zero drift against the full schema.
  */
 export const ENTITIES = [
-  // legacy dialect (utf8mb3, int(11), real FKs)
+  // legacy dialect (utf8mb3, int(11), FKs)
   User,
   Node,
   Comment,
@@ -60,7 +55,7 @@ export const ENTITIES = [
   NodeView,
   MessageView,
   Embed,
-  // GORM dialect (utf8mb4, int(10) unsigned, no FKs)
+  // modern dialect (utf8mb4, int(10) unsigned, no FKs)
   CommentUserLike,
   CommentLikesOrphan,
   UserNotification,

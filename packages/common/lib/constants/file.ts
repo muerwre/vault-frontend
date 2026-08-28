@@ -1,7 +1,6 @@
 /**
- * File types. The live `file.type` column is
- * ENUM('image','text','audio','video') — wider than the `image`/`audio` pair the
- * upload code produces, so the entity must accept all four.
+ * File types. The column enum is wider than the `image`/`audio` pair the uploader
+ * produces, so all four must be accepted.
  */
 export const FILE_TYPES = {
   IMAGE: 'image',
@@ -12,7 +11,7 @@ export const FILE_TYPES = {
 
 export type FileType = (typeof FILE_TYPES)[keyof typeof FILE_TYPES];
 
-/** DB enum member order for `file.type`. */
+/** Column enum member order for `file.type`. */
 export const FILE_TYPE_ENUM_ORDER: readonly FileType[] = [
   FILE_TYPES.IMAGE,
   FILE_TYPES.TEXT,

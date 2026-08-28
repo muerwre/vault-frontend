@@ -1,9 +1,7 @@
 /**
- * Error codes, copied verbatim from the Go backend's `pkg/codes/codes.go`.
- *
- * These strings are a wire contract: the frontend's axios interceptor reads
- * `error.response.data.error` and matches against them (see
- * `packages/frontend/src/constants/errors.ts`). Never rename a value.
+ * Error codes. A wire contract: clients read `error.response.data.error` and
+ * match against these strings (see `packages/frontend/src/constants/errors.ts`).
+ * Never rename a value.
  */
 export const ERROR_CODES = {
   NotAnEmail: 'Not_An_Email',

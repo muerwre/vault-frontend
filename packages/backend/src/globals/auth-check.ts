@@ -1,13 +1,10 @@
 /**
- * Verifies the auth plumbing against a **hand-crafted token in the Go format**:
- * HS256, claims `{ uid, nme, rol, iat }`, and crucially **no `exp`**.
+ * Verifies the auth plumbing against a hand-crafted token in the legacy format:
+ * HS256, claims `{ uid, nme, rol, iat }`, and crucially **no `exp`**. Tokens in
+ * the wild never expire, so a regression here logs out every user.
  *
- * This is the Phase 1 acceptance check for auth. Every token currently in the
- * wild was minted by the Go backend and never expires, so if this fails, the
- * cutover logs out every user.
- *
- * Boots the real AppModule (real DB, real guards) plus a throwaway controller
- * that exercises each guard level, then drives it over HTTP.
+ * Boots the real AppModule plus a throwaway controller exercising each guard
+ * level, then drives it over HTTP.
  *
  * Usage: yarn auth-check
  */
@@ -102,14 +99,11 @@ async function main() {
   }
 
   /**
-   * Minted the way Go did it: `iat` in seconds, no `exp`, no other registered
-   * claims.
+   * `iat` in seconds, no `exp`, no other registered claims.
    *
-   * Note: **do not** pass `noTimestamp` here. It does not merely stop
-   * jsonwebtoken adding its own `iat` — it strips the one in the payload too,
-   * producing a token with no `iat` at all, which is not the Go format. Leaving
-   * it off makes jsonwebtoken honour the `iat` already present in the payload.
-   * The same applies to the real signing path in Phase 3.
+   * Never pass `noTimestamp` when signing: it strips the `iat` already in the
+   * payload rather than just suppressing an added one, producing a token with no
+   * `iat` at all.
    */
   const claims: ITokenClaims = {
     uid: subject.id,
@@ -123,13 +117,12 @@ async function main() {
 
   console.log('\nhand-crafted token');
   console.log(`  ${token.slice(0, 48)}…`);
-  check('carries exactly the Go claim set', Object.keys(decoded).sort().join(',') === 'iat,nme,rol,uid', Object.keys(decoded));
+  check('carries exactly the expected claim set', Object.keys(decoded).sort().join(',') === 'iat,nme,rol,uid', Object.keys(decoded));
   check('has no exp claim', decoded.exp === undefined);
 
   const app = await NestFactory.create<NestExpressApplication>(AuthCheckModule, {
     cors: CORS_OPTIONS,
-    // Keep startup errors visible: Nest's default is to log-and-exit, which with
-    // a silenced logger would end the process with no output at all.
+    // Keep startup errors visible; silencing the logger hides them entirely.
     logger: ['error', 'warn'],
     abortOnError: false,
   });
@@ -166,7 +159,7 @@ async function main() {
     );
 
     const okRequired = await fetch(`${base}/api/__authcheck/required`, { headers: authed });
-    check('hand-crafted Go token is accepted', okRequired.status === 200, okRequired.status);
+    check('hand-crafted legacy token is accepted', okRequired.status === 200, okRequired.status);
 
     // A token signed with the wrong key must not pass.
     const forged = jwt.sign(claims, `${secret}-wrong`, { algorithm: 'HS256' });
@@ -190,7 +183,7 @@ async function main() {
         'Access-Control-Request-Headers': 'authorization,cache-control',
       },
     });
-    check('preflight answers 200 (Go behaviour)', preflight.status === 200, preflight.status);
+    check('preflight answers 200', preflight.status === 200, preflight.status);
     check('allows any origin', preflight.headers.get('access-control-allow-origin') === '*');
     const allowHeaders = (preflight.headers.get('access-control-allow-headers') ?? '').toLowerCase();
     check('allows Authorization', allowHeaders.includes('authorization'), allowHeaders);

@@ -1,15 +1,14 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-import { GORM_ID_NULLABLE, gormBool, TIMESTAMP_NULLABLE } from './columns';
+import { MODERN_ID_NULLABLE, modernBool, TIMESTAMP_NULLABLE } from './columns';
 
 /**
- * `node_social_publications` — a node's cross-post links (29 rows). GORM dialect.
+ * A node's cross-post links. Modern dialect.
  *
- * ⚠️ Table name is **plural** (data-model.md calls it singular), and this is the
- * **only** table whose FK column is snake_case `node_id` rather than `nodeId`.
- * Preserve both exactly.
+ * Table name is plural, and this is the **only** table whose FK column is
+ * snake_case `node_id` rather than `nodeId`.
  *
- * Rows with `provider = 'vkontakte'` are surfaced as node backlinks.
+ * Rows with `provider = 'vkontakte'` surface as node backlinks.
  */
 @Entity('node_social_publications')
 @Index('node_provider', ['nodeId', 'provider'])
@@ -17,8 +16,8 @@ export class NodeSocialPublication {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
-  /** snake_case by exception — see the class comment. */
-  @Column({ name: 'node_id', ...GORM_ID_NULLABLE })
+  /** snake_case by exception; see the class comment. */
+  @Column({ name: 'node_id', ...MODERN_ID_NULLABLE })
   nodeId: number | null;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
@@ -39,25 +38,23 @@ export class NodeSocialPublication {
 }
 
 /**
- * `node_watch` — comment-thread subscriptions. GORM dialect, currently **empty**
- * (0 rows), so the write path is untested against real data.
+ * Comment-thread subscriptions. Modern dialect.
  *
- * ⚠️ The live table has **no** unique index on `(userId, nodeId)`, contrary to
- * data-model.md. Upserts must therefore de-duplicate in the query, not rely on
- * the DB rejecting a second row.
+ * `(userId, nodeId)` has **no** unique index, so upserts must de-duplicate in
+ * the query rather than rely on the database rejecting a second row.
  */
 @Entity('node_watch')
 export class NodeWatch {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
-  @Column({ name: 'userId', ...GORM_ID_NULLABLE })
+  @Column({ name: 'userId', ...MODERN_ID_NULLABLE })
   userId: number | null;
 
-  @Column({ name: 'nodeId', ...GORM_ID_NULLABLE })
+  @Column({ name: 'nodeId', ...MODERN_ID_NULLABLE })
   nodeId: number | null;
 
-  @Column({ name: 'active', ...gormBool() })
+  @Column({ name: 'active', ...modernBool() })
   active: boolean | null;
 
   @Column({ name: 'created_at', ...TIMESTAMP_NULLABLE })

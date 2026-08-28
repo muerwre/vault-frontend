@@ -1,22 +1,19 @@
 import type { ColumnOptions, ValueTransformer } from 'typeorm';
 
 /**
- * Column helpers that pin down the two distinct schema "dialects" present in the
- * live database. Getting these wrong is the main source of spurious ALTERs in
- * `migration:generate`.
+ * The schema has two column dialects. Mixing them up is the main source of
+ * spurious ALTERs in `migration:generate`.
  *
- * **Legacy dialect** — the 16 tables originally created by the old TypeORM app
- * (`user`, `node`, `comment`, `file`, …). `utf8mb3 / utf8mb3_unicode_ci`,
- * signed `int(11)` keys, real foreign keys, and
- * `datetime NOT NULL DEFAULT current_timestamp()` timestamps.
+ * **Legacy** (16 tables: `user`, `node`, `comment`, `file`, …):
+ * `utf8mb3_unicode_ci`, signed `int(11)` keys, foreign keys, and
+ * `datetime NOT NULL DEFAULT current_timestamp()`.
  *
- * **GORM dialect** — tables the Go app's AutoMigrate added later
- * (`user_notifications`, `node_watch`, `app_notifications`, …). Server-default
- * `utf8mb4`, `int(10) unsigned` keys, **no** foreign keys, and nullable
- * `timestamp NULL DEFAULT NULL` timestamps with no default.
+ * **Modern** (`user_notifications`, `node_watch`, `app_notifications`, …):
+ * server-default `utf8mb4`, `int(10) unsigned` keys, no foreign keys, and
+ * nullable `timestamp` with no default.
  */
 
-/** utf8mb3 / utf8mb3_unicode_ci — the legacy tables' charset. */
+/** The legacy tables' charset. */
 export const LEGACY_CHARSET = {
   charset: 'utf8mb3',
   collation: 'utf8mb3_unicode_ci',
@@ -38,11 +35,8 @@ export const legacyText = (options: ColumnOptions = {}): ColumnOptions => ({
 });
 
 /**
- * Legacy `datetime NOT NULL DEFAULT current_timestamp()`.
- *
- * The precision is pinned to 0: MariaDB's bare `datetime` is `datetime(0)`,
- * while TypeORM's own default for date columns is `datetime(6)` — which would
- * otherwise show up as a diff on every generate.
+ * Legacy `datetime NOT NULL DEFAULT current_timestamp()`. Precision must stay
+ * pinned to 0; TypeORM defaults date columns to `datetime(6)`, which drifts.
  */
 export const LEGACY_TIMESTAMP: ColumnOptions = {
   type: 'datetime',
@@ -59,9 +53,8 @@ export const LEGACY_DATETIME_NULLABLE: ColumnOptions = {
 };
 
 /**
- * Nullable `timestamp NULL DEFAULT NULL`. Used for the GORM tables' date
- * columns, and for a handful of columns retro-added to legacy tables
- * (`user.deleted_at`, `file.deleted_at`, `token.created_at`, …).
+ * Nullable `timestamp NULL DEFAULT NULL`: the modern tables' date columns, plus
+ * some retro-added to legacy tables (`user.deleted_at`, `token.created_at`, …).
  */
 export const TIMESTAMP_NULLABLE: ColumnOptions = {
   type: 'timestamp',
@@ -69,30 +62,21 @@ export const TIMESTAMP_NULLABLE: ColumnOptions = {
   nullable: true,
 };
 
-/** GORM-dialect `int(10) unsigned` nullable FK/id column. */
-export const GORM_ID_NULLABLE: ColumnOptions = {
+/** Modern-dialect `int(10) unsigned` nullable FK/id column. */
+export const MODERN_ID_NULLABLE: ColumnOptions = {
   type: 'int',
   unsigned: true,
   nullable: true,
 };
 
 /**
- * Booleans are declared as raw `tinyint`, never TypeORM's `boolean` type.
+ * Modern-dialect nullable `tinyint(1)` boolean.
  *
- * The two dialects disagree on display width — legacy tables have `tinyint(4)`,
- * GORM tables `tinyint(1)` — and TypeORM has no way to express that: the `width`
- * option was removed in 1.0, and setting `length` instead would produce a
- * permanent phantom diff, because the MySQL driver only reads a length back from
- * the database for char/varchar/binary types (`withLengthColumnTypes`), so an
- * entity length of `1` would forever compare against `''`.
- *
- * The upshot is that display width is invisible to `migration:generate` and
- * cannot drift. The baseline migration therefore carries the exact widths in raw
- * SQL, while these helpers only need to pin down type, nullability and default.
+ * Booleans are raw `tinyint`, never TypeORM's `boolean` type. Never set `length`
+ * on these: display width is inexpressible in entity metadata and would compare
+ * against `''` forever. Exact widths live in the baseline migration SQL.
  */
-
-/** GORM-dialect nullable `tinyint(1)` boolean. */
-export const gormBool = (options: ColumnOptions = {}): ColumnOptions => ({
+export const modernBool = (options: ColumnOptions = {}): ColumnOptions => ({
   type: 'tinyint',
   nullable: true,
   ...options,
@@ -106,11 +90,9 @@ export const legacyBool = (defaultValue: 0 | 1): ColumnOptions => ({
 });
 
 /**
- * Stores a JSON blob in a `text` column, byte-compatible with what Go wrote.
- *
- * Deliberately not MySQL's native `json` type: that would re-serialise (and
- * reorder/reformat) the stored bytes. Unparseable values fall back to `null`
- * rather than throwing — a single bad legacy row must not break a whole feed.
+ * JSON blob in a `text` column. Never the native `json` type, which re-serialises
+ * and so rewrites stored bytes. Unparseable values fall back instead of throwing
+ * so one bad row cannot break a feed.
  */
 export const jsonTransformer = <T>(fallback: T | null = null): ValueTransformer => ({
   to: (value: T | null | undefined): string | null =>

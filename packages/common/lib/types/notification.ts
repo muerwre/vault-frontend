@@ -14,7 +14,7 @@ export interface ICommentNotification {
 
 export type INotification = IMessageNotification | ICommentNotification;
 
-/** ⚠️ `itemId` is camelCase on the wire (documented exception). */
+/** `itemId` is camelCase on the wire, unlike its neighbours. */
 export interface INotificationItem {
   type: string;
   itemId: number;
@@ -22,8 +22,8 @@ export interface INotificationItem {
 }
 
 /**
- * `GET/POST /notifications/settings` payload — **snake_case on the wire**, and
- * the keys do not match the column names one-to-one:
+ * `GET/POST /notifications/settings` payload. snake_case on the wire, and the
+ * keys do not match column names one-to-one:
  *
  * | wire       | column                  |
  * |------------|-------------------------|

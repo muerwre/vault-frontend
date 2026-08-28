@@ -20,10 +20,8 @@ import {
 import { File } from './file.entity';
 
 /**
- * `user` — legacy dialect (utf8mb3, int(11), real FKs).
- *
- * Note there is **no `last_seen_boris` column**; the API field of that name is
- * derived server-side.
+ * Legacy dialect. There is no `last_seen_boris` column — the API field of that
+ * name is derived server-side.
  */
 @Entity('user')
 export class User {
@@ -35,10 +33,9 @@ export class User {
   username: string;
 
   /**
-   * Three hash formats coexist in production and all must keep validating:
-   * bcrypt `$2a$` (24 rows), bcrypt `$2b$` (2 rows) and bare MD5 hex (34 rows).
-   * One row holds the literal `NO_PASSWORD` sentinel (OAuth-only account).
-   * Never serialise this column.
+   * Three hash formats coexist and all must keep validating: bcrypt `$2a$`,
+   * bcrypt `$2b$` and bare MD5 hex. The literal `NO_PASSWORD` sentinel marks an
+   * OAuth-only account and must never authenticate. Never serialise this column.
    */
   @Column(legacyVarchar())
   password: string;
@@ -55,7 +52,7 @@ export class User {
   })
   role: Role;
 
-  /** `tinyint(4)`, despite data-model.md describing it as a string. */
+  /** `tinyint(4)`, not a string. */
   @Column({ name: 'is_activated', ...legacyBool(0) })
   isActivated: boolean;
 
@@ -86,18 +83,14 @@ export class User {
   @Column({ name: 'last_seen_notifications', ...TIMESTAMP_NULLABLE })
   lastSeenNotifications: Date | null;
 
-  /**
-   * Retro-added as `timestamp` (the older legacy tables use `datetime` for this
-   * column) — see the dialect note in columns.ts.
-   */
+  /** Retro-added as `timestamp`, unlike the other legacy date columns. */
   @Index('idx_user_deleted_at')
   @Column({ name: 'deleted_at', ...TIMESTAMP_NULLABLE })
   deletedAt: Date | null;
 
   /**
-   * Both photo and cover carry a **unique** constraint in the live schema
-   * (`REL_…`), i.e. TypeORM modelled them as one-to-one. Eager-loaded: every
-   * `WithUser` route serialises the avatar.
+   * Photo and cover are one-to-one: both columns carry a unique constraint.
+   * Eager-loaded because every `WithUser` route serialises the avatar.
    */
   @OneToOne(() => File, { nullable: true, eager: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'photoId', foreignKeyConstraintName: 'FK_75e2be4ce11d447ef43be0e374f' })

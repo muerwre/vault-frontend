@@ -1,11 +1,9 @@
 import type { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 /**
- * CORS settings copied from what the Go backend sent on every response.
- *
- * The header list is reproduced verbatim rather than trimmed: the frontend's
- * axios instance sends `Authorization` and `Cache-Control`, and browsers reject a
- * preflight whose `Allow-Headers` omits any requested header.
+ * The allowed-header list must stay a superset of what the client sends
+ * (`Authorization`, `Cache-Control`, …) — browsers reject a preflight that omits
+ * any requested header.
  */
 export const CORS_OPTIONS: CorsOptions = {
   origin: '*',
@@ -22,9 +20,6 @@ export const CORS_OPTIONS: CorsOptions = {
     'Cache-Control',
     'X-Requested-With',
   ],
-  /**
-   * Go answered `OPTIONS` with a bare 200. Nest's default is 204, which is also
-   * legal, but 200 keeps byte-compatibility with anything that asserted on it.
-   */
+  // Preflight answers 200, not Nest's default 204.
   optionsSuccessStatus: 200,
 };

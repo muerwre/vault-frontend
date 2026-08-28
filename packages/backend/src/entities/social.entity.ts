@@ -11,10 +11,10 @@ import { LEGACY_TIMESTAMP, legacyVarchar } from './columns';
 import { User } from './user.entity';
 
 /**
- * `social` — a linked OAuth account. Legacy dialect.
+ * A linked OAuth account. Legacy dialect.
  *
- * The wire DTO renames these columns: `account_id` → `id`,
- * `account_name` → `name`, `account_photo` → `photo`, and hides `id`/`userId`.
+ * The wire DTO renames columns: `account_id` → `id`, `account_name` → `name`,
+ * `account_photo` → `photo`, and hides `id`/`userId`.
  */
 @Entity('social')
 export class Social {
@@ -44,7 +44,7 @@ export class Social {
   user: User | null;
 }
 
-/** `restore_code` — password-reset codes. Legacy dialect, `created_at` only. */
+/** Password-reset codes. Legacy dialect; has `created_at` but no `updated_at`. */
 @Entity('restore_code')
 export class RestoreCode {
   @PrimaryGeneratedColumn({ type: 'int' })
