@@ -3,21 +3,16 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 import { jsonTransformer, LEGACY_TIMESTAMP, TIMESTAMP_NULLABLE } from './columns';
 
-/**
- * `embed` — cache of external media metadata (YouTube), looked up by
- * `(provider, address)`.
- *
- * Its own charset dialect: `utf8mb4 / utf8mb4_unicode_ci` — neither the legacy
- * utf8mb3 tables nor the GORM tables' server-default collation.
- *
- * Note there is **no unique index** on `(provider, address)` in the live schema,
- * so the lookup must tolerate duplicates.
- */
+/** This table's own charset, unlike either other dialect. */
 const EMBED_CHARSET = {
   charset: 'utf8mb4',
   collation: 'utf8mb4_unicode_ci',
 } as const;
 
+/**
+ * Cache of external media metadata, looked up by `(provider, address)` — which
+ * has **no unique index**, so lookups must tolerate duplicates.
+ */
 @Entity('embed')
 export class Embed {
   @PrimaryGeneratedColumn({ type: 'int' })

@@ -11,14 +11,13 @@ import { Node } from './node.entity';
 import { User } from './user.entity';
 
 /**
- * `like` — node likes.
+ * Node likes.
  *
- * Despite being conceptually a Node↔User join, the live table has its own
- * auto-increment `id` and **nullable** FK columns, which a TypeORM `@JoinTable`
- * cannot express (those require a composite primary key). So it is a first-class
- * entity and like counts are queried explicitly.
+ * Conceptually a Node↔User join, but the table has its own auto-increment `id`
+ * and nullable FKs, which `@JoinTable` cannot express — hence a first-class
+ * entity with like counts queried explicitly.
  *
- * `like` is a reserved word in MySQL — always quote it (TypeORM does).
+ * `like` is a reserved word; it must always be quoted.
  */
 @Entity('like')
 export class Like {
@@ -47,13 +46,9 @@ export class Like {
 }
 
 /**
- * `comment_user_likes` — the **live** comment-likes join table (308 rows).
+ * Comment likes. Modern dialect: composite primary key, no foreign keys, no `id`.
  *
- * GORM dialect: `int(10) unsigned`, composite primary key, no foreign keys and
- * no `id`. Modelled as an entity with a composite PK so the baseline migration
- * reproduces it exactly.
- *
- * ⚠️ Do not confuse with `comment_likes` (see CommentLikesOrphan below).
+ * Not to be confused with {@link CommentLikesOrphan}.
  */
 @Entity('comment_user_likes')
 export class CommentUserLike {
@@ -65,16 +60,11 @@ export class CommentUserLike {
 }
 
 /**
- * `comment_likes` — **dead table, never read or written.**
+ * Dead table, never read or written. Superseded by {@link CommentUserLike}.
  *
- * The Go code declared comment-likes with two different join-table names; this
- * is the losing one. It is empty (0 rows) and its columns are nonsense for the
- * purpose — `user_id` *and* `userId`, with no comment reference at all — which
- * is why it never worked and `comment_user_likes` is the live one.
- *
- * Kept as an entity purely so the baseline migration is a complete description
- * of the production schema. Dropping it is a safe follow-up cleanup, but that is
- * a deliberate schema change and belongs in its own migration, not the baseline.
+ * Its columns are `user_id` *and* `userId`, with no comment reference at all,
+ * which is why it never functioned. Kept only so the baseline migration fully
+ * describes the schema; dropping it belongs in its own migration.
  */
 @Entity('comment_likes')
 export class CommentLikesOrphan {

@@ -1,7 +1,6 @@
 /**
- * Node types. The DB enum has **six** members — `webm` exists in the live schema
- * and in the data (68 rows) even though the Go constants omit it. Any entity or
- * validation that narrows this set would reject existing rows.
+ * Node types. The column enum has six members; `webm` exists in the data even
+ * though no feed lists it. Narrowing this set rejects existing rows.
  */
 export const NODE_TYPES = {
   IMAGE: 'image',
@@ -14,7 +13,7 @@ export const NODE_TYPES = {
 
 export type NodeType = (typeof NODE_TYPES)[keyof typeof NODE_TYPES];
 
-/** DB enum member order — the baseline migration must emit this exact order. */
+/** Column enum member order; the baseline migration must match it exactly. */
 export const NODE_TYPE_ENUM_ORDER: readonly NodeType[] = [
   NODE_TYPES.IMAGE,
   NODE_TYPES.AUDIO,
@@ -24,7 +23,7 @@ export const NODE_TYPE_ENUM_ORDER: readonly NodeType[] = [
   NODE_TYPES.BORIS,
 ];
 
-/** Types listed in the flow feed (Go `FlowNodeTypes`). Excludes `webm`/`boris`. */
+/** Types listed in the flow feed. Excludes `webm` and `boris`. */
 export const FLOW_NODE_TYPES: readonly NodeType[] = [
   NODE_TYPES.IMAGE,
   NODE_TYPES.VIDEO,
@@ -32,7 +31,7 @@ export const FLOW_NODE_TYPES: readonly NodeType[] = [
   NODE_TYPES.AUDIO,
 ];
 
-/** Types listed in the lab feed (Go `LabNodeTypes` — same set as flow). */
+/** Types listed in the lab feed — the same set as the flow. */
 export const LAB_NODE_TYPES: readonly NodeType[] = FLOW_NODE_TYPES;
 
 export const NODE_FLOW_DISPLAY = {
@@ -59,17 +58,10 @@ export const BORIS_NODE_ID = 696;
 
 export const MAX_NODE_TITLE_LENGTH = 256;
 
-/** Go `MaxCommentLength = 4096 * 2`. */
 export const MAX_COMMENT_LENGTH = 8192;
 
-/**
- * Providers whose `node_social_publications` rows are surfaced as node
- * backlinks. Go validated against this list.
- */
+/** Providers whose `node_social_publications` rows surface as node backlinks. */
 export const NODE_BACKLINK_PROVIDERS = ['vkontakte'] as const;
 
-/**
- * `node.thumbnail` may carry this prefix, meaning the image lives on the
- * previous-generation host rather than the current uploads dir.
- */
+/** Prefix on `node.thumbnail` meaning the image lives on the legacy media host. */
 export const REMOTE_CURRENT_PREFIX = 'REMOTE_CURRENT:';

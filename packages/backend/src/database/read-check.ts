@@ -1,12 +1,11 @@
 /**
- * Reads a sample of real production rows through the entities and asserts the
- * tricky mappings actually decode.
+ * Reads real rows through the entities and asserts the tricky mappings decode:
+ * JSON transformers, comma-joined `files_order`, the eager photo relation, enum
+ * members and join tables.
  *
- * Zero schema drift (see schema-drift.ts) proves the *shape* matches; this proves
- * the *values* do — JSON transformers, the comma-joined `files_order`, the eager
- * photo relation, enum members, and the join tables.
+ * Complements schema-drift.ts, which only proves the shape matches.
  *
- * Usage: yarn read-check   (expects ci/compose.yml's DB, seeded from the dump)
+ * Usage: yarn read-check   (expects ci/compose.yml's seeded database)
  */
 import { IsNull, Not } from 'typeorm';
 
@@ -68,8 +67,7 @@ async function main() {
       'decodes to objects',
       withFlow.every(n => n.flow !== null && typeof n.flow === 'object'),
     );
-    // `''` is a legitimate stored value — and the most common one. Asserting the
-    // enum here would be asserting something production data disagrees with.
+    // `''` is a legitimate — and the most common — stored value.
     check(
       'display is either a known variant or empty',
       withFlow.every(n =>
@@ -98,7 +96,7 @@ async function main() {
     );
     check('non-empty for rows with a non-empty column', withOrder.every(n => n.filesOrder.length > 0));
 
-    // round-trip: the transformer must reproduce the stored string byte-for-byte
+    // The transformer must reproduce the stored string byte-for-byte.
     const raw: Array<{ id: number; files_order: string }> = await dataSource.query(
       "SELECT id, files_order FROM node WHERE files_order <> '' ORDER BY id DESC LIMIT 200",
     );
@@ -126,10 +124,8 @@ async function main() {
     // ---- user: eager photo relation + password variants --------------------
     const users = dataSource.getRepository(User);
 
-    // `eager: true` is honoured by the `find*` methods only — QueryBuilder
-    // ignores it, so any WithUser code path built on QueryBuilder must join
-    // photo/cover explicitly. Both behaviours are checked here so a future
-    // refactor can't quietly drop the avatar from responses.
+    // `eager: true` applies to `find*` only; QueryBuilder ignores it. Both are
+    // checked so a refactor cannot quietly drop avatars from responses.
     const withPhoto = await users.find({
       where: { photoId: Not(IsNull()) },
       take: 20,

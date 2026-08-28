@@ -12,11 +12,10 @@ import { Node } from './node.entity';
 import { User } from './user.entity';
 
 /**
- * `node_view` — when a user last opened a node. Drives the "updated since your
- * last visit" marker (`visited < node.commented_at`).
+ * When a user last opened a node. Drives the "updated since your last visit"
+ * marker (`visited < node.commented_at`).
  *
- * Modelled as an entity rather than a TypeORM join table because the live table
- * has its own `id` primary key plus a payload column.
+ * An entity rather than a join table: it has its own `id` plus a payload column.
  */
 @Entity('node_view')
 @Index('IDX_b9eef954a619229d26641e5e7d', ['nodeId', 'userId'], { unique: true })
@@ -48,10 +47,7 @@ export class NodeView {
   user: User | null;
 }
 
-/**
- * `message_view` — when `userId` last viewed their dialog with `dialogId`.
- * Both columns reference `user`.
- */
+/** When `userId` last viewed their dialog with `dialogId`. Both reference `user`. */
 @Entity('message_view')
 @Index('IDX_81d1e3edf061df94b2668ba798', ['dialogId', 'userId'], {
   unique: true,

@@ -16,12 +16,7 @@ import {
 import { Node } from './node.entity';
 import { User } from './user.entity';
 
-/**
- * `tag` — legacy dialect.
- *
- * The live table has more columns than data-model.md lists (`data`, `userId`,
- * timestamps), and the wire DTO exposes the key as uppercase `ID`.
- */
+/** Legacy dialect. The wire DTO exposes the primary key as uppercase `ID`. */
 @Entity('tag')
 export class Tag {
   @PrimaryGeneratedColumn({ type: 'int' })

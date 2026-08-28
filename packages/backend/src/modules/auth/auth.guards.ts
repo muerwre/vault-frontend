@@ -19,7 +19,7 @@ import { VaultException } from '../../globals/exceptions';
 /** What the guards attach to the request. */
 export interface AuthContext {
   claims: ITokenClaims | null;
-  /** `0` for a guest, matching Go's `uid = 0` convention. */
+  /** `0` for a guest. */
   uid: number;
   user: User | null;
 }
@@ -40,8 +40,7 @@ const extractToken = (request: Request): string | null => {
     return null;
   }
 
-  // Go accepted `Bearer <token>`; be tolerant of a bare token too, since some
-  // older clients sent it that way.
+  // Accept a bare token as well as `Bearer <token>`; older clients send both.
   const [scheme, value] = header.split(' ');
 
   if (value === undefined) {
@@ -68,7 +67,7 @@ class TokenReader {
     try {
       return this.jwt.verify<ITokenClaims>(token);
     } catch (error) {
-      // Not an error condition on optional routes, so this is debug-level only.
+      // Not an error on optional routes, so debug-level only.
       this.logger.debug(
         `rejected token: ${error instanceof Error ? error.message : String(error)}`,
       );
@@ -78,11 +77,8 @@ class TokenReader {
 }
 
 /**
- * Never rejects. Populates `request.auth` with the token's claims when a valid
- * token is present, and with the guest context otherwise.
- *
- * Used by the read endpoints (feed, node, tag, search) so guests see only public
- * content while logged-in users get their personalised view from the same route.
+ * Never rejects: populates `request.auth` with the token's claims, or the guest
+ * context. Used by read endpoints so one route serves both guests and users.
  */
 @Injectable()
 export class OptionalAuthGuard implements CanActivate {
@@ -101,10 +97,8 @@ export class OptionalAuthGuard implements CanActivate {
 }
 
 /**
- * Requires a valid token; responds 401 otherwise.
- *
- * A 401 makes the frontend drop its session and redirect to login, so this guard
- * is the only place that should produce one.
+ * Requires a valid token, else 401. A 401 makes clients drop their session, so
+ * this guard should be the only source of one.
  */
 @Injectable()
 export class AuthRequiredGuard implements CanActivate {
@@ -125,13 +119,11 @@ export class AuthRequiredGuard implements CanActivate {
 }
 
 /**
- * Loads the full `User` row (with photo and cover) onto `request.auth.user`.
+ * Loads the full `User` (with photo and cover) onto `request.auth.user`.
  *
- * Separate from `AuthRequiredGuard` because most authenticated routes only need
- * `uid` and would otherwise pay for a join they never read — the same split Go
- * made between its `AuthRequired` and `WithUser` middleware.
- *
- * Use **after** an auth guard: `@UseGuards(AuthRequiredGuard, WithUserGuard)`.
+ * Separate from `AuthRequiredGuard` so routes needing only `uid` do not pay for
+ * the join. Use **after** an auth guard:
+ * `@UseGuards(AuthRequiredGuard, WithUserGuard)`.
  */
 @Injectable()
 export class WithUserGuard implements CanActivate {
@@ -154,16 +146,10 @@ export class WithUserGuard implements CanActivate {
       return true;
     }
 
-    /**
-     * `find*` honours the entity's `eager` photo/cover relations; QueryBuilder
-     * would not, and the frontend needs the avatar on `GET /auth`.
-     */
+    // `find*` honours the eager photo/cover relations; QueryBuilder would not.
     const user = await this.users.findOne({ where: { id: uid } });
 
-    /**
-     * A token for a user that no longer exists (deleted account) is not a valid
-     * session — treat it as unauthenticated rather than serving a null user.
-     */
+    // A token for a deleted account is not a valid session.
     if (!user) {
       throw new VaultException(ERROR_CODES.NotAuthorized, HttpStatus.UNAUTHORIZED);
     }
@@ -192,7 +178,7 @@ export const Claims = createParamDecorator(
     context.switchToHttp().getRequest<AuthedRequest>().auth?.claims ?? null,
 );
 
-/** The object Go served for an unauthenticated caller. */
+/** The identity served for an unauthenticated caller. */
 export const GUEST_USER = { id: GUEST_USER_ID, role: ROLES.GUEST } as const;
 
 export { TokenReader };

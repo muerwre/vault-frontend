@@ -51,10 +51,7 @@ export class File {
   @Column({ type: 'int', nullable: false })
   size: number;
 
-  /**
-   * The live enum is wider than what the uploader produces
-   * (`image`,`text`,`audio`,`video`) — narrowing it would reject existing rows.
-   */
+  /** Wider than what the uploader produces; narrowing it rejects existing rows. */
   @Column({
     type: 'enum',
     enum: FILE_TYPE_ENUM_ORDER as unknown as string[],
@@ -96,12 +93,10 @@ export class File {
   user: User | null;
 
   /**
-   * Inverse sides of the three `*_files_file` junctions.
-   *
-   * These exist for more than symmetry: TypeORM takes a junction table's
-   * *inverse* foreign-key actions from the inverse relation's options, so
-   * without them the `fileId` constraints would be generated as
-   * `ON UPDATE CASCADE` and drift from the live schema's `NO ACTION`.
+   * Inverse sides of the three `*_files_file` junctions. Required, not just
+   * symmetric: a junction's inverse foreign-key actions come from the inverse
+   * relation's options, so without these the `fileId` constraints drift to
+   * `ON UPDATE CASCADE`.
    */
   @ManyToMany(() => Node, node => node.files, {
     onDelete: 'CASCADE',

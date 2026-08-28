@@ -1,13 +1,10 @@
 /**
- * Prints the SQL TypeORM would run to make the live database match the entities.
+ * Prints the SQL TypeORM would run to make the database match the entities.
+ * **Empty output means the entities describe the live schema exactly** — run this
+ * after any entity change.
  *
- * **Empty output is the compatibility proof** for Phase 1: it means the entities
- * describe the production schema exactly, so the app reads and writes the same
- * bytes the Go backend did.
- *
- * Exists alongside `typeorm schema:log` because the CLI swallows connection and
- * metadata errors (it exits 1 with no output), which makes the entity-tuning
- * loop impossible to debug.
+ * Preferred over `typeorm schema:log`, which reports connection and metadata
+ * errors as a silent exit 1.
  *
  * Usage: yarn schema:drift
  */

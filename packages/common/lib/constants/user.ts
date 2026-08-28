@@ -7,26 +7,22 @@ export const ROLES = {
 
 export type Role = (typeof ROLES)[keyof typeof ROLES];
 
-/** Roles allowed to create nodes (Go `CanCreateNode`). */
+/** Roles allowed to create nodes. */
 export const ROLES_CAN_CREATE_NODE: readonly Role[] = [ROLES.USER, ROLES.ADMIN];
 
-/**
- * The object returned for an unauthenticated request on `optional` auth routes.
- * Go used `{ id: 0, role: 'guest' }`; `uid = 0` means guest throughout.
- */
+/** `uid = 0` means guest throughout. */
 export const GUEST_USER_ID = 0;
 
 export const MIN_PASSWORD_LENGTH = 6;
 
-/** Go: `^[a-zA-Z0-9_-]{3,64}$`. */
+/** Usernames are 3–64 chars of `[a-zA-Z0-9_-]`. */
 export const USERNAME_REGEX = /^[a-zA-Z0-9_-]{3,64}$/;
 
 /** Days without `last_seen` after which a user counts as inactive. */
 export const USER_INACTIVITY_DAYS = 40;
 
 /**
- * Sentinel stored in `user.password` for accounts created purely through OAuth.
- * Present in production data (1 row). Such accounts must never authenticate via
- * the password endpoint — treat any comparison against this value as a failure.
+ * Sentinel stored in `user.password` for OAuth-only accounts. Such accounts must
+ * never authenticate by password — treat any comparison against it as a failure.
  */
 export const PASSWORD_PLACEHOLDER = 'NO_PASSWORD';

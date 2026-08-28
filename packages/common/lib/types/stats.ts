@@ -1,7 +1,4 @@
-/**
- * `GET /stats/` response. Mirrors the frontend's `StatBackend`
- * (`packages/frontend/src/types/boris`).
- */
+/** `GET /stats/` response. */
 export interface IBackendStats {
   users: {
     total: number;

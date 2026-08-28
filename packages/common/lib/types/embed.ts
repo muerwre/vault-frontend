@@ -1,8 +1,6 @@
 /**
- * `embed.metadata` JSON blob.
- *
- * ⚠️ `duration` is a **string** here, unlike `FileMetadata.duration` which is a
- * number. Preserve the difference.
+ * `embed.metadata` JSON blob. `duration` is a string here, unlike
+ * `FileMetadata.duration`.
  */
 export interface EmbedMetadata {
   title?: string;

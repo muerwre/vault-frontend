@@ -19,14 +19,14 @@ import { File } from './file.entity';
 import { Node } from './node.entity';
 import { User } from './user.entity';
 
-/** `comment` — legacy dialect, FULLTEXT index on `text`. */
+/** Legacy dialect. FULLTEXT index on `text`. */
 @Entity('comment')
 @Index('IDX_84eaa1e0d08e574fb78fd3c9b3', ['text'], { fulltext: true })
 export class Comment {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  /** Max length enforced in the app layer (`MAX_COMMENT_LENGTH = 8192`). */
+  /** Max length is enforced in the app layer (`MAX_COMMENT_LENGTH`). */
   @Column(legacyText({ nullable: false }))
   text: string;
 

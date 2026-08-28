@@ -11,11 +11,9 @@ import type { IErrorResponse, IValidationErrorResponse } from '@vault/common/typ
 import type { Response } from 'express';
 
 /**
- * A domain error carrying one of the frozen wire codes.
- *
- * Prefer this over Nest's built-in exceptions: the frontend's axios interceptor
- * branches on `data.error`, and Nest's defaults would emit
- * `{ statusCode, message }` instead.
+ * A domain error carrying one of the frozen wire codes. Prefer this over Nest's
+ * built-in exceptions, which emit `{ statusCode, message }` instead of the
+ * envelope clients parse.
  */
 export class VaultException extends HttpException {
   constructor(
@@ -39,8 +37,8 @@ export class VaultValidationException extends VaultException {
 }
 
 /**
- * Human-readable text per code. Kept deliberately terse — the frontend renders
- * its own copy from the code and only falls back to `message` for unknown ones.
+ * Human-readable text per code. Terse by design: clients render their own copy
+ * from the code and only fall back to `message` for unknown ones.
  */
 const ERROR_TEXT: Partial<Record<string, string>> = {
   [ERROR_CODES.NotAuthorized]: 'Не авторизован',
@@ -61,12 +59,10 @@ const ERROR_TEXT: Partial<Record<string, string>> = {
 };
 
 /**
- * Renders **every** failure as the frozen error envelope
- * `{ error, message }` (plus `errors` for validation failures).
+ * Renders every failure as the frozen `{ error, message }` envelope (plus
+ * `errors` for validation failures).
  *
- * Registered globally, so it also catches Nest's own exceptions (404 from an
- * unmatched route, 413 from the body parser, …) and unexpected throws — none of
- * which would otherwise use the shape the frontend parses.
+ * Registered globally so Nest's own exceptions and unexpected throws use it too.
  */
 @Catch()
 export class VaultExceptionFilter implements ExceptionFilter {
@@ -95,12 +91,9 @@ export class VaultExceptionFilter implements ExceptionFilter {
       const status = exception.getStatus();
 
       /**
-       * Only reached for exceptions Nest raised itself — an unmatched route, a
-       * body-parser rejection, and so on. Handlers throw `VaultException` with a
-       * precise code and are handled above.
-       *
-       * A 401 makes the frontend log the user out, so it must only ever mean
-       * "not authenticated".
+       * Only for exceptions Nest raised itself; handlers throw `VaultException`
+       * with a precise code and are handled above. A 401 logs clients out, so it
+       * must only ever mean "not authenticated".
        */
       const code =
         status === HttpStatus.UNAUTHORIZED
@@ -117,7 +110,7 @@ export class VaultExceptionFilter implements ExceptionFilter {
       return;
     }
 
-    // Genuinely unexpected: log with the stack, but never leak internals on the wire.
+    // Unexpected: log the stack, never leak internals on the wire.
     this.logger.error(
       exception instanceof Error ? exception.message : String(exception),
       exception instanceof Error ? exception.stack : undefined,

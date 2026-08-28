@@ -5,13 +5,10 @@ import { loadConfig } from '../config/env';
 loadConfig();
 
 /**
- * JWT signing, matching the Go backend exactly.
+ * Claims are `{ uid, nme, rol, iat }` (`ITokenClaims`).
  *
- * **No `expiresIn`.** Go issued tokens without an `exp` claim, so every token in
- * the wild is non-expiring; adding an expiry here would invalidate all of them
- * and log every user out. HS256 is the default algorithm and matches Go's.
- *
- * Claims are `{ uid, nme, rol, iat }` — see `ITokenClaims` in @vault/common.
+ * **Never add `expiresIn`.** Issued tokens carry no `exp` and are expected to
+ * live forever; introducing one invalidates every token in the wild.
  */
 export const JWT = JwtModule.register({
   global: true,
@@ -21,10 +18,7 @@ export const JWT = JwtModule.register({
   },
   verifyOptions: {
     algorithms: ['HS256'],
-    /**
-     * Tokens have no `exp`; without this, `jsonwebtoken` is fine, but being
-     * explicit documents that expiry is intentionally not enforced.
-     */
+    // Expiry is intentionally not enforced.
     ignoreExpiration: true,
   },
 });

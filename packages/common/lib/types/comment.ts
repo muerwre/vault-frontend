@@ -10,11 +10,11 @@ export interface IComment {
 
   /** Computed per-request from `comment_user_likes`. */
   like_count?: number;
-  /** Computed per-request; note the key is `liked`, not `is_liked`. */
+  /** Computed per request. The key is `liked`, not `is_liked`. */
   liked?: boolean;
 
   created_at?: string;
-  /** ⚠️ The frontend type spells this `update_at` (missing 'd'). */
+  /** Spelled `update_at`, without the 'd'. */
   update_at?: string;
   deleted_at?: string;
 }
@@ -29,8 +29,8 @@ export interface IMessage extends Omit<IComment, 'user'> {
 }
 
 /**
- * A "note" is a **self-message** (`message.fromId === message.toId`). There is
- * no `note` table. `content` maps onto `message.text`.
+ * A note is a self-message (`fromId === toId`); there is no `note` table.
+ * `content` maps onto `message.text`.
  */
 export interface INote {
   id: number;
@@ -39,12 +39,7 @@ export interface INote {
   created_at: string;
 }
 
-/**
- * Notes list envelope.
- *
- * ⚠️ The frontend reads `totalCount` (camelCase) while the Go handler emits
- * `totalItems`. The frontend wins — see PLAN.md open items.
- */
+/** Notes list envelope. The key is `totalCount`, not `totalItems`. */
 export interface INotesList {
   list: INote[];
   totalCount: number;

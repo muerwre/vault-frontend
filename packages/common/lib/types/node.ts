@@ -20,11 +20,9 @@ export type INodeBlock = IBlockText | IBlockEmbed;
 /**
  * `node.flow` JSON blob.
  *
- * ⚠️ `display` is **not** restricted to the four documented variants: an empty
- * string is the single most common value in production (139 of the 415 rows that
- * have a `flow` at all), and 2194 nodes have no `flow` blob whatsoever. Treat
- * `''`/absent as "unset" and fall back to the default rendering — do not
- * validate this field against the enum, or a third of the flow would 500.
+ * `display` is **not** restricted to the four variants: `''` is common, and most
+ * nodes have no `flow` blob at all. Treat `''`/absent as unset and fall back to
+ * the default rendering; never validate this field against the enum.
  */
 export interface INodeFlow {
   display: FlowDisplayVariant | '';

@@ -31,7 +31,7 @@ import { File } from './file.entity';
 import { Tag } from './tag.entity';
 import { User } from './user.entity';
 
-/** `node` — legacy dialect, with FULLTEXT indexes on `title` and `description`. */
+/** Legacy dialect. FULLTEXT indexes on `title` and `description` back search. */
 @Entity('node')
 @Index('IDX_7204c77952e8c70fc6c0d5e26b', ['title'], { fulltext: true })
 @Index('IDX_4ca96324484c7a3d16aa993cad', ['description'], { fulltext: true })
@@ -42,7 +42,7 @@ export class Node {
   @Column(legacyVarchar())
   title: string;
 
-  /** Includes `webm` — present in the live enum and in 68 rows. */
+  /** Includes `webm`, which is present in the data. */
   @Column({
     type: 'enum',
     enum: NODE_TYPE_ENUM_ORDER as unknown as string[],
@@ -57,7 +57,7 @@ export class Node {
   })
   blocks: INodeBlock[];
 
-  /** Comma-joined file ids; `NOT NULL`, so an empty list stores as `''`. */
+  /** Comma-joined file ids. `NOT NULL`: an empty list stores as `''`. */
   @Column({
     name: 'files_order',
     ...legacyText({ nullable: false }),
@@ -75,7 +75,7 @@ export class Node {
   @Column({ name: 'is_heroic', ...legacyBool(0) })
   isHeroic: boolean;
 
-  /** May carry a `REMOTE_CURRENT:` prefix pointing at the previous-gen host. */
+  /** May carry a `REMOTE_CURRENT:` prefix pointing at the legacy media host. */
   @Column(legacyVarchar({ nullable: true }))
   thumbnail: string | null;
 
@@ -108,9 +108,8 @@ export class Node {
   deletedAt: Date | null;
 
   /**
-   * `coverId` carries a UNIQUE constraint in the live schema (`REL_…`), so this
-   * is one-to-one. `ON DELETE NO ACTION` matches the live FK — deleting a file
-   * that is a node cover fails at the DB level rather than nulling the column.
+   * One-to-one: `coverId` carries a unique constraint. `ON DELETE NO ACTION`
+   * means deleting a file still used as a cover fails rather than nulling it.
    */
   @OneToOne(() => File, { nullable: true, onDelete: 'NO ACTION' })
   @JoinColumn({
@@ -167,9 +166,7 @@ export class Node {
   @OneToMany(() => Comment, comment => comment.node)
   comments: Comment[];
 
-  /**
-   * Computed per request, never persisted.
-   */
+  /** Computed per request, never persisted. */
   isLiked?: boolean;
   likeCount?: number;
 }

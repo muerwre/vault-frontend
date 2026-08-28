@@ -20,21 +20,18 @@ export interface IUser {
 
   last_seen: string;
   last_seen_messages: string;
-  /**
-   * Derived server-side — there is **no** `last_seen_boris` column. It is
-   * computed from the user's boris node_view / notification state.
-   */
+  /** Derived server-side; there is no such column. */
   last_seen_boris: string;
 }
 
-/** Compact user embedded in lists (`ShallowUser` on the frontend). */
+/** Compact user embedded in lists. */
 export interface IShallowUser {
   id: number;
   username: string;
   photo?: IFile;
 }
 
-/** `social` row as returned by the OAuth list endpoint. */
+/** A linked OAuth account, as returned by the OAuth list endpoint. */
 export interface ISocialAccount {
   provider: OAuthProvider;
   /** ← `social.account_id` */
@@ -45,7 +42,7 @@ export interface ISocialAccount {
   photo: string;
 }
 
-/** JWT payload. HS256, **no `exp`** — existing tokens must keep validating. */
+/** JWT payload. HS256 with **no `exp`**; issued tokens never expire. */
 export interface ITokenClaims {
   /** user id */
   uid: number;

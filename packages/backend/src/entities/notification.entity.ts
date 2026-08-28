@@ -1,45 +1,42 @@
 import type { NotificationItemType } from '@vault/common/constants';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-import { GORM_ID_NULLABLE, gormBool, TIMESTAMP_NULLABLE } from './columns';
+import { MODERN_ID_NULLABLE, modernBool, TIMESTAMP_NULLABLE } from './columns';
 
 /**
- * All entities in this file use the **GORM dialect**: server-default utf8mb4,
- * `int(10) unsigned` keys, no foreign keys, and nullable `timestamp` date
- * columns with no default (so plain `@Column`, never `@CreateDateColumn`, which
- * would add a CURRENT_TIMESTAMP default).
+ * Modern dialect throughout: utf8mb4, `int(10) unsigned` keys, no foreign keys,
+ * nullable `timestamp` columns with no default. Use plain `@Column`, never
+ * `@CreateDateColumn` — that adds a CURRENT_TIMESTAMP default.
  */
 
-const gormVarchar = {
+const modernVarchar = {
   type: 'varchar',
   length: 255,
   nullable: true,
 } as const;
 
 /**
- * `user_notifications` — **the live per-user notification feed** (546 rows).
- *
- * ⚠️ Table name is plural. The identically-shaped `notifications` table is empty
- * and dead (see NotificationsOrphan).
+ * The per-user notification feed. Table name is plural; the identically-shaped
+ * `notifications` table is dead (see {@link NotificationsOrphan}).
  */
 @Entity('user_notifications')
 export class UserNotification {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
-  @Column({ ...gormVarchar })
+  @Column({ ...modernVarchar })
   type: NotificationItemType | null;
 
   /** Id of the node/comment the notification points at. Wire key is `itemId`. */
   @Index('item_id')
-  @Column({ name: 'itemId', ...GORM_ID_NULLABLE })
+  @Column({ name: 'itemId', ...MODERN_ID_NULLABLE })
   itemId: number | null;
 
   @Column({ name: 'time', ...TIMESTAMP_NULLABLE })
   time: Date | null;
 
   /** Recipient. Hidden on the wire. */
-  @Column({ name: 'userId', ...GORM_ID_NULLABLE })
+  @Column({ name: 'userId', ...MODERN_ID_NULLABLE })
   userId: number | null;
 
   @Column({ name: 'created_at', ...TIMESTAMP_NULLABLE })
@@ -53,27 +50,23 @@ export class UserNotification {
   deletedAt: Date | null;
 }
 
-/**
- * `notifications` — **dead table** (0 rows), same shape as `user_notifications`.
- * An artefact of a renamed GORM model. Kept for baseline-migration completeness
- * only; nothing reads it.
- */
+/** Dead table, superseded by {@link UserNotification}. Nothing reads it. */
 @Entity('notifications')
 export class NotificationsOrphan {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
-  @Column({ ...gormVarchar })
+  @Column({ ...modernVarchar })
   type: string | null;
 
   @Index('item_id')
-  @Column({ name: 'itemId', ...GORM_ID_NULLABLE })
+  @Column({ name: 'itemId', ...MODERN_ID_NULLABLE })
   itemId: number | null;
 
   @Column({ name: 'time', ...TIMESTAMP_NULLABLE })
   time: Date | null;
 
-  @Column({ name: 'userId', ...GORM_ID_NULLABLE })
+  @Column({ name: 'userId', ...MODERN_ID_NULLABLE })
   userId: number | null;
 
   @Column({ name: 'created_at', ...TIMESTAMP_NULLABLE })
@@ -87,10 +80,7 @@ export class NotificationsOrphan {
   deletedAt: Date | null;
 }
 
-/**
- * `user_notifications_processed` — **the live delivery ledger** (484 rows).
- * Records which external service has already handled a notification.
- */
+/** Delivery ledger: which external service already handled a notification. */
 @Entity('user_notifications_processed')
 export class UserNotificationProcessed {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
@@ -102,14 +92,11 @@ export class UserNotificationProcessed {
   @Column({ name: 'processed_at', ...TIMESTAMP_NULLABLE })
   processedAt: Date | null;
 
-  @Column({ name: 'notification_id', ...GORM_ID_NULLABLE })
+  @Column({ name: 'notification_id', ...MODERN_ID_NULLABLE })
   notificationId: number | null;
 }
 
-/**
- * `user_notifications_sent` — **dead table** (0 rows), superseded by
- * `user_notifications_processed`. Baseline-migration completeness only.
- */
+/** Dead table, superseded by {@link UserNotificationProcessed}. */
 @Entity('user_notifications_sent')
 export class UserNotificationSentOrphan {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
@@ -121,27 +108,24 @@ export class UserNotificationSentOrphan {
   @Column({ name: 'sent_at', ...TIMESTAMP_NULLABLE })
   sentAt: Date | null;
 
-  @Column({ name: 'notification_id', ...GORM_ID_NULLABLE })
+  @Column({ name: 'notification_id', ...MODERN_ID_NULLABLE })
   notificationId: number | null;
 }
 
-/**
- * `app_notifications` — the source event queue (90 rows). No recipient; the
- * dispatcher fans these out into `user_notifications`.
- */
+/** Source event queue. No recipient; the dispatcher fans these out per user. */
 @Entity('app_notifications')
 export class AppNotification {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
-  @Column({ ...gormVarchar })
+  @Column({ ...modernVarchar })
   app: string | null;
 
-  @Column({ ...gormVarchar })
+  @Column({ ...modernVarchar })
   type: string | null;
 
   @Index('item_id')
-  @Column({ name: 'item_id', ...GORM_ID_NULLABLE })
+  @Column({ name: 'item_id', ...MODERN_ID_NULLABLE })
   itemId: number | null;
 
   @Column({ name: 'item_created_at', ...TIMESTAMP_NULLABLE })
@@ -162,13 +146,12 @@ export class AppNotification {
 }
 
 /**
- * `notification_settings` — per-user preferences (24 rows).
+ * Per-user notification preferences.
  *
- * ⚠️ The live table has **only** a primary key — no unique index on `userId`,
- * contrary to data-model.md. Duplicate rows per user are therefore possible and
- * the read path must pick deterministically rather than assume uniqueness.
+ * `userId` has **no unique index**, so duplicate rows per user are possible —
+ * reads must pick deterministically rather than assume uniqueness.
  *
- * ⚠️ Wire keys differ from column names: `flow` ← `subscribed_to_flow`,
+ * Wire keys differ from columns: `flow` ← `subscribed_to_flow`,
  * `boris` ← `subscribed_to_boris`, `comments` ← `subscribed_to_comments`.
  */
 @Entity('notification_settings')
@@ -176,28 +159,28 @@ export class NotificationSettings {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
-  @Column({ name: 'userId', ...GORM_ID_NULLABLE })
+  @Column({ name: 'userId', ...MODERN_ID_NULLABLE })
   userId: number | null;
 
-  @Column({ name: 'enabled', ...gormBool({ default: 1 }) })
+  @Column({ name: 'enabled', ...modernBool({ default: 1 }) })
   enabled: boolean | null;
 
-  @Column({ name: 'show_indicator', ...gormBool() })
+  @Column({ name: 'show_indicator', ...modernBool() })
   showIndicator: boolean | null;
 
-  @Column({ name: 'send_telegram', ...gormBool() })
+  @Column({ name: 'send_telegram', ...modernBool() })
   sendTelegram: boolean | null;
 
-  @Column({ name: 'send_email', ...gormBool() })
+  @Column({ name: 'send_email', ...modernBool() })
   sendEmail: boolean | null;
 
-  @Column({ name: 'subscribed_to_flow', ...gormBool() })
+  @Column({ name: 'subscribed_to_flow', ...modernBool() })
   subscribedToFlow: boolean | null;
 
-  @Column({ name: 'subscribed_to_boris', ...gormBool() })
+  @Column({ name: 'subscribed_to_boris', ...modernBool() })
   subscribedToBoris: boolean | null;
 
-  @Column({ name: 'subscribed_to_comments', ...gormBool({ default: 1 }) })
+  @Column({ name: 'subscribed_to_comments', ...modernBool({ default: 1 }) })
   subscribedToComments: boolean | null;
 
   @Column({ name: 'last_seen', ...TIMESTAMP_NULLABLE })

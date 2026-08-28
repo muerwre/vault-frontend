@@ -1,6 +1,6 @@
 import type { FileType, UploadTarget } from '../constants/file';
 
-/** `file.metadata` JSON blob. `duration` is a **number** here (unlike embed). */
+/** `file.metadata` JSON blob. `duration` is a number here, unlike on embeds. */
 export interface FileMetadata {
   width?: number;
   height?: number;
@@ -12,10 +12,8 @@ export interface FileMetadata {
 }
 
 /**
- * Wire shape of a file. Mirrors the frontend's `IFile`.
- *
- * ⚠️ Casing is inconsistent by design: `createdAt`/`updatedAt` are camelCase
- * while `user_id`/`node_id` are snake_case. Do not normalise.
+ * Wire shape of a file. Casing is inconsistent by design:
+ * `createdAt`/`updatedAt` are camelCase, `user_id`/`node_id` snake_case.
  */
 export interface IFile {
   id: number;

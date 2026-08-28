@@ -19,9 +19,9 @@ import { File } from './file.entity';
 import { User } from './user.entity';
 
 /**
- * `message` — legacy dialect, FULLTEXT index on `text`.
+ * Legacy dialect. FULLTEXT index on `text`.
  *
- * A **note** is a self-message (`fromId === toId`); there is no separate table.
+ * A "note" is a self-message (`fromId === toId`); there is no separate table.
  */
 @Entity('message')
 @Index('IDX_5e732355048e135674f657e595', ['text'], { fulltext: true })

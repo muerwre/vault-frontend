@@ -10,21 +10,16 @@ async function bootstrap() {
     cors: CORS_OPTIONS,
   });
 
-  /**
-   * Renders every failure as `{ error, message }` — the envelope the frontend's
-   * axios interceptor parses. Applied globally so Nest's own exceptions (404s
-   * from unmatched routes, body-parser 413s) use it too.
-   */
+  // Renders every failure as the `{ error, message }` envelope clients parse.
   app.useGlobalFilters(new VaultExceptionFilter());
 
-  // All controllers are served under /api (matches the Go backend behind the proxy).
+  // All controllers are served under /api, matching the reverse proxy.
   app.setGlobalPrefix('api');
 
   /**
-   * The frontend calls several paths with a trailing slash (`GET /nodes/`,
-   * `POST /auth`, `GET /stats/`, …). Express' default non-strict routing already
-   * matches both spellings; keep it that way, because a 301 to the canonical form
-   * would drop the Authorization header on some clients.
+   * Clients call several paths with a trailing slash (`/nodes/`, `/stats/`, …).
+   * Loose routing must stay on: a 301 to the canonical form drops the
+   * Authorization header on some clients.
    */
   app.set('strict routing', false);
 
