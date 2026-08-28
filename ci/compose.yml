@@ -1,54 +1,46 @@
-# Explicit project name. Without it, Compose derives the project from the
-# directory name ("ci"), which collides with every other repo that keeps its
-# compose file in a ci/ folder — Compose would then treat that project's
-# containers as belonging to this file and recreate them.
+# Explicit project name. Without it Compose derives one from the directory name
+# ("ci"), colliding with any other repo that also keeps its compose file in a ci/
+# folder — that project's containers would then be recreated by this file.
 name: vault
 
 services:
-  # Local MariaDB seeded from the production dump. Used to author entities and to
-  # prove the baseline migration produces an empty schema diff (Phase 1).
+  # Local MariaDB, seeded from the production dump.
   #
-  # The server version matches the dump's header (`10.8.2-MariaDB`): int display
-  # widths (`int(11)`) and utf8mb3 handling differ on MySQL 8 / MariaDB 11, which
-  # would show up as spurious ALTERs in `migration:generate`.
+  # The server version is pinned to match the dump: int display widths and utf8mb3
+  # handling differ on MySQL 8 and MariaDB 11, which surfaces as spurious ALTERs
+  # in `migration:generate`.
   #
-  # The server-default charset is left at the image default (utf8mb4 /
-  # utf8mb4_general_ci) — that is what production used too, since the newer
-  # GORM-created tables in the dump are `DEFAULT CHARSET=utf8mb4` with no
-  # explicit COLLATE, i.e. they inherited the server default at creation time.
+  # Credentials and database name match production, so DATABASE_URL differs only
+  # by host. The server-default charset is left at the image default
+  # (utf8mb4/utf8mb4_general_ci), which is what the newer tables were created
+  # under.
   db:
     image: mariadb:10.8
     container_name: vault-db
     restart: unless-stopped
     environment:
       MARIADB_ROOT_PASSWORD: password
-      MARIADB_DATABASE: vault
-      # Creates a `mysql@localhost` account authenticated by unix socket, which is
-      # what the healthcheck below logs in as. Applied at initdb time, so it needs
-      # a fresh volume (`yarn db:reset`) to take effect.
+      MARIADB_DATABASE: adonis
+      # Creates the `mysql@localhost` socket-auth account the healthcheck uses.
+      # Applied at initdb time, so it needs a fresh volume (`yarn db:reset`).
       MARIADB_MYSQL_LOCALHOST_USER: 1
     ports:
       - '3306:3306'
     volumes:
-      # MariaDB's entrypoint decompresses and runs *.sql.xz from initdb.d, so the
-      # dump is mounted as-is — no unpacking step. It is applied against
-      # MARIADB_DATABASE and, being an initdb script, ONLY runs when the data
-      # volume is empty. To re-seed after a schema experiment, wipe the volume:
-      #   yarn db:reset   (docker compose down -v && up -d)
+      # The entrypoint decompresses and runs *.sql.xz from initdb.d, so the dump
+      # mounts as-is. It is applied against MARIADB_DATABASE and, being an initdb
+      # script, runs ONLY when the data volume is empty — re-seeding means wiping
+      # the volume (`yarn db:reset`).
       - ../examples/2026-07-15-vault-stable__db.sql.xz:/docker-entrypoint-initdb.d/dump.sql.xz:ro
       - vault-db-data:/var/lib/mysql
     healthcheck:
-      # `--su-mysql` is required: without it healthcheck.sh connects as root with
-      # no password and is denied (root has MARIADB_ROOT_PASSWORD), so the
-      # container would sit in `health: starting` forever and any
-      # `depends_on: condition: service_healthy` would time out. Switching to the
-      # mysql user uses unix_socket auth instead.
+      # `--su-mysql` is required: otherwise healthcheck.sh connects as root with no
+      # password, is denied, and the container never leaves `health: starting`.
       test:
         ['CMD', 'healthcheck.sh', '--su-mysql', '--connect', '--innodb_initialized']
       interval: 5s
       timeout: 5s
-      # The dump is applied by the entrypoint before the server accepts external
-      # connections, so allow generous headroom for first boot.
+      # First boot applies the dump before accepting external connections.
       retries: 30
       start_period: 60s
 
