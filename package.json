@@ -19,7 +19,7 @@
     "db:up": "docker compose -f ci/compose.yml up -d",
     "db:down": "docker compose -f ci/compose.yml down",
     "db:reset": "docker compose -f ci/compose.yml down -v && docker compose -f ci/compose.yml up -d",
-    "db:cli": "docker exec -it vault-db mariadb -uroot -ppassword vault",
+    "db:cli": "docker exec -it vault-db mariadb -uroot -ppassword adonis",
     "backend:migration:run": "yarn workspace @vault/backend run migration:run",
     "backend:schema:drift": "yarn workspace @vault/backend run schema:drift",
     "backend:read-check": "yarn workspace @vault/backend run read-check",
