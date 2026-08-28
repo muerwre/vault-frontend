@@ -7,20 +7,42 @@
     "build": "nest build",
     "start": "node dist/main.js",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
-    "lint": "eslint \"src/**/*.ts\" --fix"
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "typeorm": "TS_NODE_PROJECT=./tsconfig.json ts-node -r tsconfig-paths/register ../../node_modules/typeorm/cli.js -d src/database/data-source.ts",
+    "migration:generate": "yarn typeorm migration:generate",
+    "migration:create": "yarn typeorm migration:create",
+    "migration:run": "yarn typeorm migration:run",
+    "migration:revert": "yarn typeorm migration:revert",
+    "migration:show": "yarn typeorm migration:show",
+    "schema:drift": "ts-node src/database/schema-drift.ts",
+    "read-check": "ts-node src/database/read-check.ts",
+    "auth-check": "ts-node src/globals/auth-check.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.0",
+    "@nestjs/jwt": "^11.0.2",
     "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/typeorm": "^11.0.2",
+    "bcryptjs": "^3.0.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "mysql2": "^3.11.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "^1.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@types/express": "^5.0.0",
     "@types/node": "^22.4.1",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "@vault/common": "*"
   }
 }

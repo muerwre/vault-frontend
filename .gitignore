@@ -10,9 +10,12 @@ build
 .DS_Store
 *.tsbuildinfo
 
-# env
+# env — .env.local provides the real configuration and is never committed.
+# .env.example is the committed template.
+.env
 .env.local
 .env.*.local
+!.env.example
 
 # intermediate migration spec / reference material (dump, example repos)
 /examples

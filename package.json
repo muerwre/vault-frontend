@@ -15,9 +15,18 @@
     "frontend:build": "yarn workspace @vault/frontend run build",
     "backend:dev": "yarn workspace @vault/backend run dev",
     "backend:build": "yarn workspace @vault/backend run build",
-    "common:build": "yarn workspace @vault/common run build"
+    "common:build": "yarn workspace @vault/common run build",
+    "db:up": "docker compose -f ci/compose.yml up -d",
+    "db:down": "docker compose -f ci/compose.yml down",
+    "db:reset": "docker compose -f ci/compose.yml down -v && docker compose -f ci/compose.yml up -d",
+    "db:cli": "docker exec -it vault-db mariadb -uroot -ppassword vault",
+    "backend:migration:run": "yarn workspace @vault/backend run migration:run",
+    "backend:schema:drift": "yarn workspace @vault/backend run schema:drift",
+    "backend:read-check": "yarn workspace @vault/backend run read-check",
+    "backend:auth-check": "yarn workspace @vault/backend run auth-check"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "husky": "^7.0.4",
     "lerna": "^8.1.8",
     "lint-staged": "^12.1.6",

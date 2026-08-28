@@ -1,4 +1,6 @@
-// @vault/migration — TypeORM migrations matching the live MySQL/MariaDB schema.
-// The baseline migration is generated in Phase 1 against a local DB loaded from
-// examples/2026-07-15-vault-stable__db.sql.xz (must produce an empty diff).
+// @vault/migration — one-off *data* tooling (backfills, dev fixtures).
+//
+// Schema migrations are NOT here: they live in
+// packages/backend/src/database/migrations, next to the entities the generator
+// diffs against. See ./README.md for the reasoning.
 export const VAULT_MIGRATION_PACKAGE = '@vault/migration';
