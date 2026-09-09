@@ -56,7 +56,12 @@ export type LabSort = (typeof LAB_SORT)[keyof typeof LAB_SORT];
 /** Boris is a singleton node addressed by a fixed id. */
 export const BORIS_NODE_ID = 696;
 
-export const MAX_NODE_TITLE_LENGTH = 256;
+/**
+ * The `node.title` column is `varchar(255)`, so 255 is the real ceiling — titles
+ * are truncated to fit rather than rejected. Do not raise this to 256: the
+ * server runs in strict mode and a 256th character fails the insert.
+ */
+export const MAX_NODE_TITLE_LENGTH = 255;
 
 export const MAX_COMMENT_LENGTH = 8192;
 

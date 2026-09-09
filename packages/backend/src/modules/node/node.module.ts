@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { File } from '../../entities/file.entity';
 import { Like } from '../../entities/like.entity';
+import { Comment } from '../../entities/comment.entity';
 import { NodeSocialPublication } from '../../entities/node-extras.entity';
 import { Node } from '../../entities/node.entity';
 import { Tag } from '../../entities/tag.entity';
@@ -10,7 +11,9 @@ import { NodeView } from '../../entities/views.entity';
 
 import { TagModule } from '../tag/tag.module';
 
+import { LabService } from './lab.service';
 import { NodeTagsService } from './node-tags.service';
+import { NodeUpsertService } from './node-upsert.service';
 import { NodeController } from './node.controller';
 import { NodeService } from './node.service';
 
@@ -23,11 +26,12 @@ import { NodeService } from './node.service';
       NodeView,
       NodeSocialPublication,
       Tag,
+      Comment,
     ]),
     TagModule,
   ],
   controllers: [NodeController],
-  providers: [NodeService, NodeTagsService],
+  providers: [NodeService, NodeTagsService, NodeUpsertService, LabService],
   exports: [NodeService],
 })
 export class NodeModule {}
