@@ -30,7 +30,18 @@ import {
 } from '../auth/auth.guards';
 
 import { TagService } from '../tag/tag.service';
+
+import {
+  LabService,
+  normaliseLabQuery,
+  type WireLabList,
+  type WireLabStats,
+} from './lab.service';
 import { NodeTagsService } from './node-tags.service';
+import {
+  NodeUpsertService,
+  type NodeUpsertBody,
+} from './node-upsert.service';
 
 import {
   FLOW_DEFAULT_TAKE,
@@ -68,6 +79,8 @@ export class NodeController {
     private readonly nodes: NodeService,
     private readonly nodeTags: NodeTagsService,
     private readonly tags: TagService,
+    private readonly lab: LabService,
+    private readonly upsert: NodeUpsertService,
   ) {}
 
   /**
@@ -104,6 +117,62 @@ export class NodeController {
       withValid: toBool(withValid),
       uid,
     });
+  }
+
+  /**
+   * Creates or updates a node. Derived fields (`description`, `thumbnail`,
+   * `flow.dominant_color`) are recomputed server-side and cannot be set here.
+   */
+  @Post()
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  async save(
+    @WithUser() user: User,
+    @Body() body: NodeUpsertBody,
+  ): Promise<{ node: WireGetNode['node'] }> {
+    const result = await this.upsert.upsert(body ?? {}, user);
+
+    if (result.ok !== true) {
+      throw this.upsertError(result.failure);
+    }
+
+    return { node: await this.reloadNode(result.nodeId, user) };
+  }
+
+  /**
+   * The lab feed. Declared before `:id` so the literal path is not captured as
+   * a node id.
+   */
+  @Get('lab')
+  @UseGuards(AuthRequiredGuard)
+  getLab(
+    @Uid() uid: number,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+    @Query('sort') sort?: string,
+    @Query('search') search?: string,
+  ): Promise<WireLabList> {
+    const query = normaliseLabQuery({ limit, offset, sort, search });
+
+    return this.lab.getList(
+      query.limit,
+      query.offset,
+      query.sort,
+      query.search,
+      uid,
+    );
+  }
+
+  @Get('lab/updates')
+  @UseGuards(AuthRequiredGuard)
+  getLabUpdates(@Uid() uid: number): Promise<{ nodes: unknown[] }> {
+    return this.lab.getUpdates(uid);
+  }
+
+  @Get('lab/stats')
+  @UseGuards(AuthRequiredGuard)
+  getLabStats(): Promise<WireLabStats> {
+    return this.lab.getStats();
   }
 
   /** Public. An unknown or untagged node yields empty results, not a 404. */
@@ -303,6 +372,32 @@ export class NodeController {
     }
 
     return result.node;
+  }
+
+  private upsertError(failure: {
+    kind: string;
+    message?: string;
+  }): VaultException {
+    switch (failure.kind) {
+      case 'forbidden':
+        return new VaultException(
+          ERROR_CODES.NotEnoughRights,
+          HttpStatus.FORBIDDEN,
+        );
+      case 'not-found':
+        return new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+      case 'wrong-type':
+        return new VaultException(
+          ERROR_CODES.IncorrectType,
+          HttpStatus.BAD_REQUEST,
+        );
+      default:
+        return new VaultException(
+          ERROR_CODES.IncorrectData,
+          HttpStatus.BAD_REQUEST,
+          failure.message,
+        );
+    }
   }
 
   private parseId(id: string, onInvalid: HttpStatus): number {
