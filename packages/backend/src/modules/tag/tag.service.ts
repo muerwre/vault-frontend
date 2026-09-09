@@ -65,6 +65,40 @@ export class TagService {
     return { nodes: rows.map(toWireShallowNode), count };
   }
 
+  /**
+   * Resolves titles to tag rows, creating any that do not exist.
+   *
+   * Titles are lowercased first, so tags are effectively case-insensitive.
+   * Blank titles are dropped rather than creating an empty tag.
+   */
+  async findOrCreateByTitles(titles: string[]): Promise<Tag[]> {
+    const wanted = [
+      ...new Set(titles.map(title => title.toLowerCase().trim()).filter(Boolean)),
+    ];
+
+    if (wanted.length === 0) {
+      return [];
+    }
+
+    const existing = await this.tags
+      .createQueryBuilder('tag')
+      .where('LOWER(tag.title) IN (:...titles)', { titles: wanted })
+      .getMany();
+
+    const byTitle = new Map(existing.map(tag => [tag.title.toLowerCase(), tag]));
+    const missing = wanted.filter(title => !byTitle.has(title));
+
+    for (const title of missing) {
+      const created = await this.tags.save(this.tags.create({ title }));
+      byTitle.set(title, created);
+    }
+
+    // Preserve the caller's order.
+    return wanted
+      .map(title => byTitle.get(title))
+      .filter((tag): tag is Tag => tag !== undefined);
+  }
+
   /** Substring match on title, returning bare title strings. */
   async autocomplete(search: string, exclude: string[]): Promise<string[]> {
     const query = this.tags

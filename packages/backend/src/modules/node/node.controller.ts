@@ -1,15 +1,36 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   HttpStatus,
   Param,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ERROR_CODES, ROLES } from '@vault/common/constants';
+import {
+  ERROR_CODES,
+  NODE_FLOW_DISPLAY,
+  ROLES,
+} from '@vault/common/constants';
+import type { INodeFlow } from '@vault/common/types';
 
+import { Tag } from '../../entities/tag.entity';
+import { User } from '../../entities/user.entity';
 import { VaultException } from '../../globals/exceptions';
-import { Claims, OptionalAuthGuard, Uid } from '../auth/auth.guards';
+import {
+  AuthRequiredGuard,
+  Claims,
+  OptionalAuthGuard,
+  Uid,
+  WithUser,
+  WithUserGuard,
+} from '../auth/auth.guards';
+
+import { TagService } from '../tag/tag.service';
+import { NodeTagsService } from './node-tags.service';
 
 import {
   FLOW_DEFAULT_TAKE,
@@ -33,6 +54,8 @@ const toDate = (value: unknown, fallback: Date): Date => {
   return Number.isNaN(parsed.getTime()) ? fallback : parsed;
 };
 
+const FLOW_DISPLAYS: readonly string[] = Object.values(NODE_FLOW_DISPLAY);
+
 const toPositiveInt = (value: unknown, fallback: number): number => {
   const parsed = Number.parseInt(String(value ?? ''), 10);
 
@@ -41,7 +64,11 @@ const toPositiveInt = (value: unknown, fallback: number): number => {
 
 @Controller('nodes')
 export class NodeController {
-  constructor(private readonly nodes: NodeService) {}
+  constructor(
+    private readonly nodes: NodeService,
+    private readonly nodeTags: NodeTagsService,
+    private readonly tags: TagService,
+  ) {}
 
   /**
    * The flow feed. Clients call this as `/nodes/` with a trailing slash.
@@ -116,5 +143,180 @@ export class NodeController {
     }
 
     return result;
+  }
+
+  /** Toggles the caller's like. Returns the resulting state. */
+  @Post(':id/like')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  async like(
+    @Param('id') id: string,
+    @WithUser() user: User,
+  ): Promise<{ is_liked: boolean }> {
+    const node = await this.nodes.findLive(this.parseId(id, HttpStatus.NOT_FOUND));
+
+    if (!node) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    return { is_liked: await this.nodes.toggleLike(node, user) };
+  }
+
+  /** Admin only. Toggles the heroic flag and returns the new value. */
+  @Post(':id/heroic')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  async heroic(
+    @Param('id') id: string,
+    @WithUser() user: User,
+  ): Promise<{ is_heroic: boolean }> {
+    const node = await this.nodes.findLive(
+      this.parseId(id, HttpStatus.BAD_REQUEST),
+    );
+
+    if (!node || !this.nodes.canHero(node, user)) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    return { is_heroic: await this.nodes.toggleHeroic(node) };
+  }
+
+  /**
+   * Persists the flow grid display settings.
+   *
+   * Unlike reads, this **requires** a known display variant — an empty string is
+   * rejected here even though stored rows may contain one.
+   */
+  @Post(':id/cell-view')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  async cellView(
+    @Param('id') id: string,
+    @WithUser() user: User,
+    @Body() body: { flow?: INodeFlow },
+  ): Promise<{ flow: INodeFlow }> {
+    const flow = body?.flow;
+
+    if (!flow || !FLOW_DISPLAYS.includes(flow.display)) {
+      throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.BAD_REQUEST);
+    }
+
+    const node = await this.nodes.findLive(
+      this.parseId(id, HttpStatus.BAD_REQUEST),
+    );
+
+    if (!node || !this.nodes.canEdit(node, user)) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    return { flow: await this.nodes.setFlow(node, flow) };
+  }
+
+  /**
+   * Locks or restores a node via `?is_locked=`. Locking soft-deletes it, so this
+   * looks up the node including already-deleted ones.
+   */
+  @Delete(':id')
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  async remove(
+    @Param('id') id: string,
+    @Query('is_locked') isLocked: string,
+    @WithUser() user: User,
+  ): Promise<{ deleted_at: string | null }> {
+    const node = await this.nodes.findForEdit(
+      this.parseId(id, HttpStatus.BAD_REQUEST),
+    );
+
+    if (!node || !this.nodes.canEdit(node, user)) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    return {
+      deleted_at: await this.nodes.setLocked(node, toBool(isLocked)),
+    };
+  }
+
+  /**
+   * Adds tags to a node, creating any that do not exist yet. An empty list is a
+   * no-op that still returns the node.
+   */
+  @Post(':id/tags')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  async addTags(
+    @Param('id') id: string,
+    @WithUser() user: User,
+    @Body() body: { tags?: string[] },
+  ): Promise<{ node: WireGetNode['node'] }> {
+    const nodeId = this.parseId(id, HttpStatus.BAD_REQUEST);
+    const node = await this.nodes.findLive(nodeId);
+
+    if (!node || !this.nodes.canEdit(node, user)) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.BAD_REQUEST);
+    }
+
+    const titles = Array.isArray(body?.tags) ? body.tags : [];
+
+    if (titles.length > 0) {
+      const resolved = await this.tags.findOrCreateByTitles(titles);
+      await this.nodeTags.addTags(nodeId, resolved);
+    }
+
+    return { node: await this.reloadNode(nodeId, user) };
+  }
+
+  /** Removes one tag from a node and returns the remaining set. */
+  @Delete(':id/tags/:tagId')
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  async removeTag(
+    @Param('id') id: string,
+    @Param('tagId') tagId: string,
+    @WithUser() user: User,
+  ): Promise<{ tags: Array<{ ID: number; title: string }> }> {
+    const nodeId = this.parseId(id, HttpStatus.BAD_REQUEST);
+    const parsedTagId = Number.parseInt(tagId, 10);
+
+    if (!Number.isFinite(parsedTagId) || parsedTagId <= 0) {
+      throw new VaultException(ERROR_CODES.TagNotFound, HttpStatus.BAD_REQUEST);
+    }
+
+    const node = await this.nodes.findLive(nodeId);
+
+    if (!node || !this.nodes.canEdit(node, user)) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    const remaining = await this.nodeTags.removeTag(nodeId, parsedTagId);
+
+    return { tags: remaining.map((tag: Tag) => ({ ID: tag.id, title: tag.title })) };
+  }
+
+  /** Re-reads the node so the response reflects the write. */
+  private async reloadNode(
+    nodeId: number,
+    user: User,
+  ): Promise<WireGetNode['node']> {
+    const result = await this.nodes.getNode(nodeId, user.id, user.role);
+
+    if (!result) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    return result.node;
+  }
+
+  private parseId(id: string, onInvalid: HttpStatus): number {
+    const parsed = Number.parseInt(id, 10);
+
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      throw new VaultException(
+        onInvalid === HttpStatus.NOT_FOUND
+          ? ERROR_CODES.NodeNotFound
+          : ERROR_CODES.IncorrectData,
+        onInvalid,
+      );
+    }
+
+    return parsed;
   }
 }
