@@ -4,12 +4,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Comment } from '../../entities/comment.entity';
 import { File } from '../../entities/file.entity';
 import { CommentUserLike } from '../../entities/like.entity';
+import { Node } from '../../entities/node.entity';
+import { NodeModule } from '../node/node.module';
 
 import { CommentController } from './comment.controller';
 import { CommentService } from './comment.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Comment, File, CommentUserLike])],
+  imports: [
+    TypeOrmModule.forFeature([Comment, File, CommentUserLike, Node]),
+    NodeModule,
+  ],
   controllers: [CommentController],
   providers: [CommentService],
 })

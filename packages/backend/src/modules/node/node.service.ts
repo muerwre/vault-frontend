@@ -6,6 +6,7 @@ import {
   NODE_TYPES,
   ROLES,
 } from '@vault/common/constants';
+import type { INodeFlow } from '@vault/common/types';
 import { Repository, type SelectQueryBuilder } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
@@ -15,10 +16,11 @@ import { Node } from '../../entities/node.entity';
 import { NodeView } from '../../entities/views.entity';
 import {
   sortFilesByOrder,
+  toWireDate,
+  toWireFlow,
   toWireNode,
   toWireShallowNode,
   type WireNode,
-  toWireDate,
   type WireShallowNode,
 } from '../../wire/serialize';
 
@@ -26,6 +28,12 @@ import {
   applyIsFlowNode,
   applyIsFlowOrLabNode,
 } from './node.predicates';
+import {
+  type Actor,
+  canEditNode,
+  canHeroNode,
+  canLikeNode,
+} from './node.permissions';
 
 /**
  * `GET /nodes/` response. Every slice is always present and never null; a
@@ -475,5 +483,104 @@ export class NodeService {
 
   private flowQuery(): SelectQueryBuilder<Node> {
     return applyIsFlowNode(this.baseQuery(), 'node');
+  }
+
+  // ---------------------------------------------------------------- writes
+
+  /** Loads a node for mutation, ignoring soft deletion so a locked one can be restored. */
+  findForEdit(id: number): Promise<Node | null> {
+    return this.nodes
+      .createQueryBuilder('node')
+      .where('node.id = :id', { id })
+      .getOne();
+  }
+
+  /** Excludes soft-deleted nodes; used where a locked node must stay untouchable. */
+  findLive(id: number): Promise<Node | null> {
+    return this.nodes
+      .createQueryBuilder('node')
+      .where('node.id = :id AND node.deleted_at IS NULL', { id })
+      .getOne();
+  }
+
+  /**
+   * Toggles this user's like and returns the new state.
+   *
+   * The `like` table has no unique constraint, so an existing row is deleted
+   * rather than relying on the database to reject a duplicate.
+   */
+  async toggleLike(node: Node, actor: Actor): Promise<boolean> {
+    if (!canLikeNode(node)) {
+      return false;
+    }
+
+    const existing = await this.likes
+      .createQueryBuilder('l')
+      .where('l.nodeId = :nodeId AND l.userId = :uid', {
+        nodeId: node.id,
+        uid: actor.id,
+      })
+      .getOne();
+
+    if (existing) {
+      await this.likes.delete({ nodeId: node.id, userId: actor.id });
+      return false;
+    }
+
+    await this.likes.save(this.likes.create({ nodeId: node.id, userId: actor.id }));
+
+    return true;
+  }
+
+  /** Toggles `is_heroic` and returns the new value. */
+  async toggleHeroic(node: Node): Promise<boolean> {
+    const next = !node.isHeroic;
+
+    await this.nodes.update(node.id, { isHeroic: next });
+
+    return next;
+  }
+
+  /** Persists the flow display settings and returns them as stored. */
+  async setFlow(node: Node, flow: INodeFlow): Promise<INodeFlow> {
+    await this.nodes.update(node.id, { flow });
+
+    return toWireFlow(flow);
+  }
+
+  /**
+   * Locks (soft-deletes) or restores a node, returning the resulting
+   * `deleted_at`. Truncated to the second because the column has no sub-second
+   * precision.
+   */
+  async setLocked(node: Node, isLocked: boolean): Promise<string | null> {
+    if (!isLocked) {
+      await this.nodes.update(node.id, { deletedAt: null });
+      return null;
+    }
+
+    const deletedAt = new Date();
+    deletedAt.setMilliseconds(0);
+
+    await this.nodes.update(node.id, { deletedAt });
+
+    return toWireDate(deletedAt);
+  }
+
+  /** Bumps `commented_at`, which drives the "updated" feed and notifications. */
+  async touchCommentedAt(nodeId: number, at: Date = new Date()): Promise<void> {
+    const commentedAt = new Date(at);
+    commentedAt.setMilliseconds(0);
+
+    await this.nodes.update(nodeId, { commentedAt });
+  }
+
+  /** True when this actor may edit the node. */
+  canEdit(node: Node, actor: Actor): boolean {
+    return canEditNode(node, actor);
+  }
+
+  canHero(node: Node, actor: Actor): boolean {
+    return canHeroNode(node, actor);
   }
 }
