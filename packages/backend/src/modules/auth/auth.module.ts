@@ -1,8 +1,16 @@
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { File } from '../../entities/file.entity';
+import { Node } from '../../entities/node.entity';
+import { RestoreCode } from '../../entities/social.entity';
 import { User } from '../../entities/user.entity';
+import { NodeView } from '../../entities/views.entity';
+import { MailModule } from '../mail/mail.module';
 
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { PasswordService } from './password.service';
 import {
   AuthRequiredGuard,
   OptionalAuthGuard,
@@ -22,14 +30,27 @@ import {
  */
 @Global()
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
-  providers: [TokenReader, OptionalAuthGuard, AuthRequiredGuard, WithUserGuard],
+  imports: [
+    TypeOrmModule.forFeature([User, File, Node, NodeView, RestoreCode]),
+    MailModule,
+  ],
+  controllers: [AuthController],
+  providers: [
+    TokenReader,
+    OptionalAuthGuard,
+    AuthRequiredGuard,
+    WithUserGuard,
+    PasswordService,
+    AuthService,
+  ],
   exports: [
     TypeOrmModule,
     TokenReader,
     OptionalAuthGuard,
     AuthRequiredGuard,
     WithUserGuard,
+    PasswordService,
+    AuthService,
   ],
 })
 export class AuthModule {}

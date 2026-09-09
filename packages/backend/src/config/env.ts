@@ -41,3 +41,27 @@ export const getJwtSecret = (): string => process.env.JWT_SECRET ?? '';
  * embeds are still served and only new videos fail to resolve.
  */
 export const getGoogleApiKey = (): string => process.env.GOOGLE_API_KEY ?? '';
+
+export interface SmtpConfig {
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+  from: string;
+}
+
+/** Mail is optional: an empty host disables sending. */
+export const getSmtpConfig = (): SmtpConfig => ({
+  host: process.env.SMTP_HOST ?? '',
+  port: Number.parseInt(process.env.SMTP_PORT ?? '25', 10) || 25,
+  user: process.env.SMTP_USER ?? '',
+  password: process.env.SMTP_PASSWORD ?? '',
+  from: process.env.SMTP_FROM ?? '',
+});
+
+/** Host used to build absolute links in outgoing mail. */
+export const getPublicHost = (): string => process.env.FRONTEND_PUBLIC_HOST ?? '';
+
+/** Path the password-reset link points at; the code is appended to it. */
+export const getFrontendResetUrl = (): string =>
+  process.env.FRONTEND_RESET_URL ?? '/restore/';
