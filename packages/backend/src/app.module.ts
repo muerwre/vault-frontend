@@ -13,6 +13,7 @@ import { NotesModule } from './modules/notes/notes.module';
 import { SearchModule } from './modules/search/search.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { TagModule } from './modules/tag/tag.module';
+import { UploadModule } from './modules/upload/upload.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -26,6 +27,7 @@ import { UserModule } from './modules/user/user.module';
     CommentModule,
     UserModule,
     NotesModule,
+    UploadModule,
     StatsModule,
     SearchModule,
     TagModule,
