@@ -9,6 +9,7 @@ import { CommentModule } from './modules/comment/comment.module';
 import { MailModule } from './modules/mail/mail.module';
 import { MetaModule } from './modules/meta/meta.module';
 import { NodeModule } from './modules/node/node.module';
+import { NotesModule } from './modules/notes/notes.module';
 import { SearchModule } from './modules/search/search.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { TagModule } from './modules/tag/tag.module';
@@ -24,6 +25,7 @@ import { UserModule } from './modules/user/user.module';
     NodeModule,
     CommentModule,
     UserModule,
+    NotesModule,
     StatsModule,
     SearchModule,
     TagModule,
