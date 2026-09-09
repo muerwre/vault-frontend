@@ -237,3 +237,53 @@ export const sortFilesByOrder = (files: File[], order: number[]): File[] => {
     .map(id => byId.get(id))
     .filter((file): file is File => file !== undefined);
 };
+
+/** Compact file used by profiles: no paths, no timestamps. */
+export interface WireShallowFile {
+  id: number;
+  url: string;
+  metadata: Record<string, unknown>;
+  type: string;
+  mime: string;
+  size: number;
+}
+
+export const toWireShallowFile = (
+  file: File | null | undefined,
+): WireShallowFile | null =>
+  file
+    ? {
+        id: file.id,
+        url: toWireString(file.url),
+        metadata: (file.metadata ?? {}) as Record<string, unknown>,
+        type: toWireString(file.type),
+        mime: toWireString(file.mime),
+        size: Number(file.size ?? 0),
+      }
+    : null;
+
+/**
+ * Public profile. Narrower than the user embedded in nodes: it carries
+ * `created_at` but no `last_seen`, and its files are the shallow shape.
+ */
+export interface WireProfile {
+  id: number;
+  created_at: string;
+  username: string;
+  role: string;
+  fullname: string;
+  description: string;
+  cover: WireShallowFile | null;
+  photo: WireShallowFile | null;
+}
+
+export const toWireProfile = (user: User): WireProfile => ({
+  id: user.id,
+  created_at: toWireDate(user.createdAt),
+  username: toWireString(user.username),
+  role: toWireString(user.role),
+  fullname: toWireString(user.fullname),
+  description: toWireString(user.description),
+  cover: toWireShallowFile(user.cover),
+  photo: toWireShallowFile(user.photo),
+});
