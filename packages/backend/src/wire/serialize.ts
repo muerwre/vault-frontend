@@ -287,3 +287,35 @@ export const toWireProfile = (user: User): WireProfile => ({
   cover: toWireShallowFile(user.cover),
   photo: toWireShallowFile(user.photo),
 });
+
+/**
+ * The authenticated user's own record, as returned by login, `GET /auth` and
+ * profile updates. Wider than the user embedded in nodes: it exposes `email` and
+ * `last_seen_boris`.
+ */
+export interface WireSelf {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+  fullname: string;
+  description: string;
+  last_seen: string;
+  /** Derived from this user's view of the Boris node; there is no such column. */
+  last_seen_boris: string;
+  photo: WireShallowFile | null;
+  cover: WireShallowFile | null;
+}
+
+export const toWireSelf = (user: User, lastSeenBoris: Date | null): WireSelf => ({
+  id: user.id,
+  username: toWireString(user.username),
+  email: toWireString(user.email),
+  role: toWireString(user.role),
+  fullname: toWireString(user.fullname),
+  description: toWireString(user.description),
+  last_seen: toWireDate(user.lastSeen),
+  last_seen_boris: toWireDate(lastSeenBoris),
+  photo: toWireShallowFile(user.photo),
+  cover: toWireShallowFile(user.cover),
+});
