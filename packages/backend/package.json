@@ -16,7 +16,10 @@
     "migration:show": "yarn typeorm migration:show",
     "schema:drift": "ts-node src/database/schema-drift.ts",
     "read-check": "ts-node src/database/read-check.ts",
-    "auth-check": "ts-node src/globals/auth-check.ts"
+    "auth-check": "ts-node src/globals/auth-check.ts",
+    "test": "jest",
+    "test:int": "jest --config test/jest-integration.json --runInBand",
+    "test:all": "yarn test && yarn test:int"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
@@ -37,10 +40,16 @@
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
+    "@nestjs/testing": "^12.0.1",
     "@types/bcryptjs": "^3.0.0",
     "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^22.4.1",
     "@types/nodemailer": "^8.0.1",
+    "@types/supertest": "^7.2.1",
+    "jest": "^30.5.1",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.12",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.3.3"
