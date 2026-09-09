@@ -21,13 +21,15 @@
     "noEmit": true,
     "jsx": "preserve",
     "noImplicitAny": false,
-    "incremental": true
+    "incremental": true,
+    "types": ["node", "react", "umami"]
   },
   "include": [
     "src"
   ],
   "exclude": [
     "node_modules",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "src/setupTests.js"
   ]
 }

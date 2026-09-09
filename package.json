@@ -23,7 +23,10 @@
     "backend:migration:run": "yarn workspace @vault/backend run migration:run",
     "backend:schema:drift": "yarn workspace @vault/backend run schema:drift",
     "backend:read-check": "yarn workspace @vault/backend run read-check",
-    "backend:auth-check": "yarn workspace @vault/backend run auth-check"
+    "backend:auth-check": "yarn workspace @vault/backend run auth-check",
+    "backend:test": "yarn workspace @vault/backend run test",
+    "backend:test:int": "yarn workspace @vault/backend run test:int",
+    "backend:test:all": "yarn workspace @vault/backend run test:all"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
