@@ -24,6 +24,7 @@ import {
 } from '../auth/auth.guards';
 import { NodeService } from '../node/node.service';
 import { canCommentOn } from '../node/node.permissions';
+import { NotificationDispatcher } from '../notifications/notification.dispatcher';
 
 import {
   COMMENTS_DEFAULT_TAKE,
@@ -47,6 +48,7 @@ export class CommentController {
   constructor(
     private readonly comments: CommentService,
     private readonly nodes: NodeService,
+    private readonly notifications: NotificationDispatcher,
   ) {}
 
   @Get(':id/comments')
@@ -137,6 +139,8 @@ export class CommentController {
       commentId = created.id;
 
       await this.comments.maybeSetNodeDescription(node, created);
+      // Only a new comment is announced; editing one must not notify again.
+      await this.notifications.commentCreated(created.id);
     }
 
     await this.comments.syncNodeCommentedAt(nodeId);
@@ -203,10 +207,12 @@ export class CommentController {
       throw new VaultException(ERROR_CODES.CommentNotFound, HttpStatus.NOT_FOUND);
     }
 
-    const deletedAt = await this.comments.setDeleted(
-      comment,
-      isLocked === 'true',
-    );
+    const isLocking = isLocked === 'true';
+    const deletedAt = await this.comments.setDeleted(comment, isLocking);
+
+    await (isLocking
+      ? this.notifications.commentDeleted(comment.id)
+      : this.notifications.commentRestored(comment.id));
 
     await this.comments.syncNodeCommentedAt(nodeId);
 

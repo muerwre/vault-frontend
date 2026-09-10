@@ -9,6 +9,7 @@ import { Node } from '../../entities/node.entity';
 import { Tag } from '../../entities/tag.entity';
 import { NodeView } from '../../entities/views.entity';
 
+import { NotificationsModule } from '../notifications/notifications.module';
 import { TagModule } from '../tag/tag.module';
 
 import { LabService } from './lab.service';
@@ -29,6 +30,7 @@ import { NodeService } from './node.service';
       Comment,
     ]),
     TagModule,
+    NotificationsModule,
   ],
   controllers: [NodeController],
   providers: [NodeService, NodeTagsService, NodeUpsertService, LabService],

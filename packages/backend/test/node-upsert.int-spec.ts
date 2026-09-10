@@ -3,7 +3,13 @@ import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
-import { authHeader, createTestApp, getDataSource } from './helpers/app';
+import {
+  authHeader,
+  clearNotificationsAbove,
+  createTestApp,
+  getDataSource,
+  notificationWatermark,
+} from './helpers/app';
 
 const YT = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 const YT_THUMB = 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg';
@@ -11,6 +17,7 @@ const YT_THUMB = 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg';
 describe('node upsert (integration)', () => {
   let app: INestApplication;
   let db: DataSource;
+  let notificationMark: number;
   let http: () => ReturnType<typeof request>;
 
   let authorId: number;
@@ -44,6 +51,7 @@ describe('node upsert (integration)', () => {
   beforeAll(async () => {
     app = await createTestApp();
     db = getDataSource(app);
+    notificationMark = await notificationWatermark(db);
     http = () => request(app.getHttpServer());
 
     authorId = await makeUser('user');
@@ -61,6 +69,9 @@ describe('node upsert (integration)', () => {
   });
 
   afterAll(async () => {
+    // Writes here fan out to whoever is subscribed in the seeded database.
+    await clearNotificationsAbove(db, notificationMark);
+
     for (const id of createdNodeIds) {
       await db.query('DELETE FROM node_files_file WHERE nodeId = ?', [id]);
       await db.query('DELETE FROM node_tags_tag WHERE nodeId = ?', [id]);

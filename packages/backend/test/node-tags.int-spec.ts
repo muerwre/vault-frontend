@@ -3,11 +3,18 @@ import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
-import { authHeader, createTestApp, getDataSource } from './helpers/app';
+import {
+  authHeader,
+  clearNotificationsAbove,
+  createTestApp,
+  getDataSource,
+  notificationWatermark,
+} from './helpers/app';
 
 describe('node tags (integration)', () => {
   let app: INestApplication;
   let db: DataSource;
+  let notificationMark: number;
   let http: () => ReturnType<typeof request>;
 
   let authorId: number;
@@ -49,6 +56,7 @@ describe('node tags (integration)', () => {
   beforeAll(async () => {
     app = await createTestApp();
     db = getDataSource(app);
+    notificationMark = await notificationWatermark(db);
     http = () => request(app.getHttpServer());
 
     authorId = await makeUser();
@@ -56,6 +64,9 @@ describe('node tags (integration)', () => {
   });
 
   afterAll(async () => {
+    // Writes here fan out to whoever is subscribed in the seeded database.
+    await clearNotificationsAbove(db, notificationMark);
+
     for (const id of nodeIds) {
       await db.query('DELETE FROM node_tags_tag WHERE nodeId = ?', [id]);
       await db.query('DELETE FROM node WHERE id = ?', [id]);
