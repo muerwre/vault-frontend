@@ -10,11 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ERROR_CODES,
-  NODE_FLOW_DISPLAY,
-  ROLES,
-} from '@vault/common/constants';
+import { ERROR_CODES, NODE_FLOW_DISPLAY, ROLES } from '@vault/common/constants';
 import type { INodeFlow } from '@vault/common/types';
 
 import { Tag } from '../../entities/tag.entity';
@@ -29,7 +25,6 @@ import {
   WithUserGuard,
 } from '../auth/auth.guards';
 import { NotificationDispatcher } from '../notifications/notification.dispatcher';
-
 import { TagService } from '../tag/tag.service';
 
 import {
@@ -39,11 +34,7 @@ import {
   type WireLabStats,
 } from './lab.service';
 import { NodeTagsService } from './node-tags.service';
-import {
-  NodeUpsertService,
-  type NodeUpsertBody,
-} from './node-upsert.service';
-
+import { NodeUpsertService, type NodeUpsertBody } from './node-upsert.service';
 import {
   FLOW_DEFAULT_TAKE,
   FLOW_DEFAULT_WINDOW_DAYS,
@@ -110,7 +101,9 @@ export class NodeController {
       start: startDate,
       end: toDate(
         end,
-        new Date(now.getTime() - FLOW_DEFAULT_WINDOW_DAYS * 24 * 60 * 60 * 1000),
+        new Date(
+          now.getTime() - FLOW_DEFAULT_WINDOW_DAYS * 24 * 60 * 60 * 1000,
+        ),
       ),
       take: toPositiveInt(take, FLOW_DEFAULT_TAKE),
       withHeroes: toBool(withHeroes),
@@ -188,7 +181,10 @@ export class NodeController {
     const nodeId = Number.parseInt(id, 10);
 
     if (!Number.isFinite(nodeId) || nodeId <= 0) {
-      throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.BAD_REQUEST);
+      throw new VaultException(
+        ERROR_CODES.IncorrectData,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     return this.nodes.getRelated(nodeId);
@@ -229,7 +225,9 @@ export class NodeController {
     @Param('id') id: string,
     @WithUser() user: User,
   ): Promise<{ is_liked: boolean }> {
-    const node = await this.nodes.findLive(this.parseId(id, HttpStatus.NOT_FOUND));
+    const node = await this.nodes.findLive(
+      this.parseId(id, HttpStatus.NOT_FOUND),
+    );
 
     if (!node) {
       throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
@@ -274,7 +272,10 @@ export class NodeController {
     const flow = body?.flow;
 
     if (!flow || !FLOW_DISPLAYS.includes(flow.display)) {
-      throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.BAD_REQUEST);
+      throw new VaultException(
+        ERROR_CODES.IncorrectData,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const node = await this.nodes.findLive(
@@ -333,7 +334,10 @@ export class NodeController {
     const node = await this.nodes.findLive(nodeId);
 
     if (!node || !this.nodes.canEdit(node, user)) {
-      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.BAD_REQUEST);
+      throw new VaultException(
+        ERROR_CODES.NodeNotFound,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const titles = Array.isArray(body?.tags) ? body.tags : [];
@@ -369,7 +373,9 @@ export class NodeController {
 
     const remaining = await this.nodeTags.removeTag(nodeId, parsedTagId);
 
-    return { tags: remaining.map((tag: Tag) => ({ ID: tag.id, title: tag.title })) };
+    return {
+      tags: remaining.map((tag: Tag) => ({ ID: tag.id, title: tag.title })),
+    };
   }
 
   /** Re-reads the node so the response reflects the write. */
@@ -397,7 +403,10 @@ export class NodeController {
           HttpStatus.FORBIDDEN,
         );
       case 'not-found':
-        return new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+        return new VaultException(
+          ERROR_CODES.NodeNotFound,
+          HttpStatus.NOT_FOUND,
+        );
       case 'wrong-type':
         return new VaultException(
           ERROR_CODES.IncorrectType,

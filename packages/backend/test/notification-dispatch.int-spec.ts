@@ -55,10 +55,17 @@ describe('notification dispatch (integration)', () => {
           last_seen, deleted_at)
        VALUES (?, ?, ?, 'user', 1, NOW(), NOW(),
                NOW() - INTERVAL ? DAY, ${deleted ? 'NOW()' : 'NULL'})`,
-      [username, await bcrypt.hash('x', 4), `${username}@example.com`, lastSeenDaysAgo],
+      [
+        username,
+        await bcrypt.hash('x', 4),
+        `${username}@example.com`,
+        lastSeenDaysAgo,
+      ],
     );
 
-    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [username]);
+    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [
+      username,
+    ]);
     const id = Number(row.id);
     userIds.push(id);
 
@@ -82,8 +89,13 @@ describe('notification dispatch (integration)', () => {
       [type, itemId, mark],
     );
 
-  const recipientsOf = async (type: string, itemId: number): Promise<number[]> =>
-    (await rowsFor(type, itemId)).map(row => Number(row.userId)).sort((a, b) => a - b);
+  const recipientsOf = async (
+    type: string,
+    itemId: number,
+  ): Promise<number[]> =>
+    (await rowsFor(type, itemId))
+      .map((row) => Number(row.userId))
+      .sort((a, b) => a - b);
 
   const createNode = async (
     uid: number,
@@ -142,7 +154,9 @@ describe('notification dispatch (integration)', () => {
     await db.query('DELETE FROM comment WHERE userId IN (?)', [userIds]);
 
     for (const id of userIds) {
-      await db.query('DELETE FROM notification_settings WHERE userId = ?', [id]);
+      await db.query('DELETE FROM notification_settings WHERE userId = ?', [
+        id,
+      ]);
       await db.query('DELETE FROM user WHERE id = ?', [id]);
     }
 
@@ -163,9 +177,10 @@ describe('notification dispatch (integration)', () => {
       const nodeId = await createNode(author);
 
       const [row] = await rowsFor('node', nodeId);
-      const [node] = await db.query('SELECT created_at FROM node WHERE id = ?', [
-        nodeId,
-      ]);
+      const [node] = await db.query(
+        'SELECT created_at FROM node WHERE id = ?',
+        [nodeId],
+      );
 
       expect(new Date(row.time).getTime()).toBe(
         new Date(node.created_at).getTime(),
@@ -195,7 +210,12 @@ describe('notification dispatch (integration)', () => {
       await http()
         .post('/api/nodes/')
         .set(authHeader(author))
-        .send({ id: nodeId, type: 'image', title: 'edited', files: [{ id: imageId }] })
+        .send({
+          id: nodeId,
+          type: 'image',
+          title: 'edited',
+          files: [{ id: imageId }],
+        })
         .expect(200);
 
       expect(await recipientsOf('node', nodeId)).toEqual(before);
@@ -221,12 +241,15 @@ describe('notification dispatch (integration)', () => {
       ['the flow subscription off', { flow: false }],
       ['no recent activity', { lastSeenDaysAgo: 400 }],
       ['a deleted account', { deleted: true }],
-    ] as Array<[string, Subscriptions]>)('skips a user with %s', async (_, subs) => {
-      const excluded = await makeUser(subs);
-      const nodeId = await createNode(author);
+    ] as Array<[string, Subscriptions]>)(
+      'skips a user with %s',
+      async (_, subs) => {
+        const excluded = await makeUser(subs);
+        const nodeId = await createNode(author);
 
-      expect(await recipientsOf('node', nodeId)).not.toContain(excluded);
-    });
+        expect(await recipientsOf('node', nodeId)).not.toContain(excluded);
+      },
+    );
 
     /** A duplicate settings row must not double the notification. */
     it('writes one row per recipient even with duplicate settings', async () => {
@@ -241,7 +264,7 @@ describe('notification dispatch (integration)', () => {
       const nodeId = await createNode(author);
       const recipients = await recipientsOf('node', nodeId);
 
-      expect(recipients.filter(id => id === doubled)).toHaveLength(1);
+      expect(recipients.filter((id) => id === doubled)).toHaveLength(1);
     });
   });
 
@@ -281,7 +304,11 @@ describe('notification dispatch (integration)', () => {
     });
 
     it('notifies the node author, not the commenter', async () => {
-      const { body } = await comment(watcher, nodeId, 'a comment from the watcher');
+      const { body } = await comment(
+        watcher,
+        nodeId,
+        'a comment from the watcher',
+      );
       const commentId = Number(body.comment.id);
 
       const recipients = await recipientsOf('comment', commentId);
@@ -293,7 +320,11 @@ describe('notification dispatch (integration)', () => {
       const third = await makeUser();
       await comment(third, nodeId, 'the third voice speaks');
 
-      const { body } = await comment(watcher, nodeId, 'answering the third voice');
+      const { body } = await comment(
+        watcher,
+        nodeId,
+        'answering the third voice',
+      );
       const recipients = await recipientsOf('comment', Number(body.comment.id));
 
       expect(recipients).toContain(author);
@@ -301,11 +332,20 @@ describe('notification dispatch (integration)', () => {
     });
 
     it('does not notify again when the comment is edited', async () => {
-      const { body } = await comment(watcher, nodeId, 'first thoughts on the matter');
+      const { body } = await comment(
+        watcher,
+        nodeId,
+        'first thoughts on the matter',
+      );
       const commentId = Number(body.comment.id);
       const before = await recipientsOf('comment', commentId);
 
-      await comment(watcher, nodeId, 'second thoughts on the matter', commentId);
+      await comment(
+        watcher,
+        nodeId,
+        'second thoughts on the matter',
+        commentId,
+      );
 
       expect(await recipientsOf('comment', commentId)).toEqual(before);
     });
@@ -315,15 +355,23 @@ describe('notification dispatch (integration)', () => {
       const quiet = await makeUser({ comments: false });
       await comment(quiet, nodeId, 'a comment from someone who wants quiet');
 
-      const { body } = await comment(watcher, nodeId, 'replying to the quiet one');
-
-      expect(await recipientsOf('comment', Number(body.comment.id))).not.toContain(
-        quiet,
+      const { body } = await comment(
+        watcher,
+        nodeId,
+        'replying to the quiet one',
       );
+
+      expect(
+        await recipientsOf('comment', Number(body.comment.id)),
+      ).not.toContain(quiet);
     });
 
     it('removes the rows when the comment is locked, and rebuilds them', async () => {
-      const { body } = await comment(watcher, nodeId, 'a comment to be deleted');
+      const { body } = await comment(
+        watcher,
+        nodeId,
+        'a comment to be deleted',
+      );
       const commentId = Number(body.comment.id);
 
       await http()

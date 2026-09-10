@@ -13,8 +13,12 @@ import { ERROR_CODES } from '@vault/common/constants';
 
 import { User } from '../../entities/user.entity';
 import { VaultException } from '../../globals/exceptions';
-import { AuthRequiredGuard, WithUser, WithUserGuard } from '../auth/auth.guards';
 import type { WireShallowFile } from '../../wire/serialize';
+import {
+  AuthRequiredGuard,
+  WithUser,
+  WithUserGuard,
+} from '../auth/auth.guards';
 
 import {
   isMimeAllowedForType,

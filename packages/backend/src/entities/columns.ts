@@ -94,7 +94,9 @@ export const legacyBool = (defaultValue: 0 | 1): ColumnOptions => ({
  * and so rewrites stored bytes. Unparseable values fall back instead of throwing
  * so one bad row cannot break a feed.
  */
-export const jsonTransformer = <T>(fallback: T | null = null): ValueTransformer => ({
+export const jsonTransformer = <T>(
+  fallback: T | null = null,
+): ValueTransformer => ({
   to: (value: T | null | undefined): string | null =>
     value === null || value === undefined ? null : JSON.stringify(value),
   from: (value: string | null): T | null => {
@@ -124,7 +126,7 @@ export const filesOrderTransformer: ValueTransformer = {
 
     return value
       .split(',')
-      .map(id => parseInt(id, 10))
-      .filter(id => Number.isFinite(id));
+      .map((id) => parseInt(id, 10))
+      .filter((id) => Number.isFinite(id));
   },
 };

@@ -25,7 +25,11 @@ describe('comment writes (integration)', () => {
   const commentIds: number[] = [];
 
   const makeNode = async (
-    overrides: { type?: string; isPromoted?: boolean; description?: string } = {},
+    overrides: {
+      type?: string;
+      isPromoted?: boolean;
+      description?: string;
+    } = {},
   ): Promise<number> => {
     const { type = 'image', isPromoted = true, description = '' } = overrides;
 
@@ -34,7 +38,13 @@ describe('comment writes (integration)', () => {
         (title, type, blocks, files_order, is_public, is_promoted, is_heroic,
          description, created_at, updated_at, userId)
        VALUES (?, ?, '[]', '', 1, ?, 0, ?, NOW(), NOW(), ?)`,
-      [`comment spec ${Date.now()}`, type, isPromoted ? 1 : 0, description, authorId],
+      [
+        `comment spec ${Date.now()}`,
+        type,
+        isPromoted ? 1 : 0,
+        description,
+        authorId,
+      ],
     );
     const [row] = await db.query('SELECT LAST_INSERT_ID() AS id');
     const id = Number(row.id);
@@ -49,12 +59,17 @@ describe('comment writes (integration)', () => {
        VALUES (?, ?, ?, ?, 1, NOW(), NOW())`,
       [username, await bcrypt.hash('x', 4), `${username}@example.com`, role],
     );
-    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [username]);
+    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [
+      username,
+    ]);
     return Number(row.id);
   };
 
   const post = (nodeId: number, uid: number, body: Record<string, unknown>) =>
-    http().post(`/api/nodes/${nodeId}/comments`).set(authHeader(uid)).send(body);
+    http()
+      .post(`/api/nodes/${nodeId}/comments`)
+      .set(authHeader(uid))
+      .send(body);
 
   const track = (id: number) => {
     commentIds.push(id);
@@ -77,8 +92,12 @@ describe('comment writes (integration)', () => {
     await clearNotificationsAbove(db, notificationMark);
 
     for (const id of commentIds) {
-      await db.query('DELETE FROM comment_user_likes WHERE commentId = ?', [id]);
-      await db.query('DELETE FROM comment_files_file WHERE commentId = ?', [id]);
+      await db.query('DELETE FROM comment_user_likes WHERE commentId = ?', [
+        id,
+      ]);
+      await db.query('DELETE FROM comment_files_file WHERE commentId = ?', [
+        id,
+      ]);
       await db.query('DELETE FROM comment WHERE id = ?', [id]);
     }
     for (const id of nodeIds) {
@@ -96,7 +115,9 @@ describe('comment writes (integration)', () => {
     it('creates a comment and returns the documented shape', async () => {
       const nodeId = await makeNode();
 
-      const { body } = await post(nodeId, authorId, { text: 'hello there' }).expect(200);
+      const { body } = await post(nodeId, authorId, {
+        text: 'hello there',
+      }).expect(200);
 
       track(body.comment.id);
       expect(Object.keys(body.comment).sort()).toEqual([
@@ -119,10 +140,14 @@ describe('comment writes (integration)', () => {
     it('shows up in the listing and in the count', async () => {
       const nodeId = await makeNode();
 
-      const created = await post(nodeId, authorId, { text: 'listed' }).expect(200);
+      const created = await post(nodeId, authorId, { text: 'listed' }).expect(
+        200,
+      );
       track(created.body.comment.id);
 
-      const { body } = await http().get(`/api/nodes/${nodeId}/comments`).expect(200);
+      const { body } = await http()
+        .get(`/api/nodes/${nodeId}/comments`)
+        .expect(200);
 
       expect(body.comment_count).toBe(1);
       expect(body.comments[0].text).toBe('listed');
@@ -132,19 +157,24 @@ describe('comment writes (integration)', () => {
     it('bumps the node commented_at to the new comment', async () => {
       const nodeId = await makeNode();
 
-      const created = await post(nodeId, authorId, { text: 'bump me' }).expect(200);
+      const created = await post(nodeId, authorId, { text: 'bump me' }).expect(
+        200,
+      );
       track(created.body.comment.id);
 
-      const [row] = await db.query('SELECT commented_at FROM node WHERE id = ?', [
-        nodeId,
-      ]);
+      const [row] = await db.query(
+        'SELECT commented_at FROM node WHERE id = ?',
+        [nodeId],
+      );
       expect(row.commented_at).not.toBeNull();
     });
 
     it('updates an existing comment when id is supplied', async () => {
       const nodeId = await makeNode();
 
-      const created = await post(nodeId, authorId, { text: 'first' }).expect(200);
+      const created = await post(nodeId, authorId, { text: 'first' }).expect(
+        200,
+      );
       const commentId = track(created.body.comment.id);
 
       const { body } = await post(nodeId, authorId, {
@@ -155,14 +185,18 @@ describe('comment writes (integration)', () => {
       expect(body.comment.id).toBe(commentId);
       expect(body.comment.text).toBe('edited');
 
-      const listing = await http().get(`/api/nodes/${nodeId}/comments`).expect(200);
+      const listing = await http()
+        .get(`/api/nodes/${nodeId}/comments`)
+        .expect(200);
       expect(listing.body.comment_count).toBe(1);
     });
 
     it('lets an admin edit somebody else’s comment', async () => {
       const nodeId = await makeNode();
 
-      const created = await post(nodeId, authorId, { text: 'original' }).expect(200);
+      const created = await post(nodeId, authorId, { text: 'original' }).expect(
+        200,
+      );
       const commentId = track(created.body.comment.id);
 
       await http()
@@ -175,20 +209,29 @@ describe('comment writes (integration)', () => {
     it('403s a different non-admin user editing a comment', async () => {
       const nodeId = await makeNode();
 
-      const created = await post(nodeId, authorId, { text: 'mine' }).expect(200);
+      const created = await post(nodeId, authorId, { text: 'mine' }).expect(
+        200,
+      );
       const commentId = track(created.body.comment.id);
 
-      await post(nodeId, otherId, { id: commentId, text: 'hijack' }).expect(403);
+      await post(nodeId, otherId, { id: commentId, text: 'hijack' }).expect(
+        403,
+      );
     });
 
     it('404s an edit whose comment belongs to another node', async () => {
       const first = await makeNode();
       const second = await makeNode();
 
-      const created = await post(first, authorId, { text: 'elsewhere' }).expect(200);
+      const created = await post(first, authorId, { text: 'elsewhere' }).expect(
+        200,
+      );
       const commentId = track(created.body.comment.id);
 
-      await post(second, authorId, { id: commentId, text: 'wrong node' }).expect(404);
+      await post(second, authorId, {
+        id: commentId,
+        text: 'wrong node',
+      }).expect(404);
     });
 
     it('rejects an empty comment with no files', async () => {
@@ -207,9 +250,9 @@ describe('comment writes (integration)', () => {
     it('accepts text exactly at the limit', async () => {
       const nodeId = await makeNode();
 
-      const { body } = await post(nodeId, authorId, { text: 'x'.repeat(8192) }).expect(
-        200,
-      );
+      const { body } = await post(nodeId, authorId, {
+        text: 'x'.repeat(8192),
+      }).expect(200);
       track(body.comment.id);
     });
 
@@ -255,45 +298,55 @@ describe('comment writes (integration)', () => {
       const created = await post(nodeId, authorId, { text }).expect(200);
       track(created.body.comment.id);
 
-      const [row] = await db.query('SELECT description FROM node WHERE id = ?', [
-        nodeId,
-      ]);
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
       expect(row.description).toBe(text);
     });
 
     it('leaves an existing description alone', async () => {
       const nodeId = await makeNode({ description: 'already set' });
 
-      const created = await post(nodeId, authorId, { text: 'y'.repeat(80) }).expect(200);
+      const created = await post(nodeId, authorId, {
+        text: 'y'.repeat(80),
+      }).expect(200);
       track(created.body.comment.id);
 
-      const [row] = await db.query('SELECT description FROM node WHERE id = ?', [
-        nodeId,
-      ]);
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
       expect(row.description).toBe('already set');
     });
 
     it('does not promote a comment by someone else', async () => {
       const nodeId = await makeNode({ description: '' });
 
-      const created = await post(nodeId, otherId, { text: 'z'.repeat(80) }).expect(200);
+      const created = await post(nodeId, otherId, {
+        text: 'z'.repeat(80),
+      }).expect(200);
       track(created.body.comment.id);
 
-      const [row] = await db.query('SELECT description FROM node WHERE id = ?', [
-        nodeId,
-      ]);
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
       expect(row.description).toBe('');
     });
 
     it('does not promote a short comment', async () => {
       const nodeId = await makeNode({ description: '' });
 
-      const created = await post(nodeId, authorId, { text: 'too short' }).expect(200);
+      const created = await post(nodeId, authorId, {
+        text: 'too short',
+      }).expect(200);
       track(created.body.comment.id);
 
-      const [row] = await db.query('SELECT description FROM node WHERE id = ?', [
-        nodeId,
-      ]);
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
       expect(row.description).toBe('');
     });
 
@@ -301,8 +354,12 @@ describe('comment writes (integration)', () => {
       const lab = await makeNode({ isPromoted: false });
       const boris = await makeNode({ type: 'boris' });
 
-      const one = await post(lab, authorId, { text: 'lab comment' }).expect(200);
-      const two = await post(boris, authorId, { text: 'boris comment' }).expect(200);
+      const one = await post(lab, authorId, { text: 'lab comment' }).expect(
+        200,
+      );
+      const two = await post(boris, authorId, { text: 'boris comment' }).expect(
+        200,
+      );
 
       track(one.body.comment.id);
       track(two.body.comment.id);
@@ -322,7 +379,9 @@ describe('comment writes (integration)', () => {
   describe('POST /nodes/:id/comments/:cid/likes', () => {
     it('sets and clears a like from another user', async () => {
       const nodeId = await makeNode();
-      const created = await post(nodeId, authorId, { text: 'likeable' }).expect(200);
+      const created = await post(nodeId, authorId, { text: 'likeable' }).expect(
+        200,
+      );
       const commentId = track(created.body.comment.id);
 
       const liked = await http()
@@ -344,7 +403,9 @@ describe('comment writes (integration)', () => {
 
     it('is idempotent when liking twice', async () => {
       const nodeId = await makeNode();
-      const created = await post(nodeId, authorId, { text: 'twice' }).expect(200);
+      const created = await post(nodeId, authorId, { text: 'twice' }).expect(
+        200,
+      );
       const commentId = track(created.body.comment.id);
 
       const url = `/api/nodes/${nodeId}/comments/${commentId}/likes`;
@@ -360,7 +421,9 @@ describe('comment writes (integration)', () => {
 
     it('refuses liking your own comment', async () => {
       const nodeId = await makeNode();
-      const created = await post(nodeId, authorId, { text: 'self' }).expect(200);
+      const created = await post(nodeId, authorId, { text: 'self' }).expect(
+        200,
+      );
       const commentId = track(created.body.comment.id);
 
       const { body } = await http()
@@ -390,7 +453,9 @@ describe('comment writes (integration)', () => {
   describe('DELETE /nodes/:id/comments/:cid', () => {
     it('locks a comment, hiding it from the listing', async () => {
       const nodeId = await makeNode();
-      const created = await post(nodeId, authorId, { text: 'doomed' }).expect(200);
+      const created = await post(nodeId, authorId, { text: 'doomed' }).expect(
+        200,
+      );
       const commentId = track(created.body.comment.id);
 
       const { body } = await http()
@@ -401,13 +466,17 @@ describe('comment writes (integration)', () => {
 
       expect(body.deleted_at).toMatch(WIRE_DATE);
 
-      const listing = await http().get(`/api/nodes/${nodeId}/comments`).expect(200);
+      const listing = await http()
+        .get(`/api/nodes/${nodeId}/comments`)
+        .expect(200);
       expect(listing.body.comment_count).toBe(0);
     });
 
     it('restores a locked comment', async () => {
       const nodeId = await makeNode();
-      const created = await post(nodeId, authorId, { text: 'back again' }).expect(200);
+      const created = await post(nodeId, authorId, {
+        text: 'back again',
+      }).expect(200);
       const commentId = track(created.body.comment.id);
 
       await http()
@@ -423,14 +492,18 @@ describe('comment writes (integration)', () => {
 
       expect(body.deleted_at).toBeNull();
 
-      const listing = await http().get(`/api/nodes/${nodeId}/comments`).expect(200);
+      const listing = await http()
+        .get(`/api/nodes/${nodeId}/comments`)
+        .expect(200);
       expect(listing.body.comment_count).toBe(1);
     });
 
     /** Removing the only comment must clear commented_at, not leave it stale. */
     it('clears the node commented_at when no comments remain', async () => {
       const nodeId = await makeNode();
-      const created = await post(nodeId, authorId, { text: 'only one' }).expect(200);
+      const created = await post(nodeId, authorId, { text: 'only one' }).expect(
+        200,
+      );
       const commentId = track(created.body.comment.id);
 
       await http()
@@ -439,9 +512,10 @@ describe('comment writes (integration)', () => {
         .set(authHeader(authorId))
         .expect(200);
 
-      const [row] = await db.query('SELECT commented_at FROM node WHERE id = ?', [
-        nodeId,
-      ]);
+      const [row] = await db.query(
+        'SELECT commented_at FROM node WHERE id = ?',
+        [nodeId],
+      );
       expect(row.commented_at).toBeNull();
     });
 
@@ -449,7 +523,9 @@ describe('comment writes (integration)', () => {
       const nodeId = await makeNode();
       const first = await post(nodeId, authorId, { text: 'older' }).expect(200);
       track(first.body.comment.id);
-      const second = await post(nodeId, authorId, { text: 'newer' }).expect(200);
+      const second = await post(nodeId, authorId, { text: 'newer' }).expect(
+        200,
+      );
       const secondId = track(second.body.comment.id);
 
       await http()
@@ -458,15 +534,18 @@ describe('comment writes (integration)', () => {
         .set(authHeader(authorId))
         .expect(200);
 
-      const [row] = await db.query('SELECT commented_at FROM node WHERE id = ?', [
-        nodeId,
-      ]);
+      const [row] = await db.query(
+        'SELECT commented_at FROM node WHERE id = ?',
+        [nodeId],
+      );
       expect(row.commented_at).not.toBeNull();
     });
 
     it('lets an admin lock somebody else’s comment', async () => {
       const nodeId = await makeNode();
-      const created = await post(nodeId, authorId, { text: 'moderate me' }).expect(200);
+      const created = await post(nodeId, authorId, {
+        text: 'moderate me',
+      }).expect(200);
       const commentId = track(created.body.comment.id);
 
       await http()
@@ -478,7 +557,9 @@ describe('comment writes (integration)', () => {
 
     it('404s a different non-admin user', async () => {
       const nodeId = await makeNode();
-      const created = await post(nodeId, authorId, { text: 'not yours' }).expect(200);
+      const created = await post(nodeId, authorId, {
+        text: 'not yours',
+      }).expect(200);
       const commentId = track(created.body.comment.id);
 
       await http()
@@ -491,7 +572,9 @@ describe('comment writes (integration)', () => {
     it('404s a comment that belongs to another node', async () => {
       const first = await makeNode();
       const second = await makeNode();
-      const created = await post(first, authorId, { text: 'mismatched' }).expect(200);
+      const created = await post(first, authorId, {
+        text: 'mismatched',
+      }).expect(200);
       const commentId = track(created.body.comment.id);
 
       await http()

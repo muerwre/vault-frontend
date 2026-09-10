@@ -23,38 +23,38 @@ export class BaselineSchema1721000000000 implements MigrationInterface {
    * database and to drive `down()`.
    */
   private static readonly TABLES = [
-  'app_notifications',
-  'comment',
-  'comment_files_file',
-  'comment_likes',
-  'comment_user_likes',
-  'embed',
-  'file',
-  'like',
-  'message',
-  'message_files_file',
-  'message_view',
-  'node',
-  'node_files_file',
-  'node_social_publications',
-  'node_tags_tag',
-  'node_view',
-  'node_watch',
-  'notification_settings',
-  'notifications',
-  'restore_code',
-  'social',
-  'tag',
-  'token',
-  'user',
-  'user_notifications',
-  'user_notifications_processed',
-  'user_notifications_sent',
+    'app_notifications',
+    'comment',
+    'comment_files_file',
+    'comment_likes',
+    'comment_user_likes',
+    'embed',
+    'file',
+    'like',
+    'message',
+    'message_files_file',
+    'message_view',
+    'node',
+    'node_files_file',
+    'node_social_publications',
+    'node_tags_tag',
+    'node_view',
+    'node_watch',
+    'notification_settings',
+    'notifications',
+    'restore_code',
+    'social',
+    'tag',
+    'token',
+    'user',
+    'user_notifications',
+    'user_notifications_processed',
+    'user_notifications_sent',
   ];
 
   private static readonly CREATE_TABLE_SQL = [
-  // ---- app_notifications -------------------------------------------------
-  `
+    // ---- app_notifications -------------------------------------------------
+    `
 CREATE TABLE \`app_notifications\` (
   \`id\` int(10) unsigned NOT NULL AUTO_INCREMENT,
   \`created_at\` timestamp NULL DEFAULT NULL,
@@ -70,8 +70,8 @@ CREATE TABLE \`app_notifications\` (
   KEY \`item_id\` (\`item_id\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `,
-  // ---- comment -----------------------------------------------------------
-  `
+    // ---- comment -----------------------------------------------------------
+    `
 CREATE TABLE \`comment\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`files_order\` text COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -90,8 +90,8 @@ CREATE TABLE \`comment\` (
   CONSTRAINT \`FK_c0354a9a009d3bb45a08655ce3b\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`) ON DELETE SET NULL ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- comment_files_file ------------------------------------------------
-  `
+    // ---- comment_files_file ------------------------------------------------
+    `
 CREATE TABLE \`comment_files_file\` (
   \`commentId\` int(11) NOT NULL,
   \`fileId\` int(11) NOT NULL,
@@ -102,24 +102,24 @@ CREATE TABLE \`comment_files_file\` (
   CONSTRAINT \`FK_ea6a49b254c2a9f60fae7ae641b\` FOREIGN KEY (\`fileId\`) REFERENCES \`file\` (\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- comment_likes -----------------------------------------------------
-  `
+    // ---- comment_likes -----------------------------------------------------
+    `
 CREATE TABLE \`comment_likes\` (
   \`user_id\` int(10) unsigned NOT NULL,
   \`userId\` int(10) unsigned NOT NULL,
   PRIMARY KEY (\`user_id\`,\`userId\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `,
-  // ---- comment_user_likes ------------------------------------------------
-  `
+    // ---- comment_user_likes ------------------------------------------------
+    `
 CREATE TABLE \`comment_user_likes\` (
   \`commentId\` int(10) unsigned NOT NULL,
   \`userId\` int(10) unsigned NOT NULL,
   PRIMARY KEY (\`commentId\`,\`userId\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `,
-  // ---- embed -------------------------------------------------------------
-  `
+    // ---- embed -------------------------------------------------------------
+    `
 CREATE TABLE \`embed\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`provider\` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -132,8 +132,8 @@ CREATE TABLE \`embed\` (
   KEY \`idx_embed_deleted_at\` (\`deleted_at\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `,
-  // ---- file --------------------------------------------------------------
-  `
+    // ---- file --------------------------------------------------------------
+    `
 CREATE TABLE \`file\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`name\` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -156,8 +156,8 @@ CREATE TABLE \`file\` (
   CONSTRAINT \`FK_b2d8e683f020f61115edea206b3\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`) ON DELETE SET NULL ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- like --------------------------------------------------------------
-  `
+    // ---- like --------------------------------------------------------------
+    `
 CREATE TABLE \`like\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`userId\` int(11) DEFAULT NULL,
@@ -169,8 +169,8 @@ CREATE TABLE \`like\` (
   CONSTRAINT \`FK_e8fb739f08d47955a39850fac23\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- message -----------------------------------------------------------
-  `
+    // ---- message -----------------------------------------------------------
+    `
 CREATE TABLE \`message\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`text\` text COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -189,8 +189,8 @@ CREATE TABLE \`message\` (
   CONSTRAINT \`FK_776000050f42ddb61d3c628ff16\` FOREIGN KEY (\`fromId\`) REFERENCES \`user\` (\`id\`) ON DELETE SET NULL ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- message_files_file ------------------------------------------------
-  `
+    // ---- message_files_file ------------------------------------------------
+    `
 CREATE TABLE \`message_files_file\` (
   \`messageId\` int(11) NOT NULL,
   \`fileId\` int(11) NOT NULL,
@@ -201,8 +201,8 @@ CREATE TABLE \`message_files_file\` (
   CONSTRAINT \`FK_fc56b6b90ec366b402fc86bbe41\` FOREIGN KEY (\`fileId\`) REFERENCES \`file\` (\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- message_view ------------------------------------------------------
-  `
+    // ---- message_view ------------------------------------------------------
+    `
 CREATE TABLE \`message_view\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`viewed\` datetime NOT NULL DEFAULT current_timestamp(),
@@ -215,8 +215,8 @@ CREATE TABLE \`message_view\` (
   CONSTRAINT \`FK_f72b3a46e2a6dd4ef146ebdb755\` FOREIGN KEY (\`dialogId\`) REFERENCES \`user\` (\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- node --------------------------------------------------------------
-  `
+    // ---- node --------------------------------------------------------------
+    `
 CREATE TABLE \`node\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`title\` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -245,8 +245,8 @@ CREATE TABLE \`node\` (
   CONSTRAINT \`FK_eb77c38da6d87500c1e84ffbcf7\` FOREIGN KEY (\`coverId\`) REFERENCES \`file\` (\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- node_files_file ---------------------------------------------------
-  `
+    // ---- node_files_file ---------------------------------------------------
+    `
 CREATE TABLE \`node_files_file\` (
   \`nodeId\` int(11) NOT NULL,
   \`fileId\` int(11) NOT NULL,
@@ -257,8 +257,8 @@ CREATE TABLE \`node_files_file\` (
   CONSTRAINT \`FK_8ffb7320092a62cfa9a37305ff2\` FOREIGN KEY (\`nodeId\`) REFERENCES \`node\` (\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- node_social_publications ------------------------------------------
-  `
+    // ---- node_social_publications ------------------------------------------
+    `
 CREATE TABLE \`node_social_publications\` (
   \`id\` int(10) unsigned NOT NULL AUTO_INCREMENT,
   \`created_at\` timestamp NULL DEFAULT NULL,
@@ -272,8 +272,8 @@ CREATE TABLE \`node_social_publications\` (
   KEY \`node_provider\` (\`node_id\`,\`provider\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `,
-  // ---- node_tags_tag -----------------------------------------------------
-  `
+    // ---- node_tags_tag -----------------------------------------------------
+    `
 CREATE TABLE \`node_tags_tag\` (
   \`nodeId\` int(11) NOT NULL,
   \`tagId\` int(11) NOT NULL,
@@ -284,8 +284,8 @@ CREATE TABLE \`node_tags_tag\` (
   CONSTRAINT \`FK_f93fb13785a5615177ff54eb34b\` FOREIGN KEY (\`nodeId\`) REFERENCES \`node\` (\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- node_view ---------------------------------------------------------
-  `
+    // ---- node_view ---------------------------------------------------------
+    `
 CREATE TABLE \`node_view\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`visited\` datetime NOT NULL DEFAULT current_timestamp(),
@@ -298,8 +298,8 @@ CREATE TABLE \`node_view\` (
   CONSTRAINT \`FK_4f3b0c25129817036a8b070a140\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- node_watch --------------------------------------------------------
-  `
+    // ---- node_watch --------------------------------------------------------
+    `
 CREATE TABLE \`node_watch\` (
   \`id\` int(10) unsigned NOT NULL AUTO_INCREMENT,
   \`created_at\` timestamp NULL DEFAULT NULL,
@@ -312,8 +312,8 @@ CREATE TABLE \`node_watch\` (
   KEY \`idx_node_watch_deleted_at\` (\`deleted_at\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `,
-  // ---- notification_settings ---------------------------------------------
-  `
+    // ---- notification_settings ---------------------------------------------
+    `
 CREATE TABLE \`notification_settings\` (
   \`id\` int(10) unsigned NOT NULL AUTO_INCREMENT,
   \`userId\` int(10) unsigned DEFAULT NULL,
@@ -330,8 +330,8 @@ CREATE TABLE \`notification_settings\` (
   PRIMARY KEY (\`id\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `,
-  // ---- notifications -----------------------------------------------------
-  `
+    // ---- notifications -----------------------------------------------------
+    `
 CREATE TABLE \`notifications\` (
   \`id\` int(10) unsigned NOT NULL AUTO_INCREMENT,
   \`created_at\` timestamp NULL DEFAULT NULL,
@@ -346,8 +346,8 @@ CREATE TABLE \`notifications\` (
   KEY \`item_id\` (\`itemId\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `,
-  // ---- restore_code ------------------------------------------------------
-  `
+    // ---- restore_code ------------------------------------------------------
+    `
 CREATE TABLE \`restore_code\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`code\` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -358,8 +358,8 @@ CREATE TABLE \`restore_code\` (
   CONSTRAINT \`FK_669b3600ee64af20658316527bc\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- social ------------------------------------------------------------
-  `
+    // ---- social ------------------------------------------------------------
+    `
 CREATE TABLE \`social\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`provider\` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -372,8 +372,8 @@ CREATE TABLE \`social\` (
   CONSTRAINT \`FK_4cda297c26dea7a3b8d08b9ba18\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- tag ---------------------------------------------------------------
-  `
+    // ---- tag ---------------------------------------------------------------
+    `
 CREATE TABLE \`tag\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`title\` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -386,8 +386,8 @@ CREATE TABLE \`tag\` (
   CONSTRAINT \`FK_d0dc39ff83e384b4a097f47d3f5\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`) ON DELETE SET NULL ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- token -------------------------------------------------------------
-  `
+    // ---- token -------------------------------------------------------------
+    `
 CREATE TABLE \`token\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`token\` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -399,8 +399,8 @@ CREATE TABLE \`token\` (
   CONSTRAINT \`FK_94f168faad896c0786646fa3d4a\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- user --------------------------------------------------------------
-  `
+    // ---- user --------------------------------------------------------------
+    `
 CREATE TABLE \`user\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`username\` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -427,8 +427,8 @@ CREATE TABLE \`user\` (
   CONSTRAINT \`FK_75e2be4ce11d447ef43be0e374f\` FOREIGN KEY (\`photoId\`) REFERENCES \`file\` (\`id\`) ON DELETE SET NULL ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci
   `,
-  // ---- user_notifications ------------------------------------------------
-  `
+    // ---- user_notifications ------------------------------------------------
+    `
 CREATE TABLE \`user_notifications\` (
   \`id\` int(10) unsigned NOT NULL AUTO_INCREMENT,
   \`created_at\` timestamp NULL DEFAULT NULL,
@@ -443,8 +443,8 @@ CREATE TABLE \`user_notifications\` (
   KEY \`idx_user_notifications_deleted_at\` (\`deleted_at\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `,
-  // ---- user_notifications_processed --------------------------------------
-  `
+    // ---- user_notifications_processed --------------------------------------
+    `
 CREATE TABLE \`user_notifications_processed\` (
   \`id\` int(10) unsigned NOT NULL AUTO_INCREMENT,
   \`service\` varchar(255) NOT NULL,
@@ -453,8 +453,8 @@ CREATE TABLE \`user_notifications_processed\` (
   PRIMARY KEY (\`id\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `,
-  // ---- user_notifications_sent -------------------------------------------
-  `
+    // ---- user_notifications_sent -------------------------------------------
+    `
 CREATE TABLE \`user_notifications_sent\` (
   \`id\` int(10) unsigned NOT NULL AUTO_INCREMENT,
   \`service\` varchar(255) NOT NULL,
@@ -466,14 +466,15 @@ CREATE TABLE \`user_notifications_sent\` (
   ];
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    const existing = await BaselineSchema1721000000000.existingTables(queryRunner);
+    const existing =
+      await BaselineSchema1721000000000.existingTables(queryRunner);
 
     if (existing.length > 0) {
       // Pre-existing database: recording this as applied is the whole point, so
       // later migrations run from a known starting state.
       if (existing.length !== BaselineSchema1721000000000.TABLES.length) {
         const missing = BaselineSchema1721000000000.TABLES.filter(
-          t => !existing.includes(t),
+          (t) => !existing.includes(t),
         );
         throw new Error(
           `Refusing to apply the baseline to a partially-populated database. ` +
@@ -511,14 +512,16 @@ CREATE TABLE \`user_notifications_sent\` (
     }
   }
 
-  private static async existingTables(queryRunner: QueryRunner): Promise<string[]> {
+  private static async existingTables(
+    queryRunner: QueryRunner,
+  ): Promise<string[]> {
     const rows: Array<{ TABLE_NAME: string }> = await queryRunner.query(
       `SELECT TABLE_NAME FROM information_schema.TABLES
        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME IN (${BaselineSchema1721000000000.TABLES.map(
-         t => `'${t}'`,
+         (t) => `'${t}'`,
        ).join(', ')})`,
     );
 
-    return rows.map(r => r.TABLE_NAME);
+    return rows.map((r) => r.TABLE_NAME);
   }
 }

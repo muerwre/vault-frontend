@@ -142,7 +142,7 @@ export class NodeUpsertService {
 
     node.title = truncateTitle(String(body?.title ?? node.title ?? ''));
     node.blocks = blocks;
-    node.filesOrder = resolvedFiles.map(file => file.id);
+    node.filesOrder = resolvedFiles.map((file) => file.id);
     node.coverId = cover?.id ?? null;
 
     if (typeof body?.is_public === 'boolean') {
@@ -181,7 +181,7 @@ export class NodeUpsertService {
     // Attached files belong to this node; files dropped from it are released.
     await this.setFilesTarget(node.filesOrder, UPLOAD_TARGETS.NODES);
     await this.setFilesTarget(
-      previousFileIds.filter(fileId => !node.filesOrder.includes(fileId)),
+      previousFileIds.filter((fileId) => !node.filesOrder.includes(fileId)),
       null,
     );
 
@@ -194,8 +194,8 @@ export class NodeUpsertService {
     requested: NodeUpsertBody['files'],
   ): Promise<File[]> {
     const ids = (requested ?? [])
-      .map(file => Number(file?.id))
-      .filter(id => Number.isFinite(id) && id > 0);
+      .map((file) => Number(file?.id))
+      .filter((id) => Number.isFinite(id) && id > 0);
 
     if (ids.length === 0) {
       return [];
@@ -204,10 +204,10 @@ export class NodeUpsertService {
     const rows = await this.files.find({
       where: { id: In(ids), type: In(NODE_FILE_TYPES) },
     });
-    const byId = new Map(rows.map(file => [file.id, file]));
+    const byId = new Map(rows.map((file) => [file.id, file]));
 
     const ordered = ids
-      .map(id => byId.get(id))
+      .map((id) => byId.get(id))
       .filter((file): file is File => file !== undefined);
 
     return filterFiles(type, ordered);
@@ -227,15 +227,17 @@ export class NodeUpsertService {
 
   /** Rewrites the junction so stored rows match `files_order`. */
   private async setNodeFiles(nodeId: number, fileIds: number[]): Promise<void> {
-    await this.nodes.manager.transaction(async manager => {
-      await manager.query('DELETE FROM node_files_file WHERE nodeId = ?', [nodeId]);
+    await this.nodes.manager.transaction(async (manager) => {
+      await manager.query('DELETE FROM node_files_file WHERE nodeId = ?', [
+        nodeId,
+      ]);
 
       if (fileIds.length > 0) {
         await manager.query(
           `INSERT INTO node_files_file (nodeId, fileId) VALUES ${fileIds
             .map(() => '(?, ?)')
             .join(', ')}`,
-          fileIds.flatMap(id => [nodeId, id]),
+          fileIds.flatMap((id) => [nodeId, id]),
         );
       }
     });
@@ -261,7 +263,7 @@ export class NodeUpsertService {
     requested: NodeUpsertBody['files'],
     resolved: File[],
   ): Promise<void> {
-    const byId = new Map(resolved.map(file => [file.id, file]));
+    const byId = new Map(resolved.map((file) => [file.id, file]));
 
     for (const incoming of requested ?? []) {
       const id = Number(incoming?.id ?? 0);

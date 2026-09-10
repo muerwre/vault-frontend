@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { Comment } from '../../entities/comment.entity';
 import { File } from '../../entities/file.entity';
 import { Like } from '../../entities/like.entity';
-import { Comment } from '../../entities/comment.entity';
 import { NodeSocialPublication } from '../../entities/node-extras.entity';
 import { Node } from '../../entities/node.entity';
 import { Tag } from '../../entities/tag.entity';
 import { NodeView } from '../../entities/views.entity';
-
 import { NotificationsModule } from '../notifications/notifications.module';
 import { TagModule } from '../tag/tag.module';
 

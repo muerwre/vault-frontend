@@ -3,7 +3,12 @@ import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
-import { authHeader, createTestApp, getDataSource, WIRE_DATE } from './helpers/app';
+import {
+  authHeader,
+  createTestApp,
+  getDataSource,
+  WIRE_DATE,
+} from './helpers/app';
 
 describe('notes (integration)', () => {
   let app: INestApplication;
@@ -20,7 +25,9 @@ describe('notes (integration)', () => {
        VALUES (?, ?, ?, 'user', 1, NOW(), NOW())`,
       [username, await bcrypt.hash('x', 4), `${username}@example.com`],
     );
-    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [username]);
+    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [
+      username,
+    ]);
     return Number(row.id);
   };
 
@@ -38,7 +45,10 @@ describe('notes (integration)', () => {
 
   afterAll(async () => {
     for (const id of [ownerId, otherId]) {
-      await db.query('DELETE FROM message WHERE fromId = ? OR toId = ?', [id, id]);
+      await db.query('DELETE FROM message WHERE fromId = ? OR toId = ?', [
+        id,
+        id,
+      ]);
       await db.query('DELETE FROM user WHERE id = ?', [id]);
     }
     await app.close();
@@ -76,7 +86,11 @@ describe('notes (integration)', () => {
     it('rejects empty or whitespace-only text', async () => {
       await create(ownerId, '').expect(400);
       await create(ownerId, '   ').expect(400);
-      await http().post('/api/notes/').set(authHeader(ownerId)).send({}).expect(400);
+      await http()
+        .post('/api/notes/')
+        .set(authHeader(ownerId))
+        .send({})
+        .expect(400);
     });
 
     it('answers 200, not 201', async () => {
@@ -118,9 +132,10 @@ describe('notes (integration)', () => {
     it('returns newest first', async () => {
       const first = await create(ownerId, 'older note').expect(200);
       // The column has second precision, so separate the two writes.
-      await db.query('UPDATE message SET created_at = DATE_SUB(NOW(), INTERVAL 1 DAY) WHERE id = ?', [
-        first.body.id,
-      ]);
+      await db.query(
+        'UPDATE message SET created_at = DATE_SUB(NOW(), INTERVAL 1 DAY) WHERE id = ?',
+        [first.body.id],
+      );
       const second = await create(ownerId, 'newer note').expect(200);
 
       const { body } = await http()
@@ -139,7 +154,9 @@ describe('notes (integration)', () => {
         .set(authHeader(otherId))
         .expect(200);
 
-      expect(body.list.map((n: { id: number }) => n.id)).not.toContain(mine.body.id);
+      expect(body.list.map((n: { id: number }) => n.id)).not.toContain(
+        mine.body.id,
+      );
     });
 
     it('honours limit and offset', async () => {
@@ -174,7 +191,9 @@ describe('notes (integration)', () => {
         .set(authHeader(ownerId))
         .expect(200);
 
-      expect(body.list.map((n: { id: number }) => n.id)).toEqual([match.body.id]);
+      expect(body.list.map((n: { id: number }) => n.id)).toEqual([
+        match.body.id,
+      ]);
     });
 
     /** Real dialog messages must never leak into notes. */
@@ -191,7 +210,9 @@ describe('notes (integration)', () => {
         .expect(200);
 
       expect(
-        body.list.some((n: { content: string }) => n.content === 'a real message'),
+        body.list.some(
+          (n: { content: string }) => n.content === 'a real message',
+        ),
       ).toBe(false);
     });
 
@@ -207,7 +228,9 @@ describe('notes (integration)', () => {
         .set(authHeader(ownerId))
         .expect(200);
 
-      expect(body.list.some((n: { content: string }) => n.content === '')).toBe(false);
+      expect(body.list.some((n: { content: string }) => n.content === '')).toBe(
+        false,
+      );
     });
   });
 

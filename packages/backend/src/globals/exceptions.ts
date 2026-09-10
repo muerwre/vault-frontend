@@ -7,7 +7,10 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ERROR_CODES, type ErrorCode } from '@vault/common/constants';
-import type { IErrorResponse, IValidationErrorResponse } from '@vault/common/types';
+import type {
+  IErrorResponse,
+  IValidationErrorResponse,
+} from '@vault/common/types';
 import type { Response } from 'express';
 
 /**
@@ -83,7 +86,9 @@ export class VaultExceptionFilter implements ExceptionFilter {
     }
 
     if (exception instanceof VaultException) {
-      response.status(exception.getStatus()).json(this.envelope(exception.code, exception.text));
+      response
+        .status(exception.getStatus())
+        .json(this.envelope(exception.code, exception.text));
       return;
     }
 

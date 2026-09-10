@@ -35,7 +35,9 @@ export class YoutubeService {
 
     // Optional by config: without a key, only cached embeds are served.
     if (!this.apiKey) {
-      this.logger.warn('GOOGLE_API_KEY is not set — serving cached embeds only');
+      this.logger.warn(
+        'GOOGLE_API_KEY is not set — serving cached embeds only',
+      );
       return result;
     }
 

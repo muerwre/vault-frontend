@@ -20,7 +20,9 @@ type SubscriptionColumn =
  */
 @Injectable()
 export class NotificationRecipientsService {
-  constructor(@InjectRepository(User) private readonly users: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private readonly users: Repository<User>,
+  ) {}
 
   flowWatchers(): Promise<number[]> {
     return this.subscribers('subscribed_to_flow');
@@ -46,13 +48,13 @@ export class NotificationRecipientsService {
       )
       .getRawMany<{ id: number }>();
 
-    return rows.map(row => Number(row.id));
+    return rows.map((row) => Number(row.id));
   }
 
   private async subscribers(column: SubscriptionColumn): Promise<number[]> {
     const rows = await this.baseQuery(column).getRawMany<{ id: number }>();
 
-    return rows.map(row => Number(row.id));
+    return rows.map((row) => Number(row.id));
   }
 
   /**

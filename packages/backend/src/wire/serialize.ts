@@ -27,7 +27,8 @@ export const toWireDate = (value: Date | string | null | undefined): string => {
 /** For the few date fields that are nullable on the wire, e.g. `deleted_at`. */
 export const toWireDateOrNull = (
   value: Date | string | null | undefined,
-): string | null => (value === null || value === undefined ? null : toWireDate(value));
+): string | null =>
+  value === null || value === undefined ? null : toWireDate(value);
 
 /** Null strings are `""` on the wire, never `null`. */
 export const toWireString = (value: string | null | undefined): string =>
@@ -47,7 +48,7 @@ export const toWireFlow = (flow: INodeFlow | null | undefined): INodeFlow => ({
 export const toWireBlocks = (
   blocks: INodeBlock[] | null | undefined,
 ): Array<{ type: string; text: string; url: string }> =>
-  (blocks ?? []).map(block => ({
+  (blocks ?? []).map((block) => ({
     type: block?.type ?? '',
     text: (block as { text?: string })?.text ?? '',
     url: (block as { url?: string })?.url ?? '',
@@ -62,7 +63,10 @@ export interface WireShallowUser {
 
 /** A missing user serialises as the zero object, not `null`. */
 export const toWireShallowUser = (
-  user: (Pick<User, 'id' | 'username'> & { photo?: File | null }) | null | undefined,
+  user:
+    | (Pick<User, 'id' | 'username'> & { photo?: File | null })
+    | null
+    | undefined,
 ): WireShallowUser => ({
   id: user?.id ?? 0,
   username: toWireString(user?.username),
@@ -160,7 +164,10 @@ export interface WireTag {
   title: string;
 }
 
-export const toWireTag = (tag: { id: number; title: string | null }): WireTag => ({
+export const toWireTag = (tag: {
+  id: number;
+  title: string | null;
+}): WireTag => ({
   ID: tag.id,
   title: toWireString(tag.title),
 });
@@ -231,10 +238,10 @@ export const sortFilesByOrder = (files: File[], order: number[]): File[] => {
     return files;
   }
 
-  const byId = new Map(files.map(file => [file.id, file]));
+  const byId = new Map(files.map((file) => [file.id, file]));
 
   return order
-    .map(id => byId.get(id))
+    .map((id) => byId.get(id))
     .filter((file): file is File => file !== undefined);
 };
 
@@ -307,7 +314,10 @@ export interface WireSelf {
   cover: WireShallowFile | null;
 }
 
-export const toWireSelf = (user: User, lastSeenBoris: Date | null): WireSelf => ({
+export const toWireSelf = (
+  user: User,
+  lastSeenBoris: Date | null,
+): WireSelf => ({
   id: user.id,
   username: toWireString(user.username),
   email: toWireString(user.email),

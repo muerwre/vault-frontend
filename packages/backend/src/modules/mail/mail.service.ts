@@ -2,7 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
 
-import { getFrontendResetUrl, getPublicHost, getSmtpConfig } from '../../config/env';
+import {
+  getFrontendResetUrl,
+  getPublicHost,
+  getSmtpConfig,
+} from '../../config/env';
 
 /**
  * Optional by config: with no SMTP host configured, sends are logged and
@@ -45,7 +49,9 @@ export class MailService {
       port: config.port,
       // Port 25 is plain SMTP; only 465 is implicit TLS.
       secure: config.port === 465,
-      ...(config.user ? { auth: { user: config.user, pass: config.password } } : {}),
+      ...(config.user
+        ? { auth: { user: config.user, pass: config.password } }
+        : {}),
     });
 
     await this.transporter.sendMail({ from: config.from, to, subject, text });

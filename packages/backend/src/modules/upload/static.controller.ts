@@ -4,8 +4,8 @@ import type { Request, Response } from 'express';
 
 import { VaultException } from '../../globals/exceptions';
 
-import { parseCacheRequest } from './upload.paths';
 import { StaticService } from './static.service';
+import { parseCacheRequest } from './upload.paths';
 
 /** Six months, matching how long generated variants are considered fresh. */
 const CACHE_MAX_AGE = 15552000;
@@ -22,9 +22,14 @@ export class StaticController {
    * 404, so `..` cannot reach the rest of the filesystem.
    */
   @Get('*path')
-  async serve(@Req() request: Request, @Res() response: Response): Promise<void> {
+  async serve(
+    @Req() request: Request,
+    @Res() response: Response,
+  ): Promise<void> {
     const relative = decodeURIComponent(
-      request.path.replace(/^\/api\/static\/?/, '').replace(/^\/?static\/?/, ''),
+      request.path
+        .replace(/^\/api\/static\/?/, '')
+        .replace(/^\/?static\/?/, ''),
     );
 
     if (!relative) {
@@ -40,7 +45,10 @@ export class StaticController {
       );
 
       if (!variant) {
-        throw new VaultException(ERROR_CODES.EmptyRequest, HttpStatus.NOT_FOUND);
+        throw new VaultException(
+          ERROR_CODES.EmptyRequest,
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       response.setHeader(

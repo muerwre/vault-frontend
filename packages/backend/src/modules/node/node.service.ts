@@ -25,15 +25,12 @@ import {
 } from '../../wire/serialize';
 
 import {
-  applyIsFlowNode,
-  applyIsFlowOrLabNode,
-} from './node.predicates';
-import {
   type Actor,
   canEditNode,
   canHeroNode,
   canLikeNode,
 } from './node.permissions';
+import { applyIsFlowNode, applyIsFlowOrLabNode } from './node.predicates';
 
 /**
  * `GET /nodes/` response. Every slice is always present and never null; a
@@ -108,7 +105,8 @@ export class NodeService {
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
     @InjectRepository(File) private readonly files: Repository<File>,
     @InjectRepository(Like) private readonly likes: Repository<Like>,
-    @InjectRepository(NodeView) private readonly nodeViews: Repository<NodeView>,
+    @InjectRepository(NodeView)
+    private readonly nodeViews: Repository<NodeView>,
     @InjectRepository(NodeSocialPublication)
     private readonly backlinks: Repository<NodeSocialPublication>,
   ) {}
@@ -137,7 +135,9 @@ export class NodeService {
       .where('node.id = :id', { id });
 
     if (!(uid !== GUEST_USER_ID && role === ROLES.ADMIN)) {
-      query.andWhere('(node.deleted_at IS NULL OR node.userId = :uid)', { uid });
+      query.andWhere('(node.deleted_at IS NULL OR node.userId = :uid)', {
+        uid,
+      });
     }
 
     const node = await query.getOne();
@@ -279,7 +279,7 @@ export class NodeService {
       [tagIds, [node.id], node.type, node.isPromoted ? 1 : 0, RELATED_LIMIT],
     );
 
-    return rows.map(row => ({
+    return rows.map((row) => ({
       id: Number(row.id),
       thumbnail: row.thumbnail ?? '',
       title: row.title ?? '',
@@ -304,7 +304,10 @@ export class NodeService {
   }
 
   private countLikes(nodeId: number): Promise<number> {
-    return this.likes.createQueryBuilder('l').where('l.nodeId = :nodeId', { nodeId }).getCount();
+    return this.likes
+      .createQueryBuilder('l')
+      .where('l.nodeId = :nodeId', { nodeId })
+      .getCount();
   }
 
   private async isLikedBy(nodeId: number, uid: number): Promise<boolean> {
@@ -327,7 +330,7 @@ export class NodeService {
       })
       .getMany();
 
-    return rows.map(row => ({
+    return rows.map((row) => ({
       provider: row.provider ?? '',
       link: row.link ?? '',
     }));
@@ -337,7 +340,10 @@ export class NodeService {
    * Returns the previous visit timestamp and records the current one. There is a
    * unique index on `(nodeId, userId)`, so the insert is an upsert.
    */
-  private async touchNodeView(uid: number, nodeId: number): Promise<string | null> {
+  private async touchNodeView(
+    uid: number,
+    nodeId: number,
+  ): Promise<string | null> {
     const existing = await this.nodeViews
       .createQueryBuilder('nv')
       .where('nv.userId = :uid AND nv.nodeId = :nodeId', { uid, nodeId })
@@ -371,7 +377,7 @@ export class NodeService {
     const [recent, valid] = await Promise.all([
       params.withRecent
         ? this.getRecent(
-            updated.map(node => node.id),
+            updated.map((node) => node.id),
             params.uid !== GUEST_USER_ID,
           )
         : [],
@@ -471,7 +477,7 @@ export class NodeService {
       })
       .getRawMany();
 
-    return rows.map(row => Number(row.id)).filter(id => id > 0);
+    return rows.map((row) => Number(row.id)).filter((id) => id > 0);
   }
 
   private baseQuery(): SelectQueryBuilder<Node> {
@@ -527,7 +533,9 @@ export class NodeService {
       return false;
     }
 
-    await this.likes.save(this.likes.create({ nodeId: node.id, userId: actor.id }));
+    await this.likes.save(
+      this.likes.create({ nodeId: node.id, userId: actor.id }),
+    );
 
     return true;
   }

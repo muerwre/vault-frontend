@@ -36,7 +36,8 @@ export class AuthService {
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(File) private readonly files: Repository<File>,
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
-    @InjectRepository(NodeView) private readonly nodeViews: Repository<NodeView>,
+    @InjectRepository(NodeView)
+    private readonly nodeViews: Repository<NodeView>,
     @InjectRepository(RestoreCode)
     private readonly restoreCodes: Repository<RestoreCode>,
     private readonly passwords: PasswordService,
@@ -188,7 +189,9 @@ export class AuthService {
   }
 
   async setPassword(userId: number, password: string): Promise<void> {
-    await this.users.update(userId, { password: await this.passwords.hash(password) });
+    await this.users.update(userId, {
+      password: await this.passwords.hash(password),
+    });
   }
 
   /** Only an existing image file may be used as a photo or cover. */

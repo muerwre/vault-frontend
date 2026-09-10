@@ -69,7 +69,7 @@ export class Message {
   })
   to: User | null;
 
-  @ManyToMany(() => File, file => file.messages, {
+  @ManyToMany(() => File, (file) => file.messages, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })

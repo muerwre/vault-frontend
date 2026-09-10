@@ -1,7 +1,4 @@
-import {
-  NODE_TYPE_ENUM_ORDER,
-  type NodeType,
-} from '@vault/common/constants';
+import { NODE_TYPE_ENUM_ORDER, type NodeType } from '@vault/common/constants';
 import type { INodeBlock, INodeFlow } from '@vault/common/types';
 import {
   Column,
@@ -125,7 +122,7 @@ export class Node {
   })
   user: User | null;
 
-  @ManyToMany(() => File, file => file.nodes, {
+  @ManyToMany(() => File, (file) => file.nodes, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })
@@ -144,7 +141,7 @@ export class Node {
   })
   files: File[];
 
-  @ManyToMany(() => Tag, tag => tag.nodes, {
+  @ManyToMany(() => Tag, (tag) => tag.nodes, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })
@@ -163,7 +160,7 @@ export class Node {
   })
   tags: Tag[];
 
-  @OneToMany(() => Comment, comment => comment.node)
+  @OneToMany(() => Comment, (comment) => comment.node)
   comments: Comment[];
 
   /** Computed per request, never persisted. */

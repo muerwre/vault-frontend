@@ -1,5 +1,5 @@
 import { mkdir, readFile, stat, writeFile } from 'fs/promises';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
 
 import { Injectable, Logger } from '@nestjs/common';
 import { IMAGE_PRESETS, type ImagePreset } from '@vault/common/constants';
@@ -52,7 +52,10 @@ export class StaticService {
    * The cache lives at `cache/<preset>/<src>` under the uploads root, so a
    * generated file is served directly on every later request.
    */
-  async resolveScaled(preset: string, src: string): Promise<ServableFile | null> {
+  async resolveScaled(
+    preset: string,
+    src: string,
+  ): Promise<ServableFile | null> {
     if (!this.isKnownPreset(preset)) {
       return null;
     }
@@ -74,7 +77,11 @@ export class StaticService {
     }
 
     try {
-      await this.writeVariant(sourceAbsolute, cacheAbsolute, IMAGE_PRESETS[preset]);
+      await this.writeVariant(
+        sourceAbsolute,
+        cacheAbsolute,
+        IMAGE_PRESETS[preset],
+      );
     } catch (error) {
       this.logger.warn(
         `could not scale ${src} to ${preset}: ${

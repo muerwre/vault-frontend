@@ -1,4 +1,7 @@
 module.exports = {
+  // Self-contained: this app keeps its own React/Next rules and must not pick
+  // up the workspace root config.
+  root: true,
   extends: ['plugin:react/recommended', 'plugin:@next/next/recommended'],
   rules: {
     'prettier/prettier': 'error',

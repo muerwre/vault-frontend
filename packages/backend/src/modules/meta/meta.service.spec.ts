@@ -32,7 +32,10 @@ const mockRepo = (found: Embed[]) => {
 };
 
 const mockYoutube = (
-  result: Map<string, { address: string; provider: 'youtube'; metadata: { title: string } }>,
+  result: Map<
+    string,
+    { address: string; provider: 'youtube'; metadata: { title: string } }
+  >,
   fail = false,
 ) =>
   ({
@@ -64,7 +67,10 @@ describe('MetaService', () => {
 
   it('serves cached embeds without calling the API', async () => {
     const youtube = mockYoutube(new Map());
-    const service = new MetaService(mockRepo([embedRow(1, 'abc', 'Cached')]), youtube);
+    const service = new MetaService(
+      mockRepo([embedRow(1, 'abc', 'Cached')]),
+      youtube,
+    );
 
     const items = await service.getYoutubeEmbeds(['abc']);
 
@@ -80,7 +86,14 @@ describe('MetaService', () => {
   it('fetches only the uncached ids and persists them', async () => {
     const youtube = mockYoutube(
       new Map([
-        ['new', { address: 'new', provider: 'youtube' as const, metadata: { title: 'New' } }],
+        [
+          'new',
+          {
+            address: 'new',
+            provider: 'youtube' as const,
+            metadata: { title: 'New' },
+          },
+        ],
       ]),
     );
     const repo = mockRepo([embedRow(1, 'abc', 'Cached')]);
@@ -97,7 +110,10 @@ describe('MetaService', () => {
   /** An outage or spent quota must not break rendering of a node with a video. */
   it('still returns the cached subset when the API fails', async () => {
     const youtube = mockYoutube(new Map(), true);
-    const service = new MetaService(mockRepo([embedRow(1, 'abc', 'Cached')]), youtube);
+    const service = new MetaService(
+      mockRepo([embedRow(1, 'abc', 'Cached')]),
+      youtube,
+    );
 
     const items = await service.getYoutubeEmbeds(['abc', 'broken']);
 
@@ -124,7 +140,12 @@ describe('MetaService', () => {
   });
 
   it('defaults a null metadata blob to an empty object', async () => {
-    const row = { id: 1, address: 'abc', provider: 'youtube', metadata: null } as Embed;
+    const row = {
+      id: 1,
+      address: 'abc',
+      provider: 'youtube',
+      metadata: null,
+    } as Embed;
     const service = new MetaService(mockRepo([row]), mockYoutube(new Map()));
 
     const items = await service.getYoutubeEmbeds(['abc']);

@@ -9,14 +9,14 @@ import { NodeView } from '../../entities/views.entity';
 import { MailModule } from '../mail/mail.module';
 
 import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { PasswordService } from './password.service';
 import {
   AuthRequiredGuard,
   OptionalAuthGuard,
   TokenReader,
   WithUserGuard,
 } from './auth.guards';
+import { AuthService } from './auth.service';
+import { PasswordService } from './password.service';
 
 /**
  * Global so any feature module can `@UseGuards(AuthRequiredGuard)` without

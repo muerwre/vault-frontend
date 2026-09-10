@@ -1,4 +1,8 @@
-import { LAB_DEFAULT_LIMIT, LAB_MAX_LIMIT, normaliseLabQuery } from './lab.service';
+import {
+  LAB_DEFAULT_LIMIT,
+  LAB_MAX_LIMIT,
+  normaliseLabQuery,
+} from './lab.service';
 
 describe('normaliseLabQuery', () => {
   it('defaults everything on an empty query', () => {

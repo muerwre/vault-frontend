@@ -73,7 +73,9 @@ export class TagService {
    */
   async findOrCreateByTitles(titles: string[]): Promise<Tag[]> {
     const wanted = [
-      ...new Set(titles.map(title => title.toLowerCase().trim()).filter(Boolean)),
+      ...new Set(
+        titles.map((title) => title.toLowerCase().trim()).filter(Boolean),
+      ),
     ];
 
     if (wanted.length === 0) {
@@ -85,8 +87,10 @@ export class TagService {
       .where('LOWER(tag.title) IN (:...titles)', { titles: wanted })
       .getMany();
 
-    const byTitle = new Map(existing.map(tag => [tag.title.toLowerCase(), tag]));
-    const missing = wanted.filter(title => !byTitle.has(title));
+    const byTitle = new Map(
+      existing.map((tag) => [tag.title.toLowerCase(), tag]),
+    );
+    const missing = wanted.filter((title) => !byTitle.has(title));
 
     for (const title of missing) {
       const created = await this.tags.save(this.tags.create({ title }));
@@ -95,7 +99,7 @@ export class TagService {
 
     // Preserve the caller's order.
     return wanted
-      .map(title => byTitle.get(title))
+      .map((title) => byTitle.get(title))
       .filter((tag): tag is Tag => tag !== undefined);
   }
 
@@ -112,6 +116,6 @@ export class TagService {
 
     const rows = await query.getMany();
 
-    return rows.map(tag => tag.title);
+    return rows.map((tag) => tag.title);
   }
 }

@@ -38,7 +38,9 @@ const makeController = (overrides: AuthMock = {}, passwordValid = true) => {
     sendRestoreCode: jest.fn().mockResolvedValue(undefined),
     findRestoreCode: jest.fn().mockResolvedValue(null),
     consumeRestoreCode: jest.fn().mockResolvedValue(undefined),
-    toRestoreUser: jest.fn().mockReturnValue({ username: 'someone', photo: null }),
+    toRestoreUser: jest
+      .fn()
+      .mockReturnValue({ username: 'someone', photo: null }),
     getUpdates: jest.fn().mockResolvedValue({ boris: { commented_at: 'x' } }),
     ...overrides,
   };
@@ -83,14 +85,16 @@ describe('AuthController', () => {
         authenticate: jest.fn().mockResolvedValue(null),
       });
 
-      await expect(controller.login({ username: 'x', password: 'y' })).rejects.toThrow(
-        VaultException,
-      );
+      await expect(
+        controller.login({ username: 'x', password: 'y' }),
+      ).rejects.toThrow(VaultException);
 
       try {
         await controller.login({ username: 'x', password: 'y' });
       } catch (error) {
-        expect((error as VaultException).getStatus()).toBe(HttpStatus.BAD_REQUEST);
+        expect((error as VaultException).getStatus()).toBe(
+          HttpStatus.BAD_REQUEST,
+        );
         expect((error as VaultException).code).toBe('Incorrect_Data');
       }
     });
@@ -117,7 +121,10 @@ describe('AuthController', () => {
         overrides.findByEmail = jest.fn().mockResolvedValue({ id: 2 });
       }
 
-      const { controller } = makeController(overrides, opts.passwordValid ?? true);
+      const { controller } = makeController(
+        overrides,
+        opts.passwordValid ?? true,
+      );
 
       try {
         await controller.patch(currentUser(), body as never);
@@ -150,26 +157,35 @@ describe('AuthController', () => {
     });
 
     it('requires the current password for an email change', async () => {
-      expect(await patchErrors({ email: 'new@example.com' }, { passwordValid: false })).toEqual(
-        { password: expect.any(String) },
-      );
+      expect(
+        await patchErrors(
+          { email: 'new@example.com' },
+          { passwordValid: false },
+        ),
+      ).toEqual({ password: expect.any(String) });
     });
 
     it('requires the current password for a username change', async () => {
-      expect(await patchErrors({ username: 'newname' }, { passwordValid: false })).toEqual(
-        { password: expect.any(String) },
-      );
+      expect(
+        await patchErrors({ username: 'newname' }, { passwordValid: false }),
+      ).toEqual({ password: expect.any(String) });
     });
 
     it('requires the current password for a password change', async () => {
       expect(
-        await patchErrors({ new_password: 'longenough' }, { passwordValid: false }),
+        await patchErrors(
+          { new_password: 'longenough' },
+          { passwordValid: false },
+        ),
       ).toEqual({ password: expect.any(String) });
     });
 
     it('does not require a password for description or fullname', async () => {
       expect(
-        await patchErrors({ description: 'x', fullname: 'y' }, { passwordValid: false }),
+        await patchErrors(
+          { description: 'x', fullname: 'y' },
+          { passwordValid: false },
+        ),
       ).toBeNull();
     });
 
@@ -183,12 +199,14 @@ describe('AuthController', () => {
     });
 
     it('rejects a taken username and a taken email', async () => {
-      expect(await patchErrors({ username: 'taken' }, { taken: 'username' })).toEqual({
+      expect(
+        await patchErrors({ username: 'taken' }, { taken: 'username' }),
+      ).toEqual({
         username: expect.any(String),
       });
-      expect(await patchErrors({ email: 'taken@example.com' }, { taken: 'email' })).toEqual(
-        { email: expect.any(String) },
-      );
+      expect(
+        await patchErrors({ email: 'taken@example.com' }, { taken: 'email' }),
+      ).toEqual({ email: expect.any(String) });
     });
 
     it('rejects a username that fails the character rules', async () => {
@@ -222,7 +240,11 @@ describe('AuthController', () => {
     });
 
     it('reports every failing field at once', async () => {
-      const fields = await patchErrors({ username: 'ab', email: 'bad', fullname: '' });
+      const fields = await patchErrors({
+        username: 'ab',
+        email: 'bad',
+        fullname: '',
+      });
 
       expect(Object.keys(fields ?? {}).sort()).toEqual([
         'email',
@@ -234,7 +256,10 @@ describe('AuthController', () => {
     it('writes a new password through the hashing path, not the entity', async () => {
       const { controller, auth } = makeController();
 
-      await controller.patch(currentUser(), { new_password: 'longenough', password: 'pw' });
+      await controller.patch(currentUser(), {
+        new_password: 'longenough',
+        password: 'pw',
+      });
 
       expect(auth.setPassword).toHaveBeenCalledWith(1, 'longenough');
     });
@@ -252,7 +277,9 @@ describe('AuthController', () => {
         findImage: jest.fn().mockResolvedValue(null),
       });
 
-      await expect(controller.setPhoto(1, { id: 7 })).rejects.toThrow(VaultException);
+      await expect(controller.setPhoto(1, { id: 7 })).rejects.toThrow(
+        VaultException,
+      );
     });
 
     it('clears without validating an id', async () => {
@@ -270,9 +297,9 @@ describe('AuthController', () => {
     it('404s an unknown account', async () => {
       const { controller } = makeController();
 
-      await expect(controller.createRestoreCode({ field: 'nobody' })).rejects.toThrow(
-        VaultException,
-      );
+      await expect(
+        controller.createRestoreCode({ field: 'nobody' }),
+      ).rejects.toThrow(VaultException);
     });
 
     it('mails the code to the account address', async () => {
@@ -285,7 +312,10 @@ describe('AuthController', () => {
 
       await controller.createRestoreCode({ field: 'someone' });
 
-      expect(auth.sendRestoreCode).toHaveBeenCalledWith('someone@example.com', 'code');
+      expect(auth.sendRestoreCode).toHaveBeenCalledWith(
+        'someone@example.com',
+        'code',
+      );
     });
 
     it('rejects a short password before looking the code up', async () => {
@@ -299,7 +329,9 @@ describe('AuthController', () => {
 
     it('consumes the code after setting the password', async () => {
       const { controller, auth } = makeController({
-        findRestoreCode: jest.fn().mockResolvedValue({ id: 9, user: { id: 1 } }),
+        findRestoreCode: jest
+          .fn()
+          .mockResolvedValue({ id: 9, user: { id: 1 } }),
       });
 
       await controller.applyRestoreCode('code', { password: 'longenough' });

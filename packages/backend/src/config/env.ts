@@ -60,7 +60,8 @@ export const getSmtpConfig = (): SmtpConfig => ({
 });
 
 /** Host used to build absolute links in outgoing mail. */
-export const getPublicHost = (): string => process.env.FRONTEND_PUBLIC_HOST ?? '';
+export const getPublicHost = (): string =>
+  process.env.FRONTEND_PUBLIC_HOST ?? '';
 
 /** Path the password-reset link points at; the code is appended to it. */
 export const getFrontendResetUrl = (): string =>
@@ -78,6 +79,7 @@ export interface UploadsConfig {
  */
 export const getUploadsConfig = (): UploadsConfig => ({
   path: process.env.UPLOADS_PATH ?? '',
-  maxSizeMb: Number.parseInt(process.env.UPLOADS_MAX_SIZE_MB ?? '200', 10) || 200,
+  maxSizeMb:
+    Number.parseInt(process.env.UPLOADS_MAX_SIZE_MB ?? '200', 10) || 200,
   outputWebp: process.env.UPLOADS_OUTPUT_WEBP === 'true',
 });

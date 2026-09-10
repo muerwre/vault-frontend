@@ -45,7 +45,8 @@ export const LAB_MAX_LIMIT = 100;
  * Sort expression shared by every mode: newest activity first, falling back to
  * creation time for nodes that were never commented on.
  */
-const ORDER_BY_ACTIVITY = 'IF(node.commented_at = 0, node.created_at, node.commented_at)';
+const ORDER_BY_ACTIVITY =
+  'IF(node.commented_at = 0, node.created_at, node.commented_at)';
 
 const HEROES_LIMIT = 20;
 const POPULAR_TAGS_LIMIT = 24;
@@ -57,7 +58,8 @@ export class LabService {
     @InjectRepository(Comment) private readonly comments: Repository<Comment>,
     @InjectRepository(Like) private readonly likes: Repository<Like>,
     @InjectRepository(Tag) private readonly tags: Repository<Tag>,
-    @InjectRepository(NodeView) private readonly nodeViews: Repository<NodeView>,
+    @InjectRepository(NodeView)
+    private readonly nodeViews: Repository<NodeView>,
   ) {}
 
   /**
@@ -72,7 +74,10 @@ export class LabService {
     uid: number,
   ): Promise<WireLabList> {
     const build = () => {
-      const query = applyIsLabNode(this.nodes.createQueryBuilder('node'), 'node');
+      const query = applyIsLabNode(
+        this.nodes.createQueryBuilder('node'),
+        'node',
+      );
 
       if (search) {
         query.andWhere(
@@ -117,18 +122,20 @@ export class LabService {
     }
 
     const rows = await query.limit(limit).offset(offset).getMany();
-    const ids = rows.map(node => node.id);
+    const ids = rows.map((node) => node.id);
 
-    const [commentCounts, lastSeens, likeCounts, likedByMe] = await Promise.all([
-      this.countComments(ids),
-      this.getLastSeens(uid, ids),
-      this.countLikes(ids),
-      this.getLikedByUser(uid, ids),
-    ]);
+    const [commentCounts, lastSeens, likeCounts, likedByMe] = await Promise.all(
+      [
+        this.countComments(ids),
+        this.getLastSeens(uid, ids),
+        this.countLikes(ids),
+        this.getLikedByUser(uid, ids),
+      ],
+    );
 
     return {
       count,
-      nodes: rows.map(node => ({
+      nodes: rows.map((node) => ({
         node: toWireNode(node, [], {
           likeCount: likeCounts.get(node.id) ?? 0,
           isLiked: likedByMe.has(node.id),
@@ -173,7 +180,11 @@ export class LabService {
       this.getHeroes(),
     ]);
 
-    return { tags: tags.map(toWireTag), heroes: heroes.map(toWireShallowNode), comments: [] };
+    return {
+      tags: tags.map(toWireTag),
+      heroes: heroes.map(toWireShallowNode),
+      comments: [],
+    };
   }
 
   private async getPopularTags(): Promise<Tag[]> {
@@ -213,11 +224,13 @@ export class LabService {
       .createQueryBuilder('comment')
       .select('comment.nodeId', 'nodeId')
       .addSelect('COUNT(comment.id)', 'count')
-      .where('comment.nodeId IN (:...ids) AND comment.deleted_at IS NULL', { ids })
+      .where('comment.nodeId IN (:...ids) AND comment.deleted_at IS NULL', {
+        ids,
+      })
       .groupBy('comment.nodeId')
       .getRawMany();
 
-    return new Map(rows.map(row => [Number(row.nodeId), Number(row.count)]));
+    return new Map(rows.map((row) => [Number(row.nodeId), Number(row.count)]));
   }
 
   private async countLikes(ids: number[]): Promise<Map<number, number>> {
@@ -233,10 +246,13 @@ export class LabService {
       .groupBy('l.nodeId')
       .getRawMany();
 
-    return new Map(rows.map(row => [Number(row.nodeId), Number(row.count)]));
+    return new Map(rows.map((row) => [Number(row.nodeId), Number(row.count)]));
   }
 
-  private async getLikedByUser(uid: number, ids: number[]): Promise<Set<number>> {
+  private async getLikedByUser(
+    uid: number,
+    ids: number[],
+  ): Promise<Set<number>> {
     if (uid === GUEST_USER_ID || ids.length === 0) {
       return new Set();
     }
@@ -246,7 +262,7 @@ export class LabService {
       .where('l.userId = :uid AND l.nodeId IN (:...ids)', { uid, ids })
       .getMany();
 
-    return new Set(rows.map(row => Number(row.nodeId)));
+    return new Set(rows.map((row) => Number(row.nodeId)));
   }
 
   /** A zero visit timestamp is treated as "never seen". */

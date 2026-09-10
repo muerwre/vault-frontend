@@ -9,10 +9,10 @@ import {
 import { ERROR_CODES, GUEST_USER_ID } from '@vault/common/constants';
 
 import { VaultException } from '../../globals/exceptions';
+import type { WireProfile, WireShallowNode } from '../../wire/serialize';
 import { OptionalAuthGuard, Uid } from '../auth/auth.guards';
 
 import { UserService } from './user.service';
-import type { WireProfile, WireShallowNode } from '../../wire/serialize';
 
 @Controller('users')
 export class UserController {

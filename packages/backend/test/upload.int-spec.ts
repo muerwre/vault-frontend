@@ -58,7 +58,9 @@ describe('upload and static (integration)', () => {
        VALUES (?, ?, ?, 'user', 1, NOW(), NOW())`,
       [username, await bcrypt.hash('x', 4), `${username}@example.com`],
     );
-    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [username]);
+    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [
+      username,
+    ]);
     userId = Number(row.id);
   });
 
@@ -73,8 +75,13 @@ describe('upload and static (integration)', () => {
 
   describe('POST /upload/:target/:type', () => {
     it('answers 201 with the shallow file shape', async () => {
-      const { body } = await upload('nodes', 'image', await png(), 'pic.png', 'image/png')
-        .expect(201);
+      const { body } = await upload(
+        'nodes',
+        'image',
+        await png(),
+        'pic.png',
+        'image/png',
+      ).expect(201);
 
       fileIds.push(body.id);
       expect(Object.keys(body).sort()).toEqual([
@@ -88,8 +95,13 @@ describe('upload and static (integration)', () => {
     });
 
     it('stores the documented path scheme', async () => {
-      const { body } = await upload('nodes', 'image', await png(), 'pic.png', 'image/png')
-        .expect(201);
+      const { body } = await upload(
+        'nodes',
+        'image',
+        await png(),
+        'pic.png',
+        'image/png',
+      ).expect(201);
 
       fileIds.push(body.id);
       const [row] = await db.query(
@@ -109,13 +121,19 @@ describe('upload and static (integration)', () => {
 
     it('writes the bytes to disk unchanged', async () => {
       const contents = await png();
-      const { body } = await upload('nodes', 'image', contents, 'exact.png', 'image/png')
-        .expect(201);
+      const { body } = await upload(
+        'nodes',
+        'image',
+        contents,
+        'exact.png',
+        'image/png',
+      ).expect(201);
 
       fileIds.push(body.id);
-      const [row] = await db.query('SELECT full_path, size FROM file WHERE id = ?', [
-        body.id,
-      ]);
+      const [row] = await db.query(
+        'SELECT full_path, size FROM file WHERE id = ?',
+        [body.id],
+      );
 
       const onDisk = await readFile(join(UPLOAD_ROOT, row.full_path));
       expect(onDisk.equals(contents)).toBe(true);
@@ -124,11 +142,18 @@ describe('upload and static (integration)', () => {
 
     /** A fresh upload has no target until a node or comment claims it. */
     it('leaves target unset', async () => {
-      const { body } = await upload('nodes', 'image', await png(), 'pic.png', 'image/png')
-        .expect(201);
+      const { body } = await upload(
+        'nodes',
+        'image',
+        await png(),
+        'pic.png',
+        'image/png',
+      ).expect(201);
 
       fileIds.push(body.id);
-      const [row] = await db.query('SELECT target FROM file WHERE id = ?', [body.id]);
+      const [row] = await db.query('SELECT target FROM file WHERE id = ?', [
+        body.id,
+      ]);
       expect(row.target).toBeNull();
     });
 
@@ -159,7 +184,9 @@ describe('upload and static (integration)', () => {
       fileIds.push(body.id);
       expect(body.metadata.width).toBeUndefined();
 
-      const [row] = await db.query('SELECT full_path FROM file WHERE id = ?', [body.id]);
+      const [row] = await db.query('SELECT full_path FROM file WHERE id = ?', [
+        body.id,
+      ]);
       const onDisk = await readFile(join(UPLOAD_ROOT, row.full_path), 'utf8');
       expect(onDisk).toBe(SVG);
     });
@@ -179,8 +206,20 @@ describe('upload and static (integration)', () => {
 
     describe('rejections', () => {
       it('400s an unknown target or type', async () => {
-        await upload('elsewhere', 'image', await png(), 'p.png', 'image/png').expect(400);
-        await upload('nodes', 'video', await png(), 'p.png', 'image/png').expect(400);
+        await upload(
+          'elsewhere',
+          'image',
+          await png(),
+          'p.png',
+          'image/png',
+        ).expect(400);
+        await upload(
+          'nodes',
+          'video',
+          await png(),
+          'p.png',
+          'image/png',
+        ).expect(400);
       });
 
       it('400s a mime that does not match the declared type', async () => {
@@ -219,7 +258,10 @@ describe('upload and static (integration)', () => {
       it('401s without a token', async () => {
         await http()
           .post('/api/upload/nodes/image')
-          .attach('file', await png(), { filename: 'p.png', contentType: 'image/png' })
+          .attach('file', await png(), {
+            filename: 'p.png',
+            contentType: 'image/png',
+          })
           .expect(401);
       });
     });
@@ -238,7 +280,9 @@ describe('upload and static (integration)', () => {
       ).expect(201);
 
       fileIds.push(body.id);
-      const [row] = await db.query('SELECT full_path FROM file WHERE id = ?', [body.id]);
+      const [row] = await db.query('SELECT full_path FROM file WHERE id = ?', [
+        body.id,
+      ]);
       fullPath = row.full_path;
     });
 
@@ -265,8 +309,8 @@ describe('upload and static (integration)', () => {
           .expect(200);
 
         const meta = await sharp(response.body).metadata();
-        expect(meta.width).toBe(300 > 200 ? 200 : 300);
         // 200x100 source, so a 300-wide preset must not enlarge it.
+        expect(meta.width).toBe(200);
         expect(meta.height).toBe(100);
       });
 
@@ -314,7 +358,9 @@ describe('upload and static (integration)', () => {
           'flow_vertical',
           'flow_horizontal',
         ]) {
-          await http().get(`/api/static/cache/${preset}/${fullPath}`).expect(200);
+          await http()
+            .get(`/api/static/cache/${preset}/${fullPath}`)
+            .expect(200);
         }
       });
 
@@ -323,7 +369,9 @@ describe('upload and static (integration)', () => {
       });
 
       it('404s when the source does not exist', async () => {
-        await http().get('/api/static/cache/avatar/uploads/missing.png').expect(404);
+        await http()
+          .get('/api/static/cache/avatar/uploads/missing.png')
+          .expect(404);
       });
 
       it('passes an svg through unscaled', async () => {
@@ -336,9 +384,10 @@ describe('upload and static (integration)', () => {
         ).expect(201);
         fileIds.push(uploaded.body.id);
 
-        const [row] = await db.query('SELECT full_path FROM file WHERE id = ?', [
-          uploaded.body.id,
-        ]);
+        const [row] = await db.query(
+          'SELECT full_path FROM file WHERE id = ?',
+          [uploaded.body.id],
+        );
 
         const response = await http()
           .get(`/api/static/cache/avatar/${row.full_path}`)

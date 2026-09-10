@@ -32,7 +32,7 @@ export class MetaService {
    * subset still returned: an API outage must not break node rendering.
    */
   async getYoutubeEmbeds(ids: string[]): Promise<Record<string, WireEmbed>> {
-    const wanted = ids.map(id => id.trim()).filter(Boolean);
+    const wanted = ids.map((id) => id.trim()).filter(Boolean);
 
     if (wanted.length === 0) {
       return {};
@@ -53,7 +53,7 @@ export class MetaService {
       }
     }
 
-    const missing = wanted.filter(id => !byAddress.has(id));
+    const missing = wanted.filter((id) => !byAddress.has(id));
 
     if (missing.length > 0) {
       try {
@@ -61,7 +61,7 @@ export class MetaService {
 
         if (fetched.size > 0) {
           const created = await this.embeds.save(
-            [...fetched.values()].map(item =>
+            [...fetched.values()].map((item) =>
               this.embeds.create({
                 provider: item.provider,
                 address: item.address,

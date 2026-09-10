@@ -34,7 +34,9 @@ export const sanitizeSearchText = (text: string): string =>
 
 @Injectable()
 export class SearchService {
-  constructor(@InjectRepository(Node) private readonly nodes: Repository<Node>) {}
+  constructor(
+    @InjectRepository(Node) private readonly nodes: Repository<Node>,
+  ) {}
 
   async searchNodes(
     rawText: string,
@@ -83,7 +85,7 @@ export class SearchService {
 
     return {
       total,
-      nodes: rows.map(node => ({
+      nodes: rows.map((node) => ({
         id: node.id,
         thumbnail: toWireString(node.thumbnail),
         title: toWireString(node.title),
