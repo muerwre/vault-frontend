@@ -3,7 +3,14 @@ import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
-import { authHeader, createTestApp, getDataSource, WIRE_DATE } from './helpers/app';
+import {
+  authHeader,
+  clearNotificationsAbove,
+  createTestApp,
+  getDataSource,
+  notificationWatermark,
+  WIRE_DATE,
+} from './helpers/app';
 
 /**
  * Writes need their own rows: these specs mutate what they touch, so every
@@ -12,6 +19,7 @@ import { authHeader, createTestApp, getDataSource, WIRE_DATE } from './helpers/a
 describe('node writes (integration)', () => {
   let app: INestApplication;
   let db: DataSource;
+  let notificationMark: number;
   let http: () => ReturnType<typeof request>;
 
   let authorId: number;
@@ -65,6 +73,7 @@ describe('node writes (integration)', () => {
   beforeAll(async () => {
     app = await createTestApp();
     db = getDataSource(app);
+    notificationMark = await notificationWatermark(db);
     http = () => request(app.getHttpServer());
 
     authorId = await makeUser('user');
@@ -73,6 +82,9 @@ describe('node writes (integration)', () => {
   });
 
   afterAll(async () => {
+    // Writes here fan out to whoever is subscribed in the seeded database.
+    await clearNotificationsAbove(db, notificationMark);
+
     for (const id of createdNodeIds) {
       await db.query('DELETE FROM `like` WHERE nodeId = ?', [id]);
       await db.query('DELETE FROM node_view WHERE nodeId = ?', [id]);

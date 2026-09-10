@@ -28,6 +28,7 @@ import {
   WithUser,
   WithUserGuard,
 } from '../auth/auth.guards';
+import { NotificationDispatcher } from '../notifications/notification.dispatcher';
 
 import { TagService } from '../tag/tag.service';
 
@@ -81,6 +82,7 @@ export class NodeController {
     private readonly tags: TagService,
     private readonly lab: LabService,
     private readonly upsert: NodeUpsertService,
+    private readonly notifications: NotificationDispatcher,
   ) {}
 
   /**
@@ -134,6 +136,11 @@ export class NodeController {
 
     if (result.ok !== true) {
       throw this.upsertError(result.failure);
+    }
+
+    // Only a new node is announced; editing one must not notify again.
+    if (result.created) {
+      await this.notifications.nodeCreated(result.nodeId);
     }
 
     return { node: await this.reloadNode(result.nodeId, user) };
@@ -300,9 +307,14 @@ export class NodeController {
       throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
     }
 
-    return {
-      deleted_at: await this.nodes.setLocked(node, toBool(isLocked)),
-    };
+    const isLocking = toBool(isLocked);
+    const deletedAt = await this.nodes.setLocked(node, isLocking);
+
+    await (isLocking
+      ? this.notifications.nodeDeleted(node.id)
+      : this.notifications.nodeRestored(node.id));
+
+    return { deleted_at: deletedAt };
   }
 
   /**

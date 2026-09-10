@@ -8,7 +8,11 @@ export const NOTIFICATION_ITEM_TYPES = {
 export type NotificationItemType =
   (typeof NOTIFICATION_ITEM_TYPES)[keyof typeof NOTIFICATION_ITEM_TYPES];
 
-/** Event kinds pushed onto the `app_notifications` source queue. */
+/**
+ * Kinds of change a write endpoint announces. Internal to the backend: these
+ * never appear on the wire, and are not the values stored in
+ * `app_notifications.type`.
+ */
 export const NOTIFICATION_QUEUE_TYPES = {
   NODE_CREATE: 'node_create',
   NODE_DELETE: 'node_delete',

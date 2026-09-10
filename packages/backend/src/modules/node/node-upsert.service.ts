@@ -46,7 +46,8 @@ export type UpsertFailure =
   | { kind: 'invalid'; message: string };
 
 export type UpsertResult =
-  | { ok: true; nodeId: number }
+  /** `created` distinguishes a new node from an edit, which must not re-notify. */
+  | { ok: true; nodeId: number; created: boolean }
   | { ok: false; failure: UpsertFailure };
 
 /** Only these types can be authored; `webm` and `boris` are not creatable. */
@@ -184,7 +185,7 @@ export class NodeUpsertService {
       null,
     );
 
-    return { ok: true, nodeId: saved.id };
+    return { ok: true, nodeId: saved.id, created: !isUpdate };
   }
 
   /** Loads the requested files, keeping request order and dropping the unusable. */

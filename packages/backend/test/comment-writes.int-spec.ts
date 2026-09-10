@@ -3,11 +3,19 @@ import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
-import { authHeader, createTestApp, getDataSource, WIRE_DATE } from './helpers/app';
+import {
+  authHeader,
+  clearNotificationsAbove,
+  createTestApp,
+  getDataSource,
+  notificationWatermark,
+  WIRE_DATE,
+} from './helpers/app';
 
 describe('comment writes (integration)', () => {
   let app: INestApplication;
   let db: DataSource;
+  let notificationMark: number;
   let http: () => ReturnType<typeof request>;
 
   let authorId: number;
@@ -56,6 +64,7 @@ describe('comment writes (integration)', () => {
   beforeAll(async () => {
     app = await createTestApp();
     db = getDataSource(app);
+    notificationMark = await notificationWatermark(db);
     http = () => request(app.getHttpServer());
 
     authorId = await makeUser('user');
@@ -64,6 +73,9 @@ describe('comment writes (integration)', () => {
   });
 
   afterAll(async () => {
+    // Writes here fan out to whoever is subscribed in the seeded database.
+    await clearNotificationsAbove(db, notificationMark);
+
     for (const id of commentIds) {
       await db.query('DELETE FROM comment_user_likes WHERE commentId = ?', [id]);
       await db.query('DELETE FROM comment_files_file WHERE commentId = ?', [id]);
