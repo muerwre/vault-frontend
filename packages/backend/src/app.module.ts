@@ -11,6 +11,7 @@ import { MetaModule } from './modules/meta/meta.module';
 import { NodeModule } from './modules/node/node.module';
 import { NotesModule } from './modules/notes/notes.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { OAuthModule } from './modules/oauth/oauth.module';
 import { SearchModule } from './modules/search/search.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { TagModule } from './modules/tag/tag.module';
@@ -29,6 +30,7 @@ import { UserModule } from './modules/user/user.module';
     UserModule,
     NotesModule,
     NotificationsModule,
+    OAuthModule,
     UploadModule,
     StatsModule,
     SearchModule,

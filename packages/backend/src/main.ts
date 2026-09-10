@@ -4,6 +4,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { CORS_OPTIONS } from './globals/cors';
 import { VaultExceptionFilter } from './globals/exceptions';
+import { createSessionMiddleware, SESSION_PATH } from './globals/session';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -12,6 +13,9 @@ async function bootstrap() {
 
   // Renders every failure as the `{ error, message }` envelope clients parse.
   app.useGlobalFilters(new VaultExceptionFilter());
+
+  // Only the OAuth handshake needs server-side state; see globals/session.ts.
+  app.use(SESSION_PATH, createSessionMiddleware());
 
   // All controllers are served under /api, matching the reverse proxy.
   app.setGlobalPrefix('api');

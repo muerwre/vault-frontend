@@ -74,6 +74,37 @@ export const isUploadTypeAllowed = (type: string): type is FileType =>
 export const isMimeAllowedForType = (type: string, mime: string): boolean =>
   (MIMES_BY_TYPE[type] ?? []).includes(mime);
 
+/** Extension to assume when a remote file's URL carries none. */
+const EXTENSION_BY_MIME: Record<string, string> = {
+  'image/jpeg': '.jpg',
+  'image/jpg': '.jpg',
+  'image/png': '.png',
+  'image/gif': '.gif',
+  'image/webp': '.webp',
+  'image/svg+xml': '.svg',
+};
+
+/**
+ * Original name for a file fetched from a URL: its last path segment, with an
+ * extension derived from the content type when the URL has none.
+ *
+ * Provider avatar URLs are often extensionless or carry a query string, and a
+ * stored name with no extension breaks clients that infer type from it.
+ */
+export const remoteFileName = (url: string, mime: string): string => {
+  let pathname = url;
+
+  try {
+    pathname = new URL(url).pathname;
+  } catch {
+    // Not absolute; fall back to treating the whole value as a path.
+  }
+
+  const base = basename(pathname) || 'file';
+
+  return extname(base) ? base : `${base}${EXTENSION_BY_MIME[mime] ?? ''}`;
+};
+
 export const isUploadTargetAllowed = (target: string): target is UploadTarget =>
   (Object.values(UPLOAD_TARGETS) as string[]).includes(target);
 

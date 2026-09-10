@@ -32,7 +32,8 @@ import { UserNotificationConsumer } from './user-notification.consumer';
     UserNotificationConsumer,
     NotificationDispatcher,
   ],
-  // Write endpoints announce their changes through the dispatcher alone.
-  exports: [NotificationDispatcher],
+  // Write endpoints announce changes through the dispatcher; linking a
+  // Telegram account also flips the delivery setting directly.
+  exports: [NotificationDispatcher, NotificationsService],
 })
 export class NotificationsModule {}

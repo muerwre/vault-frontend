@@ -17,7 +17,12 @@ import { File } from '../../entities/file.entity';
 import type { User } from '../../entities/user.entity';
 import { toWireShallowFile, type WireShallowFile } from '../../wire/serialize';
 
-import { generateUploadName, needsScaling } from './upload.paths';
+import {
+  generateUploadName,
+  isMimeAllowedForType,
+  needsScaling,
+  remoteFileName,
+} from './upload.paths';
 
 @Injectable()
 export class UploadService {
@@ -84,6 +89,52 @@ export class UploadService {
     );
 
     return toWireShallowFile(saved) as WireShallowFile;
+  }
+
+  /**
+   * Fetches a remote file and stores it as if it had been uploaded — used to
+   * adopt an OAuth provider's avatar.
+   *
+   * Returns null when the fetch fails or the response is not the expected kind
+   * of file, so a caller can treat it as optional.
+   */
+  async storeRemote(
+    url: string,
+    target: UploadTarget,
+    fileType: FileType,
+    user: User,
+  ): Promise<WireShallowFile | null> {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      this.logger.warn(`remote fetch failed for ${url}: ${response.status}`);
+      return null;
+    }
+
+    const mime = (response.headers.get('content-type') ?? '').split(';')[0];
+
+    if (!isMimeAllowedForType(fileType, mime)) {
+      this.logger.warn(
+        `remote file ${url} is ${mime || 'untyped'}, not ${fileType}`,
+      );
+      return null;
+    }
+
+    const contents = Buffer.from(await response.arrayBuffer());
+
+    if (contents.length > this.maxSizeBytes) {
+      this.logger.warn(`remote file ${url} is too big`);
+      return null;
+    }
+
+    return this.store(
+      contents,
+      remoteFileName(url, mime),
+      mime,
+      fileType,
+      target,
+      user,
+    );
   }
 
   /**

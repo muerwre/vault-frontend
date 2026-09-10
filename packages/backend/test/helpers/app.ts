@@ -9,6 +9,10 @@ import { AppModule } from '../../src/app.module';
 import { getJwtSecret, loadConfig } from '../../src/config/env';
 import { CORS_OPTIONS } from '../../src/globals/cors';
 import { VaultExceptionFilter } from '../../src/globals/exceptions';
+import {
+  createSessionMiddleware,
+  SESSION_PATH,
+} from '../../src/globals/session';
 
 loadConfig();
 
@@ -31,6 +35,7 @@ export const createTestApp = async (): Promise<INestApplication> => {
   });
 
   app.useGlobalFilters(new VaultExceptionFilter());
+  app.use(SESSION_PATH, createSessionMiddleware());
   app.setGlobalPrefix('api');
   app.set('strict routing', false);
 
