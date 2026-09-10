@@ -67,6 +67,44 @@ export const getPublicHost = (): string =>
 export const getFrontendResetUrl = (): string =>
   process.env.FRONTEND_RESET_URL ?? '/restore/';
 
+export interface OAuthProviderConfig {
+  clientId: string;
+  clientSecret: string;
+  callbackUrl: string;
+}
+
+/**
+ * A provider is enabled only when all three values are present; the OAuth
+ * routes 404 for a provider that is not configured.
+ */
+export const isOAuthProviderConfigured = (
+  config: OAuthProviderConfig,
+): boolean =>
+  Boolean(config.clientId && config.clientSecret && config.callbackUrl);
+
+export const getVkOAuthConfig = (): OAuthProviderConfig => ({
+  clientId: process.env.VK_CLIENT_ID ?? '',
+  clientSecret: process.env.VK_CLIENT_SECRET ?? '',
+  callbackUrl: process.env.VK_CALLBACK_URL ?? '',
+});
+
+export const getGoogleOAuthConfig = (): OAuthProviderConfig => ({
+  clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+  callbackUrl: process.env.GOOGLE_CALLBACK_URL ?? '',
+});
+
+/** Bot token for the Telegram login widget. Empty disables Telegram linking. */
+export const getTelegramToken = (): string => process.env.TELEGRAM_TOKEN ?? '';
+
+/**
+ * Signs the OAuth handshake session. PKCE requires the code verifier to outlive
+ * the redirect to the provider, so it is kept in a session cookie scoped to the
+ * OAuth routes. Falls back to the JWT secret when unset.
+ */
+export const getSessionSecret = (): string =>
+  process.env.SESSION_SECRET || getJwtSecret();
+
 export interface UploadsConfig {
   path: string;
   maxSizeMb: number;

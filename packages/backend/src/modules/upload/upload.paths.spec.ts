@@ -6,6 +6,7 @@ import {
   isUploadTypeAllowed,
   needsScaling,
   parseCacheRequest,
+  remoteFileName,
   resolveUploadPath,
 } from './upload.paths';
 
@@ -155,6 +156,51 @@ describe('upload paths', () => {
 
     it('refuses everything when no root is configured', () => {
       expect(resolveUploadPath('', 'a.jpg')).toBeNull();
+    });
+  });
+
+  describe('remoteFileName', () => {
+    it('takes the last path segment', () => {
+      expect(
+        remoteFileName('https://example.com/a/b/pic.jpg', 'image/jpeg'),
+      ).toBe('pic.jpg');
+    });
+
+    /** Provider avatar URLs often carry a query string. */
+    it('ignores the query string', () => {
+      expect(
+        remoteFileName(
+          'https://example.com/pic.jpg?size=200&v=2',
+          'image/jpeg',
+        ),
+      ).toBe('pic.jpg');
+    });
+
+    it('derives an extension from the mime when the url has none', () => {
+      expect(remoteFileName('https://example.com/avatar', 'image/png')).toBe(
+        'avatar.png',
+      );
+      expect(
+        remoteFileName('https://sun1.userapi.com/s/v1/if1/abc', 'image/jpeg'),
+      ).toBe('abc.jpg');
+    });
+
+    it('leaves the name bare for an unrecognised mime', () => {
+      expect(
+        remoteFileName('https://example.com/avatar', 'image/unknown'),
+      ).toBe('avatar');
+    });
+
+    it('falls back to a placeholder when there is no segment', () => {
+      expect(remoteFileName('https://example.com/', 'image/png')).toBe(
+        'file.png',
+      );
+    });
+
+    it('handles a value that is not a url', () => {
+      expect(remoteFileName('just-a-name.png', 'image/png')).toBe(
+        'just-a-name.png',
+      );
     });
   });
 

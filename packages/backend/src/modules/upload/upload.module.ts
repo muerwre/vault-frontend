@@ -12,5 +12,6 @@ import { UploadService } from './upload.service';
   imports: [TypeOrmModule.forFeature([File])],
   controllers: [UploadController, StaticController],
   providers: [UploadService, StaticService],
+  exports: [UploadService],
 })
 export class UploadModule {}
