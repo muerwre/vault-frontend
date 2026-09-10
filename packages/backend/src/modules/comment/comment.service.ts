@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GUEST_USER_ID } from '@vault/common/constants';
-import { Repository } from 'typeorm';
-
 import { MAX_COMMENT_LENGTH, ROLES } from '@vault/common/constants';
+import { Repository } from 'typeorm';
 
 import { Comment } from '../../entities/comment.entity';
 import { File } from '../../entities/file.entity';
@@ -91,15 +90,15 @@ export class CommentService {
 
     const [filesById, likes] = await Promise.all([
       this.loadFiles(rows),
-      this.loadLikes(rows.map(row => row.id)),
+      this.loadLikes(rows.map((row) => row.id)),
     ]);
 
     return {
       comment_count: commentCount,
-      comments: rows.map(comment => {
+      comments: rows.map((comment) => {
         const order = comment.filesOrder ?? [];
         const files = sortFilesByOrder(
-          order.map(id => filesById.get(id)).filter((f): f is File => !!f),
+          order.map((id) => filesById.get(id)).filter((f): f is File => !!f),
           order,
         );
         const likedBy = likes.get(comment.id) ?? new Set<number>();
@@ -121,7 +120,7 @@ export class CommentService {
 
   /** One query for every page's files, keyed by id. */
   private async loadFiles(comments: Comment[]): Promise<Map<number, File>> {
-    const ids = [...new Set(comments.flatMap(c => c.filesOrder ?? []))];
+    const ids = [...new Set(comments.flatMap((c) => c.filesOrder ?? []))];
 
     if (ids.length === 0) {
       return new Map();
@@ -132,7 +131,7 @@ export class CommentService {
       .where('file.id IN (:...ids)', { ids })
       .getMany();
 
-    return new Map(files.map(file => [file.id, file]));
+    return new Map(files.map((file) => [file.id, file]));
   }
 
   /** One query for the whole page's likes, giving both count and membership. */
@@ -209,7 +208,7 @@ export class CommentService {
 
     const known = new Set(rows.map((row: { id: number }) => Number(row.id)));
 
-    return ids.filter(id => known.has(id));
+    return ids.filter((id) => known.has(id));
   }
 
   async create(
@@ -243,17 +242,18 @@ export class CommentService {
 
   /** Rewrites the whole junction so stored rows match `files_order`. */
   private async setFiles(commentId: number, fileIds: number[]): Promise<void> {
-    await this.comments.manager.transaction(async manager => {
-      await manager.query('DELETE FROM comment_files_file WHERE commentId = ?', [
-        commentId,
-      ]);
+    await this.comments.manager.transaction(async (manager) => {
+      await manager.query(
+        'DELETE FROM comment_files_file WHERE commentId = ?',
+        [commentId],
+      );
 
       if (fileIds.length > 0) {
         await manager.query(
           `INSERT INTO comment_files_file (commentId, fileId) VALUES ${fileIds
             .map(() => '(?, ?)')
             .join(', ')}`,
-          fileIds.flatMap(id => [commentId, id]),
+          fileIds.flatMap((id) => [commentId, id]),
         );
       }
     });
@@ -263,11 +263,17 @@ export class CommentService {
    * Sets or clears this user's like. The join table has no unique constraint, so
    * an existing row is removed explicitly rather than relying on the database.
    */
-  async setLike(commentId: number, userId: number, liked: boolean): Promise<void> {
+  async setLike(
+    commentId: number,
+    userId: number,
+    liked: boolean,
+  ): Promise<void> {
     await this.commentLikes.delete({ commentId, userId });
 
     if (liked) {
-      await this.commentLikes.save(this.commentLikes.create({ commentId, userId }));
+      await this.commentLikes.save(
+        this.commentLikes.create({ commentId, userId }),
+      );
     }
   }
 
@@ -292,7 +298,9 @@ export class CommentService {
   async syncNodeCommentedAt(nodeId: number): Promise<void> {
     const latest = await this.comments
       .createQueryBuilder('comment')
-      .where('comment.nodeId = :nodeId AND comment.deleted_at IS NULL', { nodeId })
+      .where('comment.nodeId = :nodeId AND comment.deleted_at IS NULL', {
+        nodeId,
+      })
       .orderBy('comment.created_at', 'DESC')
       .getOne();
 
@@ -303,10 +311,7 @@ export class CommentService {
    * Promotes a long comment to the node's description when the node has none and
    * the comment is by its author.
    */
-  async maybeSetNodeDescription(
-    node: Node,
-    comment: Comment,
-  ): Promise<void> {
+  async maybeSetNodeDescription(node: Node, comment: Comment): Promise<void> {
     if (
       !node.description &&
       node.userId !== null &&
@@ -328,7 +333,7 @@ export class CommentService {
     const order = comment.filesOrder ?? [];
     const filesById = await this.loadFiles([comment]);
     const files = sortFilesByOrder(
-      order.map(id => filesById.get(id)).filter((f): f is File => !!f),
+      order.map((id) => filesById.get(id)).filter((f): f is File => !!f),
       order,
     );
     const likes = await this.loadLikes([comment.id]);

@@ -11,7 +11,10 @@ import { Comment } from '../../entities/comment.entity';
 import { Node } from '../../entities/node.entity';
 import { UserNotification } from '../../entities/notification.entity';
 
-import type { NotificationConsumer, NotificationEvent } from './notification.events';
+import type {
+  NotificationConsumer,
+  NotificationEvent,
+} from './notification.events';
 import { NotificationRecipientsService } from './notification.recipients';
 import {
   COMMENT_ITEM_TYPES,
@@ -93,7 +96,13 @@ export class UserNotificationConsumer implements NotificationConsumer {
         ? await this.recipients.borisWatchers()
         : await this.recipients.nodeParticipants(comment.node.id);
 
-    await this.add(type, comment.id, comment.createdAt, recipients, comment.userId);
+    await this.add(
+      type,
+      comment.id,
+      comment.createdAt,
+      recipients,
+      comment.userId,
+    );
   }
 
   /**
@@ -111,7 +120,7 @@ export class UserNotificationConsumer implements NotificationConsumer {
     recipients: number[],
     authorId: number | null,
   ): Promise<void> {
-    const candidates = recipients.filter(userId => userId !== authorId);
+    const candidates = recipients.filter((userId) => userId !== authorId);
 
     if (candidates.length === 0) {
       return;
@@ -124,15 +133,15 @@ export class UserNotificationConsumer implements NotificationConsumer {
       .andWhere('n.deleted_at IS NULL')
       .getRawMany<{ userId: number }>();
 
-    const notified = new Set(existing.map(row => Number(row.userId)));
-    const fresh = candidates.filter(userId => !notified.has(userId));
+    const notified = new Set(existing.map((row) => Number(row.userId)));
+    const fresh = candidates.filter((userId) => !notified.has(userId));
 
     if (fresh.length === 0) {
       return;
     }
 
     await this.notifications.insert(
-      fresh.map(userId => ({
+      fresh.map((userId) => ({
         type,
         itemId,
         userId,
@@ -148,6 +157,9 @@ export class UserNotificationConsumer implements NotificationConsumer {
     types: readonly NotificationItemType[],
     itemId: number,
   ): Promise<void> {
-    await this.notifications.delete({ type: In(types as NotificationItemType[]), itemId });
+    await this.notifications.delete({
+      type: In(types as NotificationItemType[]),
+      itemId,
+    });
   }
 }

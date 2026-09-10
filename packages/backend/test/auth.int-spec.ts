@@ -5,9 +5,15 @@ import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
-import { authHeader, createTestApp, getDataSource, WIRE_DATE } from './helpers/app';
+import {
+  authHeader,
+  createTestApp,
+  getDataSource,
+  WIRE_DATE,
+} from './helpers/app';
 
-const md5 = (value: string) => createHash('md5').update(value, 'utf8').digest('hex');
+const md5 = (value: string) =>
+  createHash('md5').update(value, 'utf8').digest('hex');
 
 const PASSWORD = 'spec-password';
 
@@ -31,7 +37,9 @@ describe('auth (integration)', () => {
        VALUES (?, ?, ?, 'user', 1, NOW(), NOW())`,
       [username, await bcrypt.hash(PASSWORD, 4), `${username}@example.com`],
     );
-    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [username]);
+    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [
+      username,
+    ]);
     userId = Number(row.id);
   });
 
@@ -98,7 +106,9 @@ describe('auth (integration)', () => {
 
       await login(PASSWORD).expect(200);
 
-      const [row] = await db.query('SELECT password FROM user WHERE id = ?', [userId]);
+      const [row] = await db.query('SELECT password FROM user WHERE id = ?', [
+        userId,
+      ]);
       expect(row.password.startsWith('$2')).toBe(true);
       await expect(bcrypt.compare(PASSWORD, row.password)).resolves.toBe(true);
 
@@ -107,7 +117,9 @@ describe('auth (integration)', () => {
     });
 
     it('does not authenticate the OAuth-only sentinel', async () => {
-      await db.query("UPDATE user SET password = 'NO_PASSWORD' WHERE id = ?", [userId]);
+      await db.query("UPDATE user SET password = 'NO_PASSWORD' WHERE id = ?", [
+        userId,
+      ]);
 
       await login('NO_PASSWORD').expect(400);
 
@@ -140,7 +152,9 @@ describe('auth (integration)', () => {
 
       expect(body.user.id).toBe(userId);
 
-      const [row] = await db.query('SELECT last_seen FROM user WHERE id = ?', [userId]);
+      const [row] = await db.query('SELECT last_seen FROM user WHERE id = ?', [
+        userId,
+      ]);
       expect(row.last_seen).not.toBeNull();
     });
   });
@@ -168,7 +182,9 @@ describe('auth (integration)', () => {
     it('accepts a description on its own without touching fullname', async () => {
       await patch({ fullname: 'Full Name' }).expect(200);
 
-      const { body } = await patch({ description: 'only a description' }).expect(200);
+      const { body } = await patch({
+        description: 'only a description',
+      }).expect(200);
 
       expect(body.user.description).toBe('only a description');
       expect(body.user.fullname).toBe('Full Name');
@@ -196,7 +212,10 @@ describe('auth (integration)', () => {
     });
 
     it('rejects a username already in use', async () => {
-      const { body } = await patch({ username: 'muro', password: PASSWORD }).expect(400);
+      const { body } = await patch({
+        username: 'muro',
+        password: PASSWORD,
+      }).expect(400);
 
       expect(body.errors).toEqual({ username: expect.any(String) });
     });
@@ -238,7 +257,9 @@ describe('auth (integration)', () => {
       const [image] = await db.query(
         "SELECT id FROM file WHERE type = 'image' AND deleted_at IS NULL LIMIT 1",
       );
-      const [audio] = await db.query("SELECT id FROM file WHERE type = 'audio' LIMIT 1");
+      const [audio] = await db.query(
+        "SELECT id FROM file WHERE type = 'audio' LIMIT 1",
+      );
       imageId = Number(image.id);
       audioId = Number(audio.id);
     });
@@ -282,7 +303,11 @@ describe('auth (integration)', () => {
     });
 
     it('rejects a missing or unknown id', async () => {
-      await http().post('/api/auth/photo').set(authHeader(userId)).send({}).expect(400);
+      await http()
+        .post('/api/auth/photo')
+        .set(authHeader(userId))
+        .send({})
+        .expect(400);
       await http()
         .post('/api/auth/photo')
         .set(authHeader(userId))
@@ -296,15 +321,21 @@ describe('auth (integration)', () => {
       await db.query('DELETE FROM restore_code WHERE userId = ?', [userId]);
 
       // Mail is skipped when SMTP_HOST is unset, so this succeeds locally.
-      await http().post('/api/auth/restore').send({ field: username }).expect(201);
+      await http()
+        .post('/api/auth/restore')
+        .send({ field: username })
+        .expect(201);
 
-      const [row] = await db.query('SELECT code FROM restore_code WHERE userId = ?', [
-        userId,
-      ]);
+      const [row] = await db.query(
+        'SELECT code FROM restore_code WHERE userId = ?',
+        [userId],
+      );
       const code = row.code as string;
 
       // Validation answers 201, not 200.
-      const validated = await http().get(`/api/auth/restore/${code}`).expect(201);
+      const validated = await http()
+        .get(`/api/auth/restore/${code}`)
+        .expect(201);
       expect(validated.body.user.username).toBe(username);
 
       const next = 'restored-password';
@@ -328,30 +359,46 @@ describe('auth (integration)', () => {
     it('reuses one code per user until it is consumed', async () => {
       await db.query('DELETE FROM restore_code WHERE userId = ?', [userId]);
 
-      await http().post('/api/auth/restore').send({ field: username }).expect(201);
-      await http().post('/api/auth/restore').send({ field: username }).expect(201);
+      await http()
+        .post('/api/auth/restore')
+        .send({ field: username })
+        .expect(201);
+      await http()
+        .post('/api/auth/restore')
+        .send({ field: username })
+        .expect(201);
 
-      const rows = await db.query('SELECT code FROM restore_code WHERE userId = ?', [
-        userId,
-      ]);
+      const rows = await db.query(
+        'SELECT code FROM restore_code WHERE userId = ?',
+        [userId],
+      );
       expect(rows).toHaveLength(1);
     });
 
     it('accepts an email as well as a username', async () => {
-      const [row] = await db.query('SELECT email FROM user WHERE id = ?', [userId]);
+      const [row] = await db.query('SELECT email FROM user WHERE id = ?', [
+        userId,
+      ]);
 
-      await http().post('/api/auth/restore').send({ field: row.email }).expect(201);
+      await http()
+        .post('/api/auth/restore')
+        .send({ field: row.email })
+        .expect(201);
     });
 
     it('404s an unknown account and an empty field', async () => {
-      await http().post('/api/auth/restore').send({ field: 'nobody_here' }).expect(404);
+      await http()
+        .post('/api/auth/restore')
+        .send({ field: 'nobody_here' })
+        .expect(404);
       await http().post('/api/auth/restore').send({}).expect(404);
     });
 
     it('rejects a too-short password with the code error', async () => {
-      const [row] = await db.query('SELECT code FROM restore_code WHERE userId = ?', [
-        userId,
-      ]);
+      const [row] = await db.query(
+        'SELECT code FROM restore_code WHERE userId = ?',
+        [userId],
+      );
 
       const { body } = await http()
         .put(`/api/auth/restore/${row.code}`)

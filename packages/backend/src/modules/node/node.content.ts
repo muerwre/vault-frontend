@@ -72,7 +72,9 @@ export const filterBlocks = (
   type: NodeType,
   blocks: INodeBlock[] | null | undefined,
 ): INodeBlock[] =>
-  (blocks ?? []).filter(block => canHaveBlock(type, block) && isBlockValid(block));
+  (blocks ?? []).filter(
+    (block) => canHaveBlock(type, block) && isBlockValid(block),
+  );
 
 /** Which file types a node of each type may carry. */
 export const canHaveFile = (type: NodeType, file: File): boolean => {
@@ -87,15 +89,15 @@ export const canHaveFile = (type: NodeType, file: File): boolean => {
 };
 
 export const filterFiles = (type: NodeType, files: File[]): File[] =>
-  files.filter(file => canHaveFile(type, file));
+  files.filter((file) => canHaveFile(type, file));
 
 const firstFileOfType = (files: File[], fileType: string): File | undefined =>
-  files.find(file => file.type === fileType);
+  files.find((file) => file.type === fileType);
 
 const firstBlockOfType = (
   blocks: INodeBlock[],
   blockType: string,
-): INodeBlock | undefined => blocks.find(block => block.type === blockType);
+): INodeBlock | undefined => blocks.find((block) => block.type === blockType);
 
 /**
  * Content requirements per node type. Returns an error message, or null when the
@@ -122,7 +124,9 @@ export const validateNodeContent = (
         : 'Прикрепите хотя бы один аудиофайл';
 
     case NODE_TYPES.TEXT:
-      return firstBlockOfType(blocks, 'text') ? null : 'В тексте должен быть текст';
+      return firstBlockOfType(blocks, 'text')
+        ? null
+        : 'В тексте должен быть текст';
 
     case NODE_TYPES.VIDEO:
       return firstBlockOfType(blocks, 'video')
@@ -175,7 +179,8 @@ export const deriveThumbnail = (
 
   if (type === NODE_TYPES.VIDEO) {
     const block = firstBlockOfType(blocks, 'video');
-    const url = block && block.type === 'video' ? getThumbFromUrl(block.url) : '';
+    const url =
+      block && block.type === 'video' ? getThumbFromUrl(block.url) : '';
 
     return url || current;
   }

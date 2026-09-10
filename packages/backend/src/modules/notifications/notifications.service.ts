@@ -114,8 +114,8 @@ export class NotificationsService {
 
     const idsOfType = (type: NotificationItemType) =>
       rows
-        .filter(row => row.type === type && row.itemId !== null)
-        .map(row => row.itemId as number);
+        .filter((row) => row.type === type && row.itemId !== null)
+        .map((row) => row.itemId as number);
 
     const commentIds = [
       ...idsOfType(NOTIFICATION_ITEM_TYPES.COMMENT),
@@ -163,7 +163,9 @@ export class NotificationsService {
       return existing;
     }
 
-    return this.settings.save(this.settings.create({ userId, ...DEFAULT_SETTINGS }));
+    return this.settings.save(
+      this.settings.create({ userId, ...DEFAULT_SETTINGS }),
+    );
   }
 
   /** Only supplied fields are written; absent ones keep their stored value. */
@@ -233,7 +235,7 @@ export class NotificationsService {
       relations: { user: { photo: true } },
     });
 
-    return new Map(rows.map(node => [node.id, node]));
+    return new Map(rows.map((node) => [node.id, node]));
   }
 
   private async loadComments(ids: number[]): Promise<Map<number, Comment>> {
@@ -246,7 +248,7 @@ export class NotificationsService {
       relations: { user: { photo: true }, node: true },
     });
 
-    return new Map(rows.map(comment => [comment.id, comment]));
+    return new Map(rows.map((comment) => [comment.id, comment]));
   }
 
   private fromNode(

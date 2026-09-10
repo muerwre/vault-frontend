@@ -35,7 +35,9 @@ describe('PasswordService', () => {
     });
 
     it('accepts a legacy unsalted MD5 hash', async () => {
-      await expect(service.verify('hunter2', md5('hunter2'))).resolves.toBe(true);
+      await expect(service.verify('hunter2', md5('hunter2'))).resolves.toBe(
+        true,
+      );
       await expect(service.verify('nope', md5('hunter2'))).resolves.toBe(false);
     });
 
@@ -49,7 +51,9 @@ describe('PasswordService', () => {
       await expect(service.verify('NO_PASSWORD', 'NO_PASSWORD')).resolves.toBe(
         false,
       );
-      await expect(service.verify('anything', 'NO_PASSWORD')).resolves.toBe(false);
+      await expect(service.verify('anything', 'NO_PASSWORD')).resolves.toBe(
+        false,
+      );
     });
 
     it('rejects empty input and empty stored hashes', async () => {
@@ -79,10 +83,15 @@ describe('PasswordService', () => {
       await service.upgrade(42, 'hunter2');
 
       expect(users.update).toHaveBeenCalledTimes(1);
-      const [id, patch] = users.update.mock.calls[0] as [number, { password: string }];
+      const [id, patch] = users.update.mock.calls[0] as [
+        number,
+        { password: string },
+      ];
       expect(id).toBe(42);
       expect(patch.password.startsWith('$2')).toBe(true);
-      await expect(bcrypt.compare('hunter2', patch.password)).resolves.toBe(true);
+      await expect(bcrypt.compare('hunter2', patch.password)).resolves.toBe(
+        true,
+      );
     });
 
     /** The caller has already authenticated, so a write failure must not throw. */

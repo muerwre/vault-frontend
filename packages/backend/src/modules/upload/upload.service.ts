@@ -3,7 +3,11 @@ import { dirname, join } from 'path';
 
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FILE_TYPES, type FileType, type UploadTarget } from '@vault/common/constants';
+import {
+  FILE_TYPES,
+  type FileType,
+  type UploadTarget,
+} from '@vault/common/constants';
 import type { FileMetadata } from '@vault/common/types';
 import sharp from 'sharp';
 import { Repository } from 'typeorm';
@@ -19,7 +23,9 @@ import { generateUploadName, needsScaling } from './upload.paths';
 export class UploadService {
   private readonly logger = new Logger('Upload');
 
-  constructor(@InjectRepository(File) private readonly files: Repository<File>) {}
+  constructor(
+    @InjectRepository(File) private readonly files: Repository<File>,
+  ) {}
 
   get maxSizeBytes(): number {
     return getUploadsConfig().maxSizeMb * 1024 * 1024;
@@ -47,7 +53,12 @@ export class UploadService {
     await mkdir(directory, { recursive: true });
     await writeFile(join(directory, generated.name), contents);
 
-    const metadata = await this.extractMetadata(contents, mime, fileType, originalName);
+    const metadata = await this.extractMetadata(
+      contents,
+      mime,
+      fileType,
+      originalName,
+    );
 
     const saved = await this.files.save(
       this.files.create({
@@ -64,7 +75,13 @@ export class UploadService {
       }),
     );
 
-    await this.maybeWriteWebp(contents, mime, fileType, directory, generated.name);
+    await this.maybeWriteWebp(
+      contents,
+      mime,
+      fileType,
+      directory,
+      generated.name,
+    );
 
     return toWireShallowFile(saved) as WireShallowFile;
   }
@@ -120,7 +137,7 @@ export class UploadService {
         .toBuffer({ resolveWithObject: true });
 
       const hex = [data[0], data[1], data[2]]
-        .map(channel => channel.toString(16).padStart(2, '0'))
+        .map((channel) => channel.toString(16).padStart(2, '0'))
         .join('');
 
       return `#${hex.toUpperCase()}`;

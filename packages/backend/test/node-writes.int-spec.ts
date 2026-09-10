@@ -49,7 +49,14 @@ describe('node writes (integration)', () => {
         (title, type, blocks, files_order, is_public, is_promoted, is_heroic,
          created_at, updated_at, userId, deleted_at)
        VALUES (?, ?, '[]', '', 1, ?, ?, NOW(), NOW(), ?, ?)`,
-      [`spec node ${Date.now()}`, type, isPromoted ? 1 : 0, isHeroic ? 1 : 0, userId, deletedAt],
+      [
+        `spec node ${Date.now()}`,
+        type,
+        isPromoted ? 1 : 0,
+        isHeroic ? 1 : 0,
+        userId,
+        deletedAt,
+      ],
     );
     const [row] = await db.query('SELECT LAST_INSERT_ID() AS id');
     const id = Number(row.id);
@@ -65,7 +72,9 @@ describe('node writes (integration)', () => {
        VALUES (?, ?, ?, ?, 1, NOW(), NOW())`,
       [username, await bcrypt.hash('x', 4), `${username}@example.com`, role],
     );
-    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [username]);
+    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [
+      username,
+    ]);
 
     return Number(row.id);
   };
@@ -119,24 +128,26 @@ describe('node writes (integration)', () => {
       const nodeId = await makeNode();
 
       await http().post(`/api/nodes/${nodeId}/like`).set(authHeader(authorId));
-      let rows = await db.query('SELECT * FROM `like` WHERE nodeId = ? AND userId = ?', [
-        nodeId,
-        authorId,
-      ]);
+      let rows = await db.query(
+        'SELECT * FROM `like` WHERE nodeId = ? AND userId = ?',
+        [nodeId, authorId],
+      );
       expect(rows).toHaveLength(1);
 
       await http().post(`/api/nodes/${nodeId}/like`).set(authHeader(authorId));
-      rows = await db.query('SELECT * FROM `like` WHERE nodeId = ? AND userId = ?', [
-        nodeId,
-        authorId,
-      ]);
+      rows = await db.query(
+        'SELECT * FROM `like` WHERE nodeId = ? AND userId = ?',
+        [nodeId, authorId],
+      );
       expect(rows).toHaveLength(0);
     });
 
     it('is reflected in the node read', async () => {
       const nodeId = await makeNode();
 
-      await http().post(`/api/nodes/${nodeId}/like`).set(authHeader(strangerId));
+      await http()
+        .post(`/api/nodes/${nodeId}/like`)
+        .set(authHeader(strangerId));
 
       const { body } = await http()
         .get(`/api/nodes/${nodeId}`)
@@ -151,7 +162,9 @@ describe('node writes (integration)', () => {
       const nodeId = await makeNode();
 
       await http().post(`/api/nodes/${nodeId}/like`).set(authHeader(authorId));
-      await http().post(`/api/nodes/${nodeId}/like`).set(authHeader(strangerId));
+      await http()
+        .post(`/api/nodes/${nodeId}/like`)
+        .set(authHeader(strangerId));
 
       const { body } = await http().get(`/api/nodes/${nodeId}`).expect(200);
       expect(body.node.like_count).toBe(2);
@@ -166,7 +179,10 @@ describe('node writes (integration)', () => {
     it('404s an unknown node and a soft-deleted one', async () => {
       const deleted = await makeNode({ deletedAt: '2020-01-01 00:00:00' });
 
-      await http().post('/api/nodes/99999999/like').set(authHeader(authorId)).expect(404);
+      await http()
+        .post('/api/nodes/99999999/like')
+        .set(authHeader(authorId))
+        .expect(404);
       await http()
         .post(`/api/nodes/${deleted}/like`)
         .set(authHeader(authorId))
@@ -183,7 +199,9 @@ describe('node writes (integration)', () => {
         .expect(200);
 
       expect(body).toEqual({ is_liked: false });
-      const rows = await db.query('SELECT * FROM `like` WHERE nodeId = ?', [nodeId]);
+      const rows = await db.query('SELECT * FROM `like` WHERE nodeId = ?', [
+        nodeId,
+      ]);
       expect(rows).toHaveLength(0);
     });
   });
@@ -198,7 +216,9 @@ describe('node writes (integration)', () => {
         .expect(200);
       expect(on.body).toEqual({ is_heroic: true });
 
-      const [row] = await db.query('SELECT is_heroic FROM node WHERE id = ?', [nodeId]);
+      const [row] = await db.query('SELECT is_heroic FROM node WHERE id = ?', [
+        nodeId,
+      ]);
       expect(Number(row.is_heroic)).toBe(1);
 
       const off = await http()
@@ -322,7 +342,9 @@ describe('node writes (integration)', () => {
 
       expect(body.deleted_at).toMatch(WIRE_DATE);
 
-      const [row] = await db.query('SELECT deleted_at FROM node WHERE id = ?', [nodeId]);
+      const [row] = await db.query('SELECT deleted_at FROM node WHERE id = ?', [
+        nodeId,
+      ]);
       expect(row.deleted_at).not.toBeNull();
     });
 
@@ -335,7 +357,10 @@ describe('node writes (integration)', () => {
         .set(authHeader(authorId));
 
       await http().get(`/api/nodes/${nodeId}`).expect(404);
-      await http().get(`/api/nodes/${nodeId}`).set(authHeader(authorId)).expect(200);
+      await http()
+        .get(`/api/nodes/${nodeId}`)
+        .set(authHeader(authorId))
+        .expect(200);
     });
 
     it('restores a locked node and reports a null timestamp', async () => {

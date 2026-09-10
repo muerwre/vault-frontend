@@ -60,7 +60,9 @@ export const tokenFor = (
 export const authHeader = (
   uid: number,
   role: 'user' | 'admin' | 'guest' = 'user',
-): Record<string, string> => ({ Authorization: `Bearer ${tokenFor(uid, role)}` });
+): Record<string, string> => ({
+  Authorization: `Bearer ${tokenFor(uid, role)}`,
+});
 
 /** Every date on the wire must look like this: RFC3339 UTC, no fraction. */
 export const WIRE_DATE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
@@ -70,7 +72,9 @@ export const WIRE_DATE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
  * is subscribed in the seeded database, so any spec that performs one must take
  * a mark first and {@link clearNotificationsAbove} it afterwards.
  */
-export const notificationWatermark = async (db: DataSource): Promise<number> => {
+export const notificationWatermark = async (
+  db: DataSource,
+): Promise<number> => {
   const [row] = await db.query(
     'SELECT COALESCE(MAX(id), 0) AS id FROM user_notifications',
   );

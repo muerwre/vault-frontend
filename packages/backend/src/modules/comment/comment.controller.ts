@@ -22,8 +22,8 @@ import {
   WithUser,
   WithUserGuard,
 } from '../auth/auth.guards';
-import { NodeService } from '../node/node.service';
 import { canCommentOn } from '../node/node.permissions';
+import { NodeService } from '../node/node.service';
 import { NotificationDispatcher } from '../notifications/notification.dispatcher';
 
 import {
@@ -86,9 +86,14 @@ export class CommentController {
   async createComment(
     @Param('id') id: string,
     @WithUser() user: User,
-    @Body() body: { id?: number; text?: string; files?: Array<{ id?: number }> },
+    @Body()
+    body: { id?: number; text?: string; files?: Array<{ id?: number }> },
   ): Promise<{ comment: WireComment }> {
-    const nodeId = this.parseId(id, ERROR_CODES.IncorrectData, HttpStatus.BAD_REQUEST);
+    const nodeId = this.parseId(
+      id,
+      ERROR_CODES.IncorrectData,
+      HttpStatus.BAD_REQUEST,
+    );
     const node = await this.nodes.findLive(nodeId);
 
     // Boris accepts comments even though it is neither flow nor lab.
@@ -98,8 +103,8 @@ export class CommentController {
 
     const text = typeof body?.text === 'string' ? body.text : '';
     const requested = (body?.files ?? [])
-      .map(file => Number(file?.id))
-      .filter(fileId => Number.isFinite(fileId) && fileId > 0);
+      .map((file) => Number(file?.id))
+      .filter((fileId) => Number.isFinite(fileId) && fileId > 0);
     const fileIds = await this.comments.resolveFileIds(requested);
 
     const invalid = this.comments.validate(text, fileIds);
@@ -135,7 +140,12 @@ export class CommentController {
       const updated = await this.comments.update(existing, text, fileIds);
       commentId = updated.id;
     } else {
-      const created = await this.comments.create(nodeId, user.id, text, fileIds);
+      const created = await this.comments.create(
+        nodeId,
+        user.id,
+        text,
+        fileIds,
+      );
       commentId = created.id;
 
       await this.comments.maybeSetNodeDescription(node, created);
@@ -165,7 +175,10 @@ export class CommentController {
     const comment = await this.comments.findById(commentId);
 
     if (!comment) {
-      throw new VaultException(ERROR_CODES.CommentNotFound, HttpStatus.NOT_FOUND);
+      throw new VaultException(
+        ERROR_CODES.CommentNotFound,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     if (comment.userId === user.id) {
@@ -190,7 +203,11 @@ export class CommentController {
     @Query('is_locked') isLocked: string,
     @WithUser() user: User,
   ): Promise<{ deleted_at: string | null }> {
-    const nodeId = this.parseId(id, ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    const nodeId = this.parseId(
+      id,
+      ERROR_CODES.NodeNotFound,
+      HttpStatus.NOT_FOUND,
+    );
     const commentId = this.parseId(
       cid,
       ERROR_CODES.CommentNotFound,
@@ -200,11 +217,17 @@ export class CommentController {
     const comment = await this.comments.findById(commentId, true);
 
     if (!comment || comment.nodeId !== nodeId) {
-      throw new VaultException(ERROR_CODES.CommentNotFound, HttpStatus.NOT_FOUND);
+      throw new VaultException(
+        ERROR_CODES.CommentNotFound,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     if (!this.comments.canEdit(comment, user)) {
-      throw new VaultException(ERROR_CODES.CommentNotFound, HttpStatus.NOT_FOUND);
+      throw new VaultException(
+        ERROR_CODES.CommentNotFound,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     const isLocking = isLocked === 'true';
@@ -221,11 +244,7 @@ export class CommentController {
     };
   }
 
-  private parseId(
-    value: string,
-    code: string,
-    status: HttpStatus,
-  ): number {
+  private parseId(value: string, code: string, status: HttpStatus): number {
     const parsed = Number.parseInt(value, 10);
 
     if (!Number.isFinite(parsed) || parsed <= 0) {

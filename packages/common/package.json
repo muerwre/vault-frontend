@@ -13,7 +13,9 @@
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "dev": "tsc -w --preserveWatchOutput",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"lib/**/*.ts\" --fix",
+    "format": "prettier --write \"lib/**/*.ts\""
   },
   "devDependencies": {
     "typescript": "^5.3.3"

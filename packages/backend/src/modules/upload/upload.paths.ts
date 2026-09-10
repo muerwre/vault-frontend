@@ -93,7 +93,10 @@ export const resolveUploadPath = (
   }
 
   const rootResolved = resolve(root);
-  const target = resolve(rootResolved, normalize(relative).replace(/^([/\\])+/, ''));
+  const target = resolve(
+    rootResolved,
+    normalize(relative).replace(/^([/\\])+/, ''),
+  );
 
   if (target !== rootResolved && !target.startsWith(rootResolved + sep)) {
     return null;
@@ -116,5 +119,8 @@ export const parseCacheRequest = (
     return null;
   }
 
-  return { preset: decodeURIComponent(match[1]), src: decodeURIComponent(match[2]) };
+  return {
+    preset: decodeURIComponent(match[1]),
+    src: decodeURIComponent(match[2]),
+  };
 };

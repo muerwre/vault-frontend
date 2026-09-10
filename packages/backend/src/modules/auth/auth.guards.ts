@@ -109,7 +109,10 @@ export class AuthRequiredGuard implements CanActivate {
     const claims = this.tokens.read(request);
 
     if (!claims) {
-      throw new VaultException(ERROR_CODES.NotAuthorized, HttpStatus.UNAUTHORIZED);
+      throw new VaultException(
+        ERROR_CODES.NotAuthorized,
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     request.auth = { claims, uid: claims.uid, user: null };
@@ -151,7 +154,10 @@ export class WithUserGuard implements CanActivate {
 
     // A token for a deleted account is not a valid session.
     if (!user) {
-      throw new VaultException(ERROR_CODES.NotAuthorized, HttpStatus.UNAUTHORIZED);
+      throw new VaultException(
+        ERROR_CODES.NotAuthorized,
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     request.auth.user = user;
@@ -169,7 +175,8 @@ export const WithUser = createParamDecorator(
 /** Injects the authenticated user id (`0` for a guest). */
 export const Uid = createParamDecorator(
   (_data: unknown, context: ExecutionContext): number =>
-    context.switchToHttp().getRequest<AuthedRequest>().auth?.uid ?? GUEST_USER_ID,
+    context.switchToHttp().getRequest<AuthedRequest>().auth?.uid ??
+    GUEST_USER_ID,
 );
 
 /** Injects the raw token claims, or `null`. */

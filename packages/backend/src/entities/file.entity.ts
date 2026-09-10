@@ -98,19 +98,19 @@ export class File {
    * relation's options, so without these the `fileId` constraints drift to
    * `ON UPDATE CASCADE`.
    */
-  @ManyToMany(() => Node, node => node.files, {
+  @ManyToMany(() => Node, (node) => node.files, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })
   nodes: Node[];
 
-  @ManyToMany(() => Comment, comment => comment.files, {
+  @ManyToMany(() => Comment, (comment) => comment.files, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })
   comments: Comment[];
 
-  @ManyToMany(() => Message, message => message.files, {
+  @ManyToMany(() => Message, (message) => message.files, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })

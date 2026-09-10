@@ -173,7 +173,7 @@ export class StatsService {
     const rows: Array<{ date: string; cnt: number | string }> =
       await this.nodes.query(monthlyCountSql(table), [MONTHS]);
 
-    return rows.map(row => Number(row.cnt));
+    return rows.map((row) => Number(row.cnt));
   }
 
   /** A missing Boris node yields the zero date rather than an error. */

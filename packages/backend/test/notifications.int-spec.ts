@@ -3,7 +3,12 @@ import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
-import { authHeader, createTestApp, getDataSource, WIRE_DATE } from './helpers/app';
+import {
+  authHeader,
+  createTestApp,
+  getDataSource,
+  WIRE_DATE,
+} from './helpers/app';
 
 describe('notifications (integration)', () => {
   let app: INestApplication;
@@ -43,7 +48,9 @@ describe('notifications (integration)', () => {
        VALUES (?, ?, ?, 'user', 1, NOW(), NOW())`,
       [username, await bcrypt.hash('x', 4), `${username}@example.com`],
     );
-    const [user] = await db.query('SELECT id FROM user WHERE username = ?', [username]);
+    const [user] = await db.query('SELECT id FROM user WHERE username = ?', [
+      username,
+    ]);
     userId = Number(user.id);
 
     await db.query(
@@ -67,7 +74,9 @@ describe('notifications (integration)', () => {
 
   afterAll(async () => {
     await db.query('DELETE FROM user_notifications WHERE userId = ?', [userId]);
-    await db.query('DELETE FROM notification_settings WHERE userId = ?', [userId]);
+    await db.query('DELETE FROM notification_settings WHERE userId = ?', [
+      userId,
+    ]);
     await db.query('DELETE FROM comment WHERE nodeId = ?', [nodeId]);
     await db.query('DELETE FROM node WHERE id = ?', [nodeId]);
     await db.query('DELETE FROM user WHERE id = ?', [userId]);
@@ -213,9 +222,10 @@ describe('notifications (integration)', () => {
 
     it('excludes soft-deleted notifications', async () => {
       const id = await addNotification('node', nodeId);
-      await db.query('UPDATE user_notifications SET deleted_at = NOW() WHERE id = ?', [
-        id,
-      ]);
+      await db.query(
+        'UPDATE user_notifications SET deleted_at = NOW() WHERE id = ?',
+        [id],
+      );
 
       const { body } = await http()
         .get('/api/notifications/')
@@ -228,7 +238,9 @@ describe('notifications (integration)', () => {
 
   describe('GET /notifications/settings', () => {
     beforeEach(async () => {
-      await db.query('DELETE FROM notification_settings WHERE userId = ?', [userId]);
+      await db.query('DELETE FROM notification_settings WHERE userId = ?', [
+        userId,
+      ]);
     });
 
     it('creates a row with the defaults on first read', async () => {
@@ -286,11 +298,16 @@ describe('notifications (integration)', () => {
 
   describe('POST /notifications/settings', () => {
     beforeEach(async () => {
-      await db.query('DELETE FROM notification_settings WHERE userId = ?', [userId]);
+      await db.query('DELETE FROM notification_settings WHERE userId = ?', [
+        userId,
+      ]);
     });
 
     const patch = (body: Record<string, unknown>) =>
-      http().post('/api/notifications/settings').set(authHeader(userId)).send(body);
+      http()
+        .post('/api/notifications/settings')
+        .set(authHeader(userId))
+        .send(body);
 
     it('answers 200 with the updated settings', async () => {
       const { body } = await patch({ enabled: true }).expect(200);
@@ -338,7 +355,9 @@ describe('notifications (integration)', () => {
     it('acknowledges the feed via last_seen and last_cleared', async () => {
       const at = '2026-05-03T12:00:00.000Z';
 
-      const { body } = await patch({ last_seen: at, last_cleared: at }).expect(200);
+      const { body } = await patch({ last_seen: at, last_cleared: at }).expect(
+        200,
+      );
 
       expect(body.last_seen).toBe('2026-05-03T12:00:00Z');
       expect(body.last_cleared).toBe('2026-05-03T12:00:00Z');

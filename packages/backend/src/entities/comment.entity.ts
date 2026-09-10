@@ -60,7 +60,7 @@ export class Comment {
   })
   user: User | null;
 
-  @ManyToOne(() => Node, node => node.comments, {
+  @ManyToOne(() => Node, (node) => node.comments, {
     nullable: true,
     onDelete: 'CASCADE',
   })
@@ -70,7 +70,7 @@ export class Comment {
   })
   node: Node | null;
 
-  @ManyToMany(() => File, file => file.comments, {
+  @ManyToMany(() => File, (file) => file.comments, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })

@@ -29,7 +29,7 @@ describe('node content rules', () => {
       'https://youtu.be/dQw4w9WgXcQ',
       'https://www.youtube.com/embed/dQw4w9WgXcQ',
       'https://youtube.com/v/dQw4w9WgXcQ',
-    ])('extracts the id from %s', url => {
+    ])('extracts the id from %s', (url) => {
       expect(getThumbFromUrl(url)).toBe(
         'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
       );
@@ -75,7 +75,11 @@ describe('node content rules', () => {
 
     it('filters out blocks the type cannot carry and invalid ones', () => {
       expect(
-        filterBlocks('text', [textBlock('keep'), textBlock(''), videoBlock(YT)]),
+        filterBlocks('text', [
+          textBlock('keep'),
+          textBlock(''),
+          videoBlock(YT),
+        ]),
       ).toEqual([textBlock('keep')]);
     });
 
@@ -105,8 +109,8 @@ describe('node content rules', () => {
     it('filters a mixed list by node type', () => {
       const files = [file('image', { id: 1 }), file('audio', { id: 2 })];
 
-      expect(filterFiles('image', files).map(f => f.id)).toEqual([1]);
-      expect(filterFiles('audio', files).map(f => f.id)).toEqual([1, 2]);
+      expect(filterFiles('image', files).map((f) => f.id)).toEqual([1]);
+      expect(filterFiles('audio', files).map((f) => f.id)).toEqual([1, 2]);
     });
   });
 
@@ -164,7 +168,9 @@ describe('node content rules', () => {
     });
 
     it('keeps the current value when the block is too short', () => {
-      expect(deriveDescription('text', [textBlock('short')], 'kept')).toBe('kept');
+      expect(deriveDescription('text', [textBlock('short')], 'kept')).toBe(
+        'kept',
+      );
     });
 
     it('never touches other node types', () => {
@@ -176,7 +182,10 @@ describe('node content rules', () => {
 
   describe('deriveThumbnail', () => {
     it('uses the first image for image and audio nodes', () => {
-      const files = [file('audio', { id: 1 }), file('image', { id: 2, url: 'pic' })];
+      const files = [
+        file('audio', { id: 1 }),
+        file('image', { id: 2, url: 'pic' }),
+      ];
 
       expect(deriveThumbnail('image', files, [], '')).toBe('pic');
       expect(deriveThumbnail('audio', files, [], '')).toBe('pic');
@@ -205,7 +214,9 @@ describe('node content rules', () => {
     });
 
     it('keeps the current value when the image has none', () => {
-      expect(deriveDominantColor('image', [file('image')], '#old')).toBe('#old');
+      expect(deriveDominantColor('image', [file('image')], '#old')).toBe(
+        '#old',
+      );
     });
 
     it('never touches text or video nodes', () => {

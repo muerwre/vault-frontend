@@ -45,8 +45,8 @@ export class TagController {
     @Query('exclude') exclude?: string | string[],
   ): Promise<{ tags: string[] }> {
     const excluded = (Array.isArray(exclude) ? exclude : [exclude ?? ''])
-      .flatMap(value => value.split(','))
-      .map(value => value.trim())
+      .flatMap((value) => value.split(','))
+      .map((value) => value.trim())
       .filter(Boolean);
 
     try {

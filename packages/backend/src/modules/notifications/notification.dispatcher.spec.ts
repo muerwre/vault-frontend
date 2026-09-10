@@ -11,9 +11,11 @@ describe('NotificationDispatcher', () => {
 
   const build = (impl?: jest.Mock) => {
     consumed = [];
-    consume = impl ?? jest.fn(async (event: NotificationEvent) => {
-      consumed.push(event);
-    });
+    consume =
+      impl ??
+      jest.fn(async (event: NotificationEvent) => {
+        consumed.push(event);
+      });
 
     return new NotificationDispatcher({
       name: 'test',
@@ -69,7 +71,7 @@ describe('NotificationDispatcher', () => {
 
     dispatcher = build(
       jest.fn(async () => {
-        await new Promise(resolve => setTimeout(resolve, 5));
+        await new Promise((resolve) => setTimeout(resolve, 5));
         settled = true;
       }),
     );

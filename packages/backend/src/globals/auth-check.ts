@@ -25,6 +25,7 @@ import {
   WithUser,
   WithUserGuard,
 } from '../modules/auth/auth.guards';
+
 import { CORS_OPTIONS } from './cors';
 import { VaultExceptionFilter } from './exceptions';
 
@@ -72,14 +73,18 @@ function check(label: string, condition: boolean, detail?: unknown) {
     return;
   }
   failures += 1;
-  console.log(`  ✗ ${label}${detail === undefined ? '' : ` — ${JSON.stringify(detail)}`}`);
+  console.log(
+    `  ✗ ${label}${detail === undefined ? '' : ` — ${JSON.stringify(detail)}`}`,
+  );
 }
 
 async function main() {
   const secret = getJwtSecret();
 
   if (!secret) {
-    console.error('JWT_SECRET is not set — set it in .env.local before running this check');
+    console.error(
+      'JWT_SECRET is not set — set it in .env.local before running this check',
+    );
     process.exit(1);
   }
 
@@ -94,7 +99,9 @@ async function main() {
   await dataSource.destroy();
 
   if (!subject) {
-    console.error('no user with a photo found in the database — is the dump loaded?');
+    console.error(
+      'no user with a photo found in the database — is the dump loaded?',
+    );
     process.exit(1);
   }
 
@@ -117,15 +124,22 @@ async function main() {
 
   console.log('\nhand-crafted token');
   console.log(`  ${token.slice(0, 48)}…`);
-  check('carries exactly the expected claim set', Object.keys(decoded).sort().join(',') === 'iat,nme,rol,uid', Object.keys(decoded));
+  check(
+    'carries exactly the expected claim set',
+    Object.keys(decoded).sort().join(',') === 'iat,nme,rol,uid',
+    Object.keys(decoded),
+  );
   check('has no exp claim', decoded.exp === undefined);
 
-  const app = await NestFactory.create<NestExpressApplication>(AuthCheckModule, {
-    cors: CORS_OPTIONS,
-    // Keep startup errors visible; silencing the logger hides them entirely.
-    logger: ['error', 'warn'],
-    abortOnError: false,
-  });
+  const app = await NestFactory.create<NestExpressApplication>(
+    AuthCheckModule,
+    {
+      cors: CORS_OPTIONS,
+      // Keep startup errors visible; silencing the logger hides them entirely.
+      logger: ['error', 'warn'],
+      abortOnError: false,
+    },
+  );
   app.useGlobalFilters(new VaultExceptionFilter());
   app.setGlobalPrefix('api');
   await app.listen(0);
@@ -139,13 +153,21 @@ async function main() {
     check('guest gets 200', guestOptional.status === 200, guestOptional.status);
     check('guest uid is 0', (await json(guestOptional)).uid === 0);
 
-    const authedOptional = await fetch(`${base}/api/__authcheck/optional`, { headers: authed });
-    check('token resolves to the right uid', (await json(authedOptional)).uid === subject.id);
+    const authedOptional = await fetch(`${base}/api/__authcheck/optional`, {
+      headers: authed,
+    });
+    check(
+      'token resolves to the right uid',
+      (await json(authedOptional)).uid === subject.id,
+    );
 
     const badOptional = await fetch(`${base}/api/__authcheck/optional`, {
       headers: { Authorization: 'Bearer not-a-token' },
     });
-    check('a garbage token degrades to guest, not an error', badOptional.status === 200);
+    check(
+      'a garbage token degrades to guest, not an error',
+      badOptional.status === 200,
+    );
     check('…with uid 0', (await json(badOptional)).uid === 0);
 
     console.log('\nrequired auth');
@@ -154,24 +176,41 @@ async function main() {
     const errorBody = await json(guestRequired);
     check(
       'in the frozen error envelope',
-      errorBody.error === 'NotAuthorized' && typeof errorBody.message === 'string',
+      errorBody.error === 'NotAuthorized' &&
+        typeof errorBody.message === 'string',
       errorBody,
     );
 
-    const okRequired = await fetch(`${base}/api/__authcheck/required`, { headers: authed });
-    check('hand-crafted legacy token is accepted', okRequired.status === 200, okRequired.status);
+    const okRequired = await fetch(`${base}/api/__authcheck/required`, {
+      headers: authed,
+    });
+    check(
+      'hand-crafted legacy token is accepted',
+      okRequired.status === 200,
+      okRequired.status,
+    );
 
     // A token signed with the wrong key must not pass.
     const forged = jwt.sign(claims, `${secret}-wrong`, { algorithm: 'HS256' });
     const forgedResponse = await fetch(`${base}/api/__authcheck/required`, {
       headers: { Authorization: `Bearer ${forged}` },
     });
-    check('a token signed with the wrong secret is rejected', forgedResponse.status === 401, forgedResponse.status);
+    check(
+      'a token signed with the wrong secret is rejected',
+      forgedResponse.status === 401,
+      forgedResponse.status,
+    );
 
     console.log('\nWithUser (eager photo)');
-    const withUser = await fetch(`${base}/api/__authcheck/with-user`, { headers: authed });
+    const withUser = await fetch(`${base}/api/__authcheck/with-user`, {
+      headers: authed,
+    });
     const body = await json(withUser);
-    check('loads the full user row', body.id === subject.id && body.username === subject.username, body);
+    check(
+      'loads the full user row',
+      body.id === subject.id && body.username === subject.username,
+      body,
+    );
     check('eager photo relation is populated', body.photoLoaded === true, body);
 
     console.log('\nCORS');
@@ -184,12 +223,29 @@ async function main() {
       },
     });
     check('preflight answers 200', preflight.status === 200, preflight.status);
-    check('allows any origin', preflight.headers.get('access-control-allow-origin') === '*');
-    const allowHeaders = (preflight.headers.get('access-control-allow-headers') ?? '').toLowerCase();
-    check('allows Authorization', allowHeaders.includes('authorization'), allowHeaders);
-    check('allows Cache-Control', allowHeaders.includes('cache-control'), allowHeaders);
+    check(
+      'allows any origin',
+      preflight.headers.get('access-control-allow-origin') === '*',
+    );
+    const allowHeaders = (
+      preflight.headers.get('access-control-allow-headers') ?? ''
+    ).toLowerCase();
+    check(
+      'allows Authorization',
+      allowHeaders.includes('authorization'),
+      allowHeaders,
+    );
+    check(
+      'allows Cache-Control',
+      allowHeaders.includes('cache-control'),
+      allowHeaders,
+    );
 
-    console.log(failures === 0 ? '\n✓ all auth checks passed' : `\n✗ ${failures} auth check(s) failed`);
+    console.log(
+      failures === 0
+        ? '\n✓ all auth checks passed'
+        : `\n✗ ${failures} auth check(s) failed`,
+    );
     if (failures > 0) {
       process.exitCode = 1;
     }
@@ -198,7 +254,7 @@ async function main() {
   }
 }
 
-main().catch(error => {
+main().catch((error) => {
   console.error(error);
   process.exit(1);
 });

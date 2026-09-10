@@ -93,10 +93,16 @@ export class User {
    * Eager-loaded because every `WithUser` route serialises the avatar.
    */
   @OneToOne(() => File, { nullable: true, eager: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'photoId', foreignKeyConstraintName: 'FK_75e2be4ce11d447ef43be0e374f' })
+  @JoinColumn({
+    name: 'photoId',
+    foreignKeyConstraintName: 'FK_75e2be4ce11d447ef43be0e374f',
+  })
   photo: File | null;
 
   @OneToOne(() => File, { nullable: true, eager: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'coverId', foreignKeyConstraintName: 'FK_31ee09e17ab6f824cae374e8cb4' })
+  @JoinColumn({
+    name: 'coverId',
+    foreignKeyConstraintName: 'FK_31ee09e17ab6f824cae374e8cb4',
+  })
   cover: File | null;
 }

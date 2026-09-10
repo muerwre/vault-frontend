@@ -37,14 +37,18 @@ describe('node upsert (integration)', () => {
     return id;
   };
 
-  const makeUser = async (role: 'user' | 'admin' | 'guest'): Promise<number> => {
+  const makeUser = async (
+    role: 'user' | 'admin' | 'guest',
+  ): Promise<number> => {
     const username = `uspec_${role}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     await db.query(
       `INSERT INTO user (username, password, email, role, is_activated, created_at, updated_at)
        VALUES (?, ?, ?, ?, 1, NOW(), NOW())`,
       [username, await bcrypt.hash('x', 4), `${username}@example.com`, role],
     );
-    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [username]);
+    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [
+      username,
+    ]);
     return Number(row.id);
   };
 
@@ -64,7 +68,9 @@ describe('node upsert (integration)', () => {
     imageId = Number(images[0].id);
     secondImageId = Number(images[1].id);
 
-    const [audio] = await db.query("SELECT id FROM file WHERE type = 'audio' LIMIT 1");
+    const [audio] = await db.query(
+      "SELECT id FROM file WHERE type = 'audio' LIMIT 1",
+    );
     audioId = Number(audio.id);
   });
 
@@ -96,7 +102,9 @@ describe('node upsert (integration)', () => {
       track(body.node.id);
       expect(body.node.type).toBe('image');
       expect(body.node.title).toBe('my image node');
-      expect(body.node.files.map((f: { id: number }) => f.id)).toEqual([imageId]);
+      expect(body.node.files.map((f: { id: number }) => f.id)).toEqual([
+        imageId,
+      ]);
       expect(body.node.user.id).toBe(authorId);
     });
 
@@ -168,7 +176,9 @@ describe('node upsert (integration)', () => {
       }).expect(200);
 
       track(body.node.id);
-      const [file] = await db.query('SELECT url FROM file WHERE id = ?', [imageId]);
+      const [file] = await db.query('SELECT url FROM file WHERE id = ?', [
+        imageId,
+      ]);
       expect(body.node.thumbnail).toBe(file.url);
     });
 
@@ -195,7 +205,9 @@ describe('node upsert (integration)', () => {
       }).expect(200);
 
       track(body.node.id);
-      const [row] = await db.query('SELECT target FROM file WHERE id = ?', [imageId]);
+      const [row] = await db.query('SELECT target FROM file WHERE id = ?', [
+        imageId,
+      ]);
       expect(row.target).toBe('nodes');
     });
 
@@ -238,15 +250,19 @@ describe('node upsert (integration)', () => {
     describe('rejections', () => {
       it('400s an unknown or uncreatable type', async () => {
         for (const type of ['', 'nonsense', 'boris', 'webm']) {
-          const { body } = await save(authorId, { type, files: [{ id: imageId }] }).expect(
-            400,
-          );
+          const { body } = await save(authorId, {
+            type,
+            files: [{ id: imageId }],
+          }).expect(400);
           expect(body.error).toBe('Incorrect_Node_Type');
         }
       });
 
       it('400s an image node with no image', async () => {
-        const { body } = await save(authorId, { type: 'image', files: [] }).expect(400);
+        const { body } = await save(authorId, {
+          type: 'image',
+          files: [],
+        }).expect(400);
 
         expect(body.error).toBe('Incorrect_Data');
       });
@@ -268,7 +284,10 @@ describe('node upsert (integration)', () => {
 
       it('400s an audio node with no audio file', async () => {
         await save(authorId, { type: 'audio', files: [] }).expect(400);
-        await save(authorId, { type: 'audio', files: [{ id: imageId }] }).expect(400);
+        await save(authorId, {
+          type: 'audio',
+          files: [{ id: imageId }],
+        }).expect(400);
       });
 
       /** Client-declared file types are not trusted; the stored type decides. */
@@ -280,7 +299,10 @@ describe('node upsert (integration)', () => {
       });
 
       it('400s when attached ids do not exist', async () => {
-        await save(authorId, { type: 'image', files: [{ id: 99999999 }] }).expect(400);
+        await save(authorId, {
+          type: 'image',
+          files: [{ id: 99999999 }],
+        }).expect(400);
       });
 
       it('403s a guest role', async () => {
@@ -361,7 +383,12 @@ describe('node upsert (integration)', () => {
       await http()
         .post('/api/nodes/')
         .set(authHeader(adminId, 'admin'))
-        .send({ id: nodeId, type: 'image', title: 'moderated', files: [{ id: imageId }] })
+        .send({
+          id: nodeId,
+          type: 'image',
+          title: 'moderated',
+          files: [{ id: imageId }],
+        })
         .expect(200);
     });
 
@@ -434,7 +461,9 @@ describe('node upsert (integration)', () => {
         files: [{ id: imageId }],
       }).expect(200);
 
-      expect(body.node.tags.map((t: { title: string }) => t.title)).toContain(title);
+      expect(body.node.tags.map((t: { title: string }) => t.title)).toContain(
+        title,
+      );
       await db.query('DELETE FROM tag WHERE title = ?', [title]);
     });
   });

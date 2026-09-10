@@ -15,7 +15,10 @@ const node = (
   isPromoted: boolean,
   userId: number | null = 7,
 ): Pick<Node, 'type' | 'isPromoted' | 'userId'> =>
-  ({ type, isPromoted, userId }) as Pick<Node, 'type' | 'isPromoted' | 'userId'>;
+  ({ type, isPromoted, userId }) as Pick<
+    Node,
+    'type' | 'isPromoted' | 'userId'
+  >;
 
 const author = { id: 7, role: 'user' };
 const stranger = { id: 8, role: 'user' };

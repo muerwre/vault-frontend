@@ -1,7 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { NOTIFICATION_QUEUE_TYPES } from '@vault/common/constants';
 
-import type { NotificationConsumer, NotificationEvent } from './notification.events';
+import type {
+  NotificationConsumer,
+  NotificationEvent,
+} from './notification.events';
 import { UserNotificationConsumer } from './user-notification.consumer';
 
 /**

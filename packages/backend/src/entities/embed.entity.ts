@@ -1,7 +1,11 @@
 import type { EmbedMetadata } from '@vault/common/types';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-import { jsonTransformer, LEGACY_TIMESTAMP, TIMESTAMP_NULLABLE } from './columns';
+import {
+  jsonTransformer,
+  LEGACY_TIMESTAMP,
+  TIMESTAMP_NULLABLE,
+} from './columns';
 
 /** This table's own charset, unlike either other dialect. */
 const EMBED_CHARSET = {

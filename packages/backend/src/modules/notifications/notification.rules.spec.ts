@@ -48,7 +48,9 @@ describe('notification rules', () => {
     it('stays silent about unlisted types', () => {
       for (const type of [NODE_TYPES.WEBM, NODE_TYPES.BORIS]) {
         expect(shouldAnnounceNode(node({ type }))).toBe(false);
-        expect(shouldAnnounceNode(node({ type, isPromoted: false }))).toBe(false);
+        expect(shouldAnnounceNode(node({ type, isPromoted: false }))).toBe(
+          false,
+        );
       }
     });
   });
@@ -72,10 +74,12 @@ describe('notification rules', () => {
      * its comments notify nobody.
      */
     it('stays silent on an unlisted node that is not Boris', () => {
-      expect(shouldAnnounceComment(node({ id: 5, type: NODE_TYPES.BORIS }))).toBe(
+      expect(
+        shouldAnnounceComment(node({ id: 5, type: NODE_TYPES.BORIS })),
+      ).toBe(false);
+      expect(shouldAnnounceComment(node({ type: NODE_TYPES.WEBM }))).toBe(
         false,
       );
-      expect(shouldAnnounceComment(node({ type: NODE_TYPES.WEBM }))).toBe(false);
     });
 
     /** Visibility is the node author's concern; participants already know it. */

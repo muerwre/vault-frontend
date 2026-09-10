@@ -2,7 +2,12 @@ import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
-import { authHeader, createTestApp, getDataSource, WIRE_DATE } from './helpers/app';
+import {
+  authHeader,
+  createTestApp,
+  getDataSource,
+  WIRE_DATE,
+} from './helpers/app';
 
 describe('read endpoints (integration)', () => {
   let app: INestApplication;
@@ -69,9 +74,9 @@ describe('read endpoints (integration)', () => {
       const { body } = await http().get('/api/stats/').expect(200);
 
       expect(body.nodes.by_month.length).toBeGreaterThan(0);
-      expect(body.nodes.by_month.every((n: unknown) => typeof n === 'number')).toBe(
-        true,
-      );
+      expect(
+        body.nodes.by_month.every((n: unknown) => typeof n === 'number'),
+      ).toBe(true);
     });
   });
 
@@ -112,7 +117,9 @@ describe('read endpoints (integration)', () => {
     });
 
     it('shows an authenticated viewer at least as much as a guest', async () => {
-      const guest = await http().get('/api/search/nodes').query({ text: 'дом' });
+      const guest = await http()
+        .get('/api/search/nodes')
+        .query({ text: 'дом' });
       const user = await http()
         .get('/api/search/nodes')
         .query({ text: 'дом' })
@@ -170,7 +177,9 @@ describe('read endpoints (integration)', () => {
     });
 
     it('shows an authenticated viewer at least as much as a guest', async () => {
-      const guest = await http().get('/api/tags/nodes').query({ name: tagName });
+      const guest = await http()
+        .get('/api/tags/nodes')
+        .query({ name: tagName });
       const user = await http()
         .get('/api/tags/nodes')
         .query({ name: tagName })
@@ -192,7 +201,9 @@ describe('read endpoints (integration)', () => {
     });
 
     it('honours exclude', async () => {
-      const all = await http().get('/api/tags/autocomplete').query({ search: 'до' });
+      const all = await http()
+        .get('/api/tags/autocomplete')
+        .query({ search: 'до' });
       const first = all.body.tags[0] as string;
 
       const { body } = await http()
@@ -385,7 +396,7 @@ describe('read endpoints (integration)', () => {
         .query({ take: 3, order: 'sideways' });
 
       const dates = (body: { comments: Array<{ created_at: string }> }) =>
-        body.comments.map(c => c.created_at);
+        body.comments.map((c) => c.created_at);
 
       expect(dates(asc.body)[0] < dates(asc.body)[2]).toBe(true);
       expect(dates(desc.body)).toEqual(dates(nonsense.body));
@@ -400,7 +411,7 @@ describe('read endpoints (integration)', () => {
         .query({ take: 3, skip: 1, order: 'ASC' });
 
       const ids = (body: { comments: Array<{ id: number }> }) =>
-        body.comments.map(c => c.id);
+        body.comments.map((c) => c.id);
 
       expect(ids(skipped.body)[0]).toBe(ids(page.body)[1]);
     });
@@ -414,8 +425,7 @@ describe('read endpoints (integration)', () => {
       const path = `/api/nodes/${Number(row.nodeId)}/comments`;
       const find = (body: {
         comments: Array<{ id: number; liked: boolean; like_count: number }>;
-      }) =>
-        body.comments.find(c => c.id === Number(row.commentId));
+      }) => body.comments.find((c) => c.id === Number(row.commentId));
 
       const guest = await http().get(path).query({ take: 100 });
       const liker = await http()
@@ -456,7 +466,9 @@ describe('read endpoints (integration)', () => {
         .expect(200);
 
       expect(response.headers['access-control-allow-origin']).toBe('*');
-      const allowed = (response.headers['access-control-allow-headers'] ?? '').toLowerCase();
+      const allowed = (
+        response.headers['access-control-allow-headers'] ?? ''
+      ).toLowerCase();
       expect(allowed).toContain('authorization');
       expect(allowed).toContain('cache-control');
     });

@@ -43,7 +43,9 @@ describe('node tags (integration)', () => {
        VALUES (?, ?, ?, 'user', 1, NOW(), NOW())`,
       [username, await bcrypt.hash('x', 4), `${username}@example.com`],
     );
-    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [username]);
+    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [
+      username,
+    ]);
     return Number(row.id);
   };
 
@@ -91,7 +93,9 @@ describe('node tags (integration)', () => {
         .send({ tags: [title] })
         .expect(200);
 
-      expect(body.node.tags.map((t: { title: string }) => t.title)).toContain(title);
+      expect(body.node.tags.map((t: { title: string }) => t.title)).toContain(
+        title,
+      );
 
       const rows = await db.query('SELECT * FROM tag WHERE title = ?', [title]);
       expect(rows).toHaveLength(1);
@@ -128,7 +132,9 @@ describe('node tags (integration)', () => {
         .send({ tags: [title.toUpperCase()] })
         .expect(200);
 
-      expect(body.node.tags.map((t: { title: string }) => t.title)).toContain(title);
+      expect(body.node.tags.map((t: { title: string }) => t.title)).toContain(
+        title,
+      );
     });
 
     it('accumulates across calls without duplicating', async () => {

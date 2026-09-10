@@ -1,5 +1,4 @@
 import type { File } from '../entities/file.entity';
-import type { User } from '../entities/user.entity';
 
 import {
   GO_ZERO_TIME,
@@ -26,7 +25,9 @@ describe('wire serialisation', () => {
     });
 
     it('never leaks milliseconds even when the value carries them', () => {
-      expect(toWireDate(new Date('2021-05-05T12:34:56.789Z'))).not.toContain('.');
+      expect(toWireDate(new Date('2021-05-05T12:34:56.789Z'))).not.toContain(
+        '.',
+      );
     });
 
     it('maps null and undefined to the zero date, not null', () => {
@@ -78,7 +79,9 @@ describe('wire serialisation', () => {
     });
 
     it('preserves an empty display rather than defaulting it to a variant', () => {
-      expect(toWireFlow({ display: '', show_description: true }).display).toBe('');
+      expect(toWireFlow({ display: '', show_description: true }).display).toBe(
+        '',
+      );
     });
 
     it('passes a known variant through', () => {
@@ -116,7 +119,11 @@ describe('wire serialisation', () => {
 
   describe('toWireShallowUser', () => {
     it('serialises a missing user as the zero object, not null', () => {
-      expect(toWireShallowUser(null)).toEqual({ id: 0, username: '', photo: '' });
+      expect(toWireShallowUser(null)).toEqual({
+        id: 0,
+        username: '',
+        photo: '',
+      });
     });
 
     it('exposes photo as the url string, not an object', () => {
@@ -167,11 +174,15 @@ describe('wire serialisation', () => {
     const files = [{ id: 1 }, { id: 2 }, { id: 3 }] as File[];
 
     it('reorders to match the id list', () => {
-      expect(sortFilesByOrder(files, [3, 1, 2]).map(f => f.id)).toEqual([3, 1, 2]);
+      expect(sortFilesByOrder(files, [3, 1, 2]).map((f) => f.id)).toEqual([
+        3, 1, 2,
+      ]);
     });
 
     it('drops ids with no surviving row instead of leaving holes', () => {
-      expect(sortFilesByOrder(files, [3, 99, 1]).map(f => f.id)).toEqual([3, 1]);
+      expect(sortFilesByOrder(files, [3, 99, 1]).map((f) => f.id)).toEqual([
+        3, 1,
+      ]);
     });
 
     it('returns the input untouched when there is no order', () => {

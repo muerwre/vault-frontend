@@ -14,13 +14,9 @@ async function main() {
   await dataSource.initialize();
 
   try {
-    const sqlInMemory = await dataSource.driver
-      .createSchemaBuilder()
-      .log();
+    const sqlInMemory = await dataSource.driver.createSchemaBuilder().log();
 
-    const statements = [
-      ...sqlInMemory.upQueries.map(q => q.query),
-    ];
+    const statements = [...sqlInMemory.upQueries.map((q) => q.query)];
 
     if (statements.length === 0) {
       console.log('✓ no drift — entities match the live schema exactly');
@@ -35,7 +31,7 @@ async function main() {
   }
 }
 
-main().catch(error => {
+main().catch((error) => {
   console.error(error);
   process.exit(1);
 });

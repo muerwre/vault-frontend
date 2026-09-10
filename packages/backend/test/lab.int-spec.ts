@@ -3,7 +3,12 @@ import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
-import { authHeader, createTestApp, getDataSource, WIRE_DATE } from './helpers/app';
+import {
+  authHeader,
+  createTestApp,
+  getDataSource,
+  WIRE_DATE,
+} from './helpers/app';
 
 describe('lab (integration)', () => {
   let app: INestApplication;
@@ -36,7 +41,14 @@ describe('lab (integration)', () => {
         (title, type, blocks, files_order, is_public, is_promoted, is_heroic,
          description, created_at, updated_at, userId)
        VALUES (?, 'image', '[]', '', ?, ?, ?, ?, NOW(), NOW(), ?)`,
-      [title, isPublic ? 1 : 0, isPromoted ? 1 : 0, isHeroic ? 1 : 0, description, userId],
+      [
+        title,
+        isPublic ? 1 : 0,
+        isPromoted ? 1 : 0,
+        isHeroic ? 1 : 0,
+        description,
+        userId,
+      ],
     );
     const [row] = await db.query('SELECT LAST_INSERT_ID() AS id');
     const id = Number(row.id);
@@ -54,7 +66,9 @@ describe('lab (integration)', () => {
     const id = Number(row.id);
     commentIds.push(id);
 
-    await db.query('UPDATE node SET commented_at = NOW() WHERE id = ?', [nodeId]);
+    await db.query('UPDATE node SET commented_at = NOW() WHERE id = ?', [
+      nodeId,
+    ]);
 
     return id;
   };
@@ -70,7 +84,9 @@ describe('lab (integration)', () => {
        VALUES (?, ?, ?, 'user', 1, NOW(), NOW())`,
       [username, await bcrypt.hash('x', 4), `${username}@example.com`],
     );
-    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [username]);
+    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [
+      username,
+    ]);
     userId = Number(row.id);
   });
 
@@ -134,7 +150,9 @@ describe('lab (integration)', () => {
         .set(authHeader(userId))
         .expect(200);
 
-      const ids = body.nodes.map((item: { node: { id: number } }) => item.node.id);
+      const ids = body.nodes.map(
+        (item: { node: { id: number } }) => item.node.id,
+      );
       expect(ids).toContain(labId);
       expect(ids).not.toContain(flowId);
     });
@@ -148,7 +166,9 @@ describe('lab (integration)', () => {
         .set(authHeader(userId))
         .expect(200);
 
-      const ids = body.nodes.map((item: { node: { id: number } }) => item.node.id);
+      const ids = body.nodes.map(
+        (item: { node: { id: number } }) => item.node.id,
+      );
       expect(ids).not.toContain(hidden);
     });
 
@@ -169,7 +189,9 @@ describe('lab (integration)', () => {
         .set(authHeader(userId))
         .expect(200);
 
-      expect(second.body.nodes[0].node.id).not.toBe(first.body.nodes[0].node.id);
+      expect(second.body.nodes[0].node.id).not.toBe(
+        first.body.nodes[0].node.id,
+      );
       // `count` is the total, not the page size.
       expect(first.body.count).toBeGreaterThan(1);
     });
@@ -177,7 +199,9 @@ describe('lab (integration)', () => {
     it('filters by search across title and description', async () => {
       const marker = `zzsearch${Date.now()}`;
       const byTitle = await makeLabNode({ title: `has ${marker} inside` });
-      const byDescription = await makeLabNode({ description: `desc ${marker}` });
+      const byDescription = await makeLabNode({
+        description: `desc ${marker}`,
+      });
 
       const { body } = await http()
         .get('/api/nodes/lab')
@@ -185,7 +209,9 @@ describe('lab (integration)', () => {
         .set(authHeader(userId))
         .expect(200);
 
-      const ids = body.nodes.map((item: { node: { id: number } }) => item.node.id);
+      const ids = body.nodes.map(
+        (item: { node: { id: number } }) => item.node.id,
+      );
       expect(ids).toContain(byTitle);
       expect(ids).toContain(byDescription);
     });
@@ -200,7 +226,9 @@ describe('lab (integration)', () => {
         .set(authHeader(userId))
         .expect(200);
 
-      const ids = body.nodes.map((item: { node: { id: number } }) => item.node.id);
+      const ids = body.nodes.map(
+        (item: { node: { id: number } }) => item.node.id,
+      );
       expect(ids).toContain(heroic);
       expect(ids).not.toContain(plain);
     });
@@ -215,7 +243,9 @@ describe('lab (integration)', () => {
         .set(authHeader(userId))
         .expect(200);
 
-      const ids = body.nodes.map((item: { node: { id: number } }) => item.node.id);
+      const ids = body.nodes.map(
+        (item: { node: { id: number } }) => item.node.id,
+      );
       expect(ids).not.toContain(quiet);
     });
 
@@ -262,7 +292,10 @@ describe('lab (integration)', () => {
       );
       expect(untouched.last_seen).toBeNull();
 
-      await http().get(`/api/nodes/${nodeId}`).set(authHeader(userId)).expect(200);
+      await http()
+        .get(`/api/nodes/${nodeId}`)
+        .set(authHeader(userId))
+        .expect(200);
 
       const after = await http()
         .get('/api/nodes/lab')

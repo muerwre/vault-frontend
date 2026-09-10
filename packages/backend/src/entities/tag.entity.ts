@@ -47,7 +47,7 @@ export class Tag {
   })
   user: User | null;
 
-  @ManyToMany(() => Node, node => node.tags, {
+  @ManyToMany(() => Node, (node) => node.tags, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })

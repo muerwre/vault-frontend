@@ -2,7 +2,12 @@ import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
-import { authHeader, createTestApp, getDataSource, WIRE_DATE } from './helpers/app';
+import {
+  authHeader,
+  createTestApp,
+  getDataSource,
+  WIRE_DATE,
+} from './helpers/app';
 
 const SLICES = ['before', 'after', 'heroes', 'updated', 'recent'] as const;
 
@@ -42,22 +47,29 @@ describe('nodes (integration)', () => {
     });
 
     it('honours take for the after slice', async () => {
-      const { body } = await http().get('/api/nodes/').query({ take: 3 }).expect(200);
+      const { body } = await http()
+        .get('/api/nodes/')
+        .query({ take: 3 })
+        .expect(200);
 
       expect(body.after).toHaveLength(3);
     });
 
     it('returns heroic images only, randomised between calls', async () => {
-      const first = await http().get('/api/nodes/').query({ with_heroes: 'true' });
-      const second = await http().get('/api/nodes/').query({ with_heroes: 'true' });
+      const first = await http()
+        .get('/api/nodes/')
+        .query({ with_heroes: 'true' });
+      const second = await http()
+        .get('/api/nodes/')
+        .query({ with_heroes: 'true' });
 
       expect(first.body.heroes.length).toBeGreaterThan(0);
-      expect(first.body.heroes.every((n: { type: string }) => n.type === 'image')).toBe(
-        true,
-      );
+      expect(
+        first.body.heroes.every((n: { type: string }) => n.type === 'image'),
+      ).toBe(true);
 
       const ids = (body: { heroes: Array<{ id: number }> }) =>
-        body.heroes.map(n => n.id).join(',');
+        body.heroes.map((n) => n.id).join(',');
       expect(ids(first.body)).not.toBe(ids(second.body));
     });
 
@@ -104,7 +116,9 @@ describe('nodes (integration)', () => {
         .expect(200);
 
       const updated = new Set(body.updated.map((n: { id: number }) => n.id));
-      const overlap = body.recent.filter((n: { id: number }) => updated.has(n.id));
+      const overlap = body.recent.filter((n: { id: number }) =>
+        updated.has(n.id),
+      );
 
       expect(overlap).toEqual([]);
     });
@@ -132,11 +146,16 @@ describe('nodes (integration)', () => {
         .expect(200);
 
       expect(body.valid.length).toBeGreaterThan(0);
-      expect(body.valid.every((id: unknown) => Number.isInteger(id))).toBe(true);
+      expect(body.valid.every((id: unknown) => Number.isInteger(id))).toBe(
+        true,
+      );
     });
 
     it('serialises shallow nodes with wire-format dates and a zero-object author', async () => {
-      const { body } = await http().get('/api/nodes/').query({ take: 5 }).expect(200);
+      const { body } = await http()
+        .get('/api/nodes/')
+        .query({ take: 5 })
+        .expect(200);
 
       for (const node of body.after) {
         expect(node.created_at).toMatch(WIRE_DATE);
@@ -206,9 +225,9 @@ describe('nodes (integration)', () => {
 
       expect(first.body.last_seen).toMatch(WIRE_DATE);
       // The second call must see what the first one wrote.
-      expect(
-        new Date(second.body.last_seen).getTime(),
-      ).toBeGreaterThanOrEqual(new Date(first.body.last_seen).getTime());
+      expect(new Date(second.body.last_seen).getTime()).toBeGreaterThanOrEqual(
+        new Date(first.body.last_seen).getTime(),
+      );
     });
 
     it('excludes email from the embedded author', async () => {
@@ -321,7 +340,9 @@ describe('nodes (integration)', () => {
     });
 
     it('returns empty results for an unknown node', async () => {
-      const { body } = await http().get('/api/nodes/99999999/related').expect(200);
+      const { body } = await http()
+        .get('/api/nodes/99999999/related')
+        .expect(200);
 
       expect(body).toEqual({ related: { albums: {}, similar: [] } });
     });

@@ -21,7 +21,9 @@ const MD5_HEX = /^[0-9a-f]{32}$/i;
 export class PasswordService {
   private readonly logger = new Logger('Password');
 
-  constructor(@InjectRepository(User) private readonly users: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private readonly users: Repository<User>,
+  ) {}
 
   hash(password: string): Promise<string> {
     return bcrypt.hash(password, BCRYPT_ROUNDS);

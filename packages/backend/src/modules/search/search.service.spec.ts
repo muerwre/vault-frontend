@@ -10,7 +10,9 @@ describe('sanitizeSearchText', () => {
   });
 
   it('strips everything else', () => {
-    expect(sanitizeSearchText('<script>@#$%^&*()</script>')).toBe('scriptscript');
+    expect(sanitizeSearchText('<script>@#$%^&*()</script>')).toBe(
+      'scriptscript',
+    );
   });
 
   it('trims the result', () => {

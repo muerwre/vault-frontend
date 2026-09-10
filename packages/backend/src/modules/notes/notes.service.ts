@@ -48,12 +48,16 @@ export class NotesService {
     const build = () => {
       const query = this.messages
         .createQueryBuilder('message')
-        .where('message.fromId = :userId AND message.toId = :userId', { userId })
+        .where('message.fromId = :userId AND message.toId = :userId', {
+          userId,
+        })
         .andWhere("message.text <> ''")
         .andWhere('message.deleted_at IS NULL');
 
       if (search) {
-        query.andWhere("message.text LIKE CONCAT('%', :search, '%')", { search });
+        query.andWhere("message.text LIKE CONCAT('%', :search, '%')", {
+          search,
+        });
       }
 
       return query;
@@ -70,7 +74,7 @@ export class NotesService {
       .offset(offset)
       .getMany();
 
-    return { totalCount, list: rows.map(row => this.toWire(row)) };
+    return { totalCount, list: rows.map((row) => this.toWire(row)) };
   }
 
   /** Resolves a note only if it is genuinely a self-message. */
