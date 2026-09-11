@@ -1,0 +1,77 @@
+# Reference deployment. The database is assumed to already exist and is not
+# managed here — `ci/compose.yml` is the local, seeded one for development.
+#
+# Both services sit behind the reverse proxy; see nginx.example.conf.
+name: vault
+
+services:
+  backend:
+    image: git.vault48.org/muerwre/vault-frontend-backend:master
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 8000
+
+      DATABASE_URL: mariadb://user:password@db:3306/adonis
+
+      # Must match the secret that signed the tokens already in circulation:
+      # they carry no expiry, so changing this logs everybody out.
+      JWT_SECRET: ${JWT_SECRET}
+      SESSION_SECRET: ${SESSION_SECRET}
+
+      # Uploaded files are addressed relative to this; changing it breaks every
+      # historical URL.
+      UPLOADS_PATH: /var/lib/vault/uploads
+      UPLOADS_MAX_SIZE_MB: 200
+
+      FRONTEND_PUBLIC_HOST: vault48.org
+
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM}
+
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_CALLBACK_URL: https://vault48.org/api/oauth/google/process/
+
+      # OAuth login via VK ID. All three or none — a partly configured provider
+      # answers 404.
+      VK_CLIENT_ID: ${VK_CLIENT_ID}
+      VK_CLIENT_SECRET: ${VK_CLIENT_SECRET}
+      VK_CALLBACK_URL: https://vault48.org/api/oauth/vkontakte/process/
+
+      # Wall publishing. Off unless explicitly enabled; it posts to a live group.
+      NOTIFICATIONS_VK_ENABLED: "false"
+      NOTIFICATIONS_VK_API_KEY: ${NOTIFICATIONS_VK_API_KEY}
+      NOTIFICATIONS_VK_GROUP_ID: ${NOTIFICATIONS_VK_GROUP_ID}
+      NOTIFICATIONS_VK_ALBUM_ID: ${NOTIFICATIONS_VK_ALBUM_ID}
+      NOTIFICATIONS_VK_APP_ID: ${NOTIFICATIONS_VK_APP_ID}
+      NOTIFICATIONS_VK_URL_PREFIX: https://vault48.org
+
+      # A live token sends real messages and verifies the login widget.
+      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+      # Set when api.telegram.org is unreachable from the host.
+      TELEGRAM_PROXY_URL: ${TELEGRAM_PROXY_URL}
+    volumes:
+      # The uploads directory outlives the container; losing it loses every
+      # image ever posted.
+      - vault_uploads:/var/lib/vault/uploads
+    ports:
+      - "127.0.0.1:8000:8000"
+
+  frontend:
+    image: git.vault48.org/muerwre/vault-frontend:master
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  vault_uploads:
+    external: true

@@ -6,7 +6,7 @@ on:
 
 jobs:
   push_to_registry:
-    name: Build & Publish
+    name: Build & Publish frontend
     runs-on: ubuntu-22.04
     permissions:
       packages: write
@@ -44,3 +44,40 @@ jobs:
             NEXT_PUBLIC_REMOTE_CURRENT=https://vault48.org/static/
             NEXT_PUBLIC_PUBLIC_HOST=https://vault48.org/
             NEXT_PUBLIC_BOT_USERNAME=vault48bot
+
+  push_backend_to_registry:
+    name: Build & Publish backend
+    runs-on: ubuntu-22.04
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Registry Login
+        uses: docker/login-action@v3
+        with:
+          registry: git.vault48.org
+          username: ${{ secrets.username }}
+          password: ${{ secrets.password }}
+
+      - name: Extract docker metadata
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: git.vault48.org/${{ env.GITHUB_REPOSITORY }}-backend
+
+      # Context is the repo root: the backend imports @vault/common, a sibling
+      # workspace that has to be built with it.
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./ci/backend.Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

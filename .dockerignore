@@ -1,0 +1,37 @@
+# Secrets. `.env.local` holds real credentials — it must never reach a build
+# context, or it ends up baked into an image layer.
+.env
+.env.local
+.env.*.local
+
+# Installed and built artefacts: the image builds its own.
+node_modules
+**/node_modules
+dist
+**/dist
+.next
+**/.next
+out
+build
+
+# Incremental build state. A stale one convinces tsc everything is already
+# compiled, so it emits nothing and the image ends up with no dist at all.
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Reference material and local tooling, none of it needed to build.
+examples
+ci/*.sql
+ci/*.sql.xz
+.git
+.github
+.forgejo
+.husky
+.idea
+.vscode
+.history
+.claude
+
+# Test output and scratch.
+coverage
+**/coverage
