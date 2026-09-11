@@ -97,6 +97,36 @@ export const getGoogleOAuthConfig = (): OAuthProviderConfig => ({
 /** Bot token for the Telegram login widget. Empty disables Telegram linking. */
 export const getTelegramToken = (): string => process.env.TELEGRAM_TOKEN ?? '';
 
+export interface TelegramConfig {
+  token: string;
+  /**
+   * Outbound proxy for `api.telegram.org`, which is blocked in some networks.
+   * `http(s)://`, `socks5://`, `socks5h://` and `socks4://` are understood;
+   * empty means connect directly.
+   */
+  proxyUrl: string;
+  /** Minutes between delivery runs. */
+  cooldownMins: number;
+  /** Unsent notifications older than this are dropped rather than delivered. */
+  purgeAfterDays: number;
+  /** Cap on messages sent to one recipient per run. */
+  maxMessages: number;
+}
+
+const toPositiveInt = (value: string | undefined, fallback: number): number => {
+  const parsed = Number.parseInt(value ?? '', 10);
+
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
+
+export const getTelegramConfig = (): TelegramConfig => ({
+  token: getTelegramToken(),
+  proxyUrl: process.env.TELEGRAM_PROXY_URL ?? '',
+  cooldownMins: toPositiveInt(process.env.TELEGRAM_COOLDOWN_MINS, 5),
+  purgeAfterDays: toPositiveInt(process.env.TELEGRAM_PURGE_AFTER_DAYS, 3),
+  maxMessages: toPositiveInt(process.env.TELEGRAM_MAX_MESSAGES, 3),
+});
+
 /**
  * Signs the OAuth handshake session. PKCE requires the code verifier to outlive
  * the redirect to the provider, so it is kept in a session cookie scoped to the
