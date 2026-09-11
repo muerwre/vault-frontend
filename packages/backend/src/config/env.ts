@@ -135,6 +135,40 @@ export const getTelegramConfig = (): TelegramConfig => ({
 export const getSessionSecret = (): string =>
   process.env.SESSION_SECRET || getJwtSecret();
 
+export interface VkPublisherConfig {
+  /** Off by default: enabling posts to a live group. */
+  enabled: boolean;
+  /** Group access token with `wall` and `photos` scope. */
+  apiKey: string;
+  groupId: number;
+  albumId: number;
+  appId: number;
+  /** Minutes a node waits before being posted, and the polling interval. */
+  cooldownMins: number;
+  /** Nodes older than this are never posted, only skipped. */
+  purgeAfterDays: number;
+  /** Host the posted node link is built against. */
+  urlPrefix: string;
+}
+
+export const getVkPublisherConfig = (): VkPublisherConfig => ({
+  enabled: process.env.NOTIFICATIONS_VK_ENABLED === 'true',
+  apiKey: process.env.NOTIFICATIONS_VK_API_KEY ?? '',
+  groupId: toPositiveInt(process.env.NOTIFICATIONS_VK_GROUP_ID, 0),
+  albumId: toPositiveInt(process.env.NOTIFICATIONS_VK_ALBUM_ID, 0),
+  appId: toPositiveInt(process.env.NOTIFICATIONS_VK_APP_ID, 0),
+  cooldownMins: toPositiveInt(process.env.NOTIFICATIONS_VK_COOLDOWN_MINS, 5),
+  purgeAfterDays: toPositiveInt(
+    process.env.NOTIFICATIONS_VK_PURGE_AFTER_DAYS,
+    7,
+  ),
+  urlPrefix: process.env.NOTIFICATIONS_VK_URL_PREFIX ?? '',
+});
+
+/** Publishing needs a token and a group as well as the flag. */
+export const isVkPublisherUsable = (config: VkPublisherConfig): boolean =>
+  config.enabled && Boolean(config.apiKey) && config.groupId > 0;
+
 export interface UploadsConfig {
   path: string;
   maxSizeMb: number;

@@ -18,6 +18,7 @@ import { TagModule } from './modules/tag/tag.module';
 import { TelegramModule } from './modules/telegram/telegram.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { UserModule } from './modules/user/user.module';
+import { VkModule } from './modules/vk/vk.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { UserModule } from './modules/user/user.module';
     SearchModule,
     TagModule,
     TelegramModule,
+    VkModule,
     MetaModule,
   ],
   controllers: [HealthController],
