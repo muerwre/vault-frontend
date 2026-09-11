@@ -118,7 +118,15 @@ export class StaticService {
     const crop = 'crop' in preset && preset.crop === true;
     const height = 'height' in preset ? preset.height : undefined;
 
-    const pipeline = sharp(contents, { failOn: 'none' }).resize(
+    /**
+     * `autoOrient` is load-bearing: scaling drops the EXIF orientation tag, so
+     * without physically rotating first, a camera photo comes out sideways in
+     * every generated size while the untouched original still looks right.
+     */
+    const pipeline = sharp(contents, {
+      failOn: 'none',
+      autoOrient: true,
+    }).resize(
       preset.width,
       crop ? height : undefined,
       crop

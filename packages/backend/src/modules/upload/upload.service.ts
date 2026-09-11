@@ -169,11 +169,19 @@ export class UploadService {
 
   private async imageMetadata(contents: Buffer): Promise<FileMetadata> {
     const image = sharp(contents, { failOn: 'none' });
-    const { width, height } = await image.metadata();
+    const { width, height, orientation } = await image.metadata();
+
+    /**
+     * Stored dimensions are the **displayed** ones. EXIF orientations 5-8 turn
+     * the image on its side, so the stored width and height are swapped
+     * relative to what a viewer sees — and clients size their layout from
+     * these, which would leave every rotated photo in a wrongly-shaped box.
+     */
+    const turned = (orientation ?? 1) >= 5;
 
     return {
-      width: width ?? 0,
-      height: height ?? 0,
+      width: (turned ? height : width) ?? 0,
+      height: (turned ? width : height) ?? 0,
       dominant_color: await this.dominantColor(contents),
     };
   }
@@ -238,7 +246,10 @@ export class UploadService {
     }
 
     try {
-      const webp = await sharp(contents, { failOn: 'none' }).webp().toBuffer();
+      // Re-encoding drops the EXIF orientation, so rotate before it is lost.
+      const webp = await sharp(contents, { failOn: 'none', autoOrient: true })
+        .webp()
+        .toBuffer();
 
       await mkdir(dirname(join(directory, name)), { recursive: true });
       await writeFile(join(directory, `${name}.webp`), webp);

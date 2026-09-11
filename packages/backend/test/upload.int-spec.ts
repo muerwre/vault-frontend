@@ -35,6 +35,23 @@ describe('upload and static (integration)', () => {
       .png()
       .toBuffer();
 
+  /**
+   * A landscape JPEG tagged with EXIF orientation 6, i.e. one a camera shot in
+   * portrait: stored 120x60, but meant to be displayed 60x120.
+   */
+  const rotatedJpeg = () =>
+    sharp({
+      create: {
+        width: 120,
+        height: 60,
+        channels: 3,
+        background: { r: 200, g: 30, b: 30 },
+      },
+    })
+      .withMetadata({ orientation: 6 })
+      .jpeg()
+      .toBuffer();
+
   const upload = (
     target: string,
     type: string,
@@ -300,6 +317,67 @@ describe('upload and static (integration)', () => {
     /** Traversal must not escape the uploads root. */
     it('404s a traversal attempt', async () => {
       await http().get('/api/static/../../etc/passwd').expect(404);
+    });
+
+    /**
+     * A camera photo carries its rotation in EXIF. Scaling drops that tag, so
+     * unless the variant is physically rotated it comes out sideways while the
+     * untouched original still looks right.
+     */
+    describe('exif orientation', () => {
+      let rotatedPath: string;
+
+      beforeAll(async () => {
+        const { body } = await upload(
+          'nodes',
+          'image',
+          await rotatedJpeg(),
+          'turned.jpg',
+          'image/jpeg',
+        ).expect(201);
+
+        fileIds.push(body.id);
+        const [row] = await db.query(
+          'SELECT full_path FROM file WHERE id = ?',
+          [body.id],
+        );
+        rotatedPath = row.full_path;
+      });
+
+      it('stores the displayed dimensions, not the stored ones', async () => {
+        const [row] = await db.query(
+          'SELECT metadata FROM file WHERE full_path = ?',
+          [rotatedPath],
+        );
+        const metadata = JSON.parse(row.metadata);
+
+        // Stored 120x60; displayed 60x120 once the orientation is applied.
+        expect(metadata.width).toBe(60);
+        expect(metadata.height).toBe(120);
+      });
+
+      it('rotates a scaled variant rather than leaving it sideways', async () => {
+        const response = await http()
+          .get(`/api/static/cache/300/${rotatedPath}`)
+          .expect(200);
+
+        const meta = await sharp(response.body).metadata();
+
+        // Portrait, and never enlarged past the 120px source height.
+        expect(meta.height).toBeGreaterThan(meta.width!);
+        expect(meta.width).toBe(60);
+        expect(meta.height).toBe(120);
+      });
+
+      it('rotates a cropped variant too', async () => {
+        const response = await http()
+          .get(`/api/static/cache/avatar/${rotatedPath}`)
+          .expect(200);
+
+        const meta = await sharp(response.body).metadata();
+        expect(meta.width).toBe(72);
+        expect(meta.height).toBe(72);
+      });
     });
 
     describe('preset scaling', () => {
