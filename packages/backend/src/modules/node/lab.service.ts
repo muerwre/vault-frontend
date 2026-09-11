@@ -45,8 +45,15 @@ export const LAB_MAX_LIMIT = 100;
  * Sort expression shared by every mode: newest activity first, falling back to
  * creation time for nodes that were never commented on.
  */
+/**
+ * Newest activity: the last comment, falling back to creation.
+ *
+ * `commented_at` is **null** on a node nobody has commented on, and a bare
+ * `= 0` test is null for those rows — which sorts them last in a DESC order and
+ * hides brand-new nodes entirely. The null case has to be spelled out.
+ */
 const ORDER_BY_ACTIVITY =
-  'IF(node.commented_at = 0, node.created_at, node.commented_at)';
+  'IF(node.commented_at IS NULL OR node.commented_at = 0, node.created_at, node.commented_at)';
 
 const HEROES_LIMIT = 20;
 const POPULAR_TAGS_LIMIT = 24;

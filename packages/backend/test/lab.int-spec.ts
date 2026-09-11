@@ -110,6 +110,24 @@ describe('lab (integration)', () => {
       await http().get('/api/nodes/lab').expect(401);
     });
 
+    /**
+     * A node nobody has commented on has a **null** `commented_at`. The sort
+     * has to fall back to creation time for those, or every brand-new node
+     * lands at the very bottom and looks like it was never posted.
+     */
+    it('shows a brand-new node, which has no comments yet', async () => {
+      const nodeId = await makeLabNode({ title: `fresh lab ${Date.now()}` });
+
+      const { body } = await http()
+        .get('/api/nodes/lab')
+        .set(authHeader(userId))
+        .expect(200);
+
+      expect(
+        body.nodes.map((item: { node: { id: number } }) => item.node.id),
+      ).toContain(nodeId);
+    });
+
     /** The literal path must not be captured as a node id. */
     it('is not swallowed by the :id route', async () => {
       const { body } = await http()
