@@ -24,6 +24,14 @@ export class NotificationDispatcher {
     this.consumers = [userNotifications];
   }
 
+  /**
+   * Adds a consumer. Publishers register themselves during startup, which keeps
+   * the dispatcher from having to know about every delivery channel.
+   */
+  register(consumer: NotificationConsumer): void {
+    this.consumers.push(consumer);
+  }
+
   async dispatch(event: NotificationEvent): Promise<void> {
     for (const consumer of this.consumers) {
       try {

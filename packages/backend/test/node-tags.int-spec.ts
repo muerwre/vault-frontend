@@ -7,6 +7,7 @@ import {
   authHeader,
   clearNotificationsAbove,
   createTestApp,
+  type DispatchWatermark,
   getDataSource,
   notificationWatermark,
 } from './helpers/app';
@@ -14,7 +15,7 @@ import {
 describe('node tags (integration)', () => {
   let app: INestApplication;
   let db: DataSource;
-  let notificationMark: number;
+  let notificationMark: DispatchWatermark;
   let http: () => ReturnType<typeof request>;
 
   let authorId: number;

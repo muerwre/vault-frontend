@@ -7,6 +7,7 @@ import {
   authHeader,
   clearNotificationsAbove,
   createTestApp,
+  type DispatchWatermark,
   getDataSource,
   notificationWatermark,
 } from './helpers/app';
@@ -28,7 +29,7 @@ describe('notification dispatch (integration)', () => {
   let db: DataSource;
   let http: () => ReturnType<typeof request>;
 
-  let mark: number;
+  let mark: DispatchWatermark;
   let author: number;
   let watcher: number;
   let imageId: number;

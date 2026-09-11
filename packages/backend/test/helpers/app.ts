@@ -72,24 +72,38 @@ export const authHeader = (
 /** Every date on the wire must look like this: RFC3339 UTC, no fraction. */
 export const WIRE_DATE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
 
+/** Tables a node or comment write fans out into. */
+const DISPATCH_TABLES = ['user_notifications', 'app_notifications'] as const;
+
+export type DispatchWatermark = Record<string, number>;
+
 /**
- * Highest existing notification id. Node and comment writes fan out to whoever
- * is subscribed in the seeded database, so any spec that performs one must take
- * a mark first and {@link clearNotificationsAbove} it afterwards.
+ * Highest existing id in every table the dispatcher writes to. Node and comment
+ * writes fan out to whoever is subscribed *and* to the publication queue, so any
+ * spec that performs one must take a mark first and
+ * {@link clearNotificationsAbove} it afterwards.
  */
 export const notificationWatermark = async (
   db: DataSource,
-): Promise<number> => {
-  const [row] = await db.query(
-    'SELECT COALESCE(MAX(id), 0) AS id FROM user_notifications',
-  );
+): Promise<DispatchWatermark> => {
+  const marks: DispatchWatermark = {};
 
-  return Number(row.id);
+  for (const table of DISPATCH_TABLES) {
+    const [row] = await db.query(
+      `SELECT COALESCE(MAX(id), 0) AS id FROM ${table}`,
+    );
+
+    marks[table] = Number(row.id);
+  }
+
+  return marks;
 };
 
 export const clearNotificationsAbove = async (
   db: DataSource,
-  mark: number,
+  mark: DispatchWatermark,
 ): Promise<void> => {
-  await db.query('DELETE FROM user_notifications WHERE id > ?', [mark]);
+  for (const table of DISPATCH_TABLES) {
+    await db.query(`DELETE FROM ${table} WHERE id > ?`, [mark[table] ?? 0]);
+  }
 };

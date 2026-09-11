@@ -44,7 +44,8 @@
     "sharp": "^0.35.4",
     "socks": "^2.8.10",
     "typeorm": "^1.0.0",
-    "undici": "^8.10.2"
+    "undici": "^8.10.2",
+    "vk-io": "^4.10.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",

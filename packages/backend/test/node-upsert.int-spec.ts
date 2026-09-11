@@ -7,6 +7,7 @@ import {
   authHeader,
   clearNotificationsAbove,
   createTestApp,
+  type DispatchWatermark,
   getDataSource,
   notificationWatermark,
 } from './helpers/app';
@@ -17,7 +18,7 @@ const YT_THUMB = 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg';
 describe('node upsert (integration)', () => {
   let app: INestApplication;
   let db: DataSource;
-  let notificationMark: number;
+  let notificationMark: DispatchWatermark;
   let http: () => ReturnType<typeof request>;
 
   let authorId: number;
