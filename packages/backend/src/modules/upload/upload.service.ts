@@ -266,8 +266,8 @@ export class UploadService {
     const id3artist = parsed.common.artist ?? '';
 
     return {
-      // Rounded because the stored field is an integer.
-      duration: Math.round(parsed.format.duration ?? 0),
+      // Whole seconds, cut rather than rounded, as stored rows were.
+      duration: Math.floor(parsed.format.duration ?? 0),
       // Untagged files fall back to their name, so the player shows something.
       id3title: id3title || (id3artist ? '' : originalName),
       id3artist,
