@@ -584,6 +584,37 @@ describe('telegram bot (integration)', () => {
       expect(await processed(row)).toBe(1);
     });
 
+    it('drops a comment whose node was deleted', async () => {
+      const userId = await makeUser();
+      await link(userId, '900000151');
+      await setSettings(userId);
+
+      const node = await db.query(
+        `INSERT INTO node (title, type, blocks, files_order, is_public, is_promoted, is_heroic,
+           description, thumbnail, created_at, updated_at, deleted_at, userId)
+         VALUES ('gone', 'text', '[]', '', 1, 1, 0, '', '', NOW(), NOW(), NOW(), ?)`,
+        [userId],
+      );
+      const deletedNode = Number(node.insertId);
+      const comment = await db.query(
+        `INSERT INTO comment (text, files_order, created_at, updated_at, userId, nodeId)
+         VALUES ('orphaned', '', NOW(), NOW(), ?, ?)`,
+        [userId, deletedNode],
+      );
+
+      try {
+        const row = await feedRow(userId, 'comment', Number(comment.insertId));
+
+        await sender.runOnce();
+
+        expect(sentTo(900000151)).toHaveLength(0);
+        expect(await processed(row)).toBe(1);
+      } finally {
+        await db.query('DELETE FROM comment WHERE nodeId = ?', [deletedNode]);
+        await db.query('DELETE FROM node WHERE id = ?', [deletedNode]);
+      }
+    });
+
     it('records rows even when the send fails, and keeps going', async () => {
       const failing = await makeUser();
       await link(failing, '900000160');
