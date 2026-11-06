@@ -25,6 +25,7 @@
     "types": ["node", "react", "umami"]
   },
   "include": [
+    "next-env.d.ts",
     "src"
   ],
   "exclude": [
