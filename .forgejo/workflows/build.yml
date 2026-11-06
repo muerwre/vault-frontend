@@ -81,3 +81,129 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  backend_tests:
+    name: Backend unit tests
+    # Gated on the image build: no point testing a revision that does not build.
+    needs: push_backend_to_registry
+    # The same image as the e2e job, so both share one yarn cache — the cache
+    # version is derived from the path list *and* the compression method, so an
+    # entry written under one image is invisible to a lookup from another.
+    runs-on: playwright
+    env:
+      YARN_CACHE_FOLDER: /tmp/yarn-cache
+      # Git hooks are for people, not runners.
+      HUSKY: "0"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # cache@v4 speaks a protocol Forgejo does not implement and silently misses
+      # every run, so v3. Restore and save are split so a red suite still leaves
+      # the cache warm for the next run. No `runner.os` in the key: the runners
+      # report it with different casing.
+      - name: Restore Yarn downloads
+        id: yarn-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.YARN_CACHE_FOLDER }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-
+
+      # Install scripts stay on: sharp downloads its native binary in one, and
+      # the backend cannot start without it.
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Save Yarn downloads
+        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v3
+        with:
+          path: ${{ env.YARN_CACHE_FOLDER }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      # The backend resolves @vault/common through its built dist.
+      - name: Build shared package
+        run: yarn common:build
+
+      # Unit specs only. The integration specs run against the production dump,
+      # which carries real user data and is never available to CI.
+      - name: Run backend unit tests
+        run: yarn backend:test
+
+  e2e:
+    name: Playwright
+    # After the unit tests: they are cheaper, they warm the yarn cache this job
+    # restores, and a red unit suite is not worth a browser runner.
+    needs: backend_tests
+    # Maps to mcr.microsoft.com/playwright in the runner's config. Its tag must
+    # track @playwright/test in packages/e2e, which is pinned exactly for that
+    # reason: the browser binaries belong to the npm version.
+    runs-on: playwright
+    services:
+      # Empty on purpose. The schema comes from the baseline migration and the
+      # data from a synthetic seed — never from the production dump.
+      db:
+        image: mariadb:10.8
+        env:
+          MARIADB_ROOT_PASSWORD: password
+          MARIADB_DATABASE: adonis
+    env:
+      YARN_CACHE_FOLDER: /tmp/yarn-cache
+      HUSKY: "0"
+      CI: "true"
+      DATABASE_URL: mariadb://root:password@db:3306/adonis
+      # Any value works as long as the backend and the suite agree on it.
+      JWT_SECRET: e2e-ci-secret
+      E2E_JWT_SECRET: e2e-ci-secret
+      E2E_BASE_URL: http://localhost:3010
+      E2E_API_URL: http://localhost:7777/api
+      UPLOADS_PATH: /tmp/vault-uploads
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore Yarn downloads
+        id: yarn-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.YARN_CACHE_FOLDER }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # Normally a no-op, since backend_tests saves first; a backstop for when
+      # that job hit the cache and this one did not.
+      - name: Save Yarn downloads
+        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v3
+        with:
+          path: ${{ env.YARN_CACHE_FOLDER }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Build backend
+        run: yarn common:build && yarn backend:build
+
+      - name: Prepare database
+        run: |
+          mkdir -p "$UPLOADS_PATH"
+          yarn workspace @vault/e2e db:wait
+          yarn backend:migration:run
+          yarn workspace @vault/e2e db:seed
+
+      # With CI set, Playwright starts the backend and the frontend itself (see
+      # packages/e2e/playwright.config.ts) and runs serially with retries.
+      - name: Run E2E tests
+        run: yarn e2e:test
+
+      # upload-artifact@v4 uses an artifact API Forgejo does not implement.
+      - name: Upload Playwright report
+        # A green run's report is noise nobody opens.
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: packages/e2e/playwright-report/
+          retention-days: 7

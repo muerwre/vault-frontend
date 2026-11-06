@@ -29,7 +29,8 @@
     "backend:auth-check": "yarn workspace @vault/backend run auth-check",
     "backend:test": "yarn workspace @vault/backend run test",
     "backend:test:int": "yarn workspace @vault/backend run test:int",
-    "backend:test:all": "yarn workspace @vault/backend run test:all"
+    "backend:test:all": "yarn workspace @vault/backend run test:all",
+    "e2e:test": "yarn workspace @vault/e2e run test"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
