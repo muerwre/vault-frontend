@@ -193,8 +193,12 @@ describe('telegram messages', () => {
         3,
       );
 
-      expect(picked.get(1)?.map((m) => m.text)).toEqual(['n2', 'n3', 'n4']);
-      expect(picked.get(2)?.map((m) => m.text)).toEqual(['m1']);
+      expect(picked.get(1)?.map((m) => m.message.text)).toEqual([
+        'n2',
+        'n3',
+        'n4',
+      ]);
+      expect(picked.get(2)?.map((m) => m.message.text)).toEqual(['m1']);
     });
 
     it('returns nothing for no input', () => {

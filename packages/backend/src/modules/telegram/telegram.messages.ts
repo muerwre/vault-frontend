@@ -181,20 +181,20 @@ export const commentMessage = (
  * Groups messages per recipient for one delivery run.
  *
  * `items` must be newest first. Each recipient gets at most `max` of their
- * newest messages, reordered oldest first so the chat reads chronologically.
+ * newest items, reordered oldest first so the chat reads chronologically.
  */
-export const pickPerRecipient = <K>(
-  items: ReadonlyArray<{ recipient: K; message: TelegramMessage }>,
+export const pickPerRecipient = <T extends { recipient: unknown }>(
+  items: ReadonlyArray<T>,
   max: number,
-): Map<K, TelegramMessage[]> => {
-  const picked = new Map<K, TelegramMessage[]>();
+): Map<T['recipient'], T[]> => {
+  const picked = new Map<T['recipient'], T[]>();
 
-  for (const { recipient, message } of items) {
-    const list = picked.get(recipient) ?? [];
+  for (const item of items) {
+    const list = picked.get(item.recipient) ?? [];
 
     if (list.length < max) {
-      list.push(message);
-      picked.set(recipient, list);
+      list.push(item);
+      picked.set(item.recipient, list);
     }
   }
 
