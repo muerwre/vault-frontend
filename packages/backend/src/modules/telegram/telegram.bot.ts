@@ -93,6 +93,14 @@ export class TelegramBot implements OnApplicationBootstrap, OnModuleDestroy {
 
   onApplicationBootstrap(): void {
     if (!this.isEnabled) {
+      const { token, botUsername } = getTelegramConfig();
+
+      this.logger.log(
+        botUsername
+          ? 'bot and delivery off: TELEGRAM_BOT_USERNAME is set but TELEGRAM_TOKEN is not'
+          : 'bot and delivery off (no TELEGRAM_BOT_USERNAME)' +
+              (token ? '; the login widget still verifies' : ''),
+      );
       return;
     }
 
@@ -163,6 +171,10 @@ export class TelegramBot implements OnApplicationBootstrap, OnModuleDestroy {
     const command = parseCommand(message.text);
 
     try {
+      if (command) {
+        this.logger.log(`/${command} from user ${userId}`);
+      }
+
       switch (command) {
         case 'start':
           await this.reply(sender.id, await this.start(userId));

@@ -1,4 +1,4 @@
-import { Injectable, type OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   NOTIFICATION_ITEM_TYPES,
@@ -26,6 +26,8 @@ import { VkQueueService } from './vk.queue';
 export class VkConsumer implements NotificationConsumer, OnModuleInit {
   readonly name = 'vk-wall';
 
+  private readonly logger = new Logger('VK');
+
   constructor(
     private readonly queue: VkQueueService,
     private readonly dispatcher: NotificationDispatcher,
@@ -45,17 +47,29 @@ export class VkConsumer implements NotificationConsumer, OnModuleInit {
           select: { id: true, createdAt: true },
         });
 
-        return this.queue.enqueue(
+        const queued = await this.queue.enqueue(
           NOTIFICATION_ITEM_TYPES.NODE,
           event.itemId,
           node?.createdAt ?? null,
         );
+
+        if (queued) {
+          this.logger.log(`queued node ${event.itemId} for the wall`);
+        }
+
+        return;
       }
       case NOTIFICATION_QUEUE_TYPES.NODE_DELETE:
-        return this.queue.dropUnsent(
-          NOTIFICATION_ITEM_TYPES.NODE,
-          event.itemId,
-        );
+        if (
+          await this.queue.dropUnsent(
+            NOTIFICATION_ITEM_TYPES.NODE,
+            event.itemId,
+          )
+        ) {
+          this.logger.log(`withdrew node ${event.itemId} from the wall queue`);
+        }
+
+        return;
       default:
         return undefined;
     }

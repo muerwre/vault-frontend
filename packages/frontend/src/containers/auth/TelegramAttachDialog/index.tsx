@@ -6,13 +6,14 @@ import { Padder } from '~/components/common/Padder';
 import { Button } from '~/components/input/Button';
 import { useTelegramAccount } from '~/hooks/auth/useTelegramAccount';
 import { DialogComponentProps } from '~/types/modal';
+import { CONFIG } from '~/utils/config';
 
 import { BetterScrollDialog } from '../../../components/common/BetterScrollDialog';
 import { TelegramLoginForm } from '../LoginDialog/components/TelegramLoginForm/index';
 
 interface TelegramAttachDialogProps extends DialogComponentProps {}
 
-const botName = process.env.NEXT_PUBLIC_BOT_USERNAME;
+const botName = CONFIG.botUsername;
 
 const TelegramAttachDialog: FC<TelegramAttachDialogProps> = ({
   onRequestClose,

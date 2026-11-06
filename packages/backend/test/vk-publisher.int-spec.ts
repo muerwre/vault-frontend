@@ -1,7 +1,7 @@
-// Publisher config for the spec. Deliberately left *disabled* so the interval
-// loop never starts and no VK call is attempted on boot — the publish path is
-// driven directly instead, with the api stubbed.
-process.env.NOTIFICATIONS_VK_ENABLED = 'false';
+// Publisher config for the spec. No api key, so publishing stays *off*: the
+// interval loop never starts and no VK call is attempted on boot. The publish
+// path is driven directly instead, with the api stubbed.
+process.env.NOTIFICATIONS_VK_API_KEY = '';
 process.env.NOTIFICATIONS_VK_GROUP_ID = '46579663';
 process.env.NOTIFICATIONS_VK_ALBUM_ID = '166389890';
 process.env.PUBLIC_URL = 'https://vault48.example';

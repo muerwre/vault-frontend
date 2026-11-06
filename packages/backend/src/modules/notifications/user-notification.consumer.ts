@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   NOTIFICATION_ITEM_TYPES,
@@ -32,6 +32,8 @@ import {
  */
 @Injectable()
 export class UserNotificationConsumer implements NotificationConsumer {
+  private readonly logger = new Logger('Notifications');
+
   readonly name = 'user-notifications';
 
   constructor(
@@ -139,6 +141,8 @@ export class UserNotificationConsumer implements NotificationConsumer {
     if (fresh.length === 0) {
       return;
     }
+
+    this.logger.log(`${type} ${itemId}: notified ${fresh.length} user(s)`);
 
     await this.notifications.insert(
       fresh.map((userId) => ({

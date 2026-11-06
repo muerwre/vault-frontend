@@ -19,7 +19,8 @@ import { TelegramTransport } from './telegram.transport';
  * The Telegram bot and notification delivery. Global so account linking can
  * greet a new user without threading the module through OAuth.
  *
- * Both the bot and the sender stay idle unless `TELEGRAM_BOT_ENABLED` is set.
+ * Both the bot and the sender stay idle unless `TELEGRAM_BOT_USERNAME` and
+ * `TELEGRAM_TOKEN` are both set.
  */
 @Global()
 @Module({

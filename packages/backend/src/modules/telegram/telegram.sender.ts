@@ -139,6 +139,9 @@ export class TelegramNotificationSender
     const picked = pickPerRecipient(messages, maxMessages);
     const accounts = await this.deliverableAccounts([...picked.keys()]);
 
+    let sent = 0;
+    let failed = 0;
+
     for (const [userId, list] of picked) {
       const accountId = accounts.get(userId);
 
@@ -149,7 +152,9 @@ export class TelegramNotificationSender
       for (const message of list) {
         try {
           await this.bot.send(accountId, message);
+          sent += 1;
         } catch (error) {
+          failed += 1;
           this.logger.warn(
             `could not deliver to user ${userId}: ${
               error instanceof Error ? error.message : String(error)
@@ -160,6 +165,11 @@ export class TelegramNotificationSender
     }
 
     await this.markProcessed(due, now);
+
+    this.logger.log(
+      `took ${due.length} notification(s): sent ${sent}, failed ${failed}, ` +
+        `${accounts.size} recipient(s) with Telegram on`,
+    );
   }
 
   /**

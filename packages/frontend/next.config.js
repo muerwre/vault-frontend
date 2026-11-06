@@ -39,7 +39,7 @@ const readRootEnv = (keys) => {
  * uses is derived from it, so moving the site (a tunnel, staging) needs this one
  * setting. Defaults to the backend on localhost, which serves the pages too.
  */
-const rootEnv = readRootEnv(['PUBLIC_URL', 'PORT']);
+const rootEnv = readRootEnv(['PUBLIC_URL', 'PORT', 'TELEGRAM_BOT_USERNAME']);
 const PUBLIC_URL = (
   rootEnv.PUBLIC_URL || `http://localhost:${rootEnv.PORT || 3000}`
 ).replace(/\/+$/, '');
@@ -49,6 +49,13 @@ const PUBLIC_URL = (
 process.env.NEXT_PUBLIC_PUBLIC_HOST = `${PUBLIC_URL}/`;
 process.env.NEXT_PUBLIC_API_HOST = `${PUBLIC_URL}/api/`;
 process.env.NEXT_PUBLIC_REMOTE_CURRENT = `${PUBLIC_URL}/static/`;
+
+// The bot behind the Telegram login widget and the contact link. It must be the
+// bot whose TELEGRAM_TOKEN the backend checks the widget against, so it is set
+// beside the token rather than here. Empty hides Telegram in the app.
+process.env.NEXT_PUBLIC_BOT_USERNAME = (
+  rootEnv.TELEGRAM_BOT_USERNAME || ''
+).replace(/^@/, '');
 
 const publicHost = new URL(PUBLIC_URL);
 

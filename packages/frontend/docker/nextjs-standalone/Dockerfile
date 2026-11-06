@@ -16,10 +16,12 @@ FROM base as builder
 # The persisted login is keyed on the derived api address, so changing it signs
 # everybody out.
 ARG PUBLIC_URL
-ARG NEXT_PUBLIC_BOT_USERNAME
+# The Telegram bot; must be the one whose token the backend holds. Empty hides
+# Telegram login and the contact link.
+ARG TELEGRAM_BOT_USERNAME
 
 ENV PUBLIC_URL $PUBLIC_URL
-ENV NEXT_PUBLIC_BOT_USERNAME $NEXT_PUBLIC_BOT_USERNAME
+ENV TELEGRAM_BOT_USERNAME $TELEGRAM_BOT_USERNAME
 
 COPY package.json .
 COPY yarn.lock .

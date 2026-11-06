@@ -14,6 +14,20 @@ import {
   SESSION_PATH,
 } from '../../src/globals/session';
 
+/**
+ * Integrations that act on the outside world stay off in specs, whatever the
+ * developer's `.env.local` says: no VK posts, no Telegram polling, no mail.
+ * `.env.local` never overrides a variable that is already set, so blanking
+ * these first wins; a spec that needs one sets it before importing this file.
+ */
+for (const key of [
+  'NOTIFICATIONS_VK_API_KEY',
+  'TELEGRAM_BOT_USERNAME',
+  'SMTP_HOST',
+] as const) {
+  process.env[key] ??= '';
+}
+
 loadConfig();
 
 /**

@@ -5,6 +5,8 @@ export const CONFIG = {
   apiHost: process.env.NEXT_PUBLIC_API_HOST || '',
   // image storage endpoint (sames as backend, but with /static usualy)
   remoteCurrent: process.env.NEXT_PUBLIC_REMOTE_CURRENT || '',
+  // Telegram bot for the login widget and contact link; empty hides both
+  botUsername: process.env.NEXT_PUBLIC_BOT_USERNAME || '',
   // transitional prop, marks migration to nextjs
   isNextEnvironment:
     !!process.env.NEXT_PUBLIC_REMOTE_CURRENT || typeof window === 'undefined',

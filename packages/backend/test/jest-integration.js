@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires -- plain CommonJS jest config */
 const esm = require('../jest.esm');
 
 /** Integration specs: the real app against the seeded database, one at a time. */

@@ -41,7 +41,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             PUBLIC_URL=https://vault48.org
-            NEXT_PUBLIC_BOT_USERNAME=vault48bot
+            TELEGRAM_BOT_USERNAME=vault48bot
 
   push_backend_to_registry:
     name: Build & Publish backend
