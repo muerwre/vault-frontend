@@ -2,7 +2,9 @@ name: Build & Publish
 
 on:
   push:
-    branches: [master]
+    # `master` is production; `unstable` publishes the same images under its own
+    # tag for a staging deploy.
+    branches: [master, unstable]
 
 jobs:
   push_to_registry:
@@ -29,6 +31,9 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: git.vault48.org/${{ env.GITHUB_REPOSITORY }}
+          # One tag per branch, so an `unstable` build can never overwrite the
+          # `master` image production pulls.
+          tags: type=ref,event=branch
           
       - name: Build and push Docker image
         id: push
@@ -67,6 +72,9 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: git.vault48.org/${{ env.GITHUB_REPOSITORY }}-backend
+          # One tag per branch, so an `unstable` build can never overwrite the
+          # `master` image production pulls.
+          tags: type=ref,event=branch
 
       # Context is the repo root: the backend imports @vault/common, a sibling
       # workspace that has to be built with it.
