@@ -11,7 +11,12 @@ import {
 } from '@vault/common/constants';
 import { In, Repository } from 'typeorm';
 
-import { getPublicUrl, getTelegramConfig } from '../../config/env';
+import {
+  cooldownIntervalMs,
+  describeCooldown,
+  getPublicUrl,
+  getTelegramConfig,
+} from '../../config/env';
 import { Comment } from '../../entities/comment.entity';
 import { Node } from '../../entities/node.entity';
 import {
@@ -78,14 +83,14 @@ export class TelegramNotificationSender
     const { cooldownMins, purgeAfterDays } = getTelegramConfig();
 
     this.logger.log(
-      `delivering every ${cooldownMins}m, dropping after ${purgeAfterDays}d`,
+      `delivering ${describeCooldown(cooldownMins)}, dropping after ${purgeAfterDays}d`,
     );
 
     void this.runOnce();
 
     this.timer = setInterval(() => {
       void this.runOnce();
-    }, cooldownMins * MINUTE_MS);
+    }, cooldownIntervalMs(cooldownMins));
 
     // Long-running and unattended: never hold the process open.
     this.timer.unref();
