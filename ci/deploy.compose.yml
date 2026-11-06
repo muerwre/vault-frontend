@@ -8,7 +8,7 @@ name: vault
 
 services:
   backend:
-    image: git.vault48.org/muerwre/vault-frontend-backend:master
+    image: git.vault48.org/muerwre/vault-backend:master
     restart: unless-stopped
     environment:
       NODE_ENV: production

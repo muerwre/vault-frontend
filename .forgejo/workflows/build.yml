@@ -28,7 +28,8 @@ jobs:
         id: frontend_meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: git.vault48.org/${{ env.GITHUB_REPOSITORY }}
+          # Named per service rather than after the repository, which holds both.
+          images: git.vault48.org/${{ github.repository_owner }}/vault-frontend
           # One tag per branch, so an `unstable` build can never overwrite the
           # `master` image production pulls.
           tags: type=ref,event=branch
@@ -37,7 +38,7 @@ jobs:
         id: backend_meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: git.vault48.org/${{ env.GITHUB_REPOSITORY }}-backend
+          images: git.vault48.org/${{ github.repository_owner }}/vault-backend
           tags: type=ref,event=branch
 
       # Repo root as context for both: the lockfile and hoisted dependencies
