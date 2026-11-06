@@ -3,6 +3,9 @@
 .env
 .env.local
 .env.*.local
+**/.env
+**/.env.local
+**/.env.*.local
 
 # Installed and built artefacts: the image builds its own.
 node_modules

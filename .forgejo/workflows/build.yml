@@ -7,9 +7,12 @@ on:
     branches: [master, unstable]
 
 jobs:
-  push_to_registry:
-    name: Build & Publish frontend
+  images:
+    name: Build & Publish images
     runs-on: ubuntu-22.04
+    # Both images are built before either is pushed, in one job: a broken
+    # frontend must not ship a new backend, nor the other way round. The push
+    # steps rebuild from the layers the build steps just cached, so they are quick.
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,67 +24,71 @@ jobs:
           username: ${{ secrets.username }}
           password: ${{ secrets.password }}
 
-      - name: Extract docker metadata
-        id: meta
+      - name: Frontend metadata
+        id: frontend_meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: git.vault48.org/${{ env.GITHUB_REPOSITORY }}
           # One tag per branch, so an `unstable` build can never overwrite the
           # `master` image production pulls.
           tags: type=ref,event=branch
-          
-      - name: Build and push Docker image
-        id: push
+
+      - name: Backend metadata
+        id: backend_meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: git.vault48.org/${{ env.GITHUB_REPOSITORY }}-backend
+          tags: type=ref,event=branch
+
+      # Repo root as context for both: the lockfile and hoisted dependencies
+      # live there, and the backend builds @vault/common alongside itself.
+      - name: Build frontend
         uses: docker/build-push-action@v6
         with:
-          context: ./packages/frontend
+          context: .
           file: ./packages/frontend/docker/nextjs-standalone/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          push: false
+          tags: ${{ steps.frontend_meta.outputs.tags }}
+          labels: ${{ steps.frontend_meta.outputs.labels }}
           build-args: |
             PUBLIC_URL=https://vault48.org
             TELEGRAM_BOT_USERNAME=vault48bot
 
-  push_backend_to_registry:
-    name: Build & Publish backend
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Registry Login
-        uses: docker/login-action@v3
+      - name: Build backend
+        uses: docker/build-push-action@v6
         with:
-          registry: git.vault48.org
-          username: ${{ secrets.username }}
-          password: ${{ secrets.password }}
+          context: .
+          file: ./ci/backend.Dockerfile
+          push: false
+          tags: ${{ steps.backend_meta.outputs.tags }}
+          labels: ${{ steps.backend_meta.outputs.labels }}
 
-      - name: Extract docker metadata
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+      # Reached only when both builds succeeded.
+      - name: Push frontend
+        uses: docker/build-push-action@v6
         with:
-          images: git.vault48.org/${{ env.GITHUB_REPOSITORY }}-backend
-          # One tag per branch, so an `unstable` build can never overwrite the
-          # `master` image production pulls.
-          tags: type=ref,event=branch
+          context: .
+          file: ./packages/frontend/docker/nextjs-standalone/Dockerfile
+          push: true
+          tags: ${{ steps.frontend_meta.outputs.tags }}
+          labels: ${{ steps.frontend_meta.outputs.labels }}
+          build-args: |
+            PUBLIC_URL=https://vault48.org
+            TELEGRAM_BOT_USERNAME=vault48bot
 
-      # Context is the repo root: the backend imports @vault/common, a sibling
-      # workspace that has to be built with it.
-      - name: Build and push Docker image
-        id: push
+      - name: Push backend
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./ci/backend.Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.backend_meta.outputs.tags }}
+          labels: ${{ steps.backend_meta.outputs.labels }}
 
   backend_tests:
     name: Backend unit tests
     # Gated on the image build: no point testing a revision that does not build.
-    needs: push_backend_to_registry
+    needs: images
     # The same image as the e2e job, so both share one yarn cache — the cache
     # version is derived from the path list *and* the compression method, so an
     # entry written under one image is invisible to a lookup from another.

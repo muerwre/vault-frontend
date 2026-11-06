@@ -1,15 +1,11 @@
-# As written here: 
-# https://dev.to/leduc1901/reduce-docker-image-size-for-your-nextjs-app-5911
+# Build context is the repo root: the frontend is a workspace of the monorepo,
+# whose lockfile and hoisted dependencies live there.
 
-# Base ───────────────────────────────────────────────────────────────────────
-FROM node:14-alpine as base
+ARG NODE_IMAGE=node:22-slim
 
-WORKDIR /opt/app
+FROM ${NODE_IMAGE} AS builder
 
-ENV PATH /opt/app/node_modules/.bin:$PATH
-
-# Build ──────────────────────────────────────────────────────────────────────
-FROM base as builder
+WORKDIR /app
 
 # Where people open the site. next.config.js derives the api, uploads and public
 # addresses from it; they are inlined into the bundle, so this is a build arg.
@@ -20,29 +16,42 @@ ARG PUBLIC_URL
 # Telegram login and the contact link.
 ARG TELEGRAM_BOT_USERNAME
 
-ENV PUBLIC_URL $PUBLIC_URL
-ENV TELEGRAM_BOT_USERNAME $TELEGRAM_BOT_USERNAME
+ENV PUBLIC_URL=$PUBLIC_URL
+ENV TELEGRAM_BOT_USERNAME=$TELEGRAM_BOT_USERNAME
+ENV NEXT_TELEMETRY_DISABLED=1
 
-COPY package.json .
-COPY yarn.lock .
+# Manifests first, so a source-only change reuses the cached install layer.
+COPY package.json yarn.lock ./
+COPY packages/backend/package.json ./packages/backend/
+COPY packages/common/package.json ./packages/common/
+COPY packages/frontend/package.json ./packages/frontend/
+COPY packages/e2e/package.json ./packages/e2e/
+COPY packages/migration/package.json ./packages/migration/
 
-RUN true  \
-  && yarn install --frozen-lockfile\
-  && true
+# Installs every workspace: yarn 1 has no way to install a subset, and a partial
+# tree breaks the workspace symlinks.
+RUN yarn install --frozen-lockfile
 
-COPY . /opt/app
+COPY tsconfig.json ./
+COPY packages/frontend ./packages/frontend
 
-# pkg packs nodejs with given script, so we don't need it in next section
-RUN yarn next build
+RUN yarn workspace @vault/frontend next:build
 
-FROM node:14-alpine as runner
+FROM ${NODE_IMAGE} AS runner
 
-WORKDIR /opt/app
+WORKDIR /app
 
-COPY --from=builder /opt/app/public ./public
-COPY --from=builder /opt/app/.next/standalone .
-COPY --from=builder /opt/app/.next/static ./.next/static
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+
+# The standalone output mirrors the monorepo layout from the tracing root:
+# traced dependencies at the top, the server under packages/frontend. Static
+# assets and public files are not part of it and are copied beside the server.
+COPY --from=builder /app/packages/frontend/.next/standalone ./
+COPY --from=builder /app/packages/frontend/.next/static ./packages/frontend/.next/static
+COPY --from=builder /app/packages/frontend/public ./packages/frontend/public
 
 EXPOSE 3000
 
-ENTRYPOINT ["node", "server.js"]
+CMD ["node", "packages/frontend/server.js"]
