@@ -248,7 +248,27 @@ describe('upload and static (integration)', () => {
         });
       });
 
-      it('stores an unreadable file with empty metadata rather than failing', async () => {
+      it('reads a file with junk before its first frame', async () => {
+        // Content sniffing gives up on these; the declared type must decide.
+        const { body } = await upload(
+          'nodes',
+          'audio',
+          Buffer.concat([
+            Buffer.alloc(64, 0x55),
+            await fixture('untagged.mp3'),
+          ]),
+          'padded.mp3',
+          'audio/mpeg',
+        ).expect(201);
+
+        fileIds.push(body.id);
+        expect(body.metadata).toMatchObject({
+          duration: 2,
+          title: 'padded.mp3',
+        });
+      });
+
+      it('stores a file with no audio as a zero-length track named after it', async () => {
         const { body } = await upload(
           'nodes',
           'audio',
@@ -258,7 +278,13 @@ describe('upload and static (integration)', () => {
         ).expect(201);
 
         fileIds.push(body.id);
-        expect(body.metadata).toEqual({});
+        // Declared as mp3, it is scanned rather than rejected: no frames, no tags.
+        expect(body.metadata).toEqual({
+          duration: 0,
+          id3title: '',
+          id3artist: '',
+          title: 'broken.mp3',
+        });
       });
     });
 
