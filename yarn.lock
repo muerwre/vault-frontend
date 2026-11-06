@@ -6334,6 +6334,13 @@ he@0.5.0:
   resolved "https://registry.yarnpkg.com/he/-/he-0.5.0.tgz#2c05ffaef90b68e860f3fd2b54ef580989277ee2"
   integrity sha1-LAX/rvkLaOhg8/0rVO9YCYknfuI=
 
+heic-decode@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/heic-decode/-/heic-decode-2.1.0.tgz#f40efb2d3ffa2402748cfb3b8e957b99a9cf9584"
+  integrity sha512-0fB3O3WMk38+PScbHLVp66jcNhsZ/ErtQ6u2lMYu/YxXgbBtl+oKOhGQHa4RpvE68k8IzbWkABzHnyAIjR758A==
+  dependencies:
+    libheif-js "^1.19.8"
+
 history@^4.9.0:
   version "4.10.1"
   resolved "https://registry.yarnpkg.com/history/-/history-4.10.1.tgz#33371a65e3a83b267434e2b3f3b1b4c58aad4cf3"
@@ -7790,6 +7797,11 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
+
+libheif-js@^1.19.8:
+  version "1.23.5"
+  resolved "https://registry.yarnpkg.com/libheif-js/-/libheif-js-1.23.5.tgz#6d44e05c7004b98d08ab9bec664d8121056112eb"
+  integrity sha512-umXZPthnWZtF3iG/5mQG+AZ2V6i0UeYpo3z2CkggTEgL8dKmIIwJT6TDuAMuabXa1yTW8uJ1ZAgR+CxNTklYYw==
 
 libnpmaccess@8.0.6:
   version "8.0.6"

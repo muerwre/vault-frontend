@@ -10,7 +10,6 @@ import {
 } from '@vault/common/constants';
 import type { FileMetadata } from '@vault/common/types';
 import { parseBuffer } from 'music-metadata';
-import sharp from 'sharp';
 import { Repository } from 'typeorm';
 
 import { getUploadsConfig } from '../../config/env';
@@ -25,6 +24,7 @@ import {
   remoteFileName,
   resolveUploadPath,
 } from './upload.paths';
+import { openRaster } from './raster';
 
 @Injectable()
 export class UploadService {
@@ -213,7 +213,7 @@ export class UploadService {
   }
 
   private async imageMetadata(contents: Buffer): Promise<FileMetadata> {
-    const image = sharp(contents, { failOn: 'none' });
+    const image = await openRaster(contents, { failOn: 'none' });
     const { width, height, orientation } = await image.metadata();
 
     /**
@@ -234,7 +234,7 @@ export class UploadService {
   /** Averages the image down to a single pixel and renders it as `#rrggbb`. */
   private async dominantColor(contents: Buffer): Promise<string> {
     try {
-      const { data } = await sharp(contents, { failOn: 'none' })
+      const { data } = await (await openRaster(contents, { failOn: 'none' }))
         .resize(1, 1, { fit: 'cover' })
         .removeAlpha()
         .raw()
@@ -297,7 +297,9 @@ export class UploadService {
 
     try {
       // Re-encoding drops the EXIF orientation, so rotate before it is lost.
-      const webp = await sharp(contents, { failOn: 'none', autoOrient: true })
+      const webp = await (
+        await openRaster(contents, { failOn: 'none', autoOrient: true })
+      )
         .webp()
         .toBuffer();
 
