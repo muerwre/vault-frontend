@@ -100,7 +100,8 @@ module.exports = withBundleAnalyzer(
           // Uploads, served by the backend under the public root.
           protocol: publicHost.protocol.replace(':', ''),
           hostname: publicHost.hostname,
-          port: publicHost.port,
+          // Next rejects an empty port; the default one is simply omitted.
+          ...(publicHost.port ? { port: publicHost.port } : {}),
           pathname: '/static/**',
         },
         {
