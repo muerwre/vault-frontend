@@ -1,15 +1,14 @@
 # Build context is the repo root: the backend imports `@vault/common`, which is
 # a sibling workspace and has to be built alongside it.
 #
-# Deliberately *not* bundled with ncc. The backend loads two ESM-only libraries
-# through dynamic `import()` (audio metadata and the VK client), and TypeORM
-# finds migrations by globbing the filesystem — neither survives being flattened
-# into a single file. A plain install is larger but behaves like development.
+# Not bundled: TypeORM finds migrations by globbing the filesystem, which does
+# not survive being flattened into a single file. A plain install is larger but
+# behaves like development.
 #
-# Needs Node >= 22.12. The build targets CommonJS, so those dynamic imports are
-# compiled to `require()`, which can load an ES module only from 22.12 on. On an
-# older runtime audio uploads silently lose their metadata and VK publishing
-# fails. The runner asserts the version so a bad base image fails the build.
+# Needs Node >= 22.12. The build targets CommonJS, and two dependencies (audio
+# metadata, the VK client) ship only as ES modules; `require()` can load those
+# only from 22.12 on, and on anything older the app fails at startup. The runner
+# asserts the version so a bad base image fails the build.
 
 ARG NODE_IMAGE=node:22-slim
 
@@ -36,9 +35,11 @@ COPY packages/backend ./packages/backend
 RUN yarn workspace @vault/common build \
   && yarn workspace @vault/backend build
 
-# Drop dev dependencies from the tree the runner copies.
+# Drop dev dependencies from the tree the runner copies. The mkdir keeps the
+# runner's COPY of the backend's own node_modules valid if nothing is nested.
 RUN yarn install --frozen-lockfile --production --ignore-scripts \
-  && yarn cache clean
+  && yarn cache clean \
+  && mkdir -p packages/backend/node_modules
 
 FROM ${NODE_IMAGE} AS runner
 
@@ -60,6 +61,11 @@ COPY --from=builder /app/packages/common/package.json ./packages/common/
 COPY --from=builder /app/packages/common/dist ./packages/common/dist
 COPY --from=builder /app/packages/backend/package.json ./packages/backend/
 COPY --from=builder /app/packages/backend/dist ./packages/backend/dist
+# Where the backend's version of a package differs from the one hoisted to the
+# root (the frontend's), yarn nests it here. Leaving this out makes the backend
+# silently resolve the frontend's copy — e.g. an older sharp that ignores
+# `autoOrient`, so camera photos come out sideways in every scaled size.
+COPY --from=builder /app/packages/backend/node_modules ./packages/backend/node_modules
 
 # Uploads live outside the image; mount a volume here and point UPLOADS_PATH at
 # it, or every uploaded file is lost on redeploy.
