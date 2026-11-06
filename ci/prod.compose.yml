@@ -38,8 +38,11 @@ services:
       # *.sql.xz from here, only while the data volume is empty.
       # - ./dump.sql.xz:/docker-entrypoint-initdb.d/dump.sql.xz:ro
     healthcheck:
+      # No --connect: it logs in over TCP as a socket-only account and fills the
+      # log with 'Access denied'. --innodb_initialized passes only once the
+      # server is fully up, which is what dependants wait for.
       test:
-        ['CMD', 'healthcheck.sh', '--su-mysql', '--connect', '--innodb_initialized']
+        ['CMD', 'healthcheck.sh', '--su-mysql', '--innodb_initialized']
       interval: 5s
       timeout: 5s
       retries: 30
