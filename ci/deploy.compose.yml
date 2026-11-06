@@ -48,8 +48,8 @@ services:
       VK_CLIENT_ID: ${VK_CLIENT_ID}
       VK_CLIENT_SECRET: ${VK_CLIENT_SECRET}
 
-      # Wall publishing. Off unless explicitly enabled; it posts to a live group.
-      NOTIFICATIONS_VK_ENABLED: "false"
+      # Wall publishing: on when the group and its token are both set. It posts to
+      # a live group — leave NOTIFICATIONS_VK_GROUP_ID empty until cutover.
       NOTIFICATIONS_VK_API_KEY: ${NOTIFICATIONS_VK_API_KEY}
       NOTIFICATIONS_VK_GROUP_ID: ${NOTIFICATIONS_VK_GROUP_ID}
       NOTIFICATIONS_VK_ALBUM_ID: ${NOTIFICATIONS_VK_ALBUM_ID}
@@ -57,9 +57,9 @@ services:
 
       # A live token sends real messages and verifies the login widget.
       TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
-      # The bot and notification delivery. Only one instance per token may run
-      # it — keep it off until the outgoing backend's bot is stopped.
-      TELEGRAM_BOT_ENABLED: "false"
+      # Runs the bot and notification delivery when set (with the token). One
+      # poller per token: leave it empty until the outgoing backend's bot stops.
+      TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME}
       # Set when api.telegram.org is unreachable from the host.
       TELEGRAM_PROXY_URL: ${TELEGRAM_PROXY_URL}
     volumes:

@@ -1,9 +1,9 @@
-// Boots with the bot *off*, so no poll loop or delivery run starts against the
-// real Bot API. Specs that need it on flip the flag after boot — config is read
-// per call — with every transport call stubbed.
+// Boots with the bot *off* (no username), so no poll loop or delivery run starts
+// against the real Bot API. Specs that need it on set the username after boot —
+// config is read per call — with every transport call stubbed.
 const TELEGRAM_TOKEN = '424242:spec-bot-token';
 process.env.TELEGRAM_TOKEN = TELEGRAM_TOKEN;
-process.env.TELEGRAM_BOT_ENABLED = 'false';
+process.env.TELEGRAM_BOT_USERNAME = '';
 process.env.TELEGRAM_PROXY_URL = '';
 process.env.TELEGRAM_COOLDOWN_MINS = '5';
 process.env.TELEGRAM_PURGE_AFTER_DAYS = '3';
@@ -205,7 +205,7 @@ describe('telegram bot (integration)', () => {
   });
 
   beforeEach(async () => {
-    process.env.TELEGRAM_BOT_ENABLED = 'true';
+    process.env.TELEGRAM_BOT_USERNAME = 'vault_spec_bot';
     call = jest.spyOn(transport, 'call').mockResolvedValue({});
 
     // A run sends everything due, so rows left by an earlier test would leak in.
@@ -213,7 +213,7 @@ describe('telegram bot (integration)', () => {
   });
 
   afterEach(() => {
-    process.env.TELEGRAM_BOT_ENABLED = 'false';
+    process.env.TELEGRAM_BOT_USERNAME = '';
     jest.restoreAllMocks();
   });
 
@@ -445,7 +445,7 @@ describe('telegram bot (integration)', () => {
     });
 
     it('stays silent while the bot is off', async () => {
-      process.env.TELEGRAM_BOT_ENABLED = 'false';
+      process.env.TELEGRAM_BOT_USERNAME = '';
       const userId = await makeUser();
 
       await http()
@@ -695,7 +695,7 @@ describe('telegram bot (integration)', () => {
     });
 
     it('does not poll while disabled', async () => {
-      process.env.TELEGRAM_BOT_ENABLED = 'false';
+      process.env.TELEGRAM_BOT_USERNAME = '';
 
       bot.onApplicationBootstrap();
       await bot.onModuleDestroy();

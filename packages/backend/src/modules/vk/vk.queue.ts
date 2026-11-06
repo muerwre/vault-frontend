@@ -18,18 +18,18 @@ export class VkQueueService {
     private readonly queue: Repository<AppNotification>,
   ) {}
 
-  /** Enqueues an item, ignoring one that is already queued. */
+  /** Enqueues an item, ignoring one that is already queued. True when added. */
   async enqueue(
     type: string,
     itemId: number,
     itemCreatedAt: Date | null,
-  ): Promise<void> {
+  ): Promise<boolean> {
     const existing = await this.queue.findOne({
       where: { app: VK_APP_ID, itemId, type },
     });
 
     if (existing) {
-      return;
+      return false;
     }
 
     const now = new Date();
@@ -44,16 +44,23 @@ export class VkQueueService {
       createdAt: now,
       updatedAt: now,
     });
+
+    return true;
   }
 
-  /** Drops an item that has not gone out yet; a published one is left alone. */
-  async dropUnsent(type: string, itemId: number): Promise<void> {
-    await this.queue.delete({
+  /**
+   * Drops an item that has not gone out yet; a published one is left alone.
+   * True when something was dropped.
+   */
+  async dropUnsent(type: string, itemId: number): Promise<boolean> {
+    const { affected } = await this.queue.delete({
       app: VK_APP_ID,
       type,
       itemId,
       sentAt: IsNull(),
     });
+
+    return Boolean(affected);
   }
 
   /**

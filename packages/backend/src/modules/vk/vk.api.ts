@@ -30,6 +30,7 @@ export class VkApiService {
     const { groupId, albumId } = getVkPublisherConfig();
 
     if (!albumId) {
+      this.logger.log('no NOTIFICATIONS_VK_ALBUM_ID; posting without image');
       return null;
     }
 
@@ -41,12 +42,24 @@ export class VkApiService {
         source: { value: createReadStream(absolutePath) },
       });
 
-      return photo?.toString() ?? null;
+      const attachment = photo?.toString() ?? null;
+
+      this.logger.log(
+        attachment
+          ? `uploaded ${absolutePath} to album ${albumId} as ${attachment}`
+          : `upload of ${absolutePath} to album ${albumId} returned no photo`,
+      );
+
+      return attachment;
     } catch (error) {
+      // vk-io api errors carry VK's numeric code, which says more than the text.
+      const code = (error as { code?: unknown })?.code;
+
       this.logger.warn(
-        `could not upload ${absolutePath}: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
+        `could not upload ${absolutePath} to album ${albumId} of group ${groupId}` +
+          `${code !== undefined ? ` (VK error ${String(code)})` : ''}: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
       );
 
       return null;

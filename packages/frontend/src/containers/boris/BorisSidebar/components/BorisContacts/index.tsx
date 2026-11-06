@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { Padder } from '~/components/common/Padder';
 import { Button } from '~/components/input/Button';
+import { CONFIG } from '~/utils/config';
 
 import { BorisContactItem } from './components/BorisContactItem';
 import styles from './styles.module.scss';
@@ -27,19 +28,21 @@ const BorisContacts: FC<Props> = ({ canConnectTelegram, connectTelegram }) => (
       subtitle="исходники Убежища"
     />
 
-    <BorisContactItem
-      icon="telegram"
-      title="Телеграм-бот"
-      link="https://t.me/vault48bot"
-      subtitle="@vault48bot"
-      suffix={
-        canConnectTelegram && (
-          <Padder>
-            <Button onClick={connectTelegram}>Получать уведомления</Button>
-          </Padder>
-        )
-      }
-    />
+    {CONFIG.botUsername && (
+      <BorisContactItem
+        icon="telegram"
+        title="Телеграм-бот"
+        link={`https://t.me/${CONFIG.botUsername}`}
+        subtitle={`@${CONFIG.botUsername}`}
+        suffix={
+          canConnectTelegram && (
+            <Padder>
+              <Button onClick={connectTelegram}>Получать уведомления</Button>
+            </Padder>
+          )
+        }
+      />
+    )}
   </div>
 );
 

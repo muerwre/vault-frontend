@@ -115,11 +115,12 @@ export const getTelegramToken = (): string => process.env.TELEGRAM_TOKEN ?? '';
 export interface TelegramConfig {
   token: string;
   /**
-   * Runs the bot and the notification sender. Off unless explicitly enabled:
-   * Telegram allows one long-poller per token, so a second instance holding the
-   * same token would fight the live bot for updates and send duplicates.
+   * The bot's username. Setting it (with the token) runs the bot and the
+   * notification sender. Telegram allows one long-poller per token, so only
+   * one instance may have both: a second fights the live bot for updates and
+   * sends duplicates.
    */
-  botEnabled: boolean;
+  botUsername: string;
   /**
    * Outbound proxy for `api.telegram.org`, which is blocked in some networks.
    * `http(s)://`, `socks5://`, `socks5h://` and `socks4://` are understood;
@@ -142,16 +143,16 @@ const toPositiveInt = (value: string | undefined, fallback: number): number => {
 
 export const getTelegramConfig = (): TelegramConfig => ({
   token: getTelegramToken(),
-  botEnabled: process.env.TELEGRAM_BOT_ENABLED === 'true',
+  botUsername: (process.env.TELEGRAM_BOT_USERNAME ?? '').replace(/^@/, ''),
   proxyUrl: process.env.TELEGRAM_PROXY_URL ?? '',
   cooldownMins: toPositiveInt(process.env.TELEGRAM_COOLDOWN_MINS, 5),
   purgeAfterDays: toPositiveInt(process.env.TELEGRAM_PURGE_AFTER_DAYS, 3),
   maxMessages: toPositiveInt(process.env.TELEGRAM_MAX_MESSAGES, 3),
 });
 
-/** The bot needs its token as well as the flag. */
+/** The bot runs when it has a username to be and a token to act with. */
 export const isTelegramBotUsable = (config: TelegramConfig): boolean =>
-  config.botEnabled && Boolean(config.token);
+  Boolean(config.botUsername && config.token);
 
 /**
  * Signs the OAuth handshake session. PKCE requires the code verifier to outlive
@@ -162,10 +163,9 @@ export const getSessionSecret = (): string =>
   process.env.SESSION_SECRET || getJwtSecret();
 
 export interface VkPublisherConfig {
-  /** Off by default: enabling posts to a live group. */
-  enabled: boolean;
   /** Group access token with `wall` and `photos` scope. */
   apiKey: string;
+  /** The group posted to. Setting it (with the token) turns publishing on. */
   groupId: number;
   albumId: number;
   appId: number;
@@ -178,7 +178,6 @@ export interface VkPublisherConfig {
 }
 
 export const getVkPublisherConfig = (): VkPublisherConfig => ({
-  enabled: process.env.NOTIFICATIONS_VK_ENABLED === 'true',
   apiKey: process.env.NOTIFICATIONS_VK_API_KEY ?? '',
   groupId: toPositiveInt(process.env.NOTIFICATIONS_VK_GROUP_ID, 0),
   albumId: toPositiveInt(process.env.NOTIFICATIONS_VK_ALBUM_ID, 0),
@@ -191,9 +190,9 @@ export const getVkPublisherConfig = (): VkPublisherConfig => ({
   urlPrefix: getPublicUrl(),
 });
 
-/** Publishing needs a token and a group as well as the flag. */
+/** Publishing is on when there is a group to post to and a token to post with. */
 export const isVkPublisherUsable = (config: VkPublisherConfig): boolean =>
-  config.enabled && Boolean(config.apiKey) && config.groupId > 0;
+  config.groupId > 0 && Boolean(config.apiKey);
 
 export interface UploadsConfig {
   path: string;
