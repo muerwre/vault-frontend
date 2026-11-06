@@ -170,6 +170,39 @@ describe('comment writes (integration)', () => {
       expect(row.commented_at).not.toBeNull();
     });
 
+    it("does not flag the node as updated for the comment's own author", async () => {
+      const nodeId = await makeNode();
+      const updatedFor = async (uid: number) => {
+        const { body } = await http()
+          .get('/api/nodes/?with_updated=true')
+          .set(authHeader(uid))
+          .expect(200);
+
+        return (body.updated as Array<{ id: number }>).map((node) => node.id);
+      };
+
+      // Seen an hour ago, then commented on by the same person.
+      await db.query(
+        'INSERT INTO node_view (userId, nodeId, visited) VALUES (?, ?, NOW() - INTERVAL 1 HOUR)',
+        [otherId, nodeId],
+      );
+      const { body } = await post(nodeId, otherId, { text: 'my own' }).expect(
+        200,
+      );
+      track(body.comment.id);
+
+      expect(await updatedFor(otherId)).not.toContain(nodeId);
+
+      // Control: a later comment by someone else does flag it.
+      await db.query(
+        'UPDATE node SET commented_at = NOW() + INTERVAL 1 MINUTE WHERE id = ?',
+        [nodeId],
+      );
+      expect(await updatedFor(otherId)).toContain(nodeId);
+
+      await db.query('DELETE FROM node_view WHERE nodeId = ?', [nodeId]);
+    });
+
     it('updates an existing comment when id is supplied', async () => {
       const nodeId = await makeNode();
 

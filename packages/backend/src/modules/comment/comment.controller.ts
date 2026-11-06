@@ -153,6 +153,9 @@ export class CommentController {
       await this.notifications.commentCreated(created.id);
     }
 
+    // Your own comment must not flag the node as updated for you: the flow's
+    // "updated" list and its indicator compare commented_at with your last view.
+    await this.nodes.markSeen(user.id, nodeId);
     await this.comments.syncNodeCommentedAt(nodeId);
 
     return { comment: await this.comments.toWire(commentId, user.id) };
