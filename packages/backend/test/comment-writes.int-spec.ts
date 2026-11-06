@@ -12,6 +12,12 @@ import {
   notificationWatermark,
   WIRE_DATE,
 } from './helpers/app';
+import {
+  deleteFiles,
+  type FileType,
+  makeFile as makeFileRow,
+  readFile,
+} from './helpers/fixtures';
 
 describe('comment writes (integration)', () => {
   let app: INestApplication;
@@ -68,43 +74,17 @@ describe('comment writes (integration)', () => {
 
   const fileIds: number[] = [];
 
-  /** A file row of the given type, owned by the comment author. */
   const makeFile = async (
-    type: 'image' | 'audio' | 'video' | 'text',
-    { deleted = false, metadata = {} as Record<string, unknown> } = {},
-  ): Promise<number> => {
-    const name = `cspec-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-    await db.query(
-      `INSERT INTO file (name, orig_name, path, full_path, url, size, type, mime, metadata, userId, created_at, updated_at, deleted_at)
-       VALUES (?, ?, 'uploads/spec', ?, ?, 1, ?, 'application/octet-stream', ?, ?, NOW(), NOW(), ?)`,
-      [
-        name,
-        name,
-        `uploads/spec/${name}`,
-        `REMOTE_CURRENT://uploads/spec/${name}`,
-        type,
-        JSON.stringify(metadata),
-        authorId,
-        deleted ? new Date() : null,
-      ],
-    );
-    const [row] = await db.query('SELECT LAST_INSERT_ID() AS id');
-    fileIds.push(Number(row.id));
+    type: FileType,
+    options?: Parameters<typeof makeFileRow>[3],
+  ) => {
+    const id = await makeFileRow(db, authorId, type, options);
+    fileIds.push(id);
 
-    return Number(row.id);
+    return id;
   };
 
-  const fileRow = async (id: number) => {
-    const [row] = await db.query(
-      'SELECT target, metadata FROM file WHERE id = ?',
-      [id],
-    );
-
-    return {
-      target: row.target as string | null,
-      metadata: JSON.parse(row.metadata ?? '{}') as Record<string, unknown>,
-    };
-  };
+  const fileRow = (id: number) => readFile(db, id);
 
   const post = (nodeId: number, uid: number, body: Record<string, unknown>) =>
     http()
@@ -132,10 +112,7 @@ describe('comment writes (integration)', () => {
     // Writes here fan out to whoever is subscribed in the seeded database.
     await clearNotificationsAbove(db, notificationMark);
 
-    for (const id of fileIds) {
-      await db.query('DELETE FROM comment_files_file WHERE fileId = ?', [id]);
-      await db.query('DELETE FROM file WHERE id = ?', [id]);
-    }
+    await deleteFiles(db, fileIds);
 
     for (const id of commentIds) {
       await db.query('DELETE FROM comment_user_likes WHERE commentId = ?', [

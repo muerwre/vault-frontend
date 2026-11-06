@@ -14,6 +14,7 @@ import { ERROR_CODES } from '@vault/common/constants';
 
 import { User } from '../../entities/user.entity';
 import { VaultException } from '../../globals/exceptions';
+import { parseQueryBool } from '../../globals/query';
 import { toWireDate } from '../../wire/serialize';
 import {
   AuthRequiredGuard,
@@ -274,22 +275,3 @@ export class CommentController {
     return parsed;
   }
 }
-
-/**
- * A boolean query flag, read the way clients have always sent it: `1`, `t` and
- * `true` in any case are true, `0`, `f`, `false` are false, and absent is false.
- * Anything else is null, which callers refuse rather than guess at.
- */
-const parseQueryBool = (value: string | undefined): boolean | null => {
-  if (value === undefined || value === '') {
-    return false;
-  }
-
-  const normalised = value.toLowerCase();
-
-  if (['1', 't', 'true'].includes(normalised)) {
-    return true;
-  }
-
-  return ['0', 'f', 'false'].includes(normalised) ? false : null;
-};

@@ -177,21 +177,30 @@ describe('node writes (integration)', () => {
       await http().post(`/api/nodes/${nodeId}/like`).expect(401);
     });
 
-    it('404s an unknown node and a soft-deleted one', async () => {
-      const deleted = await makeNode({ deletedAt: '2020-01-01 00:00:00' });
-
+    it('404s an unknown node', async () => {
       await http()
         .post('/api/nodes/99999999/like')
         .set(authHeader(authorId))
         .expect(404);
-      await http()
-        .post(`/api/nodes/${deleted}/like`)
-        .set(authHeader(authorId))
-        .expect(404);
     });
 
-    /** boris is neither flow nor lab, so it cannot be liked. */
-    it('reports false for a type that cannot be liked', async () => {
+    it('likes a deleted node only for its author or an admin', async () => {
+      const deleted = await makeNode({ deletedAt: '2020-01-01 00:00:00' });
+
+      await http()
+        .post(`/api/nodes/${deleted}/like`)
+        .set(authHeader(strangerId))
+        .expect(404);
+
+      const { body } = await http()
+        .post(`/api/nodes/${deleted}/like`)
+        .set(authHeader(authorId))
+        .expect(200);
+      expect(body).toEqual({ is_liked: true });
+    });
+
+    /** Likes do not depend on the node's type: Boris can be liked too. */
+    it('likes a node of any type', async () => {
       const nodeId = await makeNode({ type: 'boris' });
 
       const { body } = await http()
@@ -199,11 +208,11 @@ describe('node writes (integration)', () => {
         .set(authHeader(authorId))
         .expect(200);
 
-      expect(body).toEqual({ is_liked: false });
+      expect(body).toEqual({ is_liked: true });
       const rows = await db.query('SELECT * FROM `like` WHERE nodeId = ?', [
         nodeId,
       ]);
-      expect(rows).toHaveLength(0);
+      expect(rows).toHaveLength(1);
     });
   });
 
@@ -318,6 +327,32 @@ describe('node writes (integration)', () => {
         .expect(400);
     });
 
+    it('stores only the known flow keys', async () => {
+      const nodeId = await makeNode();
+
+      await http()
+        .post(`/api/nodes/${nodeId}/cell-view`)
+        .set(authHeader(authorId))
+        .send({
+          flow: {
+            display: 'single',
+            show_description: true,
+            dominant_color: '#123456',
+            injected: 'nope',
+          },
+        })
+        .expect(200);
+
+      const [row] = await db.query('SELECT flow FROM node WHERE id = ?', [
+        nodeId,
+      ]);
+      expect(JSON.parse(row.flow)).toEqual({
+        display: 'single',
+        show_description: true,
+        dominant_color: '#123456',
+      });
+    });
+
     it('accepts every known variant', async () => {
       const nodeId = await makeNode();
 
@@ -404,6 +439,23 @@ describe('node writes (integration)', () => {
         .expect(200);
 
       expect(body.deleted_at).toBeNull();
+    });
+
+    it('reads is_locked as a flag: 1 locks, garbage is a 400', async () => {
+      const nodeId = await makeNode();
+
+      const { body } = await http()
+        .delete(`/api/nodes/${nodeId}`)
+        .query({ is_locked: '1' })
+        .set(authHeader(authorId))
+        .expect(200);
+      expect(body.deleted_at).toMatch(WIRE_DATE);
+
+      await http()
+        .delete(`/api/nodes/${nodeId}`)
+        .query({ is_locked: 'maybe' })
+        .set(authHeader(authorId))
+        .expect(400);
     });
 
     it('404s a different non-admin user', async () => {

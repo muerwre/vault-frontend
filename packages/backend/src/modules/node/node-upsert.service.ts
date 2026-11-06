@@ -7,7 +7,7 @@ import {
   type NodeType,
 } from '@vault/common/constants';
 import type { INodeBlock, INodeFlow } from '@vault/common/types';
-import { In, Repository } from 'typeorm';
+import { In, IsNull, Repository } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
 import { Node } from '../../entities/node.entity';
@@ -124,6 +124,7 @@ export class NodeUpsertService {
 
     const type = node.type;
     const previousFileIds = isUpdate ? [...(node.filesOrder ?? [])] : [];
+    const previousCoverId = isUpdate ? node.coverId : null;
 
     const resolvedFiles = await this.resolveFiles(type, body?.files ?? []);
     const blocks = filterBlocks(type, body?.blocks);
@@ -186,6 +187,11 @@ export class NodeUpsertService {
       null,
     );
 
+    // A replaced or removed cover is released too.
+    if (previousCoverId && previousCoverId !== node.coverId) {
+      await this.setFilesTarget([previousCoverId], null);
+    }
+
     return { ok: true, nodeId: saved.id, created: !isUpdate };
   }
 
@@ -202,8 +208,9 @@ export class NodeUpsertService {
       return [];
     }
 
+    // deleted_at is a plain column here, so deleted files are excluded by hand.
     const rows = await this.files.find({
-      where: { id: In(ids), type: In(NODE_FILE_TYPES) },
+      where: { id: In(ids), type: In(NODE_FILE_TYPES), deletedAt: IsNull() },
     });
     const byId = new Map(rows.map((file) => [file.id, file]));
 
@@ -223,7 +230,7 @@ export class NodeUpsertService {
       return null;
     }
 
-    return this.files.findOne({ where: { id } });
+    return this.files.findOne({ where: { id, deletedAt: IsNull() } });
   }
 
   /** Rewrites the junction so stored rows match `files_order`. */

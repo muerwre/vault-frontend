@@ -159,6 +159,40 @@ describe('node tags (integration)', () => {
       expect(titles.filter((t: string) => t === a)).toHaveLength(1);
     });
 
+    it('replaces the set: a tag left out of the list is removed', async () => {
+      const nodeId = await makeNode();
+      const a = uniqueTitle('set-a');
+      const b = uniqueTitle('set-b');
+
+      await http()
+        .post(`/api/nodes/${nodeId}/tags`)
+        .set(authHeader(authorId))
+        .send({ tags: [a, b] })
+        .expect(200);
+      const { body } = await http()
+        .post(`/api/nodes/${nodeId}/tags`)
+        .set(authHeader(authorId))
+        .send({ tags: [b] })
+        .expect(200);
+
+      expect(body.node.tags.map((t: { title: string }) => t.title)).toEqual([
+        b,
+      ]);
+    });
+
+    it('stores a tag sent twice once', async () => {
+      const nodeId = await makeNode();
+      const a = uniqueTitle('twice');
+
+      const { body } = await http()
+        .post(`/api/nodes/${nodeId}/tags`)
+        .set(authHeader(authorId))
+        .send({ tags: [a, a.toUpperCase()] })
+        .expect(200);
+
+      expect(body.node.tags).toHaveLength(1);
+    });
+
     it('ignores blank titles', async () => {
       const nodeId = await makeNode();
 

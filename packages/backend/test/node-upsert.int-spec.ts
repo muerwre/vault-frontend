@@ -11,6 +11,12 @@ import {
   getDataSource,
   notificationWatermark,
 } from './helpers/app';
+import {
+  deleteFiles,
+  type FileType,
+  makeFile as makeFileRow,
+  readFile,
+} from './helpers/fixtures';
 
 const YT = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 const YT_THUMB = 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg';
@@ -29,6 +35,17 @@ describe('node upsert (integration)', () => {
   let audioId: number;
 
   const createdNodeIds: number[] = [];
+  const fileIds: number[] = [];
+
+  const makeFile = async (
+    type: FileType,
+    options?: Parameters<typeof makeFileRow>[3],
+  ) => {
+    const id = await makeFileRow(db, authorId, type, options);
+    fileIds.push(id);
+
+    return id;
+  };
 
   const save = (uid: number, body: Record<string, unknown>) =>
     http().post('/api/nodes/').set(authHeader(uid)).send(body);
@@ -79,6 +96,8 @@ describe('node upsert (integration)', () => {
     // Writes here fan out to whoever is subscribed in the seeded database.
     await clearNotificationsAbove(db, notificationMark);
 
+    await deleteFiles(db, fileIds);
+
     for (const id of createdNodeIds) {
       await db.query('DELETE FROM node_files_file WHERE nodeId = ?', [id]);
       await db.query('DELETE FROM node_tags_tag WHERE nodeId = ?', [id]);
@@ -93,6 +112,61 @@ describe('node upsert (integration)', () => {
   });
 
   describe('create', () => {
+    it('drops deleted files, keeping the rest in order', async () => {
+      const live = await makeFile('image');
+      const gone = await makeFile('image', { deleted: true });
+
+      const { body } = await save(authorId, {
+        type: 'image',
+        title: 'one deleted',
+        files: [{ id: gone }, { id: live }],
+      }).expect(200);
+      track(Number(body.node.id));
+
+      expect(body.node.files.map((file: { id: number }) => file.id)).toEqual([
+        live,
+      ]);
+    });
+
+    it('releases a replaced cover', async () => {
+      const audio = await makeFile('audio');
+      const firstCover = await makeFile('image', { target: 'nodes' });
+      const secondCover = await makeFile('image');
+
+      const { body } = await save(authorId, {
+        type: 'audio',
+        title: 'covered',
+        files: [{ id: audio }],
+        cover: { id: firstCover },
+      }).expect(200);
+      const nodeId = track(Number(body.node.id));
+
+      await save(authorId, {
+        id: nodeId,
+        type: 'audio',
+        title: 'recovered',
+        files: [{ id: audio }],
+        cover: { id: secondCover },
+      }).expect(200);
+
+      expect((await readFile(db, firstCover)).target).toBeNull();
+    });
+
+    it('ignores a deleted cover', async () => {
+      const audio = await makeFile('audio');
+      const goneCover = await makeFile('image', { deleted: true });
+
+      const { body } = await save(authorId, {
+        type: 'audio',
+        title: 'no cover',
+        files: [{ id: audio }],
+        cover: { id: goneCover },
+      }).expect(200);
+      track(Number(body.node.id));
+
+      expect(body.node.cover).toBeFalsy();
+    });
+
     it('creates an image node from one attached image', async () => {
       const { body } = await save(authorId, {
         type: 'image',

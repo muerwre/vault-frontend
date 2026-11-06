@@ -16,6 +16,7 @@ import type { INodeFlow } from '@vault/common/types';
 import { Tag } from '../../entities/tag.entity';
 import { User } from '../../entities/user.entity';
 import { VaultException } from '../../globals/exceptions';
+import { parseQueryBool } from '../../globals/query';
 import {
   AuthRequiredGuard,
   Claims,
@@ -225,11 +226,16 @@ export class NodeController {
     @Param('id') id: string,
     @WithUser() user: User,
   ): Promise<{ is_liked: boolean }> {
-    const node = await this.nodes.findLive(
+    // Any node the caller can see: deleted ones only by their author or an
+    // admin, as when reading a node. Its type does not matter.
+    const node = await this.nodes.findForEdit(
       this.parseId(id, HttpStatus.NOT_FOUND),
     );
 
-    if (!node) {
+    if (
+      !node ||
+      (node.deletedAt && user.role !== ROLES.ADMIN && node.userId !== user.id)
+    ) {
       throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
     }
 
@@ -308,7 +314,14 @@ export class NodeController {
       throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
     }
 
-    const isLocking = toBool(isLocked);
+    const isLocking = parseQueryBool(isLocked);
+
+    if (isLocking === null) {
+      throw new VaultException(
+        ERROR_CODES.IncorrectData,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const deletedAt = await this.nodes.setLocked(node, isLocking);
 
     await (isLocking
@@ -319,8 +332,8 @@ export class NodeController {
   }
 
   /**
-   * Adds tags to a node, creating any that do not exist yet. An empty list is a
-   * no-op that still returns the node.
+   * Sets a node's tags to the list sent, creating any that do not exist yet. An
+   * empty list is a no-op that still returns the node.
    */
   @Post(':id/tags')
   @HttpCode(HttpStatus.OK)
@@ -342,9 +355,14 @@ export class NodeController {
 
     const titles = Array.isArray(body?.tags) ? body.tags : [];
 
+    // The list sent becomes the node's tags, removing any left out: clients
+    // send the full set. An empty list changes nothing.
     if (titles.length > 0) {
       const resolved = await this.tags.findOrCreateByTitles(titles);
-      await this.nodeTags.addTags(nodeId, resolved);
+      const unique = [
+        ...new Map(resolved.map((tag) => [tag.id, tag])).values(),
+      ];
+      await this.nodeTags.setTags(nodeId, unique);
     }
 
     return { node: await this.reloadNode(nodeId, user) };
