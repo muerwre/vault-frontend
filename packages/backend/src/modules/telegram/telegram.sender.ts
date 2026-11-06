@@ -208,7 +208,8 @@ export class TelegramNotificationSender
 
   /**
    * Renders rows into messages, keeping their order. A row whose node or
-   * comment no longer exists yields nothing.
+   * comment no longer exists or was deleted, or whose comment sits on a
+   * deleted node, yields nothing.
    */
   private async toMessages(
     rows: UserNotification[],
@@ -249,9 +250,11 @@ export class TelegramNotificationSender
             await this.comments
               .createQueryBuilder('comment')
               .leftJoinAndSelect('comment.user', 'user')
-              .leftJoinAndSelect('comment.node', 'node')
+              .innerJoinAndSelect('comment.node', 'node')
               .where('comment.id IN (:...commentIds)', { commentIds })
               .andWhere('comment.deleted_at IS NULL')
+              // Nowhere to link to once the node is gone.
+              .andWhere('node.deleted_at IS NULL')
               .getMany()
           ).map((comment) => [comment.id, comment])
         : [],

@@ -8,10 +8,23 @@ import {
   getSmtpConfig,
 } from '../../config/env';
 
+/** `{link}` is replaced with the reset link. */
+const RESTORE_SUBJECT = 'Кто-то пытается сбросить пароль!';
+const RESTORE_TEXT =
+  'Кто-то (или что-то) попросило нас сбросить ваш пароль. \n\n' +
+  'Если это что-то вы, то просто перейдите по ссылке и выберите новый пароль. \n\n' +
+  'Или не делайте ничего. Зачем? Почему?\n\n' +
+  'А! Ссылка: {link}';
+const RESTORE_HTML =
+  '<h4>Кто-то (или что-то) попросило нас сбросить ваш пароль</h4>' +
+  '<p>Если это что-то вы, то просто перейдите по ссылке и выберите новый пароль.</p>' +
+  '<p>Или не делайте ничего. Зачем? Почему?</p>' +
+  '<p>А! Ссылка: <a href="{link}">сбросить пароль</a>';
+
 /**
  * Optional by config: with no SMTP host configured, sends are logged and
- * skipped. Callers must treat a skipped send as success — a mail outage should
- * not fail the request that triggered it.
+ * skipped. A failed send is logged too and never fails the caller — a mail
+ * outage should not fail the request that triggered it.
  */
 @Injectable()
 export class MailService {
@@ -23,16 +36,22 @@ export class MailService {
   }
 
   async sendRestoreCode(email: string, code: string): Promise<void> {
-    const url = publicUrl(`${getFrontendResetUrl()}${code}`);
+    const link = publicUrl(`${getFrontendResetUrl()}${code}`);
 
     await this.send(
       email,
-      'Восстановление пароля',
-      `Для восстановления пароля перейдите по ссылке: ${url}`,
+      RESTORE_SUBJECT,
+      RESTORE_TEXT.replaceAll('{link}', link),
+      RESTORE_HTML.replaceAll('{link}', link),
     );
   }
 
-  private async send(to: string, subject: string, text: string): Promise<void> {
+  private async send(
+    to: string,
+    subject: string,
+    text: string,
+    html: string,
+  ): Promise<void> {
     if (!to) {
       return;
     }
@@ -54,6 +73,20 @@ export class MailService {
         : {}),
     });
 
-    await this.transporter.sendMail({ from: config.from, to, subject, text });
+    try {
+      await this.transporter.sendMail({
+        from: config.from,
+        to,
+        subject,
+        text,
+        html,
+      });
+    } catch (error) {
+      this.logger.warn(
+        `could not send mail to ${to}: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
   }
 }
