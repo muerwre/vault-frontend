@@ -1,7 +1,9 @@
 # Reference deployment. The database is assumed to already exist and is not
 # managed here — `ci/compose.yml` is the local, seeded one for development.
 #
-# Both services sit behind the reverse proxy; see nginx.example.conf.
+# Only the backend is published: it answers /api itself and proxies every page
+# to the frontend container. The host's reverse proxy sends everything to it;
+# see nginx.example.conf.
 name: vault
 
 services:
@@ -24,7 +26,12 @@ services:
       UPLOADS_PATH: /var/lib/vault/uploads
       UPLOADS_MAX_SIZE_MB: 200
 
-      FRONTEND_PUBLIC_HOST: vault48.org
+      # Where people open the site. Links in mail/Telegram/VK posts and the
+      # OAuth callbacks (<PUBLIC_URL>/api/oauth/<provider>/process/) derive from
+      # it. Must match the frontend image's PUBLIC_URL build arg.
+      PUBLIC_URL: https://vault48.org
+      # The frontend container, which renders every page.
+      FRONTEND_URL: http://frontend:3000
 
       SMTP_HOST: ${SMTP_HOST}
       SMTP_PORT: ${SMTP_PORT}
@@ -35,13 +42,11 @@ services:
       GOOGLE_API_KEY: ${GOOGLE_API_KEY}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      GOOGLE_CALLBACK_URL: https://vault48.org/api/oauth/google/process/
 
-      # OAuth login via VK ID. All three or none — a partly configured provider
+      # OAuth login via VK ID. Both or neither — a partly configured provider
       # answers 404.
       VK_CLIENT_ID: ${VK_CLIENT_ID}
       VK_CLIENT_SECRET: ${VK_CLIENT_SECRET}
-      VK_CALLBACK_URL: https://vault48.org/api/oauth/vkontakte/process/
 
       # Wall publishing. Off unless explicitly enabled; it posts to a live group.
       NOTIFICATIONS_VK_ENABLED: "false"
@@ -49,7 +54,6 @@ services:
       NOTIFICATIONS_VK_GROUP_ID: ${NOTIFICATIONS_VK_GROUP_ID}
       NOTIFICATIONS_VK_ALBUM_ID: ${NOTIFICATIONS_VK_ALBUM_ID}
       NOTIFICATIONS_VK_APP_ID: ${NOTIFICATIONS_VK_APP_ID}
-      NOTIFICATIONS_VK_URL_PREFIX: https://vault48.org
 
       # A live token sends real messages and verifies the login widget.
       TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
@@ -70,10 +74,7 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
-    ports:
-      - "127.0.0.1:3000:3000"
-    depends_on:
-      - backend
+    # Not published: reached only by the backend, as FRONTEND_URL.
 
 volumes:
   vault_uploads:

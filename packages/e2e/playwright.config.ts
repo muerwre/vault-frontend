@@ -2,18 +2,26 @@ import { defineConfig, devices } from '@playwright/test';
 
 const CI = !!process.env.CI;
 
-const BASE_URL = process.env.E2E_BASE_URL || 'http://localhost:3000';
-const API_URL = (process.env.E2E_API_URL || 'http://localhost:7777/api').replace(
+/**
+ * The site's one public address — the backend, which answers `/api` and proxies
+ * every page to the frontend, exactly as in production.
+ */
+const BASE_URL = (process.env.E2E_BASE_URL || 'http://localhost:3000').replace(
   /\/$/,
   '',
 );
+
+/** Where the frontend's dev server listens, behind the backend. */
+const FRONTEND_DEV_PORT = process.env.E2E_FRONTEND_PORT || '3011';
 
 const port = (url: string) => new URL(url).port || '80';
 
 /**
  * In CI, Playwright starts the backend and the frontend itself, both pointed at
- * the throwaway database the workflow prepared. Locally the three processes are
- * started by hand (see README), so nothing is launched here.
+ * the throwaway database the workflow prepared, and both told the public
+ * address so every link the app builds points back at the backend. Locally the
+ * processes are started by hand (`yarn dev`, see README), so nothing is
+ * launched here.
  *
  * The frontend runs `next dev` rather than a production build: `next build`
  * calls the api from `getStaticProps`, so a build would need the backend up
@@ -24,22 +32,23 @@ const webServer = CI
       {
         command: 'node dist/main.js',
         cwd: '../backend',
-        url: `${API_URL}/health`,
-        env: { PORT: port(API_URL) },
+        url: `${BASE_URL}/api/health`,
+        env: {
+          PORT: port(BASE_URL),
+          PUBLIC_URL: BASE_URL,
+          FRONTEND_URL: `http://localhost:${FRONTEND_DEV_PORT}`,
+        },
         reuseExistingServer: false,
         timeout: 60_000,
         stdout: 'pipe' as const,
       },
       {
-        command: `yarn next dev -p ${port(BASE_URL)}`,
+        command: `yarn next dev -p ${FRONTEND_DEV_PORT}`,
         cwd: '../frontend',
-        // A static file: answers before any page compiles, and without the api.
+        // A static file through the backend: proves the proxy works, and
+        // answers before any page compiles.
         url: `${BASE_URL}/favicon.ico`,
-        env: {
-          NEXT_PUBLIC_API_HOST: `${API_URL}/`,
-          NEXT_PUBLIC_REMOTE_CURRENT: `${API_URL}/static/`,
-          NEXT_PUBLIC_PUBLIC_HOST: `${BASE_URL}/`,
-        },
+        env: { PUBLIC_URL: BASE_URL },
         reuseExistingServer: false,
         timeout: 120_000,
       },

@@ -59,9 +59,20 @@ export const getSmtpConfig = (): SmtpConfig => ({
   from: process.env.SMTP_FROM ?? '',
 });
 
-/** Host used to build absolute links in outgoing mail. */
-export const getPublicHost = (): string =>
-  process.env.FRONTEND_PUBLIC_HOST ?? '';
+/**
+ * The site's public root, e.g. `https://vault48.org` — where people open the app.
+ * Every absolute link the backend produces (mail, Telegram, VK posts, OAuth
+ * callbacks) is built from it, so moving the site needs this one setting.
+ * Defaults to this server on localhost. Never has a trailing slash.
+ */
+export const getPublicUrl = (): string =>
+  (
+    process.env.PUBLIC_URL || `http://localhost:${process.env.PORT || 3000}`
+  ).replace(/\/+$/, '');
+
+/** `path` under the public root, with exactly one slash between them. */
+export const publicUrl = (path = ''): string =>
+  path ? `${getPublicUrl()}/${path.replace(/^\/+/, '')}` : getPublicUrl();
 
 /** Path the password-reset link points at; the code is appended to it. */
 export const getFrontendResetUrl = (): string =>
@@ -74,24 +85,28 @@ export interface OAuthProviderConfig {
 }
 
 /**
- * A provider is enabled only when all three values are present; the OAuth
- * routes 404 for a provider that is not configured.
+ * A provider is enabled only when its client id and secret are present (the
+ * callback is always derived); the OAuth routes 404 for one that is not.
  */
 export const isOAuthProviderConfigured = (
   config: OAuthProviderConfig,
 ): boolean =>
   Boolean(config.clientId && config.clientSecret && config.callbackUrl);
 
+/** The provider returns here, so it must be registered with the provider as-is. */
+const oauthCallbackUrl = (provider: string): string =>
+  publicUrl(`/api/oauth/${provider}/process/`);
+
 export const getVkOAuthConfig = (): OAuthProviderConfig => ({
   clientId: process.env.VK_CLIENT_ID ?? '',
   clientSecret: process.env.VK_CLIENT_SECRET ?? '',
-  callbackUrl: process.env.VK_CALLBACK_URL ?? '',
+  callbackUrl: oauthCallbackUrl('vkontakte'),
 });
 
 export const getGoogleOAuthConfig = (): OAuthProviderConfig => ({
   clientId: process.env.GOOGLE_CLIENT_ID ?? '',
   clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
-  callbackUrl: process.env.GOOGLE_CALLBACK_URL ?? '',
+  callbackUrl: oauthCallbackUrl('google'),
 });
 
 /** Bot token for the Telegram login widget. Empty disables Telegram linking. */
@@ -138,9 +153,6 @@ export const getTelegramConfig = (): TelegramConfig => ({
 export const isTelegramBotUsable = (config: TelegramConfig): boolean =>
   config.botEnabled && Boolean(config.token);
 
-/** Absolute site root for links in outgoing messages, e.g. `https://vault48.org`. */
-export const getPublicUrl = (): string => `https://${getPublicHost()}`;
-
 /**
  * Signs the OAuth handshake session. PKCE requires the code verifier to outlive
  * the redirect to the provider, so it is kept in a session cookie scoped to the
@@ -176,7 +188,7 @@ export const getVkPublisherConfig = (): VkPublisherConfig => ({
     process.env.NOTIFICATIONS_VK_PURGE_AFTER_DAYS,
     7,
   ),
-  urlPrefix: process.env.NOTIFICATIONS_VK_URL_PREFIX ?? '',
+  urlPrefix: getPublicUrl(),
 });
 
 /** Publishing needs a token and a group as well as the flag. */

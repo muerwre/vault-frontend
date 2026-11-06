@@ -1,6 +1,12 @@
 import { expect, test } from '@playwright/test';
 
-import { anyFlowNode, authStorageKey, tokenFor, whoAmI } from '../helpers/api';
+import {
+  anyFlowNode,
+  API_URL,
+  authStorageKey,
+  tokenFor,
+  whoAmI,
+} from '../helpers/api';
 
 /**
  * Signed-in flows. The token is minted directly rather than typed into the
@@ -24,7 +30,7 @@ test.describe('authenticated pages', () => {
     // Mint against a real account, then confirm the backend accepts it —
     // otherwise a wrong secret would surface as a confusing page failure.
     const users = await fetch(
-      `${process.env.E2E_API_URL ?? 'http://localhost:7777/api'}/users/${username}`,
+      `${API_URL}/users/${username}`,
     );
     const { user } = (await users.json()) as { user: { id: number } };
 

@@ -8,7 +8,7 @@ process.env.TELEGRAM_PROXY_URL = '';
 process.env.TELEGRAM_COOLDOWN_MINS = '5';
 process.env.TELEGRAM_PURGE_AFTER_DAYS = '3';
 process.env.TELEGRAM_MAX_MESSAGES = '3';
-process.env.FRONTEND_PUBLIC_HOST = 'vault48.example';
+process.env.PUBLIC_URL = 'https://vault48.example';
 
 import { createHash, createHmac } from 'crypto';
 
