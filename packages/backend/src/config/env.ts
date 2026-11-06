@@ -27,7 +27,7 @@ export const isDevMode = process.env.NODE_ENV !== 'production';
  * Connection URI, e.g. `mariadb://root:password@localhost:3306/adonis`.
  *
  * Keep the `mariadb://` scheme: it selects the driver type, which changes how
- * column defaults are read (see data-source.ts). Defaults to `ci/compose.yml`'s
+ * column defaults are read (see data-source.ts). Defaults to `ci/dev.compose.yml`'s
  * container so a fresh checkout works without setup.
  */
 export const getDatabaseUrl = (): string =>

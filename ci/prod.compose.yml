@@ -1,0 +1,83 @@
+# Production deployment: database, backend and frontend. `dev.compose.yml` is the
+# local, seeded database for development.
+#
+# Configuration lives in a `.env` beside this file — a copy of `.env.example`
+# filled in with production values. The backend reads all of it; only what this
+# file's own wiring decides (ports, hostnames, paths) is set here, and those
+# take precedence over the file.
+#
+# Only the backend is published: it answers /api itself and proxies every page
+# to the frontend container. The host's reverse proxy sends everything to it;
+# see nginx.example.conf.
+#
+#   VAULT_TAG=unstable docker compose -f prod.compose.yml up -d   # staging
+#
+# Distinct from the dev project, so running both on one machine never touches
+# the other's containers or volumes.
+name: vault-prod
+
+services:
+  db:
+    # Pinned to match the production dump: int display widths and utf8mb3
+    # handling differ on MySQL 8 and MariaDB 11.
+    image: mariadb:10.8
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD in .env}
+      MARIADB_DATABASE: adonis
+      MARIADB_USER: vault
+      MARIADB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      # Creates the `mysql@localhost` socket-auth account the healthcheck uses.
+      MARIADB_MYSQL_LOCALHOST_USER: 1
+    volumes:
+      - db_data:/var/lib/mysql
+      # A new database starts empty, and the backend does not create the schema.
+      # For the first start, mount the production dump: the entrypoint applies
+      # *.sql.xz from here, only while the data volume is empty.
+      # - ./dump.sql.xz:/docker-entrypoint-initdb.d/dump.sql.xz:ro
+    healthcheck:
+      test:
+        ['CMD', 'healthcheck.sh', '--su-mysql', '--connect', '--innodb_initialized']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      # The first start applies the dump before accepting connections.
+      start_period: 120s
+
+  backend:
+    image: git.vault48.org/muerwre/vault-backend:${VAULT_TAG:-master}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 8000
+      # DB_PASSWORD must be url-safe, since it is part of this url.
+      DATABASE_URL: mariadb://vault:${DB_PASSWORD}@db:3306/adonis
+      # The frontend container, which renders every page.
+      FRONTEND_URL: http://frontend:3000
+      # Uploaded files are addressed relative to this; changing it breaks every
+      # historical URL.
+      UPLOADS_PATH: /var/lib/vault/uploads
+    volumes:
+      # The uploads directory outlives the container; losing it loses every
+      # image ever posted.
+      - vault_uploads:/var/lib/vault/uploads
+    ports:
+      - '127.0.0.1:8000:8000'
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    # PUBLIC_URL and TELEGRAM_BOT_USERNAME are build args, baked into this image;
+    # they must match the backend's values in .env.
+    image: git.vault48.org/muerwre/vault-frontend:${VAULT_TAG:-master}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+    # Not published: reached only by the backend, as FRONTEND_URL.
+
+volumes:
+  db_data:
+  vault_uploads:
+    external: true
