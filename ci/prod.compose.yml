@@ -73,12 +73,16 @@ services:
         condition: service_healthy
 
   frontend:
-    # PUBLIC_URL and TELEGRAM_BOT_USERNAME are build args, baked into this image;
-    # they must match the backend's values in .env.
+    # TELEGRAM_BOT_USERNAME is baked into this image at build time; it must match
+    # the backend's bot in .env. Addresses are read here, at runtime.
     image: git.vault48.org/muerwre/vault-frontend:${VAULT_TAG:-master}
     restart: unless-stopped
     environment:
       NODE_ENV: production
+      # The public root, for absolute links (og tags, canonical url).
+      PUBLIC_URL: ${PUBLIC_URL:?set PUBLIC_URL in .env}
+      # Server-side data fetching goes straight to the backend container.
+      BACKEND_URL: http://backend:8000
     # Not published: reached only by the backend, as FRONTEND_URL.
 
 volumes:

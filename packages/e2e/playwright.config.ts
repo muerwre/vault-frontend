@@ -48,7 +48,8 @@ const webServer = CI
         // A static file through the backend: proves the proxy works, and
         // answers before any page compiles.
         url: `${BASE_URL}/favicon.ico`,
-        env: { PUBLIC_URL: BASE_URL },
+        // Server-side fetches go to the backend directly.
+        env: { PUBLIC_URL: BASE_URL, BACKEND_URL: BASE_URL },
         reuseExistingServer: false,
         timeout: 120_000,
       },

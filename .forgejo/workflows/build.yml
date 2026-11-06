@@ -51,9 +51,10 @@ jobs:
           push: false
           tags: ${{ steps.frontend_meta.outputs.tags }}
           labels: ${{ steps.frontend_meta.outputs.labels }}
+          # The site's address is not baked in (read at runtime); only the bot,
+          # which must match the backend's token on each deployment.
           build-args: |
-            PUBLIC_URL=https://vault48.org
-            TELEGRAM_BOT_USERNAME=vault48bot
+            TELEGRAM_BOT_USERNAME=${{ github.ref_name == 'master' && 'vault48bot' || 'vault48testbot' }}
 
       - name: Build backend
         uses: docker/build-push-action@v6
@@ -73,9 +74,10 @@ jobs:
           push: true
           tags: ${{ steps.frontend_meta.outputs.tags }}
           labels: ${{ steps.frontend_meta.outputs.labels }}
+          # The site's address is not baked in (read at runtime); only the bot,
+          # which must match the backend's token on each deployment.
           build-args: |
-            PUBLIC_URL=https://vault48.org
-            TELEGRAM_BOT_USERNAME=vault48bot
+            TELEGRAM_BOT_USERNAME=${{ github.ref_name == 'master' && 'vault48bot' || 'vault48testbot' }}
 
       - name: Push backend
         uses: docker/build-push-action@v6

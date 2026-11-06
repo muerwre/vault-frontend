@@ -7,16 +7,13 @@ FROM ${NODE_IMAGE} AS builder
 
 WORKDIR /app
 
-# Where people open the site. next.config.js derives the api, uploads and public
-# addresses from it; they are inlined into the bundle, so this is a build arg.
-# The persisted login is keyed on the derived api address, so changing it signs
-# everybody out.
-ARG PUBLIC_URL
-# The Telegram bot; must be the one whose token the backend holds. Empty hides
-# Telegram login and the contact link.
+# The Telegram bot; must be the one whose token the backend holds. The browser
+# has no runtime env, so it is inlined at build time. Empty hides Telegram login
+# and the contact link. Addresses are not build args: the server reads
+# PUBLIC_URL and BACKEND_URL from the container at runtime, the browser uses its
+# own origin, so one image serves any site.
 ARG TELEGRAM_BOT_USERNAME
 
-ENV PUBLIC_URL=$PUBLIC_URL
 ENV TELEGRAM_BOT_USERNAME=$TELEGRAM_BOT_USERNAME
 ENV NEXT_TELEMETRY_DISABLED=1
 
