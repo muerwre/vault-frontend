@@ -1,19 +1,32 @@
 import { mkdir, readFile, stat, writeFile } from 'fs/promises';
-import { dirname } from 'path';
+import { dirname, extname } from 'path';
 
 import { Injectable, Logger } from '@nestjs/common';
 import { IMAGE_PRESETS, type ImagePreset } from '@vault/common/constants';
-import sharp from 'sharp';
 
 import { getUploadsConfig } from '../../config/env';
 
+import { openRaster } from './raster';
 import { cachePathFor, needsScaling, resolveUploadPath } from './upload.paths';
 
 export interface ServableFile {
   absolutePath: string;
   /** True when the variant already existed, so it can be served with cache headers. */
   cached: boolean;
+  /** Set when the bytes are not what the file's extension says. */
+  contentType?: string;
 }
+
+/**
+ * Browsers cannot show HEIC, so its variants are written as JPEG under the
+ * source's own name — the cache path stays `cache/<preset>/<src>`.
+ */
+const JPEG_VARIANT_EXTENSIONS = new Set(['.heic', '.heif']);
+
+const variantContentType = (src: string): string | undefined =>
+  JPEG_VARIANT_EXTENSIONS.has(extname(src).toLowerCase())
+    ? 'image/jpeg'
+    : undefined;
 
 /** Extensions mapped to the encoder sharp should use, keyed by source mime. */
 const RASTER_MIMES: Record<string, string> = {
@@ -68,8 +81,10 @@ export class StaticService {
       return null;
     }
 
+    const contentType = variantContentType(src);
+
     if (await this.isFile(cacheAbsolute)) {
-      return { absolutePath: cacheAbsolute, cached: true };
+      return { absolutePath: cacheAbsolute, cached: true, contentType };
     }
 
     if (!(await this.isFile(sourceAbsolute))) {
@@ -93,7 +108,7 @@ export class StaticService {
       return { absolutePath: sourceAbsolute, cached: false };
     }
 
-    return { absolutePath: cacheAbsolute, cached: false };
+    return { absolutePath: cacheAbsolute, cached: false, contentType };
   }
 
   /**
@@ -123,10 +138,9 @@ export class StaticService {
      * without physically rotating first, a camera photo comes out sideways in
      * every generated size while the untouched original still looks right.
      */
-    const pipeline = sharp(contents, {
-      failOn: 'none',
-      autoOrient: true,
-    }).resize(
+    const pipeline = (
+      await openRaster(contents, { failOn: 'none', autoOrient: true })
+    ).resize(
       preset.width,
       crop ? height : undefined,
       crop
@@ -134,6 +148,10 @@ export class StaticService {
         : // Never enlarge a source smaller than the preset.
           { fit: 'inside', withoutEnlargement: true },
     );
+
+    if (variantContentType(source)) {
+      pipeline.jpeg();
+    }
 
     await writeFile(destination, await pipeline.toBuffer());
   }

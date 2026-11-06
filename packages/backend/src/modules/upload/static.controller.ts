@@ -55,6 +55,10 @@ export class StaticController {
         'Cache-Control',
         `public, max-age=${CACHE_MAX_AGE}, immutable`,
       );
+      if (variant.contentType) {
+        response.type(variant.contentType);
+      }
+
       response.sendFile(variant.absolutePath);
       return;
     }

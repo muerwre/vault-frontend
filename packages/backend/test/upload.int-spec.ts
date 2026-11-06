@@ -376,6 +376,57 @@ describe('upload and static (integration)', () => {
     });
   });
 
+  /**
+   * iPhone photos. The image library reads their header but cannot decode
+   * the pixels, so they need their own decoder.
+   */
+  describe('heic', () => {
+    let heicPath: string;
+    let heicMetadata: Record<string, unknown>;
+
+    beforeAll(async () => {
+      const { body } = await upload(
+        'nodes',
+        'image',
+        await readFile(join(__dirname, 'fixtures', 'sample.heic')),
+        'photo.heic',
+        'image/heic',
+      ).expect(201);
+
+      fileIds.push(body.id);
+      heicMetadata = body.metadata;
+      const [row] = await db.query('SELECT full_path FROM file WHERE id = ?', [
+        body.id,
+      ]);
+      heicPath = row.full_path;
+    });
+
+    it('records dimensions and a dominant colour on upload', () => {
+      expect(heicMetadata).toMatchObject({ width: 120, height: 60 });
+      expect(heicMetadata.dominant_color).toMatch(/^#[0-9A-F]{6}$/);
+    });
+
+    it('serves every preset as a JPEG browsers can show', async () => {
+      const response = await http()
+        .get(`/api/static/cache/avatar/${heicPath}`)
+        .expect(200);
+
+      expect(response.headers['content-type']).toBe('image/jpeg');
+      const meta = await sharp(response.body).metadata();
+      expect(meta).toMatchObject({ format: 'jpeg', width: 72, height: 72 });
+    });
+
+    it('serves the cached JPEG as a JPEG too', async () => {
+      await http().get(`/api/static/cache/cover/${heicPath}`).expect(200);
+
+      const second = await http()
+        .get(`/api/static/cache/cover/${heicPath}`)
+        .expect(200);
+
+      expect(second.headers['content-type']).toBe('image/jpeg');
+    });
+  });
+
   describe('GET /static/*', () => {
     let fullPath: string;
 
