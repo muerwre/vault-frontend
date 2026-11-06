@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GUEST_USER_ID } from '@vault/common/constants';
-import { MAX_COMMENT_LENGTH, ROLES } from '@vault/common/constants';
+import { FILE_TYPES, MAX_COMMENT_LENGTH, ROLES } from '@vault/common/constants';
 import { Repository } from 'typeorm';
 
 import { Comment } from '../../entities/comment.entity';
@@ -18,6 +18,11 @@ import {
   type WireFile,
   type WireUser,
 } from '../../wire/serialize';
+import {
+  applyAudioTitles,
+  type IncomingFile,
+  setFilesTarget,
+} from '../upload/audio-titles';
 
 /**
  * A comment as listed under a node.
@@ -126,9 +131,11 @@ export class CommentService {
       return new Map();
     }
 
+    // A deleted file is left out of the listing; its id stays in files_order.
     const files = await this.files
       .createQueryBuilder('file')
       .where('file.id IN (:...ids)', { ids })
+      .andWhere('file.deleted_at IS NULL')
       .getMany();
 
     return new Map(files.map((file) => [file.id, file]));
@@ -156,8 +163,17 @@ export class CommentService {
 
   // ---------------------------------------------------------------- writes
 
-  /** Minimum length at which a comment can become the node's description. */
-  private static readonly BRIEF_MIN_LENGTH = 64;
+  /**
+   * Minimum length at which a comment can become the node's description. In
+   * bytes, like MAX_COMMENT_LENGTH: Cyrillic text qualifies at half the letters.
+   */
+  private static readonly BRIEF_MIN_BYTES = 64;
+
+  /** File types a comment may carry. */
+  private static readonly ATTACHABLE_TYPES = [
+    FILE_TYPES.IMAGE,
+    FILE_TYPES.AUDIO,
+  ];
 
   findById(id: number, includeDeleted = false): Promise<Comment | null> {
     const query = this.comments
@@ -180,10 +196,10 @@ export class CommentService {
 
   /**
    * Validates a comment body. A comment needs text or at least one file; text
-   * alone is capped at {@link MAX_COMMENT_LENGTH}.
+   * is capped at {@link MAX_COMMENT_LENGTH} bytes of UTF-8, not characters.
    */
   validate(text: string, fileIds: number[]): string | null {
-    if (text.length > MAX_COMMENT_LENGTH) {
+    if (Buffer.byteLength(text, 'utf8') > MAX_COMMENT_LENGTH) {
       return 'Комментарий слишком длинный';
     }
 
@@ -194,21 +210,43 @@ export class CommentService {
     return null;
   }
 
-  /** Keeps only ids that exist, in the order supplied. */
-  async resolveFileIds(ids: number[]): Promise<number[]> {
+  /**
+   * The files a comment may carry, in the order supplied: images and audio
+   * that exist and are not deleted. Anything else is dropped, not refused.
+   */
+  async resolveFiles(ids: number[]): Promise<File[]> {
     if (ids.length === 0) {
       return [];
     }
 
     const rows = await this.files
       .createQueryBuilder('file')
-      .select('file.id', 'id')
       .where('file.id IN (:...ids)', { ids })
-      .getRawMany();
+      .andWhere('file.type IN (:...types)', {
+        types: CommentService.ATTACHABLE_TYPES,
+      })
+      .andWhere('file.deleted_at IS NULL')
+      .getMany();
 
-    const known = new Set(rows.map((row: { id: number }) => Number(row.id)));
+    const byId = new Map(rows.map((file) => [file.id, file]));
 
-    return ids.filter((id) => known.has(id));
+    return [...new Set(ids)]
+      .map((id) => byId.get(id))
+      .filter((file): file is File => !!file);
+  }
+
+  /**
+   * Marks the comment's files as held by a comment and releases any it no
+   * longer holds, so orphaned uploads stay identifiable. The stored value is
+   * the singular `comment`, as in existing rows.
+   */
+  claimFiles(fileIds: number[], previous: number[]): Promise<void> {
+    return setFilesTarget(this.files, fileIds, 'comment', previous);
+  }
+
+  /** Persists edited track titles on the comment's audio files. */
+  applyAudioTitles(incoming: IncomingFile[] | undefined, attached: File[]) {
+    return applyAudioTitles(this.files, incoming, attached);
   }
 
   async create(
@@ -316,7 +354,7 @@ export class CommentService {
       !node.description &&
       node.userId !== null &&
       comment.userId === node.userId &&
-      comment.text.length >= CommentService.BRIEF_MIN_LENGTH
+      Buffer.byteLength(comment.text, 'utf8') >= CommentService.BRIEF_MIN_BYTES
     ) {
       await this.nodes.update(node.id, { description: comment.text });
     }

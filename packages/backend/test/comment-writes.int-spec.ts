@@ -66,6 +66,46 @@ describe('comment writes (integration)', () => {
     return Number(row.id);
   };
 
+  const fileIds: number[] = [];
+
+  /** A file row of the given type, owned by the comment author. */
+  const makeFile = async (
+    type: 'image' | 'audio' | 'video' | 'text',
+    { deleted = false, metadata = {} as Record<string, unknown> } = {},
+  ): Promise<number> => {
+    const name = `cspec-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    await db.query(
+      `INSERT INTO file (name, orig_name, path, full_path, url, size, type, mime, metadata, userId, created_at, updated_at, deleted_at)
+       VALUES (?, ?, 'uploads/spec', ?, ?, 1, ?, 'application/octet-stream', ?, ?, NOW(), NOW(), ?)`,
+      [
+        name,
+        name,
+        `uploads/spec/${name}`,
+        `REMOTE_CURRENT://uploads/spec/${name}`,
+        type,
+        JSON.stringify(metadata),
+        authorId,
+        deleted ? new Date() : null,
+      ],
+    );
+    const [row] = await db.query('SELECT LAST_INSERT_ID() AS id');
+    fileIds.push(Number(row.id));
+
+    return Number(row.id);
+  };
+
+  const fileRow = async (id: number) => {
+    const [row] = await db.query(
+      'SELECT target, metadata FROM file WHERE id = ?',
+      [id],
+    );
+
+    return {
+      target: row.target as string | null,
+      metadata: JSON.parse(row.metadata ?? '{}') as Record<string, unknown>,
+    };
+  };
+
   const post = (nodeId: number, uid: number, body: Record<string, unknown>) =>
     http()
       .post(`/api/nodes/${nodeId}/comments`)
@@ -91,6 +131,11 @@ describe('comment writes (integration)', () => {
   afterAll(async () => {
     // Writes here fan out to whoever is subscribed in the seeded database.
     await clearNotificationsAbove(db, notificationMark);
+
+    for (const id of fileIds) {
+      await db.query('DELETE FROM comment_files_file WHERE fileId = ?', [id]);
+      await db.query('DELETE FROM file WHERE id = ?', [id]);
+    }
 
     for (const id of commentIds) {
       await db.query('DELETE FROM comment_user_likes WHERE commentId = ?', [
@@ -253,7 +298,7 @@ describe('comment writes (integration)', () => {
       );
     });
 
-    it('404s an edit whose comment belongs to another node', async () => {
+    it('403s an edit whose comment belongs to another node', async () => {
       const first = await makeNode();
       const second = await makeNode();
 
@@ -265,7 +310,142 @@ describe('comment writes (integration)', () => {
       await post(second, authorId, {
         id: commentId,
         text: 'wrong node',
-      }).expect(404);
+      }).expect(403);
+    });
+
+    it("403s a stranger's edit before looking at its body", async () => {
+      const nodeId = await makeNode();
+      const created = await post(nodeId, authorId, { text: 'mine' }).expect(
+        200,
+      );
+      track(created.body.comment.id);
+
+      // An empty body would be a 400, but the rights check comes first.
+      await post(nodeId, otherId, {
+        id: created.body.comment.id,
+        text: '',
+      }).expect(403);
+    });
+
+    it('keeps only image and audio files that exist and are not deleted', async () => {
+      const nodeId = await makeNode();
+      const image = await makeFile('image');
+      const audio = await makeFile('audio');
+      const video = await makeFile('video');
+      const gone = await makeFile('image', { deleted: true });
+
+      const { body } = await post(nodeId, authorId, {
+        text: 'files',
+        files: [{ id: audio }, { id: video }, { id: gone }, { id: image }],
+      }).expect(200);
+      track(body.comment.id);
+
+      expect(body.comment.files.map((file: { id: number }) => file.id)).toEqual(
+        [audio, image],
+      );
+    });
+
+    it("marks attached files as a comment's and releases dropped ones", async () => {
+      const nodeId = await makeNode();
+      const kept = await makeFile('image');
+      const dropped = await makeFile('image');
+
+      const created = await post(nodeId, authorId, {
+        text: 'two files',
+        files: [{ id: kept }, { id: dropped }],
+      }).expect(200);
+      const commentId = track(created.body.comment.id);
+
+      expect((await fileRow(kept)).target).toBe('comment');
+      expect((await fileRow(dropped)).target).toBe('comment');
+
+      await post(nodeId, authorId, {
+        id: commentId,
+        text: 'one file',
+        files: [{ id: kept }],
+      }).expect(200);
+
+      expect((await fileRow(kept)).target).toBe('comment');
+      expect((await fileRow(dropped)).target).toBeNull();
+    });
+
+    it('persists an edited audio title, and nothing else from the client', async () => {
+      const nodeId = await makeNode();
+      const audio = await makeFile('audio', {
+        metadata: { title: 'old', duration: 5 },
+      });
+
+      const { body } = await post(nodeId, authorId, {
+        text: 'renamed',
+        files: [{ id: audio, metadata: { title: 'new', duration: 999 } }],
+      }).expect(200);
+      track(body.comment.id);
+
+      expect((await fileRow(audio)).metadata).toEqual({
+        title: 'new',
+        duration: 5,
+      });
+    });
+
+    it('caps text by bytes, so a long Cyrillic comment is refused', async () => {
+      const nodeId = await makeNode();
+      // 4100 letters, 8200 bytes: under the limit in characters, over it in bytes.
+      await post(nodeId, authorId, { text: 'ж'.repeat(4100) }).expect(400);
+    });
+
+    it("fills an empty description from the author's comment, counting bytes", async () => {
+      // 40 Cyrillic letters are 80 bytes: past the 64-byte threshold.
+      const nodeId = await makeNode();
+      const text = 'ж'.repeat(40);
+      const { body } = await post(nodeId, authorId, { text }).expect(200);
+      track(body.comment.id);
+
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
+      expect(row.description).toBe(text);
+    });
+
+    it('fills the description when an edit makes the comment long enough', async () => {
+      const nodeId = await makeNode();
+      const created = await post(nodeId, authorId, { text: 'short' }).expect(
+        200,
+      );
+      const commentId = track(created.body.comment.id);
+      const long =
+        'a long enough comment to become the description of its node, surely';
+
+      await post(nodeId, authorId, { id: commentId, text: long }).expect(200);
+
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
+      expect(row.description).toBe(long);
+    });
+
+    it('leaves a file deleted after posting out of the listing', async () => {
+      const nodeId = await makeNode();
+      const kept = await makeFile('image');
+      const removed = await makeFile('image');
+
+      const { body } = await post(nodeId, authorId, {
+        text: 'then one goes',
+        files: [{ id: kept }, { id: removed }],
+      }).expect(200);
+      track(body.comment.id);
+      await db.query('UPDATE file SET deleted_at = NOW() WHERE id = ?', [
+        removed,
+      ]);
+
+      const listing = await http()
+        .get(`/api/nodes/${nodeId}/comments`)
+        .expect(200);
+      const [comment] = listing.body.comments;
+      expect(comment.files.map((file: { id: number }) => file.id)).toEqual([
+        kept,
+      ]);
     });
 
     it('rejects an empty comment with no files', async () => {
@@ -485,6 +665,42 @@ describe('comment writes (integration)', () => {
   });
 
   describe('DELETE /nodes/:id/comments/:cid', () => {
+    it.each([
+      ['1', true],
+      ['TRUE', true],
+      ['t', true],
+      ['0', false],
+      ['false', false],
+    ])('reads is_locked=%p as %p', async (flag, locks) => {
+      const nodeId = await makeNode();
+      const created = await post(nodeId, authorId, {
+        text: `flag ${flag}`,
+      }).expect(200);
+      const commentId = track(created.body.comment.id);
+
+      const { body } = await http()
+        .delete(`/api/nodes/${nodeId}/comments/${commentId}`)
+        .query({ is_locked: flag })
+        .set(authHeader(authorId))
+        .expect(200);
+
+      expect(body.deleted_at === null).toBe(!locks);
+    });
+
+    it('400s an is_locked it cannot read', async () => {
+      const nodeId = await makeNode();
+      const created = await post(nodeId, authorId, {
+        text: 'garbage flag',
+      }).expect(200);
+      const commentId = track(created.body.comment.id);
+
+      await http()
+        .delete(`/api/nodes/${nodeId}/comments/${commentId}`)
+        .query({ is_locked: 'maybe' })
+        .set(authHeader(authorId))
+        .expect(400);
+    });
+
     it('locks a comment, hiding it from the listing', async () => {
       const nodeId = await makeNode();
       const created = await post(nodeId, authorId, { text: 'doomed' }).expect(

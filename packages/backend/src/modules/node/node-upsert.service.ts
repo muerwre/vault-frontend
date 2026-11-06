@@ -12,6 +12,7 @@ import { In, Repository } from 'typeorm';
 import { File } from '../../entities/file.entity';
 import { Node } from '../../entities/node.entity';
 import type { User } from '../../entities/user.entity';
+import { applyAudioTitles } from '../upload/audio-titles';
 
 import {
   deriveDescription,
@@ -176,7 +177,7 @@ export class NodeUpsertService {
     const saved = await this.nodes.save(node);
 
     await this.setNodeFiles(saved.id, node.filesOrder);
-    await this.applyAudioTitles(body?.files ?? [], resolvedFiles);
+    await applyAudioTitles(this.files, body?.files ?? [], resolvedFiles);
 
     // Attached files belong to this node; files dropped from it are released.
     await this.setFilesTarget(node.filesOrder, UPLOAD_TARGETS.NODES);
@@ -252,36 +253,5 @@ export class NodeUpsertService {
     }
 
     await this.files.update({ id: In(fileIds) }, { target: target as never });
-  }
-
-  /**
-   * Audio files carry a user-editable track title in their metadata, so a
-   * changed title on an incoming audio file is persisted. Nothing else in a
-   * client-supplied file is trusted.
-   */
-  private async applyAudioTitles(
-    requested: NodeUpsertBody['files'],
-    resolved: File[],
-  ): Promise<void> {
-    const byId = new Map(resolved.map((file) => [file.id, file]));
-
-    for (const incoming of requested ?? []) {
-      const id = Number(incoming?.id ?? 0);
-      const file = byId.get(id);
-      const title = incoming?.metadata?.title;
-
-      if (
-        !file ||
-        file.type !== FILE_TYPES.AUDIO ||
-        typeof title !== 'string' ||
-        title === file.metadata?.title
-      ) {
-        continue;
-      }
-
-      await this.files.update(id, {
-        metadata: { ...(file.metadata ?? {}), title },
-      });
-    }
   }
 }

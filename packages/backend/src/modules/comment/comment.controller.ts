@@ -25,6 +25,7 @@ import {
 import { canCommentOn } from '../node/node.permissions';
 import { NodeService } from '../node/node.service';
 import { NotificationDispatcher } from '../notifications/notification.dispatcher';
+import type { IncomingFile } from '../upload/audio-titles';
 
 import {
   COMMENTS_DEFAULT_TAKE,
@@ -87,7 +88,7 @@ export class CommentController {
     @Param('id') id: string,
     @WithUser() user: User,
     @Body()
-    body: { id?: number; text?: string; files?: Array<{ id?: number }> },
+    body: { id?: number; text?: string; files?: IncomingFile[] },
   ): Promise<{ comment: WireComment }> {
     const nodeId = this.parseId(
       id,
@@ -101,11 +102,37 @@ export class CommentController {
       throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
     }
 
+    // Order matters for the answer: a missing comment is 404, a comment of
+    // another node or someone else's is 403, and only then is the body checked.
+    const existingId = Number(body?.id ?? 0);
+    const existing =
+      Number.isFinite(existingId) && existingId > 0
+        ? await this.comments.findById(existingId)
+        : null;
+
+    if (existingId > 0 && !existing) {
+      throw new VaultException(
+        ERROR_CODES.CommentNotFound,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (
+      existing &&
+      (existing.nodeId !== nodeId || !this.comments.canEdit(existing, user))
+    ) {
+      throw new VaultException(
+        ERROR_CODES.NotEnoughRights,
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
     const text = typeof body?.text === 'string' ? body.text : '';
     const requested = (body?.files ?? [])
       .map((file) => Number(file?.id))
       .filter((fileId) => Number.isFinite(fileId) && fileId > 0);
-    const fileIds = await this.comments.resolveFileIds(requested);
+    const files = await this.comments.resolveFiles(requested);
+    const fileIds = files.map((file) => file.id);
 
     const invalid = this.comments.validate(text, fileIds);
 
@@ -117,40 +144,22 @@ export class CommentController {
       );
     }
 
-    const existingId = Number(body?.id ?? 0);
-    let commentId: number;
+    // Read before saving: update() rewrites the comment's files_order in place.
+    const previousFiles = [...(existing?.filesOrder ?? [])];
+    const saved = existing
+      ? await this.comments.update(existing, text, fileIds)
+      : await this.comments.create(nodeId, user.id, text, fileIds);
+    const commentId = saved.id;
 
-    if (Number.isFinite(existingId) && existingId > 0) {
-      const existing = await this.comments.findById(existingId);
+    await this.comments.claimFiles(fileIds, previousFiles);
+    await this.comments.applyAudioTitles(body?.files, files);
+    // On every save, not just creation: an edit can lengthen a comment past
+    // the threshold.
+    await this.comments.maybeSetNodeDescription(node, saved);
 
-      if (!existing || existing.nodeId !== nodeId) {
-        throw new VaultException(
-          ERROR_CODES.CommentNotFound,
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      if (!this.comments.canEdit(existing, user)) {
-        throw new VaultException(
-          ERROR_CODES.NotEnoughRights,
-          HttpStatus.FORBIDDEN,
-        );
-      }
-
-      const updated = await this.comments.update(existing, text, fileIds);
-      commentId = updated.id;
-    } else {
-      const created = await this.comments.create(
-        nodeId,
-        user.id,
-        text,
-        fileIds,
-      );
-      commentId = created.id;
-
-      await this.comments.maybeSetNodeDescription(node, created);
+    if (!existing) {
       // Only a new comment is announced; editing one must not notify again.
-      await this.notifications.commentCreated(created.id);
+      await this.notifications.commentCreated(commentId);
     }
 
     // Your own comment must not flag the node as updated for you: the flow's
@@ -233,7 +242,15 @@ export class CommentController {
       );
     }
 
-    const isLocking = isLocked === 'true';
+    const isLocking = parseQueryBool(isLocked);
+
+    if (isLocking === null) {
+      throw new VaultException(
+        ERROR_CODES.IncorrectData,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const deletedAt = await this.comments.setDeleted(comment, isLocking);
 
     await (isLocking
@@ -257,3 +274,22 @@ export class CommentController {
     return parsed;
   }
 }
+
+/**
+ * A boolean query flag, read the way clients have always sent it: `1`, `t` and
+ * `true` in any case are true, `0`, `f`, `false` are false, and absent is false.
+ * Anything else is null, which callers refuse rather than guess at.
+ */
+const parseQueryBool = (value: string | undefined): boolean | null => {
+  if (value === undefined || value === '') {
+    return false;
+  }
+
+  const normalised = value.toLowerCase();
+
+  if (['1', 't', 'true'].includes(normalised)) {
+    return true;
+  }
+
+  return ['0', 'f', 'false'].includes(normalised) ? false : null;
+};
