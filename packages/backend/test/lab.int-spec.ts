@@ -384,6 +384,22 @@ describe('lab (integration)', () => {
       expect(Array.isArray(body.heroes)).toBe(true);
     });
 
+    it('lists every lab tag, not just the top few', async () => {
+      const [row] = await db.query(
+        `SELECT COUNT(DISTINCT nt.tagId) AS n FROM node_tags_tag nt
+           JOIN node ON node.id = nt.nodeId
+          WHERE node.is_promoted = 0 AND node.deleted_at IS NULL
+            AND node.type IN ('image', 'video', 'text', 'audio')`,
+      );
+
+      const { body } = await http()
+        .get('/api/nodes/lab/stats')
+        .set(authHeader(userId))
+        .expect(200);
+
+      expect(body.tags).toHaveLength(Number(row.n));
+    });
+
     it('serialises tags with the uppercase ID key', async () => {
       const { body } = await http()
         .get('/api/nodes/lab/stats')

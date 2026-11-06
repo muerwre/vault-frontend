@@ -10,6 +10,7 @@ import { Tag } from '../../entities/tag.entity';
 import { NodeView } from '../../entities/views.entity';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { TagModule } from '../tag/tag.module';
+import { UploadModule } from '../upload/upload.module';
 
 import { LabService } from './lab.service';
 import { NodeTagsService } from './node-tags.service';
@@ -19,6 +20,7 @@ import { NodeService } from './node.service';
 
 @Module({
   imports: [
+    UploadModule,
     TypeOrmModule.forFeature([
       Node,
       File,

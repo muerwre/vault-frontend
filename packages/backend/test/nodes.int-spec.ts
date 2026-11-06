@@ -36,6 +36,21 @@ describe('nodes (integration)', () => {
       expect(Array.isArray(body.valid)).toBe(true);
     });
 
+    it('reads the with_* flags as bool flags: 1 and t are true', async () => {
+      const on = await http().get('/api/nodes/?with_heroes=1').expect(200);
+      const alsoOn = await http().get('/api/nodes/?with_heroes=t').expect(200);
+      const off = await http().get('/api/nodes/?with_heroes=0').expect(200);
+
+      expect(on.body.heroes.length).toBeGreaterThan(0);
+      expect(alsoOn.body.heroes.length).toBeGreaterThan(0);
+      expect(off.body.heroes).toEqual([]);
+    });
+
+    it('400s a flag or a date it cannot read', async () => {
+      await http().get('/api/nodes/?with_recent=maybe').expect(400);
+      await http().get('/api/nodes/?start=not-a-date').expect(400);
+    });
+
     it('omits slices whose flag is off', async () => {
       const { body } = await http()
         .get('/api/nodes/')
