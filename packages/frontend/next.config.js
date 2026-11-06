@@ -71,6 +71,12 @@ const withTM = require('next-transpile-modules')([
 module.exports = withBundleAnalyzer(
   withTM({
     output: 'standalone',
+    experimental: {
+      // Dependencies are hoisted to the monorepo root, outside this package.
+      // Tracing from the root puts them into the standalone output; from here
+      // they would be left out and the server would fail to start.
+      outputFileTracingRoot: join(__dirname, '../..'),
+    },
     /** rewrite old-style node paths */
     async rewrites() {
       return [
