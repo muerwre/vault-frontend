@@ -56,6 +56,12 @@ async function bootstrap() {
    */
   app.set('trust proxy', 'loopback, linklocal, uniquelocal');
 
+  /**
+   * Run destroy hooks on SIGTERM/SIGINT, so a restart lets background senders
+   * finish the message in flight and record it instead of being cut off.
+   */
+  app.enableShutdownHooks();
+
   const port = process.env.PORT ? Number(process.env.PORT) : 3000;
   await app.listen(port);
 

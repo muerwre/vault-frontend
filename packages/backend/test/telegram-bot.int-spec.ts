@@ -482,6 +482,60 @@ describe('telegram bot (integration)', () => {
       expect(await processed(newer)).toBe(1);
     });
 
+    it('records each row as soon as its message is sent', async () => {
+      const userId = await makeUser();
+      await link(userId, '900000102');
+      await setSettings(userId);
+
+      const older = await feedRow(userId, 'node', nodeId, 20);
+      const newer = await feedRow(userId, 'comment', commentId, 10);
+      const recordedWhenSent: number[] = [];
+
+      call.mockImplementation(async (method: string) => {
+        if (method === 'sendMessage') {
+          recordedWhenSent.push(await processed(older));
+        }
+        return {};
+      });
+
+      await sender.runOnce();
+
+      // The second send already sees the first row recorded.
+      expect(recordedWhenSent).toEqual([0, 1]);
+      expect(await processed(newer)).toBe(1);
+    });
+
+    it('stops between messages on shutdown and resumes without repeats', async () => {
+      const userId = await makeUser();
+      await link(userId, '900000103');
+      await setSettings(userId);
+
+      const older = await feedRow(userId, 'node', nodeId, 20);
+      const newer = await feedRow(userId, 'comment', commentId, 10);
+      let shutdown: Promise<void> | undefined;
+
+      call.mockImplementation(async (method: string) => {
+        if (method === 'sendMessage' && !shutdown) {
+          shutdown = sender.onModuleDestroy();
+        }
+        return {};
+      });
+
+      await sender.runOnce();
+      await shutdown;
+
+      expect(sentTo(900000103)).toHaveLength(1);
+      expect(await processed(older)).toBe(1);
+      expect(await processed(newer)).toBe(0);
+
+      await sender.runOnce();
+
+      const messages = sentTo(900000103);
+      expect(messages).toHaveLength(2);
+      expect(messages[1].text).toContain(`#comment-${commentId}`);
+      expect(await processed(newer)).toBe(1);
+    });
+
     it('escapes the node title', async () => {
       const userId = await makeUser();
       await link(userId, '900000101');

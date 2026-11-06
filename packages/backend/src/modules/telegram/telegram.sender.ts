@@ -46,11 +46,13 @@ const DAY_MS = 24 * 60 * MINUTE_MS;
 /**
  * Delivers users' feed notifications as Telegram messages.
  *
- * Each run takes feed rows not yet in the ledger for this service, sends each
- * recipient their newest few, then records **every** row it took as processed —
- * including ones it chose not to send. So a row is attempted once: a recipient
- * with Telegram off never gets a backlog when they turn it on, and a failed
- * send is not retried into a duplicate.
+ * Each run takes feed rows not yet in the ledger for this service and sends each
+ * recipient their newest few. A row is recorded as processed **right after its
+ * message goes out**, so a run cut short by a restart never sends it again;
+ * every other row taken — ones it chose not to send — is recorded when the run
+ * completes. So a row is attempted once: a recipient with Telegram off never
+ * gets a backlog when they turn it on, and a failed send is not retried into a
+ * duplicate.
  */
 @Injectable()
 export class TelegramNotificationSender
@@ -60,7 +62,11 @@ export class TelegramNotificationSender
 
   private timer?: NodeJS.Timeout;
 
-  private running = false;
+  /** The run in progress, if any. */
+  private current?: Promise<void>;
+
+  /** Set while shutting down: the run in progress stops between messages. */
+  private stopping = false;
 
   constructor(
     private readonly bot: TelegramBot,
@@ -96,10 +102,27 @@ export class TelegramNotificationSender
     this.timer.unref();
   }
 
-  onModuleDestroy(): void {
+  /**
+   * Stops the loop and waits for a run in progress, which stops after the
+   * message it is sending. What it had not sent stays unrecorded for the next
+   * start.
+   */
+  async onModuleDestroy(): Promise<void> {
     if (this.timer) {
       clearInterval(this.timer);
       this.timer = undefined;
+    }
+
+    if (!this.current) {
+      return;
+    }
+
+    this.stopping = true;
+
+    try {
+      await this.current;
+    } finally {
+      this.stopping = false;
     }
   }
 
@@ -109,23 +132,23 @@ export class TelegramNotificationSender
    * up the same rows and send them twice.
    */
   async runOnce(now = new Date()): Promise<void> {
-    if (this.running) {
+    if (this.current) {
       return;
     }
 
-    this.running = true;
+    this.current = this.deliver(now)
+      .catch((error: unknown) => {
+        this.logger.warn(
+          `delivery run failed: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+        );
+      })
+      .finally(() => {
+        this.current = undefined;
+      });
 
-    try {
-      await this.deliver(now);
-    } catch (error) {
-      this.logger.warn(
-        `delivery run failed: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      );
-    } finally {
-      this.running = false;
-    }
+    await this.current;
   }
 
   private async deliver(now: Date): Promise<void> {
@@ -143,18 +166,23 @@ export class TelegramNotificationSender
     const messages = await this.toMessages(due);
     const picked = pickPerRecipient(messages, maxMessages);
     const accounts = await this.deliverableAccounts([...picked.keys()]);
+    const recorded = new Set<number>();
 
     let sent = 0;
     let failed = 0;
 
-    for (const [userId, list] of picked) {
+    deliveries: for (const [userId, list] of picked) {
       const accountId = accounts.get(userId);
 
       if (!accountId) {
         continue;
       }
 
-      for (const message of list) {
+      for (const { message, rowId } of list) {
+        if (this.stopping) {
+          break deliveries;
+        }
+
         try {
           await this.bot.send(accountId, message);
           sent += 1;
@@ -166,10 +194,23 @@ export class TelegramNotificationSender
             }`,
           );
         }
+
+        await this.markProcessed([rowId], now);
+        recorded.add(rowId);
       }
     }
 
-    await this.markProcessed(due, now);
+    if (this.stopping) {
+      this.logger.log(
+        `stopped early: sent ${sent}, failed ${failed}; the rest goes out on the next start`,
+      );
+      return;
+    }
+
+    await this.markProcessed(
+      due.map((row) => row.id).filter((id) => !recorded.has(id)),
+      now,
+    );
 
     this.logger.log(
       `took ${due.length} notification(s): sent ${sent}, failed ${failed}, ` +
@@ -213,7 +254,9 @@ export class TelegramNotificationSender
    */
   private async toMessages(
     rows: UserNotification[],
-  ): Promise<Array<{ recipient: number; message: TelegramMessage }>> {
+  ): Promise<
+    Array<{ recipient: number; message: TelegramMessage; rowId: number }>
+  > {
     const publicUrl = getPublicUrl();
 
     const idsOf = (...types: string[]) => [
@@ -260,7 +303,11 @@ export class TelegramNotificationSender
         : [],
     );
 
-    const out: Array<{ recipient: number; message: TelegramMessage }> = [];
+    const out: Array<{
+      recipient: number;
+      message: TelegramMessage;
+      rowId: number;
+    }> = [];
 
     for (const row of rows) {
       if (row.userId === null || row.itemId === null) {
@@ -281,7 +328,7 @@ export class TelegramNotificationSender
       }
 
       if (message) {
-        out.push({ recipient: row.userId, message });
+        out.push({ recipient: row.userId, message, rowId: row.id });
       }
     }
 
@@ -339,18 +386,19 @@ export class TelegramNotificationSender
     return accounts;
   }
 
-  private async markProcessed(
-    rows: UserNotification[],
-    now: Date,
-  ): Promise<void> {
+  private async markProcessed(ids: number[], now: Date): Promise<void> {
+    if (ids.length === 0) {
+      return;
+    }
+
     const processedAt = new Date(now);
     processedAt.setMilliseconds(0);
 
     await this.ledger.insert(
-      rows.map((row) => ({
+      ids.map((notificationId) => ({
         service: TELEGRAM_SERVICE,
         processedAt,
-        notificationId: row.id,
+        notificationId,
       })),
     );
   }
