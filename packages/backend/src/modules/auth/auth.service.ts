@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BORIS_NODE_ID, FILE_TYPES } from '@vault/common/constants';
 import type { ITokenClaims } from '@vault/common/types';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
 import { Node } from '../../entities/node.entity';
@@ -194,9 +194,12 @@ export class AuthService {
     });
   }
 
-  /** Only an existing image file may be used as a photo or cover. */
+  /** Only an existing, non-deleted image may be used as a photo or cover. */
   async findImage(fileId: number): Promise<File | null> {
-    const file = await this.files.findOne({ where: { id: fileId } });
+    // deleted_at is a plain column here, so deleted files are excluded by hand.
+    const file = await this.files.findOne({
+      where: { id: fileId, deletedAt: IsNull() },
+    });
 
     return file && file.type === FILE_TYPES.IMAGE ? file : null;
   }

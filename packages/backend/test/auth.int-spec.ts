@@ -15,6 +15,7 @@ import {
   getDataSource,
   WIRE_DATE,
 } from './helpers/app';
+import { deleteFiles, makeFile } from './helpers/fixtures';
 
 const md5 = (value: string) =>
   createHash('md5').update(value, 'utf8').digest('hex');
@@ -281,6 +282,25 @@ describe('auth (integration)', () => {
         .set(authHeader(userId))
         .expect(200);
       expect(cleared.body.user.photo).toBeNull();
+    });
+
+    it('refuses a deleted image as photo or cover', async () => {
+      const gone = await makeFile(db, userId, 'image', { deleted: true });
+
+      try {
+        await http()
+          .post('/api/auth/photo')
+          .set(authHeader(userId))
+          .send({ id: gone })
+          .expect(400);
+        await http()
+          .post('/api/auth/cover')
+          .set(authHeader(userId))
+          .send({ id: gone })
+          .expect(400);
+      } finally {
+        await deleteFiles(db, [gone]);
+      }
     });
 
     it('sets and clears the cover', async () => {
