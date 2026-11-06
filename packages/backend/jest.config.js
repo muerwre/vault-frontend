@@ -19,5 +19,6 @@ module.exports = {
     '^@vault/common$': '<rootDir>/../../common/dist',
   },
   testEnvironment: 'node',
+  setupFiles: ['<rootDir>/../jest.unit-setup.js'],
   maxWorkers: 2,
 };
