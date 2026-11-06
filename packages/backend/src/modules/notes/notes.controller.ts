@@ -41,16 +41,19 @@ export class NotesController {
     return this.notes.getList(uid, query.limit, query.offset, query.search);
   }
 
-  /** Empty text is refused with the field-keyed validation envelope. */
+  /**
+   * Blank text is refused; anything else is stored exactly as typed, since
+   * indentation and line breaks are part of a note.
+   */
   @Post()
   @HttpCode(HttpStatus.OK)
   async create(
     @Uid() uid: number,
     @Body() body: { text?: string },
   ): Promise<WireNoteWithoutUser> {
-    const text = (body?.text ?? '').trim();
+    const text = typeof body?.text === 'string' ? body.text : '';
 
-    if (!text) {
+    if (!text.trim()) {
       throw new VaultException(
         ERROR_CODES.IncorrectData,
         HttpStatus.BAD_REQUEST,
@@ -69,9 +72,9 @@ export class NotesController {
     @Body() body: { content?: string },
   ): Promise<WireNoteWithoutUser> {
     const note = await this.requireOwn(id, uid);
-    const content = (body?.content ?? '').trim();
+    const content = typeof body?.content === 'string' ? body.content : '';
 
-    if (!content) {
+    if (!content.trim()) {
       throw new VaultException(
         ERROR_CODES.IncorrectData,
         HttpStatus.BAD_REQUEST,

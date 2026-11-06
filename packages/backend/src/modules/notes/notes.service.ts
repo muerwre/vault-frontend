@@ -98,10 +98,16 @@ export class NotesService {
     );
   }
 
-  /** Only the text is mutable; authorship and creation time are fixed. */
+  /**
+   * Only the text is mutable; authorship and creation time are fixed. The
+   * column has no on-update default, so the edit time is written explicitly.
+   */
   async update(note: Message, content: string): Promise<Message> {
-    await this.messages.update(note.id, { text: content });
+    const updatedAt = new Date();
+
+    await this.messages.update(note.id, { text: content, updatedAt });
     note.text = content;
+    note.updatedAt = updatedAt;
 
     return note;
   }

@@ -14,8 +14,8 @@ export interface FetchedEmbed {
 /**
  * YouTube Data API v3 client.
  *
- * Requests `part=snippet` and stores only the title; `thumb` and `duration` stay
- * empty. Widening this changes the stored metadata blob of every new embed.
+ * Requests `part=snippet` and fills only the title; `thumb` and `duration` are
+ * stored empty, so every cached blob carries all three keys.
  */
 @Injectable()
 export class YoutubeService {
@@ -70,7 +70,7 @@ export class YoutubeService {
       result.set(item.id, {
         address: item.id,
         provider: 'youtube',
-        metadata: { title: item.snippet?.title ?? '' },
+        metadata: { title: item.snippet?.title ?? '', thumb: '', duration: '' },
       });
     }
 

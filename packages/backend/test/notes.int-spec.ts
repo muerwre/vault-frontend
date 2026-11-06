@@ -91,6 +91,22 @@ describe('notes (integration)', () => {
         .set(authHeader(ownerId))
         .send({})
         .expect(400);
+      await http()
+        .post('/api/notes/')
+        .set(authHeader(ownerId))
+        .send({ text: 42 })
+        .expect(400);
+    });
+
+    it('stores the text exactly as sent, surrounding whitespace included', async () => {
+      const text = '  indented line\nsecond line\n';
+      const { body } = await create(ownerId, text).expect(200);
+
+      expect(body.content).toBe(text);
+      const [row] = await db.query('SELECT text FROM message WHERE id = ?', [
+        body.id,
+      ]);
+      expect(row.text).toBe(text);
     });
 
     it('answers 200, not 201', async () => {
@@ -261,6 +277,45 @@ describe('notes (integration)', () => {
         created.body.id,
       ]);
       expect(row.text).toBe('persisted');
+    });
+
+    it('stores the content exactly as sent', async () => {
+      const created = await create(ownerId, 'plain').expect(200);
+      const content = '\tkept as typed  \n';
+
+      const { body } = await http()
+        .put(`/api/notes/${created.body.id}`)
+        .set(authHeader(ownerId))
+        .send({ content })
+        .expect(200);
+
+      expect(body.content).toBe(content);
+      const [row] = await db.query('SELECT text FROM message WHERE id = ?', [
+        created.body.id,
+      ]);
+      expect(row.text).toBe(content);
+    });
+
+    it('bumps updated_at but keeps created_at', async () => {
+      const created = await create(ownerId, 'dated').expect(200);
+      await db.query(
+        `UPDATE message SET created_at = '2020-01-01 00:00:00',
+           updated_at = '2020-01-01 00:00:00' WHERE id = ?`,
+        [created.body.id],
+      );
+
+      await http()
+        .put(`/api/notes/${created.body.id}`)
+        .set(authHeader(ownerId))
+        .send({ content: 'redated' })
+        .expect(200);
+
+      const [row] = await db.query(
+        'SELECT created_at, updated_at FROM message WHERE id = ?',
+        [created.body.id],
+      );
+      expect(new Date(row.created_at).getUTCFullYear()).toBe(2020);
+      expect(new Date(row.updated_at).getUTCFullYear()).toBeGreaterThan(2020);
     });
 
     it('rejects empty content', async () => {

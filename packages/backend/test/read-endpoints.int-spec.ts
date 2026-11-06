@@ -270,6 +270,26 @@ describe('read endpoints (integration)', () => {
       expect(body.items).toEqual({});
     });
 
+    it('never serves a deleted cache row', async () => {
+      const address = `deleted_${Date.now()}`;
+      await db.query(
+        `INSERT INTO embed (provider, address, metadata, created_at, updated_at, deleted_at)
+         VALUES ('youtube', ?, '{"title":"gone","thumb":"","duration":""}', NOW(), NOW(), NOW())`,
+        [address],
+      );
+
+      try {
+        const { body } = await http()
+          .get('/api/meta/youtube')
+          .query({ ids: address })
+          .expect(200);
+
+        expect(body.items[address]).toBeUndefined();
+      } finally {
+        await db.query('DELETE FROM embed WHERE address = ?', [address]);
+      }
+    });
+
     it('returns an empty map with no ids', async () => {
       const { body } = await http().get('/api/meta/youtube').expect(200);
 

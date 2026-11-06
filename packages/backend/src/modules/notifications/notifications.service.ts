@@ -1,16 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   BORIS_NODE_ID,
+  ERROR_CODES,
   NOTIFICATION_ITEM_TYPES,
   type NotificationItemType,
 } from '@vault/common/constants';
-import { In, Repository } from 'typeorm';
+import { In, IsNull, Repository } from 'typeorm';
 
 import { Comment } from '../../entities/comment.entity';
 import { Node } from '../../entities/node.entity';
 import { NotificationSettings } from '../../entities/notification.entity';
 import { UserNotification } from '../../entities/notification.entity';
+import { VaultException } from '../../globals/exceptions';
 import {
   toWireDate,
   toWireDateOrNull,
@@ -64,6 +66,75 @@ export interface SettingsPatch {
 
 export const NOTIFICATIONS_PAGE_SIZE = 20;
 
+/** Wire key → column for each boolean setting. */
+const SETTING_FLAGS = {
+  enabled: 'enabled',
+  show_indicator: 'showIndicator',
+  send_telegram: 'sendTelegram',
+  send_email: 'sendEmail',
+  flow: 'subscribedToFlow',
+  boris: 'subscribedToBoris',
+  comments: 'subscribedToComments',
+} as const;
+
+/** Wire key → column for each timestamp setting. */
+const SETTING_DATES = {
+  last_seen: 'lastSeen',
+  last_cleared: 'lastCleared',
+} as const;
+
+const malformedSettings = () =>
+  new VaultException(ERROR_CODES.IncorrectData, HttpStatus.BAD_REQUEST);
+
+/**
+ * Reads a settings body into column values. Null counts as absent; a flag
+ * that is not a boolean or a timestamp that does not parse is refused.
+ */
+export const parseSettingsPatch = (
+  body: unknown,
+): Partial<NotificationSettings> => {
+  const raw = body ?? {};
+
+  if (typeof raw !== 'object' || Array.isArray(raw)) {
+    throw malformedSettings();
+  }
+
+  const fields = raw as Record<string, unknown>;
+  const patch: Partial<NotificationSettings> = {};
+
+  for (const [key, column] of Object.entries(SETTING_FLAGS)) {
+    const value = fields[key];
+
+    if (value === undefined || value === null) {
+      continue;
+    }
+
+    if (typeof value !== 'boolean') {
+      throw malformedSettings();
+    }
+
+    patch[column] = value;
+  }
+
+  for (const [key, column] of Object.entries(SETTING_DATES)) {
+    const value = fields[key];
+
+    if (value === undefined || value === null) {
+      continue;
+    }
+
+    const parsed = typeof value === 'string' ? new Date(value) : null;
+
+    if (!parsed || Number.isNaN(parsed.getTime())) {
+      throw malformedSettings();
+    }
+
+    patch[column] = parsed;
+  }
+
+  return patch;
+};
+
 /** Applied when a user has no settings row yet. */
 const DEFAULT_SETTINGS = {
   enabled: false,
@@ -93,8 +164,9 @@ export class NotificationsService {
   /**
    * The user's feed, newest first.
    *
-   * Rows whose referenced node or comment no longer exists are **skipped**, so
-   * the feed can be shorter than the page size. Timestamps come from the
+   * Rows whose referenced node or comment no longer exists or was deleted, or
+   * whose comment sits on a deleted node, are **skipped**, as are rows of an
+   * unknown type, so the feed can be shorter than the page size. Timestamps come from the
    * referenced entity rather than the notification row.
    */
   async list(userId: number): Promise<WireNotificationItem[]> {
@@ -133,7 +205,10 @@ export class NotificationsService {
       const item =
         row.type === NOTIFICATION_ITEM_TYPES.NODE
           ? this.fromNode(row, nodes.get(row.itemId as number))
-          : this.fromComment(row, comments.get(row.itemId as number));
+          : row.type === NOTIFICATION_ITEM_TYPES.COMMENT ||
+              row.type === NOTIFICATION_ITEM_TYPES.BORIS
+            ? this.fromComment(row, comments.get(row.itemId as number))
+            : null;
 
       if (item) {
         items.push(item);
@@ -168,33 +243,18 @@ export class NotificationsService {
     );
   }
 
-  /** Only supplied fields are written; absent ones keep their stored value. */
+  /**
+   * Only supplied fields are written; absent and null ones keep their stored
+   * value. A malformed body is refused whole before anything is stored.
+   */
   async updateSettings(
     userId: number,
-    patch: SettingsPatch,
+    body: unknown,
   ): Promise<NotificationSettings> {
+    const patch = parseSettingsPatch(body);
     const settings = await this.getSettings(userId);
 
-    const assign = <K extends keyof NotificationSettings>(
-      key: K,
-      value: NotificationSettings[K] | undefined,
-    ) => {
-      if (value !== undefined) {
-        settings[key] = value;
-      }
-    };
-
-    assign('enabled', patch.enabled);
-    assign('showIndicator', patch.show_indicator);
-    assign('sendTelegram', patch.send_telegram);
-    assign('sendEmail', patch.send_email);
-    assign('subscribedToFlow', patch.flow);
-    assign('subscribedToBoris', patch.boris);
-    assign('subscribedToComments', patch.comments);
-    assign('lastSeen', this.toDate(patch.last_seen));
-    assign('lastCleared', this.toDate(patch.last_cleared));
-
-    return this.settings.save(settings);
+    return this.settings.save(Object.assign(settings, patch));
   }
 
   toWireSettings(
@@ -215,23 +275,13 @@ export class NotificationsService {
     };
   }
 
-  private toDate(value: string | undefined): Date | undefined {
-    if (value === undefined) {
-      return undefined;
-    }
-
-    const parsed = new Date(value);
-
-    return Number.isNaN(parsed.getTime()) ? undefined : parsed;
-  }
-
   private async loadNodes(ids: number[]): Promise<Map<number, Node>> {
     if (ids.length === 0) {
       return new Map();
     }
 
     const rows = await this.nodes.find({
-      where: { id: In(ids) },
+      where: { id: In(ids), deletedAt: IsNull() },
       relations: { user: { photo: true } },
     });
 
@@ -244,9 +294,16 @@ export class NotificationsService {
     }
 
     const rows = await this.comments.find({
-      where: { id: In(ids) },
+      where: { id: In(ids), deletedAt: IsNull() },
       relations: { user: { photo: true }, node: true },
     });
+
+    // A comment whose node was deleted has nowhere to link to.
+    for (const comment of rows) {
+      if (comment.node?.deletedAt) {
+        comment.node = null;
+      }
+    }
 
     return new Map(rows.map((comment) => [comment.id, comment]));
   }
