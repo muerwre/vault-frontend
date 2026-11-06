@@ -2,9 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 
 import { AppModule } from './app.module';
+import { getPublicUrl } from './config/env';
 import { CORS_OPTIONS } from './globals/cors';
-import { DEV_PASSTHROUGH_MIDDLEWARE } from './globals/dev-proxy';
 import { VaultExceptionFilter } from './globals/exceptions';
+import { createFrontendProxy, getFrontendUrl } from './globals/frontend-proxy';
 import { createSessionMiddleware, SESSION_PATH } from './globals/session';
 
 async function bootstrap() {
@@ -15,11 +16,23 @@ async function bootstrap() {
   // Renders every failure as the `{ error, message }` envelope clients parse.
   app.useGlobalFilters(new VaultExceptionFilter());
 
-  const devProxy = process.env.NODE_ENV === 'development';
+  // Stored file urls resolve against `<public url>/static/`, a frozen public
+  // shape; uploads are served under the api. Must run before the page proxy,
+  // which would otherwise hand `/static` to the frontend.
+  app.use((req: { url: string }, _res: unknown, next: () => void) => {
+    if (req.url.startsWith('/static/')) {
+      req.url = `/api${req.url}`;
+    }
 
-  // In development the frontend's dev server sits behind this port too.
-  if (devProxy) {
-    app.use(DEV_PASSTHROUGH_MIDDLEWARE);
+    next();
+  });
+
+  // Pages are rendered by the frontend server, reached through this port too.
+  const frontendUrl = getFrontendUrl();
+  const frontendProxy = frontendUrl ? createFrontendProxy(frontendUrl) : null;
+
+  if (frontendProxy) {
+    app.use(frontendProxy);
   }
 
   // Only the OAuth handshake needs server-side state; see globals/session.ts.
@@ -40,14 +53,14 @@ async function bootstrap() {
 
   // Hot reload holds a websocket open from the first page load; route its
   // upgrade explicitly rather than relying on a proxied request coming first.
-  if (devProxy) {
-    app.getHttpServer().on('upgrade', DEV_PASSTHROUGH_MIDDLEWARE.upgrade);
+  if (frontendProxy) {
+    app.getHttpServer().on('upgrade', frontendProxy.upgrade);
   }
 
   // eslint-disable-next-line no-console
   console.log(
-    `[@vault/backend] listening on http://localhost:${port}` +
-      (devProxy ? ' (app proxied from the frontend dev server)' : '/api'),
+    `[@vault/backend] listening on :${port}, public at ${getPublicUrl()}` +
+      (frontendProxy ? `, pages from ${frontendUrl}` : ', api only'),
   );
 }
 

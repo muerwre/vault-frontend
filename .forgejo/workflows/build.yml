@@ -40,9 +40,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            NEXT_PUBLIC_API_HOST=https://vault48.org/api/
-            NEXT_PUBLIC_REMOTE_CURRENT=https://vault48.org/static/
-            NEXT_PUBLIC_PUBLIC_HOST=https://vault48.org/
+            PUBLIC_URL=https://vault48.org
             NEXT_PUBLIC_BOT_USERNAME=vault48bot
 
   push_backend_to_registry:
@@ -156,8 +154,8 @@ jobs:
       # Any value works as long as the backend and the suite agree on it.
       JWT_SECRET: e2e-ci-secret
       E2E_JWT_SECRET: e2e-ci-secret
+      # The site's one public address: the backend, proxying pages to Next.
       E2E_BASE_URL: http://localhost:3010
-      E2E_API_URL: http://localhost:7777/api
       UPLOADS_PATH: /tmp/vault-uploads
     steps:
       - name: Checkout

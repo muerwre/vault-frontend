@@ -4,7 +4,7 @@ import type { Transporter } from 'nodemailer';
 
 import {
   getFrontendResetUrl,
-  getPublicHost,
+  publicUrl,
   getSmtpConfig,
 } from '../../config/env';
 
@@ -23,7 +23,7 @@ export class MailService {
   }
 
   async sendRestoreCode(email: string, code: string): Promise<void> {
-    const url = `https://${getPublicHost()}${getFrontendResetUrl()}${code}`;
+    const url = publicUrl(`${getFrontendResetUrl()}${code}`);
 
     await this.send(
       email,

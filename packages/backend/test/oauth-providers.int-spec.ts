@@ -4,12 +4,11 @@
 // Google.
 process.env.VK_CLIENT_ID = 'vk-spec-client';
 process.env.VK_CLIENT_SECRET = 'vk-spec-secret';
-process.env.VK_CALLBACK_URL =
-  'https://spec.example/api/oauth/vkontakte/process/';
 process.env.GOOGLE_CLIENT_ID = 'google-spec-client';
 process.env.GOOGLE_CLIENT_SECRET = 'google-spec-secret';
-process.env.GOOGLE_CALLBACK_URL =
-  'https://spec.example/api/oauth/google/process/';
+// Callbacks are derived from the public root; the trailing slash checks that
+// joining it never doubles the separator.
+process.env.PUBLIC_URL = 'https://spec.example/';
 
 import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';

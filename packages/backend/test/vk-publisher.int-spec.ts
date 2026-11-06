@@ -4,7 +4,7 @@
 process.env.NOTIFICATIONS_VK_ENABLED = 'false';
 process.env.NOTIFICATIONS_VK_GROUP_ID = '46579663';
 process.env.NOTIFICATIONS_VK_ALBUM_ID = '166389890';
-process.env.NOTIFICATIONS_VK_URL_PREFIX = 'https://vault48.example';
+process.env.PUBLIC_URL = 'https://vault48.example';
 process.env.NOTIFICATIONS_VK_COOLDOWN_MINS = '5';
 process.env.NOTIFICATIONS_VK_PURGE_AFTER_DAYS = '7';
 

@@ -7,33 +7,22 @@ cannot render it.
 
 ## Running
 
-Three processes: the database, the backend, the frontend.
+Start the app as usual, then point the suite at its one public address — the
+backend, which proxies pages to the frontend:
 
 ```sh
-# 1. seeded database
-yarn db:up
+yarn db:up        # seeded database
+yarn dev          # backend on PORT (3000), proxying pages to next dev
 
-# 2. backend
-yarn workspace @vault/backend build
-cd packages/backend && PORT=7777 node dist/main.js
-
-# 3. frontend, pointed at that backend rather than production
-cd packages/frontend
-NEXT_PUBLIC_API_HOST=http://localhost:7777/api/ \
-NEXT_PUBLIC_REMOTE_CURRENT=http://localhost:7777/api/static/ \
-npx next dev -p 3010
-
-# 4. the suite
 cd packages/e2e
-E2E_BASE_URL=http://localhost:3010 \
-E2E_API_URL=http://localhost:7777/api \
+E2E_BASE_URL=http://localhost:3000 \
 E2E_JWT_SECRET=<the backend's JWT_SECRET> \
 yarn test
 ```
 
-`packages/frontend/.env.local` normally points at production. Pass the two
-`NEXT_PUBLIC_*` values on the command line as above — a shell variable wins over
-the file, so nothing needs editing.
+`E2E_BASE_URL` must be the same address the app was configured with
+(`PUBLIC_URL`, or `http://localhost:$PORT` when unset): the app keys its stored
+login on the api address derived from it.
 
 ## CI
 
@@ -42,8 +31,9 @@ MariaDB: the baseline migration builds the schema and `fixtures/seed.sql` adds a
 handful of synthetic users and posts. The production dump never reaches CI — it
 holds real accounts.
 
-With `CI` set, `playwright.config.ts` starts the backend (`dist/main.js`) and the
-frontend (`next dev`) itself. To reproduce a CI run locally against a scratch
+With `CI` set, `playwright.config.ts` starts the backend (`dist/main.js`) on
+`E2E_BASE_URL`'s port and the frontend (`next dev`) behind it, both given that
+address as `PUBLIC_URL`. To reproduce a CI run locally against a scratch
 database:
 
 ```sh
@@ -56,7 +46,7 @@ yarn workspace @vault/e2e db:seed        # refuses a non-empty database
 yarn common:build && yarn backend:build
 
 CI=true JWT_SECRET=s E2E_JWT_SECRET=s UPLOADS_PATH=/tmp/uploads \
-E2E_BASE_URL=http://localhost:3010 E2E_API_URL=http://localhost:7777/api \
+E2E_BASE_URL=http://localhost:3010 \
 yarn e2e:test
 ```
 
@@ -67,10 +57,9 @@ what precedes the default window, so a post created today would not appear in it
 
 | Variable | Purpose |
 |---|---|
-| `E2E_BASE_URL` | Where the frontend is listening. Default `http://localhost:3000` |
-| `E2E_API_URL` | Where the backend is listening. Default `http://localhost:7777/api` |
+| `E2E_BASE_URL` | The app's public address — the backend. Default `http://localhost:3000`. The api is `<E2E_BASE_URL>/api` |
 | `E2E_JWT_SECRET` | The backend's `JWT_SECRET`. Without it the authenticated specs **skip** rather than fail |
-| `E2E_FRONTEND_API_HOST` | Only if the frontend was pointed somewhere other than `E2E_API_URL` — the app keys its stored session on this exact string |
+| `E2E_FRONTEND_PORT` | CI only: the port `next dev` gets behind the backend. Default `3011` |
 
 ## Notes
 

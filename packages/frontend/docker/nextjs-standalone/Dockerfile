@@ -11,20 +11,15 @@ ENV PATH /opt/app/node_modules/.bin:$PATH
 # Build ──────────────────────────────────────────────────────────────────────
 FROM base as builder
 
-ARG NEXT_PUBLIC_API_HOST
-ARG NEXT_PUBLIC_REMOTE_CURRENT
-ARG NEXT_PUBLIC_PUBLIC_HOST
+# Where people open the site. next.config.js derives the api, uploads and public
+# addresses from it; they are inlined into the bundle, so this is a build arg.
+# The persisted login is keyed on the derived api address, so changing it signs
+# everybody out.
+ARG PUBLIC_URL
 ARG NEXT_PUBLIC_BOT_USERNAME
 
-ENV NEXT_PUBLIC_API_HOST $NEXT_PUBLIC_API_HOST
-ENV NEXT_PUBLIC_REMOTE_CURRENT $NEXT_PUBLIC_REMOTE_CURRENT
-ENV NEXT_PUBLIC_PUBLIC_HOST $NEXT_PUBLIC_PUBLIC_HOST
+ENV PUBLIC_URL $PUBLIC_URL
 ENV NEXT_PUBLIC_BOT_USERNAME $NEXT_PUBLIC_BOT_USERNAME
-
-# ENV NEXT_PUBLIC_API_HOST https://vault48.org/api/
-# ENV NEXT_PUBLIC_REMOTE_CURRENT https://vault48.org/static/
-# ENV NEXT_PUBLIC_PUBLIC_HOST https://vault48.org/
-# ENV NEXT_PUBLIC_BOT_USERNAME vault48bot
 
 COPY package.json .
 COPY yarn.lock .

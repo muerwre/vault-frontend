@@ -1,8 +1,9 @@
 import * as jwt from 'jsonwebtoken';
 
-export const API_URL = (
-  process.env.E2E_API_URL ?? 'http://localhost:7777/api'
-).replace(/\/$/, '');
+/** The api lives under the site's one public address. */
+export const API_URL = `${(
+  process.env.E2E_BASE_URL ?? 'http://localhost:3000'
+).replace(/\/$/, '')}/api`;
 
 /**
  * Fixtures are discovered from the running backend rather than hardcoded, so
@@ -82,4 +83,4 @@ export const whoAmI = async (
  * match exactly what the frontend was configured with.
  */
 export const authStorageKey = (): string =>
-  `vault48_auth_${process.env.E2E_FRONTEND_API_HOST ?? `${API_URL}/`}`;
+  `vault48_auth_${API_URL}/`;
