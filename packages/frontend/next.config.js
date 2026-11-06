@@ -34,30 +34,27 @@ const readRootEnv = (keys) => {
   return values;
 };
 
-/**
- * The site's public root, shared with the backend. Every address the client
- * uses is derived from it, so moving the site (a tunnel, staging) needs this one
- * setting. Defaults to the backend on localhost, which serves the pages too.
- */
 const rootEnv = readRootEnv(['PUBLIC_URL', 'PORT', 'TELEGRAM_BOT_USERNAME']);
-const PUBLIC_URL = (
-  rootEnv.PUBLIC_URL || `http://localhost:${rootEnv.PORT || 3000}`
-).replace(/\/+$/, '');
 
-// Inlined into the client bundle at build time, so they must be set before Next
-// reads them. They replace any value from the frontend's own env files.
-process.env.NEXT_PUBLIC_PUBLIC_HOST = `${PUBLIC_URL}/`;
-process.env.NEXT_PUBLIC_API_HOST = `${PUBLIC_URL}/api/`;
-process.env.NEXT_PUBLIC_REMOTE_CURRENT = `${PUBLIC_URL}/static/`;
+/**
+ * Addresses are read at runtime, not baked in: the browser uses its own origin,
+ * and the Next server reads PUBLIC_URL and BACKEND_URL from its environment (see
+ * src/utils/config). A built image gets them from its container. For `next dev`,
+ * which runs this file in the serving process, they default from the root env
+ * to the local backend that fronts the app.
+ */
+const localBackend = `http://localhost:${rootEnv.PORT || 3000}`;
+process.env.PUBLIC_URL =
+  process.env.PUBLIC_URL || rootEnv.PUBLIC_URL || localBackend;
+process.env.BACKEND_URL = process.env.BACKEND_URL || localBackend;
 
 // The bot behind the Telegram login widget and the contact link. It must be the
-// bot whose TELEGRAM_TOKEN the backend checks the widget against, so it is set
-// beside the token rather than here. Empty hides Telegram in the app.
+// bot whose TELEGRAM_TOKEN the backend checks the widget against. The browser
+// has no runtime env, so this one is inlined at build time. Empty hides
+// Telegram in the app.
 process.env.NEXT_PUBLIC_BOT_USERNAME = (
   rootEnv.TELEGRAM_BOT_USERNAME || ''
 ).replace(/^@/, '');
-
-const publicHost = new URL(PUBLIC_URL);
 
 /** used to transpile UMD and CJS modules */
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
@@ -97,11 +94,15 @@ module.exports = withBundleAnalyzer(
     images: {
       remotePatterns: [
         {
-          // Uploads, served by the backend under the public root.
-          protocol: publicHost.protocol.replace(':', ''),
-          hostname: publicHost.hostname,
-          // Next rejects an empty port; the default one is simply omitted.
-          ...(publicHost.port ? { port: publicHost.port } : {}),
+          // Uploads on any vault48.org host (production, unstable, tunnel).
+          // Image hosts are fixed at build time, unlike the site's address.
+          protocol: 'https',
+          hostname: 'vault48.org',
+          pathname: '/static/**',
+        },
+        {
+          protocol: 'https',
+          hostname: '**.vault48.org',
           pathname: '/static/**',
         },
         {

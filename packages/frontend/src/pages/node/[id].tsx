@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { GetStaticPropsResult, InferGetStaticPropsType } from 'next';
 import { RouteComponentProps } from 'react-router';
 
-import { apiGetNode, apiGetNodeComments, getNodeDiff } from '~/api/node';
+import { apiGetNode, apiGetNodeComments } from '~/api/node';
 import { NodeHeadMetadata } from '~/components/node/NodeHeadMetadata';
 import { COMMENTS_DISPLAY } from '~/constants/node';
 import { useNodeComments } from '~/hooks/comments/useNodeComments';
@@ -20,7 +20,6 @@ import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
 import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
 import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
-import { uniqBy } from '~/utils/ramda';
 
 export const getStaticPaths = async () => {
   if (process.env.NODE_ENV === 'development') {
@@ -30,27 +29,8 @@ export const getStaticPaths = async () => {
     };
   }
 
-  const recent = await getNodeDiff({
-    with_heroes: false,
-    with_recent: true,
-    with_updated: true,
-    with_valid: false,
-  });
-
-  const recentIDs = uniqBy(
-    (it) => it.id,
-    [
-      ...(recent.after || []),
-      ...(recent.before || []),
-      ...(recent.recent || []),
-    ],
-  )
-    .filter((it) => it.id)
-    .map((it) => it.id!.toString());
-
   return {
-    // this was generating too much garbage, so skip it
-    // paths: recentIDs.map((id) => ({ params: { id } })),
+    // Nothing is pre-rendered: every node is generated on first request.
     paths: [],
     fallback: true,
   };
