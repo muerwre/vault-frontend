@@ -175,6 +175,84 @@ describe('notifications (integration)', () => {
       expect(body.items[0].itemId).toBe(nodeId);
     });
 
+    /** A node row inserted for one test, so deleting it leaves the shared one. */
+    const makeNode = async (deleted = false): Promise<number> => {
+      await db.query(
+        `INSERT INTO node
+          (title, type, blocks, files_order, is_public, is_promoted, is_heroic,
+           description, thumbnail, created_at, updated_at, deleted_at, userId)
+         VALUES ('gone node', 'image', '[]', '', 1, 1, 0, '', '', NOW(), NOW(), ${
+           deleted ? 'NOW()' : 'NULL'
+         }, ?)`,
+        [userId],
+      );
+      const [row] = await db.query('SELECT LAST_INSERT_ID() AS id');
+      return Number(row.id);
+    };
+
+    const makeComment = async (
+      onNode: number,
+      deleted = false,
+    ): Promise<number> => {
+      await db.query(
+        `INSERT INTO comment (text, files_order, created_at, updated_at, deleted_at, userId, nodeId)
+         VALUES ('gone comment', '', NOW(), NOW(), ${deleted ? 'NOW()' : 'NULL'}, ?, ?)`,
+        [userId, onNode],
+      );
+      const [row] = await db.query('SELECT LAST_INSERT_ID() AS id');
+      return Number(row.id);
+    };
+
+    it('skips deleted nodes, deleted comments and comments on deleted nodes', async () => {
+      const deletedNode = await makeNode(true);
+      const liveNode = await makeNode();
+      const deletedComment = await makeComment(liveNode, true);
+      const orphanedComment = await makeComment(deletedNode);
+
+      try {
+        await addNotification('node', deletedNode);
+        await addNotification('comment', deletedComment);
+        await addNotification('boris', orphanedComment);
+        await addNotification('node', nodeId);
+
+        const { body } = await http()
+          .get('/api/notifications/')
+          .set(authHeader(userId))
+          .expect(200);
+
+        expect(
+          body.items.map((item: { itemId: number }) => item.itemId),
+        ).toEqual([nodeId]);
+      } finally {
+        await db.query('DELETE FROM comment WHERE nodeId IN (?, ?)', [
+          deletedNode,
+          liveNode,
+        ]);
+        await db.query('DELETE FROM node WHERE id IN (?, ?)', [
+          deletedNode,
+          liveNode,
+        ]);
+      }
+    });
+
+    it('skips rows of an unknown type', async () => {
+      await addNotification('node', nodeId);
+      await db.query(
+        `INSERT INTO user_notifications (type, itemId, time, userId, created_at, updated_at)
+         VALUES ('mystery', ?, NOW(), ?, NOW(), NOW())`,
+        [commentId, userId],
+      );
+
+      const { body } = await http()
+        .get('/api/notifications/')
+        .set(authHeader(userId))
+        .expect(200);
+
+      expect(body.items.map((item: { type: string }) => item.type)).toEqual([
+        'node',
+      ]);
+    });
+
     it('uses camelCase for itemId only', async () => {
       await addNotification('node', nodeId);
 
@@ -363,9 +441,40 @@ describe('notifications (integration)', () => {
       expect(body.last_cleared).toBe('2026-05-03T12:00:00Z');
     });
 
-    it('ignores an unparseable timestamp rather than erroring', async () => {
-      const { body } = await patch({ last_seen: 'nonsense' }).expect(200);
+    it('refuses an unparseable timestamp and stores nothing', async () => {
+      await patch({ enabled: true, last_seen: 'nonsense' }).expect(400);
 
+      const rows = await db.query(
+        'SELECT enabled, last_seen FROM notification_settings WHERE userId = ?',
+        [userId],
+      );
+      expect(rows.every((row: { enabled: number }) => !row.enabled)).toBe(true);
+    });
+
+    it.each([['yes'], [1], [{}]])(
+      'refuses a non-boolean flag (%p) and stores nothing',
+      async (value) => {
+        const { body } = await patch({ flow: value, enabled: true }).expect(
+          400,
+        );
+
+        expect(body.error).toBe('Incorrect_Data');
+        const rows = await db.query(
+          'SELECT enabled FROM notification_settings WHERE userId = ?',
+          [userId],
+        );
+        expect(rows.every((row: { enabled: number }) => !row.enabled)).toBe(
+          true,
+        );
+      },
+    );
+
+    it('treats null as absent', async () => {
+      await patch({ flow: false }).expect(200);
+
+      const { body } = await patch({ flow: null, last_seen: null }).expect(200);
+
+      expect(body.flow).toBe(false);
       expect(body.last_seen).toBeNull();
     });
 

@@ -21,6 +21,9 @@ const mockRepo = (found: Embed[]) => {
       andWhere() {
         return this;
       },
+      orderBy() {
+        return this;
+      },
       getMany: async () => found,
     }),
     create: (value: unknown) => value,
@@ -78,7 +81,7 @@ describe('MetaService', () => {
       id: 1,
       provider: 'youtube',
       address: 'abc',
-      metadata: { title: 'Cached' },
+      metadata: { title: 'Cached', thumb: '', duration: '' },
     });
     expect(youtube.fetchByIds).not.toHaveBeenCalled();
   });
@@ -103,7 +106,11 @@ describe('MetaService', () => {
 
     expect(youtube.fetchByIds).toHaveBeenCalledWith(['new']);
     expect(repo.saved).toHaveLength(1);
-    expect(items.new.metadata).toEqual({ title: 'New' });
+    expect(items.new.metadata).toEqual({
+      title: 'New',
+      thumb: '',
+      duration: '',
+    });
     expect(items.abc.id).toBe(1);
   });
 
@@ -128,7 +135,7 @@ describe('MetaService', () => {
   });
 
   /** `(provider, address)` has no unique index, so duplicates are possible. */
-  it('keeps the first row per address when the table holds duplicates', async () => {
+  it('keeps the newest row per address when the table holds duplicates', async () => {
     const service = new MetaService(
       mockRepo([embedRow(1, 'abc', 'First'), embedRow(2, 'abc', 'Second')]),
       mockYoutube(new Map()),
@@ -136,10 +143,25 @@ describe('MetaService', () => {
 
     const items = await service.getYoutubeEmbeds(['abc']);
 
-    expect(items.abc.id).toBe(1);
+    expect(items.abc.id).toBe(2);
   });
 
-  it('defaults a null metadata blob to an empty object', async () => {
+  it('always answers title, thumb and duration', async () => {
+    const service = new MetaService(
+      mockRepo([embedRow(1, 'abc', 'Only title')]),
+      mockYoutube(new Map()),
+    );
+
+    const items = await service.getYoutubeEmbeds(['abc']);
+
+    expect(items.abc.metadata).toEqual({
+      title: 'Only title',
+      thumb: '',
+      duration: '',
+    });
+  });
+
+  it('defaults a null metadata blob to empty fields', async () => {
     const row = {
       id: 1,
       address: 'abc',
@@ -150,6 +172,6 @@ describe('MetaService', () => {
 
     const items = await service.getYoutubeEmbeds(['abc']);
 
-    expect(items.abc.metadata).toEqual({});
+    expect(items.abc.metadata).toEqual({ title: '', thumb: '', duration: '' });
   });
 });

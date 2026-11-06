@@ -9,6 +9,15 @@ import { YoutubeService } from './youtube.service';
 
 const YOUTUBE_PROVIDER = 'youtube';
 
+/** Clients get all three metadata keys, empty when unknown. */
+const toWireMetadata = (
+  metadata: Partial<EmbedMetadata> | null | undefined,
+): EmbedMetadata => ({
+  title: metadata?.title ?? '',
+  thumb: metadata?.thumb ?? '',
+  duration: metadata?.duration ?? '',
+});
+
 /** Embeds serialise without timestamps. */
 export interface WireEmbed {
   id: number;
@@ -42,15 +51,14 @@ export class MetaService {
       .createQueryBuilder('embed')
       .where('embed.provider = :provider', { provider: YOUTUBE_PROVIDER })
       .andWhere('embed.address IN (:...addresses)', { addresses: wanted })
+      .andWhere('embed.deleted_at IS NULL')
+      .orderBy('embed.id', 'ASC')
       .getMany();
 
-    // `(provider, address)` is not unique; keep the first row per address.
-
+    // `(provider, address)` is not unique; the newest row per address wins.
     const byAddress = new Map<string, Embed>();
     for (const embed of found) {
-      if (!byAddress.has(embed.address)) {
-        byAddress.set(embed.address, embed);
-      }
+      byAddress.set(embed.address, embed);
     }
 
     const missing = wanted.filter((id) => !byAddress.has(id));
@@ -94,7 +102,7 @@ export class MetaService {
           id: embed.id,
           provider: embed.provider,
           address: embed.address,
-          metadata: embed.metadata ?? {},
+          metadata: toWireMetadata(embed.metadata),
         };
       }
     }
