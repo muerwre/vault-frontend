@@ -26,7 +26,8 @@ login on the api address derived from it.
 
 ## CI
 
-The `e2e` job in `.forgejo/workflows/build.yml` runs against an **empty**
+`.forgejo/workflows/e2e.yml` — started by hand for now, from Forgejo's
+"Run workflow" — runs against an **empty**
 MariaDB: the baseline migration builds the schema and `fixtures/seed.sql` adds a
 handful of synthetic users and posts. The production dump never reaches CI — it
 holds real accounts.
