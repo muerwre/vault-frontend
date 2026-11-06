@@ -35,6 +35,34 @@ yarn test
 `NEXT_PUBLIC_*` values on the command line as above — a shell variable wins over
 the file, so nothing needs editing.
 
+## CI
+
+The `e2e` job in `.forgejo/workflows/build.yml` runs against an **empty**
+MariaDB: the baseline migration builds the schema and `fixtures/seed.sql` adds a
+handful of synthetic users and posts. The production dump never reaches CI — it
+holds real accounts.
+
+With `CI` set, `playwright.config.ts` starts the backend (`dist/main.js`) and the
+frontend (`next dev`) itself. To reproduce a CI run locally against a scratch
+database:
+
+```sh
+docker run -d --rm --name vault-e2e-db -e MARIADB_ROOT_PASSWORD=password \
+  -e MARIADB_DATABASE=adonis -p 3399:3306 mariadb:10.8
+export DATABASE_URL=mariadb://root:password@127.0.0.1:3399/adonis
+yarn workspace @vault/e2e db:wait
+yarn backend:migration:run
+yarn workspace @vault/e2e db:seed        # refuses a non-empty database
+yarn common:build && yarn backend:build
+
+CI=true JWT_SECRET=s E2E_JWT_SECRET=s UPLOADS_PATH=/tmp/uploads \
+E2E_BASE_URL=http://localhost:3010 E2E_API_URL=http://localhost:7777/api \
+yarn e2e:test
+```
+
+Flow posts in the seed are backdated past 30 days: the flow's `after` page holds
+what precedes the default window, so a post created today would not appear in it.
+
 ## Environment
 
 | Variable | Purpose |
