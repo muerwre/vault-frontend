@@ -222,11 +222,11 @@ describe('upload and static (integration)', () => {
         ).expect(201);
 
         fileIds.push(body.id);
+        // No `title`: clients then show "<artist> - <title>".
         expect(body.metadata).toEqual({
           duration: 3,
           id3title: 'Spec Title',
           id3artist: 'Spec Artist',
-          title: 'Spec Title',
         });
       });
 
@@ -242,9 +242,8 @@ describe('upload and static (integration)', () => {
         fileIds.push(body.id);
         expect(body.metadata).toEqual({
           duration: 2,
-          id3title: '',
+          id3title: 'no-tags.mp3',
           id3artist: '',
-          title: 'no-tags.mp3',
         });
       });
 
@@ -264,7 +263,7 @@ describe('upload and static (integration)', () => {
         fileIds.push(body.id);
         expect(body.metadata).toMatchObject({
           duration: 2,
-          title: 'padded.mp3',
+          id3title: 'padded.mp3',
         });
       });
 
@@ -281,9 +280,8 @@ describe('upload and static (integration)', () => {
         // Declared as mp3, it is scanned rather than rejected: no frames, no tags.
         expect(body.metadata).toEqual({
           duration: 0,
-          id3title: '',
+          id3title: 'broken.mp3',
           id3artist: '',
-          title: 'broken.mp3',
         });
       });
     });

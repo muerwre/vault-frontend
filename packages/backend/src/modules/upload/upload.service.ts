@@ -224,10 +224,11 @@ export class UploadService {
     return {
       // Rounded because the stored field is an integer.
       duration: Math.round(parsed.format.duration ?? 0),
-      id3title,
+      // Untagged files fall back to their name, so the player shows something.
+      id3title: id3title || (id3artist ? '' : originalName),
       id3artist,
-      // Falls back to the filename so the player always has something to show.
-      title: id3title || originalName,
+      // `title` is left unset: it is the name a user may type in the editor, and
+      // clients show it in place of "<artist> - <title>" whenever it is set.
     };
   }
 
