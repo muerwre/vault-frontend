@@ -48,6 +48,14 @@ async function bootstrap() {
    */
   app.set('strict routing', false);
 
+  /**
+   * Behind the reverse proxy, take the client's protocol from X-Forwarded-Proto.
+   * Without it every request looks like plain http, and the OAuth session cookie
+   * (secure in production) is silently never set, so the handshake cannot be
+   * verified on the callback. Only proxies on private addresses are trusted.
+   */
+  app.set('trust proxy', 'loopback, linklocal, uniquelocal');
+
   const port = process.env.PORT ? Number(process.env.PORT) : 3000;
   await app.listen(port);
 

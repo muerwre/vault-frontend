@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   type CanActivate,
   type ExecutionContext,
   HttpStatus,
@@ -14,6 +15,39 @@ import {
   isOAuthProviderConfigured,
 } from '../../config/env';
 import { VaultException } from '../../globals/exceptions';
+
+import { describeOAuthFailure } from './oauth.diagnostics';
+
+const logger = new Logger('OAuth');
+
+/**
+ * Passport's guard for one provider, logging *why* a handshake failed: passport
+ * reduces every failure to a bare "Unauthorized", while its reason (state or
+ * PKCE verification, or the provider's own response) is only passed here.
+ */
+const loggingGuardFor = (provider: string) =>
+  class extends AuthGuard(provider) {
+    handleRequest<TUser>(
+      error: unknown,
+      user: TUser,
+      info: unknown,
+      context: ExecutionContext,
+      status?: unknown,
+    ): TUser {
+      if (error || !user) {
+        logger.warn(
+          describeOAuthFailure(
+            provider,
+            error,
+            info,
+            context.switchToHttp().getRequest<Request>(),
+          ),
+        );
+      }
+
+      return super.handleRequest(error, user, info, context, status);
+    }
+  };
 
 /**
  * A provider takes part in the redirect handshake only when its credentials are
@@ -50,7 +84,7 @@ export class ProviderAuthGuard implements CanActivate {
       );
     }
 
-    const guard = new (AuthGuard(provider))();
+    const guard = new (loggingGuardFor(provider))();
 
     return guard.canActivate(context) as Promise<boolean> | boolean;
   }
