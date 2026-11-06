@@ -5,7 +5,7 @@
  *
  * Complements schema-drift.ts, which only proves the shape matches.
  *
- * Usage: yarn read-check   (expects ci/compose.yml's seeded database)
+ * Usage: yarn read-check   (expects ci/dev.compose.yml's seeded database)
  */
 import { IsNull, Not } from 'typeorm';
 

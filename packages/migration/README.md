@@ -26,7 +26,7 @@ One-off **data** tooling: backfills, anonymised dev fixtures, and similar script
 that operate on rows rather than schema. It is currently empty, because the
 Go → NestJS migration keeps the *same* database and so needs no data porting.
 
-The local database itself is defined in `ci/compose.yml` and seeded straight from
+The local database itself is defined in `ci/dev.compose.yml` and seeded straight from
 the production dump:
 
 ```bash
