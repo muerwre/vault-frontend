@@ -22,10 +22,12 @@ services:
     # handling differ on MySQL 8 and MariaDB 11.
     image: mariadb:10.8
     restart: unless-stopped
+    # The same DB_* values the backend connects with, read from .env. DB_USER
+    # must not be root: the image creates it as an extra account.
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD in .env}
-      MARIADB_DATABASE: adonis
-      MARIADB_USER: vault
+      MARIADB_DATABASE: ${DB_NAME:-adonis}
+      MARIADB_USER: ${DB_USER:?set DB_USER in .env}
       MARIADB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
       # Creates the `mysql@localhost` socket-auth account the healthcheck uses.
       MARIADB_MYSQL_LOCALHOST_USER: 1
@@ -51,8 +53,9 @@ services:
     environment:
       NODE_ENV: production
       PORT: 8000
-      # DB_PASSWORD must be url-safe, since it is part of this url.
-      DATABASE_URL: mariadb://vault:${DB_PASSWORD}@db:3306/adonis
+      # The db service; user, password and name come from .env.
+      DB_HOST: db
+      DB_PORT: 3306
       # The frontend container, which renders every page.
       FRONTEND_URL: http://frontend:3000
       # Uploaded files are addressed relative to this; changing it breaks every

@@ -10,8 +10,8 @@ services:
   # handling differ on MySQL 8 and MariaDB 11, which surfaces as spurious ALTERs
   # in `migration:generate`.
   #
-  # Credentials and database name match production, so DATABASE_URL differs only
-  # by host. The server-default charset is left at the image default
+  # Credentials and database name are the backend's DB_* defaults, so a fresh
+  # checkout connects without any configuration. The server-default charset is left at the image default
   # (utf8mb4/utf8mb4_general_ci), which is what the newer tables were created
   # under.
   db:

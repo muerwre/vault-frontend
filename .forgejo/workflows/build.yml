@@ -156,7 +156,8 @@ jobs:
       YARN_CACHE_FOLDER: /tmp/yarn-cache
       HUSKY: "0"
       CI: "true"
-      DATABASE_URL: mariadb://root:password@db:3306/adonis
+      # The db service above; user, password and name are the backend's defaults.
+      DB_HOST: db
       # Any value works as long as the backend and the suite agree on it.
       JWT_SECRET: e2e-ci-secret
       E2E_JWT_SECRET: e2e-ci-secret
