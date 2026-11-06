@@ -9,7 +9,7 @@ Monorepo for Vault (vault48.org). Yarn workspaces + Lerna task runner.
 | `packages/frontend` | `@vault/frontend` | Next.js app (moved unchanged from the old repo root) |
 | `packages/backend` | `@vault/backend` | NestJS API — rewrite of the Go backend (`examples/vault-golang`) |
 | `packages/common` | `@vault/common` | Shared TS: enums, wire DTOs, validation (the client/server contract) |
-| `packages/migration` | `@vault/migration` | TypeORM migrations matching the live MySQL schema |
+| `packages/migration` | `@vault/migration` | Reserved for one-off data tooling; currently empty. Schema migrations live in `packages/backend/src/database/migrations` |
 | `packages/e2e` | `@vault/e2e` | Playwright end-to-end tests |
 
 ## Architecture

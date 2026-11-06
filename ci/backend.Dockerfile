@@ -5,8 +5,15 @@
 # through dynamic `import()` (audio metadata and the VK client), and TypeORM
 # finds migrations by globbing the filesystem — neither survives being flattened
 # into a single file. A plain install is larger but behaves like development.
+#
+# Needs Node >= 22.12. The build targets CommonJS, so those dynamic imports are
+# compiled to `require()`, which can load an ES module only from 22.12 on. On an
+# older runtime audio uploads silently lose their metadata and VK publishing
+# fails. The runner asserts the version so a bad base image fails the build.
 
-FROM node:22-slim AS builder
+ARG NODE_IMAGE=node:22-slim
+
+FROM ${NODE_IMAGE} AS builder
 
 WORKDIR /app
 
@@ -33,7 +40,13 @@ RUN yarn workspace @vault/common build \
 RUN yarn install --frozen-lockfile --production --ignore-scripts \
   && yarn cache clean
 
-FROM node:22-slim AS runner
+FROM ${NODE_IMAGE} AS runner
+
+RUN node -e "const [major, minor] = process.versions.node.split('.').map(Number); \
+  if (major < 22 || (major === 22 && minor < 12)) { \
+    console.error('Node >= 22.12 is required, found ' + process.versions.node); \
+    process.exit(1); \
+  }"
 
 WORKDIR /app
 
