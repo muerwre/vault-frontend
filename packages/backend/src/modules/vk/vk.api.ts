@@ -1,7 +1,7 @@
 import { createReadStream } from 'fs';
 
 import { Injectable, Logger } from '@nestjs/common';
-import type { VK } from 'vk-io';
+import { VK } from 'vk-io';
 
 import { getVkPublisherConfig } from '../../config/env';
 
@@ -34,7 +34,7 @@ export class VkApiService {
     }
 
     try {
-      const client = await this.vk();
+      const client = this.vk();
       const [photo] = await client.upload.photoAlbum({
         album_id: albumId,
         group_id: groupId,
@@ -60,7 +60,7 @@ export class VkApiService {
   ): Promise<number | null> {
     const { groupId } = getVkPublisherConfig();
 
-    const client = await this.vk();
+    const client = this.vk();
     const result = await client.api.wall.post({
       // A group wall is addressed by its negated id.
       owner_id: -Math.abs(groupId),
@@ -80,7 +80,7 @@ export class VkApiService {
     const { groupId } = getVkPublisherConfig();
 
     try {
-      const client = await this.vk();
+      const client = this.vk();
       await client.api.groups.getById({ group_id: String(groupId) });
 
       return true;
@@ -93,19 +93,12 @@ export class VkApiService {
     }
   }
 
-  /**
-   * Rebuilt when the token changes, so config edits do not need a restart.
-   *
-   * The client is imported on first use rather than at module load: it pulls in
-   * an ESM-only http library, which cannot be required from a CommonJS context.
-   */
-  private async vk(): Promise<VK> {
+  /** Rebuilt when the token changes, so config edits do not need a restart. */
+  private vk(): VK {
     const { apiKey } = getVkPublisherConfig();
 
     if (!this.client || this.clientToken !== apiKey) {
-      const { VK: VkClient } = await import('vk-io');
-
-      this.client = new VkClient({ token: apiKey });
+      this.client = new VK({ token: apiKey });
       this.clientToken = apiKey;
     }
 

@@ -9,6 +9,7 @@ import {
   type UploadTarget,
 } from '@vault/common/constants';
 import type { FileMetadata } from '@vault/common/types';
+import { parseBuffer } from 'music-metadata';
 import sharp from 'sharp';
 import { Repository } from 'typeorm';
 
@@ -209,8 +210,6 @@ export class UploadService {
     contents: Buffer,
     originalName: string,
   ): Promise<FileMetadata> {
-    // music-metadata ships ESM only, so it cannot be required at module load.
-    const { parseBuffer } = await import('music-metadata');
     const parsed = await parseBuffer(contents);
 
     const id3title = parsed.common.title ?? '';

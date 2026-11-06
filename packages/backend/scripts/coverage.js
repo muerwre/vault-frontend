@@ -46,7 +46,7 @@ const SUITES = [
   { name: 'unit', args: [], sources: SOURCES },
   {
     name: 'int',
-    args: ['--config', 'test/jest-integration.json', '--runInBand'],
+    args: ['--config', 'test/jest-integration.js', '--runInBand'],
     sources: SOURCES.map(under('src/')),
   },
 ];

@@ -208,6 +208,60 @@ describe('upload and static (integration)', () => {
       expect(onDisk).toBe(SVG);
     });
 
+    describe('audio metadata', () => {
+      const fixture = (name: string) =>
+        readFile(join(__dirname, 'fixtures', name));
+
+      it('records duration and the ID3 title and artist', async () => {
+        const { body } = await upload(
+          'nodes',
+          'audio',
+          await fixture('tagged.mp3'),
+          'track.mp3',
+          'audio/mpeg',
+        ).expect(201);
+
+        fileIds.push(body.id);
+        expect(body.metadata).toEqual({
+          duration: 3,
+          id3title: 'Spec Title',
+          id3artist: 'Spec Artist',
+          title: 'Spec Title',
+        });
+      });
+
+      it('falls back to the filename when there is no ID3 title', async () => {
+        const { body } = await upload(
+          'nodes',
+          'audio',
+          await fixture('untagged.mp3'),
+          'no-tags.mp3',
+          'audio/mpeg',
+        ).expect(201);
+
+        fileIds.push(body.id);
+        expect(body.metadata).toEqual({
+          duration: 2,
+          id3title: '',
+          id3artist: '',
+          title: 'no-tags.mp3',
+        });
+      });
+
+      it('stores an unreadable file with empty metadata rather than failing', async () => {
+        const { body } = await upload(
+          'nodes',
+          'audio',
+          Buffer.from('not really an mp3'),
+          'broken.mp3',
+          'audio/mpeg',
+        ).expect(201);
+
+        fileIds.push(body.id);
+        expect(body.metadata).toEqual({});
+      });
+    });
+
     it('accepts an upload to every valid target', async () => {
       for (const target of ['nodes', 'comments', 'profiles', 'other']) {
         const { body } = await upload(
