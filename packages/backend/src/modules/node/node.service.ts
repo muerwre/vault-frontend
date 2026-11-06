@@ -24,12 +24,7 @@ import {
   type WireShallowNode,
 } from '../../wire/serialize';
 
-import {
-  type Actor,
-  canEditNode,
-  canHeroNode,
-  canLikeNode,
-} from './node.permissions';
+import { type Actor, canEditNode, canHeroNode } from './node.permissions';
 import { applyIsFlowNode, applyIsFlowOrLabNode } from './node.predicates';
 
 /**
@@ -524,10 +519,6 @@ export class NodeService {
    * rather than relying on the database to reject a duplicate.
    */
   async toggleLike(node: Node, actor: Actor): Promise<boolean> {
-    if (!canLikeNode(node)) {
-      return false;
-    }
-
     const existing = await this.likes
       .createQueryBuilder('l')
       .where('l.nodeId = :nodeId AND l.userId = :uid', {
@@ -558,10 +549,21 @@ export class NodeService {
   }
 
   /** Persists the flow display settings and returns them as stored. */
+  /**
+   * Replaces the node's flow settings with the client's, as a whole. Only the
+   * known keys are kept: anything else a client sends is not stored.
+   */
   async setFlow(node: Node, flow: INodeFlow): Promise<INodeFlow> {
-    await this.nodes.update(node.id, { flow });
+    const stored: INodeFlow = {
+      display: flow.display,
+      show_description: Boolean(flow.show_description),
+      dominant_color:
+        typeof flow.dominant_color === 'string' ? flow.dominant_color : '',
+    };
 
-    return toWireFlow(flow);
+    await this.nodes.update(node.id, { flow: stored });
+
+    return toWireFlow(stored);
   }
 
   /**

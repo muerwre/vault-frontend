@@ -45,9 +45,6 @@ export const canEditNode = (
   isFlowOrLabType(node) &&
   (actor.role === ROLES.ADMIN || node.userId === actor.id);
 
-export const canLikeNode = (node: Pick<Node, 'type' | 'isPromoted'>): boolean =>
-  isFlowOrLabType(node);
-
 /** Boris accepts comments even though it is neither a flow nor a lab node. */
 export const canCommentOn = (
   node: Pick<Node, 'type' | 'isPromoted'>,

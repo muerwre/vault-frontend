@@ -50,22 +50,6 @@ export class NodeTagsService {
     return tags;
   }
 
-  /** Adds to whatever the node already has, ignoring duplicates. */
-  async addTags(nodeId: number, tags: Tag[]): Promise<Tag[]> {
-    const current = await this.getTags(nodeId);
-    const seen = new Set(current.map((tag) => tag.id));
-    const merged = [...current];
-
-    for (const tag of tags) {
-      if (!seen.has(tag.id)) {
-        seen.add(tag.id);
-        merged.push(tag);
-      }
-    }
-
-    return this.setTags(nodeId, merged);
-  }
-
   async removeTag(nodeId: number, tagId: number): Promise<Tag[]> {
     const remaining = (await this.getTags(nodeId)).filter(
       (tag) => tag.id !== tagId,

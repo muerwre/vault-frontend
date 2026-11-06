@@ -4,7 +4,6 @@ import {
   canCreateNode,
   canEditNode,
   canHeroNode,
-  canLikeNode,
   isFlowOrLabType,
   isFlowType,
   isLabType,
@@ -89,18 +88,6 @@ describe('node permissions', () => {
 
     it('allows editing a lab node', () => {
       expect(canEditNode(node('image', false), author)).toBe(true);
-    });
-  });
-
-  describe('canLikeNode', () => {
-    it('allows any flow or lab node', () => {
-      expect(canLikeNode(node('image', true))).toBe(true);
-      expect(canLikeNode(node('text', false))).toBe(true);
-    });
-
-    it('denies boris and webm', () => {
-      expect(canLikeNode(node('boris', true))).toBe(false);
-      expect(canLikeNode(node('webm', true))).toBe(false);
     });
   });
 
