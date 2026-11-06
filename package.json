@@ -11,7 +11,7 @@
   "scripts": {
     "prepare": "husky install",
     "build": "yarn lerna run build",
-    "dev": "lerna run dev --parallel",
+    "dev": "NODE_ENV=development NEXT_PUBLIC_API_HOST=http://localhost:3000/api/ NEXT_PUBLIC_REMOTE_CURRENT=http://localhost:3000/api/static/ NEXT_PUBLIC_PUBLIC_HOST=http://localhost:3000/ lerna run dev --parallel",
     "typecheck": "yarn lerna run typecheck",
     "lint": "yarn lerna run lint --no-bail",
     "frontend:dev": "yarn workspace @vault/frontend run dev",
