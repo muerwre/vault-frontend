@@ -247,6 +247,20 @@ describe('upload and static (integration)', () => {
         });
       });
 
+      it('truncates the duration to whole seconds', async () => {
+        const { body } = await upload(
+          'nodes',
+          'audio',
+          await fixture('fractional.mp3'),
+          'fractional.mp3',
+          'audio/mpeg',
+        ).expect(201);
+
+        fileIds.push(body.id);
+        // 2.7 seconds long: a player counting down must not overshoot.
+        expect(body.metadata.duration).toBe(2);
+      });
+
       it('reads a file with junk before its first frame', async () => {
         // Content sniffing gives up on these; the declared type must decide.
         const { body } = await upload(
