@@ -337,6 +337,14 @@ export class NodeService {
   }
 
   /**
+   * Records that `uid` has just seen the node. Called after their own comment,
+   * so it never shows the node as updated to the person who updated it.
+   */
+  async markSeen(uid: number, nodeId: number): Promise<void> {
+    await this.touchNodeView(uid, nodeId);
+  }
+
+  /**
    * Returns the previous visit timestamp and records the current one. There is a
    * unique index on `(nodeId, userId)`, so the insert is an upsert.
    */
