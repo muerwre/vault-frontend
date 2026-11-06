@@ -23,15 +23,27 @@ export const CONFIG = ConfigModule.forRoot({
 
 export const isDevMode = process.env.NODE_ENV !== 'production';
 
+export interface DatabaseConfig {
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  database: string;
+}
+
 /**
- * Connection URI, e.g. `mariadb://root:password@localhost:3306/adonis`.
- *
- * Keep the `mariadb://` scheme: it selects the driver type, which changes how
- * column defaults are read (see data-source.ts). Defaults to `ci/dev.compose.yml`'s
- * container so a fresh checkout works without setup.
+ * Connection parameters, kept separate rather than as one url so the database
+ * container and the backend read the very same values — and a password never
+ * needs url-escaping. Defaults match `ci/dev.compose.yml`'s container, so a
+ * fresh checkout works without setup.
  */
-export const getDatabaseUrl = (): string =>
-  process.env.DATABASE_URL ?? 'mariadb://root:password@localhost:3306/adonis';
+export const getDatabaseConfig = (): DatabaseConfig => ({
+  host: process.env.DB_HOST || 'localhost',
+  port: Number.parseInt(process.env.DB_PORT ?? '', 10) || 3306,
+  username: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD ?? 'password',
+  database: process.env.DB_NAME || 'adonis',
+});
 
 export const getJwtSecret = (): string => process.env.JWT_SECRET ?? '';
 

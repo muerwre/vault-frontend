@@ -4,20 +4,24 @@
  *   node scripts/seed-db.js wait   — block until the server accepts connections
  *   node scripts/seed-db.js seed   — load fixtures/seed.sql
  *
- * Reads DATABASE_URL, the same variable the backend uses. The schema itself
- * comes from the backend's migrations, run between the two steps.
+ * Reads the backend's DB_HOST, DB_PORT, DB_USER, DB_PASSWORD and DB_NAME, with
+ * the same defaults. The schema itself comes from the backend's migrations, run
+ * between the two steps.
  */
 const { readFileSync } = require('fs');
 const { join } = require('path');
 
 const mysql = require('mysql2/promise');
 
-const url = process.env.DATABASE_URL;
 const WAIT_TIMEOUT_MS = 120_000;
 
 const connect = () =>
   mysql.createConnection({
-    uri: url.replace(/^mariadb:/, 'mysql:'),
+    host: process.env.DB_HOST || 'localhost',
+    port: Number.parseInt(process.env.DB_PORT ?? '', 10) || 3306,
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD ?? 'password',
+    database: process.env.DB_NAME || 'adonis',
     multipleStatements: true,
     charset: 'utf8mb4',
   });
@@ -60,10 +64,6 @@ const seed = async () => {
 };
 
 const main = async () => {
-  if (!url) {
-    throw new Error('DATABASE_URL is not set');
-  }
-
   const step = process.argv[2];
 
   if (step === 'wait') {

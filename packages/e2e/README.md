@@ -39,7 +39,7 @@ database:
 ```sh
 docker run -d --rm --name vault-e2e-db -e MARIADB_ROOT_PASSWORD=password \
   -e MARIADB_DATABASE=adonis -p 3399:3306 mariadb:10.8
-export DATABASE_URL=mariadb://root:password@127.0.0.1:3399/adonis
+export DB_HOST=127.0.0.1 DB_PORT=3399
 yarn workspace @vault/e2e db:wait
 yarn backend:migration:run
 yarn workspace @vault/e2e db:seed        # refuses a non-empty database

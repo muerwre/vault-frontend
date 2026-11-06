@@ -1,6 +1,6 @@
 import { DataSource, type DataSourceOptions } from 'typeorm';
 
-import { getDatabaseUrl, loadConfig } from '../config/env';
+import { getDatabaseConfig, loadConfig } from '../config/env';
 import { ENTITIES } from '../entities';
 
 loadConfig();
@@ -21,7 +21,7 @@ export const dataSourceOptions: DataSourceOptions = {
    * Both types load the same `mysql2` client.
    */
   type: 'mariadb',
-  url: getDatabaseUrl(),
+  ...getDatabaseConfig(),
   entities: ENTITIES,
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
   migrationsTableName: 'typeorm_migrations',
