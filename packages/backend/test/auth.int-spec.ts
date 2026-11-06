@@ -1,3 +1,7 @@
+// Mail off, whatever the local env says: the restore flow must never send real
+// mail from a spec, and the spec asserts the skipped-send path.
+process.env.SMTP_HOST = '';
+
 import { createHash } from 'crypto';
 
 import type { INestApplication } from '@nestjs/common';
@@ -320,7 +324,6 @@ describe('auth (integration)', () => {
     it('runs request → validate → apply → consume', async () => {
       await db.query('DELETE FROM restore_code WHERE userId = ?', [userId]);
 
-      // Mail is skipped when SMTP_HOST is unset, so this succeeds locally.
       await http()
         .post('/api/auth/restore')
         .send({ field: username })
