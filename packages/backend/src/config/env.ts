@@ -100,6 +100,12 @@ export const getTelegramToken = (): string => process.env.TELEGRAM_TOKEN ?? '';
 export interface TelegramConfig {
   token: string;
   /**
+   * Runs the bot and the notification sender. Off unless explicitly enabled:
+   * Telegram allows one long-poller per token, so a second instance holding the
+   * same token would fight the live bot for updates and send duplicates.
+   */
+  botEnabled: boolean;
+  /**
    * Outbound proxy for `api.telegram.org`, which is blocked in some networks.
    * `http(s)://`, `socks5://`, `socks5h://` and `socks4://` are understood;
    * empty means connect directly.
@@ -121,11 +127,19 @@ const toPositiveInt = (value: string | undefined, fallback: number): number => {
 
 export const getTelegramConfig = (): TelegramConfig => ({
   token: getTelegramToken(),
+  botEnabled: process.env.TELEGRAM_BOT_ENABLED === 'true',
   proxyUrl: process.env.TELEGRAM_PROXY_URL ?? '',
   cooldownMins: toPositiveInt(process.env.TELEGRAM_COOLDOWN_MINS, 5),
   purgeAfterDays: toPositiveInt(process.env.TELEGRAM_PURGE_AFTER_DAYS, 3),
   maxMessages: toPositiveInt(process.env.TELEGRAM_MAX_MESSAGES, 3),
 });
+
+/** The bot needs its token as well as the flag. */
+export const isTelegramBotUsable = (config: TelegramConfig): boolean =>
+  config.botEnabled && Boolean(config.token);
+
+/** Absolute site root for links in outgoing messages, e.g. `https://vault48.org`. */
+export const getPublicUrl = (): string => `https://${getPublicHost()}`;
 
 /**
  * Signs the OAuth handshake session. PKCE requires the code verifier to outlive

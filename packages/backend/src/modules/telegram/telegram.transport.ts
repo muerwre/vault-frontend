@@ -84,11 +84,13 @@ export class TelegramTransport {
    * Calls a Bot API method and returns its `result`.
    *
    * Throws on transport failure or an `ok: false` response, so callers decide
-   * whether a failed delivery is worth retrying.
+   * whether a failed delivery is worth retrying. `signal` aborts a pending call,
+   * which a long-poll needs to release shutdown promptly.
    */
   async call<T>(
     method: string,
     payload: Record<string, unknown> = {},
+    signal?: AbortSignal,
   ): Promise<T> {
     const { token } = getTelegramConfig();
 
@@ -101,6 +103,7 @@ export class TelegramTransport {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
       dispatcher: this.getDispatcher(),
+      signal,
     });
 
     const body = (await response.json()) as {
