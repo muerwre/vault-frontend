@@ -139,7 +139,10 @@ export interface TelegramConfig {
    * empty means connect directly.
    */
   proxyUrl: string;
-  /** Minutes between delivery runs. */
+  /**
+   * Minutes a notification waits before it is delivered, and between runs.
+   * 0 delivers immediately: no wait, and runs every IMMEDIATE_POLL_MS.
+   */
   cooldownMins: number;
   /** Unsent notifications older than this are dropped rather than delivered. */
   purgeAfterDays: number;
@@ -153,11 +156,37 @@ const toPositiveInt = (value: string | undefined, fallback: number): number => {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 };
 
+/** Like toPositiveInt, but 0 is a valid value rather than a fallback. */
+const toNonNegativeInt = (
+  value: string | undefined,
+  fallback: number,
+): number => {
+  const parsed = Number.parseInt(value ?? '', 10);
+
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+};
+
+/** How often a 0 cooldown checks for work: soon enough to feel immediate. */
+export const IMMEDIATE_POLL_MS = 10_000;
+
+/**
+ * Run interval for a delivery cooldown. A cooldown is also the polling period,
+ * except at 0, which must not busy-loop and polls every IMMEDIATE_POLL_MS.
+ */
+export const cooldownIntervalMs = (cooldownMins: number): number =>
+  cooldownMins > 0 ? cooldownMins * 60_000 : IMMEDIATE_POLL_MS;
+
+/** A cooldown as a log phrase: "every 5m", or immediately. */
+export const describeCooldown = (cooldownMins: number): string =>
+  cooldownMins > 0
+    ? `every ${cooldownMins}m`
+    : `immediately (checked every ${IMMEDIATE_POLL_MS / 1000}s)`;
+
 export const getTelegramConfig = (): TelegramConfig => ({
   token: getTelegramToken(),
   botUsername: (process.env.TELEGRAM_BOT_USERNAME ?? '').replace(/^@/, ''),
   proxyUrl: process.env.TELEGRAM_PROXY_URL ?? '',
-  cooldownMins: toPositiveInt(process.env.TELEGRAM_COOLDOWN_MINS, 5),
+  cooldownMins: toNonNegativeInt(process.env.TELEGRAM_COOLDOWN_MINS, 5),
   purgeAfterDays: toPositiveInt(process.env.TELEGRAM_PURGE_AFTER_DAYS, 3),
   maxMessages: toPositiveInt(process.env.TELEGRAM_MAX_MESSAGES, 3),
 });
@@ -181,7 +210,10 @@ export interface VkPublisherConfig {
   groupId: number;
   albumId: number;
   appId: number;
-  /** Minutes a node waits before being posted, and the polling interval. */
+  /**
+   * Minutes a node waits before being posted, and between runs. 0 posts
+   * immediately: no wait, and runs every IMMEDIATE_POLL_MS.
+   */
   cooldownMins: number;
   /** Nodes older than this are never posted, only skipped. */
   purgeAfterDays: number;
@@ -194,7 +226,7 @@ export const getVkPublisherConfig = (): VkPublisherConfig => ({
   groupId: toPositiveInt(process.env.NOTIFICATIONS_VK_GROUP_ID, 0),
   albumId: toPositiveInt(process.env.NOTIFICATIONS_VK_ALBUM_ID, 0),
   appId: toPositiveInt(process.env.NOTIFICATIONS_VK_APP_ID, 0),
-  cooldownMins: toPositiveInt(process.env.NOTIFICATIONS_VK_COOLDOWN_MINS, 5),
+  cooldownMins: toNonNegativeInt(process.env.NOTIFICATIONS_VK_COOLDOWN_MINS, 5),
   purgeAfterDays: toPositiveInt(
     process.env.NOTIFICATIONS_VK_PURGE_AFTER_DAYS,
     7,

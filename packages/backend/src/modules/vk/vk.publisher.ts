@@ -15,6 +15,8 @@ import {
 import { Repository } from 'typeorm';
 
 import {
+  cooldownIntervalMs,
+  describeCooldown,
   getUploadsConfig,
   getVkPublisherConfig,
   isVkPublisherUsable,
@@ -78,12 +80,12 @@ export class VkPublisher implements OnModuleInit, OnModuleDestroy {
     }
 
     this.logger.log(
-      `publishing to group ${config.groupId} every ${config.cooldownMins}m`,
+      `publishing to group ${config.groupId} ${describeCooldown(config.cooldownMins)}`,
     );
 
     this.timer = setInterval(() => {
       void this.runOnce();
-    }, config.cooldownMins * MINUTE_MS);
+    }, cooldownIntervalMs(config.cooldownMins));
 
     // Long-running and unattended: never hold the process open.
     this.timer.unref();
