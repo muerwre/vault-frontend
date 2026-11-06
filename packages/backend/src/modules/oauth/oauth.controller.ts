@@ -30,6 +30,7 @@ import {
 } from '../auth/auth.guards';
 import { AuthService } from '../auth/auth.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { TelegramBot } from '../telegram/telegram.bot';
 
 import type { ProviderProfile } from './oauth.claim';
 import { ProviderAuthGuard, ProviderCallbackGuard } from './oauth.guards';
@@ -55,6 +56,7 @@ export class OAuthController {
     private readonly oauth: OAuthService,
     private readonly auth: AuthService,
     private readonly notifications: NotificationsService,
+    private readonly telegramBot: TelegramBot,
   ) {}
 
   /** The caller's linked accounts. */
@@ -227,7 +229,17 @@ export class OAuthController {
         );
 
     // Linking Telegram opts the user into Telegram delivery.
-    await this.notifications.updateSettings(user.id, { send_telegram: true });
+    const settings = await this.notifications.updateSettings(user.id, {
+      send_telegram: true,
+    });
+
+    // Only a new link is greeted; refreshing an existing one stays quiet.
+    if (!existing) {
+      await this.telegramBot.greet(
+        accountId,
+        Boolean(settings.enabled && settings.sendTelegram),
+      );
+    }
 
     return { account: toWireSocial(account) };
   }

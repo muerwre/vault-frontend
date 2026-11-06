@@ -53,6 +53,9 @@ services:
 
       # A live token sends real messages and verifies the login widget.
       TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+      # The bot and notification delivery. Only one instance per token may run
+      # it — keep it off until the outgoing backend's bot is stopped.
+      TELEGRAM_BOT_ENABLED: "false"
       # Set when api.telegram.org is unreachable from the host.
       TELEGRAM_PROXY_URL: ${TELEGRAM_PROXY_URL}
     volumes:
