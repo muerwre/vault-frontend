@@ -19,3 +19,6 @@ build
 
 # intermediate migration spec / reference material (dump, example repos)
 /examples
+
+# merged backend coverage (yarn backend:coverage)
+coverage/
