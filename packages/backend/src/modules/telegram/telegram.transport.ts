@@ -1,3 +1,5 @@
+import { connect } from 'tls';
+
 import { Injectable, Logger } from '@nestjs/common';
 import { SocksClient } from 'socks';
 // undici's own fetch, not the global one: the global is backed by Node's
@@ -48,7 +50,6 @@ export const socksDispatcher = (proxy: ParsedProxy): Dispatcher =>
         }
 
         // TLS must terminate at Telegram, not at the proxy.
-        const { connect } = await import('tls');
         const secure = connect({ socket, servername: hostname });
 
         secure.on('error', (error) => callback(error, null));

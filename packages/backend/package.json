@@ -21,7 +21,7 @@
     "read-check": "ts-node src/database/read-check.ts",
     "auth-check": "ts-node src/globals/auth-check.ts",
     "test": "jest",
-    "test:int": "jest --config test/jest-integration.json --runInBand",
+    "test:int": "jest --config test/jest-integration.js --runInBand",
     "test:all": "yarn test && yarn test:int",
     "coverage": "node scripts/coverage.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
