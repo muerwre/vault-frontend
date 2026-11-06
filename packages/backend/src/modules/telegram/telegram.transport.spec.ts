@@ -44,12 +44,17 @@ describe('telegram transport', () => {
       });
     });
 
-    /** A zero cooldown would busy-loop the sender, so it falls back. */
-    it('ignores non-positive and unparseable values', () => {
-      for (const value of ['0', '-1', 'soon', '']) {
+    it('ignores negative and unparseable values', () => {
+      for (const value of ['-1', 'soon', '']) {
         process.env.TELEGRAM_COOLDOWN_MINS = value;
         expect(getTelegramConfig().cooldownMins).toBe(5);
       }
+    });
+
+    /** 0 means "immediately"; the sender then polls on a short fixed interval. */
+    it('accepts a zero cooldown', () => {
+      process.env.TELEGRAM_COOLDOWN_MINS = '0';
+      expect(getTelegramConfig().cooldownMins).toBe(0);
     });
 
     it('carries the proxy url through untouched', () => {
