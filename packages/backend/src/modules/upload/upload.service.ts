@@ -156,7 +156,7 @@ export class UploadService {
             {};
       }
 
-      return await this.audioMetadata(contents, originalName);
+      return await this.audioMetadata(contents, originalName, mime);
     } catch (error) {
       this.logger.warn(
         `could not read metadata for ${originalName}: ${
@@ -209,8 +209,14 @@ export class UploadService {
   private async audioMetadata(
     contents: Buffer,
     originalName: string,
+    mime: string,
   ): Promise<FileMetadata> {
-    const parsed = await parseBuffer(contents);
+    // The type and name pick the parser directly. Left to sniff the content,
+    // the library gives up on files with anything before the first frame.
+    const parsed = await parseBuffer(contents, {
+      mimeType: mime,
+      path: originalName,
+    });
 
     const id3title = parsed.common.title ?? '';
     const id3artist = parsed.common.artist ?? '';
