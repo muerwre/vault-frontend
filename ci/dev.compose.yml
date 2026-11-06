@@ -37,7 +37,7 @@ services:
       # `--su-mysql` is required: otherwise healthcheck.sh connects as root with no
       # password, is denied, and the container never leaves `health: starting`.
       test:
-        ['CMD', 'healthcheck.sh', '--su-mysql', '--connect', '--innodb_initialized']
+        ['CMD', 'healthcheck.sh', '--su-mysql', '--innodb_initialized']
       interval: 5s
       timeout: 5s
       # First boot applies the dump before accepting external connections.
