@@ -86,6 +86,13 @@ services:
       PUBLIC_URL: ${PUBLIC_URL:?set PUBLIC_URL in .env}
       # Server-side data fetching goes straight to the backend container.
       BACKEND_URL: http://backend:8000
+    # Optional host mounts. The app lives in /app/packages/frontend in this image
+    # (the monorepo layout), not /app as in the old one — mount there.
+    # volumes:
+    #   # Next's image and page cache, kept across container recreation.
+    #   - /mnt/storage/.vault-stable/next-cache:/app/packages/frontend/.next/cache
+    #   # Files served from /.well-known/ (domain verification and the like).
+    #   - /var/www/sites/vault/data/well-known:/app/packages/frontend/public/.well-known:ro
     # Not published: reached only by the backend, as FRONTEND_URL.
 
 volumes:
