@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GUEST_USER_ID, LAB_SORT, type LabSort } from '@vault/common/constants';
+import {
+  FLOW_NODE_TYPES,
+  GUEST_USER_ID,
+  LAB_SORT,
+  type LabSort,
+} from '@vault/common/constants';
 import { Repository } from 'typeorm';
 
 import { Comment } from '../../entities/comment.entity';
@@ -56,7 +61,6 @@ const ORDER_BY_ACTIVITY =
   'IF(node.commented_at IS NULL OR node.commented_at = 0, node.created_at, node.commented_at)';
 
 const HEROES_LIMIT = 20;
-const POPULAR_TAGS_LIMIT = 24;
 
 @Injectable()
 export class LabService {
@@ -194,16 +198,21 @@ export class LabService {
     };
   }
 
+  /**
+   * Every tag used in the lab, most used first — the whole list, not a top-N:
+   * clients show all of it. Tags only on deleted nodes are left out, since they
+   * would lead nowhere.
+   */
   private async getPopularTags(): Promise<Tag[]> {
     return this.tags.query(
       `SELECT t.* FROM node_tags_tag
          LEFT JOIN node ON node_tags_tag.nodeId = node.id
          LEFT JOIN tag t ON node_tags_tag.tagId = t.id
         WHERE node.is_promoted = 0 AND node.deleted_at IS NULL
+          AND node.type IN (?)
         GROUP BY node_tags_tag.tagId
-        ORDER BY COUNT(node_tags_tag.tagId) DESC
-        LIMIT ?`,
-      [POPULAR_TAGS_LIMIT],
+        ORDER BY COUNT(node_tags_tag.tagId) DESC`,
+      [FLOW_NODE_TYPES],
     );
   }
 

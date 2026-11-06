@@ -158,6 +158,25 @@ describe('read endpoints (integration)', () => {
       expect(body.nodes.length).toBeLessThanOrEqual(2);
     });
 
+    it('pages by 20 when no limit is given', async () => {
+      const [busiest] = await db.query(
+        `SELECT t.title, COUNT(*) AS n FROM node_tags_tag nt
+           JOIN tag t ON t.id = nt.tagId
+           JOIN node ON node.id = nt.nodeId
+          WHERE node.deleted_at IS NULL AND node.is_public = 1 AND node.is_promoted = 1
+          GROUP BY t.id ORDER BY n DESC LIMIT 1`,
+      );
+      expect(Number(busiest.n)).toBeGreaterThan(20);
+
+      const { body } = await http()
+        .get('/api/tags/nodes')
+        .query({ name: busiest.title })
+        .expect(200);
+
+      expect(body.nodes).toHaveLength(20);
+      expect(body.count).toBeGreaterThan(20);
+    });
+
     it('matches the tag name case-insensitively', async () => {
       const upper = await http()
         .get('/api/tags/nodes')

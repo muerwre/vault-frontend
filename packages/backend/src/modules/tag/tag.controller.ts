@@ -6,6 +6,9 @@ import { OptionalAuthGuard, Uid } from '../auth/auth.guards';
 
 import { TagService, type WireTagNodesResponse } from './tag.service';
 
+/** Page size when the client sends none. */
+const TAG_NODES_DEFAULT_LIMIT = 20;
+
 const toInt = (value: unknown, fallback: number): number => {
   const parsed = Number.parseInt(String(value ?? ''), 10);
 
@@ -33,7 +36,8 @@ export class TagController {
     return this.tags.getNodesOfTag(
       tag,
       uid === GUEST_USER_ID,
-      toInt(limit, 0),
+      // An absent, zero or unreadable limit is a page of 20 — never "no limit".
+      toInt(limit, 0) || TAG_NODES_DEFAULT_LIMIT,
       toInt(offset, 0),
     );
   }

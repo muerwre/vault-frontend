@@ -45,17 +45,30 @@ import {
   type WireRelated,
 } from './node.service';
 
-/** Query booleans arrive as the strings `"true"`/`"false"`. */
-const toBool = (value: unknown): boolean => value === 'true' || value === true;
+/** A query flag; unreadable values are refused rather than read as false. */
+const requireFlag = (value: unknown): boolean => {
+  const parsed = parseQueryBool(value);
 
+  if (parsed === null) {
+    throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.BAD_REQUEST);
+  }
+
+  return parsed;
+};
+
+/** An optional date; absent takes the fallback, unreadable is refused. */
 const toDate = (value: unknown, fallback: Date): Date => {
-  if (typeof value !== 'string' || value === '') {
+  if (value === undefined || value === '') {
     return fallback;
   }
 
-  const parsed = new Date(value);
+  const parsed = new Date(String(value));
 
-  return Number.isNaN(parsed.getTime()) ? fallback : parsed;
+  if (Number.isNaN(parsed.getTime())) {
+    throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.BAD_REQUEST);
+  }
+
+  return parsed;
 };
 
 const FLOW_DISPLAYS: readonly string[] = Object.values(NODE_FLOW_DISPLAY);
@@ -107,10 +120,10 @@ export class NodeController {
         ),
       ),
       take: toPositiveInt(take, FLOW_DEFAULT_TAKE),
-      withHeroes: toBool(withHeroes),
-      withUpdated: toBool(withUpdated),
-      withRecent: toBool(withRecent),
-      withValid: toBool(withValid),
+      withHeroes: requireFlag(withHeroes),
+      withUpdated: requireFlag(withUpdated),
+      withRecent: requireFlag(withRecent),
+      withValid: requireFlag(withValid),
       uid,
     });
   }

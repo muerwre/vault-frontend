@@ -23,6 +23,7 @@ import {
   type WireNode,
   type WireShallowNode,
 } from '../../wire/serialize';
+import { UploadService } from '../upload/upload.service';
 
 import { type Actor, canEditNode, canHeroNode } from './node.permissions';
 import { applyIsFlowNode, applyIsFlowOrLabNode } from './node.predicates';
@@ -97,6 +98,7 @@ export interface WireGetNode {
 @Injectable()
 export class NodeService {
   constructor(
+    private readonly uploads: UploadService,
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
     @InjectRepository(File) private readonly files: Repository<File>,
     @InjectRepository(Like) private readonly likes: Repository<Like>,
@@ -148,6 +150,9 @@ export class NodeService {
       this.getBacklinks(node.id),
       uid === GUEST_USER_ID ? null : this.touchNodeView(uid, node.id),
     ]);
+
+    // Older images lack dimensions or a colour; they are filled in on read.
+    await this.uploads.backfillImageMetadata(files);
 
     return {
       node: toWireNode(node, files, { isLiked, likeCount }),

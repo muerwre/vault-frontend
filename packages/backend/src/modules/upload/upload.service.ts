@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'fs/promises';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
 
 import { Injectable, Logger } from '@nestjs/common';
@@ -23,6 +23,7 @@ import {
   isMimeAllowedForType,
   needsScaling,
   remoteFileName,
+  resolveUploadPath,
 } from './upload.paths';
 
 @Injectable()
@@ -165,6 +166,49 @@ export class UploadService {
       );
 
       return {};
+    }
+  }
+
+  /**
+   * Fills in image metadata that older uploads lack, reading the file from
+   * disk, and saves it. An image needs it when it has no dimensions or no
+   * dominant colour; clients size layouts and placeholders from both. Files
+   * are updated in place. Best-effort: a missing or unreadable file is left
+   * as it is.
+   */
+  async backfillImageMetadata(files: File[]): Promise<void> {
+    const { path: root } = getUploadsConfig();
+
+    for (const file of files) {
+      const metadata = file.metadata ?? {};
+      const incomplete =
+        (!metadata.width && !metadata.height) || !metadata.dominant_color;
+
+      if (
+        file.type !== FILE_TYPES.IMAGE ||
+        !incomplete ||
+        !needsScaling(file.mime ?? '')
+      ) {
+        continue;
+      }
+
+      const absolute = resolveUploadPath(root, file.fullPath ?? '');
+
+      if (!absolute) {
+        continue;
+      }
+
+      try {
+        const filled = {
+          ...metadata,
+          ...(await this.imageMetadata(await readFile(absolute))),
+        };
+
+        await this.files.update(file.id, { metadata: filled });
+        file.metadata = filled;
+      } catch {
+        // Missing on disk or undecodable: leave the stored metadata alone.
+      }
     }
   }
 
