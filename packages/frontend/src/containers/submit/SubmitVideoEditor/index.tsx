@@ -1,10 +1,8 @@
-import { FC, KeyboardEvent, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
 import { Icon } from '~/components/common/Icon';
-import { Button } from '~/components/input/Button';
-import { Textarea } from '~/components/input/Textarea';
 import { SortableGrid } from '~/components/sortable/SortableGrid';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
@@ -13,6 +11,8 @@ import { NodeEditorProps } from '~/types/node';
 import { getYoutubeId } from '~/utils/dom';
 
 import { SubmitCard } from '../SubmitCard';
+import { SubmitEmptyState } from '../SubmitEmptyState';
+import { SubmitVideoAddCard } from '../SubmitVideoAddCard';
 
 import styles from './styles.module.scss';
 
@@ -59,13 +59,11 @@ const getVideoId = (it: Video) => it.id;
 const noLocked: FC = () => null;
 
 /**
- * Video node content: a list of YouTube videos. Links are pasted into the add
- * card, several at once if need be; a video already listed is skipped.
+ * Video node content: a sortable list of YouTube videos ending in an add card.
+ * Before the first one, the add card sits centred in the empty zone.
  */
 const SubmitVideoEditor: FC<NodeEditorProps> = () => {
   const { values, setFieldValue } = useNodeFormContext();
-  const [url, setUrl] = useState('');
-  const [error, setError] = useState('');
 
   const videos = useMemo<Video[]>(
     () =>
@@ -88,42 +86,13 @@ const SubmitVideoEditor: FC<NodeEditorProps> = () => {
     [values.blocks, setFieldValue],
   );
 
-  const onUrlChange = useCallback((value: string) => {
-    setUrl(value);
-    setError('');
-  }, []);
+  const onAdd = useCallback(
+    (blocks: IBlock[]) =>
+      setFieldValue('blocks', [...values.blocks, ...blocks]),
+    [values.blocks, setFieldValue],
+  );
 
-  const add = useCallback(() => {
-    const links = url
-      .split(/\s+/)
-      .map((it) => ({ url: it, id: getYoutubeId(it) }))
-      .filter((it): it is { url: string; id: string } => !!it.id);
-
-    if (!links.length) {
-      setError('Это не похоже на ссылку на ютуб');
-      return;
-    }
-
-    const seen = new Set(videos.map((it) => it.id));
-    const blocks: IBlock[] = [];
-
-    links.forEach((it) => {
-      if (seen.has(it.id)) {
-        return;
-      }
-
-      seen.add(it.id);
-      blocks.push({ type: 'video', url: it.url });
-    });
-
-    if (!blocks.length) {
-      setError('Это видео уже добавлено');
-      return;
-    }
-
-    setFieldValue('blocks', [...values.blocks, ...blocks]);
-    setUrl('');
-  }, [url, videos, values.blocks, setFieldValue]);
+  const ids = useMemo(() => videos.map((it) => it.id), [videos]);
 
   const remove = useCallback(
     (id: string) => setVideos(videos.filter((it) => it.id !== id)),
@@ -132,18 +101,13 @@ const SubmitVideoEditor: FC<NodeEditorProps> = () => {
 
   const cardProps = useMemo(() => ({ onRemove: remove }), [remove]);
 
-  // Enter adds the videos instead of a new line; Shift+Enter breaks the line.
-  const onKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLTextAreaElement>) => {
-      if (event.key !== 'Enter' || event.shiftKey) {
-        return;
-      }
-
-      event.preventDefault();
-      add();
-    },
-    [add],
-  );
+  if (!videos.length) {
+    return (
+      <SubmitEmptyState>
+        <SubmitVideoAddCard existing={ids} onAdd={onAdd} variant="inline" />
+      </SubmitEmptyState>
+    );
+  }
 
   return (
     <SortableGrid
@@ -157,31 +121,7 @@ const SubmitVideoEditor: FC<NodeEditorProps> = () => {
       renderLockedProps={{}}
       onSortEnd={setVideos}
       className={styles.grid}
-      trailing={
-        <SubmitCard className={styles.add}>
-          <div className={styles.field}>
-            <Textarea
-              value={url}
-              handler={onUrlChange}
-              onKeyDown={onKeyDown}
-              placeholder="Ссылка на ютуб"
-              error={error}
-              minRows={2}
-              className={styles.textarea}
-            />
-          </div>
-
-          <Button
-            type="button"
-            onClick={add}
-            iconLeft="plus"
-            size="small"
-            className={styles.button}
-          >
-            Добавить
-          </Button>
-        </SubmitCard>
-      }
+      trailing={<SubmitVideoAddCard existing={ids} onAdd={onAdd} />}
     />
   );
 };

@@ -1,0 +1,47 @@
+@import 'src/styles/variables';
+
+.wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $gap;
+  min-height: 300px;
+  padding: $gap * 2 $gap;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.icon {
+  fill: $gray_50;
+  opacity: 0.5;
+}
+
+.title {
+  font: $font_18_semibold;
+  text-transform: uppercase;
+}
+
+.hint {
+  font: $font_14_medium;
+  color: $gray_50;
+  max-width: 320px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: $gap;
+  width: 100%;
+  margin-top: $gap;
+}
+
+.vertical {
+  flex-direction: column;
+  // as wide as the widest action, which the others stretch to match
+  align-items: stretch;
+  width: auto;
+}

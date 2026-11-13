@@ -1,0 +1,8 @@
+@import 'src/styles/variables';
+
+// fills the content zone, so the empty state can centre in it
+.fill {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

@@ -7,6 +7,8 @@ import { ImageGrid } from '~/containers/dialogs/EditorDialog/components/ImageGri
 import { NodeEditorProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
 
+import { SubmitEmptyState } from '../SubmitEmptyState';
+import { SubmitPickButton } from '../SubmitPickButton';
 import { SubmitUploadCard } from '../SubmitUploadCard';
 
 import styles from './styles.module.scss';
@@ -26,6 +28,27 @@ const SubmitAudioEditor: FC<NodeEditorProps> = () => {
   // With no photos yet, a lone square tile looks lost next to the song
   // list, so the photo card starts as a row like the song one.
   const hasImages = filesImages.length > 0 || pendingImages.length > 0;
+
+  // before anything is added, the zone is just buttons to pick files
+  if (!hasImages && !filesAudios.length && !pendingAudios.length) {
+    return (
+      <UploadDropzone onUpload={uploadFiles} className={styles.fill}>
+        <SubmitEmptyState vertical>
+          <SubmitPickButton
+            type={UploadType.Audio}
+            iconLeft="audio"
+            label="Добавить песню"
+          />
+          <SubmitPickButton
+            type={UploadType.Image}
+            iconLeft="photo_add"
+            label="Добавить обложку"
+            color="gray"
+          />
+        </SubmitEmptyState>
+      </UploadDropzone>
+    );
+  }
 
   return (
     <UploadDropzone onUpload={uploadFiles}>

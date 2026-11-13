@@ -7,11 +7,30 @@ import { NodeEditorProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
 import { values } from '~/utils/ramda';
 
+import { SubmitEmptyState } from '../SubmitEmptyState';
+import { SubmitPickButton } from '../SubmitPickButton';
 import { SubmitUploadCard } from '../SubmitUploadCard';
+
+import styles from './styles.module.scss';
 
 /** Photo node content: the photo grid, ending in a card that adds more. */
 const SubmitImageEditor: FC<NodeEditorProps> = () => {
   const { pending, files, setFiles, uploadFiles } = useUploaderContext()!;
+
+  // before the first photo, the zone is just a button to pick some
+  if (!files.length && !values(pending).length) {
+    return (
+      <UploadDropzone onUpload={uploadFiles} className={styles.fill}>
+        <SubmitEmptyState>
+          <SubmitPickButton
+            type={UploadType.Image}
+            iconLeft="photo_add"
+            label="Добавить фото"
+          />
+        </SubmitEmptyState>
+      </UploadDropzone>
+    );
+  }
 
   return (
     <UploadDropzone onUpload={uploadFiles}>

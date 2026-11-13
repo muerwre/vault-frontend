@@ -1,13 +1,12 @@
-import { ChangeEvent, FC, useCallback } from 'react';
+import { FC } from 'react';
 
 import classNames from 'classnames';
 
 import { Icon } from '~/components/common/Icon';
 import { UploadType } from '~/constants/uploads';
-import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
-import { getFileType } from '~/utils/uploader';
 
 import { SubmitCard } from '../SubmitCard';
+import { useUploadPicked } from '../hooks/useUploadPicked';
 
 import styles from './styles.module.scss';
 
@@ -21,23 +20,7 @@ interface Props {
 
 /** The last card of an upload grid: picks files of its type to upload. */
 const SubmitUploadCard: FC<Props> = ({ type, label, icon, variant }) => {
-  const { uploadFiles } = useUploaderContext()!;
-
-  const onChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const files = Array.from(event.target.files || []).filter(
-        (file) => getFileType(file) === type,
-      );
-
-      // Cleared so picking the same files again still fires a change.
-      event.target.value = '';
-
-      if (files.length) {
-        void uploadFiles(files);
-      }
-    },
-    [type, uploadFiles],
-  );
+  const onChange = useUploadPicked(type);
 
   return (
     <SubmitCard

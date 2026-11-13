@@ -121,6 +121,12 @@ const SubmitLayout: FC<Props> = observer(
       />
     );
 
+    // the type comes first, above the title, wherever the title is
+    const typeSwitch = !!onSwitchType &&
+      SWITCHABLE_TYPES.includes(currentType) && (
+        <SubmitTypeSwitch onChange={onSwitchType} />
+      );
+
     const controls = (
       <>
         <SubmitTags />
@@ -149,15 +155,10 @@ const SubmitLayout: FC<Props> = observer(
           <Container>
             <form onSubmit={handleSubmit} className={styles.wrap}>
               <div className={styles.main}>
+                {isTablet && typeSwitch}
                 {isTablet && <div className={styles.title}>{title}</div>}
 
                 <Card className={styles.content}>
-                  {!!onSwitchType && SWITCHABLE_TYPES.includes(currentType) && (
-                    <div className={styles.types}>
-                      <SubmitTypeSwitch onChange={onSwitchType} />
-                    </div>
-                  )}
-
                   {uploadButtons.length > 0 && (
                     <div className={styles.uploads}>
                       {uploadButtons.map((button, index) =>
@@ -171,6 +172,7 @@ const SubmitLayout: FC<Props> = observer(
               </div>
 
               <div className={styles.pane}>
+                {!isTablet && typeSwitch}
                 {!isTablet && title}
                 {controls}
               </div>
