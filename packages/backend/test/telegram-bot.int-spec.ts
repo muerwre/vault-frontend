@@ -420,7 +420,7 @@ describe('telegram bot (integration)', () => {
       expect(sentTo(900000070)).toHaveLength(1);
     });
 
-    it('asks for /start when notifications are off', async () => {
+    it('turns delivery on even when notifications were off', async () => {
       const userId = await makeUser();
       await setSettings(userId, { enabled: false });
 
@@ -430,7 +430,14 @@ describe('telegram bot (integration)', () => {
         .send(signedTelegramPayload(900000071))
         .expect(200);
 
-      expect(sentTo(900000071)[0].text).toContain('просто набери /start');
+      expect(sentTo(900000071)[0].text).toContain('/stop');
+
+      const [row] = await db.query(
+        'SELECT enabled, send_telegram FROM notification_settings WHERE userId = ?',
+        [userId],
+      );
+      expect(Number(row.enabled)).toBe(1);
+      expect(Number(row.send_telegram)).toBe(1);
     });
 
     it('links even when the greeting cannot be sent', async () => {

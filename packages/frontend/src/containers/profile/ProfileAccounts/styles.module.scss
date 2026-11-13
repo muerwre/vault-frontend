@@ -35,7 +35,7 @@
 
 .account {
   display: grid;
-  grid-template-columns: 20px auto 20px;
+  grid-template-columns: 20px 1fr auto 20px;
   grid-column-gap: $gap * 1.5;
   align-items: center;
   border-bottom: 1px solid $gray_90;
@@ -64,6 +64,15 @@
   &__name {
     font: $font_16_semibold;
     padding-left: $gap * 0.5;
+  }
+
+  &__notifications {
+    display: flex;
+    align-items: center;
+    gap: $gap;
+    font: $font_12_regular;
+    color: $gray_50;
+    cursor: pointer;
   }
 
   &__drop {

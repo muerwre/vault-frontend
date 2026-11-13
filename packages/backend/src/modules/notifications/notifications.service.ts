@@ -257,6 +257,21 @@ export class NotificationsService {
     return this.settings.save(Object.assign(settings, patch));
   }
 
+  /**
+   * Turns Telegram delivery on. Enabling notifications as a whole also
+   * re-enables mail, which would be a surprise for someone who only asked for
+   * Telegram — so mail is switched off when notifications were off before.
+   */
+  async enableTelegramDelivery(userId: number): Promise<NotificationSettings> {
+    const settings = await this.getSettings(userId);
+
+    return this.updateSettings(userId, {
+      enabled: true,
+      send_telegram: true,
+      ...(!settings.enabled && settings.sendEmail ? { send_email: false } : {}),
+    });
+  }
+
   toWireSettings(
     settings: NotificationSettings,
     lastDate: string | null,

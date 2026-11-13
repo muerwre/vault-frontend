@@ -129,16 +129,13 @@ export class TelegramBot implements OnApplicationBootstrap, OnModuleDestroy {
    * Welcomes a freshly linked account. Never throws: linking must succeed even
    * when Telegram is unreachable, and the user can always type `/start` later.
    */
-  async greet(accountId: string, deliveryEnabled: boolean): Promise<void> {
+  async greet(accountId: string): Promise<void> {
     if (!this.isEnabled) {
       return;
     }
 
     try {
-      await this.send(
-        accountId,
-        greetingMessage(getPublicUrl(), deliveryEnabled),
-      );
+      await this.send(accountId, greetingMessage(getPublicUrl()));
     } catch (error) {
       this.logger.warn(`could not greet ${accountId}: ${describe(error)}`);
     }
@@ -197,11 +194,7 @@ export class TelegramBot implements OnApplicationBootstrap, OnModuleDestroy {
     }
   }
 
-  /**
-   * Turns delivery on. Enabling notifications as a whole also re-enables mail,
-   * which would be a surprise for someone who only asked for Telegram — so mail
-   * is switched off when notifications were off before.
-   */
+  /** Turns delivery on. */
   private async start(userId: number): Promise<TelegramMessage> {
     const settings = await this.notifications.getSettings(userId);
 
@@ -209,11 +202,7 @@ export class TelegramBot implements OnApplicationBootstrap, OnModuleDestroy {
       return alreadyEnabledMessage();
     }
 
-    await this.notifications.updateSettings(userId, {
-      enabled: true,
-      send_telegram: true,
-      ...(!settings.enabled && settings.sendEmail ? { send_email: false } : {}),
-    });
+    await this.notifications.enableTelegramDelivery(userId);
 
     return startedMessage(getPublicUrl());
   }

@@ -3,9 +3,11 @@ import { FC, Fragment } from 'react';
 import { Group } from '~/components/common/Group';
 import { Icon } from '~/components/common/Icon';
 import { Button } from '~/components/input/Button';
+import { Toggle } from '~/components/input/Toggle';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { SOCIAL_ICONS } from '~/constants/auth/socials';
 import { useOAuth } from '~/hooks/auth/useOAuth';
+import { useTelegramNotifications } from '~/hooks/notifications/useTelegramNotifications';
 
 import styles from './styles.module.scss';
 
@@ -20,6 +22,7 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
     hasTelegram,
     showTelegramModal,
   } = useOAuth();
+  const telegramNotifications = useTelegramNotifications();
 
   return (
     <Group className={styles.wrap}>
@@ -63,6 +66,21 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
                 </div>
 
                 <div className={styles.account__name}>{it.name || it.id}</div>
+
+                {it.provider === 'telegram' &&
+                !telegramNotifications.isLoading ? (
+                  <label className={styles.account__notifications}>
+                    <span>Уведомления</span>
+                    <Toggle
+                      value={telegramNotifications.enabled}
+                      handler={telegramNotifications.setEnabled}
+                      disabled={telegramNotifications.isUpdating}
+                      title="Присылать в Телеграм уведомления о постах и комментариях"
+                    />
+                  </label>
+                ) : (
+                  <div />
+                )}
 
                 <div className={styles.account__drop}>
                   <Icon

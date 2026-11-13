@@ -228,17 +228,11 @@ export class OAuthController {
           user.id,
         );
 
-    // Linking Telegram opts the user into Telegram delivery.
-    const settings = await this.notifications.updateSettings(user.id, {
-      send_telegram: true,
-    });
-
-    // Only a new link is greeted; refreshing an existing one stays quiet.
+    // Only a new link opts the user into Telegram delivery, the same way the
+    // bot's /start does; refreshing an existing link keeps their choice.
     if (!existing) {
-      await this.telegramBot.greet(
-        accountId,
-        Boolean(settings.enabled && settings.sendTelegram),
-      );
+      await this.notifications.enableTelegramDelivery(user.id);
+      await this.telegramBot.greet(accountId);
     }
 
     return { account: toWireSocial(account) };

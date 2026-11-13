@@ -163,15 +163,13 @@ describe('telegram messages', () => {
       expect(startedMessage(SITE).text).toContain('page=notifications');
     });
 
-    it('greets differently depending on whether delivery is on', () => {
-      expect(greetingMessage(SITE, true).text).toContain('/stop');
-      expect(greetingMessage(SITE, false).text).toContain('/start');
-      expect(greetingMessage(SITE, false).text).not.toContain('href');
+    it('greets with a way to stop, since linking turns delivery on', () => {
+      expect(greetingMessage(SITE).text).toContain('/stop');
     });
 
     it('never previews service messages', () => {
       expect(helpMessage(SITE).showPreview).toBe(false);
-      expect(greetingMessage(SITE, true).showPreview).toBe(false);
+      expect(greetingMessage(SITE).showPreview).toBe(false);
     });
   });
 

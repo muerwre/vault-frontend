@@ -485,6 +485,9 @@ describe('oauth (integration)', () => {
 
     beforeEach(async () => {
       await db.query('DELETE FROM social WHERE account_id = ?', ['770001']);
+      await db.query('DELETE FROM notification_settings WHERE userId = ?', [
+        userId,
+      ]);
     });
 
     it('links the account when the signature checks out', async () => {
@@ -503,10 +506,30 @@ describe('oauth (integration)', () => {
       await attach(userId, telegramPayload()).expect(200);
 
       const [row] = await db.query(
+        'SELECT enabled, send_telegram, send_email FROM notification_settings WHERE userId = ?',
+        [userId],
+      );
+      expect(Number(row.enabled)).toBe(1);
+      expect(Number(row.send_telegram)).toBe(1);
+      // Mail was never asked for, so enabling notifications must not start it.
+      expect(Number(row.send_email)).toBe(0);
+    });
+
+    /** A re-link refreshes the account but keeps the user's delivery choice. */
+    it('leaves delivery alone when the account is linked again', async () => {
+      await attach(userId, telegramPayload()).expect(200);
+      await db.query(
+        'UPDATE notification_settings SET send_telegram = 0 WHERE userId = ?',
+        [userId],
+      );
+
+      await attach(userId, telegramPayload()).expect(200);
+
+      const [row] = await db.query(
         'SELECT send_telegram FROM notification_settings WHERE userId = ?',
         [userId],
       );
-      expect(Number(row.send_telegram)).toBe(1);
+      expect(Number(row.send_telegram)).toBe(0);
     });
 
     it('400s a tampered payload', async () => {

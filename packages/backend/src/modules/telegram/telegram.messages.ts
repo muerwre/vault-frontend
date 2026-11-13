@@ -113,22 +113,15 @@ export const unexpectedErrorMessage = (): TelegramMessage =>
  * Sent when an account is linked. Its wording depends on whether delivery is
  * already on, since a user with notifications disabled needs `/start` first.
  */
-export const greetingMessage = (
-  publicUrl: string,
-  deliveryEnabled: boolean,
-): TelegramMessage =>
-  deliveryEnabled
-    ? plain(
-        'Бип-буп-боп! Привет!\n\nЯ буду присылать тебе уведомления, которые указаны в ' +
-          `<a href="${escapeAttr(
-            notificationSettingsUrl(publicUrl),
-          )}">настройках уведомлений</a>.\n\n` +
-          'Набери /help, чтобы узнать, что я могу или /stop если буду надоедать.',
-      )
-    : plain(
-        'Приветствую!\n\nЯ могу присылать тебе уведомления, просто набери /start. ' +
-          'Чтобы узнать, что я могу, набери /help.',
-      );
+/** Linking an account switches delivery on, so the greeting assumes it. */
+export const greetingMessage = (publicUrl: string): TelegramMessage =>
+  plain(
+    'Бип-буп-боп! Привет!\n\nЯ буду присылать тебе уведомления, которые указаны в ' +
+      `<a href="${escapeAttr(
+        notificationSettingsUrl(publicUrl),
+      )}">настройках уведомлений</a>.\n\n` +
+      'Набери /help, чтобы узнать, что я могу или /stop если буду надоедать.',
+  );
 
 export interface NodeMessageSource {
   id: number;
