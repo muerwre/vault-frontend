@@ -8,13 +8,19 @@ import { SidebarStack } from '~/components/sidebar/SidebarStack';
 import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
 import { SidebarWrapper } from '~/components/sidebar/SidebarWrapper';
 import { features } from '~/constants/features';
-import { SidebarName } from '~/constants/sidebar';
+import {
+  SIDEBAR_STACK_SIDE_BY_SIDE_QUERY,
+  SidebarName,
+} from '~/constants/sidebar';
 import { ProfileSidebarMenu } from '~/containers/profile/ProfileSidebarMenu';
 import { useAuth } from '~/hooks/auth/useAuth';
 import type { SidebarComponentProps } from '~/types/sidebar';
 import { isNil } from '~/utils/ramda';
 
 const tabs = ['profile', 'notifications', 'bookmarks'] as const;
+
+/** Matches the menu's slide-in, so the settings card follows it. */
+const SETTINGS_OPEN_DELAY = 500;
 type TabName = (typeof tabs)[number];
 
 interface SettingsSidebarProps
@@ -46,6 +52,23 @@ const SettingsSidebar: VFC<SettingsSidebarProps> = ({
     },
     [openSidebar],
   );
+
+  // Where the settings card fits beside the menu, it opens once the menu is
+  // in. Only on first open: closing the card later must not bring it back.
+  useEffect(() => {
+    if (
+      page ||
+      !isUser ||
+      !window.matchMedia(SIDEBAR_STACK_SIDE_BY_SIDE_QUERY).matches
+    ) {
+      return;
+    }
+
+    const timeout = setTimeout(() => onTabChange(0), SETTINGS_OPEN_DELAY);
+
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!isUser) {

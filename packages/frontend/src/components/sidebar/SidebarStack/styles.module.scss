@@ -1,11 +1,46 @@
 @import 'src/styles/variables';
 
+// Slides out from behind the menu card it sits next to.
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translate(30%, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+// On phones cards replace the menu, so they rise from the bottom instead.
+@keyframes cardUp {
+  from {
+    opacity: 0;
+    transform: translate(0, 30%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
 .stack {
   display: flex;
   flex-direction: row-reverse;
   width: auto;
   border-radius: $radius 0 0 $radius;
   background: $content_bg_backdrop;
+
+  // The menu card (first child) paints its own backdrop and sits above the
+  // secondary card, so that one slides out from underneath instead of over it.
+  & > *:first-child {
+    position: relative;
+    z-index: 1;
+    background: $content_bg_backdrop;
+    border-radius: $radius 0 0 $radius;
+  }
 
   @include sidebar_stack_limit {
     & > *:not(:last-child) {
@@ -15,6 +50,12 @@
 }
 
 .card {
+  animation: cardIn 0.35s ease-out;
+
+  @include tablet {
+    animation-name: cardUp;
+  }
+  background: $content_bg_backdrop;
   box-shadow: $gray_90 -1px 0, transparentize(black, 0.7) -5px 0 15px;
   border-radius: $radius 0 0 $radius;
   display: flex;

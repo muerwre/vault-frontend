@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { apiUpdatePhoto, apiUpdateUser } from '~/api/auth';
+import { apiDeletePhoto, apiUpdatePhoto, apiUpdateUser } from '~/api/auth';
 import { ApiUpdateUserRequest } from '~/api/auth/types';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { useUser } from '~/hooks/auth/useUser';
@@ -41,5 +41,14 @@ export const usePatchUser = () => {
     [uploadFile, update],
   );
 
-  return { updatePhoto, save };
+  const deletePhoto = useCallback(async () => {
+    try {
+      const result = await apiDeletePhoto();
+      await update(result.user);
+    } catch (error) {
+      showErrorToast(error);
+    }
+  }, [update]);
+
+  return { updatePhoto, deletePhoto, save };
 };

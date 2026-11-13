@@ -56,6 +56,9 @@ export const apiUpdateUser = ({ user }: ApiUpdateUserRequest) =>
 export const apiUpdatePhoto = ({ file }: ApiUpdatePhotoRequest) =>
   api.post<ApiUpdateUserResult>(API.USER.UPDATE_PHOTO, file).then(unwrap);
 
+export const apiDeletePhoto = () =>
+  api.delete<ApiUpdateUserResult>(API.USER.UPDATE_PHOTO).then(unwrap);
+
 export const apiUpdateCover = ({ file }: ApiUpdatePhotoRequest) =>
   api.post<ApiUpdateUserResult>(API.USER.UPDATE_COVER, file).then(unwrap);
 

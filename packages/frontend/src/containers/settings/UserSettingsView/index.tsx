@@ -6,7 +6,10 @@ import { Superpower } from '~/components/common/Superpower';
 import { Zone } from '~/components/common/Zone';
 import { InputText } from '~/components/input/InputText';
 import { Textarea } from '~/components/input/Textarea';
+import { ProfilePhotoEditor } from '~/components/profile/ProfilePhotoEditor';
 import { ProfileAccounts } from '~/containers/profile/ProfileAccounts';
+import { usePatchUser } from '~/hooks/auth/usePatchUser';
+import { useUser } from '~/hooks/auth/useUser';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useSettings } from '~/utils/providers/SettingsProvider';
 
@@ -14,21 +17,23 @@ import styles from './styles.module.scss';
 
 interface UserSettingsViewProps {}
 
+const AVATAR_SIZE = 160;
+
 const UserSettingsView: FC<UserSettingsViewProps> = () => {
   const { values, handleChange, errors } = useSettings();
   const { isPhone } = useWindowSize();
+  const { user } = useUser();
+  const { updatePhoto, deletePhoto } = usePatchUser();
 
   return (
     <Group>
       <Group horizontal={!isPhone} className={styles.base_info}>
-        <Superpower>
-          <Zone className={styles.avatar} title="Фото">
-            <small>
-              Будет здесь. Кстати, ты видишь это, потому что включил суперсилы в
-              Борисе.
-            </small>
-          </Zone>
-        </Superpower>
+        <ProfilePhotoEditor
+          photo={user.photo}
+          size={AVATAR_SIZE}
+          onUpload={updatePhoto}
+          onDelete={deletePhoto}
+        />
 
         <Zone title="О себе" className={styles.about}>
           <Group>

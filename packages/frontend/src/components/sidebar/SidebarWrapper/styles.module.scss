@@ -10,6 +10,16 @@
   }
 }
 
+@keyframes slideUp {
+  0% {
+    transform: translate(0, 50%);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
 .wrapper {
   width: 100%;
   height: 100%;
@@ -19,6 +29,10 @@
   justify-content: flex-end;
   overflow: hidden;
   animation: slideIn 0.5s forwards;
+
+  @include tablet {
+    animation-name: slideUp;
+  }
 
   & > * {
     z-index: 4;

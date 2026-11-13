@@ -45,7 +45,12 @@ const SidebarCards: FC = ({ children }) => {
     return null;
   }
 
-  return <div className={styles.card}>{nonEmptyChildren[activeTab]}</div>;
+  // Keyed by tab, so switching cards plays the entrance again.
+  return (
+    <div className={styles.card} key={activeTab}>
+      {nonEmptyChildren[activeTab]}
+    </div>
+  );
 };
 
 const SidebarStack = function ({
