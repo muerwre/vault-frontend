@@ -34,13 +34,18 @@ export const canLikeNode = (
   user?: Partial<IUser>,
 ): boolean => path(['role'], user) !== Role.Guest;
 
+/**
+ * Admins star flow photos for the hero carousel. Lab posts never take part,
+ * so they get no star.
+ */
 export const canStarNode = (
   node?: Partial<INode>,
   user?: Partial<IUser>,
 ): boolean =>
   !!node &&
   !!user &&
-  (node.type === NODE_TYPES.IMAGE || !node.is_promoted) &&
+  node.type === NODE_TYPES.IMAGE &&
+  !!node.is_promoted &&
   user.role === Role.Admin;
 
 /**

@@ -145,6 +145,28 @@ export class AuthRequiredGuard implements CanActivate {
 }
 
 /**
+ * Like `AuthRequiredGuard`, but a guest gets a 404 rather than a 401: for
+ * members-only content (the lab) whose very existence guests must not learn.
+ */
+@Injectable()
+export class MembersOnlyGuard implements CanActivate {
+  constructor(private readonly tokens: TokenReader) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const request = context.switchToHttp().getRequest<AuthedRequest>();
+    const claims = this.tokens.read(request);
+
+    if (!claims) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    request.auth = { claims, uid: claims.uid, user: null };
+
+    return true;
+  }
+}
+
+/**
  * Loads the full `User` (with photo and cover) onto `request.auth.user`.
  *
  * Separate from `AuthRequiredGuard` so routes needing only `uid` do not pay for

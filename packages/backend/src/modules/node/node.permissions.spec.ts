@@ -101,5 +101,9 @@ describe('node permissions', () => {
     it('denies admins on a non-flow, non-lab type', () => {
       expect(canHeroNode(node('boris', true), admin)).toBe(false);
     });
+
+    it('denies admins on a lab post', () => {
+      expect(canHeroNode(node('image', false), admin)).toBe(false);
+    });
   });
 });

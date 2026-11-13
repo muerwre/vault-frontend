@@ -106,8 +106,8 @@ describe('lab (integration)', () => {
   });
 
   describe('GET /nodes/lab', () => {
-    it('requires auth', async () => {
-      await http().get('/api/nodes/lab').expect(401);
+    it('is a 404 to guests, who must not learn the lab exists', async () => {
+      await http().get('/api/nodes/lab').expect(404);
     });
 
     /**
@@ -328,8 +328,8 @@ describe('lab (integration)', () => {
   });
 
   describe('GET /nodes/lab/updates', () => {
-    it('requires auth', async () => {
-      await http().get('/api/nodes/lab/updates').expect(401);
+    it('is a 404 to guests, who must not learn the lab exists', async () => {
+      await http().get('/api/nodes/lab/updates').expect(404);
     });
 
     it('lists lab nodes commented on since the caller last opened them', async () => {
@@ -368,8 +368,8 @@ describe('lab (integration)', () => {
   });
 
   describe('GET /nodes/lab/stats', () => {
-    it('requires auth', async () => {
-      await http().get('/api/nodes/lab/stats').expect(401);
+    it('is a 404 to guests, who must not learn the lab exists', async () => {
+      await http().get('/api/nodes/lab/stats').expect(404);
     });
 
     it('returns tags, heroes and an always-empty comments list', async () => {
@@ -420,6 +420,51 @@ describe('lab (integration)', () => {
         .expect(200);
 
       expect(body.heroes.map((n: { id: number }) => n.id)).toContain(heroic);
+    });
+  });
+
+  /** Lab posts are for members: to a guest they do not exist at all. */
+  describe('a lab post, read directly', () => {
+    it('is a 404 to guests', async () => {
+      const nodeId = await makeLabNode();
+
+      await http().get(`/api/nodes/${nodeId}`).expect(404);
+    });
+
+    it('is readable by signed-in users', async () => {
+      const nodeId = await makeLabNode();
+
+      const { body } = await http()
+        .get(`/api/nodes/${nodeId}`)
+        .set(authHeader(userId))
+        .expect(200);
+
+      expect(body.node.id).toBe(nodeId);
+    });
+
+    it('stays readable to guests once promoted to the flow', async () => {
+      const nodeId = await makeLabNode({ isPromoted: true });
+
+      await http().get(`/api/nodes/${nodeId}`).expect(200);
+    });
+
+    it('hides its comments from guests', async () => {
+      const nodeId = await makeLabNode();
+      await addComment(nodeId);
+
+      await http().get(`/api/nodes/${nodeId}/comments`).expect(404);
+    });
+
+    it('shows its comments to signed-in users', async () => {
+      const nodeId = await makeLabNode();
+      await addComment(nodeId);
+
+      const { body } = await http()
+        .get(`/api/nodes/${nodeId}/comments`)
+        .set(authHeader(userId))
+        .expect(200);
+
+      expect(body.comments).toHaveLength(1);
     });
   });
 });

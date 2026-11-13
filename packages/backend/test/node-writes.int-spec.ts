@@ -247,6 +247,15 @@ describe('node writes (integration)', () => {
         .expect(404);
     });
 
+    it('404s for an admin on a lab post: the lab has no heroes', async () => {
+      const nodeId = await makeNode({ isPromoted: false });
+
+      await http()
+        .post(`/api/nodes/${nodeId}/heroic`)
+        .set(authHeader(adminId, 'admin'))
+        .expect(404);
+    });
+
     it('404s for an admin on a type that is neither flow nor lab', async () => {
       const nodeId = await makeNode({ type: 'boris' });
 
