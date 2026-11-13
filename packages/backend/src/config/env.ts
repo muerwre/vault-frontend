@@ -16,6 +16,15 @@ const ENV_FILE_PATH =
 /** Populates `process.env` eagerly, for modules that read config at import time. */
 export const loadConfig = () => config({ path: ENV_FILE_PATH });
 
+/**
+ * Also run on import, because a module that reads config *while it is being
+ * imported* — the upload interceptor's size limit, for one — would otherwise
+ * see whichever defaults applied before anything called `loadConfig`. dotenv
+ * never overwrites a variable that is already set, so a real environment (a
+ * container, CI) still wins over the file.
+ */
+loadConfig();
+
 export const CONFIG = ConfigModule.forRoot({
   envFilePath: ENV_FILE_PATH,
   isGlobal: true,
