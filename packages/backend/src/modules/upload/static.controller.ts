@@ -10,6 +10,21 @@ import { parseCacheRequest } from './upload.paths';
 /** Six months, matching how long generated variants are considered fresh. */
 const CACHE_MAX_AGE = 15552000;
 
+/**
+ * Headers every stored file is served with.
+ *
+ * Uploads are served from the site's own origin, so an SVG — which is an
+ * allowed image type and is stored unscaled — would otherwise run its own
+ * script with access to the session token. `sandbox` denies it a scripting
+ * context, and `nosniff` stops a browser from guessing a different type from
+ * the bytes.
+ */
+const SECURITY_HEADERS: Record<string, string> = {
+  'Content-Security-Policy':
+    "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+  'X-Content-Type-Options': 'nosniff',
+};
+
 @Controller('static')
 export class StaticController {
   constructor(private readonly statics: StaticService) {}
@@ -37,6 +52,10 @@ export class StaticController {
     }
 
     const cacheRequest = parseCacheRequest(relative);
+
+    for (const [header, value] of Object.entries(SECURITY_HEADERS)) {
+      response.setHeader(header, value);
+    }
 
     if (cacheRequest) {
       const variant = await this.statics.resolveScaled(

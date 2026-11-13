@@ -17,6 +17,7 @@ import { File } from '../../entities/file.entity';
 import type { User } from '../../entities/user.entity';
 import { toWireShallowFile, type WireShallowFile } from '../../wire/serialize';
 
+import { openRaster } from './raster';
 import {
   generateUploadName,
   isMimeAllowedForType,
@@ -24,7 +25,6 @@ import {
   remoteFileName,
   resolveUploadPath,
 } from './upload.paths';
-import { openRaster } from './raster';
 
 @Injectable()
 export class UploadService {
@@ -119,6 +119,15 @@ export class UploadService {
       this.logger.warn(
         `remote file ${url} is ${mime || 'untyped'}, not ${fileType}`,
       );
+      return null;
+    }
+
+    // Checked before reading the body, so an oversized remote file cannot be
+    // buffered into memory first.
+    const declared = Number(response.headers.get('content-length') ?? '');
+
+    if (Number.isFinite(declared) && declared > this.maxSizeBytes) {
+      this.logger.warn(`remote file ${url} is too big`);
       return null;
     }
 

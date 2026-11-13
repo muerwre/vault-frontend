@@ -453,6 +453,29 @@ describe('upload and static (integration)', () => {
       expect(response.body.length).toBeGreaterThan(0);
     });
 
+    /**
+     * Uploads are served from the site's own origin and SVG is an allowed type,
+     * so a stored file must never get a scripting context of its own.
+     */
+    it('serves every file sandboxed and without content sniffing', async () => {
+      const response = await http().get(`/api/static/${fullPath}`).expect(200);
+
+      expect(response.headers['content-security-policy']).toContain('sandbox');
+      expect(response.headers['content-security-policy']).toContain(
+        "default-src 'none'",
+      );
+      expect(response.headers['x-content-type-options']).toBe('nosniff');
+    });
+
+    it('sandboxes a scaled variant too', async () => {
+      const response = await http()
+        .get(`/api/static/cache/300/${fullPath}`)
+        .expect(200);
+
+      expect(response.headers['content-security-policy']).toContain('sandbox');
+      expect(response.headers['x-content-type-options']).toBe('nosniff');
+    });
+
     it('404s a file that does not exist', async () => {
       await http().get('/api/static/uploads/nope/missing.png').expect(404);
     });

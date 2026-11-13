@@ -111,7 +111,16 @@ export class VaultExceptionFilter implements ExceptionFilter {
                 ? ERROR_CODES.FilesIsTooBig
                 : ERROR_CODES.IncorrectData;
 
-      response.status(status).json(this.envelope(code, exception.message));
+      /**
+       * Multer refuses an oversized body before the handler runs. The handler
+       * answers 400 for the same condition, so both paths look alike.
+       */
+      const wireStatus =
+        status === HttpStatus.PAYLOAD_TOO_LARGE
+          ? HttpStatus.BAD_REQUEST
+          : status;
+
+      response.status(wireStatus).json(this.envelope(code, exception.message));
       return;
     }
 

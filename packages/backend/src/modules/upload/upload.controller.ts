@@ -9,8 +9,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import type { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { ERROR_CODES } from '@vault/common/constants';
 
+import { getUploadsConfig } from '../../config/env';
 import { User } from '../../entities/user.entity';
 import { VaultException } from '../../globals/exceptions';
 import type { WireShallowFile } from '../../wire/serialize';
@@ -30,6 +32,16 @@ import { UploadService } from './upload.service';
 /** The multipart field is named `file`. */
 const FIELD = 'file';
 
+/**
+ * Multer buffers the whole body in memory, so the limit has to be given to it
+ * rather than checked afterwards — without it any request can exhaust the
+ * process. The handler still checks the size, which is what turns a refusal
+ * into `File_Is_Too_Big` instead of multer's own error.
+ */
+export const multerOptions = (): MulterOptions => ({
+  limits: { fileSize: getUploadsConfig().maxSizeMb * 1024 * 1024 },
+});
+
 @Controller('upload')
 export class UploadController {
   constructor(private readonly uploads: UploadService) {}
@@ -43,7 +55,7 @@ export class UploadController {
   @Post(':target/:type')
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthRequiredGuard, WithUserGuard)
-  @UseInterceptors(FileInterceptor(FIELD))
+  @UseInterceptors(FileInterceptor(FIELD, multerOptions()))
   async upload(
     @Param('target') target: string,
     @Param('type') type: string,
