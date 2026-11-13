@@ -500,7 +500,23 @@ CREATE TABLE \`user_notifications_sent\` (
     }
   }
 
+  /**
+   * Dropping every table is only ever right for a database this migration
+   * created itself. Against an adopted one — which is what `up` records, and
+   * what production is — a revert would destroy data the migration never
+   * owned, so it refuses unless told otherwise in so many words.
+   */
   public async down(queryRunner: QueryRunner): Promise<void> {
+    if (process.env.BASELINE_DROP_EVERYTHING !== 'yes-drop-every-table') {
+      throw new Error(
+        'Refusing to revert the baseline: it adopts an existing schema rather ' +
+          'than creating one, so reverting would drop all ' +
+          `${BaselineSchema1721000000000.TABLES.length} tables and everything ` +
+          'in them. Set BASELINE_DROP_EVERYTHING=yes-drop-every-table to ' +
+          'confirm that is what you want.',
+      );
+    }
+
     await queryRunner.query('SET FOREIGN_KEY_CHECKS = 0');
 
     try {
