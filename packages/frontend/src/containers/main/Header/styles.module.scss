@@ -111,21 +111,27 @@
       opacity 0.25s;
   }
 
+  // Update dot: centred over the label, 4px above it.
   &::after {
+    $dot_size: 6px;
+    $dot_spacing: 4px;
+
     content: ' ';
     position: absolute;
-    width: 6px;
-    height: 6px;
+    width: $dot_size;
+    height: $dot_size;
     border-radius: 4px;
     background: $color_link;
-    right: 12px;
-    top: 6px;
+    top: $gap - $dot_spacing - $dot_size;
+    left: 50%;
+    transform: translate(-50%, 0);
     transition: opacity 0.5s;
     opacity: 0;
 
+    // The label has no vertical padding here, and $gap * 2 on the right only.
     @include tablet {
-      top: -4px;
-      right: 14px;
+      top: -($dot_spacing + $dot_size);
+      left: calc(50% - #{$gap});
     }
   }
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, VFC } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, VFC } from 'react';
 
 import { CoverBackdrop } from '~/components/common/CoverBackdrop';
 import { ProfileSidebarNotes } from '~/components/profile/ProfileSidebarNotes';
@@ -7,6 +7,7 @@ import { ProfileSidebarSettings } from '~/components/profile/ProfileSidebarSetti
 import { SidebarStack } from '~/components/sidebar/SidebarStack';
 import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
 import { SidebarWrapper } from '~/components/sidebar/SidebarWrapper';
+import { features } from '~/constants/features';
 import { SidebarName } from '~/constants/sidebar';
 import { ProfileSidebarMenu } from '~/containers/profile/ProfileSidebarMenu';
 import { useAuth } from '~/hooks/auth/useAuth';
@@ -29,10 +30,13 @@ const SettingsSidebar: VFC<SettingsSidebarProps> = ({
   const { isUser } = useAuth();
   const cover = false;
 
-  const tab = useMemo(
-    () => (page ? Math.max(tabs.indexOf(page), 0) : undefined),
-    [page],
-  );
+  const tab = useMemo(() => {
+    if (!page || (page === 'notifications' && !features.notifications)) {
+      return undefined;
+    }
+
+    return Math.max(tabs.indexOf(page), 0);
+  }, [page]);
 
   const onTabChange = useCallback(
     (val: number | undefined) => {
@@ -70,7 +74,12 @@ const SettingsSidebar: VFC<SettingsSidebarProps> = ({
 
         <SidebarStack.Cards>
           <ProfileSidebarSettings />
-          <ProfileSidebarNotifications />
+          {/* Cards are picked by index, so a disabled tab keeps its slot */}
+          {features.notifications ? (
+            <ProfileSidebarNotifications />
+          ) : (
+            <Fragment />
+          )}
           <ProfileSidebarNotes />
         </SidebarStack.Cards>
       </SidebarStack>

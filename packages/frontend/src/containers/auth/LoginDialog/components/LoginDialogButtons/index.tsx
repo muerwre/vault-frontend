@@ -9,9 +9,10 @@ import styles from './styles.module.scss';
 
 interface Props {
   openOauthWindow: (provider: OAuthProvider) => void;
+  onGoogleLogin: () => void;
 }
 
-const LoginDialogButtons: FC<Props> = ({ openOauthWindow }) => (
+const LoginDialogButtons: FC<Props> = ({ openOauthWindow, onGoogleLogin }) => (
   <Group className={styles.footer}>
     <Button>Войти</Button>
 
@@ -20,7 +21,7 @@ const LoginDialogButtons: FC<Props> = ({ openOauthWindow }) => (
         color="outline"
         iconLeft="google"
         type="button"
-        onClick={() => openOauthWindow('google')}
+        onClick={onGoogleLogin}
       >
         <span>Google</span>
       </Button>

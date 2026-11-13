@@ -279,7 +279,7 @@ export class AuthController {
 
     const code = await this.auth.findOrCreateRestoreCode(user.id);
 
-    await this.auth.sendRestoreCode(user.email, code);
+    await this.auth.sendRestoreCode(user.email, user.username, code);
   }
 
   /** Answers 201, not 200 — the client relies on the existing status. */

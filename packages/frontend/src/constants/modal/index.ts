@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 
+import { GoogleLoginDisabledDialog } from '~/containers/auth/GoogleLoginDisabledDialog';
 import { LoginDialog } from '~/containers/auth/LoginDialog';
 import { LoginSocialRegisterDialog } from '~/containers/auth/LoginSocialRegisterDialog';
 import { RestorePasswordDialog } from '~/containers/auth/RestorePasswordDialog';
@@ -28,6 +29,7 @@ export enum Dialog {
   CreateNode = 'CreateNode',
   EditNode = 'EditNode',
   TelegramAttach = 'TelegramAttach',
+  GoogleLoginDisabled = 'GoogleLoginDisabled',
 }
 
 export const DIALOG_CONTENT = {
@@ -42,4 +44,5 @@ export const DIALOG_CONTENT = {
   [Dialog.CreateNode]: EditorCreateDialog,
   [Dialog.EditNode]: EditorEditDialog,
   [Dialog.TelegramAttach]: TelegramAttachDialog,
+  [Dialog.GoogleLoginDisabled]: GoogleLoginDisabledDialog,
 } as const;

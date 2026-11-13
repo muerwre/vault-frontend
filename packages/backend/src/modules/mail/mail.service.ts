@@ -8,18 +8,27 @@ import {
   getSmtpConfig,
 } from '../../config/env';
 
-/** `{link}` is replaced with the reset link. */
+/** `{link}` is replaced with the reset link, `{username}` with the account name. */
 const RESTORE_SUBJECT = 'Кто-то пытается сбросить пароль!';
 const RESTORE_TEXT =
+  'Привет, {username}!\n\n' +
   'Кто-то (или что-то) попросило нас сбросить ваш пароль. \n\n' +
   'Если это что-то вы, то просто перейдите по ссылке и выберите новый пароль. \n\n' +
   'Или не делайте ничего. Зачем? Почему?\n\n' +
   'А! Ссылка: {link}';
 const RESTORE_HTML =
+  '<p>Привет, <b>{username}</b>!</p>' +
   '<h4>Кто-то (или что-то) попросило нас сбросить ваш пароль</h4>' +
   '<p>Если это что-то вы, то просто перейдите по ссылке и выберите новый пароль.</p>' +
   '<p>Или не делайте ничего. Зачем? Почему?</p>' +
   '<p>А! Ссылка: <a href="{link}">сбросить пароль</a>';
+
+const escapeHtml = (value: string): string =>
+  value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
 
 /**
  * Optional by config: with no SMTP host configured, sends are logged and
@@ -35,14 +44,24 @@ export class MailService {
     return Boolean(getSmtpConfig().host);
   }
 
-  async sendRestoreCode(email: string, code: string): Promise<void> {
+  async sendRestoreCode(
+    email: string,
+    username: string,
+    code: string,
+  ): Promise<void> {
     const link = publicUrl(`${getFrontendResetUrl()}${code}`);
 
     await this.send(
       email,
       RESTORE_SUBJECT,
-      RESTORE_TEXT.replaceAll('{link}', link),
-      RESTORE_HTML.replaceAll('{link}', link),
+      RESTORE_TEXT.replaceAll('{link}', link).replaceAll(
+        '{username}',
+        username,
+      ),
+      RESTORE_HTML.replaceAll('{link}', link).replaceAll(
+        '{username}',
+        escapeHtml(username),
+      ),
     );
   }
 

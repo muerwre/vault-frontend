@@ -1,0 +1,26 @@
+@import 'src/styles/variables';
+
+.wrap {
+  padding: $gap * 2 $gap;
+}
+
+.buttons {
+  padding: $gap;
+}
+
+.text {
+  font: $font_14_regular;
+  padding: $gap;
+  line-height: 1.5;
+}
+
+.link {
+  display: inline;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: $color_primary;
+  text-decoration: underline;
+  cursor: pointer;
+}

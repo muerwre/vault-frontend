@@ -33,6 +33,10 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
   const onRestoreRequest = useCallback(() => {
     showRestoreDialog({});
   }, [showRestoreDialog]);
+  const showGoogleDisabledDialog = useShowModal(Dialog.GoogleLoginDisabled);
+  const onGoogleLogin = useCallback(() => {
+    showGoogleDisabledDialog({});
+  }, [showGoogleDisabledDialog]);
 
   const backdrop = <LoginStaticScene scene={feature} />;
 
@@ -46,7 +50,12 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
       <BetterScrollDialog
         width={300}
         onClose={onRequestClose}
-        footer={<LoginDialogButtons openOauthWindow={openOauthWindow} />}
+        footer={
+          <LoginDialogButtons
+            openOauthWindow={openOauthWindow}
+            onGoogleLogin={onGoogleLogin}
+          />
+        }
         backdrop={backdrop}
       >
         <Padder>

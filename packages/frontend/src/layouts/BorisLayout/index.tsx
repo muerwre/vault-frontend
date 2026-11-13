@@ -6,10 +6,8 @@ import { Card } from '~/components/common/Card';
 import { Container } from '~/components/common/Container';
 import { Group } from '~/components/common/Group';
 import { Sticky } from '~/components/common/Sticky';
-import { Superpower } from '~/components/common/Superpower';
 import { BorisComments } from '~/containers/boris/BorisComments';
 import { BorisSidebar } from '~/containers/boris/BorisSidebar';
-import { BorisSuperPowersSSR } from '~/containers/boris/BorisSuperpowers/ssr';
 import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
 import { BorisUsageStats } from '~/types/boris';
 import { useAuthProvider } from '~/utils/providers/AuthProvider';
@@ -23,7 +21,7 @@ type Props = {
 };
 
 const BorisLayout: FC<Props> = observer(({ title, stats, isLoadingStats }) => {
-  const { isUser, isTester } = useAuthProvider();
+  const { isUser } = useAuthProvider();
 
   return (
     <Container>
@@ -41,14 +39,6 @@ const BorisLayout: FC<Props> = observer(({ title, stats, isLoadingStats }) => {
         <div className={styles.container}>
           <Card className={styles.content}>
             <Group>
-              {isTester && (
-                <div>
-                  <Superpower>
-                    <BorisSuperPowersSSR />
-                  </Superpower>
-                </div>
-              )}
-
               <BorisComments />
             </Group>
           </Card>

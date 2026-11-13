@@ -307,6 +307,7 @@ describe('AuthController', () => {
         findByUsernameOrEmail: jest.fn().mockResolvedValue({
           id: 1,
           email: 'someone@example.com',
+          username: 'someone',
         }),
       });
 
@@ -314,6 +315,7 @@ describe('AuthController', () => {
 
       expect(auth.sendRestoreCode).toHaveBeenCalledWith(
         'someone@example.com',
+        'someone',
         'code',
       );
     });

@@ -8,6 +8,7 @@ import {
   apiUpdateNotificationSettings,
 } from '~/api/notifications/settings';
 import { API } from '~/constants/api';
+import { features } from '~/constants/features';
 import { NotificationSettings } from '~/types/notifications';
 import { getErrorMessage } from '~/utils/errors/getErrorMessage';
 import { showErrorToast } from '~/utils/errors/showToast';
@@ -27,7 +28,7 @@ export const useNotificationSettingsRequest = () => {
     error,
     mutate,
   } = useSWR(
-    isUser ? API.NOTIFICATIONS.SETTINGS : null,
+    isUser && features.notifications ? API.NOTIFICATIONS.SETTINGS : null,
     apiGetNotificationSettings,
     { refreshInterval },
   );

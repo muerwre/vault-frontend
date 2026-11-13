@@ -234,8 +234,12 @@ export class AuthService {
     return code;
   }
 
-  async sendRestoreCode(email: string, code: string): Promise<void> {
-    await this.mail.sendRestoreCode(email, code);
+  async sendRestoreCode(
+    email: string,
+    username: string,
+    code: string,
+  ): Promise<void> {
+    await this.mail.sendRestoreCode(email, username, code);
   }
 
   /** Codes do not expire; they are removed once used. */
