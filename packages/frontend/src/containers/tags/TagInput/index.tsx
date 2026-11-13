@@ -14,7 +14,7 @@ import { useTagAutocomplete } from '~/hooks/tag/useTagAutocomplete';
 
 import styles from './styles.module.scss';
 
-const placeholder = 'Добавить';
+const placeholder = 'Добавить тэги';
 
 const prepareInput = (input: string): string[] => {
   return input

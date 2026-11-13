@@ -147,13 +147,16 @@ const SubmitLayout: FC<Props> = observer(
 
     const hasTabs = !!onSwitchType && SWITCHABLE_TYPES.includes(currentType);
 
+    // Right under the name on desktop; on mobile, where the name tops the
+    // page, it opens the controls that follow the content.
     const controls = (
       <>
+        {HAS_FLOW_TOGGLE.includes(currentType) && <SubmitFlowToggle />}
+
         <SubmitTags />
 
         <div className={styles.bottom}>
           <SubmitCoverEditor />
-          {HAS_FLOW_TOGGLE.includes(currentType) && <SubmitFlowToggle />}
         </div>
 
         <div className={styles.submit}>

@@ -99,22 +99,24 @@ $tabs_height: 44px;
   }
 }
 
-// The background and flow/lab choice sit at the pane's bottom, just above the
-// button, and scroll with the pane; only the button sticks.
+// The background sits at the pane's bottom, just above the button, and
+// scrolls with the pane; only the button sticks.
 .bottom {
   margin-top: auto;
   display: flex;
   flex-direction: column;
   gap: $gap;
 
+  // the button's fade strip takes up the pane's gap, so the space between
+  // the background and the button is the same as everywhere else
   & + .submit {
-    margin-top: 0;
+    margin-top: -$gap;
   }
 }
 
 .submit {
   margin: auto (-$gap) (-$gap);
-  padding: $gap * 3 $gap $gap;
+  padding: $gap $gap $gap;
   position: sticky;
   bottom: 0;
   z-index: 2;
@@ -123,7 +125,7 @@ $tabs_height: 44px;
   background: linear-gradient(
     to bottom,
     transparent,
-    $content_bg_dark $gap * 3
+    $content_bg_dark $gap
   );
   // matches the pane's corners: square where it joins the content
   border-radius: 0 0 $radius 0;

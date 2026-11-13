@@ -1,7 +1,5 @@
 import { FC, useCallback, useMemo } from 'react';
 
-import { Group } from '~/components/common/Group';
-import { SubTitle } from '~/components/common/SubTitle';
 import { Tags } from '~/containers/tags/Tags';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { ITag } from '~/types';
@@ -41,17 +39,13 @@ const SubmitTags: FC = () => {
   );
 
   return (
-    <Group>
-      <SubTitle>Теги</SubTitle>
-
-      <Tags
-        tags={tags}
-        editable
-        deletable
-        onTagsChange={onChange}
-        onTagDelete={onDelete}
-      />
-    </Group>
+    <Tags
+      tags={tags}
+      editable
+      deletable
+      onTagsChange={onChange}
+      onTagDelete={onDelete}
+    />
   );
 };
 
