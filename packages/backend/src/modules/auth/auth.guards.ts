@@ -11,7 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_CODES, GUEST_USER_ID, ROLES } from '@vault/common/constants';
 import type { ITokenClaims } from '@vault/common/types';
 import type { Request } from 'express';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 
 import { User } from '../../entities/user.entity';
 import { VaultException } from '../../globals/exceptions';
@@ -50,6 +50,22 @@ const extractToken = (request: Request): string | null => {
   return scheme.toLowerCase() === 'bearer' ? value : null;
 };
 
+/**
+ * A session token carries the signed-in user. Verifying the signature is not
+ * enough on its own: OAuth claims are signed with the same key, so without this
+ * check a claim — which anyone can obtain by completing a provider handshake —
+ * would pass as a session.
+ */
+const isSessionToken = (payload: unknown): payload is ITokenClaims => {
+  if (typeof payload !== 'object' || payload === null) {
+    return false;
+  }
+
+  const claims = payload as Partial<ITokenClaims> & { typ?: unknown };
+
+  return claims.typ === undefined && typeof claims.uid === 'number';
+};
+
 @Injectable()
 class TokenReader {
   private readonly logger = new Logger('Auth');
@@ -65,7 +81,14 @@ class TokenReader {
     }
 
     try {
-      return this.jwt.verify<ITokenClaims>(token);
+      const payload: unknown = this.jwt.verify(token);
+
+      if (!isSessionToken(payload)) {
+        this.logger.debug('rejected token: not a session token');
+        return null;
+      }
+
+      return payload;
     } catch (error) {
       // Not an error on optional routes, so debug-level only.
       this.logger.debug(
@@ -150,7 +173,10 @@ export class WithUserGuard implements CanActivate {
     }
 
     // `find*` honours the eager photo/cover relations; QueryBuilder would not.
-    const user = await this.users.findOne({ where: { id: uid } });
+    // `deleted_at` is a plain column, so it has to be excluded by hand.
+    const user = await this.users.findOne({
+      where: { id: uid, deletedAt: IsNull() },
+    });
 
     // A token for a deleted account is not a valid session.
     if (!user) {

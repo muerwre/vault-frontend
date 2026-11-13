@@ -113,7 +113,9 @@ export class AuthService {
 
   /** Reloads the user so the response reflects writes made during the request. */
   async getSelf(userId: number): Promise<WireSelf | null> {
-    const user = await this.users.findOne({ where: { id: userId } });
+    const user = await this.users.findOne({
+      where: { id: userId, deletedAt: IsNull() },
+    });
 
     if (!user) {
       return null;

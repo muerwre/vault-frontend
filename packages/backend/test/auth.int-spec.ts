@@ -6,8 +6,11 @@ import { createHash } from 'crypto';
 
 import type { INestApplication } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
+
+import { getJwtSecret } from '../src/config/env';
 
 import {
   authHeader,
@@ -135,6 +138,20 @@ describe('auth (integration)', () => {
     });
   });
 
+  /** A soft-deleted account: the row survives, the session must not. */
+  const makeDeletedUser = async (): Promise<number> => {
+    const name = `deleted_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    await db.query(
+      `INSERT INTO user (username, password, email, role, is_activated, created_at, updated_at, deleted_at)
+       VALUES (?, ?, ?, 'user', 1, NOW(), NOW(), NOW())`,
+      [name, await bcrypt.hash('x', 4), `${name}@example.com`],
+    );
+    const [row] = await db.query('SELECT id FROM user WHERE username = ?', [
+      name,
+    ]);
+    return Number(row.id);
+  };
+
   describe('GET /auth', () => {
     it('401s without a token', async () => {
       const { body } = await http().get('/api/auth').expect(401);
@@ -147,6 +164,56 @@ describe('auth (integration)', () => {
         .get('/api/auth')
         .set('Authorization', 'Bearer not.a.token')
         .expect(401);
+    });
+
+    /**
+     * OAuth claims are signed with the same key, and anyone can get one by
+     * completing a provider handshake — so a claim must not open a session.
+     */
+    it('401s an oauth claim used as a session token', async () => {
+      const claim = jwt.sign(
+        {
+          typ: 'oauth_claim',
+          provider: 'google',
+          id: '1',
+          email: 'a@b.c',
+          name: 'n',
+          photo: '',
+        },
+        getJwtSecret(),
+        { algorithm: 'HS256' },
+      );
+
+      await http()
+        .get('/api/auth')
+        .set('Authorization', `Bearer ${claim}`)
+        .expect(401);
+      await http()
+        .get('/api/notes/')
+        .set('Authorization', `Bearer ${claim}`)
+        .expect(401);
+    });
+
+    it('401s a token carrying no user id', async () => {
+      const token = jwt.sign({ nme: 'spec', rol: 'user' }, getJwtSecret(), {
+        algorithm: 'HS256',
+      });
+
+      await http()
+        .get('/api/auth')
+        .set('Authorization', `Bearer ${token}`)
+        .expect(401);
+    });
+
+    /** Tokens never expire, so a deleted account must be refused at the guard. */
+    it('401s a token for a deleted account', async () => {
+      const gone = await makeDeletedUser();
+
+      try {
+        await http().get('/api/auth').set(authHeader(gone)).expect(401);
+      } finally {
+        await db.query('DELETE FROM user WHERE id = ?', [gone]);
+      }
     });
 
     it('returns the caller and refreshes last_seen', async () => {

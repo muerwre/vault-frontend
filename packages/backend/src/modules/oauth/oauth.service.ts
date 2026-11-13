@@ -71,14 +71,21 @@ export class OAuthService {
   }
 
   findSocial(provider: string, accountId: string): Promise<Social | null> {
-    return this.socials
-      .createQueryBuilder('social')
-      .leftJoinAndSelect('social.user', 'user')
-      .where('social.provider = :provider AND social.account_id = :accountId', {
-        provider,
-        accountId,
-      })
-      .getOne();
+    return (
+      this.socials
+        .createQueryBuilder('social')
+        // A deleted account leaves its link in place but must not sign in, so the
+        // user is only attached when it is still live.
+        .leftJoinAndSelect('social.user', 'user', 'user.deleted_at IS NULL')
+        .where(
+          'social.provider = :provider AND social.account_id = :accountId',
+          {
+            provider,
+            accountId,
+          },
+        )
+        .getOne()
+    );
   }
 
   socialsOfUser(userId: number): Promise<Social[]> {
