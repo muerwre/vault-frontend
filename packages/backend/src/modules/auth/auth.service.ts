@@ -129,7 +129,7 @@ export class AuthService {
   /** Bumps `user.last_seen`. Failures are not worth failing the request over. */
   async touchLastSeen(userId: number): Promise<void> {
     try {
-      await this.users.update(userId, { lastSeen: new Date() });
+      await this.users.update(userId, { lastSeen: () => 'NOW()' });
     } catch (error) {
       this.logger.warn(
         `could not update last_seen for ${userId}: ${
@@ -156,13 +156,12 @@ export class AuthService {
       return existing.visited;
     }
 
-    const visited = new Date();
-
+    // Stamped by the database's clock, like the comments it is compared with.
     try {
       await this.nodeViews
         .createQueryBuilder()
         .insert()
-        .values({ userId, nodeId: BORIS_NODE_ID, visited })
+        .values({ userId, nodeId: BORIS_NODE_ID, visited: () => 'NOW()' })
         .orUpdate(['visited'], ['nodeId', 'userId'])
         .execute();
     } catch (error) {
@@ -173,7 +172,15 @@ export class AuthService {
       );
     }
 
-    return visited;
+    const created = await this.nodeViews
+      .createQueryBuilder('nv')
+      .where('nv.userId = :userId AND nv.nodeId = :nodeId', {
+        userId,
+        nodeId: BORIS_NODE_ID,
+      })
+      .getOne();
+
+    return created?.visited ?? new Date();
   }
 
   /** `GET /auth/updates`. */

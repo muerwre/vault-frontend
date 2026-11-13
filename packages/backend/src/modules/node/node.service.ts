@@ -346,37 +346,47 @@ export class NodeService {
    * Records that `uid` has just seen the node. Called after their own comment,
    * so it never shows the node as updated to the person who updated it.
    */
-  async markSeen(uid: number, nodeId: number): Promise<void> {
-    await this.touchNodeView(uid, nodeId);
+  async markSeen(
+    uid: number,
+    nodeId: number,
+    atLeast: Date | null = null,
+  ): Promise<void> {
+    await this.touchNodeView(uid, nodeId, atLeast);
   }
 
   /**
-   * Returns the previous visit timestamp and records the current one. There is a
-   * unique index on `(nodeId, userId)`, so the insert is an upsert.
+   * Returns the previous visit timestamp and records the current one, or
+   * `atLeast` when that is later. There is a unique index on `(nodeId, userId)`,
+   * so the insert is an upsert.
    */
   private async touchNodeView(
     uid: number,
     nodeId: number,
+    atLeast: Date | null = null,
   ): Promise<string | null> {
-    const existing = await this.nodeViews
-      .createQueryBuilder('nv')
-      .where('nv.userId = :uid AND nv.nodeId = :nodeId', { uid, nodeId })
-      .getOne();
+    const find = () =>
+      this.nodeViews
+        .createQueryBuilder('nv')
+        .where('nv.userId = :uid AND nv.nodeId = :nodeId', { uid, nodeId })
+        .getOne();
 
-    const visited = new Date();
+    const existing = await find();
+
+    // Stamped by the database's clock, like the comments it is compared with.
+    await this.nodeViews.query(
+      `INSERT INTO node_view (userId, nodeId, visited)
+       VALUES (?, ?, GREATEST(NOW(), COALESCE(?, NOW())))
+       ON DUPLICATE KEY UPDATE visited = VALUES(visited)`,
+      [uid, nodeId, atLeast],
+    );
 
     if (existing) {
-      await this.nodeViews.update(existing.id, { visited });
-    } else {
-      await this.nodeViews
-        .createQueryBuilder()
-        .insert()
-        .values({ userId: uid, nodeId, visited })
-        .orUpdate(['visited'], ['nodeId', 'userId'])
-        .execute();
+      return toWireDate(existing.visited);
     }
 
-    return toWireDate(existing ? existing.visited : visited);
+    const created = await find();
+
+    return toWireDate(created?.visited ?? null);
   }
 
   async getFlowDiff(params: FlowDiffParams): Promise<WireFlowDiff> {

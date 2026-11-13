@@ -225,6 +225,74 @@ describe('comment writes (integration)', () => {
       await db.query('DELETE FROM node_view WHERE nodeId = ?', [nodeId]);
     });
 
+    /**
+     * A comment stamped hours ahead, as a database clock in another timezone
+     * would stamp it, must not leave a lab post flagged for the person who
+     * just commented, edits included.
+     */
+    it('clears the lab flag for the commenter even past a skewed comment', async () => {
+      const nodeId = await makeNode({ isPromoted: false });
+      const labUpdatesFor = async (uid: number) => {
+        const { body } = await http()
+          .get('/api/nodes/lab/updates')
+          .set(authHeader(uid))
+          .expect(200);
+
+        return (body.nodes as Array<{ id: number }>).map((node) => node.id);
+      };
+
+      await db.query(
+        `INSERT INTO comment (text, files_order, created_at, updated_at, userId, nodeId)
+         VALUES ('from a skewed clock', '', NOW() + INTERVAL 3 HOUR, NOW(), ?, ?)`,
+        [authorId, nodeId],
+      );
+      const [skewed] = await db.query('SELECT LAST_INSERT_ID() AS id');
+      track(Number(skewed.id));
+      await db.query(
+        'INSERT INTO node_view (userId, nodeId, visited) VALUES (?, ?, NOW() - INTERVAL 1 HOUR)',
+        [otherId, nodeId],
+      );
+
+      const { body } = await post(nodeId, otherId, { text: 'mine' }).expect(
+        200,
+      );
+      track(body.comment.id);
+      expect(await labUpdatesFor(otherId)).not.toContain(nodeId);
+
+      await post(nodeId, otherId, {
+        id: body.comment.id,
+        text: 'mine, edited',
+      }).expect(200);
+      expect(await labUpdatesFor(otherId)).not.toContain(nodeId);
+
+      await db.query('DELETE FROM node_view WHERE nodeId = ?', [nodeId]);
+    });
+
+    /** Views are stamped by the database clock, so comments must be too. */
+    it("stamps a new comment with the database's clock", async () => {
+      const nodeId = await makeNode();
+      const dbNow = async () => {
+        const [row] = await db.query('SELECT NOW() AS now');
+        return new Date(row.now).getTime();
+      };
+
+      const before = await dbNow();
+      const { body } = await post(nodeId, otherId, { text: 'when' }).expect(
+        200,
+      );
+      track(body.comment.id);
+      const after = await dbNow();
+
+      const [row] = await db.query(
+        'SELECT created_at FROM comment WHERE id = ?',
+        [body.comment.id],
+      );
+      const stamped = new Date(row.created_at).getTime();
+
+      expect(stamped).toBeGreaterThanOrEqual(before);
+      expect(stamped).toBeLessThanOrEqual(after);
+    });
+
     it('updates an existing comment when id is supplied', async () => {
       const nodeId = await makeNode();
 

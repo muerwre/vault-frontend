@@ -255,6 +255,8 @@ export class CommentService {
     text: string,
     fileIds: number[],
   ): Promise<Comment> {
+    // created_at and updated_at are left to the database's NOW(): views are
+    // stamped by its clock too, and they are only comparable on one clock.
     const saved = await this.comments.save(
       this.comments.create({ nodeId, userId, text, filesOrder: fileIds }),
     );
@@ -269,7 +271,11 @@ export class CommentService {
     text: string,
     fileIds: number[],
   ): Promise<Comment> {
-    await this.comments.update(comment.id, { text, filesOrder: fileIds });
+    await this.comments.update(comment.id, {
+      text,
+      filesOrder: fileIds,
+      updatedAt: () => 'NOW()',
+    });
     await this.setFiles(comment.id, fileIds);
 
     comment.text = text;
@@ -330,10 +336,10 @@ export class CommentService {
 
   /**
    * Re-points `node.commented_at` at the newest surviving comment, or clears it
-   * when none remain. Called after any comment write so the "updated" feed and
+   * when none remain, and returns it. Called after any comment write so the "updated" feed and
    * the recent list stay accurate.
    */
-  async syncNodeCommentedAt(nodeId: number): Promise<void> {
+  async syncNodeCommentedAt(nodeId: number): Promise<Date | null> {
     const latest = await this.comments
       .createQueryBuilder('comment')
       .where('comment.nodeId = :nodeId AND comment.deleted_at IS NULL', {
@@ -342,7 +348,10 @@ export class CommentService {
       .orderBy('comment.created_at', 'DESC')
       .getOne();
 
-    await this.nodes.update(nodeId, { commentedAt: latest?.createdAt ?? null });
+    const commentedAt = latest?.createdAt ?? null;
+    await this.nodes.update(nodeId, { commentedAt });
+
+    return commentedAt;
   }
 
   /**
