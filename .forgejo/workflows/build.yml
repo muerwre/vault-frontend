@@ -2,17 +2,17 @@ name: Build & Publish
 
 on:
   push:
-    branches: [master]
+    # `master` is production; `unstable` publishes the same images under its own
+    # tag for a staging deploy.
+    branches: [master, unstable]
 
 jobs:
-  push_to_registry:
-    name: Build & Publish
+  images:
+    name: Build & Publish images
     runs-on: ubuntu-22.04
-    permissions:
-      packages: write
-      contents: read
-      attestations: write
-      id-token: write
+    # Both images are built before either is pushed, in one job: a broken
+    # frontend must not ship a new backend, nor the other way round. The push
+    # steps rebuild from the layers the build steps just cached, so they are quick.
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,23 +24,115 @@ jobs:
           username: ${{ secrets.username }}
           password: ${{ secrets.password }}
 
-      - name: Extract docker metadata
-        id: meta
+      - name: Frontend metadata
+        id: frontend_meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: git.vault48.org/${{ env.GITHUB_REPOSITORY }}
-          
-      - name: Build and push Docker image
-        id: push
+          # Named per service rather than after the repository, which holds both.
+          images: git.vault48.org/${{ github.repository_owner }}/vault-frontend
+          # One tag per branch, so an `unstable` build can never overwrite the
+          # `master` image production pulls.
+          tags: type=ref,event=branch
+
+      - name: Backend metadata
+        id: backend_meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: git.vault48.org/${{ github.repository_owner }}/vault-backend
+          tags: type=ref,event=branch
+
+      # Repo root as context for both: the lockfile and hoisted dependencies
+      # live there, and the backend builds @vault/common alongside itself.
+      - name: Build frontend
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./docker/nextjs-standalone/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          file: ./packages/frontend/docker/nextjs-standalone/Dockerfile
+          push: false
+          tags: ${{ steps.frontend_meta.outputs.tags }}
+          labels: ${{ steps.frontend_meta.outputs.labels }}
+          # The site's address is not baked in (read at runtime); only the bot,
+          # which must match the backend's token on each deployment.
           build-args: |
-            NEXT_PUBLIC_API_HOST=https://vault48.org/api/
-            NEXT_PUBLIC_REMOTE_CURRENT=https://vault48.org/static/
-            NEXT_PUBLIC_PUBLIC_HOST=https://vault48.org/
-            NEXT_PUBLIC_BOT_USERNAME=vault48bot
+            TELEGRAM_BOT_USERNAME=${{ github.ref_name == 'master' && 'vault48bot' || 'vault48testbot' }}
+
+      - name: Build backend
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./ci/backend.Dockerfile
+          push: false
+          tags: ${{ steps.backend_meta.outputs.tags }}
+          labels: ${{ steps.backend_meta.outputs.labels }}
+
+      # Reached only when both builds succeeded.
+      - name: Push frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./packages/frontend/docker/nextjs-standalone/Dockerfile
+          push: true
+          tags: ${{ steps.frontend_meta.outputs.tags }}
+          labels: ${{ steps.frontend_meta.outputs.labels }}
+          # The site's address is not baked in (read at runtime); only the bot,
+          # which must match the backend's token on each deployment.
+          build-args: |
+            TELEGRAM_BOT_USERNAME=${{ github.ref_name == 'master' && 'vault48bot' || 'vault48testbot' }}
+
+      - name: Push backend
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./ci/backend.Dockerfile
+          push: true
+          tags: ${{ steps.backend_meta.outputs.tags }}
+          labels: ${{ steps.backend_meta.outputs.labels }}
+
+  backend_tests:
+    name: Backend unit tests
+    # Gated on the image build: no point testing a revision that does not build.
+    needs: images
+    # The same image as the e2e job, so both share one yarn cache — the cache
+    # version is derived from the path list *and* the compression method, so an
+    # entry written under one image is invisible to a lookup from another.
+    runs-on: playwright
+    env:
+      YARN_CACHE_FOLDER: /tmp/yarn-cache
+      # Git hooks are for people, not runners.
+      HUSKY: "0"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # cache@v4 speaks a protocol Forgejo does not implement and silently misses
+      # every run, so v3. Restore and save are split so a red suite still leaves
+      # the cache warm for the next run. No `runner.os` in the key: the runners
+      # report it with different casing.
+      - name: Restore Yarn downloads
+        id: yarn-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.YARN_CACHE_FOLDER }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-
+
+      # Install scripts stay on: sharp downloads its native binary in one, and
+      # the backend cannot start without it.
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Save Yarn downloads
+        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v3
+        with:
+          path: ${{ env.YARN_CACHE_FOLDER }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      # The backend resolves @vault/common through its built dist.
+      - name: Build shared package
+        run: yarn common:build
+
+      # Unit specs only. The integration specs run against the production dump,
+      # which carries real user data and is never available to CI.
+      - name: Run backend unit tests
+        run: yarn backend:test

@@ -1,0 +1,265 @@
+import { ConfigModule } from '@nestjs/config';
+import { config } from 'dotenv';
+
+/**
+ * Env files in precedence order: `.env.local` (gitignored, per-developer) wins
+ * over `.env`; production reads a single `.env` beside the bundle.
+ *
+ * Paths resolve from the process cwd, which is the package directory — hence the
+ * `../..` hop to the repo root.
+ */
+const ENV_FILE_PATH =
+  process.env.NODE_ENV === 'production'
+    ? ['./.env']
+    : ['../../.env.local', '../../.env'];
+
+/** Populates `process.env` eagerly, for modules that read config at import time. */
+export const loadConfig = () => config({ path: ENV_FILE_PATH });
+
+/**
+ * Also run on import, because a module that reads config *while it is being
+ * imported* — the upload interceptor's size limit, for one — would otherwise
+ * see whichever defaults applied before anything called `loadConfig`. dotenv
+ * never overwrites a variable that is already set, so a real environment (a
+ * container, CI) still wins over the file.
+ */
+loadConfig();
+
+export const CONFIG = ConfigModule.forRoot({
+  envFilePath: ENV_FILE_PATH,
+  isGlobal: true,
+});
+
+export const isDevMode = process.env.NODE_ENV !== 'production';
+
+export interface DatabaseConfig {
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  database: string;
+}
+
+/**
+ * Connection parameters, kept separate rather than as one url so the database
+ * container and the backend read the very same values — and a password never
+ * needs url-escaping. Defaults match `ci/dev.compose.yml`'s container, so a
+ * fresh checkout works without setup.
+ */
+export const getDatabaseConfig = (): DatabaseConfig => ({
+  host: process.env.DB_HOST || 'localhost',
+  port: Number.parseInt(process.env.DB_PORT ?? '', 10) || 3306,
+  username: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD ?? 'password',
+  database: process.env.DB_NAME || 'adonis',
+});
+
+export const getJwtSecret = (): string => process.env.JWT_SECRET ?? '';
+
+/**
+ * Google API key for the YouTube Data API v3, used by `GET /meta/youtube` to
+ * resolve titles missing from the `embed` cache. Optional: without it, cached
+ * embeds are still served and only new videos fail to resolve.
+ */
+export const getGoogleApiKey = (): string => process.env.GOOGLE_API_KEY ?? '';
+
+export interface SmtpConfig {
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+  from: string;
+}
+
+/** Mail is optional: an empty host disables sending. */
+export const getSmtpConfig = (): SmtpConfig => ({
+  host: process.env.SMTP_HOST ?? '',
+  port: Number.parseInt(process.env.SMTP_PORT ?? '25', 10) || 25,
+  user: process.env.SMTP_USER ?? '',
+  password: process.env.SMTP_PASSWORD ?? '',
+  from: process.env.SMTP_FROM ?? '',
+});
+
+/**
+ * The site's public root, e.g. `https://vault48.org` — where people open the app.
+ * Every absolute link the backend produces (mail, Telegram, VK posts, OAuth
+ * callbacks) is built from it, so moving the site needs this one setting.
+ * Defaults to this server on localhost. Never has a trailing slash.
+ */
+export const getPublicUrl = (): string =>
+  (
+    process.env.PUBLIC_URL || `http://localhost:${process.env.PORT || 3000}`
+  ).replace(/\/+$/, '');
+
+/** `path` under the public root, with exactly one slash between them. */
+export const publicUrl = (path = ''): string =>
+  path ? `${getPublicUrl()}/${path.replace(/^\/+/, '')}` : getPublicUrl();
+
+/** Path the password-reset link points at; the code is appended to it. */
+export const getFrontendResetUrl = (): string =>
+  process.env.FRONTEND_RESET_URL ?? '/restore/';
+
+export interface OAuthProviderConfig {
+  clientId: string;
+  clientSecret: string;
+  callbackUrl: string;
+}
+
+/**
+ * A provider is enabled only when its client id and secret are present (the
+ * callback is always derived); the OAuth routes 404 for one that is not.
+ */
+export const isOAuthProviderConfigured = (
+  config: OAuthProviderConfig,
+): boolean =>
+  Boolean(config.clientId && config.clientSecret && config.callbackUrl);
+
+/** The provider returns here, so it must be registered with the provider as-is. */
+const oauthCallbackUrl = (provider: string): string =>
+  publicUrl(`/api/oauth/${provider}/process/`);
+
+export const getVkOAuthConfig = (): OAuthProviderConfig => ({
+  clientId: process.env.VK_CLIENT_ID ?? '',
+  clientSecret: process.env.VK_CLIENT_SECRET ?? '',
+  callbackUrl: oauthCallbackUrl('vkontakte'),
+});
+
+export const getGoogleOAuthConfig = (): OAuthProviderConfig => ({
+  clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+  callbackUrl: oauthCallbackUrl('google'),
+});
+
+/** Bot token for the Telegram login widget. Empty disables Telegram linking. */
+export const getTelegramToken = (): string => process.env.TELEGRAM_TOKEN ?? '';
+
+export interface TelegramConfig {
+  token: string;
+  /**
+   * The bot's username. Setting it (with the token) runs the bot and the
+   * notification sender. Telegram allows one long-poller per token, so only
+   * one instance may have both: a second fights the live bot for updates and
+   * sends duplicates.
+   */
+  botUsername: string;
+  /**
+   * Outbound proxy for `api.telegram.org`, which is blocked in some networks.
+   * `http(s)://`, `socks5://`, `socks5h://` and `socks4://` are understood;
+   * empty means connect directly.
+   */
+  proxyUrl: string;
+  /**
+   * Minutes a notification waits before it is delivered, and between runs.
+   * 0 delivers immediately: no wait, and runs every IMMEDIATE_POLL_MS.
+   */
+  cooldownMins: number;
+  /** Unsent notifications older than this are dropped rather than delivered. */
+  purgeAfterDays: number;
+  /** Cap on messages sent to one recipient per run. */
+  maxMessages: number;
+}
+
+const toPositiveInt = (value: string | undefined, fallback: number): number => {
+  const parsed = Number.parseInt(value ?? '', 10);
+
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
+
+/** Like toPositiveInt, but 0 is a valid value rather than a fallback. */
+const toNonNegativeInt = (
+  value: string | undefined,
+  fallback: number,
+): number => {
+  const parsed = Number.parseInt(value ?? '', 10);
+
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+};
+
+/** How often a 0 cooldown checks for work: soon enough to feel immediate. */
+export const IMMEDIATE_POLL_MS = 10_000;
+
+/**
+ * Run interval for a delivery cooldown. A cooldown is also the polling period,
+ * except at 0, which must not busy-loop and polls every IMMEDIATE_POLL_MS.
+ */
+export const cooldownIntervalMs = (cooldownMins: number): number =>
+  cooldownMins > 0 ? cooldownMins * 60_000 : IMMEDIATE_POLL_MS;
+
+/** A cooldown as a log phrase: "every 5m", or immediately. */
+export const describeCooldown = (cooldownMins: number): string =>
+  cooldownMins > 0
+    ? `every ${cooldownMins}m`
+    : `immediately (checked every ${IMMEDIATE_POLL_MS / 1000}s)`;
+
+export const getTelegramConfig = (): TelegramConfig => ({
+  token: getTelegramToken(),
+  botUsername: (process.env.TELEGRAM_BOT_USERNAME ?? '').replace(/^@/, ''),
+  proxyUrl: process.env.TELEGRAM_PROXY_URL ?? '',
+  cooldownMins: toNonNegativeInt(process.env.TELEGRAM_COOLDOWN_MINS, 5),
+  purgeAfterDays: toPositiveInt(process.env.TELEGRAM_PURGE_AFTER_DAYS, 3),
+  maxMessages: toPositiveInt(process.env.TELEGRAM_MAX_MESSAGES, 3),
+});
+
+/** The bot runs when it has a username to be and a token to act with. */
+export const isTelegramBotUsable = (config: TelegramConfig): boolean =>
+  Boolean(config.botUsername && config.token);
+
+/**
+ * Signs the OAuth handshake session. PKCE requires the code verifier to outlive
+ * the redirect to the provider, so it is kept in a session cookie scoped to the
+ * OAuth routes. Falls back to the JWT secret when unset.
+ */
+export const getSessionSecret = (): string =>
+  process.env.SESSION_SECRET || getJwtSecret();
+
+export interface VkPublisherConfig {
+  /** Group access token with `wall` and `photos` scope. */
+  apiKey: string;
+  /** The group posted to. Setting it (with the token) turns publishing on. */
+  groupId: number;
+  albumId: number;
+  appId: number;
+  /**
+   * Minutes a node waits before being posted, and between runs. 0 posts
+   * immediately: no wait, and runs every IMMEDIATE_POLL_MS.
+   */
+  cooldownMins: number;
+  /** Nodes older than this are never posted, only skipped. */
+  purgeAfterDays: number;
+  /** Host the posted node link is built against. */
+  urlPrefix: string;
+}
+
+export const getVkPublisherConfig = (): VkPublisherConfig => ({
+  apiKey: process.env.NOTIFICATIONS_VK_API_KEY ?? '',
+  groupId: toPositiveInt(process.env.NOTIFICATIONS_VK_GROUP_ID, 0),
+  albumId: toPositiveInt(process.env.NOTIFICATIONS_VK_ALBUM_ID, 0),
+  appId: toPositiveInt(process.env.NOTIFICATIONS_VK_APP_ID, 0),
+  cooldownMins: toNonNegativeInt(process.env.NOTIFICATIONS_VK_COOLDOWN_MINS, 5),
+  purgeAfterDays: toPositiveInt(
+    process.env.NOTIFICATIONS_VK_PURGE_AFTER_DAYS,
+    7,
+  ),
+  urlPrefix: getPublicUrl(),
+});
+
+/** Publishing is on when there is a group to post to and a token to post with. */
+export const isVkPublisherUsable = (config: VkPublisherConfig): boolean =>
+  config.groupId > 0 && Boolean(config.apiKey);
+
+export interface UploadsConfig {
+  path: string;
+  maxSizeMb: number;
+  outputWebp: boolean;
+}
+
+/**
+ * Where uploaded files live on disk. Stored `file.path` values are relative to
+ * this, so changing it breaks every historical URL.
+ */
+export const getUploadsConfig = (): UploadsConfig => ({
+  path: process.env.UPLOADS_PATH ?? '',
+  maxSizeMb:
+    Number.parseInt(process.env.UPLOADS_MAX_SIZE_MB ?? '200', 10) || 200,
+  outputWebp: process.env.UPLOADS_OUTPUT_WEBP === 'true',
+});

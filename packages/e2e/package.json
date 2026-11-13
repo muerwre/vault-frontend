@@ -1,0 +1,17 @@
+{
+  "name": "@vault/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "db:wait": "node scripts/seed-db.js wait",
+    "db:seed": "node scripts/seed-db.js seed"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.57.0",
+    "jsonwebtoken": "9.0.3",
+    "mysql2": "^3.11.0"
+  }
+}

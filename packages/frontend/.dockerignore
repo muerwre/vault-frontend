@@ -1,0 +1,10 @@
+**/node_modules
+node_modules
+out
+dist
+.husky
+.next
+.idea
+.history
+.vscode
+build

@@ -1,0 +1,83 @@
+name: E2E
+
+# Manual for now: run it from the Actions tab ("Run workflow"). It builds and
+# starts everything itself against a throwaway database, so it needs no
+# published images and publishes nothing.
+on:
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    name: Playwright
+    # Maps to mcr.microsoft.com/playwright in the runner's config. Its tag must
+    # track @playwright/test in packages/e2e, which is pinned exactly for that
+    # reason: the browser binaries belong to the npm version.
+    runs-on: playwright
+    services:
+      # Empty on purpose. The schema comes from the baseline migration and the
+      # data from a synthetic seed — never from the production dump.
+      db:
+        image: mariadb:10.8
+        env:
+          MARIADB_ROOT_PASSWORD: password
+          MARIADB_DATABASE: adonis
+    env:
+      YARN_CACHE_FOLDER: /tmp/yarn-cache
+      HUSKY: "0"
+      CI: "true"
+      # The db service above; user, password and name are the backend's defaults.
+      DB_HOST: db
+      # Any value works as long as the backend and the suite agree on it.
+      JWT_SECRET: e2e-ci-secret
+      E2E_JWT_SECRET: e2e-ci-secret
+      # The site's one public address: the backend, proxying pages to Next.
+      E2E_BASE_URL: http://localhost:3010
+      UPLOADS_PATH: /tmp/vault-uploads
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore Yarn downloads
+        id: yarn-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.YARN_CACHE_FOLDER }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # Normally a no-op, since backend_tests saves first; a backstop for when
+      # that job hit the cache and this one did not.
+      - name: Save Yarn downloads
+        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v3
+        with:
+          path: ${{ env.YARN_CACHE_FOLDER }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Build backend
+        run: yarn common:build && yarn backend:build
+
+      - name: Prepare database
+        run: |
+          mkdir -p "$UPLOADS_PATH"
+          yarn workspace @vault/e2e db:wait
+          yarn backend:migration:run
+          yarn workspace @vault/e2e db:seed
+
+      # With CI set, Playwright starts the backend and the frontend itself (see
+      # packages/e2e/playwright.config.ts) and runs serially with retries.
+      - name: Run E2E tests
+        run: yarn e2e:test
+
+      # upload-artifact@v4 uses an artifact API Forgejo does not implement.
+      - name: Upload Playwright report
+        # A green run's report is noise nobody opens.
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: packages/e2e/playwright-report/
+          retention-days: 7

@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Inside dist, so `deleteOutDir` removes it with the output. Kept outside,
+    // it survives the wipe and tells tsc the deleted files are still current,
+    // so a rebuild emits only what changed and leaves dist half-empty.
+    "tsBuildInfoFile": "./dist/tsconfig.build.tsbuildinfo"
+  },
+  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts"]
+}
