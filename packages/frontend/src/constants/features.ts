@@ -14,4 +14,9 @@ export const features = {
    * its per-section update dots.
    */
   notifications: false,
+  /**
+   * With superpowers on, creating a node opens a submission page for its type
+   * instead of the editor modal.
+   */
+  submitPages: true,
 } as const;

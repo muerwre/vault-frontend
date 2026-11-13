@@ -56,6 +56,14 @@
     &.yellow {
       background: $warning_gradient;
     }
+
+    &.flow {
+      background: $flow_gradient;
+    }
+
+    &.lab {
+      background: $lab_gradient;
+    }
   }
 
   &.stretchy {

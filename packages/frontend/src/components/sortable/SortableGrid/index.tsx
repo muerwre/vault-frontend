@@ -1,4 +1,4 @@
-import { createElement, FC, useMemo } from 'react';
+import { createElement, FC, ReactNode, useMemo } from 'react';
 
 import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
 import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
@@ -28,6 +28,8 @@ interface SortableGridProps<
   renderLockedProps: LockedRendererProps;
   onSortEnd: (newVal: Item[]) => void;
   className?: string;
+  /** Rendered after the items, outside sorting: an "add" card, say. */
+  trailing?: ReactNode;
   size?: number;
 }
 
@@ -42,6 +44,7 @@ const SortableGrid = <RIP, RLP, I, L>({
   renderLocked,
   renderLockedProps,
   onSortEnd,
+  trailing,
   size,
 }: SortableGridProps<RIP, RLP, I, L>) => {
   const { sensors, onDragEnd, onDragStart, draggingItem, ids } =
@@ -88,6 +91,8 @@ const SortableGrid = <RIP, RLP, I, L>({
               key: getLockedID(item),
             }),
           )}
+
+          {trailing}
 
           <DragOverlay>
             {draggingItem ? (

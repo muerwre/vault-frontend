@@ -1,0 +1,19 @@
+@import 'src/styles/variables';
+
+// The textarea's own height comes from autosize; growing from that basis lets
+// it fill the zone when short and push the zone taller when long.
+.wrap {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+
+  & > * {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.textarea {
+  flex: 1 0 auto;
+}

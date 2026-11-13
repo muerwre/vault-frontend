@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 
 import { AudioPlayer } from '~/components/common/AudioPlayer';
 import { AudioUpload } from '~/components/upload/AudioUpload';
@@ -14,6 +14,7 @@ interface SortableAudioGridProps {
   items: IFile[];
   locked: UploadStatus[];
   className?: string;
+  trailing?: ReactNode;
   onDelete: (file_id: IFile['id']) => void;
   onTitleChange: (file_id: IFile['id'], title: string) => void;
 }
@@ -53,6 +54,7 @@ const SortableAudioGrid: FC<SortableAudioGridProps> = ({
   onDelete,
   className,
   onSortEnd,
+  trailing,
   onTitleChange,
 }) => {
   const renderItemProps = useMemo(
@@ -73,6 +75,7 @@ const SortableAudioGrid: FC<SortableAudioGridProps> = ({
       renderLockedProps={renderLockedProps}
       onSortEnd={onSortEnd}
       className={className}
+      trailing={trailing}
     />
   );
 };

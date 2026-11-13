@@ -12,9 +12,11 @@ interface HorizontalMenuProps extends DivProps {}
 interface HorizontalMenuItemProps {
   isLoading?: boolean;
   icon?: string;
-  color?: 'green' | 'orange' | 'yellow';
+  color?: 'green' | 'orange' | 'yellow' | 'flow' | 'lab';
   active?: boolean;
   stretchy?: boolean;
+  /** Tooltip; useful when the item shows only its icon. */
+  title?: string;
   onClick?: () => void;
 }
 
@@ -33,6 +35,7 @@ HorizontalMenu.Item = ({
   isLoading,
   active,
   stretchy,
+  title,
   onClick,
 }: PropsWithChildren<HorizontalMenuItemProps>) => {
   if (isLoading) {
@@ -52,9 +55,10 @@ HorizontalMenu.Item = ({
         styles[color],
       )}
       onClick={onClick}
+      title={title}
     >
       {!!icon && <Icon icon={icon} size={24} />}
-      <span className={styles.text}>{children}</span>
+      {!!children && <span className={styles.text}>{children}</span>}
     </div>
   );
 };

@@ -1,0 +1,44 @@
+@import 'src/styles/variables';
+
+.pill {
+  display: flex;
+  align-items: center;
+  border-radius: 100px;
+  background: transparentize(black, 0.4);
+  backdrop-filter: blur(4px);
+  overflow: hidden;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: none;
+  fill: white;
+  cursor: pointer;
+  transition: background-color 0.25s;
+
+  &:hover {
+    background: transparentize(white, 0.85);
+  }
+
+  & + & {
+    border-left: 1px solid transparentize(white, 0.8);
+  }
+}
+
+.input {
+  display: none;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 32px;
+}

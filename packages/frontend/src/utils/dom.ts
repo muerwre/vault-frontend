@@ -148,16 +148,20 @@ export const getPrettyDate = (date?: string): string => {
       });
 };
 
-export const getYoutubeThumb = (url: string) => {
+export const getYoutubeId = (url: string) => {
   const match =
     url &&
     url.match(
       /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-_]*)(&(amp;)?[\w?=]*)?/,
     );
 
-  return match && match[1]
-    ? `https://i.ytimg.com/vi/${match[1]}/hqdefault.jpg`
-    : null;
+  return (match && match[1]) || null;
+};
+
+export const getYoutubeThumb = (url: string) => {
+  const id = getYoutubeId(url);
+
+  return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null;
 };
 
 export const stringToColour = (str: string) => {

@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
@@ -18,6 +18,7 @@ interface SortableImageGridProps {
   locked: UploadStatus[];
   onDelete: (file_id: IFile['id']) => void;
   className?: string;
+  trailing?: ReactNode;
   size?: number;
 }
 const renderItem = observer(
@@ -53,6 +54,7 @@ const SortableImageGrid: FC<SortableImageGridProps> = ({
   onDelete,
   className,
   onSortEnd,
+  trailing,
   size,
 }) => {
   const props = useMemo(() => ({ onDelete }), [onDelete]);
@@ -69,6 +71,7 @@ const SortableImageGrid: FC<SortableImageGridProps> = ({
       renderLockedProps={props}
       onSortEnd={onSortEnd}
       className={className}
+      trailing={trailing}
       size={size}
     />
   );

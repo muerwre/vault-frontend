@@ -1,0 +1,7 @@
+@import 'src/styles/variables';
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}

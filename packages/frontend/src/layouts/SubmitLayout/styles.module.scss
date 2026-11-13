@@ -1,0 +1,113 @@
+@import 'src/styles/variables';
+
+// fills the screen below the header, keeping the wrap's bottom margin
+$screen_height: calc(
+  100vh - #{$header_height} - #{$page_top_offset} - #{$gap * 2}
+);
+
+.wrap {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  align-items: start;
+  margin-top: $page_top_offset;
+  padding-bottom: $gap * 2;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+    row-gap: $gap;
+    margin-top: 0;
+    padding: $gap * 0.5;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  min-width: 0;
+  min-height: $screen_height;
+
+  @include tablet {
+    min-height: 0;
+  }
+}
+
+// doubled to outrank Card's own radius
+.content.content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: $gap;
+  // joins the pane on its right, as on Boris
+  border-radius: $radius 0 0 $radius;
+
+  @include tablet {
+    border-radius: $radius;
+  }
+}
+
+.types {
+  margin-bottom: $gap;
+}
+
+.uploads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap;
+  margin-bottom: $gap;
+}
+
+.pane {
+  position: sticky;
+  top: 65px; // clears the fixed header, as Sticky does
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  padding: $gap;
+  border-radius: 0 $radius $radius 0;
+  background: $content_bg_dark;
+  box-sizing: border-box;
+  min-height: $screen_height;
+
+  @include tablet {
+    position: static;
+    min-height: 0;
+    border-radius: $radius;
+  }
+}
+
+// The background and flow/lab choice sit at the pane's bottom, just above the
+// button, and scroll with the pane; only the button sticks.
+.bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+
+  & + .submit {
+    margin-top: 0;
+  }
+}
+
+.submit {
+  margin: auto (-$gap) (-$gap);
+  padding: $gap * 3 $gap $gap;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  // fades in the pane's background, so content scrolling under the button
+  // is covered rather than showing through
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    $content_bg_dark $gap * 3
+  );
+  // matches the pane's corners: square where it joins the content
+  border-radius: 0 0 $radius 0;
+
+  @include tablet {
+    padding-bottom: $gap * 0.5;
+    border-radius: 0 0 $radius $radius;
+  }
+}
