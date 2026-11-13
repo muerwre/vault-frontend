@@ -15,6 +15,7 @@
     "migration:generate": "yarn typeorm migration:generate",
     "migration:create": "yarn typeorm migration:create",
     "migration:run": "yarn typeorm migration:run",
+    "migration:run:dist": "node ../../node_modules/typeorm/cli.js migration:run -d dist/database/data-source.js",
     "migration:revert": "yarn typeorm migration:revert",
     "migration:show": "yarn typeorm migration:show",
     "schema:drift": "ts-node src/database/schema-drift.ts",

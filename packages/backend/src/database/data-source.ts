@@ -33,8 +33,20 @@ export const dataSourceOptions: DataSourceOptions = {
    */
   synchronize: false,
 
-  // Run deliberately via `yarn migration:run`, so a rolling deploy cannot race.
-  migrationsRun: false,
+  /**
+   * Pending migrations are applied when the connection opens — on `yarn dev`
+   * restarts and on container start alike, so the schema never lags the code
+   * that expects it.
+   *
+   * Nest retries the connection (9 attempts, 3s apart) and this runs inside
+   * that retry, so a database still starting is waited out rather than failed.
+   *
+   * MariaDB has no transactional DDL: a migration that fails halfway leaves
+   * its earlier statements applied but records nothing, and the next start
+   * retries from the top and fails again. **Write one DDL statement per
+   * migration** so a failure can only ever be all or nothing.
+   */
+  migrationsRun: true,
 
   /**
    * Connection charset. utf8mb4 is right even though most tables are utf8mb3: it
