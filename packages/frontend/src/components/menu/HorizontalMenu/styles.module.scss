@@ -83,3 +83,28 @@
     font: $font_12_semibold;
   }
 }
+
+// A thin line between neighbouring options, hidden on either side of the
+// active one, whose own background already sets it apart.
+.separated .item + .item {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 25%;
+    bottom: 25%;
+    width: 1px;
+    background: $gray_90;
+    pointer-events: none;
+  }
+
+  &.active::before {
+    display: none;
+  }
+}
+
+.separated .item.active + .item::before {
+  display: none;
+}

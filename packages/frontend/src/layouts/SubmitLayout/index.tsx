@@ -144,11 +144,7 @@ const SubmitLayout: FC<Props> = observer(
       />
     );
 
-    // the type comes first, above the title, wherever the title is
-    const typeSwitch = !!onSwitchType &&
-      SWITCHABLE_TYPES.includes(currentType) && (
-        <SubmitTypeSwitch onChange={onSwitchType} />
-      );
+    const hasTabs = !!onSwitchType && SWITCHABLE_TYPES.includes(currentType);
 
     const controls = (
       <>
@@ -177,8 +173,16 @@ const SubmitLayout: FC<Props> = observer(
         <FormikProvider value={formik}>
           <Container>
             <form onSubmit={handleSubmit} className={styles.wrap}>
+              {hasTabs && (
+                <div className={styles.tabs}>
+                  <SubmitTypeSwitch
+                    onChange={onSwitchType!}
+                    withLabels={!isTablet}
+                  />
+                </div>
+              )}
+
               <div className={styles.main}>
-                {isTablet && typeSwitch}
                 {isTablet && <div className={styles.title}>{title}</div>}
 
                 <Card className={styles.content}>
@@ -195,7 +199,6 @@ const SubmitLayout: FC<Props> = observer(
               </div>
 
               <div className={styles.pane}>
-                {!isTablet && typeSwitch}
                 {!isTablet && title}
                 {controls}
               </div>

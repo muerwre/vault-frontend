@@ -50,6 +50,22 @@ $screen_height: calc(
   }
 }
 
+// The type tabs: a row of their own above the main card and the pane, as
+// wide as their buttons and centred.
+.tabs {
+  grid-column: 1 / -1;
+  justify-self: center;
+  padding: $gap * 0.5;
+  border-radius: $radius $radius 0 0;
+  background: $content_bg_dark;
+
+  // full width on mobile, where it no longer joins the card directly
+  @include tablet {
+    justify-self: stretch;
+    border-radius: $radius;
+  }
+}
+
 .uploads {
   display: flex;
   flex-wrap: wrap;

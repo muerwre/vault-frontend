@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { Children, PropsWithChildren } from 'react';
 
 import classNames from 'classnames';
 
@@ -17,12 +17,23 @@ interface HorizontalMenuItemProps {
   stretchy?: boolean;
   /** Tooltip; useful when the item shows only its icon. */
   title?: string;
+  className?: string;
   onClick?: () => void;
 }
 
 function HorizontalMenu({ children, ...props }: HorizontalMenuProps) {
+  // with more than two options, lines between them help tell them apart
+  const separated = Children.toArray(children).length > 2;
+
   return (
-    <div {...props} className={classNames(styles.menu, props.className)}>
+    <div
+      {...props}
+      className={classNames(
+        styles.menu,
+        { [styles.separated]: separated },
+        props.className,
+      )}
+    >
       {children}
     </div>
   );
@@ -36,6 +47,7 @@ HorizontalMenu.Item = ({
   active,
   stretchy,
   title,
+  className,
   onClick,
 }: PropsWithChildren<HorizontalMenuItemProps>) => {
   if (isLoading) {
@@ -53,6 +65,7 @@ HorizontalMenu.Item = ({
         styles.item,
         { [styles.active]: active, [styles.stretchy]: stretchy },
         styles[color],
+        className,
       )}
       onClick={onClick}
       title={title}
