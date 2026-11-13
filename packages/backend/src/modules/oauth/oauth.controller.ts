@@ -34,7 +34,7 @@ import { TelegramBot } from '../telegram/telegram.bot';
 
 import type { ProviderProfile } from './oauth.claim';
 import { ProviderAuthGuard, ProviderCallbackGuard } from './oauth.guards';
-import { renderPopupSuccess } from './oauth.popup';
+import { popupTargetOrigin, renderPopupSuccess } from './oauth.popup';
 import { OAuthPopupErrorFilter } from './oauth.popup-filter';
 import { OAuthService, toWireSocial, type WireSocial } from './oauth.service';
 import { validateSocialRegister } from './oauth.validation';
@@ -285,7 +285,12 @@ export class OAuthController {
     response
       .status(HttpStatus.OK)
       .type('html')
-      .send(renderPopupSuccess(this.oauth.encodeClaim(profile)));
+      .send(
+        renderPopupSuccess(
+          this.oauth.encodeClaim(profile),
+          popupTargetOrigin(request),
+        ),
+      );
   }
 
   /** Unlinks any other provider. */

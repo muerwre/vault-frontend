@@ -5,9 +5,9 @@ import {
   type ArgumentsHost,
   type ExceptionFilter,
 } from '@nestjs/common';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 
-import { renderPopupError } from './oauth.popup';
+import { popupTargetOrigin, renderPopupError } from './oauth.popup';
 
 /**
  * Renders any failure during the provider callback as the popup error page.
@@ -21,6 +21,7 @@ export class OAuthPopupErrorFilter implements ExceptionFilter {
 
   catch(exception: unknown, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse<Response>();
+    const request = host.switchToHttp().getRequest<Request>();
     const message =
       exception instanceof Error ? exception.message : String(exception);
 
@@ -32,6 +33,7 @@ export class OAuthPopupErrorFilter implements ExceptionFilter {
       .send(
         renderPopupError(
           'Не удалось войти через социальную сеть, попробуйте ещё раз',
+          popupTargetOrigin(request),
         ),
       );
   }
