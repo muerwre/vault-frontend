@@ -1,4 +1,5 @@
 import { createReadStream } from 'fs';
+import { stat } from 'fs/promises';
 
 import { Injectable, Logger } from '@nestjs/common';
 import { VK } from 'vk-io';
@@ -35,6 +36,11 @@ export class VkApiService {
     }
 
     try {
+      // A stream over a missing file fails with an 'error' event nobody is
+      // listening to, which takes the whole process down. Checked first, a
+      // missing file is just a failed upload.
+      await stat(absolutePath);
+
       const client = this.vk();
       const [photo] = await client.upload.photoAlbum({
         album_id: albumId,

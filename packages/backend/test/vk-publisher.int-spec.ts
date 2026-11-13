@@ -8,12 +8,17 @@ process.env.PUBLIC_URL = 'https://vault48.example';
 process.env.NOTIFICATIONS_VK_COOLDOWN_MINS = '5';
 process.env.NOTIFICATIONS_VK_PURGE_AFTER_DAYS = '7';
 
+import { mkdir, rm, stat, writeFile } from 'fs/promises';
+import { dirname, join } from 'path';
+
 import type { INestApplication } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
+import { getUploadsConfig } from '../src/config/env';
 import { VkApiService } from '../src/modules/vk/vk.api';
+import { thumbnailStoragePath } from '../src/modules/vk/vk.content';
 import { VkPublisher } from '../src/modules/vk/vk.publisher';
 
 import {
@@ -273,10 +278,49 @@ describe('vk publisher (integration)', () => {
       const nodeId = await createNode();
       await ageQueueRow(nodeId, 10);
 
-      await publisher.runOnce();
+      // Only a thumbnail that exists on disk is uploaded, so one is put there
+      // for the run, unless the fixture's file is already present.
+      const [node] = await db.query('SELECT thumbnail FROM node WHERE id = ?', [
+        nodeId,
+      ]);
+      const relative = thumbnailStoragePath(node.thumbnail) ?? '';
+      expect(relative).not.toBe('');
+      const absolute = join(getUploadsConfig().path, relative);
+      const existed = await stat(absolute).then(
+        () => true,
+        () => false,
+      );
+
+      if (!existed) {
+        await mkdir(dirname(absolute), { recursive: true });
+        await writeFile(absolute, 'spec thumbnail');
+      }
+
+      try {
+        await publisher.runOnce();
+      } finally {
+        if (!existed) {
+          await rm(absolute, { force: true });
+        }
+      }
 
       expect(uploadPhoto).toHaveBeenCalled();
       expect(postToWall.mock.calls[0][1]).toEqual(['photo-1_2']);
+    });
+
+    it('posts without an image when the thumbnail is missing on disk', async () => {
+      uploadPhoto.mockResolvedValue('photo-1_2');
+      const nodeId = await createNode();
+      await ageQueueRow(nodeId, 10);
+      await db.query('UPDATE node SET thumbnail = ? WHERE id = ?', [
+        'REMOTE_CURRENT://uploads/vault-spec/missing.jpg',
+        nodeId,
+      ]);
+
+      await publisher.runOnce();
+
+      expect(uploadPhoto).not.toHaveBeenCalled();
+      expect(postToWall.mock.calls[0][1]).toEqual([]);
     });
 
     /** A missing photo is not worth losing the post over. */

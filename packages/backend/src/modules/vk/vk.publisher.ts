@@ -247,11 +247,11 @@ export class VkPublisher implements OnModuleInit, OnModuleDestroy {
 
     const absolute = join(getUploadsConfig().path, relative);
 
-    // Diagnostic only: the upload is still attempted and reports its own error.
     if (!(await fileExists(absolute))) {
       this.logger.warn(
-        `node ${node.id} thumbnail missing on disk: ${absolute}`,
+        `node ${node.id} thumbnail missing on disk: ${absolute}; posting without image`,
       );
+      return null;
     }
 
     return this.api.uploadPhoto(absolute);
