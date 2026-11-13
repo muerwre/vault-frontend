@@ -3,6 +3,8 @@ import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
+import { NotificationRecipientsService } from '../src/modules/notifications/notification.recipients';
+
 import {
   authHeader,
   createTestApp,
@@ -371,6 +373,47 @@ describe('notifications (integration)', () => {
 
       expect(body.last_date).toMatch(WIRE_DATE);
       await clearNotifications();
+    });
+  });
+
+  /**
+   * `notification_settings` has no unique index on `userId`. Everything that
+   * writes settings updates the lowest-id row, so a stale duplicate must not
+   * decide whether notifications go out.
+   */
+  describe('duplicate settings rows', () => {
+    it('obeys the row the settings endpoints write, not a stale duplicate', async () => {
+      await db.query('DELETE FROM notification_settings WHERE userId = ?', [
+        userId,
+      ]);
+      // The row the app reads and writes: delivery switched off.
+      await db.query(
+        `INSERT INTO notification_settings
+           (userId, enabled, show_indicator, subscribed_to_boris, send_telegram,
+            send_email, subscribed_to_flow, subscribed_to_comments)
+         VALUES (?, 0, 1, 1, 1, 1, 1, 1)`,
+        [userId],
+      );
+      // A leftover duplicate that still says yes.
+      await db.query(
+        `INSERT INTO notification_settings
+           (userId, enabled, show_indicator, subscribed_to_boris, send_telegram,
+            send_email, subscribed_to_flow, subscribed_to_comments)
+         VALUES (?, 1, 1, 1, 1, 1, 1, 1)`,
+        [userId],
+      );
+
+      const recipients = app.get(NotificationRecipientsService);
+
+      await expect(recipients.flowWatchers()).resolves.not.toContain(userId);
+      await expect(recipients.borisWatchers()).resolves.not.toContain(userId);
+
+      // And the reader agrees with the writer about which row counts.
+      const { body } = await http()
+        .get('/api/notifications/settings')
+        .set(authHeader(userId))
+        .expect(200);
+      expect(body.enabled).toBe(false);
     });
   });
 

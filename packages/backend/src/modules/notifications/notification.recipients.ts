@@ -63,19 +63,30 @@ export class NotificationRecipientsService {
    * otherwise yield the same recipient twice.
    */
   private baseQuery(column: SubscriptionColumn) {
-    return this.users
-      .createQueryBuilder('user')
-      .select('DISTINCT user.id', 'id')
-      .innerJoin(
-        'notification_settings',
-        'settings',
-        'settings.userId = user.id',
-      )
-      .where('user.deleted_at IS NULL')
-      .andWhere('settings.enabled = 1')
-      .andWhere(`settings.${column} = 1`)
-      .andWhere('user.last_seen > NOW() - INTERVAL :days DAY', {
-        days: USER_INACTIVITY_DAYS,
-      });
+    return (
+      this.users
+        .createQueryBuilder('user')
+        .select('DISTINCT user.id', 'id')
+        .innerJoin(
+          'notification_settings',
+          'settings',
+          'settings.userId = user.id',
+        )
+        .where('user.deleted_at IS NULL')
+        // `notification_settings` has no unique index on `userId`. Everything
+        // that writes settings — the profile and the bot alike — updates the
+        // lowest-id row, so a stale duplicate must not keep delivery alive.
+        .andWhere(
+          `settings.id = (
+           SELECT MIN(duplicate.id) FROM notification_settings duplicate
+            WHERE duplicate.userId = user.id
+         )`,
+        )
+        .andWhere('settings.enabled = 1')
+        .andWhere(`settings.${column} = 1`)
+        .andWhere('user.last_seen > NOW() - INTERVAL :days DAY', {
+          days: USER_INACTIVITY_DAYS,
+        })
+    );
   }
 }
