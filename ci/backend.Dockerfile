@@ -63,8 +63,8 @@ COPY --from=builder /app/packages/backend/package.json ./packages/backend/
 COPY --from=builder /app/packages/backend/dist ./packages/backend/dist
 # Where the backend's version of a package differs from the one hoisted to the
 # root (the frontend's), yarn nests it here. Leaving this out makes the backend
-# silently resolve the frontend's copy — e.g. an older sharp that ignores
-# `autoOrient`, so camera photos come out sideways in every scaled size.
+# silently resolve the frontend's copy instead, which is a version it was never
+# tested against.
 COPY --from=builder /app/packages/backend/node_modules ./packages/backend/node_modules
 
 # Uploads live outside the image; mount a volume here and point UPLOADS_PATH at
