@@ -4,6 +4,8 @@ import { Tags } from '~/containers/tags/Tags';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { ITag } from '~/types';
 
+import styles from './styles.module.scss';
+
 /**
  * The post's tags, as on the post itself, but kept in the form: nothing is
  * sent until the post is saved, when they are matched or created by title.
@@ -39,13 +41,15 @@ const SubmitTags: FC = () => {
   );
 
   return (
-    <Tags
-      tags={tags}
-      editable
-      deletable
-      onTagsChange={onChange}
-      onTagDelete={onDelete}
-    />
+    <div className={styles.wrap}>
+      <Tags
+        tags={tags}
+        editable
+        deletable
+        onTagsChange={onChange}
+        onTagDelete={onDelete}
+      />
+    </div>
   );
 };
 

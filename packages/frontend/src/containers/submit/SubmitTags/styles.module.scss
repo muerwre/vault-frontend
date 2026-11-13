@@ -1,0 +1,7 @@
+// The tag input lifts itself high so its suggestions open over the page;
+// kept on a layer of its own here, it still stays under the sticky save
+// button when the pane scrolls.
+.wrap {
+  position: relative;
+  z-index: 1;
+}
