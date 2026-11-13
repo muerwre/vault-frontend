@@ -1,4 +1,4 @@
-import { createElement, FC } from 'react';
+import { FC, ReactNode, createElement } from 'react';
 
 import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
 import {
@@ -29,6 +29,8 @@ interface SortableListProps<
   renderLockedProps: RenderLockedProps;
   onSortEnd: (newVal: Item[]) => void;
   className?: string;
+  /** Rendered after the items, outside sorting: an "add" card, say. */
+  trailing?: ReactNode;
 }
 
 const SortableList = <RIP, RLP, I, L>({
@@ -42,6 +44,7 @@ const SortableList = <RIP, RLP, I, L>({
   renderLocked,
   renderLockedProps,
   onSortEnd,
+  trailing,
 }: SortableListProps<RIP, RLP, I, L>) => {
   const { sensors, onDragEnd, onDragStart, draggingItem, ids } =
     useSortableActions(items, getID, onSortEnd);
@@ -80,6 +83,8 @@ const SortableList = <RIP, RLP, I, L>({
               key: getLockedID(item),
             }),
           )}
+
+          {trailing}
 
           <DragOverlay>
             {draggingItem ? (

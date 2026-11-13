@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, ReactNode, useCallback } from 'react';
 
 import { SortableAudioGrid } from '~/components/sortable/SortableAudioGrid';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
@@ -8,9 +8,10 @@ interface Props {
   files: IFile[];
   setFiles: (val: IFile[]) => void;
   locked: UploadStatus[];
+  trailing?: ReactNode;
 }
 
-const AudioGrid: FC<Props> = ({ files, setFiles, locked }) => {
+const AudioGrid: FC<Props> = ({ files, setFiles, locked, trailing }) => {
   const onMove = useCallback(
     (newFiles: IFile[]) => {
       setFiles(newFiles);
@@ -45,6 +46,7 @@ const AudioGrid: FC<Props> = ({ files, setFiles, locked }) => {
       onSortEnd={onMove}
       items={files}
       locked={locked}
+      trailing={trailing}
     />
   );
 };

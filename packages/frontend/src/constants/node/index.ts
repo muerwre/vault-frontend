@@ -47,10 +47,10 @@ export type INodeComponents = Record<
 
 export const NODE_HEADS: INodeComponents = {
   [NODE_TYPES.IMAGE]: NodeImageSwiperBlock,
+  [NODE_TYPES.VIDEO]: NodeVideoBlock,
 };
 
 export const NODE_COMPONENTS: INodeComponents = {
-  [NODE_TYPES.VIDEO]: NodeVideoBlock,
   [NODE_TYPES.AUDIO]: NodeAudioImageBlock,
 };
 

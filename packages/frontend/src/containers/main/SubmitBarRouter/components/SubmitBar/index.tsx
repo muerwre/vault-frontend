@@ -1,10 +1,10 @@
 import { FC, useCallback, useState } from 'react';
 
 import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 import { Icon } from '~/components/common/Icon';
-import { Dialog } from '~/constants/modal';
-import { useShowModal } from '~/hooks/modal/useShowModal';
+import { useStartNodeSubmission } from '~/hooks/node/useStartNodeSubmission';
 
 import styles from './styles.module.scss';
 
@@ -12,8 +12,8 @@ export interface SubmitBarProps {
   isLab?: boolean;
 }
 
-const SubmitBar: FC<SubmitBarProps> = ({ isLab }) => {
-  const showModal = useShowModal(Dialog.CreateNode);
+const SubmitBar: FC<SubmitBarProps> = observer(({ isLab }) => {
+  const startSubmission = useStartNodeSubmission();
   const [focused, setFocused] = useState(false);
 
   const onFocus = useCallback(() => setFocused(true), [setFocused]);
@@ -21,9 +21,9 @@ const SubmitBar: FC<SubmitBarProps> = ({ isLab }) => {
 
   const createUrl = useCallback(
     (type: string) => () => {
-      showModal({ type, isInLab: !!isLab });
+      startSubmission(type, !!isLab);
     },
-    [isLab, showModal],
+    [isLab, startSubmission],
   );
 
   const icon = isLab ? 'lab' : 'plus';
@@ -58,6 +58,6 @@ const SubmitBar: FC<SubmitBarProps> = ({ isLab }) => {
       </button>
     </div>
   );
-};
+});
 
 export { SubmitBar };

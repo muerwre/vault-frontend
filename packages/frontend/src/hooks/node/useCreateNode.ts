@@ -22,6 +22,8 @@ export const useCreateNode = () => {
           last_seen: node.created_at,
         });
       }
+
+      return result.node;
     },
     [flow, lab],
   );

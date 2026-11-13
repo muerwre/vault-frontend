@@ -36,7 +36,7 @@ const UploadDropzone: FC<Props> = ({
         <div
           {...getRootProps({
             ...rest,
-            className: classnames(styles.zone),
+            className: classnames(styles.zone, rest.className),
           })}
         >
           <input {...getInputProps()} />

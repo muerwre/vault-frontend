@@ -1,8 +1,11 @@
 import { useCallback } from 'react';
 
 import { apiLockNode, apiPostNodeHeroic, apiPostNodeLike } from '~/api/node';
+import { features } from '~/constants/features';
 import { Dialog } from '~/constants/modal';
+import { URLS } from '~/constants/urls';
 import { useModal } from '~/hooks/modal/useModal';
+import { useNavigation } from '~/hooks/navigation/useNavigation';
 import { INode } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
 
@@ -11,6 +14,8 @@ export const useNodeActions = (
   update: (node: Partial<INode>) => Promise<unknown>,
 ) => {
   const { showModal } = useModal();
+  const { push } = useNavigation();
+  const editOnPage = !features.editorModals;
 
   const onLike = useCallback(async () => {
     try {
@@ -48,10 +53,15 @@ export const useNodeActions = (
     }
   }, [node.deleted_at, node.id, update]);
 
-  const onEdit = useCallback(
-    () => showModal(Dialog.EditNode, { nodeId: node.id! }),
-    [node, showModal],
-  );
+  // on the submission page, unless the old modals are switched back on
+  const onEdit = useCallback(() => {
+    if (editOnPage) {
+      push(URLS.EDIT(node.id!));
+      return;
+    }
+
+    showModal(Dialog.EditNode, { nodeId: node.id! });
+  }, [editOnPage, node, push, showModal]);
 
   return { onLike, onStar, onLock, onEdit };
 };

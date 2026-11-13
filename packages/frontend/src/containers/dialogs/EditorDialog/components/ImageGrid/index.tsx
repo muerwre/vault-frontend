@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, ReactNode, useCallback } from 'react';
 
 import { SortableImageGrid } from '~/components/sortable/SortableImageGrid';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
@@ -9,9 +9,10 @@ interface Props {
   files: IFile[];
   setFiles: (val: IFile[]) => void;
   locked: UploadStatus[];
+  trailing?: ReactNode;
 }
 
-const ImageGrid: FC<Props> = ({ files, setFiles, locked }) => {
+const ImageGrid: FC<Props> = ({ files, setFiles, locked, trailing }) => {
   const { isTablet } = useWindowSize();
 
   const onMove = useCallback(
@@ -34,6 +35,7 @@ const ImageGrid: FC<Props> = ({ files, setFiles, locked }) => {
       onSortEnd={onMove}
       items={files}
       locked={locked}
+      trailing={trailing}
       size={!isTablet ? 220 : (innerWidth - 60) / 2}
     />
   );

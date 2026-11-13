@@ -19,6 +19,9 @@ export const URLS = {
     NOTES: '/settings/notes',
     TRASH: '/settings/trash',
   },
+  SUBMIT: (type: string, isInLab?: boolean) =>
+    `/submit/${type}${isInLab ? '?lab=1' : ''}`,
+  EDIT: (id: INode['id'] | string) => `/edit/${id}`,
   NOTES: '/notes/',
   NOTE: (id: number) => `/notes/${id}`,
 };

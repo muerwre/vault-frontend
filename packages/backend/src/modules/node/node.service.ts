@@ -25,7 +25,12 @@ import {
 } from '../../wire/serialize';
 import { UploadService } from '../upload/upload.service';
 
-import { type Actor, canEditNode, canHeroNode } from './node.permissions';
+import {
+  type Actor,
+  canEditNode,
+  canHeroNode,
+  isLabType,
+} from './node.permissions';
 import { applyIsFlowNode, applyIsFlowOrLabNode } from './node.predicates';
 
 /**
@@ -139,7 +144,8 @@ export class NodeService {
 
     const node = await query.getOne();
 
-    if (!node) {
+    // Lab posts are for members: to a guest they do not exist.
+    if (!node || (uid === GUEST_USER_ID && isLabType(node))) {
       return null;
     }
 

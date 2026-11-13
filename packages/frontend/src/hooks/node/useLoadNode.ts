@@ -18,7 +18,7 @@ const getKey = (nodeId: number, userId = 0) =>
 
 export const useLoadNode = (id: number, fallbackData?: ApiGetNodeResponse) => {
   const { user } = useUser();
-  const { data, isValidating, mutate } = useSWR<ApiGetNodeResponse>(
+  const { data, isValidating, mutate, error } = useSWR<ApiGetNodeResponse>(
     getKey(id, user.id),
     () => apiGetNode({ id }),
     { fallbackData, revalidateOnMount: true },
@@ -44,5 +44,7 @@ export const useLoadNode = (id: number, fallbackData?: ApiGetNodeResponse) => {
     isLoading: isValidating && !data,
     update,
     lastSeen: data?.last_seen,
+    /** Set when the node could not be loaded: missing, or hidden from the viewer. */
+    error,
   };
 };

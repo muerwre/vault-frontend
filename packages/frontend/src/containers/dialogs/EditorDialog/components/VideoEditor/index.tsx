@@ -15,9 +15,14 @@ type Props = NodeEditorProps & {};
 const VideoEditor: FC<Props> = () => {
   const { values, setFieldValue } = useNodeFormContext();
 
+  // Edits the first video only; a node can carry more, which stay as they are.
   const setUrl = useCallback(
-    (url: string) => setFieldValue('blocks', [{ type: 'video', url }]),
-    [setFieldValue],
+    (url: string) =>
+      setFieldValue('blocks', [
+        { type: 'video', url },
+        ...values.blocks.slice(1),
+      ]),
+    [setFieldValue, values.blocks],
   );
 
   const url = (path(['blocks', 0, 'url'], values) as string) || '';

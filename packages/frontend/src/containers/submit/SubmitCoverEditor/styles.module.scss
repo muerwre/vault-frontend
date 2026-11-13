@@ -1,0 +1,40 @@
+@import 'src/styles/variables';
+
+// A preview area like the profile photo: it follows the pane's width, at a
+// fixed ratio, with the controls laid over its bottom edge.
+.wrap {
+  @include outer_shadow();
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  aspect-ratio: 5 / 2;
+  border-radius: $radius;
+  background: $content_bg_lighter 50% 50% no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  cursor: pointer;
+
+  // full width on mobile would make the ratio too tall, so the height is fixed
+  @include tablet {
+    aspect-ratio: auto;
+    height: 96px;
+  }
+}
+
+.label {
+  font: $font_14_semibold;
+  text-transform: uppercase;
+  color: $gray_50;
+  // keeps clear of the controls below
+  margin-bottom: $gap * 2;
+}
+
+.pill {
+  position: absolute;
+  left: 50%;
+  bottom: $gap;
+  transform: translate(-50%, 0);
+}

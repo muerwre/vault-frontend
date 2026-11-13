@@ -20,6 +20,7 @@ import { parseQueryBool } from '../../globals/query';
 import {
   AuthRequiredGuard,
   Claims,
+  MembersOnlyGuard,
   OptionalAuthGuard,
   Uid,
   WithUser,
@@ -158,7 +159,7 @@ export class NodeController {
    * a node id.
    */
   @Get('lab')
-  @UseGuards(AuthRequiredGuard)
+  @UseGuards(MembersOnlyGuard)
   getLab(
     @Uid() uid: number,
     @Query('limit') limit?: string,
@@ -178,13 +179,13 @@ export class NodeController {
   }
 
   @Get('lab/updates')
-  @UseGuards(AuthRequiredGuard)
+  @UseGuards(MembersOnlyGuard)
   getLabUpdates(@Uid() uid: number): Promise<{ nodes: unknown[] }> {
     return this.lab.getUpdates(uid);
   }
 
   @Get('lab/stats')
-  @UseGuards(AuthRequiredGuard)
+  @UseGuards(MembersOnlyGuard)
   getLabStats(): Promise<WireLabStats> {
     return this.lab.getStats();
   }

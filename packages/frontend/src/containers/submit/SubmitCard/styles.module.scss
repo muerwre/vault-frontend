@@ -1,0 +1,12 @@
+@import 'src/styles/variables';
+
+.card {
+  @include outer_shadow();
+
+  position: relative;
+  border-radius: $radius;
+  background: $content_bg_lighter;
+  color: $gray_50;
+  fill: currentColor;
+  box-sizing: border-box;
+}

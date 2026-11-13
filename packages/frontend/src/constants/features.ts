@@ -14,4 +14,9 @@ export const features = {
    * its per-section update dots.
    */
   notifications: false,
+  /**
+   * Creating and editing nodes happens on submission pages. Turned on, this
+   * brings back the old editor modals instead.
+   */
+  editorModals: false,
 } as const;

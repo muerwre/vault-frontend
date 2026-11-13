@@ -1,20 +1,21 @@
 import { FC } from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { Anchor } from '~/components/common/Anchor';
 import { Container } from '~/components/common/Container';
 import { Button } from '~/components/input/Button';
 import { Role } from '~/constants/auth';
-import { Dialog } from '~/constants/modal';
 import { NODE_TYPES } from '~/constants/node';
 import { useAuth } from '~/hooks/auth/useAuth';
-import { useShowModal } from '~/hooks/modal/useShowModal';
+import { useStartNodeSubmission } from '~/hooks/node/useStartNodeSubmission';
 import markdown from '~/styles/common/markdown.module.scss';
 
 import styles from './styles.module.scss';
 interface RoomLayoutProps {}
 
-const RoomLayout: FC<RoomLayoutProps> = () => {
-  const createNode = useShowModal(Dialog.CreateNode);
+const RoomLayout: FC<RoomLayoutProps> = observer(() => {
+  const startSubmission = useStartNodeSubmission();
   const { user } = useAuth();
 
   return (
@@ -57,9 +58,7 @@ const RoomLayout: FC<RoomLayoutProps> = () => {
                   <br />
 
                   <Button
-                    onClick={() =>
-                      createNode({ isInLab: false, type: NODE_TYPES.ROOM })
-                    }
+                    onClick={() => startSubmission(NODE_TYPES.ROOM, false)}
                   >
                     Добавить комнату
                   </Button>
@@ -72,6 +71,6 @@ const RoomLayout: FC<RoomLayoutProps> = () => {
       <div className={styles.items}></div>
     </div>
   );
-};
+});
 
 export { RoomLayout };

@@ -1,0 +1,7 @@
+@import 'src/styles/variables';
+
+// roomier than the menu's default; doubled to outrank it
+.item.item {
+  padding-left: $gap * 2;
+  padding-right: $gap * 2;
+}

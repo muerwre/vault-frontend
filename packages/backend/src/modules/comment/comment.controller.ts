@@ -10,7 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ERROR_CODES } from '@vault/common/constants';
+import { ERROR_CODES, GUEST_USER_ID } from '@vault/common/constants';
 
 import { User } from '../../entities/user.entity';
 import { VaultException } from '../../globals/exceptions';
@@ -23,7 +23,7 @@ import {
   WithUser,
   WithUserGuard,
 } from '../auth/auth.guards';
-import { canCommentOn } from '../node/node.permissions';
+import { canCommentOn, isLabType } from '../node/node.permissions';
 import { NodeService } from '../node/node.service';
 import { NotificationDispatcher } from '../notifications/notification.dispatcher';
 import type { IncomingFile } from '../upload/audio-titles';
@@ -55,7 +55,7 @@ export class CommentController {
 
   @Get(':id/comments')
   @UseGuards(OptionalAuthGuard)
-  getComments(
+  async getComments(
     @Param('id') id: string,
     @Uid() uid: number,
     @Query('take') take?: string,
@@ -66,6 +66,18 @@ export class CommentController {
 
     if (!Number.isFinite(nodeId) || nodeId <= 0) {
       throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    // A lab post's comments are as hidden from guests as the post itself.
+    if (uid === GUEST_USER_ID) {
+      const node = await this.nodes.findLive(nodeId);
+
+      if (node && isLabType(node)) {
+        throw new VaultException(
+          ERROR_CODES.NodeNotFound,
+          HttpStatus.NOT_FOUND,
+        );
+      }
     }
 
     return this.comments.getComments(
