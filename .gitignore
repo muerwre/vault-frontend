@@ -22,3 +22,6 @@ build
 
 # merged backend coverage (yarn backend:coverage)
 coverage/
+# Local notes. The four README.md files are already tracked, and a rule
+# never un-tracks a file, so they stay in the repo.
+*.md
