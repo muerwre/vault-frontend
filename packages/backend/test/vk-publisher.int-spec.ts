@@ -301,6 +301,15 @@ describe('vk publisher (integration)', () => {
       expect(row.sent_at).toBeNull();
     });
 
+    /** The loop fires on a timer and nothing awaits it, so it must not throw. */
+    it('swallows a failure instead of taking the process down', async () => {
+      const nodeId = await createNode();
+      await ageQueueRow(nodeId, 10);
+      postToWall.mockRejectedValue(new Error('vk is down'));
+
+      await expect(publisher.runOnce()).resolves.toBeUndefined();
+    });
+
     describe('nodes that no longer qualify', () => {
       const expectDropped = async (nodeId: number) => {
         await publisher.runOnce();

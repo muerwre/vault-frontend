@@ -48,6 +48,12 @@ export class VkPublisher implements OnModuleInit, OnModuleDestroy {
 
   private timer?: NodeJS.Timeout;
 
+  /** The run in progress, if any. */
+  private current?: Promise<void>;
+
+  /** Set while shutting down: the run in progress stops between nodes. */
+  private stopping = false;
+
   constructor(
     private readonly queue: VkQueueService,
     private readonly api: VkApiService,
@@ -91,18 +97,59 @@ export class VkPublisher implements OnModuleInit, OnModuleDestroy {
     this.timer.unref();
   }
 
-  onModuleDestroy(): void {
+  /**
+   * Stops the loop and waits for a run in progress, which stops after the node
+   * it is posting. Anything not yet posted stays queued for the next start.
+   */
+  async onModuleDestroy(): Promise<void> {
     if (this.timer) {
       clearInterval(this.timer);
       this.timer = undefined;
+    }
+
+    if (!this.current) {
+      return;
+    }
+
+    this.stopping = true;
+
+    try {
+      await this.current;
+    } finally {
+      this.stopping = false;
     }
   }
 
   /**
    * Publishes everything currently due. Exposed so the loop can be driven
    * directly rather than waited on.
+   *
+   * Overlapping runs are skipped: a run slower than the interval would read the
+   * same queue rows again and post the node to the wall twice. Failures are
+   * caught here, because an unhandled rejection from the timer would take the
+   * process down.
    */
   async runOnce(): Promise<void> {
+    if (this.current) {
+      return;
+    }
+
+    this.current = this.publishPending()
+      .catch((error: unknown) => {
+        this.logger.warn(
+          `publishing run failed: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+        );
+      })
+      .finally(() => {
+        this.current = undefined;
+      });
+
+    await this.current;
+  }
+
+  private async publishPending(): Promise<void> {
     const config = getVkPublisherConfig();
     const now = Date.now();
 
@@ -113,6 +160,10 @@ export class VkPublisher implements OnModuleInit, OnModuleDestroy {
     );
 
     for (const item of pending) {
+      if (this.stopping) {
+        return;
+      }
+
       try {
         await this.publish(item.itemId as number);
       } catch (error) {
