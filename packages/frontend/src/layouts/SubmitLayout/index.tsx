@@ -1,4 +1,4 @@
-import { createElement, FC, useEffect, useRef } from 'react';
+import { createElement, FC, useCallback, useEffect, useRef } from 'react';
 
 import { FormikProvider } from 'formik';
 import { observer } from 'mobx-react-lite';
@@ -28,6 +28,7 @@ import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useNodeFormFormik } from '~/hooks/node/useNodeFormFormik';
 import { INode } from '~/types';
 import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
+import { pruneNodeContent } from '~/utils/node';
 import { usePageCover } from '~/utils/providers/PageCoverProvider';
 
 import styles from './styles.module.scss';
@@ -88,19 +89,41 @@ const SubmitLayout: FC<Props> = observer(
       initialNode.files,
     );
 
-    const formik = useNodeFormFormik(initialNode, uploader, noop, onSubmit);
+    // a form that switched types may still hold the other type's content
+    const submitPruned = useCallback(
+      (node: INode) => onSubmit(pruneNodeContent(node)),
+      [onSubmit],
+    );
+
+    const formik = useNodeFormFormik(initialNode, uploader, noop, submitPruned);
     const { values, handleChange, handleSubmit, isSubmitting, setFieldValue } =
       formik;
 
-    // Switching the type keeps the form: title, background, uploads and typed
-    // content all survive, and the backend drops whatever the final type
-    // cannot carry.
+    // Each type keeps its own content draft: leaving a type stores its blocks
+    // and files, coming back restores them. Title, background, tags and the
+    // flow/lab choice are shared by all types.
     const currentType = (values.type || type) as NodeType;
+    const drafts = useRef<
+      Partial<Record<NodeType, Pick<INode, 'blocks' | 'files'>>>
+    >({});
 
     useEffect(() => {
-      if (values.type !== type) {
-        setFieldValue('type', type);
+      const previous = values.type as NodeType | undefined;
+
+      if (!previous || previous === type) {
+        return;
       }
+
+      drafts.current[previous] = {
+        blocks: values.blocks,
+        files: uploader.files,
+      };
+
+      const next = drafts.current[type];
+
+      setFieldValue('blocks', next?.blocks ?? []);
+      uploader.setFiles(next?.files ?? []);
+      setFieldValue('type', type);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [type]);
 

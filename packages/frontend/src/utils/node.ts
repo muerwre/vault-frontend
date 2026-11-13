@@ -42,3 +42,43 @@ export const canStarNode = (
   !!user &&
   (node.type === NODE_TYPES.IMAGE || !node.is_promoted) &&
   user.role === Role.Admin;
+
+/**
+ * Drops content the node's type cannot carry, mirroring what the backend
+ * keeps: text nodes keep text blocks, video nodes video blocks, photo nodes
+ * images, song nodes audio and images. Lets a form that switched types send
+ * only what the final type uses. Types not listed are left as they are.
+ */
+export const pruneNodeContent = (node: INode): INode => {
+  switch (node.type) {
+    case NODE_TYPES.TEXT:
+    case NODE_TYPES.VIDEO: {
+      const blockType = node.type === NODE_TYPES.TEXT ? 'text' : 'video';
+
+      return {
+        ...node,
+        blocks: node.blocks.filter((it) => it.type === blockType),
+        files: [],
+      };
+    }
+
+    case NODE_TYPES.IMAGE:
+      return {
+        ...node,
+        blocks: [],
+        files: node.files.filter((it) => it.type === 'image'),
+      };
+
+    case NODE_TYPES.AUDIO:
+      return {
+        ...node,
+        blocks: [],
+        files: node.files.filter(
+          (it) => it.type === 'audio' || it.type === 'image',
+        ),
+      };
+
+    default:
+      return node;
+  }
+};

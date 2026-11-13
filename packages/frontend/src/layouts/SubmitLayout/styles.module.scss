@@ -39,6 +39,9 @@ $screen_height: calc(
   display: flex;
   flex-direction: column;
   padding: $gap;
+  // keeps the editors' own layers (the dropzone's, say) inside the card, so
+  // they never cover the pane's popups, like the tag suggestions
+  isolation: isolate;
   // joins the pane on its right, as on Boris
   border-radius: $radius 0 0 $radius;
 
