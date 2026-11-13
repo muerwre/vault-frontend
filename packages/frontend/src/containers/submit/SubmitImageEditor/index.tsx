@@ -21,7 +21,10 @@ const SubmitImageEditor: FC<NodeEditorProps> = () => {
   if (!files.length && !values(pending).length) {
     return (
       <UploadDropzone onUpload={uploadFiles} className={styles.fill}>
-        <SubmitEmptyState>
+        <SubmitEmptyState
+          title="Давайте начнём!"
+          hint="Добавьте своё первое фото"
+        >
           <SubmitPickButton
             type={UploadType.Image}
             iconLeft="photo_add"

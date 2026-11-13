@@ -33,7 +33,11 @@ const SubmitAudioEditor: FC<NodeEditorProps> = () => {
   if (!hasImages && !filesAudios.length && !pendingAudios.length) {
     return (
       <UploadDropzone onUpload={uploadFiles} className={styles.fill}>
-        <SubmitEmptyState vertical>
+        <SubmitEmptyState
+          title="Давайте начнём!"
+          hint="Добавьте первую песню"
+          vertical
+        >
           <SubmitPickButton
             type={UploadType.Audio}
             iconLeft="audio"

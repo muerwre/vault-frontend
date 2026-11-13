@@ -20,13 +20,13 @@
 
 .title {
   font: $font_18_semibold;
-  text-transform: uppercase;
+  max-width: 300px;
 }
 
 .hint {
   font: $font_14_medium;
   color: $gray_50;
-  max-width: 320px;
+  max-width: 300px;
 }
 
 .actions {
@@ -36,7 +36,7 @@
   justify-content: center;
   gap: $gap;
   width: 100%;
-  margin-top: $gap;
+  margin-top: $gap * 3;
 }
 
 .vertical {

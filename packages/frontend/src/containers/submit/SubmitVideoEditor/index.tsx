@@ -103,7 +103,7 @@ const SubmitVideoEditor: FC<NodeEditorProps> = () => {
 
   if (!videos.length) {
     return (
-      <SubmitEmptyState>
+      <SubmitEmptyState title="Давайте начнём!" hint="Добавьте первое видео">
         <SubmitVideoAddCard existing={ids} onAdd={onAdd} variant="inline" />
       </SubmitEmptyState>
     );
