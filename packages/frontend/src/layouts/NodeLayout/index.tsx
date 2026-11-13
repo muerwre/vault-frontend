@@ -5,8 +5,6 @@ import { observer } from 'mobx-react-lite';
 import { Card } from '~/components/common/Card';
 import { Container } from '~/components/common/Container';
 import { Footer } from '~/components/common/Footer';
-import { ScrollHelperBottom } from '~/components/common/ScrollHelperBottom';
-import { Superpower } from '~/components/common/Superpower';
 import { NodeTitle } from '~/components/node/NodeTitle';
 import { Dialog } from '~/constants/modal';
 import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
@@ -74,10 +72,6 @@ const NodeLayout = observer(() => {
       </Container>
 
       <SubmitBarRouter prefix="/post:id" isLab={!node.is_promoted} />
-
-      <Superpower>
-        <ScrollHelperBottom />
-      </Superpower>
     </div>
   );
 });
