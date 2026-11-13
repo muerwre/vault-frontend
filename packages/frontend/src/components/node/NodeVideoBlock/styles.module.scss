@@ -24,8 +24,31 @@
 }
 
 .thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
   background: 50% 50% no-repeat;
   background-size: cover;
+  cursor: pointer;
+}
+
+.play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 100%;
+  background: transparentize(black, 0.4);
+  backdrop-filter: blur(4px);
+  fill: white;
+  transition: transform 0.25s;
+
+  .thumb:hover & {
+    transform: scale(1.1);
+  }
 }
 
 // a lone video has no slider, so it gets the slides' spacing itself
