@@ -5,6 +5,9 @@ $screen_height: calc(
   100vh - #{$header_height} - #{$page_top_offset} - #{$gap * 2}
 );
 
+// fixed, so the columns below can leave room for it
+$tabs_height: 44px;
+
 .wrap {
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -55,6 +58,10 @@ $screen_height: calc(
 .tabs {
   grid-column: 1 / -1;
   justify-self: center;
+  display: flex;
+  align-items: center;
+  height: $tabs_height;
+  box-sizing: border-box;
   padding: $gap * 0.5;
   border-radius: $radius $radius 0 0;
   background: $content_bg_dark;
@@ -124,5 +131,15 @@ $screen_height: calc(
   @include tablet {
     padding-bottom: $gap * 0.5;
     border-radius: 0 0 $radius $radius;
+  }
+}
+
+// with the tabs above them, the columns still end at the screen's bottom
+.with_tabs .main,
+.with_tabs .pane {
+  min-height: calc(#{$screen_height} - #{$tabs_height});
+
+  @include tablet {
+    min-height: 0;
   }
 }

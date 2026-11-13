@@ -1,5 +1,6 @@
 import { createElement, FC, useCallback, useEffect, useRef } from 'react';
 
+import classNames from 'classnames';
 import { FormikProvider } from 'formik';
 import { observer } from 'mobx-react-lite';
 
@@ -172,7 +173,12 @@ const SubmitLayout: FC<Props> = observer(
       <UploaderContextProvider value={uploader}>
         <FormikProvider value={formik}>
           <Container>
-            <form onSubmit={handleSubmit} className={styles.wrap}>
+            <form
+              onSubmit={handleSubmit}
+              className={classNames(styles.wrap, {
+                [styles.with_tabs]: hasTabs,
+              })}
+            >
               {hasTabs && (
                 <div className={styles.tabs}>
                   <SubmitTypeSwitch
