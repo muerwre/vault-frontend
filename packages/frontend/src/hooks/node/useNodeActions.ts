@@ -4,7 +4,6 @@ import { apiLockNode, apiPostNodeHeroic, apiPostNodeLike } from '~/api/node';
 import { features } from '~/constants/features';
 import { Dialog } from '~/constants/modal';
 import { URLS } from '~/constants/urls';
-import { useAuth } from '~/hooks/auth/useAuth';
 import { useModal } from '~/hooks/modal/useModal';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
 import { INode } from '~/types';
@@ -16,8 +15,7 @@ export const useNodeActions = (
 ) => {
   const { showModal } = useModal();
   const { push } = useNavigation();
-  const { isTester } = useAuth();
-  const editOnPage = isTester && features.submitPages;
+  const editOnPage = !features.editorModals;
 
   const onLike = useCallback(async () => {
     try {
@@ -55,7 +53,7 @@ export const useNodeActions = (
     }
   }, [node.deleted_at, node.id, update]);
 
-  // on the submission page under the same switch as creating, else the modal
+  // on the submission page, unless the old modals are switched back on
   const onEdit = useCallback(() => {
     if (editOnPage) {
       push(URLS.EDIT(node.id!));

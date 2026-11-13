@@ -15,8 +15,8 @@ export const features = {
    */
   notifications: false,
   /**
-   * With superpowers on, creating a node opens a submission page for its type
-   * instead of the editor modal.
+   * Creating and editing nodes happens on submission pages. Turned on, this
+   * brings back the old editor modals instead.
    */
-  submitPages: true,
+  editorModals: false,
 } as const;
