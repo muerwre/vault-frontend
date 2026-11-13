@@ -88,6 +88,8 @@ $tabs_height: 44px;
   gap: $gap;
   padding: $gap;
   border-radius: 0 $radius $radius 0;
+  @include outer_shadow();
+
   background: $content_bg_dark;
   box-sizing: border-box;
   min-height: $screen_height;
