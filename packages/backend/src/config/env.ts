@@ -297,6 +297,18 @@ export const getScheduleTimeZone = (): string =>
 export const getMediaRescanCron = (): string =>
   process.env.MEDIA_RESCAN_CRON || '0 0 2 * * *';
 
+export interface MediaCleanupConfig {
+  /** When local copies nothing links any more are deleted (cron with seconds). */
+  cron: string;
+  /** How long a deleted post or comment keeps its videos, in case it is restored. */
+  graceDays: number;
+}
+
+export const getMediaCleanupConfig = (): MediaCleanupConfig => ({
+  cron: process.env.MEDIA_CLEANUP_CRON || '0 0 4 * * *',
+  graceDays: toNonNegativeInt(process.env.MEDIA_GC_GRACE_DAYS, 1),
+});
+
 export interface MediaBacklogConfig {
   /** When the next batch is released, as a six-field cron expression. */
   cron: string;

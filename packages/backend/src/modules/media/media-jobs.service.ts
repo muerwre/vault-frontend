@@ -83,8 +83,12 @@ const isOneOf = <T extends string>(
 export class MediaJobsService {
   private readonly logger = new Logger('MediaJobs');
 
-  /** Each fetcher's last reported yt-dlp version. */
-  readonly fetcherVersions = new Map<string, { version: string; at: Date }>();
+  /**
+   * Each fetcher's yt-dlp version and last claim, since this process started.
+   * Fetchers claim every few seconds while idle, so a stale entry means one
+   * has stopped.
+   */
+  readonly fetchers = new Map<string, { version: string; lastSeenAt: Date }>();
 
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
@@ -109,12 +113,12 @@ export class MediaJobsService {
       throw badRequest();
     }
 
-    if (request.ytDlpVersion) {
-      this.fetcherVersions.set(fetcher, {
-        version: String(request.ytDlpVersion).slice(0, 64),
-        at: new Date(),
-      });
-    }
+    this.fetchers.set(fetcher, {
+      version: request.ytDlpVersion
+        ? String(request.ytDlpVersion).slice(0, 64)
+        : (this.fetchers.get(fetcher)?.version ?? ''),
+      lastSeenAt: new Date(),
+    });
 
     if (!getMediaCacheConfig().enabled) {
       return null;
