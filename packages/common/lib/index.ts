@@ -5,3 +5,4 @@
 // frontend or the existing data.
 export * from './constants';
 export * from './types';
+export * from './media';
