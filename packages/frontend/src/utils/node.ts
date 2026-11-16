@@ -35,8 +35,8 @@ export const canLikeNode = (
 ): boolean => path(['role'], user) !== Role.Guest;
 
 /**
- * Admins star flow photos for the hero carousel. Lab posts never take part,
- * so they get no star.
+ * Admins star flow photos for the hero carousel, and any lab post for the lab's
+ * heroes panel.
  */
 export const canStarNode = (
   node?: Partial<INode>,
@@ -44,8 +44,7 @@ export const canStarNode = (
 ): boolean =>
   !!node &&
   !!user &&
-  node.type === NODE_TYPES.IMAGE &&
-  !!node.is_promoted &&
+  (node.type === NODE_TYPES.IMAGE || !node.is_promoted) &&
   user.role === Role.Admin;
 
 /**

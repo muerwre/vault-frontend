@@ -50,8 +50,11 @@ export const canCommentOn = (
   node: Pick<Node, 'type' | 'isPromoted'>,
 ): boolean => node.type === NODE_TYPES.BORIS || isFlowOrLabType(node);
 
-/** Admins only, and only flow nodes: lab posts never become heroes. */
+/**
+ * Admins only, on flow or lab nodes. Flow heroes feed the top carousel, lab
+ * heroes the lab's side panel.
+ */
 export const canHeroNode = (
   node: Pick<Node, 'type' | 'isPromoted'>,
   actor: Actor,
-): boolean => actor.role === ROLES.ADMIN && isFlowType(node);
+): boolean => actor.role === ROLES.ADMIN && isFlowOrLabType(node);

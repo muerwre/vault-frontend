@@ -102,8 +102,8 @@ describe('node permissions', () => {
       expect(canHeroNode(node('boris', true), admin)).toBe(false);
     });
 
-    it('denies admins on a lab post', () => {
-      expect(canHeroNode(node('image', false), admin)).toBe(false);
+    it('allows admins on a lab post', () => {
+      expect(canHeroNode(node('image', false), admin)).toBe(true);
     });
   });
 });

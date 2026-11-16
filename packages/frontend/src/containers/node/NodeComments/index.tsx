@@ -1,10 +1,18 @@
-import { FC, useEffect, useMemo } from 'react';
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from 'react';
 
 import { observer } from 'mobx-react-lite';
 
 import { LoadMoreButton } from '~/components/input/LoadMoreButton';
 import { ANNOUNCE_USER_ID, BORIS_NODE_ID } from '~/constants/boris/constants';
 import {
+  getCommentId,
   isCommentAnchor,
   NEW_COMMENT_ANCHOR_NAME,
 } from '~/constants/dom/links';
@@ -51,18 +59,69 @@ const NodeComments: FC<Props> = observer(({ order }) => {
     lastSeenCurrent ?? undefined,
   );
 
+  /**
+   * With DESC order older comments are inserted above the ones on screen,
+   * pushing them down. Remember where the topmost comment sits in the
+   * viewport before loading, and put it back there once the page arrives.
+   */
+  const scrollAnchor = useRef<{
+    id: string;
+    top: number;
+    count: number;
+  } | null>(null);
+
+  const loadMore = useCallback(() => {
+    const oldest = comments[comments.length - 1];
+    const element =
+      order === 'DESC' && oldest
+        ? document.getElementById(getCommentId(oldest.id))
+        : null;
+
+    scrollAnchor.current = element
+      ? {
+          id: element.id,
+          top: element.getBoundingClientRect().top,
+          count: comments.length,
+        }
+      : null;
+
+    onLoadMoreComments();
+  }, [comments, order, onLoadMoreComments]);
+
+  useLayoutEffect(() => {
+    const anchor = scrollAnchor.current;
+
+    if (!anchor) {
+      return;
+    }
+
+    // Nothing new arrived: keep waiting while loading, give up once done.
+    if (anchor.count === comments.length) {
+      if (!isLoadingMore) {
+        scrollAnchor.current = null;
+      }
+
+      return;
+    }
+
+    scrollAnchor.current = null;
+
+    const element = document.getElementById(anchor.id);
+
+    if (element) {
+      window.scrollBy(0, element.getBoundingClientRect().top - anchor.top);
+    }
+  }, [comments.length, isLoadingMore]);
+
   const more = useMemo(
     () =>
       hasMore &&
       !isLoading && (
         <div className={styles.more}>
-          <LoadMoreButton
-            isLoading={isLoadingMore}
-            onClick={onLoadMoreComments}
-          />
+          <LoadMoreButton isLoading={isLoadingMore} onClick={loadMore} />
         </div>
       ),
-    [hasMore, onLoadMoreComments, isLoadingMore, isLoading],
+    [hasMore, loadMore, isLoadingMore, isLoading],
   );
 
   if (!node?.id) {
