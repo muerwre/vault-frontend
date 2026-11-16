@@ -16,9 +16,9 @@ yarn workspace @vault/backend run migration:run
 yarn workspace @vault/backend run migration:show
 ```
 
-The naming is inherited from the orchid example (`examples/nestjs-with-react-monorepo`),
-whose `packages/migration` is likewise **not** a schema-migration runner — it is a
-one-off MariaDB↔Postgres data-porting tool.
+The name is inherited from the reference monorepo this layout was based on, whose
+`packages/migration` is likewise **not** a schema-migration runner — it is a one-off
+data-porting tool.
 
 ## What this package is for
 
@@ -27,10 +27,10 @@ that operate on rows rather than schema. It is currently empty, because the
 Go → NestJS migration keeps the *same* database and so needs no data porting.
 
 The local database itself is defined in `ci/dev.compose.yml` and seeded straight from
-the production dump:
+a production dump, which is not in the repository (see the root README):
 
 ```bash
-yarn db:up      # start MariaDB, seeded from examples/*.sql.xz on first boot
+yarn db:up      # start MariaDB, seeded from the dump on first boot
 yarn db:reset   # wipe the volume and re-seed
 yarn db:cli     # mariadb shell
 ```
