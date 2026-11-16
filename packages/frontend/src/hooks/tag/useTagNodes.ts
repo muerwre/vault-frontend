@@ -9,10 +9,10 @@ import { flatten, isNil } from '~/utils/ramda';
 
 const PAGE_SIZE = 10;
 
-const getKey: (tag: string) => SWRInfiniteKeyLoader =
-  (tag) => (pageIndex, previousPageData: INode[]) => {
+const getKey: (tag: string, lab: boolean) => SWRInfiniteKeyLoader =
+  (tag, lab) => (pageIndex, previousPageData: INode[]) => {
     if (pageIndex > 0 && !previousPageData?.length) return null;
-    return `${API.TAG.NODES}?tag=${tag}&page=${pageIndex}`;
+    return `${API.TAG.NODES}?tag=${tag}&page=${pageIndex}${lab ? '&feature=lab' : ''}`;
   };
 
 const extractKey = (key: string) => {
@@ -26,12 +26,13 @@ const extractKey = (key: string) => {
   return parseInt(match[1], 10) || 0;
 };
 
-export const useTagNodes = (tag: string) => {
+export const useTagNodes = (tag: string, lab = false) => {
   const { data, isValidating, setSize, size, mutate } = useSWRInfinite(
-    getKey(tag),
+    getKey(tag, lab),
     async (key: string) => {
       const result = await apiGetNodesOfTag({
         tag,
+        lab,
         limit: PAGE_SIZE,
         offset: extractKey(key) * PAGE_SIZE,
       });

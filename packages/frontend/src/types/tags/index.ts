@@ -4,6 +4,8 @@ export type ApiGetNodesOfTagRequest = {
   tag: string;
   offset: number;
   limit: number;
+  /** Only lab (unpromoted) nodes. */
+  lab?: boolean;
 };
 export type ApiGetNodesOfTagResult = { nodes: INode[]; count: number };
 

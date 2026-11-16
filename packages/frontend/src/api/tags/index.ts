@@ -11,10 +11,11 @@ export const apiGetNodesOfTag = ({
   tag,
   offset,
   limit,
+  lab,
 }: ApiGetNodesOfTagRequest) =>
   api
     .get<ApiGetNodesOfTagResult>(API.TAG.NODES, {
-      params: { name: tag, offset, limit },
+      params: { name: tag, offset, limit, feature: lab ? 'lab' : undefined },
     })
     .then(unwrap);
 

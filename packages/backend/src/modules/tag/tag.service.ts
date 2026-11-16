@@ -5,7 +5,11 @@ import { Repository } from 'typeorm';
 import { Node } from '../../entities/node.entity';
 import { Tag } from '../../entities/tag.entity';
 import { toWireShallowNode, type WireShallowNode } from '../../wire/serialize';
-import { applyIsFlowNode, applyIsFlowOrLabNode } from '../node/node.predicates';
+import {
+  applyIsFlowNode,
+  applyIsFlowOrLabNode,
+  applyIsLabNode,
+} from '../node/node.predicates';
 
 export interface WireTagNodesResponse {
   nodes: WireShallowNode[];
@@ -30,13 +34,21 @@ export class TagService {
       .getOne();
   }
 
-  /** Nodes carrying a tag. Guests are limited to the flow. */
+  /**
+   * Nodes carrying a tag. Guests are limited to the flow; `onlyLab` narrows to
+   * lab nodes, which guests never see, so a guest asking for it gets nothing.
+   */
   async getNodesOfTag(
     tag: Tag,
     onlyFlow: boolean,
+    onlyLab: boolean,
     limit: number,
     offset: number,
   ): Promise<WireTagNodesResponse> {
+    if (onlyFlow && onlyLab) {
+      return { nodes: [], count: 0 };
+    }
+
     const build = () => {
       const query = this.nodes
         .createQueryBuilder('node')
@@ -46,6 +58,10 @@ export class TagService {
           'nt.nodeId = node.id AND nt.tagId = :tagId',
           { tagId: tag.id },
         );
+
+      if (onlyLab) {
+        return applyIsLabNode(query, 'node');
+      }
 
       return onlyFlow
         ? applyIsFlowNode(query, 'node')

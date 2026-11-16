@@ -1,7 +1,8 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { Tag } from '~/components/tags/Tag';
+import { useTagSidebar } from '~/hooks/sidebar/useTagSidebar';
 import { ITag } from '~/types';
 
 import styles from './styles.module.scss';
@@ -12,6 +13,19 @@ interface Props {
 }
 
 const LabTags: FC<Props> = ({ tags, isLoading }) => {
+  const openTagSidebar = useTagSidebar();
+
+  const onTagClick = useCallback(
+    (tag: Partial<ITag>) => {
+      if (!tag.title) {
+        return;
+      }
+
+      openTagSidebar(tag.title, { lab: true });
+    },
+    [openTagSidebar],
+  );
+
   if (isLoading) {
     return (
       <div className={styles.tags}>
@@ -28,7 +42,7 @@ const LabTags: FC<Props> = ({ tags, isLoading }) => {
   return (
     <div className={styles.tags}>
       {tags.slice(0, 10).map((tag) => (
-        <Tag tag={tag} key={tag.ID} />
+        <Tag tag={tag} key={tag.ID} onClick={onTagClick} />
       ))}
     </div>
   );

@@ -26,6 +26,7 @@ export class TagController {
     @Query('name') name?: string,
     @Query('limit') limit?: string,
     @Query('offset') offset?: string,
+    @Query('feature') feature?: string,
   ): Promise<WireTagNodesResponse> {
     const tag = await this.tags.findByName(name ?? '');
 
@@ -36,6 +37,8 @@ export class TagController {
     return this.tags.getNodesOfTag(
       tag,
       uid === GUEST_USER_ID,
+      // `?feature=lab` narrows the list to lab nodes.
+      feature === 'lab',
       // An absent, zero or unreadable limit is a page of 20 — never "no limit".
       toInt(limit, 0) || TAG_NODES_DEFAULT_LIMIT,
       toInt(offset, 0),

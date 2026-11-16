@@ -15,10 +15,15 @@ import styles from './styles.module.scss';
 
 interface TagSidebarProps extends SidebarComponentProps<SidebarName.Tag> {
   tag: string;
+  /** `'lab'` when opened from the lab: lists only lab nodes. */
+  feature?: string;
 }
 
-const TagSidebar: VFC<TagSidebarProps> = ({ tag, onRequestClose }) => {
-  const { nodes, hasMore, isLoading, loadMore } = useTagNodes(tag);
+const TagSidebar: VFC<TagSidebarProps> = ({ tag, feature, onRequestClose }) => {
+  const { nodes, hasMore, isLoading, loadMore } = useTagNodes(
+    tag,
+    feature === 'lab',
+  );
   const title = useMemo(() => decodeURIComponent(tag), [tag]);
 
   return (

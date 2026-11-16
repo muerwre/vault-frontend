@@ -7,12 +7,15 @@ export const useTagSidebar = () => {
   const { open } = useSidebar();
 
   return useCallback(
-    (tag: string) => {
+    (tag: string, options?: { lab?: boolean }) => {
       if (!tag) {
         return;
       }
 
-      open(SidebarName.Tag, { tag });
+      open(SidebarName.Tag, {
+        tag,
+        feature: options?.lab ? 'lab' : undefined,
+      });
     },
     [open],
   );

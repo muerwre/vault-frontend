@@ -1,4 +1,5 @@
 import type { INestApplication } from '@nestjs/common';
+import { LAB_NODE_TYPES } from '@vault/common/constants';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
@@ -205,6 +206,47 @@ describe('read endpoints (integration)', () => {
         .set(authHeader(1));
 
       expect(user.body.count).toBeGreaterThanOrEqual(guest.body.count);
+    });
+
+    describe('with feature=lab', () => {
+      let labTagName: string;
+      let labCount: number;
+
+      beforeAll(async () => {
+        const [row] = await db.query(
+          `SELECT t.title, COUNT(*) AS n FROM node_tags_tag nt
+             JOIN tag t ON t.id = nt.tagId
+             JOIN node ON node.id = nt.nodeId
+            WHERE node.deleted_at IS NULL AND node.is_public = 1
+              AND node.is_promoted = 0 AND node.type IN (?)
+            GROUP BY t.id ORDER BY n DESC LIMIT 1`,
+          [[...LAB_NODE_TYPES]],
+        );
+        labTagName = row.title as string;
+        labCount = Number(row.n);
+      });
+
+      it('returns only unpromoted nodes to an authenticated viewer', async () => {
+        const { body } = await http()
+          .get('/api/tags/nodes')
+          .query({ name: labTagName, feature: 'lab', limit: 50 })
+          .set(authHeader(1))
+          .expect(200);
+
+        expect(body.count).toBe(labCount);
+        expect(
+          body.nodes.every((n: { is_promoted: boolean }) => !n.is_promoted),
+        ).toBe(true);
+      });
+
+      it('returns nothing to a guest', async () => {
+        const { body } = await http()
+          .get('/api/tags/nodes')
+          .query({ name: labTagName, feature: 'lab' })
+          .expect(200);
+
+        expect(body).toEqual({ nodes: [], count: 0 });
+      });
     });
   });
 
