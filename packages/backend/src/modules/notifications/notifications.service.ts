@@ -18,6 +18,7 @@ import {
   toWireDateOrNull,
   toWireShallowUser,
   toWireString,
+  toWireThumbnail,
   type WireShallowUser,
 } from '../../wire/serialize';
 
@@ -338,7 +339,7 @@ export class NotificationsService {
       type: NOTIFICATION_ITEM_TYPES.NODE,
       title: toWireString(node.title),
       text: toWireString(node.description),
-      thumbnail: toWireString(node.thumbnail),
+      thumbnail: toWireThumbnail(node.thumbnail),
       created_at: toWireDate(node.createdAt),
       user: toWireShallowUser(node.user),
     };
@@ -363,7 +364,7 @@ export class NotificationsService {
           : NOTIFICATION_ITEM_TYPES.COMMENT,
       title: toWireString(comment.node.title),
       text: toWireString(comment.text),
-      thumbnail: toWireString(comment.node.thumbnail),
+      thumbnail: toWireThumbnail(comment.node.thumbnail),
       created_at: toWireDate(comment.createdAt),
       user: toWireShallowUser(comment.user),
     };

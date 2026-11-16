@@ -485,6 +485,119 @@ describe('upload and static (integration)', () => {
       await http().get('/api/static/../../etc/passwd').expect(404);
     });
 
+    /** Covers are downloaded on first request, then served from disk. */
+    describe('youtube covers', () => {
+      let fetchMock: jest.SpyInstance;
+
+      const cover = () =>
+        sharp({
+          create: {
+            width: 320,
+            height: 180,
+            channels: 3,
+            background: { r: 0, g: 0, b: 0 },
+          },
+        })
+          .jpeg()
+          .toBuffer();
+
+      beforeEach(async () => {
+        // `.env.local` may set these; the mock only sees a direct fetch.
+        process.env.YOUTUBE_PROXY_URL = '';
+        delete process.env.CACHE_YOUTUBE_THUMBS;
+
+        const body = await cover();
+        fetchMock = jest.spyOn(global, 'fetch').mockImplementation(
+          async () =>
+            new Response(body, {
+              status: 200,
+              headers: { 'content-type': 'image/jpeg' },
+            }),
+        );
+      });
+
+      afterEach(() => fetchMock.mockRestore());
+
+      it('downloads a missing cover once and keeps it', async () => {
+        const first = await http()
+          .get('/api/static/youtube/aaaaaaaaaaa.jpg')
+          .expect(200);
+
+        expect(first.headers['content-type']).toBe('image/jpeg');
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+        await stat(join(UPLOAD_ROOT, 'youtube', 'aaaaaaaaaaa.jpg'));
+
+        await http().get('/api/static/youtube/aaaaaaaaaaa.jpg').expect(200);
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+      });
+
+      it('scales a cover through the preset cache', async () => {
+        const response = await http()
+          .get('/api/static/cache/300/youtube/bbbbbbbbbbb.jpg')
+          .expect(200);
+
+        expect((await sharp(response.body).metadata()).width).toBe(300);
+      });
+
+      describe('with the cache off', () => {
+        beforeEach(() => {
+          process.env.CACHE_YOUTUBE_THUMBS = 'false';
+        });
+
+        afterEach(() => {
+          delete process.env.CACHE_YOUTUBE_THUMBS;
+        });
+
+        it('redirects a cover to YouTube instead of storing it', async () => {
+          const response = await http()
+            .get('/api/static/youtube/ddddddddddd.jpg')
+            .expect(302);
+
+          expect(response.headers.location).toBe(
+            'https://i.ytimg.com/vi/ddddddddddd/hqdefault.jpg',
+          );
+          expect(fetchMock).not.toHaveBeenCalled();
+        });
+
+        it('redirects a scaled cover too', async () => {
+          await http()
+            .get('/api/static/cache/300/youtube/ddddddddddd.jpg')
+            .expect(302);
+        });
+      });
+
+      it('serves the fallback image when no copy can be made', async () => {
+        fetchMock.mockImplementation(
+          async () => new Response('', { status: 404 }),
+        );
+
+        const response = await http()
+          .get('/api/static/youtube/ccccccccccc.jpg')
+          .expect(200);
+
+        expect(response.headers['content-type']).toBe('image/png');
+        expect(response.headers['cache-control']).toBe('public, max-age=60');
+        expect((await sharp(response.body).metadata()).hasAlpha).toBe(true);
+      });
+
+      it('serves the fallback for a scaled cover too', async () => {
+        fetchMock.mockImplementation(
+          async () => new Response('', { status: 404 }),
+        );
+
+        const response = await http()
+          .get('/api/static/cache/600/youtube/eeeeeeeeeee.jpg')
+          .expect(200);
+
+        expect(response.headers['content-type']).toBe('image/png');
+      });
+
+      it('never fetches for a path that is not a cover', async () => {
+        await http().get('/api/static/youtube/short.jpg').expect(404);
+        expect(fetchMock).not.toHaveBeenCalled();
+      });
+    });
+
     /**
      * A camera photo carries its rotation in EXIF. Scaling drops that tag, so
      * unless the variant is physically rotated it comes out sideways while the

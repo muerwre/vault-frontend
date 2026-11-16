@@ -5,6 +5,7 @@ import { NodeSocialPublication } from '../../entities/node-extras.entity';
 import { Node } from '../../entities/node.entity';
 import { AppNotification } from '../../entities/notification.entity';
 import { NotificationsModule } from '../notifications/notifications.module';
+import { UploadModule } from '../upload/upload.module';
 
 import { VkApiService } from './vk.api';
 import { VkConsumer } from './vk.consumer';
@@ -19,6 +20,7 @@ import { VkQueueService } from './vk.queue';
   imports: [
     TypeOrmModule.forFeature([AppNotification, Node, NodeSocialPublication]),
     NotificationsModule,
+    UploadModule,
   ],
   providers: [VkQueueService, VkApiService, VkConsumer, VkPublisher],
   exports: [VkQueueService],

@@ -23,7 +23,10 @@ import {
 } from '../../config/env';
 import { NodeSocialPublication } from '../../entities/node-extras.entity';
 import { Node } from '../../entities/node.entity';
+import { toWireThumbnail } from '../../wire/serialize';
 import { isFlowType } from '../node/node.permissions';
+import { parseYoutubeThumbPath } from '../upload/upload.paths';
+import { YoutubeThumbService } from '../upload/youtube-thumb.service';
 
 import { VkApiService } from './vk.api';
 import {
@@ -57,6 +60,7 @@ export class VkPublisher implements OnModuleInit, OnModuleDestroy {
   constructor(
     private readonly queue: VkQueueService,
     private readonly api: VkApiService,
+    private readonly youtubeThumbs: YoutubeThumbService,
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
     @InjectRepository(NodeSocialPublication)
     private readonly publications: Repository<NodeSocialPublication>,
@@ -236,7 +240,7 @@ export class VkPublisher implements OnModuleInit, OnModuleDestroy {
       return null;
     }
 
-    const relative = thumbnailStoragePath(node.thumbnail);
+    const relative = thumbnailStoragePath(toWireThumbnail(node.thumbnail));
 
     if (!relative) {
       this.logger.log(
@@ -246,6 +250,12 @@ export class VkPublisher implements OnModuleInit, OnModuleDestroy {
     }
 
     const absolute = join(getUploadsConfig().path, relative);
+
+    // A video's cover is downloaded on first request, which may not have come yet.
+    const youtubeId = parseYoutubeThumbPath(relative);
+    if (youtubeId) {
+      await this.youtubeThumbs.ensure(youtubeId);
+    }
 
     if (!(await fileExists(absolute))) {
       this.logger.warn(

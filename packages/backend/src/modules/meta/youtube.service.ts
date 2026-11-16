@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import type { EmbedMetadata } from '@vault/common/types';
 
 import { getGoogleApiKey } from '../../config/env';
+import { youtubeFetch } from '../../globals/youtube-fetch';
 
 const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/videos';
 
@@ -46,7 +47,7 @@ export class YoutubeService {
     url.searchParams.set('id', ids.join(','));
     url.searchParams.set('part', 'snippet');
 
-    const response = await fetch(url, { method: 'GET' });
+    const response = await youtubeFetch(url, { method: 'GET' });
 
     if (!response.ok) {
       const body = (await response.json().catch(() => ({}))) as {

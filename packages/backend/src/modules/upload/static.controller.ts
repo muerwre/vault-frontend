@@ -1,11 +1,27 @@
+import { join } from 'path';
+
 import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
 import { ERROR_CODES } from '@vault/common/constants';
 import type { Request, Response } from 'express';
 
+import { isYoutubeThumbCacheEnabled } from '../../config/env';
 import { VaultException } from '../../globals/exceptions';
 
 import { StaticService } from './static.service';
-import { parseCacheRequest } from './upload.paths';
+import {
+  parseCacheRequest,
+  parseYoutubeThumbPath,
+  remoteYoutubeThumbUrl,
+} from './upload.paths';
+
+/**
+ * Served in place of a YouTube cover that could not be fetched. Lives in
+ * `src/assets`, copied beside the build, so it can be swapped for a real image.
+ */
+const YOUTUBE_FALLBACK = join(__dirname, '../../assets/youtube-fallback.png');
+
+/** Short, so a cover that becomes available replaces the fallback soon. */
+const FALLBACK_MAX_AGE = 60;
 
 /** Six months, matching how long generated variants are considered fresh. */
 const CACHE_MAX_AGE = 15552000;
@@ -53,6 +69,23 @@ export class StaticController {
 
     const cacheRequest = parseCacheRequest(relative);
 
+    const youtubeId = parseYoutubeThumbPath(cacheRequest?.src ?? relative);
+
+    // With the cover cache off, clients load covers from YouTube themselves.
+    if (youtubeId && !isYoutubeThumbCacheEnabled()) {
+      response.redirect(HttpStatus.FOUND, remoteYoutubeThumbUrl(youtubeId));
+      return;
+    }
+
+    /** A cover that could not be fetched, answered without failing the image. */
+    const fallback = (): void => {
+      response.setHeader(
+        'Cache-Control',
+        `public, max-age=${FALLBACK_MAX_AGE}`,
+      );
+      response.sendFile(YOUTUBE_FALLBACK);
+    };
+
     for (const [header, value] of Object.entries(SECURITY_HEADERS)) {
       response.setHeader(header, value);
     }
@@ -62,6 +95,11 @@ export class StaticController {
         cacheRequest.preset,
         cacheRequest.src,
       );
+
+      if (!variant && youtubeId) {
+        fallback();
+        return;
+      }
 
       if (!variant) {
         throw new VaultException(
@@ -83,6 +121,11 @@ export class StaticController {
     }
 
     const absolute = await this.statics.resolvePlain(relative);
+
+    if (!absolute && youtubeId) {
+      fallback();
+      return;
+    }
 
     if (!absolute) {
       throw new VaultException(ERROR_CODES.EmptyRequest, HttpStatus.NOT_FOUND);

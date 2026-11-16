@@ -1,6 +1,6 @@
-import { describeProxy, parseProxyUrl } from './telegram.proxy';
+import { describeProxy, parseProxyUrl } from './proxy';
 
-describe('telegram proxy url', () => {
+describe('proxy url', () => {
   describe('parseProxyUrl', () => {
     /** No proxy configured means a direct connection, not an error. */
     it('returns null for an empty or blank value', () => {

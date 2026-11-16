@@ -10,6 +10,7 @@ import {
   toWireShallowFile,
   toWireShallowUser,
   toWireString,
+  toWireThumbnail,
 } from './serialize';
 
 /**
@@ -66,6 +67,37 @@ describe('wire serialisation', () => {
     it('preserves an empty string and does not trim', () => {
       expect(toWireString('')).toBe('');
       expect(toWireString('  x  ')).toBe('  x  ');
+    });
+  });
+
+  describe('toWireThumbnail', () => {
+    const REMOTE = 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg';
+
+    beforeEach(() => {
+      delete process.env.CACHE_YOUTUBE_THUMBS;
+    });
+
+    afterEach(() => {
+      delete process.env.CACHE_YOUTUBE_THUMBS;
+    });
+
+    it('serves a YouTube cover from the local copy by default', () => {
+      expect(toWireThumbnail(REMOTE)).toBe(
+        'REMOTE_CURRENT://youtube/dQw4w9WgXcQ.jpg',
+      );
+    });
+
+    it('passes the stored url through when the cache is off', () => {
+      process.env.CACHE_YOUTUBE_THUMBS = 'false';
+
+      expect(toWireThumbnail(REMOTE)).toBe(REMOTE);
+    });
+
+    it('leaves uploads alone and maps null to an empty string', () => {
+      expect(toWireThumbnail('REMOTE_CURRENT://uploads/a.jpg')).toBe(
+        'REMOTE_CURRENT://uploads/a.jpg',
+      );
+      expect(toWireThumbnail(null)).toBe('');
     });
   });
 

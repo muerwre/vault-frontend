@@ -63,6 +63,14 @@ export const getJwtSecret = (): string => process.env.JWT_SECRET ?? '';
  */
 export const getGoogleApiKey = (): string => process.env.GOOGLE_API_KEY ?? '';
 
+/**
+ * Outbound proxy for YouTube and its APIs (covers, titles), which are blocked
+ * in some networks. Same schemes as `TELEGRAM_PROXY_URL`; empty connects
+ * directly.
+ */
+export const getYoutubeProxyUrl = (): string =>
+  process.env.YOUTUBE_PROXY_URL ?? '';
+
 export interface SmtpConfig {
   host: string;
   port: number;
@@ -246,6 +254,14 @@ export const getVkPublisherConfig = (): VkPublisherConfig => ({
 /** Publishing is on when there is a group to post to and a token to post with. */
 export const isVkPublisherUsable = (config: VkPublisherConfig): boolean =>
   config.groupId > 0 && Boolean(config.apiKey);
+
+/**
+ * Whether YouTube covers are served from local copies, downloaded on first
+ * request, rather than loaded by clients from YouTube. On unless set to
+ * `false`; when off, cover urls redirect to YouTube and nothing is stored.
+ */
+export const isYoutubeThumbCacheEnabled = (): boolean =>
+  process.env.CACHE_YOUTUBE_THUMBS !== 'false';
 
 export interface UploadsConfig {
   path: string;

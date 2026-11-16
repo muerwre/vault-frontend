@@ -148,20 +148,31 @@ export const getPrettyDate = (date?: string): string => {
       });
 };
 
+/**
+ * The video id in a YouTube url. Accepts the same forms as the backend, which
+ * rejects a video block whose url this does not match.
+ */
 export const getYoutubeId = (url: string) => {
   const match =
     url &&
     url.match(
-      /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-_]*)(&(amp;)?[\w?=]*)?/,
+      /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/,
     );
 
   return (match && match[1]) || null;
 };
 
-export const getYoutubeThumb = (url: string) => {
+/**
+ * The video's cover, served by the backend from its own copy rather than
+ * loaded from YouTube. Goes through the usual preset scaling when `size` is set.
+ */
+export const getYoutubeThumbById = (id: string, size?: ImagePreset) =>
+  getURLFromString(`REMOTE_CURRENT://youtube/${id}.jpg`, size);
+
+export const getYoutubeThumb = (url: string, size?: ImagePreset) => {
   const id = getYoutubeId(url);
 
-  return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null;
+  return id ? getYoutubeThumbById(id, size) : null;
 };
 
 export const stringToColour = (str: string) => {

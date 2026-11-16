@@ -226,7 +226,15 @@ describe('node upsert (integration)', () => {
       }).expect(200);
 
       track(body.node.id);
-      expect(body.node.thumbnail).toBe(YT_THUMB);
+      expect(body.node.thumbnail).toBe(
+        'REMOTE_CURRENT://youtube/dQw4w9WgXcQ.jpg',
+      );
+
+      // YouTube's url is what is stored; the local one is applied on the way out.
+      const [row] = await db.query('SELECT thumbnail FROM node WHERE id = ?', [
+        body.node.id,
+      ]);
+      expect(row.thumbnail).toBe(YT_THUMB);
     });
 
     it('creates an audio node and accepts a cover image alongside it', async () => {

@@ -155,3 +155,41 @@ export const parseCacheRequest = (
     src: decodeURIComponent(match[2]),
   };
 };
+
+/**
+ * YouTube cover images live at `youtube/<videoId>.jpg` under the uploads root,
+ * outside the dated upload tree, and are fetched from YouTube on first request.
+ */
+export const YOUTUBE_THUMBS_DIR = 'youtube';
+
+/** YouTube video ids are 11 characters from the URL-safe base64 alphabet. */
+const YOUTUBE_ID_PATTERN = /^[\w-]{11}$/;
+
+export const isYoutubeId = (id: string): boolean => YOUTUBE_ID_PATTERN.test(id);
+
+export const youtubeThumbPath = (id: string): string =>
+  `${YOUTUBE_THUMBS_DIR}/${id}.jpg`;
+
+/** YouTube's own cover url, the one stored as a video node's thumbnail. */
+export const remoteYoutubeThumbUrl = (id: string): string =>
+  `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+
+const REMOTE_YOUTUBE_THUMB =
+  /^https:\/\/i\.ytimg\.com\/vi\/([\w-]{11})\/hqdefault\.jpg$/;
+
+/**
+ * A stored thumbnail as clients should see it: a YouTube cover becomes our own
+ * copy's url, anything else is returned unchanged.
+ */
+export const localizeYoutubeThumb = (thumbnail: string): string => {
+  const match = REMOTE_YOUTUBE_THUMB.exec(thumbnail);
+
+  return match ? `${URL_PREFIX}${youtubeThumbPath(match[1])}` : thumbnail;
+};
+
+/** The video id when `relative` names a YouTube thumbnail, else null. */
+export const parseYoutubeThumbPath = (relative: string): string | null => {
+  const match = /^\/?youtube\/([\w-]{11})\.jpg$/.exec(relative);
+
+  return match ? match[1] : null;
+};

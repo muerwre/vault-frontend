@@ -4,11 +4,12 @@ import { observer } from 'mobx-react-lite';
 
 import { Icon } from '~/components/common/Icon';
 import { SortableGrid } from '~/components/sortable/SortableGrid';
+import { imagePresets } from '~/constants/urls';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { IBlock } from '~/types';
 import { NodeEditorProps } from '~/types/node';
-import { getYoutubeId } from '~/utils/dom';
+import { getYoutubeId, getYoutubeThumbById } from '~/utils/dom';
 
 import { SubmitCard } from '../SubmitCard';
 import { SubmitEmptyState } from '../SubmitEmptyState';
@@ -36,7 +37,7 @@ const SubmitVideoCard: FC<CardProps> = observer(({ item, onRemove }) => {
       <div
         className={styles.thumb}
         style={{
-          backgroundImage: `url("https://i.ytimg.com/vi/${id}/hqdefault.jpg")`,
+          backgroundImage: `url("${getYoutubeThumbById(id, imagePresets[600])}")`,
         }}
       >
         <button
