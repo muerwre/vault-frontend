@@ -355,16 +355,38 @@ export class CommentService {
   }
 
   /**
-   * Promotes a long comment to the node's description when the node has none and
-   * the comment is by its author.
+   * Keeps the node's description in step with its author's comments. A long
+   * author comment fills an empty description; editing the comment that the
+   * description was taken from (`previousText`) rewrites it, or clears it when
+   * the edit is too short to qualify.
    */
-  async maybeSetNodeDescription(node: Node, comment: Comment): Promise<void> {
-    if (
-      !node.description &&
-      node.userId !== null &&
-      comment.userId === node.userId &&
-      Buffer.byteLength(comment.text, 'utf8') >= CommentService.BRIEF_MIN_BYTES
-    ) {
+  async maybeSetNodeDescription(
+    node: Node,
+    comment: Comment,
+    previousText?: string,
+  ): Promise<void> {
+    if (node.userId === null || comment.userId !== node.userId) {
+      return;
+    }
+
+    const qualifies =
+      Buffer.byteLength(comment.text, 'utf8') >= CommentService.BRIEF_MIN_BYTES;
+    const isSource =
+      previousText !== undefined &&
+      !!node.description &&
+      node.description === previousText;
+
+    if (isSource) {
+      const description = qualifies ? comment.text : '';
+
+      if (description !== node.description) {
+        await this.nodes.update(node.id, { description });
+      }
+
+      return;
+    }
+
+    if (!node.description && qualifies) {
       await this.nodes.update(node.id, { description: comment.text });
     }
   }

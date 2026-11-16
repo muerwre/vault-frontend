@@ -6,14 +6,16 @@ import {
   LAB_SORT,
   type LabSort,
 } from '@vault/common/constants';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { Comment } from '../../entities/comment.entity';
+import { File } from '../../entities/file.entity';
 import { Like } from '../../entities/like.entity';
 import { Node } from '../../entities/node.entity';
 import { Tag } from '../../entities/tag.entity';
 import { NodeView } from '../../entities/views.entity';
 import {
+  sortFilesByOrder,
   toWireDateOrNull,
   toWireNode,
   toWireShallowNode,
@@ -68,6 +70,7 @@ export class LabService {
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
     @InjectRepository(Comment) private readonly comments: Repository<Comment>,
     @InjectRepository(Like) private readonly likes: Repository<Like>,
+    @InjectRepository(File) private readonly files: Repository<File>,
     @InjectRepository(Tag) private readonly tags: Repository<Tag>,
     @InjectRepository(NodeView)
     private readonly nodeViews: Repository<NodeView>,
@@ -135,19 +138,19 @@ export class LabService {
     const rows = await query.limit(limit).offset(offset).getMany();
     const ids = rows.map((node) => node.id);
 
-    const [commentCounts, lastSeens, likeCounts, likedByMe] = await Promise.all(
-      [
+    const [commentCounts, lastSeens, likeCounts, likedByMe, filesById] =
+      await Promise.all([
         this.countComments(ids),
         this.getLastSeens(uid, ids),
         this.countLikes(ids),
         this.getLikedByUser(uid, ids),
-      ],
-    );
+        this.loadFiles(rows),
+      ]);
 
     return {
       count,
       nodes: rows.map((node) => ({
-        node: toWireNode(node, [], {
+        node: toWireNode(node, this.filesOf(node, filesById), {
           likeCount: likeCounts.get(node.id) ?? 0,
           isLiked: likedByMe.has(node.id),
         }),
@@ -229,6 +232,33 @@ export class LabService {
       .addOrderBy('node.created_at', 'DESC')
       .limit(HEROES_LIMIT)
       .getMany();
+  }
+
+  /**
+   * Every file the listed nodes reference, in one query. Cards render from
+   * `files` (an image node's picture, an audio node's tracks), so a node sent
+   * without them shows up empty.
+   */
+  private async loadFiles(nodes: Node[]): Promise<Map<number, File>> {
+    const ids = [...new Set(nodes.flatMap((node) => node.filesOrder ?? []))];
+
+    if (ids.length === 0) {
+      return new Map();
+    }
+
+    const files = await this.files.findBy({ id: In(ids) });
+
+    return new Map(files.map((file) => [file.id, file]));
+  }
+
+  /** A node's files from the batch, in its `files_order`. */
+  private filesOf(node: Node, filesById: Map<number, File>): File[] {
+    const order = node.filesOrder ?? [];
+
+    return sortFilesByOrder(
+      order.map((id) => filesById.get(id)).filter((f): f is File => !!f),
+      order,
+    );
   }
 
   private async countComments(ids: number[]): Promise<Map<number, number>> {

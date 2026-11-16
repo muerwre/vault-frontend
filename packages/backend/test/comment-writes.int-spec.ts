@@ -470,6 +470,67 @@ describe('comment writes (integration)', () => {
       expect(row.description).toBe(long);
     });
 
+    it('rewrites the description when its source comment is edited', async () => {
+      const nodeId = await makeNode();
+      const first =
+        'the first long comment, which becomes the description of its own node';
+      const created = await post(nodeId, authorId, { text: first }).expect(200);
+      const commentId = track(created.body.comment.id);
+      const edited =
+        'the same comment, edited afterwards, still long enough to qualify';
+
+      await post(nodeId, authorId, { id: commentId, text: edited }).expect(200);
+
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
+      expect(row.description).toBe(edited);
+    });
+
+    it('clears the description when its source comment is cut short', async () => {
+      const nodeId = await makeNode();
+      const first =
+        'the first long comment, which becomes the description of its own node';
+      const created = await post(nodeId, authorId, { text: first }).expect(200);
+      const commentId = track(created.body.comment.id);
+
+      await post(nodeId, authorId, { id: commentId, text: 'short' }).expect(
+        200,
+      );
+
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
+      expect(row.description).toBe('');
+    });
+
+    it('leaves the description alone when another comment is edited', async () => {
+      const nodeId = await makeNode();
+      const first =
+        'the first long comment, which becomes the description of its own node';
+      track(
+        (await post(nodeId, authorId, { text: first }).expect(200)).body.comment
+          .id,
+      );
+      const second = track(
+        (await post(nodeId, authorId, { text: 'second' }).expect(200)).body
+          .comment.id,
+      );
+
+      await post(nodeId, authorId, {
+        id: second,
+        text: 'the second comment, edited to be long enough to qualify as well',
+      }).expect(200);
+
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
+      expect(row.description).toBe(first);
+    });
+
     it('leaves a file deleted after posting out of the listing', async () => {
       const nodeId = await makeNode();
       const kept = await makeFile('image');

@@ -159,6 +159,7 @@ export class CommentController {
 
     // Read before saving: update() rewrites the comment's files_order in place.
     const previousFiles = [...(existing?.filesOrder ?? [])];
+    const previousText = existing?.text;
     const saved = existing
       ? await this.comments.update(existing, text, fileIds)
       : await this.comments.create(nodeId, user.id, text, fileIds);
@@ -167,8 +168,8 @@ export class CommentController {
     await this.comments.claimFiles(fileIds, previousFiles);
     await this.comments.applyAudioTitles(body?.files, files);
     // On every save, not just creation: an edit can lengthen a comment past
-    // the threshold.
-    await this.comments.maybeSetNodeDescription(node, saved);
+    // the threshold, or change the comment the description was taken from.
+    await this.comments.maybeSetNodeDescription(node, saved, previousText);
 
     if (!existing) {
       // Only a new comment is announced; editing one must not notify again.

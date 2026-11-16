@@ -9,6 +9,7 @@ import {
   getDataSource,
   WIRE_DATE,
 } from './helpers/app';
+import { deleteFiles, makeFile } from './helpers/fixtures';
 
 describe('lab (integration)', () => {
   let app: INestApplication;
@@ -18,6 +19,7 @@ describe('lab (integration)', () => {
   let userId: number;
   const nodeIds: number[] = [];
   const commentIds: number[] = [];
+  const fileIds: number[] = [];
 
   const makeLabNode = async (
     overrides: {
@@ -26,9 +28,11 @@ describe('lab (integration)', () => {
       isPromoted?: boolean;
       isPublic?: boolean;
       description?: string;
+      filesOrder?: number[];
     } = {},
   ): Promise<number> => {
     const {
+      filesOrder = [],
       title = `lab spec ${Date.now()}`,
       isHeroic = false,
       isPromoted = false,
@@ -40,9 +44,10 @@ describe('lab (integration)', () => {
       `INSERT INTO node
         (title, type, blocks, files_order, is_public, is_promoted, is_heroic,
          description, created_at, updated_at, userId)
-       VALUES (?, 'image', '[]', '', ?, ?, ?, ?, NOW(), NOW(), ?)`,
+       VALUES (?, 'image', '[]', ?, ?, ?, ?, ?, NOW(), NOW(), ?)`,
       [
         title,
+        filesOrder.join(','),
         isPublic ? 1 : 0,
         isPromoted ? 1 : 0,
         isHeroic ? 1 : 0,
@@ -100,6 +105,7 @@ describe('lab (integration)', () => {
       await db.query('DELETE FROM `like` WHERE nodeId = ?', [id]);
       await db.query('DELETE FROM node WHERE id = ?', [id]);
     }
+    await deleteFiles(db, fileIds);
     await db.query('DELETE FROM node_view WHERE userId = ?', [userId]);
     await db.query('DELETE FROM user WHERE id = ?', [userId]);
     await app.close();
@@ -153,6 +159,27 @@ describe('lab (integration)', () => {
         'node',
       ]);
       expect(typeof body.nodes[0].comment_count).toBe('number');
+    });
+
+    /** Lab cards draw an image node's picture from its files. */
+    it("carries each node's files in files_order", async () => {
+      const first = await makeFile(db, userId, 'image');
+      const second = await makeFile(db, userId, 'image');
+      fileIds.push(first, second);
+      const nodeId = await makeLabNode({ filesOrder: [second, first] });
+
+      const { body } = await http()
+        .get('/api/nodes/lab')
+        .set(authHeader(userId))
+        .expect(200);
+
+      const item = body.nodes.find(
+        (entry: { node: { id: number } }) => entry.node.id === nodeId,
+      );
+      expect(item.node.files.map((f: { id: number }) => f.id)).toEqual([
+        second,
+        first,
+      ]);
     });
 
     it('lists unpromoted nodes and excludes promoted ones', async () => {
