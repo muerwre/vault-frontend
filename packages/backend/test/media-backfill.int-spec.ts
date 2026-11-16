@@ -27,6 +27,7 @@ describe('media backfill (integration)', () => {
   let nodeId: number;
   let deletedNodeId: number;
   let commentId: number;
+  let orphanCommentId: number;
   const marks = { media: 0, ref: 0, job: 0 };
 
   const maxId = async (table: string) =>
@@ -92,6 +93,16 @@ describe('media backfill (integration)', () => {
     );
     commentId = Number((await db.query('SELECT LAST_INSERT_ID() AS id'))[0].id);
 
+    // A live comment under a deleted node.
+    await db.query(
+      `INSERT INTO comment (text, files_order, nodeId, userId, created_at, updated_at)
+       VALUES (?, '', ?, ?, NOW(), NOW())`,
+      [`https://youtu.be/${IN_DELETED}`, deletedNodeId, userId],
+    );
+    orphanCommentId = Number(
+      (await db.query('SELECT LAST_INSERT_ID() AS id'))[0].id,
+    );
+
     process.env.CACHE_EXTERNAL_MEDIA = 'true';
   });
 
@@ -101,7 +112,9 @@ describe('media backfill (integration)', () => {
     await db.query('DELETE FROM media_job WHERE id > ?', [marks.job]);
     await db.query('DELETE FROM external_media_ref WHERE id > ?', [marks.ref]);
     await db.query('DELETE FROM external_media WHERE id > ?', [marks.media]);
-    await db.query('DELETE FROM comment WHERE id = ?', [commentId]);
+    await db.query('DELETE FROM comment WHERE id IN (?)', [
+      [commentId, orphanCommentId],
+    ]);
     await db.query('DELETE FROM node WHERE id IN (?)', [
       [nodeId, deletedNodeId],
     ]);
@@ -122,8 +135,9 @@ describe('media backfill (integration)', () => {
     expect(row).toEqual({ priority: 10, video_status: 'none' });
   }, 120_000);
 
-  it('skips deleted content', async () => {
+  it('skips deleted nodes and comments under them', async () => {
     expect(await refsOf('node', deletedNodeId)).toEqual([]);
+    expect(await refsOf('comment', orphanCommentId)).toEqual([]);
   });
 
   it('can run again without duplicating anything', async () => {

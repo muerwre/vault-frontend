@@ -122,6 +122,8 @@ export class MediaBackfillService
       const rows = await this.comments
         .createQueryBuilder('comment')
         .select(['comment.id', 'comment.text'])
+        // A live comment under a deleted node is not shown either.
+        .innerJoin('comment.node', 'node', 'node.deleted_at IS NULL')
         .where('comment.deleted_at IS NULL')
         .andWhere('comment.id > :after', { after })
         .andWhere(
