@@ -85,6 +85,15 @@ export class MetadataStore {
     this.queue.push(id);
   };
 
+  /** Asks for an item again, even though it is loaded: its copy may have moved on. */
+  refresh = (id: string) => {
+    if (this.queue.includes(id) || this.pending.includes(id)) {
+      return;
+    }
+
+    this.queue.push(id);
+  };
+
   /** pushes items to pending list */
   pushPending = (ids: string[]) => this.pending.push(...ids);
 

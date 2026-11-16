@@ -1,11 +1,14 @@
-import { FC, memo, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
+
+import { observer } from 'mobx-react-lite';
 
 import { Icon } from '~/components/common/Icon';
+import { VideoSaveBadge } from '~/components/media/VideoSaveBadge';
 import { ICommentBlockProps } from '~/constants/comment';
 import { imagePresets } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
-import { getYoutubeThumb } from '~/utils/dom';
+import { getURLFromString, getYoutubeId, getYoutubeThumb } from '~/utils/dom';
 import { useVideoPlayer } from '~/utils/providers/VideoPlayerProvider';
 
 import { CommentVideoFrame } from './components/CommentVideoFrame';
@@ -13,17 +16,14 @@ import styles from './styles.module.scss';
 
 type Props = ICommentBlockProps & {};
 
-const CommentEmbedBlock: FC<Props> = memo(({ block }) => {
+const CommentEmbedBlock: FC<Props> = observer(({ block }) => {
   const { isTablet } = useWindowSize();
   const { url, setUrl } = useVideoPlayer();
 
-  const id = useMemo(() => {
-    const match = block.content.match(
-      /https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch)?(?:\?v=)?([\w\-=]+)/,
-    );
-
-    return (match && match[1]) || '';
-  }, [block.content]);
+  const id = useMemo(
+    () => getYoutubeId(block.content.trim()) ?? '',
+    [block.content],
+  );
 
   const address = `https://youtube.com/watch?v=${id}`;
 
@@ -34,15 +34,22 @@ const CommentEmbedBlock: FC<Props> = memo(({ block }) => {
 
   const metadata = useYoutubeMetadata(id);
   const title = metadata?.metadata?.title || '';
+  const video = metadata?.video;
+
+  // Where YouTube can no longer play it, a phone opens our copy instead.
+  const external =
+    video?.status === 'ready' && video.source === 'gone' && video.url
+      ? getURLFromString(video.url)
+      : address;
 
   const onClick = useCallback(() => {
     if (isTablet) {
-      window.open(address, '_blank');
+      window.open(external, '_blank');
       return;
     }
 
     setUrl(address);
-  }, [isTablet, setUrl, address]);
+  }, [isTablet, setUrl, address, external]);
 
   const closeVideo = useCallback(() => setUrl(''), [setUrl]);
 
@@ -54,7 +61,7 @@ const CommentEmbedBlock: FC<Props> = memo(({ block }) => {
             <Icon icon="close" />
           </div>
           <div className={styles.animation}>
-            <CommentVideoFrame id={id} title={title} />
+            <CommentVideoFrame id={id} title={title} video={video} />
           </div>
         </div>
       ) : (
@@ -71,6 +78,8 @@ const CommentEmbedBlock: FC<Props> = memo(({ block }) => {
               </div>
 
               <div className={styles.title}>{title}</div>
+
+              <VideoSaveBadge video={video} className={styles.badge} />
             </div>
           </div>
         </div>

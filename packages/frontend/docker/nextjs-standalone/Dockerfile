@@ -31,9 +31,12 @@ COPY packages/migration/package.json ./packages/migration/
 RUN yarn install --frozen-lockfile
 
 COPY tsconfig.json ./
+COPY packages/common ./packages/common
 COPY packages/frontend ./packages/frontend
 
-RUN yarn workspace @vault/frontend next:build
+# The frontend imports @vault/common's build, so it is built first.
+RUN yarn workspace @vault/common build \
+  && yarn workspace @vault/frontend next:build
 
 FROM ${NODE_IMAGE} AS runner
 

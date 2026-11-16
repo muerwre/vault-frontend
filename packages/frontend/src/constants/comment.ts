@@ -1,13 +1,27 @@
+import { parseMediaUrl, YOUTUBE_PROVIDER } from '@vault/common/media';
+
 export const COMMENT_BLOCK_TYPES = {
   TEXT: 'TEXT',
   MARK: 'MARK',
   EMBED: 'EMBED',
 };
 
-export const COMMENT_BLOCK_DETECTORS = [
+/** A line that is nothing but a link to a video. */
+const MEDIA_LINK_LINE = new RegExp(
+  `^\\s*${YOUTUBE_PROVIDER.urlInText.source}\\s*$`,
+  'i',
+);
+
+export const isMediaLinkLine = (line: string): boolean =>
+  MEDIA_LINK_LINE.test(line) && !!parseMediaUrl(line.trim());
+
+export const COMMENT_BLOCK_DETECTORS: Array<{
+  type: string;
+  test: RegExp | ((line: string) => boolean);
+}> = [
   {
     type: COMMENT_BLOCK_TYPES.EMBED,
-    test: /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-&=]+)/gim,
+    test: isMediaLinkLine,
   },
   {
     type: COMMENT_BLOCK_TYPES.MARK,

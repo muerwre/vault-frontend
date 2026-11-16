@@ -6,7 +6,10 @@ import { Keyboard, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Icon } from '~/components/common/Icon';
+import { VideoSaveBadge } from '~/components/media/VideoSaveBadge';
+import { YoutubePlayer } from '~/components/media/YoutubePlayer';
 import { NodeComponentProps } from '~/constants/node';
+import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
 import { useModal } from '~/hooks/modal/useModal';
 import { getYoutubeId, getYoutubeThumbById } from '~/utils/dom';
 
@@ -17,41 +20,51 @@ import styles from './styles.module.scss';
 
 interface Props extends NodeComponentProps {}
 
-const VideoFrame: FC<{ id: string; autoplay?: boolean }> = ({
-  id,
-  autoplay,
-}) => (
-  <iframe
-    width="560"
-    height="315"
-    src={`https://www.youtube.com/embed/${id}${autoplay ? '?autoplay=1' : ''}`}
-    allow="autoplay; encrypted-media; picture-in-picture"
-    frameBorder="0"
-    allowFullScreen
-    title="video"
-  />
+/** YouTube's player, or our copy where YouTube can no longer play it. */
+const VideoFrame: FC<{ id: string; autoplay?: boolean }> = observer(
+  ({ id, autoplay }) => {
+    const metadata = useYoutubeMetadata(id);
+
+    return (
+      <YoutubePlayer
+        id={id}
+        autoplay={autoplay}
+        title={metadata?.metadata?.title}
+        video={metadata?.video}
+      />
+    );
+  },
 );
 
-/** The video's cover, with a play button when it can be started. */
+/**
+ * The video's cover, with a play button when it can be started, and how
+ * saving our copy is going.
+ */
 const VideoThumb: FC<{
   id: string;
   playable: boolean;
   onClick: () => void;
-}> = ({ id, playable, onClick }) => (
-  <button
-    type="button"
-    className={styles.thumb}
-    style={{ backgroundImage: `url("${getYoutubeThumbById(id)}")` }}
-    onClick={onClick}
-    aria-label="Смотреть видео"
-  >
-    {playable && (
-      <span className={styles.play}>
-        <Icon icon="play" size={32} />
-      </span>
-    )}
-  </button>
-);
+}> = observer(({ id, playable, onClick }) => {
+  const metadata = useYoutubeMetadata(id);
+
+  return (
+    <button
+      type="button"
+      className={styles.thumb}
+      style={{ backgroundImage: `url("${getYoutubeThumbById(id)}")` }}
+      onClick={onClick}
+      aria-label="Смотреть видео"
+    >
+      {playable && (
+        <span className={styles.play}>
+          <Icon icon="play" size={32} />
+        </span>
+      )}
+
+      <VideoSaveBadge video={metadata?.video} className={styles.badge} />
+    </button>
+  );
+});
 
 /**
  * The head of a video post, laid out like the photo slider: videos sized to
