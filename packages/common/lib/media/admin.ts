@@ -25,6 +25,8 @@ export interface IMediaAdminSummary {
   /** Fetchers seen since the backend started. */
   fetchers: IMediaAdminFetcher[];
   settings: {
+    /** Fetcher keys configured; the keys themselves are never sent. */
+    fetcher_keys: number;
     max_duration_sec: number;
     max_mb: number;
     backlog_batch: number;

@@ -18,12 +18,14 @@ import {
   getMediaBacklogConfig,
   getMediaCacheConfig,
   getMediaCleanupConfig,
+  getMediaFetcherKeys,
   getMediaRescanCron,
   getScheduleTimeZone,
 } from '../../config/env';
 import { ExternalMedia, MediaJob } from '../../entities/media.entity';
 import { VaultException } from '../../globals/exceptions';
 
+import { parseFetcherKeys } from './fetcher-keys';
 import { MediaJobsService } from './media-jobs.service';
 
 const MAX_TAKE = 100;
@@ -103,6 +105,7 @@ export class MediaAdminService {
         }))
         .sort((a, b) => a.name.localeCompare(b.name)),
       settings: {
+        fetcher_keys: parseFetcherKeys(getMediaFetcherKeys()).length,
         max_duration_sec: cache.maxDurationSec,
         max_mb: Math.round(cache.maxBytes / 1024 / 1024),
         backlog_batch: backlogConfig.batch,

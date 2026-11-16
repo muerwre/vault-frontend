@@ -136,6 +136,7 @@ describe('media admin API (integration)', () => {
           },
         ],
         settings: {
+          fetcher_keys: expect.any(Number),
           max_duration_sec: expect.any(Number),
           max_mb: expect.any(Number),
           backlog_batch: expect.any(Number),

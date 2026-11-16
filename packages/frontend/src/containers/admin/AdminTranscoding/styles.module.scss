@@ -1,0 +1,188 @@
+@import 'src/styles/variables';
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: $gap * 2;
+
+  // variable names and cron expressions
+  code {
+    font-family: monospace;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: $gap * 2;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: $gap;
+}
+
+.title {
+  font: $font_24_semibold;
+  margin: 0;
+}
+
+.badge {
+  font: $font_12_semibold;
+  padding: 2px $gap * 0.5;
+  border-radius: $radius;
+  background: $content_bg_light;
+  opacity: 0.7;
+}
+
+.badge_on {
+  background: $color_primary;
+  opacity: 1;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: $gap;
+}
+
+.tile {
+  padding: $gap;
+  border-radius: $radius;
+  background: $content_bg_light;
+}
+
+.value {
+  font: $font_24_semibold;
+}
+
+.label {
+  font: $font_12_regular;
+  opacity: 0.6;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+.subtitle {
+  font: $font_14_semibold;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin: 0;
+}
+
+.filters {
+  align-self: flex-start;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $gap * 0.5;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fetcher {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $gap;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: $content_bg_lighter;
+}
+
+.dot_on {
+  background: $color_primary;
+}
+
+.job {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: $gap * 0.75 $gap;
+  border-radius: $radius;
+  background: $content_bg_light;
+}
+
+.job_head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $gap;
+}
+
+.video {
+  font: $font_14_semibold;
+  color: inherit;
+  word-break: break-all;
+}
+
+.retry {
+  margin-left: auto;
+}
+
+.error {
+  font: $font_12_regular;
+  font-family: monospace;
+  color: $color_danger;
+  word-break: break-word;
+}
+
+.muted {
+  font: $font_12_regular;
+  opacity: 0.6;
+}
+
+.empty {
+  opacity: 0.6;
+}
+
+.notice {
+  padding: $gap;
+  border-radius: $radius;
+  background: $content_bg_danger;
+  line-height: 1.5;
+}
+
+.env {
+  display: block;
+  font: $font_12_regular;
+  font-family: monospace;
+  opacity: 0.5;
+}
+
+.settings {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: $gap * 0.5 $gap;
+  margin: 0;
+
+  dt {
+    opacity: 0.6;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  @include tablet {
+    grid-template-columns: 1fr;
+
+    dd {
+      margin-bottom: $gap * 0.5;
+    }
+  }
+}
