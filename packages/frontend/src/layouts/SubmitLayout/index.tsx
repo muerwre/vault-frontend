@@ -155,19 +155,21 @@ const SubmitLayout: FC<Props> = observer(
 
         <SubmitTags />
 
-        <div className={styles.bottom}>
+        <div className={styles.footer}>
           <SubmitCoverEditor />
-        </div>
 
-        <div className={styles.submit}>
-          <Button
-            title="Сохранить"
-            iconRight="check"
-            color={color}
-            disabled={isSubmitting}
-            type="submit"
-            stretchy
-          />
+          {/* wrapped: a stretchy button is flex: 1, which collapses its
+              height as a direct child of the footer's column */}
+          <div className={styles.save}>
+            <Button
+              title="Сохранить"
+              iconRight="check"
+              color={color}
+              disabled={isSubmitting}
+              type="submit"
+              stretchy
+            />
+          </div>
         </div>
       </>
     );

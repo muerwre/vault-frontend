@@ -11,7 +11,8 @@ $tabs_height: 44px;
 .wrap {
   display: grid;
   grid-template-columns: 3fr 1fr;
-  align-items: start;
+  // the main card and the pane stretch to the taller of the two
+  align-items: stretch;
   margin-top: $page_top_offset;
   padding-bottom: $gap * 2;
 
@@ -81,8 +82,6 @@ $tabs_height: 44px;
 }
 
 .pane {
-  position: sticky;
-  top: 65px; // clears the fixed header, as Sticky does
   display: flex;
   flex-direction: column;
   gap: $gap;
@@ -95,45 +94,45 @@ $tabs_height: 44px;
   min-height: $screen_height;
 
   @include tablet {
-    position: static;
     min-height: 0;
     border-radius: $radius;
   }
 }
 
-// The background sits at the pane's bottom, just above the button, and
-// scrolls with the pane; only the button sticks.
-.bottom {
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: $gap;
-
-  // the button's fade strip takes up the pane's gap, so the space between
-  // the background and the button is the same as everywhere else
-  & + .submit {
-    margin-top: -$gap;
-  }
-}
-
-.submit {
-  margin: auto (-$gap) (-$gap);
-  padding: $gap $gap $gap;
+// The pane's footer: background and save button, pushed to the bottom. On
+// desktop both stick to the screen's bottom edge while the pane is taller than
+// it, and its own background covers whatever scrolls beneath.
+.footer {
   position: sticky;
   bottom: 0;
   z-index: 2;
-  // fades in the pane's background, so content scrolling under the button
-  // is covered rather than showing through
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    $content_bg_dark $gap
-  );
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  margin: auto (-$gap) (-$gap);
+  padding: $gap;
+  background: $content_bg_dark;
   // matches the pane's corners: square where it joins the content
   border-radius: 0 0 $radius 0;
 
+  // On mobile the background would take too much of the screen, so only the
+  // button sticks. A sticky element sticks within its parent, so the footer
+  // steps out of the way and the button sticks within the whole pane.
   @include tablet {
-    padding-bottom: $gap * 0.5;
+    display: contents;
+  }
+}
+
+.save {
+  @include tablet {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    // the pane's background behind the button, so content scrolling under
+    // it is covered
+    margin: 0 (-$gap) (-$gap * 0.5);
+    padding: $gap $gap $gap * 0.5;
+    background: $content_bg_dark;
     border-radius: 0 0 $radius $radius;
   }
 }
