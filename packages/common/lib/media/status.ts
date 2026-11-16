@@ -89,3 +89,17 @@ export const MEDIA_OWNER_TYPES = {
 
 export type MediaOwnerType =
   (typeof MEDIA_OWNER_TYPES)[keyof typeof MEDIA_OWNER_TYPES];
+
+/**
+ * Whether the original can still be played from the provider. `gone` covers
+ * removed, private and embedding-disabled items alike: in each case the local
+ * copy is what can be shown.
+ */
+export const MEDIA_SOURCE_STATUSES = {
+  UNKNOWN: 'unknown',
+  AVAILABLE: 'available',
+  GONE: 'gone',
+} as const;
+
+export type MediaSourceStatus =
+  (typeof MEDIA_SOURCE_STATUSES)[keyof typeof MEDIA_SOURCE_STATUSES];

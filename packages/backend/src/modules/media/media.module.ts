@@ -15,6 +15,7 @@ import { MediaJobsController } from './media-jobs.controller';
 import { MediaJobsService } from './media-jobs.service';
 import { MediaPlannerService } from './media-planner.service';
 import { MediaRefsService } from './media-refs.service';
+import { MediaSourceService } from './media-source.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { MediaRefsService } from './media-refs.service';
     MediaJobsService,
     MediaCleanupService,
     MediaAdminService,
+    MediaSourceService,
   ],
   exports: [MediaRefsService],
 })

@@ -6,6 +6,7 @@ import type { Node } from '../../entities/node.entity';
 
 import { MediaBackfillService } from './media-backfill.service';
 import type { MediaRefsService } from './media-refs.service';
+import type { MediaSourceService } from './media-source.service';
 
 /** Query builders over empty tables, so a scan finishes at once. */
 const emptyRepo = () => {
@@ -39,6 +40,7 @@ const setup = () => {
     comments.repo as unknown as Repository<Comment>,
     { syncOwner: jest.fn() } as unknown as MediaRefsService,
     scheduler,
+    { checkDue: jest.fn(async () => 0) } as unknown as MediaSourceService,
   );
 
   return { service, scheduler, nodeQuery: nodes.builder.getMany as jest.Mock };

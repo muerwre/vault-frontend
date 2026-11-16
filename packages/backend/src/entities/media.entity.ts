@@ -1,5 +1,6 @@
 import {
   MEDIA_KINDS,
+  MEDIA_SOURCE_STATUSES,
   MEDIA_THUMB_STATUSES,
   MEDIA_VIDEO_STATUSES,
   MEDIA_JOB_STATUSES,
@@ -9,6 +10,7 @@ import {
   type MediaOwnerType,
   type MediaProvider,
   type MediaSkipReason,
+  type MediaSourceStatus,
   type MediaThumbStatus,
   type MediaVideoStatus,
 } from '@vault/common/media';
@@ -115,6 +117,18 @@ export class ExternalMedia {
     transformer: bigintNumber,
   })
   estimatedBytes: number | null;
+
+  /** Whether the provider can still play the original. */
+  @Column({
+    name: 'source_status',
+    type: 'varchar',
+    length: 16,
+    default: MEDIA_SOURCE_STATUSES.UNKNOWN,
+  })
+  sourceStatus: MediaSourceStatus;
+
+  @Column({ name: 'source_checked_at', ...TIMESTAMP_NULLABLE })
+  sourceCheckedAt: Date | null;
 
   @CreateDateColumn(CREATED_AT)
   createdAt: Date;

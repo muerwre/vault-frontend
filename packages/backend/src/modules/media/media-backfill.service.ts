@@ -24,6 +24,7 @@ import { Comment } from '../../entities/comment.entity';
 import { Node } from '../../entities/node.entity';
 
 import { MediaRefsService } from './media-refs.service';
+import { MediaSourceService } from './media-source.service';
 import { refsFromBlocks, refsFromText } from './media.rules';
 
 const CHUNK = 200;
@@ -57,6 +58,7 @@ export class MediaBackfillService
     @InjectRepository(Comment) private readonly comments: Repository<Comment>,
     private readonly refs: MediaRefsService,
     private readonly scheduler: SchedulerRegistry,
+    private readonly sources: MediaSourceService,
   ) {}
 
   onApplicationBootstrap(): void {
@@ -123,6 +125,13 @@ export class MediaBackfillService
       const comments = await this.scanComments();
 
       this.logger.log(`recorded links of ${nodes} nodes, ${comments} comments`);
+
+      // Originals of stored copies, so clients know which ones to fall back on.
+      const changed = await this.sources.checkDue();
+
+      if (changed > 0) {
+        this.logger.log(`${changed} originals changed availability`);
+      }
     } catch (error) {
       this.logger.error(
         `backfill failed: ${error instanceof Error ? error.message : String(error)}`,
