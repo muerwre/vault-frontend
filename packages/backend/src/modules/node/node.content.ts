@@ -20,7 +20,8 @@ import type { File } from '../../entities/file.entity';
 
 /** Stored thumbnail url per provider, built from the item id. */
 const THUMB_TEMPLATES: Record<MediaProvider, (id: string) => string> = {
-  [MEDIA_PROVIDERS.YOUTUBE]: (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+  [MEDIA_PROVIDERS.YOUTUBE]: (id) =>
+    `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
 };
 
 /** Minimum text length for a text node's body to become its description. */

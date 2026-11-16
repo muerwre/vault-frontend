@@ -27,6 +27,11 @@ export interface MediaProviderDef {
    * checked with {@link MediaProviderDef.parseUrl} afterwards.
    */
   urlInText: RegExp;
+  /**
+   * Substrings every link of this provider contains, for a cheap pre-filter
+   * (such as SQL `LIKE`) before {@link MediaProviderDef.urlInText} runs.
+   */
+  textHints: readonly string[];
   /** The item id a single URL points at, or null when it points at none. */
   parseUrl(url: string): string | null;
   isValidId(id: string): boolean;
@@ -69,13 +74,16 @@ const parseYoutubeUrl = (url: string): string | null => {
 
   const rest = value.slice(host[0].length);
 
-  return (YOUTUBE_PATH_ID.exec(rest) ?? YOUTUBE_QUERY_ID.exec(rest))?.[1] ?? null;
+  return (
+    (YOUTUBE_PATH_ID.exec(rest) ?? YOUTUBE_QUERY_ID.exec(rest))?.[1] ?? null
+  );
 };
 
 export const YOUTUBE_PROVIDER: MediaProviderDef = {
   name: MEDIA_PROVIDERS.YOUTUBE,
   urlInText:
     /(?:https?:\/\/)?(?:[\w-]+\.)?(?:youtube(?:-nocookie)?\.com|youtu\.be)\/[^\s<>"'`]+/gi,
+  textHints: ['youtu'],
   parseUrl: parseYoutubeUrl,
   isValidId: (id) => YOUTUBE_ID.test(id ?? ''),
   canonicalUrl: (id) => `https://www.youtube.com/watch?v=${id}`,
@@ -139,7 +147,10 @@ export const parseMediaRefKey = (key: string): MediaRef | null => {
   const provider = key.slice(0, separator);
   const id = key.slice(separator + 1);
 
-  if (!isMediaProvider(provider) || !MEDIA_PROVIDER_DEFS[provider].isValidId(id)) {
+  if (
+    !isMediaProvider(provider) ||
+    !MEDIA_PROVIDER_DEFS[provider].isValidId(id)
+  ) {
     return null;
   }
 

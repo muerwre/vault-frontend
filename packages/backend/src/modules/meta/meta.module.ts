@@ -11,5 +11,6 @@ import { YoutubeService } from './youtube.service';
   imports: [TypeOrmModule.forFeature([Embed])],
   controllers: [MetaController],
   providers: [MetaService, YoutubeService],
+  exports: [MetaService, YoutubeService],
 })
 export class MetaModule {}

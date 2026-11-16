@@ -5,6 +5,7 @@ import { Comment } from '../../entities/comment.entity';
 import { File } from '../../entities/file.entity';
 import { CommentUserLike } from '../../entities/like.entity';
 import { Node } from '../../entities/node.entity';
+import { MediaModule } from '../media/media.module';
 import { NodeModule } from '../node/node.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 
@@ -15,6 +16,7 @@ import { CommentService } from './comment.service';
   imports: [
     TypeOrmModule.forFeature([Comment, File, CommentUserLike, Node]),
     NodeModule,
+    MediaModule,
     NotificationsModule,
   ],
   controllers: [CommentController],

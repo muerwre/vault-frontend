@@ -263,6 +263,22 @@ export const isVkPublisherUsable = (config: VkPublisherConfig): boolean =>
 export const isYoutubeThumbCacheEnabled = (): boolean =>
   process.env.CACHE_YOUTUBE_THUMBS !== 'false';
 
+export interface MediaCacheConfig {
+  /** Whether external items are tracked and queued for local copies at all. */
+  enabled: boolean;
+  /** Longer videos are never downloaded and stay provider embeds. */
+  maxDurationSec: number;
+  /** A video is downloaded only if some acceptable quality fits into this. */
+  maxBytes: number;
+}
+
+/** Local copies of external videos. Off unless `CACHE_EXTERNAL_MEDIA=true`. */
+export const getMediaCacheConfig = (): MediaCacheConfig => ({
+  enabled: process.env.CACHE_EXTERNAL_MEDIA === 'true',
+  maxDurationSec: toPositiveInt(process.env.MEDIA_MAX_DURATION_SEC, 30 * 60),
+  maxBytes: toPositiveInt(process.env.MEDIA_MAX_MB, 500) * 1024 * 1024,
+});
+
 export interface UploadsConfig {
   path: string;
   maxSizeMb: number;

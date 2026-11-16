@@ -8,6 +8,7 @@ import { NodeSocialPublication } from '../../entities/node-extras.entity';
 import { Node } from '../../entities/node.entity';
 import { Tag } from '../../entities/tag.entity';
 import { NodeView } from '../../entities/views.entity';
+import { MediaModule } from '../media/media.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { TagModule } from '../tag/tag.module';
 import { UploadModule } from '../upload/upload.module';
@@ -21,6 +22,7 @@ import { NodeService } from './node.service';
 @Module({
   imports: [
     UploadModule,
+    MediaModule,
     TypeOrmModule.forFeature([
       Node,
       File,

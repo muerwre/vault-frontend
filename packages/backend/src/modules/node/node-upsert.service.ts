@@ -6,12 +6,15 @@ import {
   UPLOAD_TARGETS,
   type NodeType,
 } from '@vault/common/constants';
+import { MEDIA_OWNER_TYPES, MEDIA_PRIORITIES } from '@vault/common/media';
 import type { INodeBlock, INodeFlow } from '@vault/common/types';
 import { In, IsNull, Repository } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
 import { Node } from '../../entities/node.entity';
 import type { User } from '../../entities/user.entity';
+import { MediaRefsService } from '../media/media-refs.service';
+import { refsFromBlocks } from '../media/media.rules';
 import { applyAudioTitles } from '../upload/audio-titles';
 
 import {
@@ -62,6 +65,7 @@ export class NodeUpsertService {
   constructor(
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
     @InjectRepository(File) private readonly files: Repository<File>,
+    private readonly mediaRefs: MediaRefsService,
   ) {}
 
   /**
@@ -191,6 +195,13 @@ export class NodeUpsertService {
     if (previousCoverId && previousCoverId !== node.coverId) {
       await this.setFilesTarget([previousCoverId], null);
     }
+
+    await this.mediaRefs.syncOwner(
+      MEDIA_OWNER_TYPES.NODE,
+      saved.id,
+      refsFromBlocks(node.blocks),
+      MEDIA_PRIORITIES.FRESH,
+    );
 
     return { ok: true, nodeId: saved.id, created: !isUpdate };
   }

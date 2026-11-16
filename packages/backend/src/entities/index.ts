@@ -2,6 +2,7 @@ import { Comment } from './comment.entity';
 import { Embed } from './embed.entity';
 import { File } from './file.entity';
 import { CommentLikesOrphan, CommentUserLike, Like } from './like.entity';
+import { ExternalMedia, ExternalMediaRef, MediaJob } from './media.entity';
 import { Message } from './message.entity';
 import { NodeSocialPublication, NodeWatch } from './node-extras.entity';
 import { Node } from './node.entity';
@@ -24,6 +25,7 @@ export * from './comment.entity';
 export * from './embed.entity';
 export * from './file.entity';
 export * from './like.entity';
+export * from './media.entity';
 export * from './message.entity';
 export * from './node-extras.entity';
 export * from './node.entity';
@@ -37,7 +39,7 @@ export * from './views.entity';
 /**
  * Every entity, listed explicitly — globs break under ncc bundling.
  *
- * Covers all 27 tables, including the dead ones, so `migration:generate` can
+ * Covers every table, including the dead ones, so `migration:generate` can
  * prove zero drift against the full schema.
  */
 export const ENTITIES = [
@@ -66,4 +68,8 @@ export const ENTITIES = [
   NotificationSettings,
   NodeSocialPublication,
   NodeWatch,
+  // media cache (utf8mb4, no FKs)
+  ExternalMedia,
+  ExternalMediaRef,
+  MediaJob,
 ];

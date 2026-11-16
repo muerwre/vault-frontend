@@ -7,6 +7,7 @@ import {
   NODE_TYPES,
   ROLES,
 } from '@vault/common/constants';
+import { MEDIA_OWNER_TYPES, MEDIA_PRIORITIES } from '@vault/common/media';
 import { Repository } from 'typeorm';
 
 import { Comment } from '../../entities/comment.entity';
@@ -23,6 +24,8 @@ import {
   type WireFile,
   type WireUser,
 } from '../../wire/serialize';
+import { MediaRefsService } from '../media/media-refs.service';
+import { refsFromText } from '../media/media.rules';
 import {
   applyAudioTitles,
   type IncomingFile,
@@ -62,6 +65,7 @@ export class CommentService {
     @InjectRepository(CommentUserLike)
     private readonly commentLikes: Repository<CommentUserLike>,
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
+    private readonly mediaRefs: MediaRefsService,
   ) {}
 
   /**
@@ -267,6 +271,7 @@ export class CommentService {
     );
 
     await this.setFiles(saved.id, fileIds);
+    await this.syncMedia(saved.id, text);
 
     return saved;
   }
@@ -282,11 +287,21 @@ export class CommentService {
       updatedAt: () => 'NOW()',
     });
     await this.setFiles(comment.id, fileIds);
+    await this.syncMedia(comment.id, text);
 
     comment.text = text;
     comment.filesOrder = fileIds;
 
     return comment;
+  }
+
+  private syncMedia(commentId: number, text: string): Promise<void> {
+    return this.mediaRefs.syncOwner(
+      MEDIA_OWNER_TYPES.COMMENT,
+      commentId,
+      refsFromText(text),
+      MEDIA_PRIORITIES.FRESH,
+    );
   }
 
   /** Rewrites the whole junction so stored rows match `files_order`. */
