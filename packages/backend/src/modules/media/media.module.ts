@@ -5,7 +5,6 @@ import { Comment } from '../../entities/comment.entity';
 import { File } from '../../entities/file.entity';
 import { ExternalMedia, MediaJob } from '../../entities/media.entity';
 import { Node } from '../../entities/node.entity';
-import { MetaModule } from '../meta/meta.module';
 import { UploadModule } from '../upload/upload.module';
 
 import { MediaBackfillService } from './media-backfill.service';
@@ -17,7 +16,6 @@ import { MediaRefsService } from './media-refs.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ExternalMedia, MediaJob, Node, Comment, File]),
-    MetaModule,
     UploadModule,
   ],
   controllers: [MediaJobsController],

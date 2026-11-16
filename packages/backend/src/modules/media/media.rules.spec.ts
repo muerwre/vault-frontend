@@ -1,5 +1,4 @@
 import {
-  decideVideo,
   diffIds,
   refsFromBlocks,
   refsFromText,
@@ -55,40 +54,6 @@ describe('media rules', () => {
       expect(diffIds([1, 1], [1, 1, 2, 2])).toEqual({
         added: [2],
         removed: [],
-      });
-    });
-  });
-
-  describe('decideVideo', () => {
-    const limits = { maxDurationSec: 1800 };
-
-    it('marks an item the provider does not know as unavailable', () => {
-      expect(decideVideo(undefined, limits)).toEqual({ status: 'unavailable' });
-    });
-
-    it('skips live streams', () => {
-      expect(decideVideo({ duration: null, isLive: true }, limits)).toEqual({
-        status: 'skipped',
-        reason: 'live',
-      });
-    });
-
-    it('skips videos over the limit', () => {
-      expect(decideVideo({ duration: 1801, isLive: false }, limits)).toEqual({
-        status: 'skipped',
-        reason: 'too_long',
-      });
-    });
-
-    it('queues videos at the limit', () => {
-      expect(decideVideo({ duration: 1800, isLive: false }, limits)).toEqual({
-        status: 'queued',
-      });
-    });
-
-    it('queues videos of unknown length, for the fetcher to check', () => {
-      expect(decideVideo({ duration: null, isLive: false }, limits)).toEqual({
-        status: 'queued',
       });
     });
   });

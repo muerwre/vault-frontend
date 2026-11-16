@@ -2,7 +2,6 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import type { FindManyOptions, FindOperator, Repository } from 'typeorm';
 
 import type { ExternalMedia, MediaJob } from '../../entities/media.entity';
-import type { YoutubeDetails, YoutubeService } from '../meta/youtube.service';
 import type { YoutubeThumbService } from '../upload/youtube-thumb.service';
 
 import { MediaPlannerService } from './media-planner.service';
@@ -42,7 +41,6 @@ const priorityMatches = (
 /** A planner over in-memory rows, which it updates as it saves them. */
 const setup = (options: {
   rows: ExternalMedia[];
-  details?: Map<string, YoutubeDetails> | Error;
   thumbs?: Record<string, boolean>;
   openJobs?: number;
 }) => {
@@ -81,17 +79,6 @@ const setup = (options: {
     }),
   } as unknown as Repository<MediaJob>;
 
-  const youtube = {
-    isConfigured: options.details !== undefined,
-    fetchDetails: jest.fn(async (_ids: string[]) => {
-      if (options.details instanceof Error) {
-        throw options.details;
-      }
-
-      return options.details;
-    }),
-  } as unknown as YoutubeService;
-
   const thumbs = {
     ensure: jest.fn(async (id: string) => options.thumbs?.[id] ?? true),
   } as unknown as YoutubeThumbService;
@@ -99,16 +86,9 @@ const setup = (options: {
   const scheduler = new SchedulerRegistry();
 
   return {
-    planner: new MediaPlannerService(
-      media,
-      jobRepo,
-      youtube,
-      thumbs,
-      scheduler,
-    ),
+    planner: new MediaPlannerService(media, jobRepo, thumbs, scheduler),
     saved,
     jobs,
-    youtube,
     thumbs,
     scheduler,
   };
@@ -133,47 +113,18 @@ describe('MediaPlannerService', () => {
   });
 
   describe('fresh items', () => {
-    it('decides each video from its details and queues downloads', async () => {
+    it('queues every video for download and stores its cover', async () => {
       const ok = fresh('okVideo0001');
-      const { planner, saved, jobs } = setup({
-        rows: [
-          ok,
-          fresh('longVideo01'),
-          fresh('liveVideo01'),
-          fresh('goneVideo01'),
-        ],
-        details: new Map([
-          ['okVideo0001', { title: '', duration: 600, isLive: false }],
-          ['longVideo01', { title: '', duration: 3600, isLive: false }],
-          ['liveVideo01', { title: '', duration: null, isLive: true }],
-        ]),
-      });
+      const { planner, saved, jobs } = setup({ rows: [ok] });
 
       await planner.runOnce();
 
-      const byId = new Map(saved.map((row) => [row.externalId, row]));
-
-      expect(byId.get('okVideo0001')).toMatchObject({
+      expect(saved[0]).toMatchObject({
         kind: 'video',
         videoStatus: 'queued',
-        duration: 600,
         thumbStatus: 'ready',
         thumbPath: 'youtube/okVideo0001.jpg',
       });
-      expect(byId.get('longVideo01')).toMatchObject({
-        videoStatus: 'skipped',
-        skipReason: 'too_long',
-        thumbStatus: 'ready',
-      });
-      expect(byId.get('liveVideo01')).toMatchObject({
-        videoStatus: 'skipped',
-        skipReason: 'live',
-      });
-      expect(byId.get('goneVideo01')).toMatchObject({
-        videoStatus: 'unavailable',
-        thumbStatus: 'none',
-      });
-
       expect(jobs).toEqual([
         expect.objectContaining({
           kind: 'download',
@@ -195,66 +146,40 @@ describe('MediaPlannerService', () => {
       });
     });
 
-    it('does not fetch covers for videos that are gone', async () => {
-      const { planner, thumbs } = setup({
+    it('records a cover that could not be fetched, and queues anyway', async () => {
+      const { planner, saved, jobs } = setup({
         rows: [fresh('goneVideo01')],
-        details: new Map(),
-      });
-
-      await planner.runOnce();
-
-      expect(thumbs.ensure).not.toHaveBeenCalled();
-    });
-
-    it('records a cover that could not be fetched', async () => {
-      const { planner, saved } = setup({
-        rows: [fresh('okVideo0001')],
-        details: new Map([
-          ['okVideo0001', { title: '', duration: 60, isLive: false }],
-        ]),
-        thumbs: { okVideo0001: false },
+        thumbs: { goneVideo01: false },
       });
 
       await planner.runOnce();
 
       expect(saved[0]).toMatchObject({
+        videoStatus: 'queued',
         thumbStatus: 'failed',
         thumbPath: null,
       });
-    });
-
-    it('queues everything when there is no API key, leaving length to the fetcher', async () => {
-      const { planner, saved, jobs, youtube } = setup({
-        rows: [fresh('anyVideo001')],
-      });
-
-      await planner.runOnce();
-
-      expect(youtube.fetchDetails).not.toHaveBeenCalled();
-      expect(saved[0]).toMatchObject({ videoStatus: 'queued', duration: null });
       expect(jobs).toHaveLength(1);
     });
 
-    it('leaves the batch for a later round when the API fails', async () => {
-      const rows = [fresh('okVideo0001')];
-      const { planner, saved, jobs } = setup({
-        rows,
-        details: new Error('quota'),
+    it('leaves covers alone while the cover cache is off', async () => {
+      process.env.CACHE_YOUTUBE_THUMBS = 'false';
+      const { planner, saved, thumbs } = setup({
+        rows: [fresh('okVideo0001')],
       });
 
       await planner.runOnce();
 
-      expect(saved).toEqual([]);
-      expect(jobs).toEqual([]);
-      expect(rows[0].videoStatus).toBe('none');
+      expect(thumbs.ensure).not.toHaveBeenCalled();
+      expect(saved[0]).toMatchObject({
+        videoStatus: 'queued',
+        thumbStatus: 'none',
+      });
     });
 
     it('does not queue a second download for an item that has one open', async () => {
       const { planner, jobs } = setup({
         rows: [fresh('okVideo0001')],
-        details: new Map([
-          ['okVideo0001', { title: '', duration: 60, isLive: false }],
-        ]),
         openJobs: 1,
       });
 
@@ -267,16 +192,12 @@ describe('MediaPlannerService', () => {
       const rows = Array.from({ length: 120 }, (_, index) =>
         fresh(String(index).padStart(11, 'v')),
       );
-      const { planner, youtube } = setup({ rows, details: new Map() });
+      const { planner, jobs } = setup({ rows });
 
       await planner.runOnce();
 
-      expect(rows.every((row) => row.videoStatus === 'unavailable')).toBe(true);
-      expect(
-        (youtube.fetchDetails as jest.Mock).mock.calls.map(
-          ([ids]: [string[]]) => ids.length,
-        ),
-      ).toEqual([50, 50, 20]);
+      expect(rows.every((row) => row.videoStatus === 'queued')).toBe(true);
+      expect(jobs).toHaveLength(120);
     });
 
     it('shares one run between concurrent calls', async () => {

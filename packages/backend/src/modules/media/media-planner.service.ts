@@ -26,11 +26,8 @@ import {
   isYoutubeThumbCacheEnabled,
 } from '../../config/env';
 import { ExternalMedia, MediaJob } from '../../entities/media.entity';
-import { YoutubeService, type YoutubeDetails } from '../meta/youtube.service';
 import { youtubeThumbPath } from '../upload/upload.paths';
 import { YoutubeThumbService } from '../upload/youtube-thumb.service';
-
-import { decideVideo, type VideoFacts } from './media.rules';
 
 /** How often fresh items are looked for. */
 const POLL_MS = 15_000;
@@ -69,7 +66,6 @@ export class MediaPlannerService
     @InjectRepository(ExternalMedia)
     private readonly media: Repository<ExternalMedia>,
     @InjectRepository(MediaJob) private readonly jobs: Repository<MediaJob>,
-    private readonly youtube: YoutubeService,
     private readonly youtubeThumbs: YoutubeThumbService,
     private readonly scheduler: SchedulerRegistry,
   ) {}
@@ -169,9 +165,11 @@ export class MediaPlannerService
           take: BATCH_SIZE,
         });
 
-        if (batch.length === 0 || !(await this.plan(batch))) {
+        if (batch.length === 0) {
           return;
         }
+
+        await this.plan(batch);
       }
     } catch (error) {
       this.logFailure(error);
@@ -203,73 +201,39 @@ export class MediaPlannerService
     );
   }
 
-  /** False when the batch could not be planned and should wait for a later round. */
-  private async plan(batch: ExternalMedia[]): Promise<boolean> {
-    const youtube = batch.filter(
-      (item) => item.provider === MEDIA_PROVIDERS.YOUTUBE,
-    );
-    const others = batch.filter(
-      (item) => item.provider !== MEDIA_PROVIDERS.YOUTUBE,
-    );
-
-    for (const item of others) {
-      await this.planWithProbe(item);
+  private async plan(batch: ExternalMedia[]): Promise<void> {
+    for (const item of batch) {
+      if (item.provider !== MEDIA_PROVIDERS.YOUTUBE) {
+        await this.planWithProbe(item);
+      }
     }
 
-    return youtube.length === 0 || this.planYoutube(youtube);
+    await this.planYoutube(
+      batch.filter((item) => item.provider === MEDIA_PROVIDERS.YOUTUBE),
+    );
   }
 
   /**
-   * YouTube is described by its Data API, cheaply and without the fetcher;
-   * without an API key, durations are left to the fetcher's own check.
+   * Every YouTube item is queued for download. Whether it still exists, is
+   * live or is too long is checked by the fetcher before it downloads, so the
+   * Data API is not spent on it.
    */
-  private async planYoutube(items: ExternalMedia[]): Promise<boolean> {
-    let details: Map<string, YoutubeDetails> | null = null;
-
-    if (this.youtube.isConfigured) {
-      try {
-        details = await this.youtube.fetchDetails(
-          items.map((item) => item.externalId),
-        );
-      } catch (error) {
-        this.logger.warn(
-          `youtube details unavailable, retrying later: ${
-            error instanceof Error ? error.message : String(error)
-          }`,
-        );
-        return false;
-      }
+  private async planYoutube(items: ExternalMedia[]): Promise<void> {
+    if (items.length === 0) {
+      return;
     }
-
-    const { maxDurationSec } = getMediaCacheConfig();
 
     for (const item of items) {
-      const facts: VideoFacts | undefined = details
-        ? details.get(item.externalId)
-        : { duration: null, isLive: false };
-      const decision = decideVideo(facts, { maxDurationSec });
-
       item.kind = MEDIA_KINDS.VIDEO;
-      item.duration = facts?.duration ?? null;
-      item.videoStatus = decision.status;
-      item.skipReason = 'reason' in decision ? decision.reason : null;
+      item.videoStatus = MEDIA_VIDEO_STATUSES.QUEUED;
     }
 
-    await this.storeYoutubeThumbs(
-      items.filter(
-        (item) => item.videoStatus !== MEDIA_VIDEO_STATUSES.UNAVAILABLE,
-      ),
-    );
+    await this.storeYoutubeThumbs(items);
 
     for (const item of items) {
       await this.media.save(item);
-
-      if (item.videoStatus === MEDIA_VIDEO_STATUSES.QUEUED) {
-        await this.enqueue(MEDIA_JOB_KINDS.DOWNLOAD, item);
-      }
+      await this.enqueue(MEDIA_JOB_KINDS.DOWNLOAD, item);
     }
-
-    return true;
   }
 
   /** Covers come from public YouTube urls; the backend fetches them itself. */
