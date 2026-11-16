@@ -4,6 +4,7 @@ import {
   type OnApplicationBootstrap,
   type OnModuleDestroy,
 } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NODE_TYPES } from '@vault/common/constants';
 import {
@@ -11,9 +12,14 @@ import {
   MEDIA_PRIORITIES,
   MEDIA_PROVIDER_DEFS,
 } from '@vault/common/media';
+import { CronJob } from 'cron';
 import { Brackets, Repository } from 'typeorm';
 
-import { getMediaCacheConfig } from '../../config/env';
+import {
+  getMediaCacheConfig,
+  getMediaRescanCron,
+  getScheduleTimeZone,
+} from '../../config/env';
 import { Comment } from '../../entities/comment.entity';
 import { Node } from '../../entities/node.entity';
 
@@ -28,10 +34,13 @@ const PAUSE_MS = 50;
 const pause = () =>
   new Promise<void>((resolve) => setTimeout(resolve, PAUSE_MS).unref());
 
+const RESCAN_JOB = 'media-rescan';
+
 /**
  * Records the links of everything posted so far, oldest first, so items posted
- * before the cache existed (or while it was off) get planned too. Runs once per
- * start; re-recording a link is harmless.
+ * before the cache existed (or while it was off) get planned too, and links a
+ * save failed to record are repaired. Runs on start and on a schedule;
+ * re-recording a link is harmless.
  */
 @Injectable()
 export class MediaBackfillService
@@ -47,21 +56,68 @@ export class MediaBackfillService
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
     @InjectRepository(Comment) private readonly comments: Repository<Comment>,
     private readonly refs: MediaRefsService,
+    private readonly scheduler: SchedulerRegistry,
   ) {}
 
   onApplicationBootstrap(): void {
-    if (getMediaCacheConfig().enabled) {
-      this.current = this.run();
+    if (!getMediaCacheConfig().enabled) {
+      return;
     }
+
+    void this.run();
+    this.schedule();
   }
 
   async onModuleDestroy(): Promise<void> {
+    if (this.scheduler.doesExist('cron', RESCAN_JOB)) {
+      this.scheduler.deleteCronJob(RESCAN_JOB);
+    }
+
     this.stopping = true;
     await this.current;
   }
 
-  /** The whole scan. Exposed so it can be driven directly. */
-  async run(): Promise<void> {
+  /**
+   * The whole scan. A call while one is running shares it. Exposed so it can
+   * be driven directly.
+   */
+  run(): Promise<void> {
+    this.current ??= this.scan().finally(() => {
+      this.current = undefined;
+    });
+
+    return this.current;
+  }
+
+  /** A bad expression or zone is reported and leaves only the startup scan. */
+  private schedule(): void {
+    const cron = getMediaRescanCron();
+    const timeZone = getScheduleTimeZone();
+
+    try {
+      const job = CronJob.from({
+        cronTime: cron,
+        timeZone,
+        onTick: () => {
+          if (getMediaCacheConfig().enabled) {
+            void this.run();
+          }
+        },
+      });
+
+      this.scheduler.addCronJob(RESCAN_JOB, job);
+      job.start();
+      this.logger.log(`re-scanning on "${cron}" (${timeZone})`);
+    } catch (error) {
+      this.logger.error(
+        `rescan not scheduled, "${cron}" in ${timeZone} is invalid: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
+  }
+
+  private async scan(): Promise<void> {
     try {
       const nodes = await this.scanNodes();
       const comments = await this.scanComments();

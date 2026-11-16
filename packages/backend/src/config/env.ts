@@ -279,6 +279,17 @@ export const getMediaCacheConfig = (): MediaCacheConfig => ({
   maxBytes: toPositiveInt(process.env.MEDIA_MAX_MB, 500) * 1024 * 1024,
 });
 
+/** Zone that scheduled jobs' hours are read in. */
+export const getScheduleTimeZone = (): string =>
+  process.env.SCHEDULE_TIMEZONE || 'UTC';
+
+/**
+ * When linked videos are re-scanned, as a six-field cron expression (seconds
+ * first) in {@link getScheduleTimeZone}.
+ */
+export const getMediaRescanCron = (): string =>
+  process.env.MEDIA_RESCAN_CRON || '0 0 2 * * *';
+
 export interface UploadsConfig {
   path: string;
   maxSizeMb: number;
