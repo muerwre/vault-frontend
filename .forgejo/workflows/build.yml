@@ -10,9 +10,9 @@ jobs:
   images:
     name: Build & Publish images
     runs-on: ubuntu-22.04
-    # Both images are built before either is pushed, in one job: a broken
-    # frontend must not ship a new backend, nor the other way round. The push
-    # steps rebuild from the layers the build steps just cached, so they are quick.
+    # Every image is built before any is pushed, in one job: a broken frontend
+    # must not ship a new backend, nor the other way round. The push steps
+    # rebuild from the layers the build steps just cached, so they are quick.
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,6 +41,13 @@ jobs:
           images: git.vault48.org/${{ github.repository_owner }}/vault-backend
           tags: type=ref,event=branch
 
+      - name: Media fetcher metadata
+        id: fetcher_meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: git.vault48.org/${{ github.repository_owner }}/vault-media-fetcher
+          tags: type=ref,event=branch
+
       # Repo root as context for both: the lockfile and hoisted dependencies
       # live there, and the backend builds @vault/common alongside itself.
       - name: Build frontend
@@ -65,7 +72,17 @@ jobs:
           tags: ${{ steps.backend_meta.outputs.tags }}
           labels: ${{ steps.backend_meta.outputs.labels }}
 
-      # Reached only when both builds succeeded.
+      # Runs on its own host; bakes in the yt-dlp release current at build time.
+      - name: Build media fetcher
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./ci/media-fetcher.Dockerfile
+          push: false
+          tags: ${{ steps.fetcher_meta.outputs.tags }}
+          labels: ${{ steps.fetcher_meta.outputs.labels }}
+
+      # Reached only when every build succeeded.
       - name: Push frontend
         uses: docker/build-push-action@v6
         with:
@@ -88,8 +105,17 @@ jobs:
           tags: ${{ steps.backend_meta.outputs.tags }}
           labels: ${{ steps.backend_meta.outputs.labels }}
 
+      - name: Push media fetcher
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./ci/media-fetcher.Dockerfile
+          push: true
+          tags: ${{ steps.fetcher_meta.outputs.tags }}
+          labels: ${{ steps.fetcher_meta.outputs.labels }}
+
   backend_tests:
-    name: Backend unit tests
+    name: Unit tests
     # Gated on the image build: no point testing a revision that does not build.
     needs: images
     # The same image as the e2e job, so both share one yarn cache — the cache
@@ -128,7 +154,7 @@ jobs:
           path: ${{ env.YARN_CACHE_FOLDER }}
           key: yarn-${{ hashFiles('yarn.lock') }}
 
-      # The backend resolves @vault/common through its built dist.
+      # The backend and the fetcher resolve @vault/common through its built dist.
       - name: Build shared package
         run: yarn common:build
 
@@ -136,3 +162,7 @@ jobs:
       # which carries real user data and is never available to CI.
       - name: Run backend unit tests
         run: yarn backend:test
+
+      # Child processes and the backend are faked; nothing reaches YouTube.
+      - name: Run media fetcher unit tests
+        run: yarn fetcher:test
