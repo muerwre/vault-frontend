@@ -42,6 +42,14 @@ export const UPLOAD_TARGETS = {
 export type UploadTarget = (typeof UPLOAD_TARGETS)[keyof typeof UPLOAD_TARGETS];
 
 /**
+ * `file.target` of a local copy of an external item. Never a valid upload
+ * target, so it is kept apart from {@link UPLOAD_TARGETS}.
+ */
+export const EXTERNAL_MEDIA_TARGET = 'external';
+
+export type FileTarget = UploadTarget | typeof EXTERNAL_MEDIA_TARGET;
+
+/**
  * Image presets served from `cache/<preset>/<src>`. Width-only presets scale
  * proportionally; the rest crop to the given box. SVG is passed through
  * untouched for every preset.

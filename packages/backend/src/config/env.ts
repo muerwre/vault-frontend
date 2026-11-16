@@ -279,6 +279,13 @@ export const getMediaCacheConfig = (): MediaCacheConfig => ({
   maxBytes: toPositiveInt(process.env.MEDIA_MAX_MB, 500) * 1024 * 1024,
 });
 
+/**
+ * Media fetchers allowed to take work, as `name:secret` pairs separated by
+ * commas. Empty means none: every fetcher request is refused.
+ */
+export const getMediaFetcherKeys = (): string =>
+  process.env.MEDIA_FETCHER_KEYS ?? '';
+
 /** Zone that scheduled jobs' hours are read in. */
 export const getScheduleTimeZone = (): string =>
   process.env.SCHEDULE_TIMEZONE || 'UTC';

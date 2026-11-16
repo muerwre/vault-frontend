@@ -3,6 +3,7 @@ import {
   diffIds,
   refsFromBlocks,
   refsFromText,
+  retryDelayMs,
 } from './media.rules';
 
 const A = 'aaaaaaaaaaa';
@@ -89,6 +90,19 @@ describe('media rules', () => {
       expect(decideVideo({ duration: null, isLive: false }, limits)).toEqual({
         status: 'queued',
       });
+    });
+  });
+
+  describe('retryDelayMs', () => {
+    const hour = 60 * 60 * 1000;
+
+    it.each([
+      [1, hour],
+      [2, 24 * hour],
+      [3, 7 * 24 * hour],
+      [10, 7 * 24 * hour],
+    ])('waits after failure %i for %i ms', (failures, delay) => {
+      expect(retryDelayMs(failures)).toBe(delay);
     });
   });
 });

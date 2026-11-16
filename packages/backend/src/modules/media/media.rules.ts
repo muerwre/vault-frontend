@@ -85,3 +85,20 @@ export const decideVideo = (
 
   return { status: MEDIA_VIDEO_STATUSES.QUEUED };
 };
+
+const HOUR_MS = 60 * 60 * 1000;
+
+/** How long a claimed job is held for its fetcher without a progress report. */
+export const LEASE_MS = 15 * 60 * 1000;
+
+/**
+ * Wait before retrying after the `failures`-th retryable failure: an hour,
+ * then a day, then a week for every failure after that.
+ */
+export const retryDelayMs = (failures: number): number => {
+  if (failures <= 1) {
+    return HOUR_MS;
+  }
+
+  return failures === 2 ? 24 * HOUR_MS : 7 * 24 * HOUR_MS;
+};
