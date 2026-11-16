@@ -375,7 +375,10 @@ export class MediaJobsService {
     }
 
     await this.media.update(item.id, update);
-    await this.finish(job, MEDIA_JOB_STATUSES.DONE, { progress: 100 });
+    await this.finish(job, MEDIA_JOB_STATUSES.DONE, {
+      progress: 100,
+      lastError: null,
+    });
   }
 
   async fail(

@@ -1,0 +1,41 @@
+# The media fetcher, on its own host. It only makes outgoing connections: to
+# the backend (MEDIA_BACKEND_URL, normally over the VPN) and to YouTube
+# (directly, or through YOUTUBE_PROXY_URL). It needs no published ports.
+#
+#   docker compose -f ci/media-fetcher.compose.yml up -d
+
+services:
+  media-fetcher:
+    image: git.vault48.org/muerwre/vault-media-fetcher:${VAULT_TAG:-master}
+    build:
+      context: ..
+      dockerfile: ci/media-fetcher.Dockerfile
+    restart: unless-stopped
+    # Lets a job in progress be handed back before the container is killed.
+    stop_grace_period: 30s
+    environment:
+      # The backend's API root. Over the VPN: http://<backend vpn ip>:<port>/api
+      # (plain HTTP, no nginx). Over the internet: https://<site>/api.
+      MEDIA_BACKEND_URL: ${MEDIA_BACKEND_URL:?set MEDIA_BACKEND_URL}
+      # This fetcher's secret: the part after `name:` in the backend's
+      # MEDIA_FETCHER_KEYS.
+      MEDIA_FETCHER_KEY: ${MEDIA_FETCHER_KEY:?set MEDIA_FETCHER_KEY}
+      # YouTube traffic only, never the backend. http(s)://, socks5://,
+      # socks5h:// or socks4://; empty connects directly.
+      YOUTUBE_PROXY_URL: ${YOUTUBE_PROXY_URL:-}
+      # Pause between YouTube jobs, in seconds.
+      YOUTUBE_MIN_INTERVAL_SEC: ${YOUTUBE_MIN_INTERVAL_SEC:-30}
+      # Heights to try, best first; the first whose size estimate fits wins.
+      QUALITY_LADDER: ${QUALITY_LADDER:-720,480,360}
+      # yt-dlp self-update interval in hours; 0 keeps the image's version.
+      YTDLP_UPDATE_HOURS: ${YTDLP_UPDATE_HOURS:-24}
+      # A cookies.txt, mounted below, for when YouTube asks to sign in.
+      YOUTUBE_COOKIES: ${YOUTUBE_COOKIES:-}
+    volumes:
+      # Scratch space for the download in progress: up to MEDIA_MAX_MB plus
+      # the merged copy. A named volume takes /work's ownership from the image.
+      - work:/work
+      # - ./youtube-cookies.txt:/run/secrets/youtube-cookies.txt:ro
+
+volumes:
+  work:

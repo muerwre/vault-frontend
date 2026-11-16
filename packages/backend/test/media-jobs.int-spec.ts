@@ -282,6 +282,7 @@ describe('media jobs API (integration)', () => {
         status: 'done',
         progress: 100,
         lease_owner: null,
+        last_error: null,
       });
     });
 
