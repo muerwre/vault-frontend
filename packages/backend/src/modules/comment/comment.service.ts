@@ -391,7 +391,47 @@ export class CommentService {
     }
   }
 
-  /** Serialises one comment for a write response. */
+  /**
+   * Regenerates the node's description after `affected` was deleted or
+   * restored Applies only while the description is empty or was taken from `affected`.
+   */
+  async regenerateNodeDescription(
+    node: Node,
+    affected: Comment,
+  ): Promise<void> {
+    if (node.userId === null || affected.userId !== node.userId) {
+      return;
+    }
+
+    const current = node.description ?? '';
+
+    if (current && current !== affected.text) {
+      return;
+    }
+
+    // LENGTH() counts bytes, matching BRIEF_MIN_BYTES.
+    const source = await this.comments
+      .createQueryBuilder('comment')
+      .where('comment.nodeId = :nodeId AND comment.userId = :userId', {
+        nodeId: node.id,
+        userId: node.userId,
+      })
+      .andWhere('comment.deleted_at IS NULL')
+      .andWhere('LENGTH(comment.text) >= :min', {
+        min: CommentService.BRIEF_MIN_BYTES,
+      })
+      .orderBy('comment.created_at', 'ASC')
+      .addOrderBy('comment.id', 'ASC')
+      .getOne();
+
+    const description = source?.text ?? '';
+
+    if (description !== current) {
+      await this.nodes.update(node.id, { description });
+    }
+  }
+
+  /** Serializes one comment for a write response. */
   async toWire(commentId: number, uid: number): Promise<WireComment> {
     const comment = await this.findById(commentId, true);
 

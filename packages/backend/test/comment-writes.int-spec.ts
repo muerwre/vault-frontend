@@ -854,6 +854,99 @@ describe('comment writes (integration)', () => {
       expect(listing.body.comment_count).toBe(1);
     });
 
+    describe('node description', () => {
+      const LONG_A =
+        'the first long comment, which becomes the description of its own node';
+      const LONG_B =
+        'a second long comment by the author, long enough to qualify as well';
+
+      const lock = (nodeId: number, commentId: number, locked: boolean) =>
+        http()
+          .delete(`/api/nodes/${nodeId}/comments/${commentId}`)
+          .query({ is_locked: String(locked) })
+          .set(authHeader(authorId))
+          .expect(200);
+
+      const description = async (nodeId: number): Promise<string> => {
+        const [row] = await db.query(
+          'SELECT description FROM node WHERE id = ?',
+          [nodeId],
+        );
+        return row.description;
+      };
+
+      it("falls back to the author's next long comment when the source is deleted", async () => {
+        const nodeId = await makeNode();
+        const a = track(
+          (await post(nodeId, authorId, { text: LONG_A }).expect(200)).body
+            .comment.id,
+        );
+        track(
+          (await post(nodeId, authorId, { text: LONG_B }).expect(200)).body
+            .comment.id,
+        );
+        expect(await description(nodeId)).toBe(LONG_A);
+
+        await lock(nodeId, a, true);
+
+        expect(await description(nodeId)).toBe(LONG_B);
+      });
+
+      it('clears the description when no long author comment remains', async () => {
+        const nodeId = await makeNode();
+        const a = track(
+          (await post(nodeId, authorId, { text: LONG_A }).expect(200)).body
+            .comment.id,
+        );
+
+        await lock(nodeId, a, true);
+
+        expect(await description(nodeId)).toBe('');
+      });
+
+      it('restores the description along with its source comment', async () => {
+        const nodeId = await makeNode();
+        const a = track(
+          (await post(nodeId, authorId, { text: LONG_A }).expect(200)).body
+            .comment.id,
+        );
+
+        await lock(nodeId, a, true);
+        await lock(nodeId, a, false);
+
+        expect(await description(nodeId)).toBe(LONG_A);
+      });
+
+      it('leaves the description alone when another comment is deleted', async () => {
+        const nodeId = await makeNode();
+        track(
+          (await post(nodeId, authorId, { text: LONG_A }).expect(200)).body
+            .comment.id,
+        );
+        const b = track(
+          (await post(nodeId, authorId, { text: LONG_B }).expect(200)).body
+            .comment.id,
+        );
+
+        await lock(nodeId, b, true);
+
+        expect(await description(nodeId)).toBe(LONG_A);
+      });
+
+      it('never replaces a description that did not come from a comment', async () => {
+        const nodeId = await makeNode({ description: 'written by hand' });
+        const a = track(
+          (await post(nodeId, authorId, { text: LONG_A }).expect(200)).body
+            .comment.id,
+        );
+
+        await lock(nodeId, a, true);
+        await lock(nodeId, a, false);
+
+        expect(await description(nodeId)).toBe('written by hand');
+      });
+    });
+
     /** Removing the only comment must clear commented_at, not leave it stale. */
     it('clears the node commented_at when no comments remain', async () => {
       const nodeId = await makeNode();

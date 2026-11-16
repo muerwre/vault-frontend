@@ -274,6 +274,12 @@ export class CommentController {
 
     await this.comments.syncNodeCommentedAt(nodeId);
 
+    const node = await this.nodes.findLive(nodeId);
+
+    if (node) {
+      await this.comments.regenerateNodeDescription(node, comment);
+    }
+
     return {
       deleted_at: deletedAt ? toWireDate(deletedAt) : null,
     };
