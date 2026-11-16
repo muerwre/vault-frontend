@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GUEST_USER_ID } from '@vault/common/constants';
-import { FILE_TYPES, MAX_COMMENT_LENGTH, ROLES } from '@vault/common/constants';
+import {
+  FILE_TYPES,
+  MAX_COMMENT_LENGTH,
+  NODE_TYPES,
+  ROLES,
+} from '@vault/common/constants';
 import { Repository } from 'typeorm';
 
 import { Comment } from '../../entities/comment.entity';
@@ -355,57 +360,15 @@ export class CommentService {
   }
 
   /**
-   * Keeps the node's description in step with its author's comments. A long
-   * author comment fills an empty description; editing the comment that the
-   * description was taken from (`previousText`) rewrites it, or clears it when
-   * the edit is too short to qualify.
+   * Regenerates the node's description from its comments: the author's oldest
+   * live comment that is at least {@link BRIEF_MIN_BYTES} long, or empty when
+   * there is none. Written only when it differs from the stored one. Run after
+   * every comment write, so create, edit, delete and restore all agree.
+   *
+   * Text nodes are skipped: their description comes from the node body.
    */
-  async maybeSetNodeDescription(
-    node: Node,
-    comment: Comment,
-    previousText?: string,
-  ): Promise<void> {
-    if (node.userId === null || comment.userId !== node.userId) {
-      return;
-    }
-
-    const qualifies =
-      Buffer.byteLength(comment.text, 'utf8') >= CommentService.BRIEF_MIN_BYTES;
-    const isSource =
-      previousText !== undefined &&
-      !!node.description &&
-      node.description === previousText;
-
-    if (isSource) {
-      const description = qualifies ? comment.text : '';
-
-      if (description !== node.description) {
-        await this.nodes.update(node.id, { description });
-      }
-
-      return;
-    }
-
-    if (!node.description && qualifies) {
-      await this.nodes.update(node.id, { description: comment.text });
-    }
-  }
-
-  /**
-   * Regenerates the node's description after `affected` was deleted or
-   * restored Applies only while the description is empty or was taken from `affected`.
-   */
-  async regenerateNodeDescription(
-    node: Node,
-    affected: Comment,
-  ): Promise<void> {
-    if (node.userId === null || affected.userId !== node.userId) {
-      return;
-    }
-
-    const current = node.description ?? '';
-
-    if (current && current !== affected.text) {
+  async syncNodeDescription(node: Node): Promise<void> {
+    if (node.userId === null || node.type === NODE_TYPES.TEXT) {
       return;
     }
 
@@ -426,7 +389,7 @@ export class CommentService {
 
     const description = source?.text ?? '';
 
-    if (description !== current) {
+    if (description !== (node.description ?? '')) {
       await this.nodes.update(node.id, { description });
     }
   }

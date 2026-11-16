@@ -531,6 +531,54 @@ describe('comment writes (integration)', () => {
       expect(row.description).toBe(first);
     });
 
+    it('takes an older comment once an edit makes it long enough', async () => {
+      const nodeId = await makeNode();
+      const older = track(
+        (await post(nodeId, authorId, { text: 'short' }).expect(200)).body
+          .comment.id,
+      );
+      const later =
+        'a later long comment, which becomes the description for the time being';
+      track(
+        (await post(nodeId, authorId, { text: later }).expect(200)).body.comment
+          .id,
+      );
+      const lengthened =
+        'the older comment, edited to be long enough, so it takes over the description';
+
+      await post(nodeId, authorId, { id: older, text: lengthened }).expect(200);
+
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
+      expect(row.description).toBe(lengthened);
+    });
+
+    it('falls back to the next long comment when the source is cut short', async () => {
+      const nodeId = await makeNode();
+      const first =
+        'the first long comment, which becomes the description of its own node';
+      const source = track(
+        (await post(nodeId, authorId, { text: first }).expect(200)).body.comment
+          .id,
+      );
+      const next =
+        'the next long comment by the author, long enough to take over from it';
+      track(
+        (await post(nodeId, authorId, { text: next }).expect(200)).body.comment
+          .id,
+      );
+
+      await post(nodeId, authorId, { id: source, text: 'short' }).expect(200);
+
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
+      expect(row.description).toBe(next);
+    });
+
     it('leaves a file deleted after posting out of the listing', async () => {
       const nodeId = await makeNode();
       const kept = await makeFile('image');
@@ -625,8 +673,23 @@ describe('comment writes (integration)', () => {
       expect(row.description).toBe(text);
     });
 
-    it('leaves an existing description alone', async () => {
-      const nodeId = await makeNode({ description: 'already set' });
+    /** A description out of step with the comments is corrected on any write. */
+    it("replaces a stale description with the author's first long comment", async () => {
+      const nodeId = await makeNode({ description: 'stale' });
+      const text = 'y'.repeat(80);
+
+      const created = await post(nodeId, authorId, { text }).expect(200);
+      track(created.body.comment.id);
+
+      const [row] = await db.query(
+        'SELECT description FROM node WHERE id = ?',
+        [nodeId],
+      );
+      expect(row.description).toBe(text);
+    });
+
+    it("keeps a text node's description, which comes from its body", async () => {
+      const nodeId = await makeNode({ type: 'text', description: 'the body' });
 
       const created = await post(nodeId, authorId, {
         text: 'y'.repeat(80),
@@ -637,7 +700,7 @@ describe('comment writes (integration)', () => {
         'SELECT description FROM node WHERE id = ?',
         [nodeId],
       );
-      expect(row.description).toBe('already set');
+      expect(row.description).toBe('the body');
     });
 
     it('does not promote a comment by someone else', async () => {
@@ -933,8 +996,11 @@ describe('comment writes (integration)', () => {
         expect(await description(nodeId)).toBe(LONG_A);
       });
 
-      it('never replaces a description that did not come from a comment', async () => {
-        const nodeId = await makeNode({ description: 'written by hand' });
+      it("never touches a text node's description", async () => {
+        const nodeId = await makeNode({
+          type: 'text',
+          description: 'written by hand',
+        });
         const a = track(
           (await post(nodeId, authorId, { text: LONG_A }).expect(200)).body
             .comment.id,
