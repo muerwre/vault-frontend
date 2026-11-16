@@ -290,6 +290,22 @@ export const getScheduleTimeZone = (): string =>
 export const getMediaRescanCron = (): string =>
   process.env.MEDIA_RESCAN_CRON || '0 0 2 * * *';
 
+export interface MediaBacklogConfig {
+  /** When the next batch is released, as a six-field cron expression. */
+  cron: string;
+  /** Items released per run. */
+  batch: number;
+}
+
+/**
+ * Items found in older content are planned a few at a time, to keep the load on
+ * the provider and the growth of the disk steady. Fresh content never waits.
+ */
+export const getMediaBacklogConfig = (): MediaBacklogConfig => ({
+  cron: process.env.MEDIA_BACKLOG_CRON || '0 0 6 * * *',
+  batch: toPositiveInt(process.env.MEDIA_BACKLOG_BATCH, 5),
+});
+
 export interface UploadsConfig {
   path: string;
   maxSizeMb: number;

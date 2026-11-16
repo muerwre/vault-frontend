@@ -4,20 +4,25 @@ import {
   type OnApplicationBootstrap,
   type OnModuleDestroy,
 } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   MEDIA_JOB_KINDS,
   MEDIA_JOB_STATUSES,
   MEDIA_KINDS,
+  MEDIA_PRIORITIES,
   MEDIA_PROVIDERS,
   MEDIA_THUMB_STATUSES,
   MEDIA_VIDEO_STATUSES,
   type MediaJobKind,
 } from '@vault/common/media';
-import { In, Repository } from 'typeorm';
+import { CronJob } from 'cron';
+import { In, MoreThan, Repository } from 'typeorm';
 
 import {
+  getMediaBacklogConfig,
   getMediaCacheConfig,
+  getScheduleTimeZone,
   isYoutubeThumbCacheEnabled,
 } from '../../config/env';
 import { ExternalMedia, MediaJob } from '../../entities/media.entity';
@@ -27,16 +32,22 @@ import { YoutubeThumbService } from '../upload/youtube-thumb.service';
 
 import { decideVideo, type VideoFacts } from './media.rules';
 
-/** How often new items are looked for. */
+/** How often fresh items are looked for. */
 const POLL_MS = 15_000;
 
 /** Items planned per round; also the YouTube API's ids-per-call limit. */
 const BATCH_SIZE = 50;
 
+const BACKLOG_JOB = 'media-backlog';
+
 /**
  * Decides what happens to newly linked items: fetches what the provider says
  * about them, stores their thumbnails, and queues downloads for the ones worth
- * keeping. Picks up items in `none`, most urgent first.
+ * keeping.
+ *
+ * Fresh items are planned as soon as they appear. Items found in older content
+ * wait in `none` and are released a batch at a time, oldest first. Planning
+ * runs one round at a time, so an item is never planned twice at once.
  */
 @Injectable()
 export class MediaPlannerService
@@ -46,7 +57,11 @@ export class MediaPlannerService
 
   private timer?: NodeJS.Timeout;
 
+  /** The fresh-items round in progress, shared by concurrent callers. */
   private current?: Promise<void>;
+
+  /** Tail of the rounds queued so far; each waits for the previous one. */
+  private lock: Promise<unknown> = Promise.resolve();
 
   private stopping = false;
 
@@ -56,6 +71,7 @@ export class MediaPlannerService
     @InjectRepository(MediaJob) private readonly jobs: Repository<MediaJob>,
     private readonly youtube: YoutubeService,
     private readonly youtubeThumbs: YoutubeThumbService,
+    private readonly scheduler: SchedulerRegistry,
   ) {}
 
   onApplicationBootstrap(): void {
@@ -67,6 +83,8 @@ export class MediaPlannerService
 
     this.timer = setInterval(() => void this.runOnce(), POLL_MS);
     this.timer.unref();
+
+    this.scheduleBacklog();
   }
 
   async onModuleDestroy(): Promise<void> {
@@ -75,30 +93,79 @@ export class MediaPlannerService
       this.timer = undefined;
     }
 
+    if (this.scheduler.doesExist('cron', BACKLOG_JOB)) {
+      this.scheduler.deleteCronJob(BACKLOG_JOB);
+    }
+
     this.stopping = true;
 
     try {
-      await this.current;
+      await this.lock;
     } finally {
       this.stopping = false;
     }
   }
 
-  /** Plans everything waiting. Concurrent calls share the run in progress. */
+  /** Plans every fresh item waiting. Concurrent calls share the run in progress. */
   runOnce(): Promise<void> {
-    this.current ??= this.drain().finally(() => {
+    this.current ??= this.exclusive(() => this.drainFresh()).finally(() => {
       this.current = undefined;
     });
 
     return this.current;
   }
 
-  private async drain(): Promise<void> {
+  /** Plans the next batch of backlog items, oldest first. */
+  releaseBacklog(): Promise<void> {
+    return this.exclusive(() => this.planBacklog());
+  }
+
+  private exclusive(task: () => Promise<void>): Promise<void> {
+    const run = this.lock.then(task, task);
+    this.lock = run.catch((): void => undefined);
+
+    return run;
+  }
+
+  /** A bad expression or zone is reported and leaves the backlog unreleased. */
+  private scheduleBacklog(): void {
+    const { cron, batch } = getMediaBacklogConfig();
+    const timeZone = getScheduleTimeZone();
+
+    try {
+      const job = CronJob.from({
+        cronTime: cron,
+        timeZone,
+        onTick: () => {
+          if (getMediaCacheConfig().enabled) {
+            void this.releaseBacklog();
+          }
+        },
+      });
+
+      this.scheduler.addCronJob(BACKLOG_JOB, job);
+      job.start();
+      this.logger.log(
+        `releasing ${batch} backlog items on "${cron}" (${timeZone})`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `backlog not scheduled, "${cron}" in ${timeZone} is invalid: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
+  }
+
+  private async drainFresh(): Promise<void> {
     try {
       while (!this.stopping) {
         const batch = await this.media.find({
-          where: { videoStatus: MEDIA_VIDEO_STATUSES.NONE },
-          order: { priority: 'ASC', id: 'ASC' },
+          where: {
+            videoStatus: MEDIA_VIDEO_STATUSES.NONE,
+            priority: MEDIA_PRIORITIES.FRESH,
+          },
+          order: { id: 'ASC' },
           take: BATCH_SIZE,
         });
 
@@ -107,10 +174,33 @@ export class MediaPlannerService
         }
       }
     } catch (error) {
-      this.logger.error(
-        `planning failed: ${error instanceof Error ? error.message : String(error)}`,
-      );
+      this.logFailure(error);
     }
+  }
+
+  private async planBacklog(): Promise<void> {
+    try {
+      const batch = await this.media.find({
+        where: {
+          videoStatus: MEDIA_VIDEO_STATUSES.NONE,
+          priority: MoreThan(MEDIA_PRIORITIES.FRESH),
+        },
+        order: { priority: 'ASC', id: 'ASC' },
+        take: Math.min(getMediaBacklogConfig().batch, BATCH_SIZE),
+      });
+
+      if (batch.length > 0) {
+        await this.plan(batch);
+      }
+    } catch (error) {
+      this.logFailure(error);
+    }
+  }
+
+  private logFailure(error: unknown): void {
+    this.logger.error(
+      `planning failed: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 
   /** False when the batch could not be planned and should wait for a later round. */
