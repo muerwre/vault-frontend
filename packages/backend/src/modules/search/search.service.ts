@@ -3,7 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Node } from '../../entities/node.entity';
-import { toWireDate, toWireString } from '../../wire/serialize';
+import {
+  toWireDate,
+  toWireString,
+  toWireThumbnail,
+} from '../../wire/serialize';
 import { applyVisibleToViewer } from '../node/node.predicates';
 
 /** One item of `GET /search/nodes`. */
@@ -87,7 +91,7 @@ export class SearchService {
       total,
       nodes: rows.map((node) => ({
         id: node.id,
-        thumbnail: toWireString(node.thumbnail),
+        thumbnail: toWireThumbnail(node.thumbnail),
         title: toWireString(node.title),
         created_at: toWireDate(node.createdAt),
         is_promoted: Boolean(node.isPromoted),

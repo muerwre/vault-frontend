@@ -4,10 +4,15 @@ import {
   isMimeAllowedForType,
   isUploadTargetAllowed,
   isUploadTypeAllowed,
+  isYoutubeId,
+  localizeYoutubeThumb,
   needsScaling,
   parseCacheRequest,
+  parseYoutubeThumbPath,
+  remoteYoutubeThumbUrl,
   remoteFileName,
   resolveUploadPath,
+  youtubeThumbPath,
 } from './upload.paths';
 
 const AT = new Date('2026-05-03T12:00:00.000Z');
@@ -228,6 +233,62 @@ describe('upload paths', () => {
         preset: 'avatar',
         src: 'uploads/я.jpg',
       });
+    });
+  });
+
+  describe('youtube thumbnails', () => {
+    it('accepts an 11-character id only', () => {
+      expect(isYoutubeId('dQw4w9WgXcQ')).toBe(true);
+      expect(isYoutubeId('a-b_c-d_e-f')).toBe(true);
+      expect(isYoutubeId('short')).toBe(false);
+      expect(isYoutubeId('dQw4w9WgXcQx')).toBe(false);
+      expect(isYoutubeId('../../etc/x')).toBe(false);
+    });
+
+    it('stores a cover at youtube/<id>.jpg', () => {
+      expect(youtubeThumbPath('dQw4w9WgXcQ')).toBe('youtube/dQw4w9WgXcQ.jpg');
+    });
+
+    it('parses the id back out of that path', () => {
+      expect(parseYoutubeThumbPath('youtube/dQw4w9WgXcQ.jpg')).toBe(
+        'dQw4w9WgXcQ',
+      );
+      expect(parseYoutubeThumbPath('/youtube/dQw4w9WgXcQ.jpg')).toBe(
+        'dQw4w9WgXcQ',
+      );
+    });
+
+    it('points a stored YouTube cover at the local copy', () => {
+      expect(
+        localizeYoutubeThumb(
+          'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
+        ),
+      ).toBe('REMOTE_CURRENT://youtube/dQw4w9WgXcQ.jpg');
+    });
+
+    it('round-trips with the remote url', () => {
+      expect(localizeYoutubeThumb(remoteYoutubeThumbUrl('a-b_c-d_e-f'))).toBe(
+        'REMOTE_CURRENT://youtube/a-b_c-d_e-f.jpg',
+      );
+    });
+
+    it('leaves every other thumbnail alone', () => {
+      for (const value of [
+        '',
+        'REMOTE_CURRENT://uploads/2026/5/image/a.jpg',
+        'https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+        'https://i.ytimg.com/vi/short/hqdefault.jpg',
+        'https://example.com/i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
+      ]) {
+        expect(localizeYoutubeThumb(value)).toBe(value);
+      }
+    });
+
+    it('ignores anything else', () => {
+      expect(parseYoutubeThumbPath('uploads/2026/5/image/a.jpg')).toBeNull();
+      expect(parseYoutubeThumbPath('youtube/dQw4w9WgXcQ.png')).toBeNull();
+      expect(parseYoutubeThumbPath('youtube/short.jpg')).toBeNull();
+      expect(parseYoutubeThumbPath('youtube/x/dQw4w9WgXcQ.jpg')).toBeNull();
     });
   });
 });

@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Icon } from '~/components/common/Icon';
 import { NodeComponentProps } from '~/constants/node';
 import { useModal } from '~/hooks/modal/useModal';
-import { getYoutubeId } from '~/utils/dom';
+import { getYoutubeId, getYoutubeThumbById } from '~/utils/dom';
 
 import { NODE_SWIPER_OPTIONS } from '../NodeImageSwiperBlock/options';
 import swiperStyles from '../NodeImageSwiperBlock/styles.module.scss';
@@ -32,14 +32,35 @@ const VideoFrame: FC<{ id: string; autoplay?: boolean }> = ({
   />
 );
 
+/** The video's cover, with a play button when it can be started. */
+const VideoThumb: FC<{
+  id: string;
+  playable: boolean;
+  onClick: () => void;
+}> = ({ id, playable, onClick }) => (
+  <button
+    type="button"
+    className={styles.thumb}
+    style={{ backgroundImage: `url("${getYoutubeThumbById(id)}")` }}
+    onClick={onClick}
+    aria-label="Смотреть видео"
+  >
+    {playable && (
+      <span className={styles.play}>
+        <Icon icon="play" size={32} />
+      </span>
+    )}
+  </button>
+);
+
 /**
  * The head of a video post, laid out like the photo slider: videos sized to
- * fit the screen, neighbours peeking in at the sides. Every slide is its
- * thumbnail until the current one is clicked, which mounts the player there;
+ * fit the screen, neighbours peeking in at the sides. Every video, a lone one
+ * included, is its thumbnail until the current one is clicked, which mounts the player there;
  * moving to another slide drops it, so playback stops and drags are never
  * swallowed by an iframe.
  */
-const NodeVideoBlock: FC<Props> = observer(({ node }) => {
+const NodeVideos: FC<Props> = observer(({ node }) => {
   const [active, setActive] = useState(0);
   const [playing, setPlaying] = useState<number | null>(null);
   const { isOpened: isModalActive } = useModal();
@@ -61,7 +82,11 @@ const NodeVideoBlock: FC<Props> = observer(({ node }) => {
     return (
       <div className={classNames(swiperStyles.wrapper, styles.single)}>
         <div className={styles.frame}>
-          <VideoFrame id={videos[0]} />
+          {playing === 0 ? (
+            <VideoFrame id={videos[0]} autoplay />
+          ) : (
+            <VideoThumb id={videos[0]} playable onClick={() => setPlaying(0)} />
+          )}
         </div>
       </div>
     );
@@ -70,7 +95,6 @@ const NodeVideoBlock: FC<Props> = observer(({ node }) => {
   return (
     <div className={classNames(swiperStyles.wrapper, styles.slider)}>
       <Swiper
-        key={node.id}
         modules={[Navigation, Pagination, Keyboard]}
         slidesPerView="auto"
         breakpoints={NODE_SWIPER_OPTIONS.breakpoints}
@@ -91,23 +115,13 @@ const NodeVideoBlock: FC<Props> = observer(({ node }) => {
               {playing === index ? (
                 <VideoFrame id={id} autoplay />
               ) : (
-                <button
-                  type="button"
-                  className={styles.thumb}
-                  style={{
-                    backgroundImage: `url("https://i.ytimg.com/vi/${id}/hqdefault.jpg")`,
-                  }}
+                <VideoThumb
+                  id={id}
+                  playable={index === active}
                   // only the current slide plays; a click on a neighbour is
                   // the slider's, to bring it forward
                   onClick={() => index === active && setPlaying(index)}
-                  aria-label="Смотреть видео"
-                >
-                  {index === active && (
-                    <span className={styles.play}>
-                      <Icon icon="play" size={32} />
-                    </span>
-                  )}
-                </button>
+                />
               )}
             </div>
           </SwiperSlide>
@@ -116,5 +130,13 @@ const NodeVideoBlock: FC<Props> = observer(({ node }) => {
     </div>
   );
 });
+
+/**
+ * Keyed by post, so one opened in place of another starts from its first
+ * slide with nothing playing, rather than inheriting the previous post's state.
+ */
+const NodeVideoBlock: FC<Props> = (props) => (
+  <NodeVideos key={props.node.id} {...props} />
+);
 
 export { NodeVideoBlock };

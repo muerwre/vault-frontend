@@ -1,67 +1,20 @@
-import { connect } from 'tls';
-
 import { Injectable, Logger } from '@nestjs/common';
-import { SocksClient } from 'socks';
 // undici's own fetch, not the global one: the global is backed by Node's
 // bundled copy, whose Dispatcher type is not interchangeable with this one.
-import { Agent, fetch, ProxyAgent, type Dispatcher } from 'undici';
+import { fetch, type Dispatcher } from 'undici';
 
 import { getTelegramConfig } from '../../config/env';
-
 import {
   describeProxy,
   parseProxyUrl,
-  type ParsedProxy,
-} from './telegram.proxy';
+  proxyDispatcher,
+} from '../../globals/proxy';
 
 export const TELEGRAM_API_ROOT = 'https://api.telegram.org';
 
 /** Builds `https://api.telegram.org/bot<token>/<method>`. */
 export const telegramMethodUrl = (token: string, method: string): string =>
   `${TELEGRAM_API_ROOT}/bot${token}/${method}`;
-
-/**
- * Dispatcher that tunnels to the Bot API through a SOCKS proxy. undici has no
- * SOCKS support of its own, so the TCP connection is established by the SOCKS
- * client and handed back for undici to run TLS over.
- */
-export const socksDispatcher = (proxy: ParsedProxy): Dispatcher =>
-  new Agent({
-    connect: async ({ hostname, port, protocol }, callback) => {
-      try {
-        const { socket } = await SocksClient.createConnection({
-          proxy: {
-            host: proxy.host,
-            port: proxy.port,
-            type: proxy.socksType ?? 5,
-            userId: proxy.username,
-            password: proxy.password,
-          },
-          command: 'connect',
-          destination: {
-            host: hostname,
-            port: Number(port) || (protocol === 'https:' ? 443 : 80),
-          },
-        });
-
-        if (protocol !== 'https:') {
-          callback(null, socket);
-          return;
-        }
-
-        // TLS must terminate at Telegram, not at the proxy.
-        const secure = connect({ socket, servername: hostname });
-
-        secure.on('error', (error) => callback(error, null));
-        secure.on('secureConnect', () => callback(null, secure));
-      } catch (error) {
-        callback(
-          error instanceof Error ? error : new Error(String(error)),
-          null,
-        );
-      }
-    },
-  });
 
 /**
  * Talks to the Telegram Bot API, optionally through a proxy.
@@ -135,17 +88,16 @@ export class TelegramTransport {
     this.resolved = true;
 
     try {
-      const proxy = parseProxyUrl(getTelegramConfig().proxyUrl);
+      const proxy = parseProxyUrl(
+        getTelegramConfig().proxyUrl,
+        'TELEGRAM_PROXY_URL',
+      );
 
       if (!proxy) {
         return undefined;
       }
 
-      // ProxyAgent derives proxy-authorization from the url's credentials.
-      this.dispatcher =
-        proxy.kind === 'socks'
-          ? socksDispatcher(proxy)
-          : new ProxyAgent({ uri: proxy.url });
+      this.dispatcher = proxyDispatcher(proxy);
 
       this.logger.log(`bot api routed through ${describeProxy(proxy)}`);
     } catch (error) {

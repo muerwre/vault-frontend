@@ -2,6 +2,7 @@ import type { Repository } from 'typeorm';
 
 import type { NodeSocialPublication } from '../../entities/node-extras.entity';
 import type { Node } from '../../entities/node.entity';
+import type { YoutubeThumbService } from '../upload/youtube-thumb.service';
 
 import type { VkApiService } from './vk.api';
 import { VkPublisher } from './vk.publisher';
@@ -17,8 +18,12 @@ const makePublisher = (pending: jest.Mock) => {
   const api = {} as VkApiService;
   const nodes = {} as Repository<Node>;
   const publications = {} as Repository<NodeSocialPublication>;
+  const youtubeThumbs = {} as YoutubeThumbService;
 
-  return { publisher: new VkPublisher(queue, api, nodes, publications), queue };
+  return {
+    publisher: new VkPublisher(queue, api, youtubeThumbs, nodes, publications),
+    queue,
+  };
 };
 
 /** A `pending` that blocks until released, and says when it was entered. */

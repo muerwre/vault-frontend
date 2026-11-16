@@ -7,8 +7,7 @@ import {
 
 import { fetch } from 'undici';
 
-import { parseProxyUrl } from './telegram.proxy';
-import { socksDispatcher } from './telegram.transport';
+import { parseProxyUrl, socksDispatcher } from './proxy';
 
 /**
  * A minimal SOCKS5 server supporting no-auth CONNECT, so the tunnelling code

@@ -2,6 +2,7 @@ import { FC, memo, useCallback, useMemo } from 'react';
 
 import { Icon } from '~/components/common/Icon';
 import { ICommentBlockProps } from '~/constants/comment';
+import { imagePresets } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
 import { getYoutubeThumb } from '~/utils/dom';
@@ -27,7 +28,7 @@ const CommentEmbedBlock: FC<Props> = memo(({ block }) => {
   const address = `https://youtube.com/watch?v=${id}`;
 
   const preview = useMemo(
-    () => getYoutubeThumb(block.content),
+    () => getYoutubeThumb(block.content, imagePresets[600]),
     [block.content],
   );
 

@@ -20,6 +20,7 @@ import {
   toWireFlow,
   toWireNode,
   toWireShallowNode,
+  toWireThumbnail,
   type WireNode,
   type WireShallowNode,
 } from '../../wire/serialize';
@@ -244,7 +245,7 @@ export class NodeService {
       albums[key] = albums[key] ?? [];
       albums[key].push({
         id: Number(row.id),
-        thumbnail: row.thumbnail ?? '',
+        thumbnail: toWireThumbnail(row.thumbnail),
         title: row.title ?? '',
         is_promoted: Boolean(row.is_promoted),
       });
@@ -287,7 +288,7 @@ export class NodeService {
 
     return rows.map((row) => ({
       id: Number(row.id),
-      thumbnail: row.thumbnail ?? '',
+      thumbnail: toWireThumbnail(row.thumbnail),
       title: row.title ?? '',
       is_promoted: Boolean(row.is_promoted),
     }));

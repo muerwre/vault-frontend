@@ -1,8 +1,10 @@
 import type { INodeBlock, INodeFlow } from '@vault/common/types';
 
+import { isYoutubeThumbCacheEnabled } from '../config/env';
 import type { File } from '../entities/file.entity';
 import type { Node } from '../entities/node.entity';
 import type { User } from '../entities/user.entity';
+import { localizeYoutubeThumb } from '../modules/upload/upload.paths';
 
 /** Wire serialisation. The output shapes here are a frozen client contract. */
 
@@ -33,6 +35,18 @@ export const toWireDateOrNull = (
 /** Null strings are `""` on the wire, never `null`. */
 export const toWireString = (value: string | null | undefined): string =>
   value === null || value === undefined ? '' : value;
+
+/**
+ * A node's thumbnail for the wire. Video covers are stored as YouTube urls and
+ * swapped for our own copy here, so turning the cache off needs no data change.
+ */
+export const toWireThumbnail = (value: string | null | undefined): string => {
+  const thumbnail = toWireString(value);
+
+  return isYoutubeThumbCacheEnabled()
+    ? localizeYoutubeThumb(thumbnail)
+    : thumbnail;
+};
 
 /** All three keys are always present, even when the stored blob is null. */
 export const toWireFlow = (flow: INodeFlow | null | undefined): INodeFlow => ({
@@ -90,7 +104,7 @@ export const toWireShallowNode = (node: Node): WireShallowNode => ({
   id: node.id,
   title: toWireString(node.title),
   type: toWireString(node.type),
-  thumbnail: toWireString(node.thumbnail),
+  thumbnail: toWireThumbnail(node.thumbnail),
   description: toWireString(node.description),
   commented_at: toWireDate(node.commentedAt),
   created_at: toWireDate(node.createdAt),
@@ -215,7 +229,7 @@ export const toWireNode = (
   is_public: Boolean(node.isPublic),
   is_promoted: Boolean(node.isPromoted),
   is_heroic: Boolean(node.isHeroic),
-  thumbnail: toWireString(node.thumbnail),
+  thumbnail: toWireThumbnail(node.thumbnail),
   description: toWireString(node.description),
   blocks: toWireBlocks(node.blocks),
   cover: node.cover ? toWireFile(node.cover) : null,

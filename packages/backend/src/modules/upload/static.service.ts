@@ -1,13 +1,20 @@
-import { mkdir, readFile, stat, writeFile } from 'fs/promises';
-import { dirname, extname } from 'path';
+import { readFile, stat } from 'fs/promises';
+import { extname } from 'path';
 
 import { Injectable, Logger } from '@nestjs/common';
 import { IMAGE_PRESETS, type ImagePreset } from '@vault/common/constants';
 
 import { getUploadsConfig } from '../../config/env';
 
+import { writeAtomically } from './atomic-write';
 import { openRaster } from './raster';
-import { cachePathFor, needsScaling, resolveUploadPath } from './upload.paths';
+import {
+  cachePathFor,
+  needsScaling,
+  parseYoutubeThumbPath,
+  resolveUploadPath,
+} from './upload.paths';
+import { YoutubeThumbService } from './youtube-thumb.service';
 
 export interface ServableFile {
   absolutePath: string;
@@ -44,6 +51,8 @@ const RASTER_MIMES: Record<string, string> = {
 export class StaticService {
   private readonly logger = new Logger('Static');
 
+  constructor(private readonly youtubeThumbs: YoutubeThumbService) {}
+
   get root(): string {
     return getUploadsConfig().path;
   }
@@ -56,7 +65,9 @@ export class StaticService {
   async resolvePlain(relative: string): Promise<string | null> {
     const absolute = resolveUploadPath(this.root, relative);
 
-    return absolute && (await this.isFile(absolute)) ? absolute : null;
+    return absolute && (await this.ensureFile(relative, absolute))
+      ? absolute
+      : null;
   }
 
   /**
@@ -87,7 +98,7 @@ export class StaticService {
       return { absolutePath: cacheAbsolute, cached: true, contentType };
     }
 
-    if (!(await this.isFile(sourceAbsolute))) {
+    if (!(await this.ensureFile(src, sourceAbsolute))) {
       return null;
     }
 
@@ -123,10 +134,10 @@ export class StaticService {
     const contents = await readFile(source);
     const mime = this.guessMime(source);
 
-    await mkdir(dirname(destination), { recursive: true });
-
+    // Atomic, because a variant is served with a long immutable cache: a
+    // request racing a half-written file would pin the truncated copy.
     if (!needsScaling(mime)) {
-      await writeFile(destination, contents);
+      await writeAtomically(destination, contents);
       return;
     }
 
@@ -153,7 +164,24 @@ export class StaticService {
       pipeline.jpeg();
     }
 
-    await writeFile(destination, await pipeline.toBuffer());
+    await writeAtomically(destination, await pipeline.toBuffer());
+  }
+
+  /**
+   * Whether the file is on disk. A YouTube cover that is not yet is downloaded
+   * first; nothing else is ever created here.
+   */
+  private async ensureFile(
+    relative: string,
+    absolute: string,
+  ): Promise<boolean> {
+    if (await this.isFile(absolute)) {
+      return true;
+    }
+
+    const youtubeId = parseYoutubeThumbPath(relative);
+
+    return youtubeId ? this.youtubeThumbs.ensure(youtubeId) : false;
   }
 
   private guessMime(path: string): string {
