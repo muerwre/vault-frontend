@@ -3,6 +3,8 @@ import { DataSource, type DataSourceOptions } from 'typeorm';
 import { getDatabaseConfig, loadConfig } from '../config/env';
 import { ENTITIES } from '../entities';
 
+import { utcMysql2 } from './utc-driver';
+
 loadConfig();
 
 /**
@@ -21,6 +23,7 @@ export const dataSourceOptions: DataSourceOptions = {
    * Both types load the same `mysql2` client.
    */
   type: 'mariadb',
+  driver: utcMysql2,
   ...getDatabaseConfig(),
   entities: ENTITIES,
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
@@ -55,6 +58,11 @@ export const dataSourceOptions: DataSourceOptions = {
    */
   charset: 'utf8mb4',
 
+  /**
+   * Dates travel as UTC both ways. The sessions are pinned to UTC too (see
+   * `utcMysql2`), so values the database stamps with `NOW()` or a default are
+   * UTC as well: the server's own zone never leaks into stored dates.
+   */
   timezone: 'Z',
 
   // Keep BIGINT as a string to avoid silent precision loss.
