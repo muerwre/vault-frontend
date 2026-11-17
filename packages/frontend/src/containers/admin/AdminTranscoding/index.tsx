@@ -1,6 +1,5 @@
 import { FC, Fragment, ReactNode, useCallback, useMemo, useState } from 'react';
 
-import { YOUTUBE_PROVIDER } from '@vault/common/media';
 import classNames from 'classnames';
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
@@ -27,6 +26,7 @@ import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { API } from '~/constants/api';
 import { showErrorToast } from '~/utils/errors/showToast';
 
+import { JobVideoLink } from './components/JobVideoLink';
 import {
   FETCHER_ONLINE_MS,
   formatBytes,
@@ -58,11 +58,6 @@ const TILE_STATUSES = [
   'unavailable',
   'skipped',
 ];
-
-const videoUrl = (job: ApiMediaJob) =>
-  job.media?.provider === 'youtube'
-    ? YOUTUBE_PROVIDER.canonicalUrl(job.media.external_id)
-    : undefined;
 
 /** Why nothing is being downloaded, when that is the case. */
 const disabledReason = (data: ApiMediaSummary): ReactNode => {
@@ -375,16 +370,7 @@ const AdminTranscoding: FC = () => {
                         </span>
                       )}
 
-                      <a
-                        href={videoUrl(job)}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={styles.video}
-                      >
-                        {job.media
-                          ? `${job.media.provider}:${job.media.external_id}`
-                          : `#${job.id}`}
-                      </a>
+                      <JobVideoLink job={job} className={styles.video} />
 
                       {job.media?.duration ? (
                         <span className={styles.muted}>

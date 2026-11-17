@@ -88,13 +88,6 @@
   justify-content: center;
 }
 
-// In the row, after the title: the strip is too low for a corner.
-.badges.badges {
-  position: static;
-  flex: none;
-  margin-right: $gap * 0.5;
-}
-
 .title {
   flex: 1;
   text-align: left;

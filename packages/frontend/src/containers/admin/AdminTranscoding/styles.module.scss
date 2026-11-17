@@ -127,7 +127,7 @@
 .video {
   font: $font_14_semibold;
   color: inherit;
-  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 .actions {
