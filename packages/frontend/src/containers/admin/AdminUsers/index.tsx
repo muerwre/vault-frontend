@@ -6,12 +6,14 @@ import useSWR from 'swr';
 
 import { ApiAdminUser, apiGetAdminUsers } from '~/api/admin';
 import { Avatar } from '~/components/common/Avatar';
+import { Columns } from '~/components/common/Columns';
 import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { API } from '~/constants/api';
 import { Role } from '~/constants/auth';
 import { URLS } from '~/constants/urls';
 import { IUser } from '~/types/auth';
 import { getPrettyDate } from '~/utils/dom';
+import { isUserActive } from '~/utils/user';
 
 import styles from './styles.module.scss';
 
@@ -57,20 +59,31 @@ const AdminUsers: FC = () => {
         <span className={styles.count}>{data.users.length}</span>
       </header>
 
-      <ul className={styles.grid}>
+      <Columns>
         {data.users.map((user) => (
-          <li key={user.id}>
+          <div key={user.id}>
             <Link href={URLS.PROFILE_PAGE(user.username)} passHref>
               <a
                 className={classNames(styles.card, {
                   [styles.never]: neverSeen(user.last_seen),
                 })}
               >
-                <Avatar
-                  url={user.photo?.url}
-                  username={user.username}
-                  size={48}
-                />
+                <div
+                  className={classNames(styles.avatar, {
+                    [styles.alive]: isUserActive(user.last_seen),
+                  })}
+                  title={
+                    isUserActive(user.last_seen)
+                      ? 'Активен'
+                      : 'Юнит деактивирован'
+                  }
+                >
+                  <Avatar
+                    url={user.photo?.url}
+                    username={user.username}
+                    size={48}
+                  />
+                </div>
 
                 <div className={styles.info}>
                   <div className={styles.name}>
@@ -89,9 +102,9 @@ const AdminUsers: FC = () => {
                 </div>
               </a>
             </Link>
-          </li>
+          </div>
         ))}
-      </ul>
+      </Columns>
     </div>
   );
 };

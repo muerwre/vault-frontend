@@ -1,5 +1,8 @@
 @import 'src/styles/variables';
 
+// green whatever the theme: the dot means "active", not the accent colour
+$alive_green: #2fbf71;
+
 .wrap {
   display: flex;
   flex-direction: column;
@@ -27,20 +30,10 @@
   opacity: 0.5;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: $gap;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
 .card {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: $gap;
-  height: 100%;
   box-sizing: border-box;
   padding: $gap;
   border-radius: $radius;
@@ -52,6 +45,24 @@
   &:hover {
     background: $content_bg_lighter;
   }
+}
+
+// The avatar, with a green dot for users who count as active.
+.avatar {
+  position: relative;
+  flex: none;
+}
+
+.alive::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: $alive_green;
+  box-shadow: $content_bg_light 0 0 0 2px;
 }
 
 // never seen: dimmed, so the active ones stand out
