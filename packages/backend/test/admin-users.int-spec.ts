@@ -48,9 +48,17 @@ describe('admin users API (integration)', () => {
     await makeUser('recent', 'user', -2);
     await makeUser('older', 'user', -1);
     await makeUser('never', 'user', null);
+
+    await db.query(
+      `INSERT INTO social (provider, account_id, userId) VALUES ('vkontakte', ?, ?)`,
+      [`spec${stamp}`, ids.recent],
+    );
   });
 
   afterAll(async () => {
+    await db.query('DELETE FROM social WHERE userId IN (?)', [
+      Object.values(ids),
+    ]);
     await db.query('DELETE FROM user WHERE id IN (?)', [Object.values(ids)]);
     await app.close();
   });
@@ -83,5 +91,24 @@ describe('admin users API (integration)', () => {
       last_seen: expect.any(String),
     });
     expect(body.users[0]).toHaveProperty('photo');
+  });
+
+  it('lists the accounts each user can sign in with', async () => {
+    const { body } = await http()
+      .get('/api/admin/users')
+      .set(authHeader(ids.admin, 'admin'))
+      .expect(200);
+
+    const byId = new Map(
+      (body.users as Array<{ id: number; accounts: unknown[] }>).map((user) => [
+        user.id,
+        user.accounts,
+      ]),
+    );
+
+    expect(byId.get(ids.recent)).toEqual([
+      { provider: 'vkontakte', account_id: `spec${stamp}` },
+    ]);
+    expect(byId.get(ids.never)).toEqual([]);
   });
 });

@@ -18,5 +18,10 @@ export const apiGetMediaJobs = (status: MediaJobFilter, take = 50) =>
 export const apiRetryMediaJob = (id: number) =>
   api.post(API.ADMIN.MEDIA_JOB_RETRY(id)).then(unwrap);
 
+/** A user as the admin page lists them, with the accounts they sign in with. */
+export interface ApiAdminUser extends IUser {
+  accounts: Array<{ provider: string; account_id: string }>;
+}
+
 export const apiGetAdminUsers = () =>
-  api.get<{ users: IUser[] }>(API.ADMIN.USERS).then(unwrap);
+  api.get<{ users: ApiAdminUser[] }>(API.ADMIN.USERS).then(unwrap);

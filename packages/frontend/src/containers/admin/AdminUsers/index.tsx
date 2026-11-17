@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import useSWR from 'swr';
 
-import { apiGetAdminUsers } from '~/api/admin';
+import { ApiAdminUser, apiGetAdminUsers } from '~/api/admin';
 import { Avatar } from '~/components/common/Avatar';
 import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { API } from '~/constants/api';
@@ -18,6 +18,22 @@ import styles from './styles.module.scss';
 /** The backend's zero time, sent for users who were never seen. */
 const neverSeen = (date?: string) =>
   !date || new Date(date).getFullYear() < 2000;
+
+/** Short provider names for the `provider:id` labels. */
+const PROVIDERS: Record<string, string> = {
+  vkontakte: 'vk',
+  google: 'google',
+  telegram: 'telegram',
+};
+
+/** `google:someone@gmail.com`, `vk:1829572`; `direct` without any. */
+const origins = (user: ApiAdminUser) =>
+  user.accounts.length > 0
+    ? user.accounts.map(
+        (account) =>
+          `${PROVIDERS[account.provider] ?? account.provider}:${account.account_id}`,
+      )
+    : ['direct'];
 
 const lastVisit = (user: IUser) =>
   neverSeen(user.last_seen) ? 'не заходил' : getPrettyDate(user.last_seen);
@@ -65,6 +81,11 @@ const AdminUsers: FC = () => {
                   </div>
                   <div className={styles.muted}>~{user.username}</div>
                   <div className={styles.muted}>{lastVisit(user)}</div>
+                  {origins(user).map((origin) => (
+                    <div key={origin} className={styles.origin}>
+                      {origin}
+                    </div>
+                  ))}
                 </div>
               </a>
             </Link>

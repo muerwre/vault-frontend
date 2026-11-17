@@ -90,3 +90,13 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+// how the user signs in: `vk:1829572`, `google:…`, or `direct`
+.origin {
+  font: $font_12_regular;
+  font-family: monospace;
+  opacity: 0.6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
