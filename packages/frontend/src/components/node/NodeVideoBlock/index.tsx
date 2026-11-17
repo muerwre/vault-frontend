@@ -31,7 +31,6 @@ const VideoFrame: FC<{ id: string; autoplay?: boolean }> = observer(
         autoplay={autoplay}
         title={metadata?.metadata?.title}
         video={metadata?.video}
-        pending={!metadata}
       />
     );
   },

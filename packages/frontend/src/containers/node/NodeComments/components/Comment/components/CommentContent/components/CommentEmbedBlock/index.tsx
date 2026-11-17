@@ -61,12 +61,7 @@ const CommentEmbedBlock: FC<Props> = observer(({ block }) => {
             <Icon icon="close" />
           </div>
           <div className={styles.animation}>
-            <CommentVideoFrame
-              id={id}
-              title={title}
-              video={video}
-              pending={!metadata}
-            />
+            <CommentVideoFrame id={id} title={title} video={video} />
           </div>
         </div>
       ) : (

@@ -17,46 +17,29 @@ const YOUTUBE_ORIGIN = 'https://www.youtube.com';
  */
 const UNPLAYABLE = [100, 101, 150];
 
-/** How long to wait to learn whether a copy exists before falling back to YouTube. */
-const PENDING_WAIT_MS = 2_000;
-
 interface Props {
   id: string;
   title?: string;
   autoplay?: boolean;
   /** Our copy, as the metadata endpoint reports it. */
   video?: IEmbedVideo;
-  /** Whether it is still unknown if a copy exists. */
-  pending?: boolean;
   className?: string;
 }
 
 /**
- * A YouTube video. Our copy plays whenever there is one, since YouTube is not
- * reachable everywhere; YouTube's own player otherwise.
+ * A YouTube video. Our copy plays whenever one is known, since YouTube is not
+ * reachable everywhere; YouTube's own player otherwise, at once. If a copy
+ * becomes known after playback started, the player switches to it.
  */
 const YoutubePlayer: FC<Props> = ({
   id,
   title,
   autoplay,
   video,
-  pending,
   className,
 }) => {
   const frame = useRef<HTMLIFrameElement>(null);
   const [embedFailed, setEmbedFailed] = useState(false);
-  const [waited, setWaited] = useState(false);
-
-  useEffect(() => {
-    if (!pending) {
-      return;
-    }
-
-    const timer = setTimeout(() => setWaited(true), PENDING_WAIT_MS);
-
-    return () => clearTimeout(timer);
-  }, [pending]);
-
   // The embed reports errors over postMessage once asked to.
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
@@ -119,10 +102,6 @@ const YoutubePlayer: FC<Props> = ({
         <CopyBadges id={id} video={video} />
       </div>
     );
-  }
-
-  if (pending && !waited) {
-    return <div className={classNames(styles.fill, className)} />;
   }
 
   if (embedFailed) {
