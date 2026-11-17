@@ -5,6 +5,7 @@ import {
   type IMediaAdminJob,
   type IMediaAdminJobList,
   type IMediaAdminSummary,
+  MEDIA_ADMIN_BACKLOG,
   MEDIA_ADMIN_JOB_FILTERS,
   MEDIA_JOB_KINDS,
   MEDIA_JOB_STATUSES,
@@ -27,11 +28,46 @@ import { VaultException } from '../../globals/exceptions';
 
 import { parseFetcherKeys } from './fetcher-keys';
 import { MediaJobsService } from './media-jobs.service';
+import { MediaPlannerService } from './media-planner.service';
 
 const MAX_TAKE = 100;
 
 const iso = (date: Date | null | undefined): string | null =>
   date ? date.toISOString() : null;
+
+/** One run of a list stitched from several sources, see `pageAcross`. */
+interface Segment<T> {
+  count: number;
+  fetch: (offset: number, limit: number) => Promise<T[]>;
+}
+
+/** The `take` rows from `skip` of the segments laid end to end. */
+const pageAcross = async <T>(
+  segments: Array<Segment<T>>,
+  skip: number,
+  take: number,
+): Promise<T[]> => {
+  const rows: T[] = [];
+  let offset = skip;
+
+  for (const segment of segments) {
+    const wanted = take - rows.length;
+
+    if (wanted <= 0) {
+      break;
+    }
+
+    if (offset >= segment.count) {
+      offset -= segment.count;
+      continue;
+    }
+
+    rows.push(...(await segment.fetch(offset, wanted)));
+    offset = 0;
+  }
+
+  return rows;
+};
 
 const countBy = (rows: Array<{ key: string; count: string | number }>) =>
   Object.fromEntries(rows.map((row) => [row.key, Number(row.count)]));
@@ -45,6 +81,7 @@ export class MediaAdminService {
     @InjectRepository(ExternalMedia)
     private readonly media: Repository<ExternalMedia>,
     private readonly mediaJobs: MediaJobsService,
+    private readonly planner: MediaPlannerService,
   ) {}
 
   async summary(): Promise<IMediaAdminSummary> {
@@ -121,6 +158,7 @@ export class MediaAdminService {
 
   /**
    * Jobs matching `filter`: the queue in the order it is worked through,
+   * backlog included,
    * finished and failed ones most recently changed first.
    */
   async listJobs(
@@ -134,60 +172,126 @@ export class MediaAdminService {
       throw new VaultException(ERROR_CODES.IncorrectData);
     }
 
-    const builder = this.jobs.createQueryBuilder('job');
+    const limit = Math.min(Math.max(take || 50, 1), MAX_TAKE);
+    const offset = Math.max(skip || 0, 0);
 
-    if (wanted === 'queue') {
-      // running, then due, then waiting for a retry, then cancelled
-      const stage = `CASE
-          WHEN job.status = :running THEN 0
-          WHEN job.status = :queued
-            AND (job.next_attempt_at IS NULL OR job.next_attempt_at <= :now) THEN 1
-          WHEN job.status = :queued THEN 2
-          ELSE 3
-        END`;
+    if (wanted !== 'queue') {
+      const [rows, total] = await this.jobs
+        .createQueryBuilder('job')
+        .where('job.status = :status', { status: wanted })
+        .orderBy('job.updated_at', 'DESC')
+        .addOrderBy('job.id', 'DESC')
+        .take(limit)
+        .skip(offset)
+        .getManyAndCount();
 
-      builder
+      return { total, jobs: await this.withItems(rows) };
+    }
+
+    const now = new Date();
+
+    // running, then due, then waiting for a retry
+    const active = () =>
+      this.jobs
+        .createQueryBuilder('job')
         .where('job.status IN (:...statuses)', {
-          statuses: [
-            MEDIA_JOB_STATUSES.RUNNING,
-            MEDIA_JOB_STATUSES.QUEUED,
-            MEDIA_JOB_STATUSES.CANCELLED,
-          ],
+          statuses: [MEDIA_JOB_STATUSES.RUNNING, MEDIA_JOB_STATUSES.QUEUED],
         })
         .setParameters({
           running: MEDIA_JOB_STATUSES.RUNNING,
           queued: MEDIA_JOB_STATUSES.QUEUED,
-          now: new Date(),
+          now,
         })
-        .addSelect(stage, 'stage')
+        .addSelect(
+          `CASE
+            WHEN job.status = :running THEN 0
+            WHEN job.next_attempt_at IS NULL OR job.next_attempt_at <= :now THEN 1
+            ELSE 2
+          END`,
+          'stage',
+        )
         .orderBy('stage', 'ASC')
         .addOrderBy(
-          'CASE WHEN job.status = :queued AND job.next_attempt_at > :now THEN job.next_attempt_at END',
+          'CASE WHEN job.next_attempt_at > :now THEN job.next_attempt_at END',
           'ASC',
         )
         .addOrderBy('job.priority', 'ASC')
         .addOrderBy('job.id', 'ASC');
-    } else {
-      builder
-        .where('job.status = :status', { status: wanted })
+
+    const cancelled = () =>
+      this.jobs
+        .createQueryBuilder('job')
+        .where('job.status = :status', {
+          status: MEDIA_JOB_STATUSES.CANCELLED,
+        })
         .orderBy('job.updated_at', 'DESC')
         .addOrderBy('job.id', 'DESC');
-    }
 
-    const [rows, total] = await builder
-      .take(Math.min(Math.max(take || 50, 1), MAX_TAKE))
-      .skip(Math.max(skip || 0, 0))
-      .getManyAndCount();
+    const [activeCount, backlogCount, cancelledCount] = await Promise.all([
+      active().getCount(),
+      this.planner.countBacklog(),
+      cancelled().getCount(),
+    ]);
 
+    const fromJobs =
+      (query: () => ReturnType<typeof active>) =>
+      async (from: number, size: number) =>
+        this.withItems(await query().skip(from).take(size).getMany());
+
+    const jobs = await pageAcross<IMediaAdminJob>(
+      [
+        { count: activeCount, fetch: fromJobs(active) },
+        {
+          count: backlogCount,
+          fetch: async (from, size) => this.backlogItems(from, size),
+        },
+        { count: cancelledCount, fetch: fromJobs(cancelled) },
+      ],
+      offset,
+      limit,
+    );
+
+    return { total: activeCount + backlogCount + cancelledCount, jobs };
+  }
+
+  /** Jobs as the page shows them, each with its item. */
+  private async withItems(rows: MediaJob[]): Promise<IMediaAdminJob[]> {
     const items = await this.media.findBy({
       id: In(rows.map((row) => row.mediaId).filter((id): id is number => !!id)),
     });
     const byId = new Map(items.map((item) => [item.id, item]));
 
-    return {
-      total,
-      jobs: rows.map((row) => this.toWire(row, byId.get(row.mediaId ?? 0))),
-    };
+    return rows.map((row) => this.toWire(row, byId.get(row.mediaId ?? 0)));
+  }
+
+  /** Backlog items, in the order they will be released, shaped as jobs. */
+  private async backlogItems(
+    offset: number,
+    limit: number,
+  ): Promise<IMediaAdminJob[]> {
+    const ids = await this.planner.newestBacklog(limit, offset);
+    const items = await this.media.findBy({ id: In(ids) });
+    const byId = new Map(items.map((item) => [item.id, item]));
+
+    return ids
+      .map((id) => byId.get(id))
+      .filter((item): item is ExternalMedia => !!item)
+      .map(
+        (item): IMediaAdminJob => ({
+          id: item.id,
+          kind: MEDIA_JOB_KINDS.DOWNLOAD,
+          status: MEDIA_ADMIN_BACKLOG,
+          priority: item.priority,
+          progress: 0,
+          attempts: 0,
+          next_attempt_at: null,
+          last_error: null,
+          lease_owner: null,
+          updated_at: iso(item.updatedAt) ?? '',
+          finished_at: null,
+          media: this.mediaWire(item),
+        }),
+      );
   }
 
   /**
@@ -246,15 +350,17 @@ export class MediaAdminService {
       lease_owner: job.leaseOwner,
       updated_at: iso(job.updatedAt) ?? '',
       finished_at: iso(job.finishedAt),
-      media: item
-        ? {
-            provider: item.provider,
-            external_id: item.externalId,
-            video_status: item.videoStatus,
-            skip_reason: item.skipReason,
-            duration: item.duration,
-          }
-        : null,
+      media: item ? this.mediaWire(item) : null,
+    };
+  }
+
+  private mediaWire(item: ExternalMedia): NonNullable<IMediaAdminJob['media']> {
+    return {
+      provider: item.provider,
+      external_id: item.externalId,
+      video_status: item.videoStatus,
+      skip_reason: item.skipReason,
+      duration: item.duration,
     };
   }
 }

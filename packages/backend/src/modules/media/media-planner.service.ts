@@ -192,9 +192,10 @@ export class MediaPlannerService
   /**
    * Waiting backlog items, those linked from the most recent content first:
    * what people see now is saved before what nobody has opened in years.
-   * Nodes and comments count alike, by when they were posted.
+   * Nodes and comments count alike, by when they were posted. This is the
+   * order they are released in.
    */
-  private async newestBacklog(limit: number): Promise<number[]> {
+  async newestBacklog(limit: number, offset = 0): Promise<number[]> {
     const rows = (await this.media.query(
       `SELECT m.id
          FROM external_media m
@@ -204,17 +205,31 @@ export class MediaPlannerService
         WHERE m.video_status = ? AND m.priority > ?
         GROUP BY m.id
         ORDER BY MAX(COALESCE(n.created_at, c.created_at)) DESC, m.id DESC
-        LIMIT ?`,
+        LIMIT ?, ?`,
       [
         MEDIA_OWNER_TYPES.NODE,
         MEDIA_OWNER_TYPES.COMMENT,
         MEDIA_VIDEO_STATUSES.NONE,
         MEDIA_PRIORITIES.FRESH,
+        offset,
         limit,
       ],
     )) as Array<{ id: number }>;
 
     return rows.map((row) => Number(row.id));
+  }
+
+  /** How many items {@link newestBacklog} would list in all. */
+  async countBacklog(): Promise<number> {
+    const [row] = (await this.media.query(
+      `SELECT COUNT(DISTINCT m.id) AS count
+         FROM external_media m
+         JOIN external_media_ref r ON r.media_id = m.id
+        WHERE m.video_status = ? AND m.priority > ?`,
+      [MEDIA_VIDEO_STATUSES.NONE, MEDIA_PRIORITIES.FRESH],
+    )) as Array<{ count: string | number }>;
+
+    return Number(row?.count ?? 0);
   }
 
   private logFailure(error: unknown): void {

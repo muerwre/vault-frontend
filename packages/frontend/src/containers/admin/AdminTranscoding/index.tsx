@@ -34,7 +34,7 @@ import {
   canRetryJob,
   JOB_FILTER_LABELS,
   jobBadge,
-  SKIP_REASON_LABELS,
+  jobKey,
   VIDEO_STATUS_LABELS,
 } from './labels';
 import styles from './styles.module.scss';
@@ -167,11 +167,11 @@ const AdminTranscoding: FC = () => {
 
   // Jobs move between pages as the queue advances; show each once.
   const jobList = useMemo(() => {
-    const seen = new Set<number>();
+    const seen = new Set<string>();
 
     return (jobs.data ?? [])
       .flatMap((page) => page.jobs)
-      .filter((job) => !seen.has(job.id) && !!seen.add(job.id));
+      .filter((job) => !seen.has(jobKey(job)) && !!seen.add(jobKey(job)));
   }, [jobs.data]);
 
   const total = jobs.data?.[0]?.total ?? 0;
@@ -338,7 +338,7 @@ const AdminTranscoding: FC = () => {
                 const badge = jobBadge(job);
 
                 return (
-                  <li key={job.id} className={styles.job}>
+                  <li key={jobKey(job)} className={styles.job}>
                     <div className={styles.job_head}>
                       {badge && (
                         <span
@@ -368,13 +368,6 @@ const AdminTranscoding: FC = () => {
                         </span>
                       ) : null}
 
-                      {job.media?.skip_reason && (
-                        <span className={styles.muted}>
-                          {SKIP_REASON_LABELS[job.media.skip_reason] ??
-                            job.media.skip_reason}
-                        </span>
-                      )}
-
                       {job.attempts > 0 && (
                         <span className={styles.muted}>
                           попыток: {job.attempts}
@@ -399,11 +392,13 @@ const AdminTranscoding: FC = () => {
                     )}
 
                     <div className={styles.muted}>
-                      {job.next_attempt_at
-                        ? `следующая попытка ${formatRelative(
-                            job.next_attempt_at,
-                          )}`
-                        : `обновлено ${formatRelative(job.updated_at)}`}
+                      {job.status === 'backlog'
+                        ? 'ждёт своей очереди'
+                        : job.next_attempt_at
+                          ? `следующая попытка ${formatRelative(
+                              job.next_attempt_at,
+                            )}`
+                          : `обновлено ${formatRelative(job.updated_at)}`}
                       {job.lease_owner && ` · у загрузчика ${job.lease_owner}`}
                     </div>
                   </li>

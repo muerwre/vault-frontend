@@ -44,16 +44,23 @@ export interface IMediaAdminSummary {
 /**
  * Filters for the job list. `queue` is everything not finished: jobs being
  * fetched, then waiting ones in the order fetchers take them, then those
- * waiting for a retry, then cancelled ones.
+ * waiting for a retry, then the backlog in the order it is released, then
+ * cancelled jobs.
  */
 export const MEDIA_ADMIN_JOB_FILTERS = ['queue', 'done', 'failed'] as const;
 
 export type MediaAdminJobFilter = (typeof MEDIA_ADMIN_JOB_FILTERS)[number];
 
+/**
+ * A backlog item in the queue has no job yet: its `status` is `backlog` and
+ * its `id` is the item's, not a job's.
+ */
+export const MEDIA_ADMIN_BACKLOG = 'backlog';
+
 export interface IMediaAdminJob {
   id: number;
   kind: MediaJobKind;
-  status: MediaJobStatus;
+  status: MediaJobStatus | typeof MEDIA_ADMIN_BACKLOG;
   priority: number;
   progress: number;
   attempts: number;

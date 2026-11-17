@@ -32,20 +32,39 @@ export const jobBadge = (job: {
   status: string;
   attempts: number;
   progress: number;
+  media: { video_status: string; skip_reason: string | null } | null;
 }): { label: string; tone: 'active' | 'muted' | 'done' } | null => {
   switch (job.status) {
     case 'running':
       return { label: `В работе · ${job.progress}%`, tone: 'active' };
     case 'queued':
-      return job.attempts > 0 ? { label: 'Повтор', tone: 'muted' } : null;
+      return job.attempts > 0 ? { label: 'Будет повтор', tone: 'muted' } : null;
+    case 'backlog':
+      return { label: 'Бэклог', tone: 'muted' };
     case 'cancelled':
       return { label: 'Отменено', tone: 'muted' };
     case 'done':
-      return { label: 'Готово', tone: 'done' };
+      return job.media?.video_status === 'skipped'
+        ? {
+            label: `Пропущено${
+              job.media.skip_reason
+                ? `: ${
+                    SKIP_REASON_LABELS[job.media.skip_reason] ??
+                    job.media.skip_reason
+                  }`
+                : ''
+            }`,
+            tone: 'muted',
+          }
+        : { label: 'Готово', tone: 'done' };
     default:
       return null;
   }
 };
+
+/** Jobs and backlog items share the list but not their ids. */
+export const jobKey = (job: { id: number; status: string }) =>
+  `${job.status === 'backlog' ? 'item' : 'job'}:${job.id}`;
 
 /**
  * Whether a job can be sent back to the front of the queue. Finished and

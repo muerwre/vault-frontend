@@ -79,6 +79,9 @@ describe('media admin API (integration)', () => {
 
   afterAll(async () => {
     if (mediaIds.length > 0) {
+      await db.query('DELETE FROM external_media_ref WHERE media_id IN (?)', [
+        mediaIds,
+      ]);
       await db.query('DELETE FROM media_job WHERE media_id IN (?)', [mediaIds]);
       await db.query('DELETE FROM external_media WHERE id IN (?)', [mediaIds]);
     }
@@ -197,7 +200,7 @@ describe('media admin API (integration)', () => {
       ).toBe(true);
     });
 
-    it('lists the queue by default: running, due, retrying, then cancelled', async () => {
+    it('lists the queue by default: running, due, retrying, backlog, then cancelled', async () => {
       const cancelledId = await jobIn(vid(8), 'cancelled');
       const dueId = await jobIn(vid(9), 'queued');
       await db.query(
@@ -206,43 +209,77 @@ describe('media admin API (integration)', () => {
       );
       const runningId = await jobIn(vid(10), 'running');
 
+      await db.query(
+        `INSERT INTO external_media (provider, external_id, kind, video_status, priority, duration)
+         VALUES ('youtube', ?, 'video', 'none', 10, 60)`,
+        [vid(11)],
+      );
+      const backlogId = Number(
+        (await db.query('SELECT LAST_INSERT_ID() AS id'))[0].id,
+      );
+      mediaIds.push(backlogId);
+      await db.query(
+        `INSERT INTO external_media_ref (media_id, owner_type, owner_id) VALUES (?, 'node', 0)`,
+        [backlogId],
+      );
+
       const { body } = await http()
         .get('/api/admin/media/jobs?take=100')
         .set(authHeader(adminId, 'admin'))
         .expect(200);
 
-      const order = (body.jobs as Array<{ id: number }>).map((row) => row.id);
-      const mine = order.filter((id) =>
-        [runningId, dueId, retryingId, cancelledId].includes(id),
+      const keys = (body.jobs as Array<{ id: number; status: string }>).map(
+        (row) => `${row.status === 'backlog' ? 'b' : 'j'}${row.id}`,
+      );
+      const mine = keys.filter((key) =>
+        [
+          `j${runningId}`,
+          `j${dueId}`,
+          `j${retryingId}`,
+          `b${backlogId}`,
+          `j${cancelledId}`,
+        ].includes(key),
       );
 
-      expect(mine).toEqual([runningId, dueId, retryingId, cancelledId]);
-      expect(order).not.toContain(failedId);
-      expect(
-        body.jobs.every((row: { status: string }) =>
-          ['running', 'queued', 'cancelled'].includes(row.status),
-        ),
-      ).toBe(true);
-
-      await db.query('DELETE FROM media_job WHERE id IN (?)', [
-        [cancelledId, dueId, runningId],
+      expect(mine).toEqual([
+        `j${runningId}`,
+        `j${dueId}`,
+        `j${retryingId}`,
+        `b${backlogId}`,
+        `j${cancelledId}`,
       ]);
+      expect(keys).not.toContain(`j${failedId}`);
+      expect(
+        body.jobs.find(
+          (row: { id: number; status: string }) =>
+            row.status === 'backlog' && row.id === backlogId,
+        ),
+      ).toMatchObject({
+        attempts: 0,
+        media: { external_id: vid(11), video_status: 'none' },
+      });
     });
 
-    it('pages through a list', async () => {
+    it('pages through the queue across jobs and backlog alike', async () => {
+      const key = (row: { id: number; status: string }) =>
+        `${row.status}:${row.id}`;
       const all = await http()
         .get('/api/admin/media/jobs?take=100')
         .set(authHeader(adminId, 'admin'))
         .expect(200);
-      const second = await http()
-        .get('/api/admin/media/jobs?take=1&skip=1')
-        .set(authHeader(adminId, 'admin'))
-        .expect(200);
 
-      expect(second.body.total).toBe(all.body.total);
-      expect(second.body.jobs.map((row: { id: number }) => row.id)).toEqual(
-        all.body.jobs.slice(1, 2).map((row: { id: number }) => row.id),
-      );
+      const paged: string[] = [];
+      for (let skip = 0; skip < all.body.total; skip += 2) {
+        const page = await http()
+          .get(`/api/admin/media/jobs?take=2&skip=${skip}`)
+          .set(authHeader(adminId, 'admin'))
+          .expect(200);
+
+        expect(page.body.total).toBe(all.body.total);
+        paged.push(...page.body.jobs.map(key));
+      }
+
+      expect(paged).toEqual(all.body.jobs.map(key));
     });
 
     it('refuses unknown filters', async () => {
