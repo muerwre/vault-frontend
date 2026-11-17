@@ -1,8 +1,9 @@
-import { FC, Fragment, ReactNode, useCallback, useState } from 'react';
+import { FC, Fragment, ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { YOUTUBE_PROVIDER } from '@vault/common/media';
 import classNames from 'classnames';
 import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
 
 import {
   apiGetMediaJobs,
@@ -11,10 +12,12 @@ import {
 } from '~/api/admin';
 import {
   ApiMediaJob,
+  ApiMediaJobList,
   ApiMediaSummary,
   MEDIA_JOB_FILTERS,
   MediaJobFilter,
 } from '~/api/admin/types';
+import { InfiniteScroll } from '~/components/common/InfiniteScroll';
 import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { Button } from '~/components/input/Button';
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
@@ -28,14 +31,18 @@ import {
   formatRelative,
 } from './format';
 import {
+  canRetryJob,
   JOB_FILTER_LABELS,
-  RETRYABLE_FILTERS,
+  jobBadge,
   SKIP_REASON_LABELS,
   VIDEO_STATUS_LABELS,
 } from './labels';
 import styles from './styles.module.scss';
 
 const REFRESH_MS = 30_000;
+
+/** Jobs fetched per page of the list. */
+const PAGE_SIZE = 30;
 
 /** Statuses shown as tiles, in this order; the rest are folded away. */
 const TILE_STATUSES = [
@@ -130,7 +137,7 @@ const settingRows = (
     },
     {
       title: 'Часовой пояс расписаний',
-      env: 'SCHEDULE_TIMEZONE',
+      env: 'TZ',
       value: settings.time_zone,
     },
   ];
@@ -138,22 +145,46 @@ const settingRows = (
 
 /**
  * The media cache at a glance: what is stored and queued, which fetchers are
- * connected, and the jobs of one status, with a way to retry them.
+ * connected, and the jobs of one tab, loaded page by page as the list is
+ * scrolled, with a way to retry them.
  */
 const AdminTranscoding: FC = () => {
-  const [filter, setFilter] = useState<MediaJobFilter>('failed');
+  const [filter, setFilter] = useState<MediaJobFilter>('queue');
   const [retrying, setRetrying] = useState<number | null>(null);
 
   const summary = useSWR(API.ADMIN.MEDIA_SUMMARY, apiGetMediaSummary, {
     refreshInterval: REFRESH_MS,
   });
-  const jobs = useSWR(
-    [API.ADMIN.MEDIA_JOBS, filter],
-    () => apiGetMediaJobs(filter),
-    {
-      refreshInterval: REFRESH_MS,
-    },
+  const jobs = useSWRInfinite(
+    (page, previous?: ApiMediaJobList) =>
+      page > 0 && (previous?.jobs.length ?? 0) < PAGE_SIZE
+        ? null
+        : [API.ADMIN.MEDIA_JOBS, filter, page],
+    (_url: string, status: MediaJobFilter, page: number) =>
+      apiGetMediaJobs(status, PAGE_SIZE, page * PAGE_SIZE),
+    { refreshInterval: REFRESH_MS, revalidateAll: true },
   );
+
+  // Jobs move between pages as the queue advances; show each once.
+  const jobList = useMemo(() => {
+    const seen = new Set<number>();
+
+    return (jobs.data ?? [])
+      .flatMap((page) => page.jobs)
+      .filter((job) => !seen.has(job.id) && !!seen.add(job.id));
+  }, [jobs.data]);
+
+  const total = jobs.data?.[0]?.total ?? 0;
+  const lastPage = jobs.data?.[jobs.data.length - 1];
+  const hasMore =
+    !!lastPage && lastPage.jobs.length >= PAGE_SIZE && jobList.length < total;
+
+  const { setSize } = jobs;
+  const loadMore = useCallback(() => {
+    if (!jobs.isValidating) {
+      setSize((size) => size + 1);
+    }
+  }, [jobs.isValidating, setSize]);
 
   const retry = useCallback(
     async (id: number) => {
@@ -263,6 +294,22 @@ const AdminTranscoding: FC = () => {
         )}
       </section>
 
+      <details className={styles.accordion}>
+        <summary className={styles.subtitle}>Настройки</summary>
+
+        <dl className={styles.settings}>
+          {settingRows(data).map((row) => (
+            <Fragment key={row.env}>
+              <dt>
+                {row.title}
+                <code className={styles.env}>{row.env}</code>
+              </dt>
+              <dd>{row.value}</dd>
+            </Fragment>
+          ))}
+        </dl>
+      </details>
+
       <section className={styles.section}>
         <h3 className={styles.subtitle}>Задания</h3>
 
@@ -282,91 +329,97 @@ const AdminTranscoding: FC = () => {
           <div className={styles.loading}>
             <LoaderCircle size={24} />
           </div>
-        ) : jobs.data.jobs.length === 0 ? (
+        ) : jobList.length === 0 ? (
           <div className={styles.empty}>Пусто</div>
         ) : (
-          <ul className={styles.list}>
-            {jobs.data.jobs.map((job) => (
-              <li key={job.id} className={styles.job}>
-                <div className={styles.job_head}>
-                  <a
-                    href={videoUrl(job)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={styles.video}
-                  >
-                    {job.media
-                      ? `${job.media.provider}:${job.media.external_id}`
-                      : `#${job.id}`}
-                  </a>
+          <InfiniteScroll hasMore={hasMore} loadMore={loadMore}>
+            <ul className={styles.list}>
+              {jobList.map((job) => {
+                const badge = jobBadge(job);
 
-                  {job.media?.duration ? (
-                    <span className={styles.muted}>
-                      {formatDuration(job.media.duration)}
-                    </span>
-                  ) : null}
+                return (
+                  <li key={job.id} className={styles.job}>
+                    <div className={styles.job_head}>
+                      {badge && (
+                        <span
+                          className={classNames(
+                            styles.state,
+                            styles[`state_${badge.tone}`],
+                          )}
+                        >
+                          {badge.label}
+                        </span>
+                      )}
 
-                  {job.media?.skip_reason && (
-                    <span className={styles.muted}>
-                      {SKIP_REASON_LABELS[job.media.skip_reason] ??
-                        job.media.skip_reason}
-                    </span>
-                  )}
+                      <a
+                        href={videoUrl(job)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={styles.video}
+                      >
+                        {job.media
+                          ? `${job.media.provider}:${job.media.external_id}`
+                          : `#${job.id}`}
+                      </a>
 
-                  <span className={styles.muted}>
-                    попыток: {job.attempts}
-                    {job.status === 'running' && `, ${job.progress}%`}
-                  </span>
+                      {job.media?.duration ? (
+                        <span className={styles.muted}>
+                          {formatDuration(job.media.duration)}
+                        </span>
+                      ) : null}
 
-                  {RETRYABLE_FILTERS.includes(filter) && (
-                    <Button
-                      size="mini"
-                      color="outline"
-                      className={styles.retry}
-                      disabled={retrying === job.id}
-                      onClick={() => retry(job.id)}
-                    >
-                      Повторить
-                    </Button>
-                  )}
-                </div>
+                      {job.media?.skip_reason && (
+                        <span className={styles.muted}>
+                          {SKIP_REASON_LABELS[job.media.skip_reason] ??
+                            job.media.skip_reason}
+                        </span>
+                      )}
 
-                {job.last_error && (
-                  <div className={styles.error}>{job.last_error}</div>
-                )}
+                      {job.attempts > 0 && (
+                        <span className={styles.muted}>
+                          попыток: {job.attempts}
+                        </span>
+                      )}
 
-                <div className={styles.muted}>
-                  {job.next_attempt_at
-                    ? `следующая попытка ${formatRelative(job.next_attempt_at)}`
-                    : `обновлено ${formatRelative(job.updated_at)}`}
-                  {job.lease_owner && ` · у загрузчика ${job.lease_owner}`}
-                </div>
-              </li>
-            ))}
-          </ul>
+                      {canRetryJob(job) && (
+                        <Button
+                          size="mini"
+                          color="outline"
+                          className={styles.retry}
+                          disabled={retrying === job.id}
+                          onClick={() => retry(job.id)}
+                        >
+                          Повторить
+                        </Button>
+                      )}
+                    </div>
+
+                    {job.last_error && (
+                      <div className={styles.error}>{job.last_error}</div>
+                    )}
+
+                    <div className={styles.muted}>
+                      {job.next_attempt_at
+                        ? `следующая попытка ${formatRelative(
+                            job.next_attempt_at,
+                          )}`
+                        : `обновлено ${formatRelative(job.updated_at)}`}
+                      {job.lease_owner && ` · у загрузчика ${job.lease_owner}`}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </InfiniteScroll>
         )}
 
-        {jobs.data && jobs.data.total > jobs.data.jobs.length && (
+        {jobs.data && total > 0 && (
           <div className={styles.muted}>
-            показаны {jobs.data.jobs.length} из {jobs.data.total}
+            {hasMore
+              ? `показаны ${jobList.length} из ${total}`
+              : `всего ${total}`}
           </div>
         )}
-      </section>
-
-      <section className={styles.section}>
-        <h3 className={styles.subtitle}>Настройки</h3>
-
-        <dl className={styles.settings}>
-          {settingRows(data).map((row) => (
-            <Fragment key={row.env}>
-              <dt>
-                {row.title}
-                <code className={styles.env}>{row.env}</code>
-              </dt>
-              <dd>{row.value}</dd>
-            </Fragment>
-          ))}
-        </dl>
       </section>
     </div>
   );

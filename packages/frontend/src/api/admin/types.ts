@@ -29,14 +29,8 @@ export interface ApiMediaSummary {
   };
 }
 
-export const MEDIA_JOB_FILTERS = [
-  'failed',
-  'retrying',
-  'running',
-  'queued',
-  'done',
-  'cancelled',
-] as const;
+/** Tabs of the job list, in order. */
+export const MEDIA_JOB_FILTERS = ['queue', 'done', 'failed'] as const;
 
 export type MediaJobFilter = (typeof MEDIA_JOB_FILTERS)[number];
 

@@ -56,7 +56,6 @@ describe('MediaBackfillService', () => {
   it('scans on start and schedules a rescan when enabled', async () => {
     process.env.CACHE_EXTERNAL_MEDIA = 'true';
     process.env.MEDIA_RESCAN_CRON = '0 30 3 * * *';
-    process.env.SCHEDULE_TIMEZONE = 'Asia/Novosibirsk';
 
     const { service, scheduler, nodeQuery } = setup();
     service.onApplicationBootstrap();
@@ -64,7 +63,6 @@ describe('MediaBackfillService', () => {
     const job = scheduler.getCronJob('media-rescan');
     expect(job.isActive).toBe(true);
     expect(job.cronTime.source).toBe('0 30 3 * * *');
-    expect(job.cronTime.timeZone).toBe('Asia/Novosibirsk');
 
     await service.onModuleDestroy();
 

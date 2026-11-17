@@ -87,9 +87,7 @@ test.describe('admin page', () => {
       });
     });
 
-    test('shows the users section by default', async ({
-      page,
-    }) => {
+    test('shows the users section by default', async ({ page }) => {
       await page.goto('/admin');
 
       await expect(
@@ -130,6 +128,13 @@ test.describe('admin page', () => {
         'CACHE_EXTERNAL_MEDIA=true',
         { timeout: 15_000 },
       );
+
+      const settings = page.locator('details', { hasText: 'Настройки' });
+      await expect(settings).not.toHaveAttribute('open', '');
+      await expect(settings.getByText('MEDIA_MAX_MB')).toBeHidden();
+
+      await settings.getByText('Настройки').click();
+
       for (const name of [
         'MEDIA_FETCHER_KEYS',
         'MEDIA_QUALITY_TIERS',
@@ -139,9 +144,9 @@ test.describe('admin page', () => {
         'MEDIA_RESCAN_CRON',
         'MEDIA_CLEANUP_CRON',
         'MEDIA_GC_GRACE_DAYS',
-        'SCHEDULE_TIMEZONE',
+        'TZ',
       ]) {
-        await expect(page.locator('body')).toContainText(name);
+        await expect(settings.getByText(name, { exact: true })).toBeVisible();
       }
       await expect(page.locator('body')).not.toContainText('Application error');
     });
@@ -162,10 +167,16 @@ test.describe('admin page', () => {
       });
     });
 
-    test('switches the job list between statuses', async ({ page }) => {
+    test('switches the job list between its tabs', async ({ page }) => {
       await page.goto('/admin/transcoding');
 
+      const tabs = page.getByText(/^(Очередь|Готово|Ошибки)$/);
+      await expect(tabs).toHaveText(['Очередь', 'Готово', 'Ошибки'], {
+        timeout: 15_000,
+      });
+
       await page.getByText('Готово', { exact: true }).click();
+      await page.getByText('Ошибки', { exact: true }).click();
       await expect(page.locator('body')).not.toContainText('Application error');
     });
   });

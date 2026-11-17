@@ -297,9 +297,8 @@ describe('MediaPlannerService', () => {
   });
 
   describe('schedule', () => {
-    it('releases the backlog at 06:00 by default, in the configured zone', async () => {
+    it('releases the backlog at 06:00 by default', async () => {
       process.env.CACHE_EXTERNAL_MEDIA = 'true';
-      process.env.SCHEDULE_TIMEZONE = 'Asia/Novosibirsk';
       const { planner, scheduler } = setup({ rows: [] });
 
       planner.onApplicationBootstrap();
@@ -307,7 +306,6 @@ describe('MediaPlannerService', () => {
       const job = scheduler.getCronJob('media-backlog');
       expect(job.isActive).toBe(true);
       expect(job.cronTime.source).toBe('0 0 6 * * *');
-      expect(job.cronTime.timeZone).toBe('Asia/Novosibirsk');
 
       await planner.onModuleDestroy();
 

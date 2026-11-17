@@ -172,9 +172,9 @@ describe('media admin API (integration)', () => {
       });
     });
 
-    it('lists failed jobs by default, with their item', async () => {
+    it('lists failed jobs, with their item', async () => {
       const { body } = await http()
-        .get('/api/admin/media/jobs')
+        .get('/api/admin/media/jobs?status=failed')
         .set(authHeader(adminId, 'admin'))
         .expect(200);
 
@@ -197,26 +197,57 @@ describe('media admin API (integration)', () => {
       ).toBe(true);
     });
 
-    it('lists jobs waiting for a retry', async () => {
+    it('lists the queue by default: running, due, retrying, then cancelled', async () => {
+      const cancelledId = await jobIn(vid(8), 'cancelled');
+      const dueId = await jobIn(vid(9), 'queued');
+      await db.query(
+        'UPDATE media_job SET next_attempt_at = NULL WHERE id = ?',
+        [dueId],
+      );
+      const runningId = await jobIn(vid(10), 'running');
+
       const { body } = await http()
-        .get('/api/admin/media/jobs?status=retrying&take=100')
+        .get('/api/admin/media/jobs?take=100')
         .set(authHeader(adminId, 'admin'))
         .expect(200);
 
-      expect(body.jobs.map((row: { id: number }) => row.id)).toContain(
-        retryingId,
+      const order = (body.jobs as Array<{ id: number }>).map((row) => row.id);
+      const mine = order.filter((id) =>
+        [runningId, dueId, retryingId, cancelledId].includes(id),
       );
+
+      expect(mine).toEqual([runningId, dueId, retryingId, cancelledId]);
+      expect(order).not.toContain(failedId);
       expect(
-        body.jobs.every(
-          (row: { status: string; attempts: number }) =>
-            row.status === 'queued' && row.attempts > 0,
+        body.jobs.every((row: { status: string }) =>
+          ['running', 'queued', 'cancelled'].includes(row.status),
         ),
       ).toBe(true);
+
+      await db.query('DELETE FROM media_job WHERE id IN (?)', [
+        [cancelledId, dueId, runningId],
+      ]);
+    });
+
+    it('pages through a list', async () => {
+      const all = await http()
+        .get('/api/admin/media/jobs?take=100')
+        .set(authHeader(adminId, 'admin'))
+        .expect(200);
+      const second = await http()
+        .get('/api/admin/media/jobs?take=1&skip=1')
+        .set(authHeader(adminId, 'admin'))
+        .expect(200);
+
+      expect(second.body.total).toBe(all.body.total);
+      expect(second.body.jobs.map((row: { id: number }) => row.id)).toEqual(
+        all.body.jobs.slice(1, 2).map((row: { id: number }) => row.id),
+      );
     });
 
     it('refuses unknown filters', async () => {
       await http()
-        .get('/api/admin/media/jobs?status=everything')
+        .get('/api/admin/media/jobs?status=retrying')
         .set(authHeader(adminId, 'admin'))
         .expect(400);
     });

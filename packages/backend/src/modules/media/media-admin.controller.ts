@@ -33,7 +33,7 @@ export class MediaAdminController {
     return this.admin.summary();
   }
 
-  /** `status` is one of `MEDIA_ADMIN_JOB_FILTERS`; failed jobs by default. */
+  /** `status` is one of `MEDIA_ADMIN_JOB_FILTERS`; the queue by default. */
   @Get('jobs')
   jobs(
     @Query('status') status?: string,

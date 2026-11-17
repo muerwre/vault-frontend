@@ -10,9 +10,15 @@ import { api, unwrap } from '~/utils/api';
 export const apiGetMediaSummary = () =>
   api.get<ApiMediaSummary>(API.ADMIN.MEDIA_SUMMARY).then(unwrap);
 
-export const apiGetMediaJobs = (status: MediaJobFilter, take = 50) =>
+export const apiGetMediaJobs = (
+  status: MediaJobFilter,
+  take: number,
+  skip: number,
+) =>
   api
-    .get<ApiMediaJobList>(API.ADMIN.MEDIA_JOBS, { params: { status, take } })
+    .get<ApiMediaJobList>(API.ADMIN.MEDIA_JOBS, {
+      params: { status, take, skip },
+    })
     .then(unwrap);
 
 export const apiRetryMediaJob = (id: number) =>

@@ -186,3 +186,52 @@
     }
   }
 }
+
+.state {
+  font: $font_12_semibold;
+  padding: 2px $gap * 0.5;
+  border-radius: $radius;
+  white-space: nowrap;
+}
+
+.state_active {
+  background: $color_primary;
+}
+
+.state_done {
+  background: $content_bg_success;
+}
+
+.state_muted {
+  background: $content_bg_lighter;
+}
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::before {
+      content: '▸';
+      display: inline-block;
+      width: 1.2em;
+      transition: transform 0.2s;
+    }
+  }
+
+  &[open] summary {
+    margin-bottom: $gap;
+
+    &::before {
+      transform: rotate(90deg);
+    }
+  }
+}

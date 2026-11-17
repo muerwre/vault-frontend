@@ -122,7 +122,7 @@ export class MediaPlannerService
     return run;
   }
 
-  /** A bad expression or zone is reported and leaves the backlog unreleased. */
+  /** A bad expression is reported and leaves the backlog unreleased. */
   private scheduleBacklog(): void {
     const { cron, batch } = getMediaBacklogConfig();
 

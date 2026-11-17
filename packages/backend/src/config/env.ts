@@ -300,13 +300,9 @@ export const getMediaCacheConfig = (): MediaCacheConfig => {
 export const getMediaFetcherKeys = (): string =>
   process.env.MEDIA_FETCHER_KEYS ?? '';
 
-/** Zone that scheduled jobs' hours are read in. */
-export const getScheduleTimeZone = (): string =>
-  process.env.SCHEDULE_TIMEZONE || 'UTC';
-
 /**
  * When linked videos are re-scanned, as a six-field cron expression (seconds
- * first) in {@link getScheduleTimeZone}.
+ * first) in the process's time zone.
  */
 export const getMediaRescanCron = (): string =>
   process.env.MEDIA_RESCAN_CRON || '0 0 2 * * *';

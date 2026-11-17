@@ -12,12 +12,9 @@ export const VIDEO_STATUS_LABELS: Record<string, string> = {
 };
 
 export const JOB_FILTER_LABELS: Record<MediaJobFilter, string> = {
-  failed: 'Ошибки',
-  retrying: 'Повтор',
-  running: 'В работе',
-  queued: 'Очередь',
+  queue: 'Очередь',
   done: 'Готово',
-  cancelled: 'Отменены',
+  failed: 'Ошибки',
 };
 
 export const SKIP_REASON_LABELS: Record<string, string> = {
@@ -28,11 +25,33 @@ export const SKIP_REASON_LABELS: Record<string, string> = {
 };
 
 /**
- * Jobs that can be sent back to the queue from the list. Finished ones cannot:
- * their copy is already there.
+ * Badge for a job's state, or none for one simply waiting its turn (or a
+ * failed one: its error says enough).
  */
-export const RETRYABLE_FILTERS: MediaJobFilter[] = [
-  'failed',
-  'retrying',
-  'cancelled',
-];
+export const jobBadge = (job: {
+  status: string;
+  attempts: number;
+  progress: number;
+}): { label: string; tone: 'active' | 'muted' | 'done' } | null => {
+  switch (job.status) {
+    case 'running':
+      return { label: `В работе · ${job.progress}%`, tone: 'active' };
+    case 'queued':
+      return job.attempts > 0 ? { label: 'Повтор', tone: 'muted' } : null;
+    case 'cancelled':
+      return { label: 'Отменено', tone: 'muted' };
+    case 'done':
+      return { label: 'Готово', tone: 'done' };
+    default:
+      return null;
+  }
+};
+
+/**
+ * Whether a job can be sent back to the front of the queue. Finished and
+ * running ones cannot, nor one simply waiting its turn.
+ */
+export const canRetryJob = (job: { status: string; attempts: number }) =>
+  job.status === 'failed' ||
+  job.status === 'cancelled' ||
+  (job.status === 'queued' && job.attempts > 0);

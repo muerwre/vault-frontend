@@ -36,19 +36,17 @@ export interface IMediaAdminSummary {
     rescan_cron: string;
     cleanup_cron: string;
     grace_days: number;
+    /** The zone schedules run in: the backend's own `TZ`. */
     time_zone: string;
   };
 }
 
-/** Filters for the job list. `retrying` is queued jobs that already failed. */
-export const MEDIA_ADMIN_JOB_FILTERS = [
-  'failed',
-  'retrying',
-  'running',
-  'queued',
-  'done',
-  'cancelled',
-] as const;
+/**
+ * Filters for the job list. `queue` is everything not finished: jobs being
+ * fetched, then waiting ones in the order fetchers take them, then those
+ * waiting for a retry, then cancelled ones.
+ */
+export const MEDIA_ADMIN_JOB_FILTERS = ['queue', 'done', 'failed'] as const;
 
 export type MediaAdminJobFilter = (typeof MEDIA_ADMIN_JOB_FILTERS)[number];
 

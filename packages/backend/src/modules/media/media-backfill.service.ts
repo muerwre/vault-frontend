@@ -85,7 +85,7 @@ export class MediaBackfillService
     return this.current;
   }
 
-  /** A bad expression or zone is reported and leaves only the startup scan. */
+  /** A bad expression is reported and leaves only the startup scan. */
   private schedule(): void {
     scheduleMediaJob({
       scheduler: this.scheduler,

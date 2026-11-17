@@ -21,7 +21,6 @@ import {
   getMediaCleanupConfig,
   getMediaFetcherKeys,
   getMediaRescanCron,
-  getScheduleTimeZone,
 } from '../../config/env';
 import { ExternalMedia, MediaJob } from '../../entities/media.entity';
 import { VaultException } from '../../globals/exceptions';
@@ -115,18 +114,21 @@ export class MediaAdminService {
         rescan_cron: getMediaRescanCron(),
         cleanup_cron: cleanup.cron,
         grace_days: cleanup.graceDays,
-        time_zone: getScheduleTimeZone(),
+        time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       },
     };
   }
 
-  /** Jobs matching `filter`, most recently changed first. */
+  /**
+   * Jobs matching `filter`: the queue in the order it is worked through,
+   * finished and failed ones most recently changed first.
+   */
   async listJobs(
     filter: string | undefined,
     take: number,
     skip: number,
   ): Promise<IMediaAdminJobList> {
-    const wanted = (filter || 'failed') as MediaAdminJobFilter;
+    const wanted = (filter || 'queue') as MediaAdminJobFilter;
 
     if (!MEDIA_ADMIN_JOB_FILTERS.includes(wanted)) {
       throw new VaultException(ERROR_CODES.IncorrectData);
@@ -134,17 +136,45 @@ export class MediaAdminService {
 
     const builder = this.jobs.createQueryBuilder('job');
 
-    if (wanted === 'retrying') {
+    if (wanted === 'queue') {
+      // running, then due, then waiting for a retry, then cancelled
+      const stage = `CASE
+          WHEN job.status = :running THEN 0
+          WHEN job.status = :queued
+            AND (job.next_attempt_at IS NULL OR job.next_attempt_at <= :now) THEN 1
+          WHEN job.status = :queued THEN 2
+          ELSE 3
+        END`;
+
       builder
-        .where('job.status = :status', { status: MEDIA_JOB_STATUSES.QUEUED })
-        .andWhere('job.attempts > 0');
+        .where('job.status IN (:...statuses)', {
+          statuses: [
+            MEDIA_JOB_STATUSES.RUNNING,
+            MEDIA_JOB_STATUSES.QUEUED,
+            MEDIA_JOB_STATUSES.CANCELLED,
+          ],
+        })
+        .setParameters({
+          running: MEDIA_JOB_STATUSES.RUNNING,
+          queued: MEDIA_JOB_STATUSES.QUEUED,
+          now: new Date(),
+        })
+        .addSelect(stage, 'stage')
+        .orderBy('stage', 'ASC')
+        .addOrderBy(
+          'CASE WHEN job.status = :queued AND job.next_attempt_at > :now THEN job.next_attempt_at END',
+          'ASC',
+        )
+        .addOrderBy('job.priority', 'ASC')
+        .addOrderBy('job.id', 'ASC');
     } else {
-      builder.where('job.status = :status', { status: wanted });
+      builder
+        .where('job.status = :status', { status: wanted })
+        .orderBy('job.updated_at', 'DESC')
+        .addOrderBy('job.id', 'DESC');
     }
 
     const [rows, total] = await builder
-      .orderBy('job.updated_at', 'DESC')
-      .addOrderBy('job.id', 'DESC')
       .take(Math.min(Math.max(take || 50, 1), MAX_TAKE))
       .skip(Math.max(skip || 0, 0))
       .getManyAndCount();
