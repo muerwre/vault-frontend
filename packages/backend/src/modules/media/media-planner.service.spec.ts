@@ -103,7 +103,6 @@ describe('MediaPlannerService', () => {
   beforeEach(() => {
     process.env = {
       ...env,
-      MEDIA_MAX_DURATION_SEC: '1800',
       CACHE_YOUTUBE_THUMBS: 'true',
     };
   });

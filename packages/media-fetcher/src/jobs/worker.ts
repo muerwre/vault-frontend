@@ -39,6 +39,9 @@ export class Worker {
   async run(signal: AbortSignal): Promise<void> {
     log.info(`${this.name}: taking ${this.kinds.join(', ')} jobs`);
 
+    /** So an empty queue is mentioned once, not on every poll. */
+    let idle = false;
+
     while (!signal.aborted) {
       await this.deps.updater.maybeUpdate();
 
@@ -53,9 +56,20 @@ export class Worker {
       }
 
       if (!job) {
+        if (!idle) {
+          log.info(
+            `${this.name}: nothing to do, asking again every ${Math.round(
+              this.deps.idlePollMs / 1000,
+            )}s`,
+          );
+          idle = true;
+        }
+
         await sleep(this.deps.idlePollMs, signal);
         continue;
       }
+
+      idle = false;
 
       await this.deps.limiter.wait(signal);
       const outcome = await this.runJob(job, signal);

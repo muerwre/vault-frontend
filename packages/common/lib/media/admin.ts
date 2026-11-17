@@ -27,6 +27,8 @@ export interface IMediaAdminSummary {
   settings: {
     /** Fetcher keys configured; the keys themselves are never sent. */
     fetcher_keys: number;
+    /** Human-readable `MEDIA_QUALITY_TIERS`. */
+    quality_tiers: string;
     max_duration_sec: number;
     max_mb: number;
     backlog_batch: number;

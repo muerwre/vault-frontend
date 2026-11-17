@@ -63,7 +63,15 @@ const job: MediaClaimedJob = {
   provider: 'youtube',
   externalId: 'dQw4w9WgXcQ',
   url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  constraints: { maxDurationSec: 1800, maxBytes: 500 * MB },
+  constraints: {
+    maxDurationSec: 90 * 60,
+    maxBytes: 500 * MB,
+    qualityTiers: [
+      { maxDurationSec: 30 * 60, maxHeight: 720 },
+      { maxDurationSec: 60 * 60, maxHeight: 480 },
+      { maxDurationSec: 90 * 60, maxHeight: 360 },
+    ],
+  },
   attempt: 1,
   leaseUntil: new Date().toISOString(),
 };
@@ -202,6 +210,21 @@ describe('runDownloadJob', () => {
     expect(api.complete).toHaveBeenCalled();
   });
 
+  it.each([
+    [20 * 60, '136+140'],
+    [45 * 60, '135+140'],
+    [80 * 60, '134+140'],
+  ])('caps the quality by length: %is gets %s', async (duration, spec) => {
+    // sizes are stated, not derived from length, so only the tier decides
+    const { tools, run } = track(setup({ probe: info({ duration }) }));
+
+    await run();
+
+    expect(tools.download).toHaveBeenCalledWith(
+      expect.objectContaining({ spec }),
+    );
+  });
+
   it('chooses a lower quality when the top one is over the limit', async () => {
     const { tools, run } = track(setup({ maxBytes: 50 * MB }));
 
@@ -246,7 +269,7 @@ describe('runDownloadJob', () => {
 
   it.each([
     [{ is_live: true }, { reason: 'live' }],
-    [{ duration: 4000 }, { reason: 'too_long', duration: 4000 }],
+    [{ duration: 6000 }, { reason: 'too_long', duration: 6000 }],
   ])('skips %p without downloading', async (fields, expected) => {
     const { api, tools, run } = track(setup({ probe: info(fields) }));
 

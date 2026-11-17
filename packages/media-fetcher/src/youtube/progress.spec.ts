@@ -1,4 +1,5 @@
 import {
+  parseProgressDetail,
   parseProgressLine,
   PROGRESS_MARKER,
   ProgressTracker,
@@ -8,6 +9,15 @@ const line = (percent: string) => `${PROGRESS_MARKER}  ${percent}`;
 const destination = '[download] Destination: /tmp/job/video.f136.mp4';
 
 describe('parseProgressLine', () => {
+  it('reads speed and time left alongside the percentage', () => {
+    expect(
+      parseProgressDetail(`${PROGRESS_MARKER}  45.3%|  2.31MiB/s|00:12`),
+    ).toEqual({ percent: 45.3, speed: '2.31MiB/s', eta: '00:12' });
+    expect(
+      parseProgressDetail(`${PROGRESS_MARKER}  1.0%|Unknown B/s|Unknown`),
+    ).toEqual({ percent: 1, speed: '', eta: '' });
+  });
+
   it.each([
     [line('45.3%'), 45.3],
     [line('100.0%'), 100],
@@ -44,6 +54,8 @@ describe('ProgressTracker', () => {
 
     expect(tracker.feed(line('10%'), 1000)).toBeNull();
     expect(tracker.feed(line('12%'), heartbeat + 1)).toBe(12);
-    expect(tracker.feed('[ffmpeg] merging', 2 * heartbeat + 2)).toBe(0);
+    // the latest figure seen, not the last one reported
+    tracker.feed(line('20%'), heartbeat + 2);
+    expect(tracker.feed('[ffmpeg] merging', 2 * heartbeat + 2)).toBe(20);
   });
 });

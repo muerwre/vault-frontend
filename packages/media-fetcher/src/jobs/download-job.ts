@@ -1,8 +1,10 @@
 import { randomBytes } from 'crypto';
-import { access, mkdir, rm } from 'fs/promises';
+import { access, mkdir, rm, stat } from 'fs/promises';
 import { join } from 'path';
 
 import {
+  heightLimitFor,
+  maxKeptDuration,
   MEDIA_JOB_STAGES,
   MEDIA_SKIP_REASONS,
   MEDIA_UPLOAD_SLOTS,
@@ -11,13 +13,26 @@ import {
 
 import { BackendError, type BackendClient } from '../backend/api';
 import type { FetcherConfig } from '../config/config';
+import { describeError, log } from '../shared/log';
 import { DOWNLOADED, THUMBNAIL, type MediaTools } from '../tools/media-tools';
 import { classifyFailure, isOverMaxFilesize } from '../youtube/errors';
 import { isLive, pickFormat } from '../youtube/formats';
 import { ProgressTracker } from '../youtube/progress';
 
-/** Longest silence before progress is reported anyway, to keep the lease. */
-export const HEARTBEAT_MS = 2 * 60 * 1000;
+/** Progress is reported at least this often, which also keeps the lease. */
+export const PROGRESS_REPORT_MS = 60 * 1000;
+
+const MB = 1024 * 1024;
+
+const megabytes = (bytes: number) => `${(bytes / MB).toFixed(1)} MB`;
+
+const clock = (seconds: number) => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = String(Math.floor(seconds % 60)).padStart(2, '0');
+
+  return h > 0 ? `${h}:${String(m).padStart(2, '0')}:${s}` : `${m}:${s}`;
+};
 
 /** How a job ended, as far as the worker cares. */
 export interface JobOutcome {
@@ -52,6 +67,9 @@ export const runDownloadJob = async (
   },
 ): Promise<JobOutcome> => {
   const { api, tools, config, signal } = deps;
+  const startedAt = Date.now();
+  const say = (message: string) => log.info(`job ${job.id}: ${message}`);
+  const elapsed = () => clock((Date.now() - startedAt) / 1000);
   const dir = join(
     config.workDir,
     `job-${job.id}-${randomBytes(4).toString('hex')}`,
@@ -71,11 +89,17 @@ export const runDownloadJob = async (
 
   const fail = async (output: string, retryable?: boolean) => {
     const verdict = classifyFailure(output);
+    const willRetry = retryable ?? verdict.retryable;
+
+    say(
+      `failed after ${elapsed()}, ${willRetry ? 'will be retried' : 'for good'}` +
+        `${verdict.rateLimited ? ' (YouTube is throttling)' : ''}: ${verdict.reason}`,
+    );
 
     await guard(() =>
       api.fail(job.id, {
         reason: verdict.reason,
-        retryable: retryable ?? verdict.retryable,
+        retryable: willRetry,
       }),
     );
 
@@ -85,9 +109,20 @@ export const runDownloadJob = async (
     };
   };
 
+  const skip = async (
+    reason: (typeof MEDIA_SKIP_REASONS)[keyof typeof MEDIA_SKIP_REASONS],
+    detail: string,
+    fields: { duration?: number; estimatedBytes?: number } = {},
+  ) => {
+    say(`skipped, ${detail}`);
+    await guard(() => api.skip(job.id, { reason, ...fields }));
+    return FINE;
+  };
+
   await mkdir(dir, { recursive: true });
 
   try {
+    say(`checking ${job.url} (try ${job.attempt})`);
     const { info, result: probed } = await tools.probe(job.url, signal);
 
     if (signal?.aborted) {
@@ -101,41 +136,66 @@ export const runDownloadJob = async (
     const { maxDurationSec, maxBytes } = job.constraints;
     const duration = info.duration ?? undefined;
 
+    say(
+      `"${info.title ?? job.externalId}", ${duration ? clock(duration) : 'length unknown'}`,
+    );
+
     if (isLive(info)) {
-      await guard(() => api.skip(job.id, { reason: MEDIA_SKIP_REASONS.LIVE }));
-      return FINE;
+      return await skip(MEDIA_SKIP_REASONS.LIVE, 'a live stream');
     }
 
-    if (duration && duration > maxDurationSec) {
-      await guard(() =>
-        api.skip(job.id, { reason: MEDIA_SKIP_REASONS.TOO_LONG, duration }),
+    // A backend predating quality tiers sends only the overall limit.
+    const tiers = job.constraints.qualityTiers?.length
+      ? job.constraints.qualityTiers
+      : [{ maxDurationSec, maxHeight: Math.max(...config.qualityLadder) }];
+    const heightLimit = heightLimitFor(tiers, duration);
+
+    if (heightLimit === null) {
+      return await skip(
+        MEDIA_SKIP_REASONS.TOO_LONG,
+        `longer than ${clock(maxKeptDuration(tiers))}`,
+        { duration },
       );
-      return FINE;
     }
+
+    // The tier caps the ladder; the size limit may push it lower still.
+    const allowed = config.qualityLadder.filter(
+      (height) => height <= heightLimit,
+    );
+    const ladder = allowed.length > 0 ? allowed : [heightLimit];
+
+    say(`its length allows up to ${heightLimit}p`);
 
     let fromRung = 0;
 
     // The estimate only picks the quality; if the real file outgrows the cap,
     // one more try is made a rung lower.
     for (let tries = 0; tries < 2; tries += 1) {
-      const choice = pickFormat(info, config.qualityLadder, maxBytes, fromRung);
+      const choice = pickFormat(info, ladder, maxBytes, fromRung);
 
       if (choice.kind === 'no_format') {
         return await fail('ERROR: no H.264/AAC format offered', false);
       }
 
       if (choice.kind === 'too_big') {
-        await guard(() =>
-          api.skip(job.id, {
-            reason: MEDIA_SKIP_REASONS.TOO_BIG,
-            duration,
-            estimatedBytes: choice.estimatedBytes,
-          }),
+        return await skip(
+          MEDIA_SKIP_REASONS.TOO_BIG,
+          `even the lowest quality is ~${megabytes(choice.estimatedBytes)}, over ${megabytes(maxBytes)}`,
+          { duration, estimatedBytes: choice.estimatedBytes },
         );
-        return FINE;
       }
 
-      const downloaded = await download(job, choice.spec, dir, maxBytes, deps);
+      say(
+        `downloading ${choice.height}p (${choice.spec}), ` +
+          (choice.estimatedBytes
+            ? `~${megabytes(choice.estimatedBytes)}`
+            : 'size unknown'),
+      );
+
+      const downloaded = await download(job, choice.spec, dir, maxBytes, {
+        ...deps,
+        say,
+      });
 
       if (signal?.aborted) {
         return await fail('fetcher stopping', true);
@@ -146,19 +206,19 @@ export const runDownloadJob = async (
       }
 
       if (isOverMaxFilesize(downloaded.output) && tries === 0) {
+        say(
+          `${choice.height}p turned out bigger than ${megabytes(maxBytes)}, trying lower`,
+        );
         fromRung = choice.rung + 1;
         continue;
       }
 
       if (isOverMaxFilesize(downloaded.output)) {
-        await guard(() =>
-          api.skip(job.id, {
-            reason: MEDIA_SKIP_REASONS.TOO_BIG,
-            duration,
-            estimatedBytes: maxBytes + 1,
-          }),
+        return await skip(
+          MEDIA_SKIP_REASONS.TOO_BIG,
+          `still bigger than ${megabytes(maxBytes)} a quality lower`,
+          { duration, estimatedBytes: maxBytes + 1 },
         );
-        return FINE;
       }
 
       return await fail(downloaded.output);
@@ -175,7 +235,9 @@ export const runDownloadJob = async (
     }
 
     const facts = await tools.describe(ready);
+    const size = (await stat(ready)).size;
 
+    say(`uploading ${megabytes(size)}`);
     await guard(() => api.progress(job.id, 99, MEDIA_JOB_STAGES.UPLOAD));
     await guard(() =>
       api.upload(job.id, MEDIA_UPLOAD_SLOTS.VIDEO, ready, 'video/mp4'),
@@ -202,12 +264,19 @@ export const runDownloadJob = async (
       }),
     );
 
+    say(
+      `done in ${elapsed()}: ${facts?.width ?? '?'}×${facts?.height ?? '?'}, ` +
+        `${clock(facts?.duration ?? duration ?? 0)}, ${megabytes(size)}`,
+    );
+
     return FINE;
   } catch (error) {
     if (error instanceof JobLost) {
+      say('taken away by the backend (lease lost), dropped');
       return FINE;
     }
 
+    say(`broke after ${elapsed()}: ${describeError(error)}`);
     throw error;
   } finally {
     await rm(dir, { recursive: true, force: true });
@@ -220,10 +289,17 @@ const download = async (
   spec: string,
   dir: string,
   maxBytes: number,
-  deps: { api: BackendClient; tools: MediaTools; signal?: AbortSignal },
+  deps: {
+    api: BackendClient;
+    tools: MediaTools;
+    signal?: AbortSignal;
+    say: (message: string) => void;
+  },
 ): Promise<{ ok: boolean; output: string }> => {
-  const tracker = new ProgressTracker(spec.includes('+') ? 2 : 1, HEARTBEAT_MS);
-  let last = 0;
+  const tracker = new ProgressTracker(
+    spec.includes('+') ? 2 : 1,
+    PROGRESS_REPORT_MS,
+  );
   let lost = false;
   const stop = new AbortController();
   const signal = deps.signal
@@ -231,8 +307,12 @@ const download = async (
     : stop.signal;
 
   const report = (percent: number) => {
-    last = percent;
     tracker.markReported();
+    deps.say(
+      [`${percent}%`, tracker.speed, tracker.eta && `eta ${tracker.eta}`]
+        .filter(Boolean)
+        .join(' · '),
+    );
     deps.api
       .progress(job.id, percent, MEDIA_JOB_STAGES.DOWNLOAD)
       .catch((error: unknown) => {
@@ -246,10 +326,10 @@ const download = async (
 
   // Output can stall for long stretches (a slow merge, throttling).
   const heartbeat = setInterval(() => {
-    if (tracker.heartbeatDue()) {
-      report(last);
+    if (tracker.due()) {
+      report(tracker.latest);
     }
-  }, 30_000);
+  }, 15_000);
   heartbeat.unref();
 
   try {

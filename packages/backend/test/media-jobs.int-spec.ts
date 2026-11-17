@@ -202,7 +202,15 @@ describe('media jobs API (integration)', () => {
         provider: 'youtube',
         externalId: id,
         url: `https://www.youtube.com/watch?v=${id}`,
-        constraints: { maxDurationSec: 1800, maxBytes: 500 * 1024 * 1024 },
+        constraints: {
+          maxDurationSec: 90 * 60,
+          maxBytes: 800 * 1024 * 1024,
+          qualityTiers: [
+            { maxDurationSec: 30 * 60, maxHeight: 720 },
+            { maxDurationSec: 60 * 60, maxHeight: 480 },
+            { maxDurationSec: 90 * 60, maxHeight: 360 },
+          ],
+        },
         attempt: 1,
         leaseUntil: expect.any(String),
       });

@@ -3,6 +3,7 @@
  * `/api/internal/media`. Every request carries `Authorization: Bearer <key>`.
  */
 import type { MediaProvider } from './providers';
+import type { MediaQualityTier } from './quality';
 import type { MediaJobKind, MediaSkipReason } from './status';
 
 /** `POST /jobs/claim` */
@@ -15,8 +16,11 @@ export interface MediaClaimRequest {
 
 /** Limits a job's output must fit. */
 export interface MediaJobConstraints {
+  /** The longest video kept: the last quality tier's limit. */
   maxDurationSec: number;
   maxBytes: number;
+  /** Highest height kept, by length; longer than the last tier is not kept. */
+  qualityTiers: MediaQualityTier[];
 }
 
 /** The answer to a claim; no job is `204 No Content`. */

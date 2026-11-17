@@ -17,6 +17,7 @@ export interface ApiMediaSummary {
   fetchers: ApiMediaFetcher[];
   settings: {
     fetcher_keys: number;
+    quality_tiers: string;
     max_duration_sec: number;
     max_mb: number;
     backlog_batch: number;

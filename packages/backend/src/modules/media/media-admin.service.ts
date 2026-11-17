@@ -11,6 +11,7 @@ import {
   MEDIA_PRIORITIES,
   MEDIA_VIDEO_STATUSES,
   type MediaAdminJobFilter,
+  describeMediaQualityTiers,
 } from '@vault/common/media';
 import { In, type DataSource, type Repository } from 'typeorm';
 
@@ -106,6 +107,7 @@ export class MediaAdminService {
         .sort((a, b) => a.name.localeCompare(b.name)),
       settings: {
         fetcher_keys: parseFetcherKeys(getMediaFetcherKeys()).length,
+        quality_tiers: describeMediaQualityTiers(cache.qualityTiers),
         max_duration_sec: cache.maxDurationSec,
         max_mb: Math.round(cache.maxBytes / 1024 / 1024),
         backlog_batch: backlogConfig.batch,

@@ -105,7 +105,7 @@ test.describe('admin page', () => {
       );
       for (const name of [
         'MEDIA_FETCHER_KEYS',
-        'MEDIA_MAX_DURATION_SEC',
+        'MEDIA_QUALITY_TIERS',
         'MEDIA_MAX_MB',
         'MEDIA_BACKLOG_BATCH',
         'MEDIA_BACKLOG_CRON',

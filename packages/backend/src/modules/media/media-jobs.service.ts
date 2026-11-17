@@ -197,7 +197,7 @@ export class MediaJobsService {
       });
     }
 
-    const { maxDurationSec, maxBytes } = getMediaCacheConfig();
+    const { maxDurationSec, maxBytes, qualityTiers } = getMediaCacheConfig();
 
     return {
       id: job.id,
@@ -205,7 +205,7 @@ export class MediaJobsService {
       provider: item.provider,
       externalId: item.externalId,
       url: def.canonicalUrl(item.externalId),
-      constraints: { maxDurationSec, maxBytes },
+      constraints: { maxDurationSec, maxBytes, qualityTiers },
       attempt: job.attempts + 1,
       leaseUntil: (job.leaseUntil ?? new Date()).toISOString(),
     };

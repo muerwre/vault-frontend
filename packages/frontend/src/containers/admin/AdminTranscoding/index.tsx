@@ -93,9 +93,9 @@ const settingRows = (
       value: settings.fetcher_keys > 0 ? settings.fetcher_keys : 'не заданы',
     },
     {
-      title: 'Длина видео',
-      env: 'MEDIA_MAX_DURATION_SEC',
-      value: `до ${formatDuration(settings.max_duration_sec)}`,
+      title: 'Качество по длине',
+      env: 'MEDIA_QUALITY_TIERS',
+      value: `${settings.quality_tiers}; длиннее — не сохраняются`,
     },
     {
       title: 'Размер файла',

@@ -14,6 +14,7 @@ export interface YtFormat {
 
 export interface YtInfo {
   id: string;
+  title?: string | null;
   duration?: number | null;
   is_live?: boolean | null;
   live_status?: string | null;

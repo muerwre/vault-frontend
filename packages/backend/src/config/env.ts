@@ -1,4 +1,9 @@
 import { ConfigModule } from '@nestjs/config';
+import {
+  maxKeptDuration,
+  type MediaQualityTier,
+  parseMediaQualityTiers,
+} from '@vault/common/media';
 import { config } from 'dotenv';
 
 /**
@@ -266,18 +271,27 @@ export const isYoutubeThumbCacheEnabled = (): boolean =>
 export interface MediaCacheConfig {
   /** Whether external items are tracked and queued for local copies at all. */
   enabled: boolean;
-  /** Longer videos are never downloaded and stay provider embeds. */
+  /** Highest height kept, by length. Longer than the last tier stays an embed. */
+  qualityTiers: MediaQualityTier[];
+  /** The last tier's length: the longest video kept. */
   maxDurationSec: number;
   /** A video is downloaded only if some acceptable quality fits into this. */
   maxBytes: number;
 }
 
 /** Local copies of external videos. Off unless `CACHE_EXTERNAL_MEDIA=true`. */
-export const getMediaCacheConfig = (): MediaCacheConfig => ({
-  enabled: process.env.CACHE_EXTERNAL_MEDIA === 'true',
-  maxDurationSec: toPositiveInt(process.env.MEDIA_MAX_DURATION_SEC, 30 * 60),
-  maxBytes: toPositiveInt(process.env.MEDIA_MAX_MB, 500) * 1024 * 1024,
-});
+export const getMediaCacheConfig = (): MediaCacheConfig => {
+  const qualityTiers = parseMediaQualityTiers(
+    process.env.MEDIA_QUALITY_TIERS ?? '',
+  );
+
+  return {
+    enabled: process.env.CACHE_EXTERNAL_MEDIA === 'true',
+    qualityTiers,
+    maxDurationSec: maxKeptDuration(qualityTiers),
+    maxBytes: toPositiveInt(process.env.MEDIA_MAX_MB, 800) * 1024 * 1024,
+  };
+};
 
 /**
  * Media fetchers allowed to take work, as `name:secret` pairs separated by
