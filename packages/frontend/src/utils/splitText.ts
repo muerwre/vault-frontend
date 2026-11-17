@@ -1,12 +1,10 @@
-import { YOUTUBE_PROVIDER } from '@vault/common/media';
+import { splitByMediaLinks } from '@vault/common/media';
 
 import { flatten, isEmpty } from '~/utils/ramda';
 
-/** Captures every video link, so splitting keeps the links as their own parts. */
-const MEDIA_LINK = new RegExp(`(${YOUTUBE_PROVIDER.urlInText.source})`, 'i');
-
+/** Video links become parts of their own; the text around them is kept whole. */
 export const splitTextByYoutube = (strings: string[]): string[] =>
-  flatten(strings.map((str) => str.split(MEDIA_LINK)));
+  flatten(strings.map(splitByMediaLinks));
 
 export const splitTextOmitEmpty = (strings: string[]): string[] =>
   strings.map((el) => el.trim()).filter((el) => !isEmpty(el));

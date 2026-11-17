@@ -1,4 +1,4 @@
-import { parseMediaUrl, YOUTUBE_PROVIDER } from '@vault/common/media';
+import { isMediaLinkLine } from '@vault/common/media';
 
 export const COMMENT_BLOCK_TYPES = {
   TEXT: 'TEXT',
@@ -6,14 +6,7 @@ export const COMMENT_BLOCK_TYPES = {
   EMBED: 'EMBED',
 };
 
-/** A line that is nothing but a link to a video. */
-const MEDIA_LINK_LINE = new RegExp(
-  `^\\s*${YOUTUBE_PROVIDER.urlInText.source}\\s*$`,
-  'i',
-);
-
-export const isMediaLinkLine = (line: string): boolean =>
-  MEDIA_LINK_LINE.test(line) && !!parseMediaUrl(line.trim());
+export { isMediaLinkLine };
 
 export const COMMENT_BLOCK_DETECTORS: Array<{
   type: string;

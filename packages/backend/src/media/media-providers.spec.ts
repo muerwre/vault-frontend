@@ -1,5 +1,8 @@
 import {
   extractMediaRefs,
+  findMediaLinks,
+  isMediaLinkLine,
+  splitByMediaLinks,
   mediaRefKey,
   parseMediaRefKey,
   parseMediaUrl,
@@ -102,5 +105,57 @@ describe('media providers', () => {
     expect(YOUTUBE_PROVIDER.embedUrl(ID)).toBe(
       `https://www.youtube.com/embed/${ID}`,
     );
+  });
+
+  describe('links in text', () => {
+    const OTHER = 'abcdefghijk';
+
+    it('leaves trailing punctuation out of the link', () => {
+      const text = `(see https://youtu.be/${ID}), and www.youtube.com/watch?v=${OTHER}.`;
+
+      expect(findMediaLinks(text).map((link) => link.url)).toEqual([
+        `https://youtu.be/${ID}`,
+        `www.youtube.com/watch?v=${OTHER}`,
+      ]);
+    });
+
+    it.each([
+      `evilyoutube.com/watch?v=${ID}`,
+      `https://notyoutu.be/${ID}`,
+      `user@youtube.com/watch?v=${ID}`,
+      `https://example.com/youtube.com/watch?v=${ID}`,
+    ])('does not take %p for a YouTube link', (text) => {
+      expect(findMediaLinks(text)).toEqual([]);
+    });
+
+    it('takes protocol-relative links, and stops at square brackets', () => {
+      expect(
+        findMediaLinks(`[video]//www.youtube.com/watch?v=${ID}[video]`).map(
+          (link) => link.url,
+        ),
+      ).toEqual([`//www.youtube.com/watch?v=${ID}`]);
+    });
+
+    it('splits text around links without losing a character', () => {
+      const text = `a https://youtu.be/${ID}, b (youtu.be/${OTHER}) c`;
+      const parts = splitByMediaLinks(text);
+
+      expect(parts).toEqual([
+        'a ',
+        `https://youtu.be/${ID}`,
+        ', b (',
+        `youtu.be/${OTHER}`,
+        ') c',
+      ]);
+      expect(parts.join('')).toBe(text);
+    });
+
+    it('recognises a line that is nothing but a link', () => {
+      expect(isMediaLinkLine(`  https://youtu.be/${ID}  `)).toBe(true);
+      expect(isMediaLinkLine(`see https://youtu.be/${ID}`)).toBe(false);
+      expect(isMediaLinkLine('https://www.youtube.com/user/someone')).toBe(
+        false,
+      );
+    });
   });
 });

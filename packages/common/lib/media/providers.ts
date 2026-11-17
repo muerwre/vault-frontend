@@ -23,8 +23,12 @@ export interface MediaRef {
 export interface MediaProviderDef {
   name: MediaProvider;
   /**
-   * Finds candidate URLs of this provider in free text. Global; matches are
-   * checked with {@link MediaProviderDef.parseUrl} afterwards.
+   * Finds candidate URLs of this provider in free text. Global, with two
+   * groups: what precedes the link (start of text or a separator, so
+   * look-alike hosts such as `evilyoutube.com` never match), then the link,
+   * which never ends in punctuation. Matches are checked with
+   * {@link MediaProviderDef.parseUrl}; use {@link findMediaLinks} rather than
+   * this directly.
    */
   urlInText: RegExp;
   /**
@@ -45,11 +49,11 @@ const YOUTUBE_ID = /^[\w-]{11}$/;
 
 /** `youtu.be/<id>` */
 const YOUTUBE_SHORT_LINK =
-  /^(?:https?:\/\/)?(?:www\.)?youtu\.be\/([\w-]{11})(?![\w-])/i;
+  /^(?:(?:https?:)?\/\/)?(?:www\.)?youtu\.be\/([\w-]{11})(?![\w-])/i;
 
 /** Any `youtube.com` host, `www.`, `m.`, `music.` and the no-cookie domain included. */
 const YOUTUBE_HOST =
-  /^(?:https?:\/\/)?(?:[\w-]+\.)?youtube(?:-nocookie)?\.com(?=[/?#]|$)/i;
+  /^(?:(?:https?:)?\/\/)?(?:[\w-]+\.)?youtube(?:-nocookie)?\.com(?=[/?#]|$)/i;
 
 /** `/embed/<id>`, `/shorts/<id>` and the other path forms. */
 const YOUTUBE_PATH_ID = /^\/(?:embed|v|e|shorts|live)\/([\w-]{11})(?![\w-])/i;
@@ -82,7 +86,7 @@ const parseYoutubeUrl = (url: string): string | null => {
 export const YOUTUBE_PROVIDER: MediaProviderDef = {
   name: MEDIA_PROVIDERS.YOUTUBE,
   urlInText:
-    /(?:https?:\/\/)?(?:[\w-]+\.)?(?:youtube(?:-nocookie)?\.com|youtu\.be)\/[^\s<>"'`]+/gi,
+    /(^|[^\w.@/-])((?:(?:https?:)?\/\/)?(?:[\w-]+\.)?(?:youtube(?:-nocookie)?\.com|youtu\.be)\/[^\s<>"'`[\]]*[^\s<>"'`[\].,;:!?)}])/gi,
   textHints: ['youtu'],
   parseUrl: parseYoutubeUrl,
   isValidId: (id) => YOUTUBE_ID.test(id ?? ''),
@@ -112,24 +116,85 @@ export const parseMediaUrl = (url: string): MediaRef | null => {
   return null;
 };
 
-/** Every item linked from `text`, de-duplicated, in order of first appearance. */
-export const extractMediaRefs = (text: string): MediaRef[] => {
-  const found = new Map<string, MediaRef>();
+/** A link to an item, where it sits in the text it was found in. */
+export interface MediaLink {
+  ref: MediaRef;
+  url: string;
+  start: number;
+  end: number;
+}
+
+/**
+ * Every link to an item in `text`, in order. Candidates that point at no item
+ * (a channel page, a truncated id) are left out, as are overlapping matches.
+ */
+export const findMediaLinks = (text: string): MediaLink[] => {
+  const links: MediaLink[] = [];
 
   for (const def of Object.values(MEDIA_PROVIDER_DEFS)) {
     for (const match of (text ?? '').matchAll(def.urlInText)) {
-      const id = def.parseUrl(match[0]);
+      const url = match[2];
+      const id = def.parseUrl(url);
 
-      if (id && !found.has(mediaRefKey({ provider: def.name, id }))) {
-        found.set(mediaRefKey({ provider: def.name, id }), {
-          provider: def.name,
-          id,
+      if (id) {
+        const start = (match.index ?? 0) + match[1].length;
+        links.push({
+          ref: { provider: def.name, id },
+          url,
+          start,
+          end: start + url.length,
         });
       }
     }
   }
 
+  return links
+    .sort((a, b) => a.start - b.start)
+    .filter(
+      (link, index, all) => index === 0 || link.start >= all[index - 1].end,
+    );
+};
+
+/** Every item linked from `text`, de-duplicated, in order of first appearance. */
+export const extractMediaRefs = (text: string): MediaRef[] => {
+  const found = new Map<string, MediaRef>();
+
+  for (const { ref } of findMediaLinks(text)) {
+    found.set(mediaRefKey(ref), found.get(mediaRefKey(ref)) ?? ref);
+  }
+
   return [...found.values()];
+};
+
+/**
+ * `text` cut into alternating plain text and links, the links at odd indexes
+ * (as `String.split` with a capturing pattern would). Nothing is lost: joining
+ * the parts gives `text` back.
+ */
+export const splitByMediaLinks = (text: string): string[] => {
+  const parts: string[] = [];
+  let cursor = 0;
+
+  for (const link of findMediaLinks(text)) {
+    parts.push(text.slice(cursor, link.start), link.url);
+    cursor = link.end;
+  }
+
+  parts.push((text ?? '').slice(cursor));
+
+  return parts;
+};
+
+/** Whether `line` is nothing but one link to an item, give or take spaces. */
+export const isMediaLinkLine = (line: string): boolean => {
+  const trimmed = (line ?? '').trim();
+  const links = findMediaLinks(trimmed);
+
+  return (
+    links.length === 1 &&
+    links[0].start === 0 &&
+    links[0].end === trimmed.length
+  );
 };
 
 /** `provider:id`, the form used as a map key and in query strings. */
