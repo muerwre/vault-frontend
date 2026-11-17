@@ -6,6 +6,7 @@ import { Keyboard, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Icon } from '~/components/common/Icon';
+import { CopyBadges } from '~/components/media/CopyBadges';
 import { YoutubePlayer } from '~/components/media/YoutubePlayer';
 import { NodeComponentProps } from '~/constants/node';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
@@ -37,30 +38,36 @@ const VideoFrame: FC<{ id: string; autoplay?: boolean }> = observer(
 );
 
 /**
- * The video's cover, with a play button when it can be started. Loads what is
- * known about the video, so the player knows at once whether a copy exists.
+ * The video's cover, with a play button when it can be started, and the copy's
+ * badges when there is one. Loads what is known about the video, so the player
+ * knows at once whether a copy exists.
  */
 const VideoThumb: FC<{
   id: string;
   playable: boolean;
   onClick: () => void;
 }> = observer(({ id, playable, onClick }) => {
-  useYoutubeMetadata(id);
+  const metadata = useYoutubeMetadata(id);
 
   return (
-    <button
-      type="button"
-      className={styles.thumb}
-      style={{ backgroundImage: `url("${getYoutubeThumbById(id)}")` }}
-      onClick={onClick}
-      aria-label="Смотреть видео"
-    >
-      {playable && (
-        <span className={styles.play}>
-          <Icon icon="play" size={32} />
-        </span>
-      )}
-    </button>
+    <>
+      <button
+        type="button"
+        className={styles.thumb}
+        style={{ backgroundImage: `url("${getYoutubeThumbById(id)}")` }}
+        onClick={onClick}
+        aria-label="Смотреть видео"
+      >
+        {playable && (
+          <span className={styles.play}>
+            <Icon icon="play" size={32} />
+          </span>
+        )}
+      </button>
+
+      {/* beside the button, not in it: links cannot sit inside a button */}
+      <CopyBadges id={id} video={metadata?.video} />
+    </>
   );
 });
 

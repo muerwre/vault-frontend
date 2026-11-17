@@ -3,6 +3,7 @@ import { FC, useCallback, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Icon } from '~/components/common/Icon';
+import { CopyBadges } from '~/components/media/CopyBadges';
 import { ICommentBlockProps } from '~/constants/comment';
 import { imagePresets } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
@@ -82,6 +83,8 @@ const CommentEmbedBlock: FC<Props> = observer(({ block }) => {
               </div>
 
               <div className={styles.title}>{title}</div>
+
+              <CopyBadges id={id} video={video} className={styles.badges} />
             </div>
           </div>
         </div>

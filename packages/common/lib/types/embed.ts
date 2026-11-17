@@ -20,6 +20,8 @@ export interface IEmbedVideo {
   url?: string;
   /** The copy's height in pixels, once it is ready and known. */
   height?: number;
+  /** The copy's size in bytes, once it is ready. */
+  size?: number;
 }
 
 export interface IEmbed {

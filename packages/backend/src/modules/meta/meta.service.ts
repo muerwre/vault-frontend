@@ -11,6 +11,7 @@ import { In, Repository } from 'typeorm';
 
 import { getMediaCacheConfig } from '../../config/env';
 import { Embed } from '../../entities/embed.entity';
+import { File } from '../../entities/file.entity';
 import { ExternalMedia, MediaJob } from '../../entities/media.entity';
 import { mediaVideoPath } from '../media/media.paths';
 import { isYoutubeId } from '../upload/upload.paths';
@@ -48,6 +49,7 @@ export class MetaService {
     @InjectRepository(ExternalMedia)
     private readonly media: Repository<ExternalMedia>,
     @InjectRepository(MediaJob) private readonly jobs: Repository<MediaJob>,
+    @InjectRepository(File) private readonly files: Repository<File>,
   ) {}
 
   /**
@@ -155,6 +157,18 @@ export class MetaService {
       kind: MEDIA_JOB_KINDS.DOWNLOAD,
       status: MEDIA_JOB_STATUSES.RUNNING,
     });
+    const fileIds = tracked
+      .filter((item) => item.videoStatus === MEDIA_VIDEO_STATUSES.READY)
+      .map((item) => item.videoFileId)
+      .filter((id): id is number => !!id);
+    const sizes = new Map(
+      fileIds.length > 0
+        ? (await this.files.findBy({ id: In(fileIds) })).map((file) => [
+            file.id,
+            file.size,
+          ])
+        : [],
+    );
     const progress = new Map(
       downloading.map((job) => [job.mediaId, job.progress]),
     );
@@ -178,6 +192,12 @@ export class MetaService {
 
         if (item.height) {
           video.height = item.height;
+        }
+
+        const size = sizes.get(item.videoFileId ?? 0);
+
+        if (size) {
+          video.size = size;
         }
       }
 

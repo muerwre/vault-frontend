@@ -4,6 +4,7 @@ import { YOUTUBE_PROVIDER } from '@vault/common/media';
 import type { IEmbedVideo } from '@vault/common/types';
 import classNames from 'classnames';
 
+import { CopyBadges } from '~/components/media/CopyBadges';
 import { getURLFromString, getYoutubeThumbById } from '~/utils/dom';
 
 import styles from './styles.module.scss';
@@ -115,31 +116,7 @@ const YoutubePlayer: FC<Props> = ({
           playsInline
         />
 
-        <div className={styles.badges}>
-          {!!video.height && (
-            <span className={styles.badge} title="Качество сохранённой копии">
-              {video.height}p
-            </span>
-          )}
-
-          <a
-            className={classNames(styles.badge, styles.link)}
-            href={original}
-            target="_blank"
-            rel="noreferrer"
-            title="Оригинал на YouTube"
-          >
-            YouTube
-            {/* drawn, not a font glyph: fonts render ↗ inconsistently */}
-            <svg
-              className={styles.arrow}
-              viewBox="0 0 10 10"
-              aria-hidden="true"
-            >
-              <path d="M3 1h6v6M9 1 1.5 8.5" />
-            </svg>
-          </a>
-        </div>
+        <CopyBadges id={id} video={video} />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import type { Repository } from 'typeorm';
 
 import type { Embed } from '../../entities/embed.entity';
+import type { File } from '../../entities/file.entity';
 import type { ExternalMedia, MediaJob } from '../../entities/media.entity';
 
 import { MetaService } from './meta.service';
@@ -63,13 +64,16 @@ const mediaRepos = (
   jobs: {
     findBy: jest.fn(async () => running),
   } as unknown as Repository<MediaJob>,
+  files: {
+    findBy: jest.fn(async () => [{ id: 99, size: 95 * 1024 * 1024 }]),
+  } as unknown as Repository<File>,
 });
 
 const makeService = (
   embeds: Repository<Embed>,
   youtube: YoutubeService,
   repos = mediaRepos(),
-) => new MetaService(embeds, youtube, repos.media, repos.jobs);
+) => new MetaService(embeds, youtube, repos.media, repos.jobs, repos.files);
 
 describe('MetaService', () => {
   it('returns an empty map for no ids without touching the API', async () => {
@@ -226,6 +230,7 @@ describe('MetaService', () => {
             videoStatus: 'ready',
             sourceStatus: 'gone',
             height: 720,
+            videoFileId: 99,
           }),
         ]),
       );
@@ -239,6 +244,7 @@ describe('MetaService', () => {
           source: 'gone',
           url: 'REMOTE_CURRENT://media/youtube/aaaaaaaaaaa.mp4',
           height: 720,
+          size: 95 * 1024 * 1024,
         },
       });
     });
