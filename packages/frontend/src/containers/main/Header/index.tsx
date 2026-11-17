@@ -9,6 +9,7 @@ import { Authorized } from '~/components/common/Authorized';
 import { Filler } from '~/components/common/Filler';
 import { Logo } from '~/components/common/Logo';
 import { Button } from '~/components/input/Button';
+import { Role } from '~/constants/auth';
 import { Dialog } from '~/constants/modal';
 import { URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
@@ -101,6 +102,12 @@ const Header: FC<HeaderProps> = observer(() => {
             >
               БОРИС
             </Anchor>
+
+            {user.role === Role.Admin && (
+              <Anchor className={styles.item} href={URLS.ADMIN.BASE}>
+                АДМ
+              </Anchor>
+            )}
           </Authorized>
         </nav>
 

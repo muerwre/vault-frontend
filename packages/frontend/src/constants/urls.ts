@@ -26,6 +26,7 @@ export const URLS = {
   NOTE: (id: number) => `/notes/${id}`,
   ADMIN: {
     BASE: '/admin',
+    USERS: '/admin/users',
     TRANSCODING: '/admin/transcoding',
   },
 };

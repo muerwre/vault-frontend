@@ -4,6 +4,7 @@ import {
   MediaJobFilter,
 } from '~/api/admin/types';
 import { API } from '~/constants/api';
+import { IUser } from '~/types/auth';
 import { api, unwrap } from '~/utils/api';
 
 export const apiGetMediaSummary = () =>
@@ -16,3 +17,6 @@ export const apiGetMediaJobs = (status: MediaJobFilter, take = 50) =>
 
 export const apiRetryMediaJob = (id: number) =>
   api.post(API.ADMIN.MEDIA_JOB_RETRY(id)).then(unwrap);
+
+export const apiGetAdminUsers = () =>
+  api.get<{ users: IUser[] }>(API.ADMIN.USERS).then(unwrap);

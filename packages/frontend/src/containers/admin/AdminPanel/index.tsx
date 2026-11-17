@@ -1,10 +1,12 @@
 import { FC } from 'react';
 
 import { AdminTranscoding } from '~/containers/admin/AdminTranscoding';
+import { AdminUsers } from '~/containers/admin/AdminUsers';
 import { AdminSectionKey } from '~/containers/admin/sections';
 import { AdminLayout } from '~/layouts/AdminLayout';
 
 const SECTIONS: Record<AdminSectionKey, FC> = {
+  users: AdminUsers,
   transcoding: AdminTranscoding,
 };
 

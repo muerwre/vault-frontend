@@ -1,0 +1,92 @@
+@import 'src/styles/variables';
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: $gap * 1.5;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: $gap * 2;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: $gap;
+}
+
+.title {
+  font: $font_24_semibold;
+  margin: 0;
+}
+
+.count {
+  opacity: 0.5;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: $gap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: $gap;
+  height: 100%;
+  box-sizing: border-box;
+  padding: $gap;
+  border-radius: $radius;
+  background: $content_bg_light;
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $content_bg_lighter;
+  }
+}
+
+// never seen: dimmed, so the active ones stand out
+.never {
+  opacity: 0.5;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: $gap * 0.5;
+  font: $font_16_semibold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  padding: 1px 6px;
+  border-radius: $radius * 0.5;
+  font: $font_12_semibold;
+  background: $color_primary;
+}
+
+.muted {
+  font: $font_12_regular;
+  opacity: 0.6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

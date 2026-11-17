@@ -53,6 +53,12 @@ test.describe('admin page', () => {
 
     await expect(page.locator('body')).toContainText(NOT_FOUND);
     await expect(page.locator('body')).not.toContainText('Транскодирование');
+
+    await page.goto('/');
+    await expect(page.getByRole('link', { name: 'БОРИС' })).toBeVisible({
+      timeout: 15_000,
+    });
+    await expect(page.getByRole('link', { name: 'АДМ' })).toHaveCount(0);
   });
 
   test('is a 404 when the stored login claims admin but the server disagrees', async ({
@@ -81,8 +87,29 @@ test.describe('admin page', () => {
       });
     });
 
-    test('shows the transcoding section by default', async ({ page }) => {
+    test('shows the users section by default', async ({
+      page,
+    }) => {
       await page.goto('/admin');
+
+      await expect(
+        page.getByRole('heading', { name: 'Пользователи' }),
+      ).toBeVisible({ timeout: 15_000 });
+      // the order itself is the backend's, covered by its own spec
+      await expect(page.locator('body')).toContainText('~e2e_admin');
+      await expect(page.locator('body')).toContainText('~e2e_reader');
+    });
+
+    test('links to the admin page from the header', async ({ page }) => {
+      await page.goto('/');
+
+      const link = page.getByRole('link', { name: 'АДМ' });
+      await expect(link).toBeVisible({ timeout: 15_000 });
+      await expect(link).toHaveAttribute('href', '/admin');
+    });
+
+    test('shows the transcoding section', async ({ page }) => {
+      await page.goto('/admin/transcoding');
 
       await expect(
         page.getByRole('heading', { name: 'Транскодирование' }),
@@ -97,7 +124,7 @@ test.describe('admin page', () => {
       page,
     }) => {
       // The suite's backend runs without CACHE_EXTERNAL_MEDIA.
-      await page.goto('/admin');
+      await page.goto('/admin/transcoding');
 
       await expect(page.locator('body')).toContainText(
         'CACHE_EXTERNAL_MEDIA=true',
@@ -136,7 +163,7 @@ test.describe('admin page', () => {
     });
 
     test('switches the job list between statuses', async ({ page }) => {
-      await page.goto('/admin');
+      await page.goto('/admin/transcoding');
 
       await page.getByText('Готово', { exact: true }).click();
       await expect(page.locator('body')).not.toContainText('Application error');

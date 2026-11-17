@@ -5,6 +5,7 @@ import { CONFIG } from './config/env';
 import { DATABASE } from './database/database.module';
 import { JWT } from './globals/jwt';
 import { HealthController } from './health.controller';
+import { AdminModule } from './modules/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { MailModule } from './modules/mail/mail.module';
@@ -42,6 +43,7 @@ import { VkModule } from './modules/vk/vk.module';
     TelegramModule,
     VkModule,
     MetaModule,
+    AdminModule,
   ],
   controllers: [HealthController],
   providers: [],
