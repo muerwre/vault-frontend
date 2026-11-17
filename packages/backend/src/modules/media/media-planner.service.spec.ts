@@ -24,7 +24,12 @@ const item = (externalId: string, overrides: Partial<ExternalMedia> = {}) =>
   }) as ExternalMedia;
 
 const fresh = (externalId: string) => item(externalId);
-const backlog = (externalId: string) => item(externalId, { priority: 10 });
+/**
+ * Waiting backlog, linked from content posted `postedDaysAgo` ago. The date
+ * lives beside the row only for the fake query below.
+ */
+const backlog = (externalId: string, postedDaysAgo = 1) =>
+  Object.assign(item(externalId, { priority: 10 }), { postedDaysAgo });
 
 /** Matches a stored priority against an exact value or a `MoreThan`. */
 const priorityMatches = (
@@ -68,6 +73,21 @@ const setup = (options: {
       saved.push({ ...row });
       return row;
     }),
+    // The backlog query: waiting items, most recently linked first.
+    query: jest.fn(async (_sql: string, params: unknown[]) =>
+      rows
+        .filter((row) => row.videoStatus === 'none' && row.priority > 0)
+        .sort(
+          (a, b) =>
+            (a as { postedDaysAgo?: number }).postedDaysAgo! -
+              (b as { postedDaysAgo?: number }).postedDaysAgo! || b.id - a.id,
+        )
+        .slice(0, Number(params[params.length - 1]))
+        .map((row) => ({ id: row.id })),
+    ),
+    findBy: jest.fn(async ({ id }: { id: FindOperator<number[]> }) =>
+      rows.filter((row) => (id.value as unknown as number[]).includes(row.id)),
+    ),
   } as unknown as Repository<ExternalMedia>;
 
   const jobRepo = {
@@ -209,12 +229,12 @@ describe('MediaPlannerService', () => {
   });
 
   describe('backlog', () => {
-    it('releases one batch, oldest first, at backlog priority', async () => {
+    it('releases one batch, most recently linked first, at backlog priority', async () => {
       process.env.MEDIA_BACKLOG_BATCH = '2';
       const rows = [
-        backlog('oldVideo001'),
-        backlog('oldVideo002'),
-        backlog('oldVideo003'),
+        backlog('year2010vid', 5000),
+        backlog('lastWeekVid', 7),
+        backlog('lastYearVid', 365),
         fresh('freshVideo1'),
       ];
       const { planner, jobs } = setup({ rows });
@@ -222,9 +242,9 @@ describe('MediaPlannerService', () => {
       await planner.releaseBacklog();
 
       expect(statusOf(rows)).toEqual({
-        oldVideo001: 'queued',
-        oldVideo002: 'queued',
-        oldVideo003: 'none',
+        year2010vid: 'none',
+        lastWeekVid: 'queued',
+        lastYearVid: 'queued',
         freshVideo1: 'none',
       });
       expect(jobs.map((job) => job.priority)).toEqual([10, 10]);

@@ -10,6 +10,7 @@ import {
   MEDIA_JOB_KINDS,
   MEDIA_JOB_STATUSES,
   MEDIA_KINDS,
+  MEDIA_OWNER_TYPES,
   MEDIA_PRIORITIES,
   MEDIA_PROVIDERS,
   MEDIA_THUMB_STATUSES,
@@ -17,7 +18,7 @@ import {
   type MediaJobKind,
 } from '@vault/common/media';
 import { CronJob } from 'cron';
-import { In, MoreThan, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import {
   getMediaBacklogConfig,
@@ -43,7 +44,7 @@ const BACKLOG_JOB = 'media-backlog';
  * keeping.
  *
  * Fresh items are planned as soon as they appear. Items found in older content
- * wait in `none` and are released a batch at a time, oldest first. Planning
+ * wait in `none` and are released a batch at a time, newest content first. Planning
  * runs one round at a time, so an item is never planned twice at once.
  */
 @Injectable()
@@ -111,7 +112,7 @@ export class MediaPlannerService
     return this.current;
   }
 
-  /** Plans the next batch of backlog items, oldest first. */
+  /** Plans the next batch of backlog items, newest content first. */
   releaseBacklog(): Promise<void> {
     return this.exclusive(() => this.planBacklog());
   }
@@ -178,21 +179,46 @@ export class MediaPlannerService
 
   private async planBacklog(): Promise<void> {
     try {
-      const batch = await this.media.find({
-        where: {
-          videoStatus: MEDIA_VIDEO_STATUSES.NONE,
-          priority: MoreThan(MEDIA_PRIORITIES.FRESH),
-        },
-        order: { priority: 'ASC', id: 'ASC' },
-        take: Math.min(getMediaBacklogConfig().batch, BATCH_SIZE),
-      });
+      const ids = await this.newestBacklog(
+        Math.min(getMediaBacklogConfig().batch, BATCH_SIZE),
+      );
 
-      if (batch.length > 0) {
-        await this.plan(batch);
+      if (ids.length === 0) {
+        return;
       }
+
+      await this.plan(await this.media.findBy({ id: In(ids) }));
     } catch (error) {
       this.logFailure(error);
     }
+  }
+
+  /**
+   * Waiting backlog items, those linked from the most recent content first:
+   * what people see now is saved before what nobody has opened in years.
+   * Nodes and comments count alike, by when they were posted.
+   */
+  private async newestBacklog(limit: number): Promise<number[]> {
+    const rows = (await this.media.query(
+      `SELECT m.id
+         FROM external_media m
+         JOIN external_media_ref r ON r.media_id = m.id
+         LEFT JOIN node n ON r.owner_type = ? AND n.id = r.owner_id
+         LEFT JOIN comment c ON r.owner_type = ? AND c.id = r.owner_id
+        WHERE m.video_status = ? AND m.priority > ?
+        GROUP BY m.id
+        ORDER BY MAX(COALESCE(n.created_at, c.created_at)) DESC, m.id DESC
+        LIMIT ?`,
+      [
+        MEDIA_OWNER_TYPES.NODE,
+        MEDIA_OWNER_TYPES.COMMENT,
+        MEDIA_VIDEO_STATUSES.NONE,
+        MEDIA_PRIORITIES.FRESH,
+        limit,
+      ],
+    )) as Array<{ id: number }>;
+
+    return rows.map((row) => Number(row.id));
   }
 
   private logFailure(error: unknown): void {
