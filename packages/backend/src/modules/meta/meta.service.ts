@@ -175,6 +175,10 @@ export class MetaService {
 
       if (item.videoStatus === MEDIA_VIDEO_STATUSES.READY) {
         video.url = `REMOTE_CURRENT://${mediaVideoPath(item.provider, item.externalId)}`;
+
+        if (item.height) {
+          video.height = item.height;
+        }
       }
 
       items[item.externalId] = {

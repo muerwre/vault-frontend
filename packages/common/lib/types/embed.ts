@@ -18,6 +18,8 @@ export interface IEmbedVideo {
   progress?: number;
   /** `REMOTE_CURRENT://…` url of the copy, once it is ready. */
   url?: string;
+  /** The copy's height in pixels, once it is ready and known. */
+  height?: number;
 }
 
 export interface IEmbed {

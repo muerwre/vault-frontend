@@ -225,6 +225,7 @@ describe('MetaService', () => {
           tracked('aaaaaaaaaaa', {
             videoStatus: 'ready',
             sourceStatus: 'gone',
+            height: 720,
           }),
         ]),
       );
@@ -237,6 +238,7 @@ describe('MetaService', () => {
           status: 'ready',
           source: 'gone',
           url: 'REMOTE_CURRENT://media/youtube/aaaaaaaaaaa.mp4',
+          height: 720,
         },
       });
     });

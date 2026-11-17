@@ -115,15 +115,31 @@ const YoutubePlayer: FC<Props> = ({
           playsInline
         />
 
-        <a
-          className={styles.original}
-          href={original}
-          target="_blank"
-          rel="noreferrer"
-          title="Оригинал на YouTube"
-        >
-          YouTube ↗
-        </a>
+        <div className={styles.badges}>
+          {!!video.height && (
+            <span className={styles.badge} title="Качество сохранённой копии">
+              {video.height}p
+            </span>
+          )}
+
+          <a
+            className={classNames(styles.badge, styles.link)}
+            href={original}
+            target="_blank"
+            rel="noreferrer"
+            title="Оригинал на YouTube"
+          >
+            YouTube
+            {/* drawn, not a font glyph: fonts render ↗ inconsistently */}
+            <svg
+              className={styles.arrow}
+              viewBox="0 0 10 10"
+              aria-hidden="true"
+            >
+              <path d="M3 1h6v6M9 1 1.5 8.5" />
+            </svg>
+          </a>
+        </div>
       </div>
     );
   }
