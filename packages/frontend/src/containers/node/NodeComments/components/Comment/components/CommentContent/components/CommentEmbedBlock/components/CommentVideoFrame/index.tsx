@@ -9,12 +9,26 @@ interface Props {
   id: string;
   title: string;
   video?: IEmbedVideo;
+  /** Whether it is still unknown if a copy exists. */
+  pending?: boolean;
   className?: string;
 }
 
-/** The player in a comment: YouTube's, or our copy where YouTube cannot play it. */
-export const CommentVideoFrame = ({ id, title, video, className }: Props) => (
+/** The player in a comment: our copy when there is one, YouTube's otherwise. */
+export const CommentVideoFrame = ({
+  id,
+  title,
+  video,
+  pending,
+  className,
+}: Props) => (
   <div className={classNames(styles.wrap, className)}>
-    <YoutubePlayer id={id} title={title} video={video} autoplay />
+    <YoutubePlayer
+      id={id}
+      title={title}
+      video={video}
+      pending={pending}
+      autoplay
+    />
   </div>
 );

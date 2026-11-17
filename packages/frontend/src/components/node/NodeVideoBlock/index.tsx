@@ -6,7 +6,6 @@ import { Keyboard, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Icon } from '~/components/common/Icon';
-import { VideoSaveBadge } from '~/components/media/VideoSaveBadge';
 import { YoutubePlayer } from '~/components/media/YoutubePlayer';
 import { NodeComponentProps } from '~/constants/node';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
@@ -31,21 +30,22 @@ const VideoFrame: FC<{ id: string; autoplay?: boolean }> = observer(
         autoplay={autoplay}
         title={metadata?.metadata?.title}
         video={metadata?.video}
+        pending={!metadata}
       />
     );
   },
 );
 
 /**
- * The video's cover, with a play button when it can be started, and how
- * saving our copy is going.
+ * The video's cover, with a play button when it can be started. Loads what is
+ * known about the video, so the player knows at once whether a copy exists.
  */
 const VideoThumb: FC<{
   id: string;
   playable: boolean;
   onClick: () => void;
 }> = observer(({ id, playable, onClick }) => {
-  const metadata = useYoutubeMetadata(id);
+  useYoutubeMetadata(id);
 
   return (
     <button
@@ -60,8 +60,6 @@ const VideoThumb: FC<{
           <Icon icon="play" size={32} />
         </span>
       )}
-
-      <VideoSaveBadge video={metadata?.video} className={styles.badge} />
     </button>
   );
 });

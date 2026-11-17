@@ -16,33 +16,45 @@ const YOUTUBE_ORIGIN = 'https://www.youtube.com';
  */
 const UNPLAYABLE = [100, 101, 150];
 
+/** How long to wait to learn whether a copy exists before falling back to YouTube. */
+const PENDING_WAIT_MS = 2_000;
+
 interface Props {
   id: string;
   title?: string;
   autoplay?: boolean;
   /** Our copy, as the metadata endpoint reports it. */
   video?: IEmbedVideo;
+  /** Whether it is still unknown if a copy exists. */
+  pending?: boolean;
   className?: string;
 }
 
-const hasCopy = (video?: IEmbedVideo) =>
-  video?.status === 'ready' && !!video.url;
-
 /**
- * A YouTube video: YouTube's own player while the original plays, our copy
- * once it does not — known to be gone, or refused by the embed itself.
+ * A YouTube video. Our copy plays whenever there is one, since YouTube is not
+ * reachable everywhere; YouTube's own player otherwise.
  */
 const YoutubePlayer: FC<Props> = ({
   id,
   title,
   autoplay,
   video,
+  pending,
   className,
 }) => {
   const frame = useRef<HTMLIFrameElement>(null);
   const [embedFailed, setEmbedFailed] = useState(false);
+  const [waited, setWaited] = useState(false);
 
-  const sourceGone = video?.source === 'gone';
+  useEffect(() => {
+    if (!pending) {
+      return;
+    }
+
+    const timer = setTimeout(() => setWaited(true), PENDING_WAIT_MS);
+
+    return () => clearTimeout(timer);
+  }, [pending]);
 
   // The embed reports errors over postMessage once asked to.
   useEffect(() => {
@@ -88,29 +100,43 @@ const YoutubePlayer: FC<Props> = ({
     }
   };
 
-  if ((sourceGone || embedFailed) && hasCopy(video)) {
+  const original = YOUTUBE_PROVIDER.canonicalUrl(id);
+
+  if (video?.status === 'ready' && video.url) {
     return (
-      <video
-        className={classNames(styles.fill, className)}
-        src={getURLFromString(video!.url)}
-        poster={getYoutubeThumbById(id)}
-        title={title}
-        autoPlay={autoplay}
-        controls
-        playsInline
-      />
+      <div className={classNames(styles.fill, styles.copy, className)}>
+        <video
+          className={styles.fill}
+          src={getURLFromString(video.url)}
+          poster={getYoutubeThumbById(id)}
+          title={title}
+          autoPlay={autoplay}
+          controls
+          playsInline
+        />
+
+        <a
+          className={styles.original}
+          href={original}
+          target="_blank"
+          rel="noreferrer"
+          title="Оригинал на YouTube"
+        >
+          YouTube ↗
+        </a>
+      </div>
     );
   }
 
-  if (embedFailed || sourceGone) {
+  if (pending && !waited) {
+    return <div className={classNames(styles.fill, className)} />;
+  }
+
+  if (embedFailed) {
     return (
       <div className={classNames(styles.fill, styles.unavailable, className)}>
         <span>Видео недоступно</span>
-        <a
-          href={YOUTUBE_PROVIDER.canonicalUrl(id)}
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href={original} target="_blank" rel="noreferrer">
           Открыть на YouTube
         </a>
       </div>

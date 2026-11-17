@@ -3,7 +3,6 @@ import { FC, useCallback, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Icon } from '~/components/common/Icon';
-import { VideoSaveBadge } from '~/components/media/VideoSaveBadge';
 import { ICommentBlockProps } from '~/constants/comment';
 import { imagePresets } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
@@ -36,9 +35,9 @@ const CommentEmbedBlock: FC<Props> = observer(({ block }) => {
   const title = metadata?.metadata?.title || '';
   const video = metadata?.video;
 
-  // Where YouTube can no longer play it, a phone opens our copy instead.
+  // A phone opens our copy when there is one: YouTube may not be reachable.
   const external =
-    video?.status === 'ready' && video.source === 'gone' && video.url
+    video?.status === 'ready' && video.url
       ? getURLFromString(video.url)
       : address;
 
@@ -61,7 +60,12 @@ const CommentEmbedBlock: FC<Props> = observer(({ block }) => {
             <Icon icon="close" />
           </div>
           <div className={styles.animation}>
-            <CommentVideoFrame id={id} title={title} video={video} />
+            <CommentVideoFrame
+              id={id}
+              title={title}
+              video={video}
+              pending={!metadata}
+            />
           </div>
         </div>
       ) : (
@@ -78,8 +82,6 @@ const CommentEmbedBlock: FC<Props> = observer(({ block }) => {
               </div>
 
               <div className={styles.title}>{title}</div>
-
-              <VideoSaveBadge video={video} className={styles.badge} />
             </div>
           </div>
         </div>

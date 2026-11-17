@@ -23,3 +23,27 @@
     opacity: 0.7;
   }
 }
+
+.copy {
+  position: relative;
+}
+
+// a way to the original, out of the way of the player's own controls
+.original {
+  position: absolute;
+  top: $gap * 0.5;
+  right: $gap * 0.5;
+  padding: 2px $gap * 0.5;
+  border-radius: $radius * 0.5;
+  font: $font_12_semibold;
+  color: white;
+  text-decoration: none;
+  background: transparentize(black, 0.4);
+  backdrop-filter: blur(4px);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
