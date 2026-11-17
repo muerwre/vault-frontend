@@ -27,12 +27,27 @@ describe('classifyFailure', () => {
     });
   });
 
+  it.each([
+    'ERROR: [youtube] x: Unable to download API page: HTTP Error 429: Too Many Requests',
+    'ERROR: unable to download video data: HTTP Error 430',
+    "ERROR: [youtube] x: Sign in to confirm you're not a bot",
+  ])('notices YouTube asking to slow down in %p', (output) => {
+    expect(classifyFailure(output)).toMatchObject({
+      retryable: true,
+      rateLimited: true,
+    });
+  });
+
+  it('does not take a removed video for rate limiting', () => {
+    expect(
+      classifyFailure('ERROR: [youtube] x: Video unavailable').rateLimited,
+    ).toBe(false);
+  });
+
   it('retries network trouble without blaming yt-dlp', () => {
     expect(
-      classifyFailure(
-        'ERROR: unable to download webpage: HTTP Error 429: Too Many Requests',
-      ),
-    ).toMatchObject({ retryable: true, extractor: false });
+      classifyFailure('ERROR: unable to download webpage: connection reset'),
+    ).toMatchObject({ retryable: true, extractor: false, rateLimited: false });
   });
 
   it('reports the last ERROR line, or the last line', () => {

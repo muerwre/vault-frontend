@@ -11,14 +11,12 @@ interface MetadataContextProps {
   queue: string[];
   pending: string[];
   enqueue: (id: string) => void;
-  refresh: (id: string) => void;
 }
 const MetadataContext = createContext<MetadataContextProps>({
   metadata: {},
   queue: [],
   pending: [],
   enqueue: () => {},
-  refresh: () => {},
 });
 
 const fetchItems = async (ids: string[]) => {
@@ -27,15 +25,14 @@ const fetchItems = async (ids: string[]) => {
 };
 
 export const MetadataProvider: FC = observer(({ children }) => {
-  const { metadata, enqueue, refresh, queue, pending, watch } =
-    useLocalObservable(() => new MetadataStore(fetchItems));
+  const { metadata, enqueue, queue, pending, watch } = useLocalObservable(
+    () => new MetadataStore(fetchItems),
+  );
 
   useEffect(watch, [watch]);
 
   return (
-    <MetadataContext.Provider
-      value={{ metadata, enqueue, refresh, queue, pending }}
-    >
+    <MetadataContext.Provider value={{ metadata, enqueue, queue, pending }}>
       {children}
     </MetadataContext.Provider>
   );

@@ -23,6 +23,12 @@ export interface FetcherConfig {
   updateEveryHours: number;
   /** Runtime yt-dlp solves YouTube's challenges with; empty leaves its default. */
   jsRuntime: string;
+  /** Browser whose network fingerprint yt-dlp mimics; empty turns it off. */
+  impersonate: string;
+  /** Passed to yt-dlp's `--extractor-args`, e.g. `youtube:player_client=android`. */
+  extractorArgs: string;
+  /** How long to stay away from YouTube after it said to slow down. */
+  rateLimitPauseMs: number;
   /** The kinds this fetcher has handlers for. */
   kinds: MediaJobKind[];
   ytDlpPath: string;
@@ -50,12 +56,16 @@ export const loadConfig = (
     youtubeProxyUrl: (env.YOUTUBE_PROXY_URL ?? '').trim(),
     youtubeCookies: (env.YOUTUBE_COOKIES ?? '').trim(),
     youtubeMinIntervalMs:
-      nonNegativeInt(env.YOUTUBE_MIN_INTERVAL_SEC, 30) * 1000,
+      nonNegativeInt(env.YOUTUBE_MIN_INTERVAL_SEC, 60) * 1000,
     qualityLadder: parseLadder(env.QUALITY_LADDER),
     workDir: (env.WORK_DIR ?? '').trim() || '/tmp/media-fetcher',
     idlePollMs: positiveInt(env.IDLE_POLL_SEC, 30) * 1000,
     updateEveryHours: nonNegativeInt(env.YTDLP_UPDATE_HOURS, 24),
     jsRuntime: env.YTDLP_JS_RUNTIME ?? 'node',
+    impersonate: (env.YTDLP_IMPERSONATE ?? 'chrome').trim(),
+    extractorArgs: (env.YTDLP_EXTRACTOR_ARGS ?? '').trim(),
+    rateLimitPauseMs:
+      nonNegativeInt(env.YOUTUBE_RATE_LIMIT_PAUSE_MIN, 30) * 60 * 1000,
     kinds: [MEDIA_JOB_KINDS.DOWNLOAD],
     ytDlpPath: (env.YTDLP_PATH ?? '').trim() || 'yt-dlp',
     ffprobePath: (env.FFPROBE_PATH ?? '').trim() || 'ffprobe',

@@ -1,4 +1,5 @@
-import { mkdir } from 'fs/promises';
+import { copyFile, mkdir } from 'fs/promises';
+import { join } from 'path';
 
 import { BackendClient } from './backend/api';
 import { loadConfig } from './config/config';
@@ -25,6 +26,14 @@ const main = async () => {
   }
 
   await mkdir(config.workDir, { recursive: true });
+
+  // yt-dlp writes refreshed cookies back to its file, so it gets a copy: the
+  // original may be mounted read-only, and stays as it was exported.
+  if (config.youtubeCookies) {
+    const copy = join(config.workDir, 'youtube-cookies.txt');
+    await copyFile(config.youtubeCookies, copy);
+    config.youtubeCookies = copy;
+  }
   await updater.start();
 
   log.info(
@@ -37,7 +46,13 @@ const main = async () => {
     'heavy',
     config.kinds,
     (job, signal) => runDownloadJob(job, { api, tools, config, signal }),
-    { api, limiter, updater, idlePollMs: config.idlePollMs },
+    {
+      api,
+      limiter,
+      updater,
+      idlePollMs: config.idlePollMs,
+      rateLimitPauseMs: config.rateLimitPauseMs,
+    },
   );
 
   await heavy.run(shutdown.signal);

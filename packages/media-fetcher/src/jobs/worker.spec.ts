@@ -41,6 +41,7 @@ describe('Worker', () => {
     const { abort, api, updater } = setup([job(1), job(2)]);
     const handler = jest.fn(async (_job: MediaClaimedJob) => ({
       extractorFailure: true,
+      rateLimited: false,
     }));
 
     await new Worker('heavy', ['download'], handler, {
@@ -48,6 +49,7 @@ describe('Worker', () => {
       limiter: new IntervalLimiter(0),
       updater,
       idlePollMs: 1,
+      rateLimitPauseMs: 0,
     }).run(abort.signal);
 
     expect(handler.mock.calls.map(([claimed]) => claimed.id)).toEqual([1, 2]);
@@ -61,13 +63,14 @@ describe('Worker', () => {
     const handler = jest
       .fn()
       .mockRejectedValueOnce(new Error('disk full'))
-      .mockResolvedValueOnce({ extractorFailure: false });
+      .mockResolvedValueOnce({ extractorFailure: false, rateLimited: false });
 
     await new Worker('heavy', ['download'], handler, {
       api,
       limiter: new IntervalLimiter(0),
       updater,
       idlePollMs: 1,
+      rateLimitPauseMs: 0,
     }).run(abort.signal);
 
     expect(api.fail).toHaveBeenCalledWith(1, {
@@ -81,6 +84,7 @@ describe('Worker', () => {
     const { abort, api, updater } = setup([null, null, job(3)]);
     const handler = jest.fn(async (_job: MediaClaimedJob) => ({
       extractorFailure: false,
+      rateLimited: false,
     }));
 
     await new Worker('heavy', ['download'], handler, {
@@ -88,9 +92,33 @@ describe('Worker', () => {
       limiter: new IntervalLimiter(0),
       updater,
       idlePollMs: 1,
+      rateLimitPauseMs: 0,
     }).run(abort.signal);
 
     expect(api.claim).toHaveBeenCalledTimes(4);
     expect(handler).toHaveBeenCalledTimes(1);
+  });
+
+  it('stays away for a while after YouTube asked to slow down', async () => {
+    const { abort, api, updater } = setup([job(1), job(2)]);
+    const handler = jest
+      .fn(async (_job: MediaClaimedJob) => ({
+        extractorFailure: false,
+        rateLimited: false,
+      }))
+      .mockResolvedValueOnce({ extractorFailure: false, rateLimited: true });
+
+    const started = Date.now();
+
+    await new Worker('heavy', ['download'], handler, {
+      api,
+      limiter: new IntervalLimiter(0),
+      updater,
+      idlePollMs: 1,
+      rateLimitPauseMs: 300,
+    }).run(abort.signal);
+
+    expect(handler).toHaveBeenCalledTimes(2);
+    expect(Date.now() - started).toBeGreaterThanOrEqual(290);
   });
 });

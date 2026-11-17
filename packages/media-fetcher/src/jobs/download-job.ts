@@ -23,7 +23,11 @@ export const HEARTBEAT_MS = 2 * 60 * 1000;
 export interface JobOutcome {
   /** A failure a newer yt-dlp might fix. */
   extractorFailure: boolean;
+  /** YouTube asked to slow down. */
+  rateLimited: boolean;
 }
+
+const FINE: JobOutcome = { extractorFailure: false, rateLimited: false };
 
 const exists = (path: string) =>
   access(path).then(
@@ -75,7 +79,10 @@ export const runDownloadJob = async (
       }),
     );
 
-    return { extractorFailure: verdict.extractor };
+    return {
+      extractorFailure: verdict.extractor,
+      rateLimited: verdict.rateLimited,
+    };
   };
 
   await mkdir(dir, { recursive: true });
@@ -96,14 +103,14 @@ export const runDownloadJob = async (
 
     if (isLive(info)) {
       await guard(() => api.skip(job.id, { reason: MEDIA_SKIP_REASONS.LIVE }));
-      return { extractorFailure: false };
+      return FINE;
     }
 
     if (duration && duration > maxDurationSec) {
       await guard(() =>
         api.skip(job.id, { reason: MEDIA_SKIP_REASONS.TOO_LONG, duration }),
       );
-      return { extractorFailure: false };
+      return FINE;
     }
 
     let fromRung = 0;
@@ -125,7 +132,7 @@ export const runDownloadJob = async (
             estimatedBytes: choice.estimatedBytes,
           }),
         );
-        return { extractorFailure: false };
+        return FINE;
       }
 
       const downloaded = await download(job, choice.spec, dir, maxBytes, deps);
@@ -151,7 +158,7 @@ export const runDownloadJob = async (
             estimatedBytes: maxBytes + 1,
           }),
         );
-        return { extractorFailure: false };
+        return FINE;
       }
 
       return await fail(downloaded.output);
@@ -195,10 +202,10 @@ export const runDownloadJob = async (
       }),
     );
 
-    return { extractorFailure: false };
+    return FINE;
   } catch (error) {
     if (error instanceof JobLost) {
-      return { extractorFailure: false };
+      return FINE;
     }
 
     throw error;

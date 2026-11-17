@@ -4,6 +4,8 @@ export interface FailureVerdict {
   retryable: boolean;
   /** Likely fixed by a newer yt-dlp, so counts towards an early update. */
   extractor: boolean;
+  /** YouTube asked to slow down: the fetcher should stay away for a while. */
+  rateLimited: boolean;
   /** The line worth showing in the backend's admin view. */
   reason: string;
 }
@@ -40,12 +42,21 @@ const reasonOf = (output: string): string => {
   return (error ?? lines.pop() ?? 'yt-dlp failed').slice(0, 500);
 };
 
+/** YouTube telling an automated client to back off. */
+const RATE_LIMITED = [
+  /HTTP Error 4(29|30)\b/i,
+  /too many requests/i,
+  /sign in to confirm you.?re not a bot/i,
+  /rate.?limit/i,
+];
+
 export const classifyFailure = (output: string): FailureVerdict => {
   const reason = reasonOf(output);
 
   return {
     retryable: !PERMANENT.some((pattern) => pattern.test(output)),
     extractor: EXTRACTOR.some((pattern) => pattern.test(output)),
+    rateLimited: RATE_LIMITED.some((pattern) => pattern.test(output)),
     reason,
   };
 };

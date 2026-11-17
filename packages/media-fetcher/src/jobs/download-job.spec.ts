@@ -165,7 +165,10 @@ describe('runDownloadJob', () => {
   it('downloads the best fitting quality, uploads video and cover, completes', async () => {
     const { api, tools, run, workDir } = track(setup({}));
 
-    await expect(run()).resolves.toEqual({ extractorFailure: false });
+    await expect(run()).resolves.toEqual({
+      extractorFailure: false,
+      rateLimited: false,
+    });
 
     expect(tools.download).toHaveBeenCalledWith(
       expect.objectContaining({ spec: '136+140', maxBytes: 500 * MB }),
@@ -273,7 +276,10 @@ describe('runDownloadJob', () => {
       }),
     );
 
-    await expect(run()).resolves.toEqual({ extractorFailure: false });
+    await expect(run()).resolves.toEqual({
+      extractorFailure: false,
+      rateLimited: false,
+    });
 
     expect(api.fail).toHaveBeenCalledWith(7, {
       reason: 'ERROR: [youtube] x: Video unavailable',
@@ -286,7 +292,10 @@ describe('runDownloadJob', () => {
       failed("ERROR: [youtube] x: Sign in to confirm you're not a bot");
     const { api, run } = track(setup({ downloads: [blocked] }));
 
-    await expect(run()).resolves.toEqual({ extractorFailure: true });
+    await expect(run()).resolves.toEqual({
+      extractorFailure: true,
+      rateLimited: true,
+    });
 
     expect(api.fail).toHaveBeenCalledWith(
       7,
@@ -328,7 +337,10 @@ describe('runDownloadJob', () => {
       setup({ downloads: [waitsForAbort], progress }),
     );
 
-    await expect(run()).resolves.toEqual({ extractorFailure: false });
+    await expect(run()).resolves.toEqual({
+      extractorFailure: false,
+      rateLimited: false,
+    });
 
     expect(api.fail).not.toHaveBeenCalled();
     expect(api.complete).not.toHaveBeenCalled();

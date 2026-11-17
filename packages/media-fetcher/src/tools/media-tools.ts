@@ -42,8 +42,18 @@ export const createTools = (
   ffmpegPath = process.env.FFMPEG_PATH || 'ffmpeg',
 ): MediaTools => {
   /** Applies to every yt-dlp run that talks to YouTube. */
+  /**
+   * Every run that talks to YouTube: paced and browser-like, since YouTube
+   * answers 429 to clients that fetch too fast or look automated.
+   */
   const youtubeArgs = (): string[] => [
     '--no-playlist',
+    '--sleep-requests',
+    '1',
+    '--retry-sleep',
+    'http:exp=1:30',
+    ...(config.impersonate ? ['--impersonate', config.impersonate] : []),
+    ...(config.extractorArgs ? ['--extractor-args', config.extractorArgs] : []),
     ...(config.youtubeProxyUrl ? ['--proxy', config.youtubeProxyUrl] : []),
     ...(config.youtubeCookies ? ['--cookies', config.youtubeCookies] : []),
     ...(config.jsRuntime ? ['--js-runtimes', config.jsRuntime] : []),
@@ -94,6 +104,11 @@ export const createTools = (
           'mp4',
           '--max-filesize',
           String(maxBytes),
+          // a pause before each stream, as for a playlist
+          '--sleep-interval',
+          '2',
+          '--max-sleep-interval',
+          '5',
           '--write-thumbnail',
           '--convert-thumbnails',
           'jpg',

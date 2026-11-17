@@ -31,6 +31,8 @@ export class Worker {
       limiter: IntervalLimiter;
       updater: YtDlpUpdater;
       idlePollMs: number;
+      /** Pause after YouTube asked to slow down. */
+      rateLimitPauseMs: number;
     },
   ) {}
 
@@ -56,14 +58,26 @@ export class Worker {
       }
 
       await this.deps.limiter.wait(signal);
-      await this.runJob(job, signal);
+      const outcome = await this.runJob(job, signal);
       this.deps.limiter.done();
+
+      if (outcome?.rateLimited && this.deps.rateLimitPauseMs > 0) {
+        log.info(
+          `${this.name}: YouTube asked to slow down, pausing ${Math.round(
+            this.deps.rateLimitPauseMs / 60_000,
+          )} min`,
+        );
+        await sleep(this.deps.rateLimitPauseMs, signal);
+      }
     }
 
     log.info(`${this.name}: stopped`);
   }
 
-  private async runJob(job: MediaClaimedJob, signal: AbortSignal) {
+  private async runJob(
+    job: MediaClaimedJob,
+    signal: AbortSignal,
+  ): Promise<JobOutcome | null> {
     log.info(
       `${this.name}: job ${job.id} ${job.kind} ${job.provider}:${job.externalId} (try ${job.attempt})`,
     );
@@ -72,6 +86,8 @@ export class Worker {
       const outcome = await this.handler(job, signal);
       await this.deps.updater.noteOutcome(outcome.extractorFailure);
       log.info(`${this.name}: job ${job.id} finished`);
+
+      return outcome;
     } catch (error) {
       log.error(`${this.name}: job ${job.id} broke: ${describeError(error)}`);
 
@@ -82,6 +98,8 @@ export class Worker {
             `${this.name}: could not report job ${job.id}: ${describeError(reportError)}`,
           ),
         );
+
+      return null;
     }
   }
 }

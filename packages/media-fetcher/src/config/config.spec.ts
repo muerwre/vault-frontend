@@ -11,11 +11,14 @@ describe('config', () => {
       backendUrl: 'http://10.0.0.1:8000/api',
       key: 'secret',
       youtubeProxyUrl: '',
-      youtubeMinIntervalMs: 30_000,
+      youtubeMinIntervalMs: 60_000,
       qualityLadder: [720, 480, 360],
       idlePollMs: 30_000,
       updateEveryHours: 24,
       jsRuntime: 'node',
+      impersonate: 'chrome',
+      extractorArgs: '',
+      rateLimitPauseMs: 30 * 60 * 1000,
       kinds: ['download'],
     });
   });

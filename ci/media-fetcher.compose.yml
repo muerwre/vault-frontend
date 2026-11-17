@@ -23,13 +23,24 @@ services:
       # YouTube traffic only, never the backend. http(s)://, socks5://,
       # socks5h:// or socks4://; empty connects directly.
       YOUTUBE_PROXY_URL: ${YOUTUBE_PROXY_URL:-}
-      # Pause between YouTube jobs, in seconds.
-      YOUTUBE_MIN_INTERVAL_SEC: ${YOUTUBE_MIN_INTERVAL_SEC:-30}
+      # Pause between YouTube jobs, in seconds (varies by ±30 %).
+      YOUTUBE_MIN_INTERVAL_SEC: ${YOUTUBE_MIN_INTERVAL_SEC:-60}
+      # Minutes to stay away from YouTube after it answers 429 or asks
+      # whether this is a bot.
+      YOUTUBE_RATE_LIMIT_PAUSE_MIN: ${YOUTUBE_RATE_LIMIT_PAUSE_MIN:-30}
+      # Browser whose network fingerprint yt-dlp mimics; empty turns it off.
+      YTDLP_IMPERSONATE: ${YTDLP_IMPERSONATE:-chrome}
+      # Optional yt-dlp --extractor-args, e.g. youtube:player_client=android.
+      YTDLP_EXTRACTOR_ARGS: ${YTDLP_EXTRACTOR_ARGS:-}
       # Heights to try, best first; the first whose size estimate fits wins.
       QUALITY_LADDER: ${QUALITY_LADDER:-720,480,360}
       # yt-dlp self-update interval in hours; 0 keeps the image's version.
       YTDLP_UPDATE_HOURS: ${YTDLP_UPDATE_HOURS:-24}
-      # A cookies.txt, mounted below, for when YouTube asks to sign in.
+      # A cookies.txt, mounted below, for when YouTube keeps asking whether
+      # this is a bot. Export it from a throwaway account's browser:
+      #   yt-dlp --cookies-from-browser firefox --cookies youtube-cookies.txt \
+      #     --skip-download https://www.youtube.com/watch?v=jNQXAC9IVRw
+      # then set /run/secrets/youtube-cookies.txt here. The fetcher uses a copy.
       YOUTUBE_COOKIES: ${YOUTUBE_COOKIES:-}
     volumes:
       # Scratch space for the download in progress: up to MEDIA_MAX_MB plus
