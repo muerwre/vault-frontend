@@ -42,7 +42,22 @@ const ProfilePageLeft: FC<Props> = ({
         </div>
       </Card>
       <div className={styles.region}>
-        <div className={styles.description}>{description}</div>
+        <div className={styles.description}>
+          {description}
+          {description}
+          {description}
+          {description}
+          {description}
+          {description}
+          {description}
+          {description}
+          {description}
+        </div>
+      </div>
+      <div className={styles.region}>
+        <div>https://vk.com/id123456</div>
+        <div>https://vk.com/id123456</div>
+        <div>https://vk.com/id123456</div>
       </div>
     </Card>
   );

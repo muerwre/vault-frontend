@@ -3,15 +3,19 @@
 .wrap {
   @include flow_container();
   margin-top: $page_top_offset;
+  gap: $gap;
+  display: flex;
+  flex-direction: column;
 }
 
 .description {
-  grid-column: 2 / -3;
-  grid-row: 1 / 4;
+  grid-column: 2 / span 2;
+  grid-row: 1 / span 2;
   height: 100%;
   font: $font_14_medium;
   overflow: auto;
   height: 100%;
+  // display: none;
 }
 
 .grid {
@@ -19,6 +23,7 @@
 
   @include flow_breakpoint(4);
   @include flow_breakpoint(3);
+
   @include flow_breakpoint(2) {
     .left {
       grid-column: 1 / -1;
@@ -33,5 +38,13 @@
 
 .left {
   grid-row-start: 1;
-  grid-row-end: span 3;
+  grid-row-end: span 2;
+  grid-column-start: 1;
+  grid-column-end: span 1;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  gap: $gap;
 }
