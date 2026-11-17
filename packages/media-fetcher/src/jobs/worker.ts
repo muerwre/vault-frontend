@@ -13,6 +13,12 @@ export type JobHandler = (
   signal: AbortSignal,
 ) => Promise<JobOutcome>;
 
+/** `300000` → `5 min`, `30000` → `30s`. */
+const describeWait = (ms: number): string =>
+  ms >= 60_000 && ms % 60_000 === 0
+    ? `${ms / 60_000} min`
+    : `${Math.round(ms / 1000)}s`;
+
 /** Wait after the backend could not be reached. */
 const BACKEND_RETRY_MS = 30_000;
 
@@ -58,9 +64,9 @@ export class Worker {
       if (!job) {
         if (!idle) {
           log.info(
-            `${this.name}: nothing to do, asking again every ${Math.round(
-              this.deps.idlePollMs / 1000,
-            )}s`,
+            `${this.name}: nothing to do, asking again every ${describeWait(
+              this.deps.idlePollMs,
+            )}`,
           );
           idle = true;
         }

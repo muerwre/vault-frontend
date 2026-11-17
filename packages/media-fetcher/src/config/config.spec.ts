@@ -13,7 +13,7 @@ describe('config', () => {
       youtubeProxyUrl: '',
       youtubeMinIntervalMs: 60_000,
       qualityLadder: [720, 480, 360],
-      idlePollMs: 30_000,
+      idlePollMs: 1_800_000,
       updateEveryHours: 24,
       jsRuntime: 'node',
       impersonate: 'chrome',

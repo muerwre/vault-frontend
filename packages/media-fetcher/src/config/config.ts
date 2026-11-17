@@ -59,7 +59,7 @@ export const loadConfig = (
       nonNegativeInt(env.YOUTUBE_MIN_INTERVAL_SEC, 60) * 1000,
     qualityLadder: parseLadder(env.QUALITY_LADDER),
     workDir: (env.WORK_DIR ?? '').trim() || '/tmp/media-fetcher',
-    idlePollMs: positiveInt(env.IDLE_POLL_SEC, 30) * 1000,
+    idlePollMs: positiveInt(env.IDLE_POLL_SEC, 1800) * 1000,
     updateEveryHours: nonNegativeInt(env.YTDLP_UPDATE_HOURS, 24),
     jsRuntime: env.YTDLP_JS_RUNTIME ?? 'node',
     impersonate: (env.YTDLP_IMPERSONATE ?? 'chrome').trim(),

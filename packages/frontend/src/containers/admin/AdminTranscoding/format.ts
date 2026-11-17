@@ -40,5 +40,8 @@ export const formatRelative = (iso: string, now = Date.now()): string => {
   return diff < 0 ? `${amount} назад` : `через ${amount}`;
 };
 
-/** Seen this recently, a fetcher counts as connected: idle ones poll every 30 s. */
-export const FETCHER_ONLINE_MS = 2 * 60 * 1000;
+/**
+ * Seen this recently, a fetcher counts as connected. Idle ones ask for work
+ * every 30 minutes, so this is one poll plus some slack.
+ */
+export const FETCHER_ONLINE_MS = 35 * 60 * 1000;

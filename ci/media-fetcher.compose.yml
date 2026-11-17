@@ -34,6 +34,8 @@ services:
       YTDLP_EXTRACTOR_ARGS: ${YTDLP_EXTRACTOR_ARGS:-}
       # Heights to try, best first; the first whose size estimate fits wins.
       QUALITY_LADDER: ${QUALITY_LADDER:-720,480,360}
+      # How often an idle fetcher asks for work, in seconds.
+      IDLE_POLL_SEC: ${IDLE_POLL_SEC:-1800}
       # yt-dlp self-update interval in hours; 0 keeps the image's version.
       YTDLP_UPDATE_HOURS: ${YTDLP_UPDATE_HOURS:-24}
       # A cookies.txt, mounted below, for when YouTube keeps asking whether
