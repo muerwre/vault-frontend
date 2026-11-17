@@ -5,6 +5,7 @@ import type { Comment } from '../../entities/comment.entity';
 import type { Node } from '../../entities/node.entity';
 
 import { MediaBackfillService } from './media-backfill.service';
+import type { MediaPlannerService } from './media-planner.service';
 import type { MediaRefsService } from './media-refs.service';
 import type { MediaSourceService } from './media-source.service';
 
@@ -35,15 +36,24 @@ const setup = () => {
   const nodes = emptyRepo();
   const comments = emptyRepo();
   const scheduler = new SchedulerRegistry();
+  const planner = {
+    releaseBacklog: jest.fn(async (): Promise<void> => undefined),
+  } as unknown as MediaPlannerService & { releaseBacklog: jest.Mock };
   const service = new MediaBackfillService(
     nodes.repo as unknown as Repository<Node>,
     comments.repo as unknown as Repository<Comment>,
     { syncOwner: jest.fn() } as unknown as MediaRefsService,
     scheduler,
     { checkDue: jest.fn(async () => 0) } as unknown as MediaSourceService,
+    planner,
   );
 
-  return { service, scheduler, nodeQuery: nodes.builder.getMany as jest.Mock };
+  return {
+    service,
+    scheduler,
+    planner,
+    nodeQuery: nodes.builder.getMany as jest.Mock,
+  };
 };
 
 describe('MediaBackfillService', () => {
@@ -73,11 +83,38 @@ describe('MediaBackfillService', () => {
   it('does nothing when disabled', async () => {
     process.env.CACHE_EXTERNAL_MEDIA = 'false';
 
-    const { service, scheduler, nodeQuery } = setup();
+    const { service, scheduler, planner, nodeQuery } = setup();
     service.onApplicationBootstrap();
 
     expect(scheduler.getCronJobs().size).toBe(0);
     expect(nodeQuery).not.toHaveBeenCalled();
+    expect(planner.releaseBacklog).not.toHaveBeenCalled();
+
+    await service.onModuleDestroy();
+  });
+
+  it('releases a backlog batch once the startup scan is done', async () => {
+    process.env.CACHE_EXTERNAL_MEDIA = 'true';
+
+    const { service, planner, nodeQuery } = setup();
+    let finishScan = (): void => undefined;
+    nodeQuery.mockImplementationOnce(
+      () => new Promise((resolve) => (finishScan = () => resolve([]))),
+    );
+
+    service.onApplicationBootstrap();
+    await new Promise((resolve) => setImmediate(resolve));
+    expect(planner.releaseBacklog).not.toHaveBeenCalled();
+
+    finishScan();
+    await service.run();
+    await new Promise((resolve) => setImmediate(resolve));
+
+    expect(planner.releaseBacklog).toHaveBeenCalledTimes(1);
+
+    // a rescan releases nothing of its own
+    await service.run();
+    expect(planner.releaseBacklog).toHaveBeenCalledTimes(1);
 
     await service.onModuleDestroy();
   });

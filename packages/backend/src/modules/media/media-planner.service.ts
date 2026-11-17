@@ -179,11 +179,12 @@ export class MediaPlannerService
         ]),
       );
 
-      await this.plan(
-        ids
-          .map((id) => byId.get(id))
-          .filter((item): item is ExternalMedia => !!item),
-      );
+      const batch = ids
+        .map((id) => byId.get(id))
+        .filter((item): item is ExternalMedia => !!item);
+
+      await this.plan(batch);
+      this.logger.log(`released ${batch.length} backlog items`);
     } catch (error) {
       this.logFailure(error);
     }

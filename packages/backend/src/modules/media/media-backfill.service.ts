@@ -18,6 +18,7 @@ import { getMediaCacheConfig, getMediaRescanCron } from '../../config/env';
 import { Comment } from '../../entities/comment.entity';
 import { Node } from '../../entities/node.entity';
 
+import { MediaPlannerService } from './media-planner.service';
 import { MediaRefsService } from './media-refs.service';
 import { scheduleMediaJob, unscheduleMediaJob } from './media-schedule';
 import { MediaSourceService } from './media-source.service';
@@ -55,6 +56,7 @@ export class MediaBackfillService
     private readonly refs: MediaRefsService,
     private readonly scheduler: SchedulerRegistry,
     private readonly sources: MediaSourceService,
+    private readonly planner: MediaPlannerService,
   ) {}
 
   onApplicationBootstrap(): void {
@@ -62,7 +64,11 @@ export class MediaBackfillService
       return;
     }
 
-    void this.run();
+    // A start releases one backlog batch, once the scan has filled the
+    // backlog, besides those MEDIA_BACKLOG_CRON releases.
+    void this.run().then(() =>
+      this.stopping ? undefined : this.planner.releaseBacklog(),
+    );
     this.schedule();
   }
 
