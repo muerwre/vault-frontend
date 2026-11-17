@@ -24,6 +24,7 @@ for (const key of [
   'NOTIFICATIONS_VK_API_KEY',
   'TELEGRAM_BOT_USERNAME',
   'SMTP_HOST',
+  'CACHE_EXTERNAL_MEDIA',
 ] as const) {
   process.env[key] ??= '';
 }

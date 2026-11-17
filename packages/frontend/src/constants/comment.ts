@@ -1,13 +1,20 @@
+import { isMediaLinkLine } from '@vault/common/media';
+
 export const COMMENT_BLOCK_TYPES = {
   TEXT: 'TEXT',
   MARK: 'MARK',
   EMBED: 'EMBED',
 };
 
-export const COMMENT_BLOCK_DETECTORS = [
+export { isMediaLinkLine };
+
+export const COMMENT_BLOCK_DETECTORS: Array<{
+  type: string;
+  test: RegExp | ((line: string) => boolean);
+}> = [
   {
     type: COMMENT_BLOCK_TYPES.EMBED,
-    test: /(https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(watch)?(\?v=)?[\w\-&=]+)/gim,
+    test: isMediaLinkLine,
   },
   {
     type: COMMENT_BLOCK_TYPES.MARK,

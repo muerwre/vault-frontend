@@ -1,0 +1,58 @@
+@import 'src/styles/variables';
+
+// Over the top-right corner of a cover or player, clear of its controls.
+.badges {
+  position: absolute;
+  top: $gap;
+  right: $gap;
+  z-index: 20;
+  display: flex;
+  gap: $gap * 0.5;
+
+  @include tablet {
+    top: $gap * 0.5;
+    right: $gap * 0.5;
+  }
+}
+
+// Doubled with the container, so rules of whatever the badges sit in (a
+// stretched link, a white icon fill) never reach them.
+.badges .badge {
+  position: relative;
+  inset: auto;
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: $radius * 0.5;
+  font: $font_14_semibold;
+  line-height: 1;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;
+  background: transparentize(black, 0.25);
+  backdrop-filter: blur(4px);
+  transition: background 0.2s;
+
+  &:hover {
+    background: black;
+  }
+
+  @include tablet {
+    padding: 4px 8px;
+    font: $font_12_semibold;
+  }
+}
+
+.badges .icon {
+  position: static;
+  width: 0.75em;
+  height: 0.75em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

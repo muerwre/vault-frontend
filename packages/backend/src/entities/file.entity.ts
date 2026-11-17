@@ -1,7 +1,7 @@
 import {
   FILE_TYPE_ENUM_ORDER,
+  type FileTarget,
   type FileType,
-  type UploadTarget,
 } from '@vault/common/constants';
 import type { FileMetadata } from '@vault/common/types';
 import {
@@ -70,7 +70,7 @@ export class File {
   metadata: FileMetadata | null;
 
   @Column(legacyVarchar({ nullable: true }))
-  target: UploadTarget | null;
+  target: FileTarget | null;
 
   @Column({ name: 'userId', type: 'int', nullable: true })
   userId: number | null;

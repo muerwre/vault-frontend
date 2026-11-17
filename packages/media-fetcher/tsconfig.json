@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "declaration": false,
+    "lib": ["ES2022"],
+    "types": ["node", "jest"],
+    "paths": {
+      "@vault/common": ["../common/dist"],
+      "@vault/common/*": ["../common/dist/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

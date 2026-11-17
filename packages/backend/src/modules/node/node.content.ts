@@ -4,6 +4,11 @@ import {
   NODE_TYPES,
   type NodeType,
 } from '@vault/common/constants';
+import {
+  MEDIA_PROVIDERS,
+  type MediaProvider,
+  parseMediaUrl,
+} from '@vault/common/media';
 import type { INodeBlock } from '@vault/common/types';
 
 import type { File } from '../../entities/file.entity';
@@ -13,28 +18,19 @@ import type { File } from '../../entities/file.entity';
  * service applies them, and they are unit-tested directly.
  */
 
-/** Providers whose video URLs yield a thumbnail, and the URL template for each. */
-const THUMB_PROVIDERS: ReadonlyArray<{ pattern: RegExp; template: string }> = [
-  {
-    pattern:
-      /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/,
-    template: 'https://i.ytimg.com/vi/%s/hqdefault.jpg',
-  },
-];
+/** Stored thumbnail url per provider, built from the item id. */
+const THUMB_TEMPLATES: Record<MediaProvider, (id: string) => string> = {
+  [MEDIA_PROVIDERS.YOUTUBE]: (id) =>
+    `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+};
 
 /** Minimum text length for a text node's body to become its description. */
 const DESCRIPTION_MIN_LENGTH = 64;
 
 export const getThumbFromUrl = (url: string): string => {
-  for (const { pattern, template } of THUMB_PROVIDERS) {
-    const match = pattern.exec(url ?? '');
+  const ref = parseMediaUrl(url ?? '');
 
-    if (match) {
-      return template.replace('%s', match[1]);
-    }
-  }
-
-  return '';
+  return ref ? THUMB_TEMPLATES[ref.provider](ref.id) : '';
 };
 
 /** Which block types a node of each type may carry. Others carry none. */

@@ -22,6 +22,7 @@ COPY packages/backend/package.json ./packages/backend/
 COPY packages/common/package.json ./packages/common/
 COPY packages/frontend/package.json ./packages/frontend/
 COPY packages/e2e/package.json ./packages/e2e/
+COPY packages/media-fetcher/package.json ./packages/media-fetcher/
 COPY packages/migration/package.json ./packages/migration/
 
 # Installs every workspace, including the frontend's: yarn 1 has no way to

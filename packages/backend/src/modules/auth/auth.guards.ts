@@ -167,6 +167,24 @@ export class MembersOnlyGuard implements CanActivate {
 }
 
 /**
+ * Admits admins only. Anyone else gets a 404, so the route's existence is not
+ * revealed. Use **after** `AuthRequiredGuard` or `MembersOnlyGuard` and
+ * `WithUserGuard`.
+ */
+@Injectable()
+export class AdminOnlyGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean {
+    const request = context.switchToHttp().getRequest<AuthedRequest>();
+
+    if (request.auth?.user?.role !== ROLES.ADMIN) {
+      throw new VaultException(ERROR_CODES.EmptyRequest, HttpStatus.NOT_FOUND);
+    }
+
+    return true;
+  }
+}
+
+/**
  * Loads the full `User` (with photo and cover) onto `request.auth.user`.
  *
  * Separate from `AuthRequiredGuard` so routes needing only `uid` do not pay for

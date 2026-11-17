@@ -8,6 +8,7 @@ import {
   type UploadTarget,
   UPLOAD_TARGETS,
 } from '@vault/common/constants';
+import { YOUTUBE_PROVIDER } from '@vault/common/media';
 
 /**
  * Storage layout for uploads. Every historical URL depends on these shapes, so
@@ -162,10 +163,9 @@ export const parseCacheRequest = (
  */
 export const YOUTUBE_THUMBS_DIR = 'youtube';
 
-/** YouTube video ids are 11 characters from the URL-safe base64 alphabet. */
-const YOUTUBE_ID_PATTERN = /^[\w-]{11}$/;
-
-export const isYoutubeId = (id: string): boolean => YOUTUBE_ID_PATTERN.test(id);
+/** Whether `id` is a YouTube video id, by the rule shared with every client. */
+export const isYoutubeId = (id: string): boolean =>
+  YOUTUBE_PROVIDER.isValidId(id);
 
 export const youtubeThumbPath = (id: string): string =>
   `${YOUTUBE_THUMBS_DIR}/${id}.jpg`;

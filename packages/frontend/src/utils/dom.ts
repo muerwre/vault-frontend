@@ -1,3 +1,4 @@
+import { YOUTUBE_PROVIDER } from '@vault/common/media';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import differenceInMonths from 'date-fns/differenceInMonths';
 import format from 'date-fns/format';
@@ -110,7 +111,9 @@ export const findBlockType = (
   line: string,
 ): ValueOf<typeof COMMENT_BLOCK_TYPES> => {
   const match = Object.values(COMMENT_BLOCK_DETECTORS).find((detector) =>
-    line.match(detector.test),
+    typeof detector.test === 'function'
+      ? detector.test(line)
+      : line.match(detector.test),
   );
   return (match && match.type) || COMMENT_BLOCK_TYPES.TEXT;
 };
@@ -149,18 +152,11 @@ export const getPrettyDate = (date?: string): string => {
 };
 
 /**
- * The video id in a YouTube url. Accepts the same forms as the backend, which
- * rejects a video block whose url this does not match.
+ * The video id in a YouTube url, parsed exactly as the backend parses it, so
+ * what the page shows and what the backend tracks agree.
  */
-export const getYoutubeId = (url: string) => {
-  const match =
-    url &&
-    url.match(
-      /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/,
-    );
-
-  return (match && match[1]) || null;
-};
+export const getYoutubeId = (url: string): string | null =>
+  YOUTUBE_PROVIDER.parseUrl(url ?? '');
 
 /**
  * The video's cover, served by the backend from its own copy rather than

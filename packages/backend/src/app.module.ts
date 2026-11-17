@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { CONFIG } from './config/env';
 import { DATABASE } from './database/database.module';
@@ -25,6 +26,7 @@ import { VkModule } from './modules/vk/vk.module';
     CONFIG,
     DATABASE,
     JWT,
+    ScheduleModule.forRoot(),
     MailModule,
     AuthModule,
     NodeModule,

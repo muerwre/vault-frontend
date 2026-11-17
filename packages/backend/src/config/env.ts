@@ -1,4 +1,9 @@
 import { ConfigModule } from '@nestjs/config';
+import {
+  maxKeptDuration,
+  type MediaQualityTier,
+  parseMediaQualityTiers,
+} from '@vault/common/media';
 import { config } from 'dotenv';
 
 /**
@@ -262,6 +267,77 @@ export const isVkPublisherUsable = (config: VkPublisherConfig): boolean =>
  */
 export const isYoutubeThumbCacheEnabled = (): boolean =>
   process.env.CACHE_YOUTUBE_THUMBS !== 'false';
+
+export interface MediaCacheConfig {
+  /** Whether external items are tracked and queued for local copies at all. */
+  enabled: boolean;
+  /** Highest height kept, by length. Longer than the last tier stays an embed. */
+  qualityTiers: MediaQualityTier[];
+  /** The last tier's length: the longest video kept. */
+  maxDurationSec: number;
+  /** A video is downloaded only if some acceptable quality fits into this. */
+  maxBytes: number;
+}
+
+/** Local copies of external videos. Off unless `CACHE_EXTERNAL_MEDIA=true`. */
+export const getMediaCacheConfig = (): MediaCacheConfig => {
+  const qualityTiers = parseMediaQualityTiers(
+    process.env.MEDIA_QUALITY_TIERS ?? '',
+  );
+
+  return {
+    enabled: process.env.CACHE_EXTERNAL_MEDIA === 'true',
+    qualityTiers,
+    maxDurationSec: maxKeptDuration(qualityTiers),
+    maxBytes: toPositiveInt(process.env.MEDIA_MAX_MB, 500) * 1024 * 1024,
+  };
+};
+
+/**
+ * Media fetchers allowed to take work, as `name:secret` pairs separated by
+ * commas. Empty means none: every fetcher request is refused.
+ */
+export const getMediaFetcherKeys = (): string =>
+  process.env.MEDIA_FETCHER_KEYS ?? '';
+
+/** Zone that scheduled jobs' hours are read in. */
+export const getScheduleTimeZone = (): string =>
+  process.env.SCHEDULE_TIMEZONE || 'UTC';
+
+/**
+ * When linked videos are re-scanned, as a six-field cron expression (seconds
+ * first) in {@link getScheduleTimeZone}.
+ */
+export const getMediaRescanCron = (): string =>
+  process.env.MEDIA_RESCAN_CRON || '0 0 2 * * *';
+
+export interface MediaCleanupConfig {
+  /** When local copies nothing links any more are deleted (cron with seconds). */
+  cron: string;
+  /** How long a deleted post or comment keeps its videos, in case it is restored. */
+  graceDays: number;
+}
+
+export const getMediaCleanupConfig = (): MediaCleanupConfig => ({
+  cron: process.env.MEDIA_CLEANUP_CRON || '0 0 4 * * *',
+  graceDays: toNonNegativeInt(process.env.MEDIA_GC_GRACE_DAYS, 1),
+});
+
+export interface MediaBacklogConfig {
+  /** When the next batch is released, as a six-field cron expression. */
+  cron: string;
+  /** Items released per run. */
+  batch: number;
+}
+
+/**
+ * Items found in older content are planned a few at a time, to keep the load on
+ * the provider and the growth of the disk steady. Fresh content never waits.
+ */
+export const getMediaBacklogConfig = (): MediaBacklogConfig => ({
+  cron: process.env.MEDIA_BACKLOG_CRON || '0 0 6 * * *',
+  batch: toPositiveInt(process.env.MEDIA_BACKLOG_BATCH, 5),
+});
 
 export interface UploadsConfig {
   path: string;

@@ -1,0 +1,65 @@
+@import 'src/styles/variables';
+
+// fills the screen below the header, as the submit page does
+$screen_height: calc(
+  100vh - #{$header_height} - #{$page_top_offset} - #{$gap * 2}
+);
+
+.wrap {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: stretch;
+  margin-top: $page_top_offset;
+  padding-bottom: $gap * 2;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+    row-gap: $gap;
+    margin-top: 0;
+    padding: $gap * 0.5;
+  }
+}
+
+// the submit page's pane, on the other side
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  padding: $gap;
+  border-radius: $radius 0 0 $radius;
+  @include outer_shadow();
+
+  background: $content_bg_dark;
+  box-sizing: border-box;
+  min-height: $screen_height;
+
+  @include tablet {
+    min-height: 0;
+    border-radius: $radius;
+  }
+}
+
+.heading {
+  font: $font_14_semibold;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.active {
+  background: $content_bg_lighter;
+}
+
+// doubled to outrank Card's own radius
+.main.main {
+  min-width: 0;
+  min-height: $screen_height;
+  padding: $gap;
+  box-sizing: border-box;
+  // joins the sidebar on its left
+  border-radius: 0 $radius $radius 0;
+
+  @include tablet {
+    min-height: 0;
+    border-radius: $radius;
+  }
+}

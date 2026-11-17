@@ -23,6 +23,7 @@ COPY packages/backend/package.json ./packages/backend/
 COPY packages/common/package.json ./packages/common/
 COPY packages/frontend/package.json ./packages/frontend/
 COPY packages/e2e/package.json ./packages/e2e/
+COPY packages/media-fetcher/package.json ./packages/media-fetcher/
 COPY packages/migration/package.json ./packages/migration/
 
 # Installs every workspace: yarn 1 has no way to install a subset, and a partial
@@ -30,9 +31,12 @@ COPY packages/migration/package.json ./packages/migration/
 RUN yarn install --frozen-lockfile
 
 COPY tsconfig.json ./
+COPY packages/common ./packages/common
 COPY packages/frontend ./packages/frontend
 
-RUN yarn workspace @vault/frontend next:build
+# The frontend imports @vault/common's build, so it is built first.
+RUN yarn workspace @vault/common build \
+  && yarn workspace @vault/frontend next:build
 
 FROM ${NODE_IMAGE} AS runner
 

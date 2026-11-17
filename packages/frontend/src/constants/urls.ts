@@ -24,6 +24,10 @@ export const URLS = {
   EDIT: (id: INode['id'] | string) => `/edit/${id}`,
   NOTES: '/notes/',
   NOTE: (id: number) => `/notes/${id}`,
+  ADMIN: {
+    BASE: '/admin',
+    TRANSCODING: '/admin/transcoding',
+  },
 };
 
 export const imagePresets = {

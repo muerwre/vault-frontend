@@ -2,7 +2,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "@vault/common": ["../common/dist"],
+      "@vault/common/*": ["../common/dist/*"]
     }
   }
 }

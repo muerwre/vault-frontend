@@ -1,9 +1,20 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import type { EmbedMetadata } from '@vault/common/types';
-import { Repository } from 'typeorm';
+import {
+  MEDIA_JOB_KINDS,
+  MEDIA_JOB_STATUSES,
+  MEDIA_PROVIDERS,
+  MEDIA_VIDEO_STATUSES,
+} from '@vault/common/media';
+import type { EmbedMetadata, IEmbedVideo } from '@vault/common/types';
+import { In, Repository } from 'typeorm';
 
+import { getMediaCacheConfig } from '../../config/env';
 import { Embed } from '../../entities/embed.entity';
+import { File } from '../../entities/file.entity';
+import { ExternalMedia, MediaJob } from '../../entities/media.entity';
+import { mediaVideoPath } from '../media/media.paths';
+import { isYoutubeId } from '../upload/upload.paths';
 
 import { YoutubeService } from './youtube.service';
 
@@ -24,6 +35,8 @@ export interface WireEmbed {
   provider: string;
   address: string;
   metadata: EmbedMetadata;
+  /** Our copy of the video, when the media cache tracks it. */
+  video?: IEmbedVideo;
 }
 
 @Injectable()
@@ -33,6 +46,10 @@ export class MetaService {
   constructor(
     @InjectRepository(Embed) private readonly embeds: Repository<Embed>,
     private readonly youtube: YoutubeService,
+    @InjectRepository(ExternalMedia)
+    private readonly media: Repository<ExternalMedia>,
+    @InjectRepository(MediaJob) private readonly jobs: Repository<MediaJob>,
+    @InjectRepository(File) private readonly files: Repository<File>,
   ) {}
 
   /**
@@ -107,6 +124,92 @@ export class MetaService {
       }
     }
 
+    await this.attachVideos(items, wanted);
+
     return items;
+  }
+
+  /**
+   * Adds what the media cache knows to each id: an item it tracks is listed
+   * even when no title is known, so clients can still play the copy.
+   */
+  private async attachVideos(
+    items: Record<string, WireEmbed>,
+    wanted: string[],
+  ): Promise<void> {
+    const ids = wanted.filter(isYoutubeId);
+
+    if (ids.length === 0 || !getMediaCacheConfig().enabled) {
+      return;
+    }
+
+    const tracked = await this.media.findBy({
+      provider: MEDIA_PROVIDERS.YOUTUBE,
+      externalId: In(ids),
+    });
+
+    if (tracked.length === 0) {
+      return;
+    }
+
+    const downloading = await this.jobs.findBy({
+      mediaId: In(tracked.map((item) => item.id)),
+      kind: MEDIA_JOB_KINDS.DOWNLOAD,
+      status: MEDIA_JOB_STATUSES.RUNNING,
+    });
+    const fileIds = tracked
+      .filter((item) => item.videoStatus === MEDIA_VIDEO_STATUSES.READY)
+      .map((item) => item.videoFileId)
+      .filter((id): id is number => !!id);
+    const sizes = new Map(
+      fileIds.length > 0
+        ? (await this.files.findBy({ id: In(fileIds) })).map((file) => [
+            file.id,
+            file.size,
+          ])
+        : [],
+    );
+    const progress = new Map(
+      downloading.map((job) => [job.mediaId, job.progress]),
+    );
+
+    for (const item of tracked) {
+      if (item.videoStatus === MEDIA_VIDEO_STATUSES.REMOVED) {
+        continue;
+      }
+
+      const video: IEmbedVideo = {
+        status: item.videoStatus,
+        source: item.sourceStatus,
+      };
+
+      if (item.videoStatus === MEDIA_VIDEO_STATUSES.DOWNLOADING) {
+        video.progress = progress.get(item.id) ?? 0;
+      }
+
+      if (item.videoStatus === MEDIA_VIDEO_STATUSES.READY) {
+        video.url = `REMOTE_CURRENT://${mediaVideoPath(item.provider, item.externalId)}`;
+
+        if (item.height) {
+          video.height = item.height;
+        }
+
+        const size = sizes.get(item.videoFileId ?? 0);
+
+        if (size) {
+          video.size = size;
+        }
+      }
+
+      items[item.externalId] = {
+        ...(items[item.externalId] ?? {
+          id: 0,
+          provider: YOUTUBE_PROVIDER,
+          address: item.externalId,
+          metadata: toWireMetadata(null),
+        }),
+        video,
+      };
+    }
   }
 }
