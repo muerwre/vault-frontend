@@ -289,7 +289,7 @@ export const getMediaCacheConfig = (): MediaCacheConfig => {
     enabled: process.env.CACHE_EXTERNAL_MEDIA === 'true',
     qualityTiers,
     maxDurationSec: maxKeptDuration(qualityTiers),
-    maxBytes: toPositiveInt(process.env.MEDIA_MAX_MB, 800) * 1024 * 1024,
+    maxBytes: toPositiveInt(process.env.MEDIA_MAX_MB, 500) * 1024 * 1024,
   };
 };
 

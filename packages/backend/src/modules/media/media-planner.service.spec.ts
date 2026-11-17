@@ -79,8 +79,9 @@ const setup = (options: {
         .filter((row) => row.videoStatus === 'none' && row.priority > 0)
         .sort(
           (a, b) =>
-            (a as { postedDaysAgo?: number }).postedDaysAgo! -
-              (b as { postedDaysAgo?: number }).postedDaysAgo! || b.id - a.id,
+            ((a as { postedDaysAgo?: number }).postedDaysAgo ?? 0) -
+              ((b as { postedDaysAgo?: number }).postedDaysAgo ?? 0) ||
+            b.id - a.id,
         )
         .slice(0, Number(params[params.length - 1]))
         .map((row) => ({ id: row.id })),
@@ -248,6 +249,25 @@ describe('MediaPlannerService', () => {
         freshVideo1: 'none',
       });
       expect(jobs.map((job) => job.priority)).toEqual([10, 10]);
+    });
+
+    it('queues the released batch in that same order', async () => {
+      process.env.MEDIA_BACKLOG_BATCH = '3';
+      const rows = [
+        backlog('oldestVid01', 900),
+        backlog('middleVid01', 90),
+        backlog('newestVid01', 9),
+      ];
+      const { planner, jobs } = setup({ rows });
+
+      await planner.releaseBacklog();
+
+      const order = new Map(rows.map((row) => [row.id, row.externalId]));
+      expect(jobs.map((job) => order.get(job.mediaId ?? 0))).toEqual([
+        'newestVid01',
+        'middleVid01',
+        'oldestVid01',
+      ]);
     });
 
     it('defaults to five items per release', async () => {

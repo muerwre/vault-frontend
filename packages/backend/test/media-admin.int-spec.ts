@@ -243,6 +243,29 @@ describe('media admin API (integration)', () => {
       expect(item.video_status).toBe('queued');
     });
 
+    it('will not retry a finished job, nor one whose copy is ready or removed', async () => {
+      const done = await jobIn(vid(5), 'done', { videoStatus: 'ready' });
+      const cancelledReady = await jobIn(vid(6), 'cancelled', {
+        videoStatus: 'ready',
+      });
+      const cancelledRemoved = await jobIn(vid(7), 'cancelled', {
+        videoStatus: 'removed',
+      });
+
+      for (const id of [done, cancelledReady, cancelledRemoved]) {
+        await http()
+          .post(`/api/admin/media/jobs/${id}/retry`)
+          .set(authHeader(adminId, 'admin'))
+          .expect(409);
+      }
+
+      const [item] = await db.query(
+        'SELECT video_status FROM external_media WHERE external_id = ?',
+        [vid(6)],
+      );
+      expect(item.video_status).toBe('ready');
+    });
+
     it('will not retry a job a fetcher is working on, or one that does not exist', async () => {
       const runningId = await jobIn(vid(4), 'running');
 

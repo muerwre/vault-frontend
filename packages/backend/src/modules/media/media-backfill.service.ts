@@ -12,18 +12,14 @@ import {
   MEDIA_PRIORITIES,
   MEDIA_PROVIDER_DEFS,
 } from '@vault/common/media';
-import { CronJob } from 'cron';
 import { Brackets, Repository } from 'typeorm';
 
-import {
-  getMediaCacheConfig,
-  getMediaRescanCron,
-  getScheduleTimeZone,
-} from '../../config/env';
+import { getMediaCacheConfig, getMediaRescanCron } from '../../config/env';
 import { Comment } from '../../entities/comment.entity';
 import { Node } from '../../entities/node.entity';
 
 import { MediaRefsService } from './media-refs.service';
+import { scheduleMediaJob, unscheduleMediaJob } from './media-schedule';
 import { MediaSourceService } from './media-source.service';
 import { refsFromBlocks, refsFromText } from './media.rules';
 
@@ -71,9 +67,7 @@ export class MediaBackfillService
   }
 
   async onModuleDestroy(): Promise<void> {
-    if (this.scheduler.doesExist('cron', RESCAN_JOB)) {
-      this.scheduler.deleteCronJob(RESCAN_JOB);
-    }
+    unscheduleMediaJob(this.scheduler, RESCAN_JOB);
 
     this.stopping = true;
     await this.current;
@@ -93,30 +87,16 @@ export class MediaBackfillService
 
   /** A bad expression or zone is reported and leaves only the startup scan. */
   private schedule(): void {
-    const cron = getMediaRescanCron();
-    const timeZone = getScheduleTimeZone();
-
-    try {
-      const job = CronJob.from({
-        cronTime: cron,
-        timeZone,
-        onTick: () => {
-          if (getMediaCacheConfig().enabled) {
-            void this.run();
-          }
-        },
-      });
-
-      this.scheduler.addCronJob(RESCAN_JOB, job);
-      job.start();
-      this.logger.log(`re-scanning on "${cron}" (${timeZone})`);
-    } catch (error) {
-      this.logger.error(
-        `rescan not scheduled, "${cron}" in ${timeZone} is invalid: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      );
-    }
+    scheduleMediaJob({
+      scheduler: this.scheduler,
+      logger: this.logger,
+      name: RESCAN_JOB,
+      cron: getMediaRescanCron(),
+      description: 're-scanning',
+      onTick: () => {
+        void this.run();
+      },
+    });
   }
 
   private async scan(): Promise<void> {

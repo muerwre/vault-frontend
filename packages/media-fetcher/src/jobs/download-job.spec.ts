@@ -201,6 +201,49 @@ describe('runDownloadJob', () => {
     expect(readdirSync(workDir)).toEqual([]);
   });
 
+  it('skips a finished file over the limit instead of uploading it', async () => {
+    // both streams are small on their own, but merged they are not
+    const big: Downloader = async ({ dir }) => {
+      writeFileSync(join(dir, 'video.mp4'), Buffer.alloc(3 * 1024));
+      return ok();
+    };
+    const { api, run } = track(
+      setup({
+        downloads: [big],
+        maxBytes: 2 * 1024,
+        probe: info({
+          formats: [
+            { format_id: 'v', vcodec: 'avc1', acodec: 'none', height: 720 },
+            { format_id: 'a', vcodec: 'none', acodec: 'mp4a.40.2' },
+          ],
+        }),
+      }),
+    );
+
+    await run();
+
+    expect(api.upload).not.toHaveBeenCalled();
+    expect(api.skip).toHaveBeenCalledWith(
+      7,
+      expect.objectContaining({ reason: 'too_big', estimatedBytes: 3 * 1024 }),
+    );
+  });
+
+  it('skips as too big when the backend refuses the upload as such', async () => {
+    const { api, run } = track(setup({}));
+    api.upload.mockRejectedValueOnce(
+      new BackendError(413, '/jobs/7/files/video'),
+    );
+
+    await expect(run()).resolves.toMatchObject({ rateLimited: false });
+
+    expect(api.skip).toHaveBeenCalledWith(
+      7,
+      expect.objectContaining({ reason: 'too_big' }),
+    );
+    expect(api.fail).not.toHaveBeenCalled();
+  });
+
   it('completes without a cover when yt-dlp wrote none', async () => {
     const { api, run } = track(setup({ downloads: [writesFiles(false)] }));
 

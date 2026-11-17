@@ -16,14 +16,20 @@ import {
   matchFetcherKey,
   parseFetcherKeys,
 } from './fetcher-keys';
+import { MediaJobsService } from './media-jobs.service';
 
 interface FetcherRequest extends Request {
   fetcher?: string;
 }
 
-/** Admits only requests carrying a configured fetcher key. */
+/**
+ * Admits only requests carrying a configured fetcher key, and notes each
+ * admitted fetcher as heard from.
+ */
 @Injectable()
 export class FetcherKeyGuard implements CanActivate {
+  constructor(private readonly jobs: MediaJobsService) {}
+
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<FetcherRequest>();
     const name = matchFetcherKey(
@@ -39,6 +45,7 @@ export class FetcherKeyGuard implements CanActivate {
     }
 
     request.fetcher = name;
+    this.jobs.noteSeen(name);
 
     return true;
   }

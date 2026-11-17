@@ -47,6 +47,9 @@ import { LEASE_MS, retryDelayMs } from './media.rules';
 /** Covers are a few hundred KB; anything far larger is not one. */
 const MAX_THUMB_BYTES = 5 * 1024 * 1024;
 
+/** How often a streaming upload renews its job's lease. */
+const LEASE_RENEW_MS = 60_000;
+
 /** Room for container overhead beyond the size the fetcher aimed for. */
 const VIDEO_SLACK = 1.1;
 
@@ -84,11 +87,21 @@ export class MediaJobsService {
   private readonly logger = new Logger('MediaJobs');
 
   /**
-   * Each fetcher's yt-dlp version and last claim, since this process started.
-   * Fetchers claim every few seconds while idle, so a stale entry means one
-   * has stopped.
+   * Each fetcher's yt-dlp version and last request of any kind, since this
+   * process started. Busy fetchers report every minute; idle ones ask for work
+   * every `IDLE_POLL_SEC`.
    */
   readonly fetchers = new Map<string, { version: string; lastSeenAt: Date }>();
+
+  /** Records that `fetcher` was heard from; every authenticated request counts. */
+  noteSeen(fetcher: string, ytDlpVersion?: string): void {
+    this.fetchers.set(fetcher, {
+      version: ytDlpVersion
+        ? String(ytDlpVersion).slice(0, 64)
+        : (this.fetchers.get(fetcher)?.version ?? ''),
+      lastSeenAt: new Date(),
+    });
+  }
 
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
@@ -113,12 +126,7 @@ export class MediaJobsService {
       throw badRequest();
     }
 
-    this.fetchers.set(fetcher, {
-      version: request.ytDlpVersion
-        ? String(request.ytDlpVersion).slice(0, 64)
-        : (this.fetchers.get(fetcher)?.version ?? ''),
-      lastSeenAt: new Date(),
-    });
+    this.noteSeen(fetcher, request.ytDlpVersion);
 
     if (!getMediaCacheConfig().enabled) {
       return null;
@@ -287,7 +295,9 @@ export class MediaJobsService {
     const relative = `${MEDIA_INCOMING_DIR}/${job.id}-${slot}-${randomBytes(6).toString('hex')}`;
     const absolute = this.absolute(relative);
     const hash = createHash('sha256');
+    const renew = () => this.renewLease(job.id, fetcher);
     let size = 0;
+    let renewedAt = Date.now();
 
     await mkdir(dirname(absolute), { recursive: true });
 
@@ -304,7 +314,18 @@ export class MediaJobsService {
             }
 
             hash.update(chunk);
-            done(null, chunk);
+
+            // A long upload keeps its lease; one that lost it stops here.
+            if (Date.now() - renewedAt < LEASE_RENEW_MS) {
+              done(null, chunk);
+              return;
+            }
+
+            renewedAt = Date.now();
+            renew().then(
+              (held) => (held ? done(null, chunk) : done(new LeaseLost())),
+              (error: Error) => done(error),
+            );
           },
         }),
         createWriteStream(absolute),
@@ -319,6 +340,10 @@ export class MediaJobsService {
         );
       }
 
+      if (error instanceof LeaseLost) {
+        throw conflict();
+      }
+
       throw error;
     }
 
@@ -327,13 +352,41 @@ export class MediaJobsService {
       throw badRequest();
     }
 
-    const uploads = this.uploadsOf(job);
-    await this.discard({ [slot]: uploads[slot] });
+    // Recorded only if the lease is still this fetcher's: the job may have
+    // been handed to someone else while the body streamed.
+    const current = await this.jobs.findOneBy({ id: job.id });
+    const uploads = current ? this.uploadsOf(current) : {};
+    const recorded = await this.jobs.update(
+      {
+        id: job.id,
+        status: MEDIA_JOB_STATUSES.RUNNING,
+        leaseOwner: fetcher,
+      },
+      {
+        payload: {
+          ...current?.payload,
+          uploads: { ...uploads, [slot]: relative },
+        },
+        leaseUntil: new Date(Date.now() + LEASE_MS),
+      },
+    );
 
-    await this.jobs.update(job.id, {
-      payload: { ...job.payload, uploads: { ...uploads, [slot]: relative } },
-      leaseUntil: new Date(Date.now() + LEASE_MS),
-    });
+    if (!recorded.affected) {
+      await unlink(absolute).catch((): void => undefined);
+      throw conflict();
+    }
+
+    await this.discard({ [slot]: uploads[slot] });
+  }
+
+  /** Extends the lease if `fetcher` still holds it; false when it does not. */
+  private async renewLease(jobId: number, fetcher: string): Promise<boolean> {
+    const result = await this.jobs.update(
+      { id: jobId, status: MEDIA_JOB_STATUSES.RUNNING, leaseOwner: fetcher },
+      { leaseUntil: new Date(Date.now() + LEASE_MS) },
+    );
+
+    return !!result.affected;
   }
 
   /** Moves the uploads into place and marks the item ready. */
@@ -589,3 +642,5 @@ export class MediaJobsService {
 }
 
 class UploadTooBig extends Error {}
+
+class LeaseLost extends Error {}

@@ -237,11 +237,35 @@ export const runDownloadJob = async (
     const facts = await tools.describe(ready);
     const size = (await stat(ready)).size;
 
+    // `--max-filesize` caps each stream, not the merged file, and streams of
+    // unknown size were taken on trust: the finished file is what counts.
+    if (size > maxBytes) {
+      return await skip(
+        MEDIA_SKIP_REASONS.TOO_BIG,
+        `the finished file is ${megabytes(size)}, over ${megabytes(maxBytes)}`,
+        { duration, estimatedBytes: size },
+      );
+    }
+
     say(`uploading ${megabytes(size)}`);
     await guard(() => api.progress(job.id, 99, MEDIA_JOB_STAGES.UPLOAD));
-    await guard(() =>
-      api.upload(job.id, MEDIA_UPLOAD_SLOTS.VIDEO, ready, 'video/mp4'),
-    );
+
+    try {
+      await guard(() =>
+        api.upload(job.id, MEDIA_UPLOAD_SLOTS.VIDEO, ready, 'video/mp4'),
+      );
+    } catch (error) {
+      // The backend's own limit decides in the end; retrying would not help.
+      if (error instanceof BackendError && error.status === 413) {
+        return await skip(
+          MEDIA_SKIP_REASONS.TOO_BIG,
+          `the backend refused ${megabytes(size)} as too big`,
+          { duration, estimatedBytes: size },
+        );
+      }
+
+      throw error;
+    }
 
     if (await exists(join(dir, THUMBNAIL))) {
       await guard(() =>

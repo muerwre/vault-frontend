@@ -15,13 +15,11 @@ import {
   MEDIA_THUMB_STATUSES,
   MEDIA_VIDEO_STATUSES,
 } from '@vault/common/media';
-import { CronJob } from 'cron';
 import { In, IsNull, type DataSource, type Repository } from 'typeorm';
 
 import {
   getMediaCacheConfig,
   getMediaCleanupConfig,
-  getScheduleTimeZone,
   getUploadsConfig,
   isYoutubeThumbCacheEnabled,
 } from '../../config/env';
@@ -30,6 +28,7 @@ import { ExternalMedia, MediaJob } from '../../entities/media.entity';
 import { resolveUploadPath, youtubeThumbPath } from '../upload/upload.paths';
 import { YoutubeThumbService } from '../upload/youtube-thumb.service';
 
+import { scheduleMediaJob, unscheduleMediaJob } from './media-schedule';
 import { MEDIA_INCOMING_DIR } from './media.paths';
 
 const CLEANUP_JOB = 'media-cleanup';
@@ -88,9 +87,7 @@ export class MediaCleanupService
   }
 
   async onModuleDestroy(): Promise<void> {
-    if (this.scheduler.doesExist('cron', CLEANUP_JOB)) {
-      this.scheduler.deleteCronJob(CLEANUP_JOB);
-    }
+    unscheduleMediaJob(this.scheduler, CLEANUP_JOB);
 
     await this.current;
   }
@@ -105,30 +102,16 @@ export class MediaCleanupService
   }
 
   private schedule(): void {
-    const { cron } = getMediaCleanupConfig();
-    const timeZone = getScheduleTimeZone();
-
-    try {
-      const job = CronJob.from({
-        cronTime: cron,
-        timeZone,
-        onTick: () => {
-          if (getMediaCacheConfig().enabled) {
-            void this.run();
-          }
-        },
-      });
-
-      this.scheduler.addCronJob(CLEANUP_JOB, job);
-      job.start();
-      this.logger.log(`cleaning up on "${cron}" (${timeZone})`);
-    } catch (error) {
-      this.logger.error(
-        `cleanup not scheduled, "${cron}" in ${timeZone} is invalid: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      );
-    }
+    scheduleMediaJob({
+      scheduler: this.scheduler,
+      logger: this.logger,
+      name: CLEANUP_JOB,
+      cron: getMediaCleanupConfig().cron,
+      description: 'cleaning up',
+      onTick: () => {
+        void this.run();
+      },
+    });
   }
 
   private async cleanUp(): Promise<CleanupReport> {

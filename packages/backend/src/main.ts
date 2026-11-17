@@ -65,6 +65,14 @@ async function bootstrap() {
   const port = process.env.PORT ? Number(process.env.PORT) : 3000;
   await app.listen(port);
 
+  /**
+   * No limit on how long a request body may take: the media fetcher streams
+   * copies of hundreds of megabytes, which Node would otherwise cut off after
+   * five minutes. Headers still have to arrive within `headersTimeout`, and
+   * public traffic comes through nginx with its own limits.
+   */
+  app.getHttpServer().requestTimeout = 0;
+
   // Hot reload holds a websocket open from the first page load; route its
   // upgrade explicitly rather than relying on a proxied request coming first.
   if (frontendProxy) {

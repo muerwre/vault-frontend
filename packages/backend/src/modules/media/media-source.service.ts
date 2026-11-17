@@ -30,6 +30,9 @@ const TIMEOUT_MS = 10_000;
 
 const OEMBED_URL = 'https://www.youtube.com/oembed';
 
+/** YouTube said to slow down: the run stops, the rest wait for the next one. */
+const THROTTLED = 'throttled' as const;
+
 /**
  * What YouTube's oEmbed answer says about a video: playable, gone (removed,
  * private or not embeddable), or null when the answer says nothing (network
@@ -95,27 +98,35 @@ export class MediaSourceService {
     for (const item of due) {
       const status = await this.check(item.externalId);
 
-      if (status === null) {
-        continue;
+      if (status === THROTTLED) {
+        this.logger.warn(
+          'YouTube is throttling oEmbed checks, stopping until the next run',
+        );
+        break;
       }
 
-      if (status !== item.sourceStatus) {
-        changed += 1;
-        this.logger.log(`youtube ${item.externalId}: original is ${status}`);
+      if (status !== null) {
+        if (status !== item.sourceStatus) {
+          changed += 1;
+          this.logger.log(`youtube ${item.externalId}: original is ${status}`);
+        }
+
+        await this.media.update(item.id, {
+          sourceStatus: status,
+          sourceCheckedAt: new Date(),
+        });
       }
 
-      await this.media.update(item.id, {
-        sourceStatus: status,
-        sourceCheckedAt: new Date(),
-      });
-
+      // after every request, answered or not
       await new Promise((resolve) => setTimeout(resolve, PAUSE_MS).unref());
     }
 
     return changed;
   }
 
-  private async check(id: string): Promise<MediaSourceStatus | null> {
+  private async check(
+    id: string,
+  ): Promise<MediaSourceStatus | typeof THROTTLED | null> {
     const url = new URL(OEMBED_URL);
     url.searchParams.set(
       'url',
@@ -128,6 +139,10 @@ export class MediaSourceService {
         signal: AbortSignal.timeout(TIMEOUT_MS),
       });
       await response.body?.cancel().catch((): void => undefined);
+
+      if (response.status === 429) {
+        return THROTTLED;
+      }
 
       return sourceStatusFromOembed(response.status);
     } catch (error) {

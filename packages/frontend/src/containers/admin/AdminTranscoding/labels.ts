@@ -27,10 +27,12 @@ export const SKIP_REASON_LABELS: Record<string, string> = {
   not_video: 'не видео',
 };
 
-/** Jobs that can be sent back to the queue from the list. */
+/**
+ * Jobs that can be sent back to the queue from the list. Finished ones cannot:
+ * their copy is already there.
+ */
 export const RETRYABLE_FILTERS: MediaJobFilter[] = [
   'failed',
   'retrying',
   'cancelled',
-  'done',
 ];

@@ -2,6 +2,7 @@ import { createHash } from 'crypto';
 import { existsSync, mkdtempSync, readdirSync, rmSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
+import { PassThrough } from 'stream';
 
 // Uploads land in a throwaway directory; nothing here reaches YouTube.
 const uploadsRoot = mkdtempSync(join(tmpdir(), 'media-jobs-'));
@@ -13,6 +14,8 @@ process.env.MEDIA_FETCHER_KEYS = 'home:home-secret,vps:vps-secret';
 import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
+
+import { MediaJobsService } from '../src/modules/media/media-jobs.service';
 
 import { createTestApp, getDataSource } from './helpers/app';
 
@@ -204,7 +207,7 @@ describe('media jobs API (integration)', () => {
         url: `https://www.youtube.com/watch?v=${id}`,
         constraints: {
           maxDurationSec: 90 * 60,
-          maxBytes: 800 * 1024 * 1024,
+          maxBytes: 500 * 1024 * 1024,
           qualityTiers: [
             { maxDurationSec: 30 * 60, maxHeight: 720 },
             { maxDurationSec: 60 * 60, maxHeight: 480 },
@@ -297,6 +300,57 @@ describe('media jobs API (integration)', () => {
     it('refuses reports on a finished job', async () => {
       await report(ids.jobId, 'progress', { percent: 1 }).expect(409);
       await report(999_999_999, 'progress', { percent: 1 }).expect(404);
+    });
+  });
+
+  describe('leases', () => {
+    it('counts any request as hearing from the fetcher', async () => {
+      const jobs = app.get(MediaJobsService);
+      jobs.fetchers.delete('home');
+
+      // even one about a job that does not exist
+      await report(999_999_998, 'progress', { percent: 1 }).expect(404);
+
+      expect(jobs.fetchers.get('home')?.lastSeenAt.getTime()).toBeGreaterThan(
+        Date.now() - 5_000,
+      );
+    });
+
+    it('drops an upload whose job was handed to someone else meanwhile', async () => {
+      const { jobId } = await queueDownload(vid(8));
+      await claim().expect(200);
+
+      const contents = Buffer.from('a copy that arrives too late');
+      const body = new PassThrough();
+      const uploading = app
+        .get(MediaJobsService)
+        .upload('home', jobId, 'video', body, {
+          contentType: 'video/mp4',
+          sha256: sha(contents),
+        });
+
+      body.write(contents.subarray(0, 5));
+      // the lease runs out and the job goes back to the queue mid-upload
+      await db.query(
+        `UPDATE media_job SET status = 'queued', lease_owner = NULL, lease_until = NULL WHERE id = ?`,
+        [jobId],
+      );
+      body.end(contents.subarray(5));
+
+      await expect(uploading).rejects.toMatchObject({ status: 409 });
+
+      const row = await job(jobId);
+      expect(JSON.parse(row.payload ?? '{}').uploads ?? {}).toEqual({});
+      expect(row.lease_owner).toBeNull();
+      expect(
+        readdirSync(join(uploadsRoot, 'media/.incoming')).filter((name) =>
+          name.startsWith(`${jobId}-`),
+        ),
+      ).toEqual([]);
+
+      await db.query(`UPDATE media_job SET status = 'cancelled' WHERE id = ?`, [
+        jobId,
+      ]);
     });
   });
 

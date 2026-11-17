@@ -17,18 +17,18 @@ import {
   MEDIA_VIDEO_STATUSES,
   type MediaJobKind,
 } from '@vault/common/media';
-import { CronJob } from 'cron';
 import { In, Repository } from 'typeorm';
 
 import {
   getMediaBacklogConfig,
   getMediaCacheConfig,
-  getScheduleTimeZone,
   isYoutubeThumbCacheEnabled,
 } from '../../config/env';
 import { ExternalMedia, MediaJob } from '../../entities/media.entity';
 import { youtubeThumbPath } from '../upload/upload.paths';
 import { YoutubeThumbService } from '../upload/youtube-thumb.service';
+
+import { scheduleMediaJob, unscheduleMediaJob } from './media-schedule';
 
 /** How often fresh items are looked for. */
 const POLL_MS = 15_000;
@@ -90,9 +90,7 @@ export class MediaPlannerService
       this.timer = undefined;
     }
 
-    if (this.scheduler.doesExist('cron', BACKLOG_JOB)) {
-      this.scheduler.deleteCronJob(BACKLOG_JOB);
-    }
+    unscheduleMediaJob(this.scheduler, BACKLOG_JOB);
 
     this.stopping = true;
 
@@ -127,31 +125,17 @@ export class MediaPlannerService
   /** A bad expression or zone is reported and leaves the backlog unreleased. */
   private scheduleBacklog(): void {
     const { cron, batch } = getMediaBacklogConfig();
-    const timeZone = getScheduleTimeZone();
 
-    try {
-      const job = CronJob.from({
-        cronTime: cron,
-        timeZone,
-        onTick: () => {
-          if (getMediaCacheConfig().enabled) {
-            void this.releaseBacklog();
-          }
-        },
-      });
-
-      this.scheduler.addCronJob(BACKLOG_JOB, job);
-      job.start();
-      this.logger.log(
-        `releasing ${batch} backlog items on "${cron}" (${timeZone})`,
-      );
-    } catch (error) {
-      this.logger.error(
-        `backlog not scheduled, "${cron}" in ${timeZone} is invalid: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      );
-    }
+    scheduleMediaJob({
+      scheduler: this.scheduler,
+      logger: this.logger,
+      name: BACKLOG_JOB,
+      cron,
+      description: `releasing ${batch} backlog items`,
+      onTick: () => {
+        void this.releaseBacklog();
+      },
+    });
   }
 
   private async drainFresh(): Promise<void> {
@@ -187,7 +171,19 @@ export class MediaPlannerService
         return;
       }
 
-      await this.plan(await this.media.findBy({ id: In(ids) }));
+      // Planned, and so queued and claimed, in the query's order.
+      const byId = new Map(
+        (await this.media.findBy({ id: In(ids) })).map((item) => [
+          item.id,
+          item,
+        ]),
+      );
+
+      await this.plan(
+        ids
+          .map((id) => byId.get(id))
+          .filter((item): item is ExternalMedia => !!item),
+      );
     } catch (error) {
       this.logFailure(error);
     }

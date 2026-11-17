@@ -1,5 +1,6 @@
 import { FC, Fragment, ReactNode, useCallback, useState } from 'react';
 
+import { YOUTUBE_PROVIDER } from '@vault/common/media';
 import classNames from 'classnames';
 import useSWR from 'swr';
 
@@ -48,7 +49,7 @@ const TILE_STATUSES = [
 
 const videoUrl = (job: ApiMediaJob) =>
   job.media?.provider === 'youtube'
-    ? `https://www.youtube.com/watch?v=${job.media.external_id}`
+    ? YOUTUBE_PROVIDER.canonicalUrl(job.media.external_id)
     : undefined;
 
 /** Why nothing is being downloaded, when that is the case. */

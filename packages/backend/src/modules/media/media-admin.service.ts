@@ -161,8 +161,10 @@ export class MediaAdminService {
   }
 
   /**
-   * Puts a finished or waiting job back at the front of its queue, whatever its
-   * failure history. A job a fetcher is working on cannot be retried.
+   * Puts a failed, waiting or cancelled job back at the front of its queue,
+   * whatever its failure history. Refused (409) for a job a fetcher is working
+   * on, a finished one, and one whose item already has its copy or was
+   * removed: retrying those would hide a good copy or fetch an unlinked one.
    */
   async retry(jobId: number): Promise<void> {
     const job = await this.jobs.findOneBy({ id: jobId });
@@ -171,7 +173,16 @@ export class MediaAdminService {
       throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.NOT_FOUND);
     }
 
-    if (job.status === MEDIA_JOB_STATUSES.RUNNING) {
+    const item = job.mediaId
+      ? await this.media.findOneBy({ id: job.mediaId })
+      : null;
+
+    if (
+      job.status === MEDIA_JOB_STATUSES.RUNNING ||
+      job.status === MEDIA_JOB_STATUSES.DONE ||
+      item?.videoStatus === MEDIA_VIDEO_STATUSES.READY ||
+      item?.videoStatus === MEDIA_VIDEO_STATUSES.REMOVED
+    ) {
       throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.CONFLICT);
     }
 
