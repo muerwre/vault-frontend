@@ -9,6 +9,9 @@ export const API = {
     MEDIA_SUMMARY: '/admin/media/summary',
     MEDIA_JOBS: '/admin/media/jobs',
     MEDIA_JOB_RETRY: (id: number) => `/admin/media/jobs/${id}/retry`,
+    MEDIA_ITEM_RELEASE: (id: number) => `/admin/media/items/${id}/release`,
+    MEDIA_ITEM_SKIP: (id: number) => `/admin/media/items/${id}/skip`,
+    MEDIA_ITEM_UNSKIP: (id: number) => `/admin/media/items/${id}/unskip`,
   },
   USER: {
     LOGIN: '/auth',

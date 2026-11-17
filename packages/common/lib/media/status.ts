@@ -38,6 +38,12 @@ export const MEDIA_SKIP_REASONS = {
 export type MediaSkipReason =
   (typeof MEDIA_SKIP_REASONS)[keyof typeof MEDIA_SKIP_REASONS];
 
+/** Skip reason of a video an admin chose not to keep; never a fetcher's. */
+export const MEDIA_MANUAL_SKIP = 'manual';
+
+/** Any reason an item can be skipped for. */
+export type MediaItemSkipReason = MediaSkipReason | typeof MEDIA_MANUAL_SKIP;
+
 export const MEDIA_THUMB_STATUSES = {
   NONE: 'none',
   QUEUED: 'queued',

@@ -47,6 +47,7 @@ export interface ApiMediaJob {
   updated_at: string;
   finished_at: string | null;
   media: {
+    id: number;
     provider: string;
     external_id: string;
     video_status: string;

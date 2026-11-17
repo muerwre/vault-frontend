@@ -219,6 +219,33 @@ export class MediaPlannerService
     return rows.map((row) => Number(row.id));
   }
 
+  /**
+   * Releases one backlog item at once, as the backlog schedule would. False
+   * when it is not waiting in the backlog.
+   */
+  async releaseItem(mediaId: number): Promise<boolean> {
+    const item = await this.media.findOneBy({ id: mediaId });
+
+    if (
+      !item ||
+      item.videoStatus !== MEDIA_VIDEO_STATUSES.NONE ||
+      item.priority <= MEDIA_PRIORITIES.FRESH
+    ) {
+      return false;
+    }
+
+    await this.plan([item]);
+    return true;
+  }
+
+  /**
+   * Queues an item's download now, whatever its status, unless such a job is
+   * already open.
+   */
+  async queueItem(item: ExternalMedia): Promise<void> {
+    await this.plan([item]);
+  }
+
   /** How many items {@link newestBacklog} would list in all. */
   async countBacklog(): Promise<number> {
     const [row] = (await this.media.query(

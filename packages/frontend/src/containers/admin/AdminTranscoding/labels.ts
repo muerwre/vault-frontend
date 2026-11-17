@@ -22,6 +22,7 @@ export const SKIP_REASON_LABELS: Record<string, string> = {
   too_big: 'слишком большое',
   live: 'трансляция',
   not_video: 'не видео',
+  manual: 'вручную',
 };
 
 /**
@@ -66,11 +67,39 @@ export const jobBadge = (job: {
 export const jobKey = (job: { id: number; status: string }) =>
   `${job.status === 'backlog' ? 'item' : 'job'}:${job.id}`;
 
+export type JobAction = 'retry' | 'batch' | 'release' | 'skip' | 'unskip';
+
+export const JOB_ACTION_LABELS: Record<JobAction, string> = {
+  retry: 'Повторить',
+  batch: 'В батч',
+  release: 'В батч',
+  skip: 'Пропустить',
+  unskip: 'Вернуть',
+};
+
 /**
- * Whether a job can be sent back to the front of the queue. Finished and
- * running ones cannot, nor one simply waiting its turn.
+ * What can be done to a list entry. `batch` makes a job waiting for a retry
+ * due now, `release` takes a backlog item into the queue now, `unskip` queues
+ * a skipped video again. Nothing touches a job a fetcher is working on, or
+ * one finished with its copy.
  */
-export const canRetryJob = (job: { status: string; attempts: number }) =>
-  job.status === 'failed' ||
-  job.status === 'cancelled' ||
-  (job.status === 'queued' && job.attempts > 0);
+export const jobActions = (job: {
+  status: string;
+  attempts: number;
+  media: { video_status: string } | null;
+}): JobAction[] => {
+  switch (job.status) {
+    case 'failed':
+      return ['retry'];
+    case 'cancelled':
+      return ['retry', 'skip'];
+    case 'queued':
+      return job.attempts > 0 ? ['batch', 'skip'] : ['skip'];
+    case 'backlog':
+      return ['release', 'skip'];
+    case 'done':
+      return job.media?.video_status === 'skipped' ? ['unskip'] : [];
+    default:
+      return [];
+  }
+};

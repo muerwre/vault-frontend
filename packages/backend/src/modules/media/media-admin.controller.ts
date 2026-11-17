@@ -48,4 +48,25 @@ export class MediaAdminController {
   retry(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.admin.retry(id);
   }
+
+  /** Releases a backlog item now; `id` is the item's. */
+  @Post('items/:id/release')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  release(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.admin.release(id);
+  }
+
+  /** Stops keeping an item's video; `id` is the item's. */
+  @Post('items/:id/skip')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  skip(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.admin.skip(id);
+  }
+
+  /** Queues a skipped item's video again; `id` is the item's. */
+  @Post('items/:id/unskip')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  unskip(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.admin.unskip(id);
+  }
 }

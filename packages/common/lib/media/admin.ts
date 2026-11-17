@@ -70,6 +70,8 @@ export interface IMediaAdminJob {
   updated_at: string;
   finished_at: string | null;
   media: {
+    /** The item's own id, which item actions take. */
+    id: number;
     provider: string;
     external_id: string;
     video_status: string;

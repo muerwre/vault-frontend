@@ -108,6 +108,18 @@ describe('media admin API (integration)', () => {
         .post('/api/admin/media/jobs/1/retry')
         .set(headers)
         .expect(404);
+      await http()
+        .post('/api/admin/media/items/1/skip')
+        .set(headers)
+        .expect(404);
+      await http()
+        .post('/api/admin/media/items/1/release')
+        .set(headers)
+        .expect(404);
+      await http()
+        .post('/api/admin/media/items/1/unskip')
+        .set(headers)
+        .expect(404);
     });
   });
 
@@ -345,6 +357,167 @@ describe('media admin API (integration)', () => {
         .post('/api/admin/media/jobs/999999999/retry')
         .set(authHeader(adminId, 'admin'))
         .expect(404);
+    });
+  });
+  describe('items', () => {
+    const admin = () => authHeader(adminId, 'admin');
+
+    /** A backlog item linked from a node; returns its id. */
+    const backlogItem = async (externalId: string) => {
+      await db.query(
+        `INSERT INTO external_media (provider, external_id, kind, video_status, priority)
+         VALUES ('youtube', ?, 'video', 'none', 10)`,
+        [externalId],
+      );
+      const id = Number(
+        (await db.query('SELECT LAST_INSERT_ID() AS id'))[0].id,
+      );
+      mediaIds.push(id);
+      await db.query(
+        `INSERT INTO external_media_ref (media_id, owner_type, owner_id) VALUES (?, 'node', 0)`,
+        [id],
+      );
+      return id;
+    };
+
+    const mediaOf = async (jobId: number) =>
+      Number(
+        (
+          await db.query('SELECT media_id FROM media_job WHERE id = ?', [jobId])
+        )[0].media_id,
+      );
+
+    it('releases a backlog item into the queue at once', async () => {
+      const id = await backlogItem(vid(20));
+
+      await http()
+        .post(`/api/admin/media/items/${id}/release`)
+        .set(admin())
+        .expect(204);
+
+      const [item] = await db.query(
+        'SELECT video_status FROM external_media WHERE id = ?',
+        [id],
+      );
+      const jobs = await db.query(
+        'SELECT status, priority FROM media_job WHERE media_id = ?',
+        [id],
+      );
+
+      expect(item.video_status).toBe('queued');
+      expect(jobs).toEqual([{ status: 'queued', priority: 10 }]);
+
+      // already released
+      await http()
+        .post(`/api/admin/media/items/${id}/release`)
+        .set(admin())
+        .expect(409);
+    });
+
+    it('will not release what is not in the backlog, or does not exist', async () => {
+      const jobId = await jobIn(vid(21), 'failed');
+
+      await http()
+        .post(`/api/admin/media/items/${await mediaOf(jobId)}/release`)
+        .set(admin())
+        .expect(409);
+      await http()
+        .post('/api/admin/media/items/999999999/release')
+        .set(admin())
+        .expect(404);
+    });
+
+    it('skips a backlog item, listing it with finished jobs', async () => {
+      const id = await backlogItem(vid(22));
+
+      await http()
+        .post(`/api/admin/media/items/${id}/skip`)
+        .set(admin())
+        .expect(204);
+
+      const [item] = await db.query(
+        'SELECT video_status, skip_reason FROM external_media WHERE id = ?',
+        [id],
+      );
+      expect(item).toEqual({ video_status: 'skipped', skip_reason: 'manual' });
+
+      const { body } = await http()
+        .get('/api/admin/media/jobs?status=done&take=100')
+        .set(admin())
+        .expect(200);
+      expect(
+        body.jobs.find(
+          (row: { media: { id: number } | null }) => row.media?.id === id,
+        ),
+      ).toMatchObject({
+        status: 'done',
+        media: { video_status: 'skipped', skip_reason: 'manual' },
+      });
+
+      await http()
+        .post(`/api/admin/media/items/${id}/skip`)
+        .set(admin())
+        .expect(409);
+    });
+
+    it('skips a waiting job, finishing it', async () => {
+      const jobId = await jobIn(vid(23), 'queued', { attempts: 1 });
+
+      await http()
+        .post(`/api/admin/media/items/${await mediaOf(jobId)}/skip`)
+        .set(admin())
+        .expect(204);
+
+      const [job] = await db.query(
+        'SELECT status, next_attempt_at FROM media_job WHERE id = ?',
+        [jobId],
+      );
+      expect(job).toEqual({ status: 'done', next_attempt_at: null });
+    });
+
+    it('will not skip a video being fetched or already kept', async () => {
+      const running = await jobIn(vid(24), 'running');
+      const kept = await jobIn(vid(25), 'done', { videoStatus: 'ready' });
+
+      for (const jobId of [running, kept]) {
+        await http()
+          .post(`/api/admin/media/items/${await mediaOf(jobId)}/skip`)
+          .set(admin())
+          .expect(409);
+      }
+    });
+    it('takes a skip back, queueing the video again on its own job', async () => {
+      const jobId = await jobIn(vid(26), 'done', { videoStatus: 'skipped' });
+      const id = await mediaOf(jobId);
+      await db.query(
+        "UPDATE external_media SET skip_reason = 'too_long' WHERE id = ?",
+        [id],
+      );
+
+      await http()
+        .post(`/api/admin/media/items/${id}/unskip`)
+        .set(admin())
+        .expect(204);
+
+      const [item] = await db.query(
+        'SELECT video_status, skip_reason FROM external_media WHERE id = ?',
+        [id],
+      );
+      const jobs = await db.query(
+        'SELECT id, status, finished_at FROM media_job WHERE media_id = ?',
+        [id],
+      );
+
+      expect(item).toEqual({ video_status: 'queued', skip_reason: null });
+      expect(jobs).toEqual([
+        { id: jobId, status: 'queued', finished_at: null },
+      ]);
+
+      // no longer skipped
+      await http()
+        .post(`/api/admin/media/items/${id}/unskip`)
+        .set(admin())
+        .expect(409);
     });
   });
 });

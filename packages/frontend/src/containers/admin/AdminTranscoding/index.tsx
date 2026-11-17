@@ -8,7 +8,10 @@ import useSWRInfinite from 'swr/infinite';
 import {
   apiGetMediaJobs,
   apiGetMediaSummary,
+  apiReleaseMediaItem,
   apiRetryMediaJob,
+  apiSkipMediaItem,
+  apiUnskipMediaItem,
 } from '~/api/admin';
 import {
   ApiMediaJob,
@@ -31,8 +34,10 @@ import {
   formatRelative,
 } from './format';
 import {
-  canRetryJob,
+  JOB_ACTION_LABELS,
   JOB_FILTER_LABELS,
+  JobAction,
+  jobActions,
   jobBadge,
   jobKey,
   VIDEO_STATUS_LABELS,
@@ -150,7 +155,8 @@ const settingRows = (
  */
 const AdminTranscoding: FC = () => {
   const [filter, setFilter] = useState<MediaJobFilter>('queue');
-  const [retrying, setRetrying] = useState<number | null>(null);
+  /** The entry an action is running on, by {@link jobKey}. */
+  const [busy, setBusy] = useState<string | null>(null);
 
   const summary = useSWR(API.ADMIN.MEDIA_SUMMARY, apiGetMediaSummary, {
     refreshInterval: REFRESH_MS,
@@ -186,17 +192,35 @@ const AdminTranscoding: FC = () => {
     }
   }, [jobs.isValidating, setSize]);
 
-  const retry = useCallback(
-    async (id: number) => {
-      setRetrying(id);
+  const act = useCallback(
+    async (action: JobAction, job: ApiMediaJob) => {
+      setBusy(jobKey(job));
 
       try {
-        await apiRetryMediaJob(id);
+        const itemId = job.media?.id ?? 0;
+
+        switch (action) {
+          case 'retry':
+          case 'batch':
+            await apiRetryMediaJob(job.id);
+            break;
+          case 'release':
+            // a backlog entry's id is its item's
+            await apiReleaseMediaItem(job.id);
+            break;
+          case 'skip':
+            await apiSkipMediaItem(itemId);
+            break;
+          case 'unskip':
+            await apiUnskipMediaItem(itemId);
+            break;
+        }
+
         await Promise.all([jobs.mutate(), summary.mutate()]);
       } catch (error) {
         showErrorToast(error);
       } finally {
-        setRetrying(null);
+        setBusy(null);
       }
     },
     [jobs, summary],
@@ -374,16 +398,20 @@ const AdminTranscoding: FC = () => {
                         </span>
                       )}
 
-                      {canRetryJob(job) && (
-                        <Button
-                          size="mini"
-                          color="outline"
-                          className={styles.retry}
-                          disabled={retrying === job.id}
-                          onClick={() => retry(job.id)}
-                        >
-                          Повторить
-                        </Button>
+                      {jobActions(job).length > 0 && (
+                        <div className={styles.actions}>
+                          {jobActions(job).map((action) => (
+                            <Button
+                              key={action}
+                              size="mini"
+                              color="outline"
+                              disabled={busy === jobKey(job)}
+                              onClick={() => act(action, job)}
+                            >
+                              {JOB_ACTION_LABELS[action]}
+                            </Button>
+                          ))}
+                        </div>
                       )}
                     </div>
 

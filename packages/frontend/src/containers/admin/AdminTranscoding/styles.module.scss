@@ -130,7 +130,9 @@
   word-break: break-all;
 }
 
-.retry {
+.actions {
+  display: flex;
+  gap: $gap * 0.5;
   margin-left: auto;
 }
 

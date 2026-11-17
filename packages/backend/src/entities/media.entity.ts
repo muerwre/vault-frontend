@@ -9,7 +9,7 @@ import {
   type MediaKind,
   type MediaOwnerType,
   type MediaProvider,
-  type MediaSkipReason,
+  type MediaItemSkipReason,
   type MediaSourceStatus,
   type MediaThumbStatus,
   type MediaVideoStatus,
@@ -77,7 +77,7 @@ export class ExternalMedia {
   videoStatus: MediaVideoStatus;
 
   @Column({ name: 'skip_reason', type: 'varchar', length: 16, nullable: true })
-  skipReason: MediaSkipReason | null;
+  skipReason: MediaItemSkipReason | null;
 
   @Column({
     name: 'thumb_status',

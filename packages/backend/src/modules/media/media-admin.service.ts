@@ -9,6 +9,7 @@ import {
   MEDIA_ADMIN_JOB_FILTERS,
   MEDIA_JOB_KINDS,
   MEDIA_JOB_STATUSES,
+  MEDIA_MANUAL_SKIP,
   MEDIA_PRIORITIES,
   MEDIA_VIDEO_STATUSES,
   type MediaAdminJobFilter,
@@ -337,6 +338,119 @@ export class MediaAdminService {
     }
   }
 
+  /**
+   * Releases a backlog item now instead of on the backlog schedule. Refused
+   * (409) for an item not waiting in the backlog.
+   */
+  async release(mediaId: number): Promise<void> {
+    await this.itemOr404(mediaId);
+
+    if (!(await this.planner.releaseItem(mediaId))) {
+      throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.CONFLICT);
+    }
+  }
+
+  /**
+   * Gives up on keeping an item's video: it leaves the queue and is listed as
+   * finished, skipped by hand. Refused (409) while a fetcher is working on it,
+   * and for one already kept, removed or skipped.
+   */
+  async skip(mediaId: number): Promise<void> {
+    const item = await this.itemOr404(mediaId);
+
+    const running = await this.jobs.countBy({
+      mediaId,
+      kind: MEDIA_JOB_KINDS.DOWNLOAD,
+      status: MEDIA_JOB_STATUSES.RUNNING,
+    });
+
+    if (
+      running > 0 ||
+      item.videoStatus === MEDIA_VIDEO_STATUSES.READY ||
+      item.videoStatus === MEDIA_VIDEO_STATUSES.REMOVED ||
+      item.videoStatus === MEDIA_VIDEO_STATUSES.SKIPPED
+    ) {
+      throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.CONFLICT);
+    }
+
+    await this.media.update(mediaId, {
+      videoStatus: MEDIA_VIDEO_STATUSES.SKIPPED,
+      skipReason: MEDIA_MANUAL_SKIP,
+    });
+
+    // The job, open or cancelled, ends as a fetcher's skip would; a backlog
+    // item gets one so the skip is listed with the others.
+    const finished = await this.jobs.update(
+      {
+        mediaId,
+        kind: MEDIA_JOB_KINDS.DOWNLOAD,
+        status: In([MEDIA_JOB_STATUSES.QUEUED, MEDIA_JOB_STATUSES.CANCELLED]),
+      },
+      {
+        status: MEDIA_JOB_STATUSES.DONE,
+        nextAttemptAt: null,
+        finishedAt: new Date(),
+      },
+    );
+
+    if (!finished.affected) {
+      await this.jobs.save(
+        this.jobs.create({
+          kind: MEDIA_JOB_KINDS.DOWNLOAD,
+          mediaId,
+          status: MEDIA_JOB_STATUSES.DONE,
+          priority: item.priority,
+          finishedAt: new Date(),
+          payload: {},
+        }),
+      );
+    }
+  }
+
+  /**
+   * Takes back a skip, by hand or the fetcher's: the item is queued again,
+   * reusing its finished job, and the fetcher checks it afresh. Refused (409)
+   * for an item that is not skipped.
+   */
+  async unskip(mediaId: number): Promise<void> {
+    const item = await this.itemOr404(mediaId);
+
+    if (item.videoStatus !== MEDIA_VIDEO_STATUSES.SKIPPED) {
+      throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.CONFLICT);
+    }
+
+    const job = await this.jobs.findOne({
+      where: {
+        mediaId,
+        kind: MEDIA_JOB_KINDS.DOWNLOAD,
+        status: MEDIA_JOB_STATUSES.DONE,
+      },
+      order: { id: 'DESC' },
+    });
+
+    if (job) {
+      await this.jobs.update(job.id, {
+        status: MEDIA_JOB_STATUSES.QUEUED,
+        nextAttemptAt: null,
+        finishedAt: null,
+        progress: 0,
+      });
+    }
+
+    item.skipReason = null;
+    await this.planner.queueItem(item);
+  }
+
+  private async itemOr404(mediaId: number): Promise<ExternalMedia> {
+    const item = await this.media.findOneBy({ id: mediaId });
+
+    if (!item) {
+      throw new VaultException(ERROR_CODES.IncorrectData, HttpStatus.NOT_FOUND);
+    }
+
+    return item;
+  }
+
   private toWire(job: MediaJob, item?: ExternalMedia): IMediaAdminJob {
     return {
       id: job.id,
@@ -356,6 +470,7 @@ export class MediaAdminService {
 
   private mediaWire(item: ExternalMedia): NonNullable<IMediaAdminJob['media']> {
     return {
+      id: item.id,
       provider: item.provider,
       external_id: item.externalId,
       video_status: item.videoStatus,
