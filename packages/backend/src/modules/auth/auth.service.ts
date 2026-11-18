@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   BORIS_NODE_ID,
   FILE_TYPES,
+  OAUTH_PROVIDERS,
   REGISTRATION_STATUSES,
   ROLES,
 } from '@vault/common/constants';
@@ -15,7 +16,7 @@ import { IsNull, Repository } from 'typeorm';
 import { File } from '../../entities/file.entity';
 import { Node } from '../../entities/node.entity';
 import { RegistrationRequest } from '../../entities/registration-request.entity';
-import { RestoreCode } from '../../entities/social.entity';
+import { RestoreCode, Social } from '../../entities/social.entity';
 import { User } from '../../entities/user.entity';
 import { NodeView } from '../../entities/views.entity';
 import {
@@ -51,6 +52,7 @@ export class AuthService {
     private readonly nodeViews: Repository<NodeView>,
     @InjectRepository(RestoreCode)
     private readonly restoreCodes: Repository<RestoreCode>,
+    @InjectRepository(Social) private readonly socials: Repository<Social>,
     @InjectRepository(RegistrationRequest)
     private readonly registrations: Repository<RegistrationRequest>,
     private readonly passwords: PasswordService,
@@ -116,17 +118,35 @@ export class AuthService {
     return (await this.users.countBy({ username })) > 0;
   }
 
-  /** Like {@link isUsernameTaken}; `exceptUserId` skips the caller's own row. */
+  /**
+   * Like {@link isUsernameTaken}. A linked Google account counts too: its id
+   * is the email, and its owner may have a different one on their profile.
+   * `exceptUserId` skips the caller's own account.
+   */
   async isEmailTaken(email: string, exceptUserId?: number): Promise<boolean> {
-    const query = this.users
+    const users = this.users
       .createQueryBuilder('user')
       .where('user.email = :email', { email });
 
+    const google = this.socials
+      .createQueryBuilder('social')
+      .where('social.provider = :provider AND social.account_id = :email', {
+        provider: OAUTH_PROVIDERS.GOOGLE,
+        email,
+      })
+      .andWhere('social.userId IS NOT NULL');
+
     if (exceptUserId !== undefined) {
-      query.andWhere('user.id <> :exceptUserId', { exceptUserId });
+      users.andWhere('user.id <> :exceptUserId', { exceptUserId });
+      google.andWhere('social.userId <> :exceptUserId', { exceptUserId });
     }
 
-    return (await query.getCount()) > 0;
+    const [byProfile, byGoogle] = await Promise.all([
+      users.getCount(),
+      google.getCount(),
+    ]);
+
+    return byProfile + byGoogle > 0;
   }
 
   /** A live account by email, or null. */

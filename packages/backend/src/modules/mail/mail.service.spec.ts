@@ -123,17 +123,6 @@ describe('MailService', () => {
       ).resolves.toEqual({ sent: false, error: 'mailbox is full' });
     });
 
-    it('points an existing account at a password reset', async () => {
-      await new MailService().sendAlreadyRegistered(
-        'user@example.org',
-        'restore-1',
-      );
-
-      const [mail] = sendMail.mock.calls[0];
-
-      expect(mail.text).toContain('https://vault48.example/restore/restore-1');
-    });
-
     it('mails every admin, escaping the guest-written reason', async () => {
       await new MailService().sendApprovalRequest(
         ['a@example.org', 'b@example.org'],

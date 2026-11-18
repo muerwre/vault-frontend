@@ -41,19 +41,6 @@ const REGISTER_HTML =
   '<p>Ссылка действует 72 часа.</p>' +
   '<p>Если вы ничего не просили, просто проигнорируйте это письмо.</p>';
 
-/** `{link}` is the password reset link for the existing account. */
-const ALREADY_REGISTERED_SUBJECT = 'У вас уже есть аккаунт';
-const ALREADY_REGISTERED_TEXT =
-  'Привет!\n\n' +
-  'Кто-то попросил зарегистрироваться с этим адресом, но аккаунт с ним уже есть.\n\n' +
-  'Если забыли пароль, его можно сбросить по ссылке: {link}\n\n' +
-  'Если это были не вы, просто проигнорируйте это письмо.';
-const ALREADY_REGISTERED_HTML =
-  '<p>Привет!</p>' +
-  '<p>Кто-то попросил зарегистрироваться с этим адресом, но аккаунт с ним уже есть.</p>' +
-  '<p>Если забыли пароль, <a href="{link}">его можно сбросить</a>.</p>' +
-  '<p>Если это были не вы, просто проигнорируйте это письмо.</p>';
-
 /** `{email}`, `{reason}` describe the request, `{link}` is the admin page. */
 const APPROVAL_SUBJECT = 'Новая заявка на регистрацию';
 const APPROVAL_TEXT =
@@ -198,22 +185,6 @@ export class MailService implements OnApplicationBootstrap, OnModuleDestroy {
       REGISTER_SUBJECT,
       fill(REGISTER_TEXT, values),
       fill(REGISTER_HTML, values, escapeHtml),
-    );
-  }
-
-  sendAlreadyRegistered(
-    email: string,
-    restoreCode: string,
-  ): Promise<MailResult> {
-    const values = {
-      link: publicUrl(`${getFrontendResetUrl()}${restoreCode}`),
-    };
-
-    return this.send(
-      email,
-      ALREADY_REGISTERED_SUBJECT,
-      fill(ALREADY_REGISTERED_TEXT, values),
-      fill(ALREADY_REGISTERED_HTML, values, escapeHtml),
     );
   }
 

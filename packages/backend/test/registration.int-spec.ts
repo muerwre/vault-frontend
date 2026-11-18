@@ -22,7 +22,6 @@ describe('registration (integration)', () => {
 
   let mailUp: jest.SpyInstance;
   let sendLink: jest.SpyInstance;
-  let sendReminder: jest.SpyInstance;
   let sendApproval: jest.SpyInstance;
 
   const newEmail = () => `regspec_${stamp}_${(seq += 1)}@example.com`;
@@ -87,9 +86,6 @@ describe('registration (integration)', () => {
     mailUp = jest.spyOn(mail, 'isAvailable', 'get').mockReturnValue(true);
     sendLink = jest
       .spyOn(mail, 'sendRegistrationLink')
-      .mockResolvedValue({ sent: true });
-    sendReminder = jest
-      .spyOn(mail, 'sendAlreadyRegistered')
       .mockResolvedValue({ sent: true });
     sendApproval = jest
       .spyOn(mail, 'sendApprovalRequest')
@@ -250,16 +246,68 @@ describe('registration (integration)', () => {
       expect(lastCode()).toBe(first);
     });
 
-    it('reminds an existing account instead, and says the same', async () => {
+    it('refuses an address that already has an account', async () => {
       const { username } = await makeUser('user');
-      const email = `${username}@example.com`;
 
-      const { body } = await register(email).expect(200);
+      const { body } = await register(
+        ` ${username.toUpperCase()}@Example.com`,
+      ).expect(409);
 
-      expect(body).toEqual({ status: 'mailed' });
-      expect(sendReminder).toHaveBeenCalledWith(email, expect.any(String));
+      expect(body.error).toBe('User_Exist_With_Email');
+      expect(body.message).toBe('Почта уже занята, вы забыли пароль?');
       expect(sendLink).not.toHaveBeenCalled();
-      expect(await rowOf(email)).toBeUndefined();
+      expect(await rowOf(`${username}@example.com`)).toBeUndefined();
+    });
+
+    it("refuses an address linked as someone's Google account", async () => {
+      const owner = await makeUser('user');
+      const email = newEmail();
+      await db.query(
+        "INSERT INTO social (provider, account_id, userId) VALUES ('google', ?, ?)",
+        [email, owner.id],
+      );
+
+      try {
+        const { body } = await register(email).expect(409);
+
+        expect(body.error).toBe('User_Exist_With_Email');
+        expect(await rowOf(email)).toBeUndefined();
+      } finally {
+        await db.query('DELETE FROM social WHERE userId = ?', [owner.id]);
+      }
+    });
+
+    it('refuses to complete once the address got taken', async () => {
+      const email = newEmail();
+
+      await register(email).expect(200);
+      const code = lastCode();
+
+      const taker = await makeUser('user');
+      await db.query('UPDATE user SET email = ? WHERE id = ?', [
+        email,
+        taker.id,
+      ]);
+
+      const { body } = await http()
+        .put(`/api/auth/register/${code}`)
+        .send({ username: newName(), password: 'hunter22' })
+        .expect(409);
+
+      expect(body.error).toBe('User_Exist_With_Email');
+      expect((await rowOf(email)).status).toBe('approved');
+
+      // Nor does it keep mailing a link that cannot be used.
+      const resent = await http()
+        .post(`/api/admin/registrations/${(await rowOf(email)).id}/resend`)
+        .set(authHeader(admin.id, 'admin'))
+        .expect(200);
+
+      expect(resent.body.request).toMatchObject({
+        delivery: 'failed',
+        last_error: expect.stringContaining('занята'),
+        link: null,
+      });
     });
 
     it('refuses a username only a deleted account holds', async () => {

@@ -67,7 +67,7 @@ export interface Features {
   registration_approval: boolean;
 }
 
-/** What the guest is told; the same whether or not the address is known. */
+/** What the guest is told once the request is accepted. */
 export type RegistrationOutcome = 'mailed' | 'awaiting_approval';
 
 export interface WireRegistrationRequest {
@@ -118,10 +118,25 @@ const isUsable = (row: RegistrationRequest, now: Date): boolean =>
   row.codeExpiresAt !== null &&
   !isExpired(row, now);
 
-const isDuplicateEntry = (error: unknown): boolean =>
-  typeof error === 'object' &&
-  error !== null &&
-  (error as { code?: unknown }).code === 'ER_DUP_ENTRY';
+/** A unique index violation, optionally of the named index. */
+const isDuplicateEntry = (error: unknown, index?: string): boolean => {
+  if (typeof error !== 'object' || error === null) {
+    return false;
+  }
+
+  const { code, sqlMessage } = error as {
+    code?: unknown;
+    sqlMessage?: unknown;
+  };
+
+  return (
+    code === 'ER_DUP_ENTRY' &&
+    (!index || String(sqlMessage ?? '').includes(index))
+  );
+};
+
+/** What a guest is told when the address already has an account. */
+const EMAIL_TAKEN = 'Почта уже занята, вы забыли пароль?';
 
 /**
  * Registration by email. A guest submits an address (and, with approval on, a
@@ -221,19 +236,22 @@ export class RegistrationService
       );
     }
 
-    if (!this.perIp.take(ip) || !this.perEmail.take(email)) {
+    if (!this.perIp.take(ip)) {
+      throw this.tooManyRequests();
+    }
+
+    // Checked before the per-address limit, so someone who mistyped their
+    // own address can fix it right away.
+    if (await this.auth.isEmailTaken(email)) {
       throw new VaultException(
-        ERROR_CODES.TooManyRequests,
-        HttpStatus.TOO_MANY_REQUESTS,
-        'Слишком часто. Попробуйте через час',
+        ERROR_CODES.UserExistWithEmail,
+        HttpStatus.CONFLICT,
+        EMAIL_TAKEN,
       );
     }
 
-    // An address with an account gets a reminder, not a second account. The
-    // guest is told the same either way.
-    if (await this.auth.isEmailTaken(email)) {
-      await this.remindExistingAccount(email);
-      return outcome;
+    if (!this.perEmail.take(email)) {
+      throw this.tooManyRequests();
     }
 
     const now = new Date();
@@ -306,7 +324,12 @@ export class RegistrationService
       throw new VaultValidationException(invalid, HttpStatus.BAD_REQUEST);
     }
 
-    await this.findUsable(code);
+    const usable = await this.findUsable(code);
+
+    // The address may have been taken since the invite went out.
+    if (await this.auth.isEmailTaken(usable.email)) {
+      throw this.emailTakenSinceInvite();
+    }
 
     if (await this.auth.isUsernameTaken(username)) {
       throw new VaultValidationException(
@@ -352,6 +375,10 @@ export class RegistrationService
       });
     } catch (error) {
       // Lost a race for the name or the address.
+      if (isDuplicateEntry(error, 'uq_user_email')) {
+        throw this.emailTakenSinceInvite();
+      }
+
       if (isDuplicateEntry(error)) {
         throw new VaultValidationException(
           { username: 'Это имя уже занято' },
@@ -479,6 +506,17 @@ export class RegistrationService
       return;
     }
 
+    // Taken since the request was made: an invite could never be used.
+    if (await this.auth.isEmailTaken(row.email)) {
+      row.delivery = REGISTRATION_DELIVERIES.FAILED;
+      row.nextAttemptAt = null;
+      row.lastError = 'Почта уже занята другим аккаунтом';
+      row.code = null;
+      row.codeExpiresAt = null;
+      await this.requests.save(row);
+      return;
+    }
+
     if (!row.code || isExpired(row, now)) {
       row.code = randomUUID();
       row.codeExpiresAt = null;
@@ -514,19 +552,6 @@ export class RegistrationService
     await this.requests.save(row);
   }
 
-  /** Best-effort: a missed reminder is not worth failing the request over. */
-  private async remindExistingAccount(email: string): Promise<void> {
-    const user = await this.auth.findByEmail(email);
-
-    // A deleted account still holds the address, but has nothing to restore.
-    if (!user) {
-      return;
-    }
-
-    const code = await this.auth.findOrCreateRestoreCode(user.id);
-    await this.mail.sendAlreadyRegistered(email, code);
-  }
-
   private async notifyAdmins(row: RegistrationRequest): Promise<void> {
     const admins = await this.users.find({
       select: { email: true },
@@ -548,6 +573,22 @@ export class RegistrationService
     }
 
     return row;
+  }
+
+  private tooManyRequests(): VaultException {
+    return new VaultException(
+      ERROR_CODES.TooManyRequests,
+      HttpStatus.TOO_MANY_REQUESTS,
+      'Слишком часто. Попробуйте через час',
+    );
+  }
+
+  private emailTakenSinceInvite(): VaultException {
+    return new VaultException(
+      ERROR_CODES.UserExistWithEmail,
+      HttpStatus.CONFLICT,
+      'Эта почта уже занята другим аккаунтом',
+    );
   }
 
   private invalidCode(): VaultException {
