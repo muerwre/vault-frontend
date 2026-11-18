@@ -18,3 +18,9 @@ div.base_info.base_info {
   align-items: stretch;
 }
 
+
+.error {
+  font: $font_12_regular;
+  color: $color_danger;
+  padding: 0 $gap 0;
+}

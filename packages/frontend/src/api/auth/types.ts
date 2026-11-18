@@ -1,4 +1,4 @@
-import { IFile, INotification } from '~/types';
+import { IFile, IFlowNode, INotification } from '~/types';
 import { ISocialAccount, IUser } from '~/types/auth';
 
 export type ApiUserLoginRequest = Record<'username' | 'password', string>;
@@ -17,6 +17,13 @@ export type ApiUpdateUserResult = {
 };
 export type ApiAuthGetUserProfileRequest = { username: string };
 export type ApiAuthGetUserProfileResult = { user: IUser };
+export type ApiGetUserNodesRequest = {
+  username: string;
+  /** `created_at` of the oldest node already loaded. */
+  after?: string;
+  limit?: number;
+};
+export type ApiGetUserNodesResult = { nodes: IFlowNode[] };
 export type ApiAuthGetUpdatesRequest = {
   exclude_dialogs: number;
   last: string;

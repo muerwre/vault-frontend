@@ -1,0 +1,123 @@
+@import 'src/styles/variables';
+
+.wrap {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+
+.card {
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.content {
+  font: $font_14_medium;
+  overflow: auto;
+  min-height: 0;
+  flex: 1;
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font: $font_14_medium;
+  color: $gray_50;
+}
+
+.edit {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  fill: $gray_50;
+
+  &:hover {
+    fill: $white;
+  }
+}
+
+// Fills the whole card: the text takes whatever the footer leaves.
+.form {
+  position: absolute;
+  inset: 0;
+  padding: $gap;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+.textarea {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
+  resize: none;
+  padding: $gap;
+  border: none;
+  border-radius: $radius;
+  outline: none;
+  background: $content_bg_dark;
+  color: $white;
+  font: $font_14_medium;
+}
+
+.error {
+  font: $font_12_medium;
+  color: $color_danger;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $gap;
+}
+
+.sizes {
+  display: flex;
+  gap: 4px;
+}
+
+.size {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: $radius;
+  background: none;
+  cursor: pointer;
+  fill: $gray_50;
+  stroke: $gray_50;
+
+  &:hover {
+    fill: $white;
+    stroke: $white;
+  }
+
+  &.active {
+    background: $content_bg_lighter;
+    fill: $white;
+    stroke: $white;
+  }
+}

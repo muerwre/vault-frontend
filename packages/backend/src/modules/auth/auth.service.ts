@@ -17,6 +17,7 @@ import { File } from '../../entities/file.entity';
 import { Node } from '../../entities/node.entity';
 import { RegistrationRequest } from '../../entities/registration-request.entity';
 import { RestoreCode, Social } from '../../entities/social.entity';
+import { UserProfile } from '../../entities/user-profile.entity';
 import { User } from '../../entities/user.entity';
 import { NodeView } from '../../entities/views.entity';
 import {
@@ -49,6 +50,8 @@ export class AuthService {
 
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
+    @InjectRepository(UserProfile)
+    private readonly profiles: Repository<UserProfile>,
     @InjectRepository(File) private readonly files: Repository<File>,
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
     @InjectRepository(NodeView)
@@ -179,9 +182,30 @@ export class AuthService {
       return null;
     }
 
-    const lastSeenBoris = await this.getOrCreateBorisView(userId);
+    const [lastSeenBoris, profile] = await Promise.all([
+      this.getOrCreateBorisView(userId),
+      this.profiles.findOneBy({ userId }),
+    ]);
 
-    return toWireSelf(user, lastSeenBoris);
+    return toWireSelf(user, lastSeenBoris, profile);
+  }
+
+  /** Writes the given profile page fields, creating the row on first save. */
+  async saveProfile(
+    userId: number,
+    fields: Partial<Pick<UserProfile, 'about' | 'aboutDisplay' | 'links'>>,
+  ): Promise<void> {
+    if (Object.keys(fields).length === 0) {
+      return;
+    }
+
+    const existing = await this.profiles.findOneBy({ userId });
+
+    await this.profiles.save(
+      existing
+        ? Object.assign(existing, fields)
+        : this.profiles.create({ userId, ...fields }),
+    );
   }
 
   /** Bumps `user.last_seen`. Failures are not worth failing the request over. */

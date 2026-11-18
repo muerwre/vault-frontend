@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import {
   ERROR_CODES,
+  MAX_PROFILE_ABOUT_LENGTH,
   MIN_PASSWORD_LENGTH,
   USERNAME_REGEX,
 } from '@vault/common/constants';
@@ -34,6 +35,7 @@ import {
 } from './auth.service';
 import { isSameEmail } from './email';
 import { PasswordService } from './password.service';
+import { parseAboutDisplay, parseProfileLinks } from './profile-fields';
 
 interface LoginBody {
   username?: string;
@@ -47,6 +49,9 @@ interface PatchBody {
   new_password?: string;
   email?: string;
   description?: string;
+  about?: unknown;
+  about_display?: unknown;
+  links?: unknown;
 }
 
 interface FileBody {
@@ -235,6 +240,30 @@ export class AuthController {
       errors.description = 'Слишком длинно';
     }
 
+    const links =
+      data.links !== undefined ? parseProfileLinks(data.links) : undefined;
+
+    if (links && 'error' in links) {
+      errors.links = links.error;
+    }
+
+    const aboutDisplay =
+      data.about_display !== undefined
+        ? parseAboutDisplay(data.about_display)
+        : undefined;
+
+    if (aboutDisplay && 'error' in aboutDisplay) {
+      errors.about_display = aboutDisplay.error;
+    }
+
+    if (
+      data.about !== undefined &&
+      (typeof data.about !== 'string' ||
+        data.about.length > MAX_PROFILE_ABOUT_LENGTH)
+    ) {
+      errors.about = 'Слишком длинно';
+    }
+
     if (Object.keys(errors).length > 0) {
       throw new VaultValidationException(
         errors,
@@ -260,6 +289,15 @@ export class AuthController {
     }
 
     await this.auth.save(user);
+
+    await this.auth.saveProfile(user.id, {
+      ...(typeof data.about === 'string' && { about: data.about }),
+      ...(aboutDisplay &&
+        'value' in aboutDisplay && {
+          aboutDisplay: aboutDisplay.value,
+        }),
+      ...(links && 'value' in links && { links: links.value }),
+    });
 
     if (data.new_password !== undefined) {
       await this.auth.setPassword(user.id, data.new_password);

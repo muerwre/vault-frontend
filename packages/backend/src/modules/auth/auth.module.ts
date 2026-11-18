@@ -5,6 +5,7 @@ import { File } from '../../entities/file.entity';
 import { Node } from '../../entities/node.entity';
 import { RegistrationRequest } from '../../entities/registration-request.entity';
 import { RestoreCode, Social } from '../../entities/social.entity';
+import { UserProfile } from '../../entities/user-profile.entity';
 import { User } from '../../entities/user.entity';
 import { NodeView } from '../../entities/views.entity';
 import { MailModule } from '../mail/mail.module';
@@ -34,6 +35,7 @@ import { PasswordService } from './password.service';
   imports: [
     TypeOrmModule.forFeature([
       User,
+      UserProfile,
       File,
       Node,
       NodeView,

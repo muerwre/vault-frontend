@@ -8,10 +8,12 @@ import {
   toWireDate,
   toWireDateOrNull,
   toWireFlow,
+  toWireLinks,
   toWireShallowFile,
   toWireShallowUser,
   toWireString,
   toWireThumbnail,
+  toWireUser,
 } from './serialize';
 
 /**
@@ -212,6 +214,31 @@ describe('wire serialisation', () => {
         username: 'someone',
         photo: 'https://p',
       });
+    });
+  });
+
+  describe('toWireUser', () => {
+    /** Bylines on nodes and comments must stay small. */
+    it('carries no profile page fields', () => {
+      const wire = toWireUser({ id: 1, username: 'someone' } as never);
+
+      for (const key of ['about', 'about_display', 'links']) {
+        expect(key in (wire as object)).toBe(false);
+      }
+    });
+  });
+
+  describe('toWireLinks', () => {
+    it('serialises a missing blob as an empty array', () => {
+      expect(toWireLinks(null)).toEqual([]);
+      expect(toWireLinks({ not: 'an array' })).toEqual([]);
+    });
+
+    it('drops entries that are not non-empty strings', () => {
+      expect(toWireLinks(['https://a', '', 42, null, 'https://b'])).toEqual([
+        'https://a',
+        'https://b',
+      ]);
     });
   });
 

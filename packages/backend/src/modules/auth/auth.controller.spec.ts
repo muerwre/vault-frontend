@@ -37,6 +37,7 @@ const makeController = (overrides: AuthMock = {}, passwordValid = true) => {
     findByUsernameOrEmail: jest.fn().mockResolvedValue(null),
     save: jest.fn().mockImplementation(async (user: User) => user),
     setPassword: jest.fn().mockResolvedValue(undefined),
+    saveProfile: jest.fn().mockResolvedValue(undefined),
     setPhoto: jest.fn().mockResolvedValue(undefined),
     setCover: jest.fn().mockResolvedValue(undefined),
     findImage: jest.fn().mockResolvedValue({ id: 5 }),
@@ -213,6 +214,34 @@ describe('AuthController', () => {
         return (error as VaultValidationException).fields;
       }
     };
+
+    it('passes only the profile fields that were sent', async () => {
+      const { controller, auth } = makeController();
+
+      await controller.patch(currentUser(), {
+        about: 'text',
+        links: ['https://a.com', ''],
+      });
+
+      expect(auth.saveProfile).toHaveBeenCalledWith(1, {
+        about: 'text',
+        links: ['https://a.com'],
+      });
+    });
+
+    it('rejects bad profile fields under their own names', async () => {
+      expect(
+        await patchErrors({
+          about_display: 'huge',
+          links: ['nope'],
+          about: 'x'.repeat(9000),
+        }),
+      ).toEqual({
+        about_display: expect.any(String),
+        links: expect.any(String),
+        about: expect.any(String),
+      });
+    });
 
     it('applies description without touching fullname', async () => {
       const { controller, auth } = makeController();

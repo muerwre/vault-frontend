@@ -26,3 +26,12 @@ export const USER_INACTIVITY_DAYS = 40;
  * never authenticate by password — treat any comparison against it as a failure.
  */
 export const PASSWORD_PLACEHOLDER = 'NO_PASSWORD';
+
+/** A profile lists at most this many external links. */
+export const MAX_PROFILE_LINKS = 4;
+
+/** Longest accepted profile link. */
+export const MAX_PROFILE_LINK_LENGTH = 255;
+
+/** Longest accepted profile about text. */
+export const MAX_PROFILE_ABOUT_LENGTH = 8192;

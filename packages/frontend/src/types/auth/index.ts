@@ -1,5 +1,5 @@
 import { Role } from '~/constants/auth';
-import { IFile } from '~/types';
+import { FlowDisplayVariant, IFile } from '~/types';
 
 export interface IUser {
   id: number;
@@ -11,6 +11,12 @@ export interface IUser {
   name: string;
   fullname: string;
   description: string;
+  /** Long-form markdown for the big card on the profile page. */
+  about?: string;
+  /** Size of the about card; empty means the page default. */
+  about_display?: FlowDisplayVariant | '';
+  /** External links shown on the profile page. */
+  links?: string[];
 
   last_seen: string;
   last_seen_messages: string;

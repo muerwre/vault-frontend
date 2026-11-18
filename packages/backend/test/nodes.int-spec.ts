@@ -337,6 +337,15 @@ describe('nodes (integration)', () => {
       expect('email' in body.node.user).toBe(false);
     });
 
+    /** Profile page content belongs to the profile, not to every byline. */
+    it('excludes profile page fields from the embedded author', async () => {
+      const { body } = await http().get(`/api/nodes/${nodeId}`).expect(200);
+
+      for (const key of ['about', 'about_display', 'links']) {
+        expect(key in body.node.user).toBe(false);
+      }
+    });
+
     it('returns backlinks as provider/link pairs', async () => {
       const { body } = await http().get(`/api/nodes/${nodeId}`).expect(200);
 

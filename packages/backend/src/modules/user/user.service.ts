@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Node } from '../../entities/node.entity';
+import { UserProfile } from '../../entities/user-profile.entity';
 import { User } from '../../entities/user.entity';
 import {
   toWireProfile,
@@ -12,13 +13,15 @@ import {
 } from '../../wire/serialize';
 import { applyVisibleToViewer } from '../node/node.predicates';
 
-/** Rows returned per request by the node listing. */
-const USER_NODES_LIMIT = 100;
+/** Most rows returned per request by the node listing, and the default. */
+export const USER_NODES_LIMIT = 100;
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
+    @InjectRepository(UserProfile)
+    private readonly profiles: Repository<UserProfile>,
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
   ) {}
 
@@ -32,7 +35,14 @@ export class UserService {
       .andWhere('user.deleted_at IS NULL')
       .getOne();
 
-    return user ? toWireProfile(user) : null;
+    if (!user) {
+      return null;
+    }
+
+    return toWireProfile(
+      user,
+      await this.profiles.findOneBy({ userId: user.id }),
+    );
   }
 
   findByUsername(username: string): Promise<User | null> {
@@ -45,12 +55,14 @@ export class UserService {
 
   /**
    * A user's nodes, newest first. `after` is a `created_at` cursor: only older
-   * nodes are returned. Guests see flow nodes only.
+   * nodes are returned. Guests see flow nodes only. A `limit` that is not a
+   * whole number within `1..USER_NODES_LIMIT` falls back to the maximum.
    */
   async getUserNodes(
     userId: number,
     isUser: boolean,
     after: Date | null,
+    limit?: number,
   ): Promise<WireShallowNode[]> {
     const query = applyVisibleToViewer(
       this.nodes
@@ -68,7 +80,14 @@ export class UserService {
 
     const rows = await query
       .orderBy('node.created_at', 'DESC')
-      .limit(USER_NODES_LIMIT)
+      .limit(
+        limit &&
+          Number.isInteger(limit) &&
+          limit > 0 &&
+          limit <= USER_NODES_LIMIT
+          ? limit
+          : USER_NODES_LIMIT,
+      )
       .getMany();
 
     return rows.map(toWireShallowNode);

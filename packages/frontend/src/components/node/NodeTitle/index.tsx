@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { SeparatedMenu } from '~/components/menu/SeparatedMenu';
 import { NodeEditMenu } from '~/components/node/NodeEditMenu';
 import { Placeholder } from '~/components/placeholders/Placeholder';
+import { ProfileLink } from '~/components/profile/ProfileLink';
 import { getPrettyDate } from '~/utils/dom';
 
 import { NodeLikeButton } from '../NodeLikeButton';
@@ -69,9 +70,12 @@ const NodeTitle: VFC<Props> = memo(
                 {isLoading ? (
                   <Placeholder width="100px" />
                 ) : (
-                  `~${username.toLocaleLowerCase()}, ${getPrettyDate(
-                    createdAt,
-                  )}`
+                  <>
+                    <ProfileLink username={username}>
+                      ~{username.toLocaleLowerCase()}
+                    </ProfileLink>
+                    {`, ${getPrettyDate(createdAt)}`}
+                  </>
                 )}
               </aside>
             )}

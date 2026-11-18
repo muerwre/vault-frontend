@@ -8,32 +8,21 @@
   flex-direction: column;
 }
 
-.description {
-  grid-column: 2 / span 2;
-  grid-row: 1 / span 2;
-  height: 100%;
-  font: $font_14_medium;
-  overflow: auto;
-  height: 100%;
-  // display: none;
+.controls {
+  display: flex;
+  flex-direction: row;
+  gap: $gap;
 }
 
-.grid {
-  @include flow_grid();
-
-  @include flow_breakpoint(4);
-  @include flow_breakpoint(3);
-
-  @include flow_breakpoint(2) {
-    .left {
-      grid-column: 1 / -1;
-    }
-  }
+/* About card sizes, as in the flow grid. */
+.horizontal,
+.quadro {
+  grid-column-end: span 2;
 }
 
-.row {
-  margin-bottom: $gap;
-  height: 100%;
+.vertical,
+.quadro {
+  grid-row-end: span 2;
 }
 
 .left {
@@ -43,8 +32,17 @@
   grid-column-end: span 1;
 }
 
-.controls {
-  display: flex;
-  flex-direction: row;
-  gap: $gap;
+.grid {
+  @include flow_grid();
+
+  @include flow_breakpoint(4);
+  @include flow_breakpoint(3);
+
+  // Too narrow for anything but the full width.
+  @include flow_breakpoint(2) {
+    .left,
+    .about {
+      grid-column: 1 / -1;
+    }
+  }
 }

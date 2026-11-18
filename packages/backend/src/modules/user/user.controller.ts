@@ -34,7 +34,8 @@ export class UserController {
 
   /**
    * A user's nodes. `after` is an ISO `created_at` cursor; omitting it returns
-   * the newest page. An unparseable value is ignored rather than rejected.
+   * the newest page. An unparseable value is ignored rather than rejected, and
+   * so is a `limit` outside the accepted range.
    */
   @Get(':username/nodes')
   @UseGuards(OptionalAuthGuard)
@@ -42,6 +43,7 @@ export class UserController {
     @Param('username') username: string,
     @Uid() uid: number,
     @Query('after') after?: string,
+    @Query('limit') limit?: string,
   ): Promise<{ nodes: WireShallowNode[] }> {
     const user = username ? await this.users.findByUsername(username) : null;
 
@@ -56,6 +58,7 @@ export class UserController {
         user.id,
         uid !== GUEST_USER_ID,
         cursor && !Number.isNaN(cursor.getTime()) ? cursor : null,
+        limit ? Number(limit) : undefined,
       ),
     };
   }

@@ -18,6 +18,7 @@ import { RegistrationRequest } from './registration-request.entity';
 import { RestoreCode, Social } from './social.entity';
 import { Tag } from './tag.entity';
 import { Token } from './token.entity';
+import { UserProfile } from './user-profile.entity';
 import { User } from './user.entity';
 import { MessageView, NodeView } from './views.entity';
 
@@ -35,6 +36,7 @@ export * from './registration-request.entity';
 export * from './social.entity';
 export * from './tag.entity';
 export * from './token.entity';
+export * from './user-profile.entity';
 export * from './user.entity';
 export * from './views.entity';
 
@@ -76,4 +78,6 @@ export const ENTITIES = [
   MediaJob,
   // registration (utf8mb4, no FKs)
   RegistrationRequest,
+  // profile page (utf8mb4, FK to user)
+  UserProfile,
 ];
