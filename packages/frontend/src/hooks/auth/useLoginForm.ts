@@ -36,12 +36,27 @@ export const useLoginForm = (
     [fetcher, onSuccess],
   );
 
-  return useFormik({
+  const formik = useFormik({
     validationSchema,
     onSubmit,
+    // Checked on submit only; typing into a field clears its error.
+    validateOnChange: false,
+    validateOnBlur: false,
     initialValues: {
       username: '',
       password: '',
     },
   });
+
+  const { setFieldValue, setFieldError } = formik;
+
+  const handleChange = useCallback(
+    (field: keyof LoginFormData) => (value: string) => {
+      void setFieldValue(field, value, false);
+      setFieldError(field, undefined);
+    },
+    [setFieldValue, setFieldError],
+  );
+
+  return { ...formik, handleChange };
 };

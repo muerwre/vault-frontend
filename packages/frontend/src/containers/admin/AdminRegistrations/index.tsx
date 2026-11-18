@@ -7,10 +7,12 @@ import {
   apiRegistrationAction,
 } from '~/api/registration';
 import { ApiRegistrationRequest } from '~/api/registration/types';
+import { Columns } from '~/components/common/Columns';
 import { Button } from '~/components/input/Button';
 import { API } from '~/constants/api';
 import { getPrettyDate } from '~/utils/dom';
 import { showErrorToast } from '~/utils/errors/showToast';
+import { showToastInfo } from '~/utils/toast';
 
 import styles from './styles.module.scss';
 
@@ -48,9 +50,18 @@ const describe = (request: ApiRegistrationRequest): string => {
     : 'Приглашение отправлено';
 };
 
-const canRetry = (request: ApiRegistrationRequest) =>
-  request.status === 'approved' &&
-  (request.delivery === 'failed' || request.is_expired);
+const copyLink = async (link: string) => {
+  try {
+    await navigator.clipboard.writeText(link);
+    showToastInfo('Ссылка скопирована');
+  } catch (error) {
+    showErrorToast(error);
+  }
+};
+
+/** Failed or expired invites need a retry; working ones can be sent again. */
+const needsRetry = (request: ApiRegistrationRequest) =>
+  request.delivery === 'failed' || request.is_expired;
 
 /**
  * Registration requests awaiting an admin, and invites not used yet. Hidden
@@ -94,65 +105,87 @@ const AdminRegistrations: FC = () => {
   );
 
   const renderCard = (request: ApiRegistrationRequest) => (
-    <div key={request.id} className={styles.card}>
-      <div className={styles.head}>
-        <span className={styles.email}>{request.email}</span>
-        <span className={styles.muted}>
-          {getPrettyDate(request.requested_at || request.created_at || '')}
-        </span>
-      </div>
+    <div key={request.id}>
+      <div className={styles.card}>
+        <div className={styles.head}>
+          <span className={styles.email}>{request.email}</span>
+          <span className={styles.muted}>
+            {getPrettyDate(request.requested_at || request.created_at || '')}
+          </span>
+        </div>
 
-      {request.reason && <div className={styles.reason}>{request.reason}</div>}
+        {request.reason && (
+          <div className={styles.reason}>{request.reason}</div>
+        )}
 
-      <div
-        className={request.delivery === 'failed' ? styles.error : styles.muted}
-      >
-        {describe(request)}
-      </div>
+        <div
+          className={
+            request.delivery === 'failed' ? styles.error : styles.muted
+          }
+        >
+          {describe(request)}
+        </div>
 
-      <div className={styles.actions}>
-        {request.status === 'pending_approval' && (
-          <>
-            <Button
-              size="small"
-              color="primary"
-              disabled={busy === request.id}
-              onClick={() => act(request.id, 'approve')}
-            >
-              Одобрить
-            </Button>
+        {request.link && (
+          <div className={styles.link}>
+            <a href={request.link} target="_blank" rel="noreferrer">
+              {request.link}
+            </a>
             <Button
               size="small"
               color="gray"
-              disabled={busy === request.id}
-              onClick={() => act(request.id, 'reject')}
-            >
-              Отклонить
-            </Button>
-          </>
+              iconLeft="link"
+              iconOnly
+              label="Скопировать ссылку"
+              onClick={() => copyLink(request.link ?? '')}
+            />
+          </div>
         )}
 
-        {canRetry(request) && (
-          <Button
-            size="small"
-            color="primary"
-            disabled={busy === request.id}
-            onClick={() => act(request.id, 'resend')}
-          >
-            Повторить
-          </Button>
-        )}
+        {/* Destructive action first, the main one on the right. */}
+        <div className={styles.actions}>
+          {request.status === 'pending_approval' && (
+            <>
+              <Button
+                size="small"
+                color="gray"
+                disabled={busy === request.id}
+                onClick={() => act(request.id, 'reject')}
+              >
+                Отклонить
+              </Button>
+              <Button
+                size="small"
+                color="primary"
+                disabled={busy === request.id}
+                onClick={() => act(request.id, 'approve')}
+              >
+                Одобрить
+              </Button>
+            </>
+          )}
 
-        {request.status === 'approved' && (
-          <Button
-            size="small"
-            color="gray"
-            disabled={busy === request.id}
-            onClick={() => act(request.id, 'reject')}
-          >
-            Отозвать
-          </Button>
-        )}
+          {request.status === 'approved' && (
+            <>
+              <Button
+                size="small"
+                color="gray"
+                disabled={busy === request.id}
+                onClick={() => act(request.id, 'reject')}
+              >
+                Отозвать
+              </Button>
+              <Button
+                size="small"
+                color={needsRetry(request) ? 'primary' : 'gray'}
+                disabled={busy === request.id}
+                onClick={() => act(request.id, 'resend')}
+              >
+                {needsRetry(request) ? 'Повторить' : 'Отправить ещё раз'}
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -165,7 +198,7 @@ const AdminRegistrations: FC = () => {
             <h2 className={styles.title}>Заявки</h2>
             <span className={styles.count}>{pending.length}</span>
           </header>
-          <div className={styles.list}>{pending.map(renderCard)}</div>
+          <Columns>{pending.map(renderCard)}</Columns>
         </section>
       )}
 
@@ -175,7 +208,7 @@ const AdminRegistrations: FC = () => {
             <h2 className={styles.title}>Приглашения</h2>
             <span className={styles.count}>{invites.length}</span>
           </header>
-          <div className={styles.list}>{invites.map(renderCard)}</div>
+          <Columns>{invites.map(renderCard)}</Columns>
         </section>
       )}
     </div>

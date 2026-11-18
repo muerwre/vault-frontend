@@ -20,9 +20,8 @@ import { showErrorToast } from '~/utils/errors/showToast';
 import styles from './styles.module.scss';
 
 const SENT_TEXT: Record<ApiRegistrationOutcome, string> = {
-  mailed: 'Проверьте почту — мы отправили на неё ссылку для регистрации',
-  awaiting_approval:
-    'Заявка отправлена. Когда её одобрят, мы пришлём ссылку на почту',
+  mailed: 'Проверьте почту, мы отправили на неё ссылку.',
+  awaiting_approval: 'Мы прочитаем вашу заявку и пришлём ссылку. До встречи!',
 };
 
 /** Asks for an account by email; with approval on, also for a short resume. */
@@ -70,12 +69,10 @@ const RegisterRequestDialog: FC<DialogComponentProps> = ({
   const footer = useMemo(
     () => (
       <Group className={styles.buttons}>
-        <Button disabled={!isOpen || isSubmitting}>
-          {needsReason ? 'Отправить заявку' : 'Зарегистрироваться'}
-        </Button>
+        <Button disabled={!isOpen || isSubmitting}>Впустите меня!</Button>
       </Group>
     ),
-    [isOpen, isSubmitting, needsReason],
+    [isOpen, isSubmitting],
   );
 
   const overlay = outcome ? (
@@ -100,11 +97,15 @@ const RegisterRequestDialog: FC<DialogComponentProps> = ({
       >
         <div className={styles.wrap}>
           <Group>
-            <DialogTitle>Регистрация</DialogTitle>
+            <DialogTitle>
+              БИП-БОП!
+              <br />
+              Кто здесь?
+            </DialogTitle>
 
             {!isLoading && !isOpen ? (
               <div className={styles.text}>
-                Регистрация временно недоступна. Попробуйте позже.
+                Сейчас мы не принимаем заявки, приходите позже.
               </div>
             ) : (
               <>
@@ -119,7 +120,6 @@ const RegisterRequestDialog: FC<DialogComponentProps> = ({
 
                 {needsReason && (
                   <Textarea
-                    title="Резюме"
                     placeholder="Расскажите немного о себе и почему вы хотите к нам присоединиться"
                     value={values.reason}
                     handler={(value) => setFieldValue('reason', value)}
@@ -131,8 +131,8 @@ const RegisterRequestDialog: FC<DialogComponentProps> = ({
 
                 <div className={styles.text}>
                   {needsReason
-                    ? 'Заявку рассмотрят администраторы. Если её одобрят, мы пришлём ссылку для регистрации на почту.'
-                    : 'Мы пришлём на почту ссылку, по которой можно выбрать имя и пароль.'}
+                    ? 'Мы прочитаем вашу заявку и отправим ссылку на почту.'
+                    : 'Мы отправим вам ссылку по этому адресу.'}
                 </div>
               </>
             )}

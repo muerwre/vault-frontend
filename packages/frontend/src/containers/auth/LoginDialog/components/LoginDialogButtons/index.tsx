@@ -22,6 +22,12 @@ const LoginDialogButtons: FC<Props> = ({
   <Group className={styles.footer}>
     <Button>Войти</Button>
 
+    {onRegister && (
+      <Button color="outline" type="button" onClick={onRegister}>
+        Регистрация
+      </Button>
+    )}
+
     <Grid columns="repeat(2, 1fr)">
       <Button
         color="outline"
@@ -41,12 +47,6 @@ const LoginDialogButtons: FC<Props> = ({
         <span>Вконтакте</span>
       </Button>
     </Grid>
-
-    {onRegister && (
-      <Button color="outline" type="button" onClick={onRegister}>
-        <span>Регистрация</span>
-      </Button>
-    )}
   </Group>
 );
 

@@ -187,6 +187,16 @@ describe('registration (integration)', () => {
       expect(ttl).toBeGreaterThan(71 * 3600_000);
       expect(ttl).toBeLessThanOrEqual(72 * 3600_000);
 
+      const listed = await http()
+        .get('/api/admin/registrations')
+        .set(authHeader(admin.id, 'admin'))
+        .expect(200);
+      expect(
+        listed.body.requests.find(
+          (item: { email: string }) => item.email === email,
+        ).link,
+      ).toMatch(new RegExp(`/register/${code}$`));
+
       const check = await http().get(`/api/auth/register/${code}`).expect(200);
       expect(check.body).toEqual({ email });
 
@@ -321,7 +331,12 @@ describe('registration (integration)', () => {
         list.body.requests.find(
           (item: { email: string }) => item.email === email,
         ),
-      ).toMatchObject({ delivery: 'failed', last_error: 'mailbox is full' });
+      ).toMatchObject({
+        delivery: 'failed',
+        last_error: 'mailbox is full',
+        // Never mailed, so there is no working link to hand out.
+        link: null,
+      });
 
       sendLink.mockResolvedValue({ sent: true });
 

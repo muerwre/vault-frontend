@@ -11,11 +11,11 @@ import { LoginDialogButtons } from '~/containers/auth/LoginDialog/components/Log
 import { LoginStaticScene } from '~/containers/auth/LoginDialog/components/LoginStaticScene';
 import { useCloseOnEscape } from '~/hooks';
 import { useAuth } from '~/hooks/auth/useAuth';
+import { useFeatures } from '~/hooks/auth/useFeatures';
 import { useLoginForm } from '~/hooks/auth/useLoginForm';
 import { useOAuth } from '~/hooks/auth/useOAuth';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { DialogComponentProps } from '~/types/modal';
-import { CONFIG } from '~/utils/config';
 
 import styles from './styles.module.scss';
 
@@ -34,6 +34,8 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
   const onRestoreRequest = useCallback(() => {
     showRestoreDialog({});
   }, [showRestoreDialog]);
+  // Shared with the header through the SWR cache, so usually known already.
+  const { features } = useFeatures();
   const showRegisterDialog = useShowModal(Dialog.RegisterRequest);
   const onRegister = useCallback(() => {
     showRegisterDialog({});
@@ -59,7 +61,7 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
           <LoginDialogButtons
             openOauthWindow={openOauthWindow}
             onGoogleLogin={onGoogleLogin}
-            onRegister={CONFIG.registrationEnabled ? onRegister : undefined}
+            onRegister={features.registration ? onRegister : undefined}
           />
         }
         backdrop={backdrop}

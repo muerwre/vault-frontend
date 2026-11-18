@@ -8,13 +8,13 @@ import {
   apiGetSocials,
   apiLoginWithSocial,
 } from '~/api/auth';
+import { apiGetFeatures } from '~/api/registration';
 import { API } from '~/constants/api';
 import { ERRORS } from '~/constants/errors';
 import { Dialog } from '~/constants/modal';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useModal } from '~/hooks/modal/useModal';
 import { OAuthProvider } from '~/types/auth';
-import { CONFIG } from '~/utils/config';
 import { showErrorToast } from '~/utils/errors/showToast';
 import { path } from '~/utils/ramda';
 import { showToastError } from '~/utils/toast';
@@ -58,8 +58,12 @@ export const useOAuth = () => {
           path(['response', 'data', 'error'], error) ===
           ERRORS.OAUTH_ACCOUNT_NOT_FOUND
         ) {
+          const { registration } = await apiGetFeatures().catch(() => ({
+            registration: false,
+          }));
+
           showToastError(
-            CONFIG.registrationEnabled
+            registration
               ? 'Аккаунт не найден, зарегистрируйтесь'
               : 'Аккаунт не найден',
           );

@@ -55,6 +55,8 @@ export interface ApiRegistrationRequest {
   code_expires_at: string | null;
   /** The link was sent but can no longer be used. */
   is_expired: boolean;
+  /** The mailed link, while it can still be used. */
+  link: string | null;
   requested_at: string | null;
   created_at: string | null;
 }

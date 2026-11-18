@@ -6,8 +6,9 @@ import { API } from '~/constants/api';
 const NONE = { registration: false, registration_approval: false };
 
 /**
- * What the backend currently allows. Only fetched where it matters (`enabled`),
- * since the build-time flag already decides whether entry points render.
+ * What the backend currently allows. Cached by SWR, so the header, the login
+ * dialog and the registration form share one request. Fetched only while
+ * `enabled`.
  */
 export const useFeatures = (enabled = true) => {
   const { data, error } = useSWR(

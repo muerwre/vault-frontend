@@ -17,7 +17,6 @@ import { useScrollTop } from '~/hooks/dom/useScrollTop';
 import { useFlow } from '~/hooks/flow/useFlow';
 import { useModal } from '~/hooks/modal/useModal';
 import { useUpdates } from '~/hooks/updates/useUpdates';
-import { CONFIG } from '~/utils/config';
 import { useNotifications } from '~/utils/providers/NotificationProvider';
 
 import { UserButtonWithNotifications } from '../UserButtonWithNotifications';
@@ -121,23 +120,15 @@ const Header: FC<HeaderProps> = observer(() => {
           </Authorized>
         </nav>
 
-        {isUser && <UserButtonWithNotifications />}
+        <div className={styles.right_buttons}>
+          {isUser && <UserButtonWithNotifications />}
 
-        {!isUser && CONFIG.registrationEnabled && (
-          <button
-            type="button"
-            className={styles.register_button}
-            onClick={onRegister}
-          >
-            Регистрация
-          </button>
-        )}
-
-        {!isUser && (
-          <Button className={styles.user_button} onClick={onLogin} round>
-            ВДОХ
-          </Button>
-        )}
+          {!isUser && (
+            <Button className={styles.user_button} onClick={onLogin} round>
+              Вдох
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );

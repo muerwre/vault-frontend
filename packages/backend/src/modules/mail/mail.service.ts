@@ -66,9 +66,11 @@ const APPROVAL_HTML =
   '<p style="white-space: pre-wrap">{reason}</p>' +
   '<p><a href="{link}">Одобрить или отклонить</a></p>';
 
-/** Frontend pages the mails link to; the registration code is appended. */
-const REGISTER_PATH = '/register/';
 const ADMIN_USERS_PATH = '/admin/users';
+
+/** The frontend page a registration code opens. */
+export const registrationLink = (code: string): string =>
+  publicUrl(`/register/${code}`);
 
 const HEALTH_CHECK_MS = 60 * 60 * 1000;
 
@@ -189,7 +191,7 @@ export class MailService implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   sendRegistrationLink(email: string, code: string): Promise<MailResult> {
-    const values = { link: publicUrl(`${REGISTER_PATH}${code}`) };
+    const values = { link: registrationLink(code) };
 
     return this.send(
       email,

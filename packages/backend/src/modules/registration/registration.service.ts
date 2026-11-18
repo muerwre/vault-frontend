@@ -35,7 +35,11 @@ import { toWireDateOrNull, toWireString } from '../../wire/serialize';
 import { AuthService } from '../auth/auth.service';
 import { isEmail, normalizeEmail } from '../auth/email';
 import { PasswordService } from '../auth/password.service';
-import { MailService, type MailResult } from '../mail/mail.service';
+import {
+  MailService,
+  registrationLink,
+  type MailResult,
+} from '../mail/mail.service';
 import { validateSocialRegister } from '../oauth/oauth.validation';
 
 import { RateLimiter } from './rate-limiter';
@@ -79,6 +83,8 @@ export interface WireRegistrationRequest {
   code_expires_at: string | null;
   /** The link was sent but can no longer be used. */
   is_expired: boolean;
+  /** The mailed link, while it can still be used. */
+  link: string | null;
   requested_at: string | null;
   created_at: string | null;
 }
@@ -98,12 +104,19 @@ const toWire = (
   last_sent_at: toWireDateOrNull(row.lastSentAt),
   code_expires_at: toWireDateOrNull(row.codeExpiresAt),
   is_expired: isExpired(row, now),
+  link: row.code && isUsable(row, now) ? registrationLink(row.code) : null,
   requested_at: toWireDateOrNull(row.requestedAt),
   created_at: toWireDateOrNull(row.createdAt),
 });
 
 const isExpired = (row: RegistrationRequest, now: Date): boolean =>
   row.codeExpiresAt !== null && row.codeExpiresAt.getTime() <= now.getTime();
+
+/** Approved, mailed at least once, and not expired. */
+const isUsable = (row: RegistrationRequest, now: Date): boolean =>
+  row.status === REGISTRATION_STATUSES.APPROVED &&
+  row.codeExpiresAt !== null &&
+  !isExpired(row, now);
 
 const isDuplicateEntry = (error: unknown): boolean =>
   typeof error === 'object' &&
@@ -312,7 +325,7 @@ export class RegistrationService
           lock: { mode: 'pessimistic_write' },
         });
 
-        if (!row || !this.isUsable(row, new Date())) {
+        if (!row || !isUsable(row, new Date())) {
           throw this.invalidCode();
         }
 
@@ -527,18 +540,10 @@ export class RegistrationService
     );
   }
 
-  private isUsable(row: RegistrationRequest, now: Date): boolean {
-    return (
-      row.status === REGISTRATION_STATUSES.APPROVED &&
-      row.codeExpiresAt !== null &&
-      !isExpired(row, now)
-    );
-  }
-
   private async findUsable(code: string): Promise<RegistrationRequest> {
     const row = code ? await this.requests.findOneBy({ code }) : null;
 
-    if (!row || !this.isUsable(row, new Date())) {
+    if (!row || !isUsable(row, new Date())) {
       throw this.invalidCode();
     }
 

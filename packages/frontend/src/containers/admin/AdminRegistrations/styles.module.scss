@@ -27,12 +27,6 @@
   opacity: 0.5;
 }
 
-.list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: $gap;
-}
-
 .card {
   display: flex;
   flex-direction: column;
@@ -75,9 +69,28 @@
   overflow-wrap: anywhere;
 }
 
+.link {
+  display: flex;
+  align-items: center;
+  gap: $gap * 0.5;
+  min-width: 0;
+
+  a {
+    flex: 1;
+    min-width: 0;
+    font: $font_12_regular;
+    font-family: monospace;
+    color: $color_link;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: $gap * 0.5;
   margin-top: $gap * 0.5;
 

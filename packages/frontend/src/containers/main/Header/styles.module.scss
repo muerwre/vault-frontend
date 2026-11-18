@@ -4,6 +4,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -77,24 +78,6 @@
 .user_button {
   flex: 0;
   cursor: pointer;
-}
-
-// Text-only, so ВДОХ stays the main action.
-.register_button {
-  flex: none;
-  font: $font_14_semibold;
-  text-transform: uppercase;
-  color: inherit;
-  opacity: 0.6;
-  background: none;
-  border: none;
-  padding: 0 $gap * 1.5;
-  cursor: pointer;
-  transition: opacity 0.25s;
-
-  &:hover {
-    opacity: 1;
-  }
 }
 
 .item {
@@ -194,4 +177,9 @@
   @include tablet {
     display: none;
   }
+}
+
+.right_buttons {
+  display: flex;
+  gap: $gap;
 }
