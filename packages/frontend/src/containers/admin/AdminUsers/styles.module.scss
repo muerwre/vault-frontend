@@ -111,3 +111,19 @@ $alive_green: #2fbf71;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+// Shown on hover, so the list stays calm; always visible on touch screens.
+.delete {
+  flex: none;
+  margin-left: auto;
+  opacity: 0;
+  transition: opacity 0.2s;
+
+  .card:hover & {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    opacity: 1;
+  }
+}

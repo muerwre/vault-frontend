@@ -66,14 +66,42 @@ const isSessionToken = (payload: unknown): payload is ITokenClaims => {
   return claims.typ === undefined && typeof claims.uid === 'number';
 };
 
+/** How long an account's live-or-deleted state is trusted without a query. */
+const LIVENESS_TTL_MS = 60 * 1000;
+
 @Injectable()
 class TokenReader {
   private readonly logger = new Logger('Auth');
 
-  constructor(private readonly jwt: JwtService) {}
+  /** uid → whether the account is live, and when that was looked up. */
+  private readonly liveness = new Map<number, { live: boolean; at: number }>();
 
-  /** Returns the claims, or `null` if the token is absent or unusable. */
-  read(request: Request): ITokenClaims | null {
+  constructor(
+    private readonly jwt: JwtService,
+    @InjectRepository(User) private readonly users: Repository<User>,
+  ) {}
+
+  /**
+   * Returns the claims, or `null` if the token is absent, unusable, or belongs
+   * to an account that no longer exists or was deleted. Tokens never expire,
+   * so this is what ends a deleted user's sessions everywhere.
+   */
+  async read(request: Request): Promise<ITokenClaims | null> {
+    const claims = this.verify(request);
+
+    if (!claims || !(await this.isLive(claims.uid))) {
+      return null;
+    }
+
+    return claims;
+  }
+
+  /** Call after deleting or restoring an account, so it applies at once. */
+  forget(uid: number): void {
+    this.liveness.delete(uid);
+  }
+
+  private verify(request: Request): ITokenClaims | null {
     const token = extractToken(request);
 
     if (!token) {
@@ -97,6 +125,26 @@ class TokenReader {
       return null;
     }
   }
+
+  private async isLive(uid: number): Promise<boolean> {
+    const now = Date.now();
+    const cached = this.liveness.get(uid);
+
+    if (cached && now - cached.at < LIVENESS_TTL_MS) {
+      return cached.live;
+    }
+
+    const live =
+      (await this.users.countBy({ id: uid, deletedAt: IsNull() })) > 0;
+
+    if (this.liveness.size > 10_000) {
+      this.liveness.clear();
+    }
+
+    this.liveness.set(uid, { live, at: now });
+
+    return live;
+  }
 }
 
 /**
@@ -107,9 +155,9 @@ class TokenReader {
 export class OptionalAuthGuard implements CanActivate {
   constructor(private readonly tokens: TokenReader) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthedRequest>();
-    const claims = this.tokens.read(request);
+    const claims = await this.tokens.read(request);
 
     request.auth = claims
       ? { claims, uid: claims.uid, user: null }
@@ -127,9 +175,9 @@ export class OptionalAuthGuard implements CanActivate {
 export class AuthRequiredGuard implements CanActivate {
   constructor(private readonly tokens: TokenReader) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthedRequest>();
-    const claims = this.tokens.read(request);
+    const claims = await this.tokens.read(request);
 
     if (!claims) {
       throw new VaultException(
@@ -152,9 +200,9 @@ export class AuthRequiredGuard implements CanActivate {
 export class MembersOnlyGuard implements CanActivate {
   constructor(private readonly tokens: TokenReader) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthedRequest>();
-    const claims = this.tokens.read(request);
+    const claims = await this.tokens.read(request);
 
     if (!claims) {
       throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);

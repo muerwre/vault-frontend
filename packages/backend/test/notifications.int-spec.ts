@@ -279,12 +279,27 @@ describe('notifications (integration)', () => {
     it('never shows another user’s notifications', async () => {
       await addNotification('node', nodeId);
 
-      const { body } = await http()
-        .get('/api/notifications/')
-        .set(authHeader(userId + 100000))
-        .expect(200);
+      const other = `notifspec_other_${Date.now()}`;
+      const inserted = await db.query(
+        `INSERT INTO user (username, password, email, role, is_activated, created_at, updated_at)
+         VALUES (?, 'x', ?, 'user', 1, NOW(), NOW())`,
+        [other, `${other}@example.com`],
+      );
+      const otherId = Number(inserted.insertId);
 
-      expect(body.items).toEqual([]);
+      try {
+        const { body } = await http()
+          .get('/api/notifications/')
+          .set(authHeader(otherId))
+          .expect(200);
+
+        expect(body.items).toEqual([]);
+      } finally {
+        await db.query('DELETE FROM notification_settings WHERE userId = ?', [
+          otherId,
+        ]);
+        await db.query('DELETE FROM user WHERE id = ?', [otherId]);
+      }
     });
 
     it('caps the feed at the page size', async () => {

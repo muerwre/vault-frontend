@@ -43,3 +43,7 @@ export interface ApiAdminUser extends IUser {
 
 export const apiGetAdminUsers = () =>
   api.get<{ users: ApiAdminUser[] }>(API.ADMIN.USERS).then(unwrap);
+
+/** Soft-deletes a user; their posts and comments stay. */
+export const apiDeleteAdminUser = (id: number) =>
+  api.delete(API.ADMIN.USER(id)).then(unwrap);

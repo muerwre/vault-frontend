@@ -1,19 +1,28 @@
-import { FC } from 'react';
+import { FC, MouseEvent, useCallback } from 'react';
 
 import classNames from 'classnames';
 import Link from 'next/link';
 import useSWR from 'swr';
 
-import { ApiAdminUser, apiGetAdminUsers } from '~/api/admin';
+import {
+  ApiAdminUser,
+  apiDeleteAdminUser,
+  apiGetAdminUsers,
+} from '~/api/admin';
 import { Avatar } from '~/components/common/Avatar';
 import { Columns } from '~/components/common/Columns';
 import { LoaderCircle } from '~/components/common/LoaderCircle';
+import { Button } from '~/components/input/Button';
 import { API } from '~/constants/api';
 import { Role } from '~/constants/auth';
 import { URLS } from '~/constants/urls';
 import { AdminRegistrations } from '~/containers/admin/AdminRegistrations';
+import { useAuth } from '~/hooks/auth/useAuth';
+import { useConfirmation } from '~/hooks/dom/useConfirmation';
 import { IUser } from '~/types/auth';
 import { getPrettyDate } from '~/utils/dom';
+import { showErrorToast } from '~/utils/errors/showToast';
+import { showToastSuccess } from '~/utils/toast';
 import { isUserActive } from '~/utils/user';
 
 import styles from './styles.module.scss';
@@ -46,7 +55,31 @@ const lastVisit = (user: IUser) =>
  * registrations and unused invites come first.
  */
 const AdminUsers: FC = () => {
-  const { data } = useSWR(API.ADMIN.USERS, apiGetAdminUsers);
+  const { data, mutate } = useSWR(API.ADMIN.USERS, apiGetAdminUsers);
+  const { user: me } = useAuth();
+  const confirm = useConfirmation();
+
+  const onDelete = useCallback(
+    (event: MouseEvent, user: ApiAdminUser) => {
+      // The button sits inside the card's profile link.
+      event.preventDefault();
+      event.stopPropagation();
+
+      confirm(
+        `Удалить ~${user.username}? Пользователь больше не сможет войти, его посты и комментарии останутся.`,
+        async () => {
+          try {
+            await apiDeleteAdminUser(user.id);
+            await mutate();
+            showToastSuccess(`~${user.username} удалён`);
+          } catch (error) {
+            showErrorToast(error);
+          }
+        },
+      );
+    },
+    [confirm, mutate],
+  );
 
   if (!data) {
     return (
@@ -106,6 +139,20 @@ const AdminUsers: FC = () => {
                     </div>
                   ))}
                 </div>
+
+                {/* Admins and yourself cannot be deleted here. */}
+                {user.role !== Role.Admin && user.id !== me.id && (
+                  <Button
+                    className={styles.delete}
+                    size="small"
+                    color="gray"
+                    iconLeft="close"
+                    iconOnly
+                    type="button"
+                    label="Удалить пользователя"
+                    onClick={(event) => onDelete(event, user)}
+                  />
+                )}
               </a>
             </Link>
           </div>

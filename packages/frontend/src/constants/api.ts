@@ -11,6 +11,7 @@ export const API = {
   },
   ADMIN: {
     USERS: '/admin/users',
+    USER: (id: number) => `/admin/users/${id}`,
     REGISTRATIONS: '/admin/registrations',
     REGISTRATION_ACTION: (
       id: number,

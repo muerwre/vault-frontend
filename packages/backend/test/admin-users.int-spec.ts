@@ -111,4 +111,71 @@ describe('admin users API (integration)', () => {
     ]);
     expect(byId.get(ids.never)).toEqual([]);
   });
+
+  describe('DELETE /admin/users/:id', () => {
+    it('is a 404 for members', async () => {
+      await http()
+        .delete(`/api/admin/users/${ids.never}`)
+        .set(authHeader(ids.recent))
+        .expect(404);
+    });
+
+    it('refuses to delete yourself or another admin', async () => {
+      const self = await http()
+        .delete(`/api/admin/users/${ids.admin}`)
+        .set(authHeader(ids.admin, 'admin'))
+        .expect(400);
+      expect(self.body.message).toBe('Нельзя удалить самого себя');
+
+      await makeUser('admin2', 'admin', null);
+      const other = await http()
+        .delete(`/api/admin/users/${ids.admin2}`)
+        .set(authHeader(ids.admin, 'admin'))
+        .expect(400);
+      expect(other.body.message).toBe('Нельзя удалить администратора');
+    });
+
+    it('404s an unknown user', async () => {
+      await http()
+        .delete('/api/admin/users/999999999')
+        .set(authHeader(ids.admin, 'admin'))
+        .expect(404);
+    });
+
+    /** Tokens never expire, so deletion must end them everywhere. */
+    it('soft-deletes, hides the user and ends their sessions', async () => {
+      // A session in use before the deletion, so its state is cached.
+      await http().get('/api/nodes/lab').set(authHeader(ids.older)).expect(200);
+
+      await http()
+        .delete(`/api/admin/users/${ids.older}`)
+        .set(authHeader(ids.admin, 'admin'))
+        .expect(200);
+
+      const [row] = await db.query('SELECT deleted_at FROM user WHERE id = ?', [
+        ids.older,
+      ]);
+      expect(row.deleted_at).not.toBeNull();
+
+      const { body } = await http()
+        .get('/api/admin/users')
+        .set(authHeader(ids.admin, 'admin'))
+        .expect(200);
+      expect(
+        (body.users as Array<{ id: number }>).some(
+          (user) => user.id === ids.older,
+        ),
+      ).toBe(false);
+
+      await http().get('/api/auth/').set(authHeader(ids.older)).expect(401);
+      await http().get('/api/nodes/lab').set(authHeader(ids.older)).expect(404);
+      await http().get('/api/notes').set(authHeader(ids.older)).expect(401);
+
+      // Deleting again finds nobody.
+      await http()
+        .delete(`/api/admin/users/${ids.older}`)
+        .set(authHeader(ids.admin, 'admin'))
+        .expect(404);
+    });
+  });
 });
