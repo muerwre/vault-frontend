@@ -31,6 +31,7 @@ import {
   VaultException,
   VaultValidationException,
 } from '../../globals/exceptions';
+import { RateLimiter } from '../../globals/rate-limiter';
 import { toWireDateOrNull, toWireString } from '../../wire/serialize';
 import { AuthService } from '../auth/auth.service';
 import { isEmail, normalizeEmail } from '../auth/email';
@@ -41,8 +42,6 @@ import {
   type MailResult,
 } from '../mail/mail.service';
 import { validateSocialRegister } from '../oauth/oauth.validation';
-
-import { RateLimiter } from './rate-limiter';
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;

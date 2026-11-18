@@ -13,21 +13,34 @@ export class RateLimiter {
 
   /** Records a hit and answers whether it was within the limit. */
   take(key: string): boolean {
-    const now = this.now();
-    const recent = (this.hits.get(key) ?? []).filter(
-      (time) => now - time < this.windowMs,
-    );
-
-    if (recent.length >= this.limit) {
-      this.hits.set(key, recent);
+    if (this.isLimited(key)) {
       return false;
     }
+
+    this.hit(key);
+
+    return true;
+  }
+
+  /** Whether the key has used up its hits, without recording one. */
+  isLimited(key: string): boolean {
+    return this.recent(key, this.now()).length >= this.limit;
+  }
+
+  /** Records a hit regardless of the limit, e.g. a failed login. */
+  hit(key: string): void {
+    const now = this.now();
+    const recent = this.recent(key, now);
 
     recent.push(now);
     this.hits.set(key, recent);
     this.prune(now);
+  }
 
-    return true;
+  private recent(key: string, now: number): number[] {
+    return (this.hits.get(key) ?? []).filter(
+      (time) => now - time < this.windowMs,
+    );
   }
 
   /** Drops keys whose hits have all expired, so the map does not grow forever. */

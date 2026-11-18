@@ -46,4 +46,14 @@ describe('RateLimiter', () => {
 
     expect(limiter.take('a')).toBe(true);
   });
+
+  it('checks without counting, and counts hits regardless', () => {
+    const limiter = new RateLimiter(2, 1000, clock);
+
+    expect(limiter.isLimited('a')).toBe(false);
+    limiter.hit('a');
+    limiter.hit('a');
+    expect(limiter.isLimited('a')).toBe(true);
+    expect(limiter.take('a')).toBe(false);
+  });
 });

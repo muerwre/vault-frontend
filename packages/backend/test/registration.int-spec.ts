@@ -3,8 +3,8 @@ import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 
+import { RateLimiter } from '../src/globals/rate-limiter';
 import { MailService } from '../src/modules/mail/mail.service';
-import { RateLimiter } from '../src/modules/registration/rate-limiter';
 import { RegistrationService } from '../src/modules/registration/registration.service';
 
 import { authHeader, createTestApp, getDataSource } from './helpers/app';

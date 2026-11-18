@@ -6,7 +6,13 @@ import {
   VaultValidationException,
 } from '../../globals/exceptions';
 
-import { AuthController } from './auth.controller';
+import {
+  AuthController,
+  LOGIN_FAILURES_PER_ACCOUNT,
+  LOGIN_FAILURES_PER_IP,
+  RESTORES_PER_ACCOUNT,
+  RESTORES_PER_IP,
+} from './auth.controller';
 import type { AuthService } from './auth.service';
 import type { PasswordService } from './password.service';
 
@@ -34,10 +40,10 @@ const makeController = (overrides: AuthMock = {}, passwordValid = true) => {
     setPhoto: jest.fn().mockResolvedValue(undefined),
     setCover: jest.fn().mockResolvedValue(undefined),
     findImage: jest.fn().mockResolvedValue({ id: 5 }),
-    findOrCreateRestoreCode: jest.fn().mockResolvedValue('code'),
+    createRestoreCode: jest.fn().mockResolvedValue('code'),
     sendRestoreCode: jest.fn().mockResolvedValue(undefined),
     findRestoreCode: jest.fn().mockResolvedValue(null),
-    consumeRestoreCode: jest.fn().mockResolvedValue(undefined),
+    dropRestoreCodes: jest.fn().mockResolvedValue(undefined),
     toRestoreUser: jest
       .fn()
       .mockReturnValue({ username: 'someone', photo: null }),
@@ -108,6 +114,80 @@ describe('AuthController', () => {
     });
   });
 
+  describe('rate limits', () => {
+    it('refuses logins for an account after too many failures', async () => {
+      const { controller, auth } = makeController({
+        authenticate: jest.fn().mockResolvedValue(null),
+      });
+
+      for (
+        let attempt = 0;
+        attempt < LOGIN_FAILURES_PER_ACCOUNT;
+        attempt += 1
+      ) {
+        await expect(
+          controller.login(
+            { username: 'Someone', password: 'wrong' },
+            `10.0.0.${attempt}`,
+          ),
+        ).rejects.toMatchObject({ code: 'Incorrect_Data' });
+      }
+
+      // Counted case-insensitively, from any address.
+      await expect(
+        controller.login(
+          { username: 'someone', password: 'right' },
+          '10.1.1.1',
+        ),
+      ).rejects.toMatchObject({ code: 'Too_Many_Requests' });
+      expect(auth.authenticate).toHaveBeenCalledTimes(
+        LOGIN_FAILURES_PER_ACCOUNT,
+      );
+    });
+
+    it('does not count successful logins', async () => {
+      const { controller } = makeController();
+
+      for (let attempt = 0; attempt <= LOGIN_FAILURES_PER_IP; attempt += 1) {
+        await controller.login({ username: 'someone', password: 'pw' }, 'ip');
+      }
+    });
+
+    it('limits reset requests per account', async () => {
+      const { controller, auth } = makeController({
+        findByUsernameOrEmail: jest.fn().mockResolvedValue({ id: 7 }),
+      });
+
+      for (let attempt = 0; attempt < RESTORES_PER_ACCOUNT; attempt += 1) {
+        await controller.createRestoreCode(
+          { field: 'someone' },
+          `ip${attempt}`,
+        );
+      }
+
+      await expect(
+        controller.createRestoreCode({ field: 'someone' }, 'other'),
+      ).rejects.toMatchObject({ code: 'Too_Many_Requests' });
+      expect(auth.createRestoreCode).toHaveBeenCalledTimes(
+        RESTORES_PER_ACCOUNT,
+      );
+    });
+
+    it('limits reset requests per client, known account or not', async () => {
+      const { controller } = makeController();
+
+      for (let attempt = 0; attempt < RESTORES_PER_IP; attempt += 1) {
+        await expect(
+          controller.createRestoreCode({ field: `nobody${attempt}` }, 'ip'),
+        ).rejects.toMatchObject({ code: 'User_Not_found' });
+      }
+
+      await expect(
+        controller.createRestoreCode({ field: 'nobody' }, 'ip'),
+      ).rejects.toMatchObject({ code: 'Too_Many_Requests' });
+    });
+  });
+
   describe('patch', () => {
     const patchErrors = async (
       body: Record<string, unknown>,
@@ -156,15 +236,6 @@ describe('AuthController', () => {
       expect(saved.description).toBe('Desc');
     });
 
-    it('requires the current password for an email change', async () => {
-      expect(
-        await patchErrors(
-          { email: 'new@example.com' },
-          { passwordValid: false },
-        ),
-      ).toEqual({ password: expect.any(String) });
-    });
-
     it('requires the current password for a username change', async () => {
       expect(
         await patchErrors({ username: 'newname' }, { passwordValid: false }),
@@ -198,35 +269,43 @@ describe('AuthController', () => {
       ).toBeNull();
     });
 
-    it('treats an email differing only in case or spaces as unchanged', async () => {
-      const { controller, auth } = makeController({}, false);
-      const user = currentUser();
-
-      await controller.patch(user, { email: ' SomeOne@Example.com ' } as never);
-
-      expect(auth.isEmailTaken).not.toHaveBeenCalled();
-      expect(user.email).toBe('someone@example.com');
-    });
-
-    it('stores a changed email trimmed and lower-cased', async () => {
+    it('refuses to change the email, even with the right password', async () => {
       const { controller, auth } = makeController();
       const user = currentUser();
 
-      await controller.patch(user, { email: ' New@Example.com' } as never);
-
-      expect(auth.isEmailTaken).toHaveBeenCalledWith('new@example.com', 1);
-      expect(user.email).toBe('new@example.com');
+      await expect(
+        controller.patch(user, { email: 'new@example.com' } as never),
+      ).rejects.toMatchObject({ fields: { email: expect.any(String) } });
+      expect(auth.save).not.toHaveBeenCalled();
+      expect(user.email).toBe('someone@example.com');
     });
 
-    it('rejects a taken username and a taken email', async () => {
+    it('accepts the current email sent back in any case', async () => {
+      expect(
+        await patchErrors(
+          { email: ' SomeOne@Example.com ', description: 'x' },
+          { passwordValid: false },
+        ),
+      ).toBeNull();
+    });
+
+    it('drops pending reset codes when the password changes', async () => {
+      const { controller, auth } = makeController();
+
+      await controller.patch(currentUser(), {
+        password: 'current',
+        new_password: 'longenough',
+      } as never);
+
+      expect(auth.dropRestoreCodes).toHaveBeenCalledWith(1);
+    });
+
+    it('rejects a taken username', async () => {
       expect(
         await patchErrors({ username: 'taken' }, { taken: 'username' }),
       ).toEqual({
         username: expect.any(String),
       });
-      expect(
-        await patchErrors({ email: 'taken@example.com' }, { taken: 'email' }),
-      ).toEqual({ email: expect.any(String) });
     });
 
     it('rejects a username that fails the character rules', async () => {
@@ -235,12 +314,6 @@ describe('AuthController', () => {
       });
       expect(await patchErrors({ username: 'has spaces' })).toEqual({
         username: expect.any(String),
-      });
-    });
-
-    it('rejects a malformed email', async () => {
-      expect(await patchErrors({ email: 'not-an-email' })).toEqual({
-        email: expect.any(String),
       });
     });
 
@@ -349,7 +422,7 @@ describe('AuthController', () => {
       expect(auth.findRestoreCode).not.toHaveBeenCalled();
     });
 
-    it('consumes the code after setting the password', async () => {
+    it('drops every reset code after setting the password', async () => {
       const { controller, auth } = makeController({
         findRestoreCode: jest
           .fn()
@@ -359,7 +432,7 @@ describe('AuthController', () => {
       await controller.applyRestoreCode('code', { password: 'longenough' });
 
       expect(auth.setPassword).toHaveBeenCalledWith(1, 'longenough');
-      expect(auth.consumeRestoreCode).toHaveBeenCalledWith(9);
+      expect(auth.dropRestoreCodes).toHaveBeenCalledWith(1);
     });
   });
 });

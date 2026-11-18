@@ -19,6 +19,20 @@ import { showErrorToast } from '~/utils/errors/showToast';
 import { path } from '~/utils/ramda';
 import { showToastError } from '~/utils/toast';
 
+/** The provider popup this page opened; only its messages are trusted. */
+let oauthPopup: Window | null = null;
+
+/**
+ * Whether a `message` event came from the provider popup this page opened.
+ * Anything else — another site, a frame, a window the user opened by hand —
+ * could be posting a claim of its own, which would link the attacker's
+ * account to whoever is signed in here.
+ */
+export const isFromOauthPopup = (event: MessageEvent): boolean =>
+  event.origin === window.location.origin &&
+  oauthPopup !== null &&
+  event.source === oauthPopup;
+
 export const useOAuth = () => {
   const { isUser, setToken } = useAuth();
   const { showModal, hideModal } = useModal();
@@ -33,7 +47,11 @@ export const useOAuth = () => {
   });
 
   const openOauthWindow = useCallback((provider: OAuthProvider) => {
-    window.open(API.USER.OAUTH_WINDOW(provider), '', 'width=600,height=400');
+    oauthPopup = window.open(
+      API.USER.OAUTH_WINDOW(provider),
+      '',
+      'width=600,height=400',
+    );
   }, []);
 
   const createSocialAccount = useCallback(
@@ -74,18 +92,6 @@ export const useOAuth = () => {
       }
     },
     [showModal, hideModal, setToken],
-  );
-
-  const loginWithSocial = useCallback(
-    (token: string | undefined) => {
-      if (!token) {
-        return;
-      }
-
-      setToken(token);
-      hideModal();
-    },
-    [setToken, hideModal],
   );
 
   const attachAccount = useCallback(
@@ -130,7 +136,6 @@ export const useOAuth = () => {
     hasTelegram,
     showTelegramModal,
     openOauthWindow,
-    loginWithSocial,
     createSocialAccount,
     attachAccount,
     dropAccount,

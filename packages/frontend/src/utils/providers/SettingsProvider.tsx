@@ -22,7 +22,7 @@ const validationSchema = object({
   fullname: string().default(''),
   newPassword: string().optional(),
   description: string().default(''),
-  email: string().default('').email(ERRORS.NOT_AN_EMAIL),
+  email: string().default(''),
   password: string().optional(),
 });
 
@@ -37,6 +37,8 @@ export const useSettingsForm = (
   const onSubmit = useCallback<FormikConfig<ProfileFormData>['onSubmit']>(
     async (values, { setErrors, setValues }) => {
       try {
+        // `email` is read-only and goes back unchanged, which the backend
+        // accepts; any other value it refuses.
         const fields = {
           ...values,
           password: values.password?.length ? values.password : undefined,

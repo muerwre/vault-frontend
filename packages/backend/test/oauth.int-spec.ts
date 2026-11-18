@@ -46,7 +46,7 @@ describe('oauth (integration)', () => {
         ...profile,
       },
       getJwtSecret(),
-      { algorithm: 'HS256' },
+      { algorithm: 'HS256', expiresIn: 600 },
     );
 
   const telegramPayload = (overrides: Record<string, unknown> = {}) => {
@@ -476,6 +476,35 @@ describe('oauth (integration)', () => {
     it('400s without a valid claim', async () => {
       await http().put('/api/oauth/').send({}).expect(400);
       await http().put('/api/oauth/').send({ token: 'nope' }).expect(400);
+    });
+
+    /** A claim is redeemable for a session, so it must not live forever. */
+    it('400s an expired claim, or one without an expiry', async () => {
+      const payload = {
+        typ: 'oauth_claim',
+        provider: 'vkontakte',
+        id: '900020',
+        email: '',
+        name: 'VK Person',
+        photo: '',
+      };
+
+      const expired = jwt.sign(
+        { ...payload, exp: Math.floor(Date.now() / 1000) - 60 },
+        getJwtSecret(),
+        { algorithm: 'HS256' },
+      );
+      const forever = jwt.sign(payload, getJwtSecret(), {
+        algorithm: 'HS256',
+      });
+
+      await http().put('/api/oauth/').send({ token: expired }).expect(400);
+      await http().put('/api/oauth/').send({ token: forever }).expect(400);
+      await http()
+        .post('/api/oauth/')
+        .set(authHeader(userId))
+        .send({ token: forever })
+        .expect(400);
     });
   });
 

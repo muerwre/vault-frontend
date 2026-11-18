@@ -30,6 +30,9 @@ import { MailService } from '../mail/mail.service';
 
 import { PasswordService } from './password.service';
 
+/** How long a mailed password reset link works. */
+export const RESTORE_CODE_TTL_MS = 72 * 60 * 60 * 1000;
+
 export interface WireUpdates {
   boris: { commented_at: string };
   registrations?: { pending: number };
@@ -289,23 +292,22 @@ export class AuthService {
   }
 
   /**
-   * One code per user, reused until consumed. Returns the code so the caller can
-   * mail it; it is never exposed on the wire.
+   * Issues a fresh code, dropping any earlier one, so only the latest mailed
+   * link works. Returns the code so the caller can mail it; it is never
+   * exposed on the wire.
    */
-  async findOrCreateRestoreCode(userId: number): Promise<string> {
-    const existing = await this.restoreCodes
-      .createQueryBuilder('code')
-      .where('code.userId = :userId', { userId })
-      .getOne();
-
-    if (existing) {
-      return existing.code;
-    }
+  async createRestoreCode(userId: number): Promise<string> {
+    await this.dropRestoreCodes(userId);
 
     const code = randomUUID();
     await this.restoreCodes.save(this.restoreCodes.create({ userId, code }));
 
     return code;
+  }
+
+  /** Invalidates every reset link the user was sent. */
+  async dropRestoreCodes(userId: number): Promise<void> {
+    await this.restoreCodes.delete({ userId });
   }
 
   async sendRestoreCode(
@@ -316,7 +318,7 @@ export class AuthService {
     await this.mail.sendRestoreCode(email, username, code);
   }
 
-  /** Codes do not expire; they are removed once used. */
+  /** A code is usable for {@link RESTORE_CODE_TTL_MS}, and once. */
   async findRestoreCode(
     code: string,
   ): Promise<{ id: number; user: User } | null> {
@@ -330,13 +332,13 @@ export class AuthService {
       .leftJoinAndSelect('user.photo', 'photo')
       .leftJoinAndSelect('user.cover', 'cover')
       .where('code.code = :code', { code })
+      .andWhere('code.created_at > :since', {
+        since: new Date(Date.now() - RESTORE_CODE_TTL_MS),
+      })
+      .andWhere('user.deleted_at IS NULL')
       .getOne();
 
     return row?.user ? { id: row.id, user: row.user } : null;
-  }
-
-  async consumeRestoreCode(id: number): Promise<void> {
-    await this.restoreCodes.delete(id);
   }
 
   toRestoreUser(user: User): WireRestoreUser {
