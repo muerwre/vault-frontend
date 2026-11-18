@@ -23,7 +23,7 @@ import {
   WithUser,
   WithUserGuard,
 } from '../auth/auth.guards';
-import { canCommentOn, isLabType } from '../node/node.permissions';
+import { canCommentOn, isHiddenFromGuests } from '../node/node.permissions';
 import { NodeService } from '../node/node.service';
 import { NotificationDispatcher } from '../notifications/notification.dispatcher';
 import type { IncomingFile } from '../upload/audio-titles';
@@ -68,11 +68,11 @@ export class CommentController {
       throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
     }
 
-    // A lab post's comments are as hidden from guests as the post itself.
+    // Comments are as hidden from guests as the node itself.
     if (uid === GUEST_USER_ID) {
       const node = await this.nodes.findLive(nodeId);
 
-      if (node && isLabType(node)) {
+      if (node && isHiddenFromGuests(node)) {
         throw new VaultException(
           ERROR_CODES.NodeNotFound,
           HttpStatus.NOT_FOUND,

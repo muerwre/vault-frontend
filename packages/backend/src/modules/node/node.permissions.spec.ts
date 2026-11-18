@@ -6,6 +6,7 @@ import {
   canHeroNode,
   isFlowOrLabType,
   isFlowType,
+  isHiddenFromGuests,
   isLabType,
 } from './node.permissions';
 
@@ -48,6 +49,19 @@ describe('node permissions', () => {
       for (const type of ['image', 'video', 'text', 'audio']) {
         expect(isFlowOrLabType(node(type, true))).toBe(true);
       }
+    });
+  });
+
+  describe('isHiddenFromGuests', () => {
+    it('hides lab posts and boris', () => {
+      expect(isHiddenFromGuests(node('image', false))).toBe(true);
+      expect(isHiddenFromGuests(node('boris', false))).toBe(true);
+      expect(isHiddenFromGuests(node('boris', true))).toBe(true);
+    });
+
+    it('shows flow posts and webm', () => {
+      expect(isHiddenFromGuests(node('image', true))).toBe(false);
+      expect(isHiddenFromGuests(node('webm', false))).toBe(false);
     });
   });
 

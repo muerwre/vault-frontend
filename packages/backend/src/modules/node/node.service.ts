@@ -30,7 +30,7 @@ import {
   type Actor,
   canEditNode,
   canHeroNode,
-  isLabType,
+  isHiddenFromGuests,
 } from './node.permissions';
 import { applyIsFlowNode, applyIsFlowOrLabNode } from './node.predicates';
 
@@ -145,8 +145,7 @@ export class NodeService {
 
     const node = await query.getOne();
 
-    // Lab posts are for members: to a guest they do not exist.
-    if (!node || (uid === GUEST_USER_ID && isLabType(node))) {
+    if (!node || (uid === GUEST_USER_ID && isHiddenFromGuests(node))) {
       return null;
     }
 

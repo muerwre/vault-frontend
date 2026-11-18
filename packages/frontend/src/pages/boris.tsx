@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { PageTitle } from '~/components/common/PageTitle';
 import { BORIS_NODE_ID } from '~/constants/boris/constants';
+import { MembersOnly } from '~/containers/auth/MembersOnly';
 import { useBoris } from '~/hooks/boris/useBoris';
 import { useNodeComments } from '~/hooks/comments/useNodeComments';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
@@ -13,7 +14,7 @@ import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
 import { getPageTitle } from '~/utils/ssr/getPageTitle';
 
-const BorisPage: VFC = observer(() => {
+const BorisContent: VFC = observer(() => {
   const { node, isLoading, update } = useLoadNode(BORIS_NODE_ID);
 
   const onShowImageModal = useImageModal();
@@ -55,5 +56,11 @@ const BorisPage: VFC = observer(() => {
     </NodeContextProvider>
   );
 });
+
+const BorisPage: VFC = () => (
+  <MembersOnly>
+    <BorisContent />
+  </MembersOnly>
+);
 
 export default BorisPage;

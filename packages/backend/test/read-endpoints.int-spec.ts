@@ -426,10 +426,13 @@ describe('read endpoints (integration)', () => {
     let total: number;
 
     beforeAll(async () => {
+      // Guest-readable only: boris and lab posts 404 to guests.
       const [row] = await db.query(`
-        SELECT nodeId, COUNT(*) AS c FROM comment
-         WHERE deleted_at IS NULL AND nodeId IS NOT NULL
-         GROUP BY nodeId ORDER BY c DESC LIMIT 1
+        SELECT c.nodeId, COUNT(*) AS c FROM comment c
+          JOIN node n ON n.id = c.nodeId
+         WHERE c.deleted_at IS NULL AND n.type <> 'boris'
+           AND (n.is_promoted = 1 OR n.type = 'webm')
+         GROUP BY c.nodeId ORDER BY c DESC LIMIT 1
       `);
       nodeId = Number(row.nodeId);
       total = Number(row.c);

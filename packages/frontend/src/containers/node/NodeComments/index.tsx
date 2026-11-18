@@ -124,10 +124,6 @@ const NodeComments: FC<Props> = observer(({ order }) => {
     [hasMore, loadMore, isLoadingMore, isLoading],
   );
 
-  if (!node?.id) {
-    return null;
-  }
-
   /** Scrolls down to new comments or specific one from anchor */
   useEffect(() => {
     const anchor = location.hash?.replace('#', '');
@@ -142,6 +138,11 @@ const NodeComments: FC<Props> = observer(({ order }) => {
       );
     }
   }, [isLoading]);
+
+  // After every hook: the node is briefly empty while it reloads for a new viewer.
+  if (!node?.id) {
+    return null;
+  }
 
   return (
     <VideoPlayerProvider>

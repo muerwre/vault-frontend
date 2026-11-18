@@ -9,12 +9,17 @@ import { useLabStore } from '~/store/lab/useLabStore';
 
 const refreshInterval = 1000 * 60 * 5; // 5 minutes
 
+/** Per viewer, so one user's lab never shows up for the next, or for a guest. */
+const getKey = (url: string, userId?: number) =>
+  userId ? JSON.stringify({ url, userId }) : null;
+
 export const useGetLabStats = () => {
   const lab = useLabStore();
-  const { isUser } = useAuth();
+  const { isUser, user } = useAuth();
+  const userId = isUser ? user.id : undefined;
 
   const { data: stats, isValidating: isValidatingStats } = useSWR(
-    isUser ? API.LAB.STATS : null,
+    getKey(API.LAB.STATS, userId),
     async () => getLabStats(),
     {
       fallbackData: {
@@ -34,7 +39,7 @@ export const useGetLabStats = () => {
     isValidating: isValidatingUpdates,
     mutate: mutateUpdates,
   } = useSWR(
-    isUser ? API.LAB.UPDATES : null,
+    getKey(API.LAB.UPDATES, userId),
     async () => {
       const result = await getLabUpdates();
       return result.nodes;
@@ -48,9 +53,17 @@ export const useGetLabStats = () => {
     },
   );
 
-  const heroes = useMemo(() => stats?.heroes || [], [stats]);
-  const tags = useMemo(() => stats?.tags || [], [stats]);
-  const updates = useMemo(() => updatesData || [], [updatesData]);
+  // Without a key SWR still hands back the fallback, i.e. what the store kept
+  // from the previous session.
+  const heroes = useMemo(
+    () => (isUser && stats?.heroes) || [],
+    [isUser, stats],
+  );
+  const tags = useMemo(() => (isUser && stats?.tags) || [], [isUser, stats]);
+  const updates = useMemo(
+    () => (isUser && updatesData) || [],
+    [isUser, updatesData],
+  );
 
   const isLoading =
     (!stats || !updates) && (isValidatingStats || isValidatingUpdates);

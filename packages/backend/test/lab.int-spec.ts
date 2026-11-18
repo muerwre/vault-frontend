@@ -494,4 +494,28 @@ describe('lab (integration)', () => {
       expect(body.comments).toHaveLength(1);
     });
   });
+  /** Boris is for members too: guests get neither the node nor its comments. */
+  describe('boris', () => {
+    const BORIS_NODE_ID = 696;
+
+    it('is a 404 to guests', async () => {
+      await http().get(`/api/nodes/${BORIS_NODE_ID}`).expect(404);
+    });
+
+    it('hides its comments from guests', async () => {
+      await http().get(`/api/nodes/${BORIS_NODE_ID}/comments`).expect(404);
+    });
+
+    it('is readable by signed-in users', async () => {
+      await http()
+        .get(`/api/nodes/${BORIS_NODE_ID}`)
+        .set(authHeader(userId))
+        .expect(200);
+
+      await http()
+        .get(`/api/nodes/${BORIS_NODE_ID}/comments`)
+        .set(authHeader(userId))
+        .expect(200);
+    });
+  });
 });

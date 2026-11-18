@@ -33,6 +33,11 @@ export const isFlowOrLabType = (
   node: Pick<Node, 'type' | 'isPromoted'>,
 ): boolean => isFlowType(node) || isLabType(node);
 
+/** Lab posts and Boris are for members: to a guest they do not exist. */
+export const isHiddenFromGuests = (
+  node: Pick<Node, 'type' | 'isPromoted'>,
+): boolean => node.type === NODE_TYPES.BORIS || isLabType(node);
+
 /** Guests and the `guest` role cannot author content. */
 export const canCreateNode = (actor: Actor): boolean =>
   ROLES_CAN_CREATE_NODE.includes(actor.role as Role);
