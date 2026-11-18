@@ -16,7 +16,7 @@ import {
 import { ERROR_CODES, OAUTH_PROVIDERS } from '@vault/common/constants';
 import type { Request, Response } from 'express';
 
-import { getTelegramToken } from '../../config/env';
+import { getRegistrationConfig, getTelegramToken } from '../../config/env';
 import { User } from '../../entities/user.entity';
 import {
   VaultException,
@@ -117,11 +117,13 @@ export class OAuthController {
   }
 
   /**
-   * Logs in with a linked account, or registers a new one.
+   * Logs in with a linked account, or — with social registration on —
+   * registers a new one.
    *
-   * A claim whose account is already linked logs that user straight in.
-   * Otherwise registration details are required, and their absence is reported
-   * as **428** — which is how the frontend knows to show the signup form.
+   * A claim whose account is already linked logs that user straight in. An
+   * unknown account is a 404 while social registration is off. Otherwise
+   * registration details are required, and their absence is reported as
+   * **428** — which is how the frontend knows to show the signup form.
    */
   @Put()
   @HttpCode(HttpStatus.OK)
@@ -135,7 +137,17 @@ export class OAuthController {
       return { token: this.auth.signToken(existing.user) };
     }
 
-    if (claim.email && (await this.oauth.findUserByEmail(claim.email))) {
+    // Users register by email; an unknown account only signs up when social
+    // registration is explicitly switched on.
+    if (!getRegistrationConfig().social) {
+      throw new VaultException(
+        ERROR_CODES.OAuthAccountNotFound,
+        HttpStatus.NOT_FOUND,
+        'Аккаунт не найден',
+      );
+    }
+
+    if (claim.email && (await this.auth.isEmailTaken(claim.email))) {
       throw new VaultException(
         ERROR_CODES.OAuthConflict,
         HttpStatus.CONFLICT,
@@ -154,7 +166,7 @@ export class OAuthController {
       );
     }
 
-    if (await this.oauth.findUserByUsername(username)) {
+    if (await this.auth.isUsernameTaken(username)) {
       throw new VaultValidationException(
         { username: 'Это имя уже занято' },
         HttpStatus.PRECONDITION_REQUIRED,

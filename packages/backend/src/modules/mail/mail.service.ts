@@ -1,4 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  type OnApplicationBootstrap,
+  type OnModuleDestroy,
+} from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
 
@@ -23,6 +28,39 @@ const RESTORE_HTML =
   '<p>Или не делайте ничего. Зачем? Почему?</p>' +
   '<p>А! Ссылка: <a href="{link}">сбросить пароль</a>';
 
+/** `{link}` is the registration link. No username: the account does not exist yet. */
+const REGISTER_SUBJECT = 'Добро пожаловать в Убежище!';
+const REGISTER_TEXT =
+  'Привет!\n\n' +
+  'Осталось выбрать имя пользователя и пароль — перейдите по ссылке: {link}\n\n' +
+  'Ссылка действует 72 часа.\n\n' +
+  'Если вы ничего не просили, просто проигнорируйте это письмо.';
+const REGISTER_HTML =
+  '<p>Привет!</p>' +
+  '<p>Осталось выбрать имя пользователя и пароль — <a href="{link}">перейдите по ссылке</a>.</p>' +
+  '<p>Ссылка действует 72 часа.</p>' +
+  '<p>Если вы ничего не просили, просто проигнорируйте это письмо.</p>';
+
+/** `{email}`, `{reason}` describe the request, `{link}` is the admin page. */
+const APPROVAL_SUBJECT = 'Новая заявка на регистрацию';
+const APPROVAL_TEXT =
+  'Новая заявка на регистрацию от {email}.\n\n' +
+  'Резюме:\n{reason}\n\n' +
+  'Одобрить или отклонить: {link}';
+const APPROVAL_HTML =
+  '<p>Новая заявка на регистрацию от <b>{email}</b>.</p>' +
+  '<h4>Резюме</h4>' +
+  '<p style="white-space: pre-wrap">{reason}</p>' +
+  '<p><a href="{link}">Одобрить или отклонить</a></p>';
+
+const ADMIN_USERS_PATH = '/admin/users';
+
+/** The frontend page a registration code opens. */
+export const registrationLink = (code: string): string =>
+  publicUrl(`/register/${code}`);
+
+const HEALTH_CHECK_MS = 60 * 60 * 1000;
+
 const escapeHtml = (value: string): string =>
   value
     .replaceAll('&', '&amp;')
@@ -30,56 +68,149 @@ const escapeHtml = (value: string): string =>
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;');
 
+const fill = (
+  template: string,
+  values: Record<string, string>,
+  escape: (value: string) => string = (value) => value,
+): string =>
+  Object.entries(values).reduce(
+    (text, [key, value]) => text.replaceAll(`{${key}}`, escape(value)),
+    template,
+  );
+
+const describeError = (error: unknown): string =>
+  error instanceof Error ? error.message : String(error);
+
+/** Whether a mail went out, and why not. */
+export type MailResult = { sent: true } | { sent: false; error: string };
+
 /**
  * Optional by config: with no SMTP host configured, sends are logged and
- * skipped. A failed send is logged too and never fails the caller — a mail
- * outage should not fail the request that triggered it.
+ * skipped. The connection is verified at startup and then hourly; features
+ * that cannot work without mail read {@link isAvailable}.
  */
 @Injectable()
-export class MailService {
+export class MailService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly logger = new Logger('Mail');
   private transporter: Transporter | null = null;
+  private healthy = false;
+  private checked = false;
+  private timer?: NodeJS.Timeout;
 
   get isEnabled(): boolean {
     return Boolean(getSmtpConfig().host);
   }
 
+  /** Configured, and the last connection check passed. */
+  get isAvailable(): boolean {
+    return this.isEnabled && this.healthy;
+  }
+
+  onApplicationBootstrap(): void {
+    if (!this.isEnabled) {
+      return;
+    }
+
+    // Not awaited: an unreachable server must not hold up startup. Until the
+    // first check finishes, mail counts as unavailable.
+    void this.checkHealth();
+
+    this.timer = setInterval(() => void this.checkHealth(), HEALTH_CHECK_MS);
+    this.timer.unref();
+  }
+
+  onModuleDestroy(): void {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = undefined;
+    }
+  }
+
+  /** Verifies the SMTP connection and records the result. */
+  async checkHealth(): Promise<boolean> {
+    const transporter = this.getTransporter();
+
+    if (!transporter) {
+      this.healthy = false;
+      return false;
+    }
+
+    // Logged on changes only, so a lasting outage does not repeat every hour.
+    const first = !this.checked;
+    const was = this.healthy;
+    this.checked = true;
+
+    try {
+      await transporter.verify();
+      this.healthy = true;
+
+      if (first || !was) {
+        this.logger.log('SMTP is reachable');
+      }
+    } catch (error) {
+      this.healthy = false;
+
+      if (first || was) {
+        this.logger.warn(`SMTP is unreachable: ${describeError(error)}`);
+      }
+    }
+
+    return this.healthy;
+  }
+
+  /** Best-effort: a failure is logged and never reaches the caller. */
   async sendRestoreCode(
     email: string,
     username: string,
     code: string,
   ): Promise<void> {
-    const link = publicUrl(`${getFrontendResetUrl()}${code}`);
+    const values = {
+      link: publicUrl(`${getFrontendResetUrl()}${code}`),
+      username,
+    };
 
     await this.send(
       email,
       RESTORE_SUBJECT,
-      RESTORE_TEXT.replaceAll('{link}', link).replaceAll(
-        '{username}',
-        username,
-      ),
-      RESTORE_HTML.replaceAll('{link}', link).replaceAll(
-        '{username}',
-        escapeHtml(username),
-      ),
+      fill(RESTORE_TEXT, values),
+      fill(RESTORE_HTML, values, escapeHtml),
     );
   }
 
-  private async send(
-    to: string,
-    subject: string,
-    text: string,
-    html: string,
-  ): Promise<void> {
-    if (!to) {
-      return;
-    }
+  sendRegistrationLink(email: string, code: string): Promise<MailResult> {
+    const values = { link: registrationLink(code) };
 
+    return this.send(
+      email,
+      REGISTER_SUBJECT,
+      fill(REGISTER_TEXT, values),
+      fill(REGISTER_HTML, values, escapeHtml),
+    );
+  }
+
+  /** Best-effort, one mail per admin. */
+  async sendApprovalRequest(
+    admins: string[],
+    email: string,
+    reason: string,
+  ): Promise<void> {
+    const values = { email, reason, link: publicUrl(ADMIN_USERS_PATH) };
+
+    for (const admin of admins) {
+      await this.send(
+        admin,
+        APPROVAL_SUBJECT,
+        fill(APPROVAL_TEXT, values),
+        fill(APPROVAL_HTML, values, escapeHtml),
+      );
+    }
+  }
+
+  private getTransporter(): Transporter | null {
     const config = getSmtpConfig();
 
     if (!config.host) {
-      this.logger.warn(`SMTP is not configured — skipped mail to ${to}`);
-      return;
+      return null;
     }
 
     this.transporter ??= nodemailer.createTransport({
@@ -92,20 +223,42 @@ export class MailService {
         : {}),
     });
 
+    return this.transporter;
+  }
+
+  /** Never throws; resolves whether the mail went out. */
+  private async send(
+    to: string,
+    subject: string,
+    text: string,
+    html: string,
+  ): Promise<MailResult> {
+    if (!to) {
+      return { sent: false, error: 'no recipient' };
+    }
+
+    const transporter = this.getTransporter();
+
+    if (!transporter) {
+      this.logger.warn(`SMTP is not configured — skipped mail to ${to}`);
+      return { sent: false, error: 'SMTP is not configured' };
+    }
+
     try {
-      await this.transporter.sendMail({
-        from: config.from,
+      await transporter.sendMail({
+        from: getSmtpConfig().from,
         to,
         subject,
         text,
         html,
       });
+
+      return { sent: true };
     } catch (error) {
-      this.logger.warn(
-        `could not send mail to ${to}: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      );
+      const message = describeError(error);
+      this.logger.warn(`could not send mail to ${to}: ${message}`);
+
+      return { sent: false, error: message };
     }
   }
 }

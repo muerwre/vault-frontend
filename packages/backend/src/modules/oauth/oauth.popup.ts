@@ -26,8 +26,16 @@ import { getPublicUrl } from '../../config/env';
  */
 export const popupTargetOrigin = (request: Request): string => {
   const host = request.get('host');
+  const site = new URL(getPublicUrl());
 
-  return host ? `${request.protocol}://${host}` : getPublicUrl();
+  // A TLS-terminating proxy we do not trust (a tunnel) hands the request over
+  // as plain http, so the site's own scheme wins for its own host. Posting to
+  // the wrong scheme is dropped by the browser without a trace.
+  if (!host || host === site.host) {
+    return site.origin;
+  }
+
+  return `${request.protocol}://${host}`;
 };
 
 /**

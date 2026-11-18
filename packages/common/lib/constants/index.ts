@@ -4,3 +4,4 @@ export * from './node';
 export * from './notification';
 export * from './oauth';
 export * from './user';
+export * from './registration';

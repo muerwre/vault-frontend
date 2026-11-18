@@ -4,6 +4,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -149,6 +150,11 @@
     background: $color_primary;
   }
 
+  // registration requests awaiting approval
+  &.admin::after {
+    background: $color_danger;
+  }
+
   @include tablet {
     padding: 0 $gap * 2 0 0;
 
@@ -171,4 +177,9 @@
   @include tablet {
     display: none;
   }
+}
+
+.right_buttons {
+  display: flex;
+  gap: $gap;
 }

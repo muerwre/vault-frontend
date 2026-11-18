@@ -14,6 +14,7 @@ import { NodeModule } from './modules/node/node.module';
 import { NotesModule } from './modules/notes/notes.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { OAuthModule } from './modules/oauth/oauth.module';
+import { RegistrationModule } from './modules/registration/registration.module';
 import { SearchModule } from './modules/search/search.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { TagModule } from './modules/tag/tag.module';
@@ -44,6 +45,7 @@ import { VkModule } from './modules/vk/vk.module';
     VkModule,
     MetaModule,
     AdminModule,
+    RegistrationModule,
   ],
   controllers: [HealthController],
   providers: [],

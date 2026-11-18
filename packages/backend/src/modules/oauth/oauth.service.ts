@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { Social } from '../../entities/social.entity';
 import { User } from '../../entities/user.entity';
 import { toWireString } from '../../wire/serialize';
+import { normalizeEmail } from '../auth/email';
 import { PasswordService } from '../auth/password.service';
 import { UploadService } from '../upload/upload.service';
 
@@ -22,6 +23,9 @@ import {
   type OAuthClaim,
   type ProviderProfile,
 } from './oauth.claim';
+
+/** How long a claim can be redeemed: enough to fill in the signup form. */
+export const CLAIM_TTL_SECONDS = 15 * 60;
 
 /** `{ provider, id, name, photo }` — DB `id` and `userId` never leave. */
 export interface WireSocial {
@@ -50,21 +54,33 @@ export class OAuthService {
     private readonly uploads: UploadService,
   ) {}
 
-  /** Signs a provider profile into the token the popup hands to the frontend. */
+  /**
+   * Signs a provider profile into the token the popup hands to the frontend.
+   * Unlike a session token it expires: it only has to survive the popup
+   * handing it over and, at most, the signup form.
+   */
   encodeClaim(profile: ProviderProfile): string {
-    return this.jwt.sign(toClaim(profile));
+    return this.jwt.sign(toClaim(profile), { expiresIn: CLAIM_TTL_SECONDS });
   }
 
-  /** Returns null for anything that is not a claim this server signed. */
+  /**
+   * Returns null for anything that is not a live claim this server signed. A
+   * claim without an expiry predates expiring claims and is refused too.
+   */
   decodeClaim(token: unknown): OAuthClaim | null {
     if (typeof token !== 'string' || token === '') {
       return null;
     }
 
     try {
-      const payload: unknown = this.jwt.verify(token);
+      const payload: unknown = this.jwt.verify(token, {
+        ignoreExpiration: false,
+      });
 
-      return isOAuthClaim(payload) ? payload : null;
+      return isOAuthClaim(payload) &&
+        typeof (payload as { exp?: unknown }).exp === 'number'
+        ? payload
+        : null;
     } catch {
       return null;
     }
@@ -148,15 +164,6 @@ export class OAuthService {
       .getOne();
   }
 
-  findUserByUsername(username: string): Promise<User | null> {
-    return this.users
-      .createQueryBuilder('user')
-      .where('user.username = :username AND user.deleted_at IS NULL', {
-        username,
-      })
-      .getOne();
-  }
-
   /** Creates an activated account owning the linked social. */
   async register(
     claim: OAuthClaim,
@@ -167,7 +174,7 @@ export class OAuthService {
       this.users.create({
         username,
         password: await this.passwords.hash(password),
-        email: claim.email,
+        email: claim.email ? normalizeEmail(claim.email) : null,
         fullname: claim.name,
         role: ROLES.USER,
         isActivated: true,

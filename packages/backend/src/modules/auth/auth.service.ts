@@ -3,13 +3,20 @@ import { randomUUID } from 'crypto';
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BORIS_NODE_ID, FILE_TYPES } from '@vault/common/constants';
+import {
+  BORIS_NODE_ID,
+  FILE_TYPES,
+  OAUTH_PROVIDERS,
+  REGISTRATION_STATUSES,
+  ROLES,
+} from '@vault/common/constants';
 import type { ITokenClaims } from '@vault/common/types';
 import { IsNull, Repository } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
 import { Node } from '../../entities/node.entity';
-import { RestoreCode } from '../../entities/social.entity';
+import { RegistrationRequest } from '../../entities/registration-request.entity';
+import { RestoreCode, Social } from '../../entities/social.entity';
 import { User } from '../../entities/user.entity';
 import { NodeView } from '../../entities/views.entity';
 import {
@@ -22,6 +29,14 @@ import {
 import { MailService } from '../mail/mail.service';
 
 import { PasswordService } from './password.service';
+
+/** How long a mailed password reset link works. */
+export const RESTORE_CODE_TTL_MS = 72 * 60 * 60 * 1000;
+
+export interface WireUpdates {
+  boris: { commented_at: string };
+  registrations?: { pending: number };
+}
 
 export interface WireRestoreUser {
   username: string;
@@ -40,6 +55,9 @@ export class AuthService {
     private readonly nodeViews: Repository<NodeView>,
     @InjectRepository(RestoreCode)
     private readonly restoreCodes: Repository<RestoreCode>,
+    @InjectRepository(Social) private readonly socials: Repository<Social>,
+    @InjectRepository(RegistrationRequest)
+    private readonly registrations: Repository<RegistrationRequest>,
     private readonly passwords: PasswordService,
     private readonly jwt: JwtService,
     private readonly mail: MailService,
@@ -95,6 +113,46 @@ export class AuthService {
       .getOne();
   }
 
+  /**
+   * Counts deleted accounts too: the unique index covers them, so a name only
+   * a deleted account holds still cannot be reused.
+   */
+  async isUsernameTaken(username: string): Promise<boolean> {
+    return (await this.users.countBy({ username })) > 0;
+  }
+
+  /**
+   * Like {@link isUsernameTaken}. A linked Google account counts too: its id
+   * is the email, and its owner may have a different one on their profile.
+   * `exceptUserId` skips the caller's own account.
+   */
+  async isEmailTaken(email: string, exceptUserId?: number): Promise<boolean> {
+    const users = this.users
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email });
+
+    const google = this.socials
+      .createQueryBuilder('social')
+      .where('social.provider = :provider AND social.account_id = :email', {
+        provider: OAUTH_PROVIDERS.GOOGLE,
+        email,
+      })
+      .andWhere('social.userId IS NOT NULL');
+
+    if (exceptUserId !== undefined) {
+      users.andWhere('user.id <> :exceptUserId', { exceptUserId });
+      google.andWhere('social.userId <> :exceptUserId', { exceptUserId });
+    }
+
+    const [byProfile, byGoogle] = await Promise.all([
+      users.getCount(),
+      google.getCount(),
+    ]);
+
+    return byProfile + byGoogle > 0;
+  }
+
+  /** A live account by email, or null. */
   findByEmail(email: string): Promise<User | null> {
     return this.users
       .createQueryBuilder('user')
@@ -183,14 +241,26 @@ export class AuthService {
     return created?.visited ?? new Date();
   }
 
-  /** `GET /auth/updates`. */
-  async getUpdates(): Promise<{ boris: { commented_at: string } }> {
+  /** `GET /auth/updates`. Admins also get the registrations awaiting them. */
+  async getUpdates(user: User): Promise<WireUpdates> {
     const boris = await this.nodes
       .createQueryBuilder('node')
       .where('node.id = :id', { id: BORIS_NODE_ID })
       .getOne();
 
-    return { boris: { commented_at: toWireDate(boris?.commentedAt) } };
+    const updates: WireUpdates = {
+      boris: { commented_at: toWireDate(boris?.commentedAt) },
+    };
+
+    if (user.role === ROLES.ADMIN) {
+      updates.registrations = {
+        pending: await this.registrations.countBy({
+          status: REGISTRATION_STATUSES.PENDING_APPROVAL,
+        }),
+      };
+    }
+
+    return updates;
   }
 
   save(user: User): Promise<User> {
@@ -222,23 +292,22 @@ export class AuthService {
   }
 
   /**
-   * One code per user, reused until consumed. Returns the code so the caller can
-   * mail it; it is never exposed on the wire.
+   * Issues a fresh code, dropping any earlier one, so only the latest mailed
+   * link works. Returns the code so the caller can mail it; it is never
+   * exposed on the wire.
    */
-  async findOrCreateRestoreCode(userId: number): Promise<string> {
-    const existing = await this.restoreCodes
-      .createQueryBuilder('code')
-      .where('code.userId = :userId', { userId })
-      .getOne();
-
-    if (existing) {
-      return existing.code;
-    }
+  async createRestoreCode(userId: number): Promise<string> {
+    await this.dropRestoreCodes(userId);
 
     const code = randomUUID();
     await this.restoreCodes.save(this.restoreCodes.create({ userId, code }));
 
     return code;
+  }
+
+  /** Invalidates every reset link the user was sent. */
+  async dropRestoreCodes(userId: number): Promise<void> {
+    await this.restoreCodes.delete({ userId });
   }
 
   async sendRestoreCode(
@@ -249,7 +318,7 @@ export class AuthService {
     await this.mail.sendRestoreCode(email, username, code);
   }
 
-  /** Codes do not expire; they are removed once used. */
+  /** A code is usable for {@link RESTORE_CODE_TTL_MS}, and once. */
   async findRestoreCode(
     code: string,
   ): Promise<{ id: number; user: User } | null> {
@@ -263,13 +332,13 @@ export class AuthService {
       .leftJoinAndSelect('user.photo', 'photo')
       .leftJoinAndSelect('user.cover', 'cover')
       .where('code.code = :code', { code })
+      .andWhere('code.created_at > :since', {
+        since: new Date(Date.now() - RESTORE_CODE_TTL_MS),
+      })
+      .andWhere('user.deleted_at IS NULL')
       .getOne();
 
     return row?.user ? { id: row.id, user: row.user } : null;
-  }
-
-  async consumeRestoreCode(id: number): Promise<void> {
-    await this.restoreCodes.delete(id);
   }
 
   toRestoreUser(user: User): WireRestoreUser {

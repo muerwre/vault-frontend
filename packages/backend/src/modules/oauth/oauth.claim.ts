@@ -4,7 +4,8 @@ import type { OAuthProvider } from '@vault/common/constants';
 export const OAUTH_CLAIM_TYPE = 'oauth_claim';
 
 /**
- * The provider profile, signed into a short-lived token by `/process` and
+ * The provider profile, signed into a token by `/process` (expiring, see
+ * `CLAIM_TTL_SECONDS`) and
  * redeemed by `PUT /oauth` (login/register) or `POST /oauth` (attach).
  *
  * It travels through the browser, so it is signed rather than stored — but it

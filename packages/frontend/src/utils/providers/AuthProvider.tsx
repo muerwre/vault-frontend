@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { EMPTY_USER } from '~/constants/auth';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useOauthEventListeners } from '~/hooks/auth/useOauthEventListeners';
+import { useRegisterRedirect } from '~/hooks/auth/useRegisterRedirect';
 import { useRestorePasswordRedirect } from '~/hooks/auth/useRestorePasswordRedirect';
 import { useSessionCookie } from '~/hooks/auth/useSessionCookie';
 
@@ -26,6 +27,7 @@ export const AuthProvider: FC = observer(({ children }) => {
 
   useOauthEventListeners();
   useRestorePasswordRedirect();
+  useRegisterRedirect();
   useSessionCookie();
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

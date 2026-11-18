@@ -30,12 +30,16 @@ const Header: FC<HeaderProps> = observer(() => {
   const { showModal } = useModal();
   const { isUser, user, fetched } = useAuth();
   const { hasFlowUpdates, hasLabUpdates } = useFlow();
-  const { borisCommentedAt } = useUpdates();
+  const { borisCommentedAt, pendingRegistrations } = useUpdates();
   const { indicatorEnabled } = useNotifications();
 
   const onLogin = useCallback(() => {
     umami.track('login-button');
     showModal(Dialog.Login, {});
+  }, [showModal]);
+
+  const onRegister = useCallback(() => {
+    showModal(Dialog.RegisterRequest, {});
   }, [showModal]);
 
   const top = useScrollTop();
@@ -104,20 +108,27 @@ const Header: FC<HeaderProps> = observer(() => {
             </Anchor>
 
             {user.role === Role.Admin && (
-              <Anchor className={styles.item} href={URLS.ADMIN.BASE}>
+              <Anchor
+                className={classNames(styles.item, styles.admin, {
+                  [styles.has_dot]: pendingRegistrations > 0,
+                })}
+                href={URLS.ADMIN.BASE}
+              >
                 АДМ
               </Anchor>
             )}
           </Authorized>
         </nav>
 
-        {isUser && <UserButtonWithNotifications />}
+        <div className={styles.right_buttons}>
+          {isUser && <UserButtonWithNotifications />}
 
-        {!isUser && (
-          <Button className={styles.user_button} onClick={onLogin} round>
-            ВДОХ
-          </Button>
-        )}
+          {!isUser && (
+            <Button className={styles.user_button} onClick={onLogin} round>
+              Вдох
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );

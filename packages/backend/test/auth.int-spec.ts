@@ -269,18 +269,56 @@ describe('auth (integration)', () => {
       expect(body.user.description).toBe('only a description');
     });
 
-    it('requires the current password to change the email', async () => {
-      const { body } = await patch({ email: 'other@example.com' }).expect(400);
+    /** Password resets trust the email, so nothing may swap it unproven. */
+    it('refuses to change the email, even with the password', async () => {
+      const [before] = await db.query('SELECT email FROM user WHERE id = ?', [
+        userId,
+      ]);
 
-      expect(body.error).toBe('Incorrect_Data');
-      expect(body.errors).toEqual({ password: expect.any(String) });
+      const { body } = await patch({
+        email: `changed_${Date.now()}@example.com`,
+        password: PASSWORD,
+      }).expect(400);
+
+      expect(body.errors).toEqual({ email: expect.any(String) });
+
+      const [after] = await db.query('SELECT email FROM user WHERE id = ?', [
+        userId,
+      ]);
+      expect(after.email).toBe(before.email);
     });
 
-    it('changes the email when the password is supplied', async () => {
-      const email = `changed_${Date.now()}@example.com`;
-      const { body } = await patch({ email, password: PASSWORD }).expect(200);
+    it('accepts the current email sent back with other changes', async () => {
+      const [row] = await db.query('SELECT email FROM user WHERE id = ?', [
+        userId,
+      ]);
 
-      expect(body.user.email).toBe(email);
+      await patch({ email: row.email.toUpperCase(), description: 'x' }).expect(
+        200,
+      );
+    });
+
+    it('drops pending reset links when the password changes', async () => {
+      await http()
+        .post('/api/auth/restore')
+        .send({ field: username })
+        .expect(201);
+
+      await patch({
+        new_password: 'temporary-pass',
+        password: PASSWORD,
+      }).expect(200);
+
+      const rows = await db.query(
+        'SELECT id FROM restore_code WHERE userId = ?',
+        [userId],
+      );
+      expect(rows).toHaveLength(0);
+
+      await patch({
+        new_password: PASSWORD,
+        password: 'temporary-pass',
+      }).expect(200);
     });
 
     it('rejects a username already in use', async () => {
@@ -446,23 +484,48 @@ describe('auth (integration)', () => {
       ]);
     });
 
-    it('reuses one code per user until it is consumed', async () => {
+    it('issues a fresh code on each request, and only the latest works', async () => {
       await db.query('DELETE FROM restore_code WHERE userId = ?', [userId]);
 
       await http()
         .post('/api/auth/restore')
         .send({ field: username })
         .expect(201);
+      const [first] = await db.query(
+        'SELECT code FROM restore_code WHERE userId = ?',
+        [userId],
+      );
+
       await http()
         .post('/api/auth/restore')
         .send({ field: username })
         .expect(201);
-
       const rows = await db.query(
         'SELECT code FROM restore_code WHERE userId = ?',
         [userId],
       );
+
       expect(rows).toHaveLength(1);
+      expect(rows[0].code).not.toBe(first.code);
+      await http().get(`/api/auth/restore/${first.code}`).expect(404);
+      await http().get(`/api/auth/restore/${rows[0].code}`).expect(201);
+    });
+
+    it('404s a code older than 72 hours', async () => {
+      const [row] = await db.query(
+        'SELECT code FROM restore_code WHERE userId = ?',
+        [userId],
+      );
+      await db.query(
+        'UPDATE restore_code SET created_at = NOW() - INTERVAL 73 HOUR WHERE userId = ?',
+        [userId],
+      );
+
+      await http().get(`/api/auth/restore/${row.code}`).expect(404);
+      await http()
+        .put(`/api/auth/restore/${row.code}`)
+        .send({ password: 'whatever-long' })
+        .expect(404);
     });
 
     it('accepts an email as well as a username', async () => {

@@ -11,6 +11,7 @@ import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { API } from '~/constants/api';
 import { Role } from '~/constants/auth';
 import { URLS } from '~/constants/urls';
+import { AdminRegistrations } from '~/containers/admin/AdminRegistrations';
 import { IUser } from '~/types/auth';
 import { getPrettyDate } from '~/utils/dom';
 import { isUserActive } from '~/utils/user';
@@ -40,7 +41,10 @@ const origins = (user: ApiAdminUser) =>
 const lastVisit = (user: IUser) =>
   neverSeen(user.last_seen) ? 'не заходил' : getPrettyDate(user.last_seen);
 
-/** Every user, most recently seen first, as the backend orders them. */
+/**
+ * Every user, most recently seen first, as the backend orders them. Pending
+ * registrations and unused invites come first.
+ */
 const AdminUsers: FC = () => {
   const { data } = useSWR(API.ADMIN.USERS, apiGetAdminUsers);
 
@@ -54,6 +58,8 @@ const AdminUsers: FC = () => {
 
   return (
     <div className={styles.wrap}>
+      <AdminRegistrations />
+
       <header className={styles.header}>
         <h2 className={styles.title}>Пользователи</h2>
         <span className={styles.count}>{data.users.length}</span>

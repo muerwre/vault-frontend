@@ -8,13 +8,30 @@ import {
   apiGetSocials,
   apiLoginWithSocial,
 } from '~/api/auth';
+import { apiGetFeatures } from '~/api/registration';
 import { API } from '~/constants/api';
+import { ERRORS } from '~/constants/errors';
 import { Dialog } from '~/constants/modal';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useModal } from '~/hooks/modal/useModal';
 import { OAuthProvider } from '~/types/auth';
 import { showErrorToast } from '~/utils/errors/showToast';
 import { path } from '~/utils/ramda';
+import { showToastError } from '~/utils/toast';
+
+/** The provider popup this page opened; only its messages are trusted. */
+let oauthPopup: Window | null = null;
+
+/**
+ * Whether a `message` event came from the provider popup this page opened.
+ * Anything else — another site, a frame, a window the user opened by hand —
+ * could be posting a claim of its own, which would link the attacker's
+ * account to whoever is signed in here.
+ */
+export const isFromOauthPopup = (event: MessageEvent): boolean =>
+  event.origin === window.location.origin &&
+  oauthPopup !== null &&
+  event.source === oauthPopup;
 
 export const useOAuth = () => {
   const { isUser, setToken } = useAuth();
@@ -30,7 +47,11 @@ export const useOAuth = () => {
   });
 
   const openOauthWindow = useCallback((provider: OAuthProvider) => {
-    window.open(API.USER.OAUTH_WINDOW(provider), '', 'width=600,height=400');
+    oauthPopup = window.open(
+      API.USER.OAUTH_WINDOW(provider),
+      '',
+      'width=600,height=400',
+    );
   }, []);
 
   const createSocialAccount = useCallback(
@@ -50,22 +71,27 @@ export const useOAuth = () => {
           return;
         }
 
+        // Unknown account: users register by email, not through a provider.
+        if (
+          path(['response', 'data', 'error'], error) ===
+          ERRORS.OAUTH_ACCOUNT_NOT_FOUND
+        ) {
+          const { registration } = await apiGetFeatures().catch(() => ({
+            registration: false,
+          }));
+
+          showToastError(
+            registration
+              ? 'Аккаунт не найден, зарегистрируйтесь'
+              : 'Аккаунт не найден',
+          );
+          return;
+        }
+
         showErrorToast(error);
       }
     },
     [showModal, hideModal, setToken],
-  );
-
-  const loginWithSocial = useCallback(
-    (token: string | undefined) => {
-      if (!token) {
-        return;
-      }
-
-      setToken(token);
-      hideModal();
-    },
-    [setToken, hideModal],
   );
 
   const attachAccount = useCallback(
@@ -110,7 +136,6 @@ export const useOAuth = () => {
     hasTelegram,
     showTelegramModal,
     openOauthWindow,
-    loginWithSocial,
     createSocialAccount,
     attachAccount,
     dropAccount,

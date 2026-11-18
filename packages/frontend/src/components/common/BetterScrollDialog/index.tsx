@@ -1,10 +1,18 @@
-import { FC, MouseEventHandler, ReactChild, useEffect, useRef } from 'react';
+import {
+  FC,
+  MouseEventHandler,
+  ReactChild,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react';
 
 import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
 
 import { Icon } from '~/components/common/Icon';
 import { LoaderCircle } from '~/components/common/LoaderCircle';
 
+import { DialogBackdropContext } from './context';
 import styles from './styles.module.scss';
 
 interface Props {
@@ -35,6 +43,8 @@ const BetterScrollDialog: FC<Props> = ({
   overlay = null,
 }) => {
   const ref = useRef(null);
+  const sharedBackdrop = useContext(DialogBackdropContext);
+  const shownBackdrop = backdrop ?? sharedBackdrop;
 
   useEffect(() => {
     disableBodyScroll(ref.current, { reserveScrollBarGap: true });
@@ -44,7 +54,7 @@ const BetterScrollDialog: FC<Props> = ({
 
   return (
     <div className={styles.wrap} ref={ref}>
-      {backdrop && <div className={styles.backdrop}>{backdrop}</div>}
+      {shownBackdrop && <div className={styles.backdrop}>{shownBackdrop}</div>}
 
       <div className={styles.container} style={{ maxWidth: width }}>
         {onClose && (

@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 
 import { EventMessageType } from '~/constants/events';
 import { useAuth } from '~/hooks/auth/useAuth';
-import { useOAuth } from '~/hooks/auth/useOAuth';
+import { isFromOauthPopup, useOAuth } from '~/hooks/auth/useOAuth';
 import { useModal } from '~/hooks/modal/useModal';
 import { includes, path, values } from '~/utils/ramda';
 import { showToastError } from '~/utils/toast';
 
 /** reacts to events passed by window.postMessage */
 export const useOauthEventListeners = () => {
-  const { loginWithSocial, createSocialAccount, attachAccount } = useOAuth();
+  const { createSocialAccount, attachAccount } = useOAuth();
   const { showModal } = useModal();
   const { isUser } = useAuth();
 
@@ -21,10 +21,11 @@ export const useOauthEventListeners = () => {
         return;
       }
 
+      if (!isFromOauthPopup(event)) {
+        return;
+      }
+
       switch (type) {
-        case EventMessageType.OAuthLogin:
-          loginWithSocial(path(['data', 'payload', 'token'], event));
-          break;
         case EventMessageType.OAuthProcessed:
           if (isUser) {
             void attachAccount(path(['data', 'payload', 'token'], event));
@@ -45,5 +46,5 @@ export const useOauthEventListeners = () => {
 
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
-  }, [attachAccount, createSocialAccount, loginWithSocial, isUser, showModal]);
+  }, [attachAccount, createSocialAccount, isUser, showModal]);
 };

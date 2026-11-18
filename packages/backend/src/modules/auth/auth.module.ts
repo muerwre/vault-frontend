@@ -3,7 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { File } from '../../entities/file.entity';
 import { Node } from '../../entities/node.entity';
-import { RestoreCode } from '../../entities/social.entity';
+import { RegistrationRequest } from '../../entities/registration-request.entity';
+import { RestoreCode, Social } from '../../entities/social.entity';
 import { User } from '../../entities/user.entity';
 import { NodeView } from '../../entities/views.entity';
 import { MailModule } from '../mail/mail.module';
@@ -31,7 +32,15 @@ import { PasswordService } from './password.service';
 @Global()
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, File, Node, NodeView, RestoreCode]),
+    TypeOrmModule.forFeature([
+      User,
+      File,
+      Node,
+      NodeView,
+      RestoreCode,
+      Social,
+      RegistrationRequest,
+    ]),
     MailModule,
   ],
   controllers: [AuthController],

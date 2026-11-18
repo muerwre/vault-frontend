@@ -14,6 +14,7 @@ import {
   UserNotificationProcessed,
   UserNotificationSentOrphan,
 } from './notification.entity';
+import { RegistrationRequest } from './registration-request.entity';
 import { RestoreCode, Social } from './social.entity';
 import { Tag } from './tag.entity';
 import { Token } from './token.entity';
@@ -30,6 +31,7 @@ export * from './message.entity';
 export * from './node-extras.entity';
 export * from './node.entity';
 export * from './notification.entity';
+export * from './registration-request.entity';
 export * from './social.entity';
 export * from './tag.entity';
 export * from './token.entity';
@@ -72,4 +74,6 @@ export const ENTITIES = [
   ExternalMedia,
   ExternalMediaRef,
   MediaJob,
+  // registration (utf8mb4, no FKs)
+  RegistrationRequest,
 ];

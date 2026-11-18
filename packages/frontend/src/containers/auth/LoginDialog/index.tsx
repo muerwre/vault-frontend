@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef } from 'react';
+import { FC, useCallback } from 'react';
 
 import { BetterScrollDialog } from '~/components/common/BetterScrollDialog';
 import { DialogTitle } from '~/components/common/DialogTitle';
@@ -8,9 +8,9 @@ import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
 import { Dialog } from '~/constants/modal';
 import { LoginDialogButtons } from '~/containers/auth/LoginDialog/components/LoginDialogButtons';
-import { LoginStaticScene } from '~/containers/auth/LoginDialog/components/LoginStaticScene';
 import { useCloseOnEscape } from '~/hooks';
 import { useAuth } from '~/hooks/auth/useAuth';
+import { useFeatures } from '~/hooks/auth/useFeatures';
 import { useLoginForm } from '~/hooks/auth/useLoginForm';
 import { useOAuth } from '~/hooks/auth/useOAuth';
 import { useShowModal } from '~/hooks/modal/useShowModal';
@@ -21,10 +21,6 @@ import styles from './styles.module.scss';
 type LoginDialogProps = DialogComponentProps & {};
 
 const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
-  const feature = useRef<'clouds' | 'nowhere'>(
-    Math.random() <= 0.5 ? 'clouds' : 'nowhere',
-  ).current;
-
   useCloseOnEscape(onRequestClose);
 
   const { login } = useAuth();
@@ -33,12 +29,16 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
   const onRestoreRequest = useCallback(() => {
     showRestoreDialog({});
   }, [showRestoreDialog]);
+  // Shared with the header through the SWR cache, so usually known already.
+  const { features } = useFeatures();
+  const showRegisterDialog = useShowModal(Dialog.RegisterRequest);
+  const onRegister = useCallback(() => {
+    showRegisterDialog({});
+  }, [showRegisterDialog]);
   const showGoogleDisabledDialog = useShowModal(Dialog.GoogleLoginDisabled);
   const onGoogleLogin = useCallback(() => {
     showGoogleDisabledDialog({});
   }, [showGoogleDisabledDialog]);
-
-  const backdrop = <LoginStaticScene scene={feature} />;
 
   const { values, errors, handleSubmit, handleChange } = useLoginForm(
     login,
@@ -54,9 +54,9 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
           <LoginDialogButtons
             openOauthWindow={openOauthWindow}
             onGoogleLogin={onGoogleLogin}
+            onRegister={features.registration ? onRegister : undefined}
           />
         }
-        backdrop={backdrop}
       >
         <Padder>
           <div className={styles.wrap}>

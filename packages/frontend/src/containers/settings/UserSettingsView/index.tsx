@@ -82,11 +82,14 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
             error={errors.username}
           />
 
+          {/* Password resets trust it, so it cannot be changed here. */}
           <InputText
             value={values.email}
-            handler={handleChange('email')}
+            handler={() => {}}
             title="E-mail"
             error={errors.email}
+            readOnly
+            disabled
           />
 
           <InputText

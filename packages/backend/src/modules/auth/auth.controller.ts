@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Ip,
   Param,
   Patch,
   Post,
@@ -22,10 +23,16 @@ import {
   VaultException,
   VaultValidationException,
 } from '../../globals/exceptions';
+import { RateLimiter } from '../../globals/rate-limiter';
 import type { WireSelf } from '../../wire/serialize';
 
 import { AuthRequiredGuard, Uid, WithUser, WithUserGuard } from './auth.guards';
-import { AuthService, type WireRestoreUser } from './auth.service';
+import {
+  AuthService,
+  type WireRestoreUser,
+  type WireUpdates,
+} from './auth.service';
+import { isSameEmail } from './email';
 import { PasswordService } from './password.service';
 
 interface LoginBody {
@@ -51,8 +58,44 @@ const MAX_FULLNAME_LENGTH = 64;
 const MAX_PASSWORD_LENGTH = 64;
 const MAX_DESCRIPTION_LENGTH = 512;
 
+const MINUTE_MS = 60 * 1000;
+
+/** Failed logins allowed per client and per account. */
+export const LOGIN_FAILURES_PER_IP = 20;
+export const LOGIN_FAILURES_PER_ACCOUNT = 10;
+const LOGIN_WINDOW_MS = 15 * MINUTE_MS;
+
+/** Reset requests allowed per client and per account. */
+export const RESTORES_PER_IP = 20;
+export const RESTORES_PER_ACCOUNT = 5;
+const RESTORE_WINDOW_MS = 60 * MINUTE_MS;
+
+const tooManyAttempts = () =>
+  new VaultException(
+    ERROR_CODES.TooManyRequests,
+    HttpStatus.TOO_MANY_REQUESTS,
+    'Слишком много попыток, попробуйте позже',
+  );
+
 @Controller('auth')
 export class AuthController {
+  private readonly loginsByIp = new RateLimiter(
+    LOGIN_FAILURES_PER_IP,
+    LOGIN_WINDOW_MS,
+  );
+  private readonly loginsByName = new RateLimiter(
+    LOGIN_FAILURES_PER_ACCOUNT,
+    LOGIN_WINDOW_MS,
+  );
+  private readonly restoresByIp = new RateLimiter(
+    RESTORES_PER_IP,
+    RESTORE_WINDOW_MS,
+  );
+  private readonly restoresByAccount = new RateLimiter(
+    RESTORES_PER_ACCOUNT,
+    RESTORE_WINDOW_MS,
+  );
+
   constructor(
     private readonly auth: AuthService,
     private readonly passwords: PasswordService,
@@ -66,13 +109,22 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(
     @Body() body: LoginBody,
+    @Ip() ip = '',
   ): Promise<{ user: WireSelf; token: string }> {
-    const user = await this.auth.authenticate(
-      body?.username ?? '',
-      body?.password ?? '',
-    );
+    const username = String(body?.username ?? '');
+    const account = username.toLowerCase();
+
+    if (this.loginsByIp.isLimited(ip) || this.loginsByName.isLimited(account)) {
+      throw tooManyAttempts();
+    }
+
+    const user = await this.auth.authenticate(username, body?.password ?? '');
 
     if (!user) {
+      // Only failures count, so a user who signs in often is never slowed.
+      this.loginsByIp.hit(ip);
+      this.loginsByName.hit(account);
+
       throw new VaultException(
         ERROR_CODES.IncorrectData,
         HttpStatus.BAD_REQUEST,
@@ -111,14 +163,14 @@ export class AuthController {
   }
 
   @Get('updates')
-  @UseGuards(AuthRequiredGuard)
-  getUpdates(): Promise<{ boris: { commented_at: string } }> {
-    return this.auth.getUpdates();
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  getUpdates(@WithUser() user: User): Promise<WireUpdates> {
+    return this.auth.getUpdates(user);
   }
 
   /**
-   * Partial profile update. Changing username, email or password requires the
-   * current password. Validation failures answer the `errors` envelope keyed by
+   * Partial profile update. Changing username or password requires the current
+   * password; the email cannot be changed at all. Validation failures answer the `errors` envelope keyed by
    * the request's own field names.
    */
   @Patch()
@@ -132,7 +184,6 @@ export class AuthController {
 
     const wantsSensitiveChange =
       data.new_password !== undefined ||
-      (data.email !== undefined && data.email !== user.email) ||
       (data.username !== undefined && data.username !== user.username);
 
     if (
@@ -149,17 +200,16 @@ export class AuthController {
         !USERNAME_REGEX.test(data.username)
       ) {
         errors.username = 'Некорректное имя пользователя';
-      } else if (await this.auth.findByUsername(data.username)) {
+      } else if (await this.auth.isUsernameTaken(data.username)) {
         errors.username = 'Это имя уже занято, выберите другое';
       }
     }
 
-    if (data.email !== undefined && data.email !== user.email) {
-      if (!data.email.includes('@') || data.email.length < 2) {
-        errors.email = 'Не похоже на email';
-      } else if (await this.auth.findByEmail(data.email)) {
-        errors.email = 'Этот email уже используется, выберите другой';
-      }
+    // The email cannot be changed here: nothing would prove the new address
+    // belongs to the user, and password resets trust it. Sending the current
+    // one back is fine.
+    if (data.email !== undefined && !isSameEmail(data.email, user.email)) {
+      errors.email = 'Почту нельзя изменить';
     }
 
     if (data.new_password !== undefined) {
@@ -205,10 +255,6 @@ export class AuthController {
       user.fullname = data.fullname;
     }
 
-    if (data.email !== undefined) {
-      user.email = data.email;
-    }
-
     if (data.username !== undefined) {
       user.username = data.username;
     }
@@ -217,6 +263,8 @@ export class AuthController {
 
     if (data.new_password !== undefined) {
       await this.auth.setPassword(user.id, data.new_password);
+      // A reset link mailed earlier must not undo the change.
+      await this.auth.dropRestoreCodes(user.id);
     }
 
     return this.getSelf(user.id);
@@ -269,7 +317,15 @@ export class AuthController {
    */
   @Post('restore')
   @HttpCode(HttpStatus.CREATED)
-  async createRestoreCode(@Body() body: { field?: string }): Promise<void> {
+  async createRestoreCode(
+    @Body() body: { field?: string },
+    @Ip() ip = '',
+  ): Promise<void> {
+    // Before the lookup, so probing for accounts is slowed down too.
+    if (!this.restoresByIp.take(ip)) {
+      throw tooManyAttempts();
+    }
+
     const field = body?.field ?? '';
     const user = field ? await this.auth.findByUsernameOrEmail(field) : null;
 
@@ -277,9 +333,14 @@ export class AuthController {
       throw new VaultException(ERROR_CODES.UserNotFound, HttpStatus.NOT_FOUND);
     }
 
-    const code = await this.auth.findOrCreateRestoreCode(user.id);
+    // Each request mails a new link; this keeps someone from flooding a mailbox.
+    if (!this.restoresByAccount.take(String(user.id))) {
+      throw tooManyAttempts();
+    }
 
-    await this.auth.sendRestoreCode(user.email, user.username, code);
+    const code = await this.auth.createRestoreCode(user.id);
+
+    await this.auth.sendRestoreCode(user.email ?? '', user.username, code);
   }
 
   /** Answers 201, not 200 — the client relies on the existing status. */
@@ -322,7 +383,7 @@ export class AuthController {
     }
 
     await this.auth.setPassword(found.user.id, password);
-    await this.auth.consumeRestoreCode(found.id);
+    await this.auth.dropRestoreCodes(found.user.id);
 
     const self = await this.auth.getSelf(found.user.id);
 

@@ -4,8 +4,18 @@ import { CONFIG } from '~/utils/config';
 
 export const API = {
   BASE: CONFIG.apiHost,
+  FEATURES: '/features',
+  REGISTRATION: {
+    REQUEST: '/auth/register',
+    CODE: (code: string) => `/auth/register/${code}`,
+  },
   ADMIN: {
     USERS: '/admin/users',
+    REGISTRATIONS: '/admin/registrations',
+    REGISTRATION_ACTION: (
+      id: number,
+      action: 'approve' | 'reject' | 'resend',
+    ) => `/admin/registrations/${id}/${action}`,
     MEDIA_SUMMARY: '/admin/media/summary',
     MEDIA_JOBS: '/admin/media/jobs',
     MEDIA_JOB_RETRY: (id: number) => `/admin/media/jobs/${id}/retry`,

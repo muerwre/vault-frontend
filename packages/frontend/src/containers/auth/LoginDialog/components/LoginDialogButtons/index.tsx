@@ -10,11 +10,23 @@ import styles from './styles.module.scss';
 interface Props {
   openOauthWindow: (provider: OAuthProvider) => void;
   onGoogleLogin: () => void;
+  /** Rendered only when given. */
+  onRegister?: () => void;
 }
 
-const LoginDialogButtons: FC<Props> = ({ openOauthWindow, onGoogleLogin }) => (
+const LoginDialogButtons: FC<Props> = ({
+  openOauthWindow,
+  onGoogleLogin,
+  onRegister,
+}) => (
   <Group className={styles.footer}>
     <Button>Войти</Button>
+
+    {onRegister && (
+      <Button color="outline" type="button" onClick={onRegister}>
+        Регистрация
+      </Button>
+    )}
 
     <Grid columns="repeat(2, 1fr)">
       <Button
