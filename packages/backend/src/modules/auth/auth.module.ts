@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { File } from '../../entities/file.entity';
 import { Node } from '../../entities/node.entity';
 import { RestoreCode } from '../../entities/social.entity';
+import { UserProfile } from '../../entities/user-profile.entity';
 import { User } from '../../entities/user.entity';
 import { NodeView } from '../../entities/views.entity';
 import { MailModule } from '../mail/mail.module';
@@ -31,7 +32,14 @@ import { PasswordService } from './password.service';
 @Global()
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, File, Node, NodeView, RestoreCode]),
+    TypeOrmModule.forFeature([
+      User,
+      UserProfile,
+      File,
+      Node,
+      NodeView,
+      RestoreCode,
+    ]),
     MailModule,
   ],
   controllers: [AuthController],

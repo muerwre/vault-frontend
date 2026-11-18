@@ -6,7 +6,7 @@ import {
   FormikProvider,
   useFormikContext,
 } from 'formik';
-import { Asserts, object, string } from 'yup';
+import { array, Asserts, object, string } from 'yup';
 
 import { ERRORS } from '~/constants/errors';
 import { getRandomPhrase } from '~/constants/phrases';
@@ -22,6 +22,7 @@ const validationSchema = object({
   fullname: string().default(''),
   newPassword: string().optional(),
   description: string().default(''),
+  links: array(string().default('')).default([]),
   email: string().default('').email(ERRORS.NOT_AN_EMAIL),
   password: string().optional(),
 });
@@ -47,7 +48,12 @@ export const useSettingsForm = (
 
         const result = await submitter(fields);
 
-        setValues({ ...result, password: '', newPassword: '' });
+        setValues({
+          ...result,
+          links: result.links ?? [],
+          password: '',
+          newPassword: '',
+        });
         showToastSuccess(getRandomPhrase('SUCCESS'));
       } catch (error) {
         showErrorToast(error);
@@ -73,7 +79,7 @@ export const SettingsProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   const { save } = usePatchUser();
 
   const formik = useSettingsForm(
-    { ...user, password: '', newPassword: '' },
+    { ...user, links: user.links ?? [], password: '', newPassword: '' },
     save,
   );
 

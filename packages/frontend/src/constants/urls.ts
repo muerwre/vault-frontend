@@ -13,7 +13,8 @@ export const URLS = {
     IMAGE: '/examples/image',
   },
   NODE_URL: (id: INode['id'] | string) => `/post${id}`,
-  PROFILE_PAGE: (username: string) => `/profile/${username}`,
+  /** Served by `pages/profile/[username]` through a rewrite. */
+  PROFILE_PAGE: (username: string) => `/~${encodeURIComponent(username)}`,
   SETTINGS: {
     BASE: '/settings',
     NOTES: '/settings/notes',

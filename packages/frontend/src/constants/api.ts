@@ -21,6 +21,7 @@ export const API = {
     UPDATE_PHOTO: '/auth/photo',
     UPDATE_COVER: '/auth/photo',
     PROFILE: (username: string) => `/users/${username}`,
+    NODES: (username: string) => `/users/${username}/nodes`,
     MESSAGES: (username: string) => `/users/${username}/messages`,
     MESSAGE_SEND: (username: string) => `/users/${username}/messages`,
     MESSAGE_DELETE: (username: string, id: number) =>

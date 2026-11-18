@@ -3,6 +3,7 @@ import type { INodeBlock, INodeFlow } from '@vault/common/types';
 import { isYoutubeThumbCacheEnabled } from '../config/env';
 import type { File } from '../entities/file.entity';
 import type { Node } from '../entities/node.entity';
+import type { UserProfile } from '../entities/user-profile.entity';
 import type { User } from '../entities/user.entity';
 import { localizeYoutubeThumb } from '../modules/upload/upload.paths';
 
@@ -284,6 +285,15 @@ export const toWireShallowFile = (
     : null;
 
 /**
+ * Profile links. Anything that is not a non-empty string is dropped, so a
+ * malformed blob degrades to fewer links rather than a broken page.
+ */
+export const toWireLinks = (links: unknown): string[] =>
+  Array.isArray(links)
+    ? links.filter((link): link is string => typeof link === 'string' && !!link)
+    : [];
+
+/**
  * Public profile. Narrower than the user embedded in nodes: it carries
  * `created_at` but no `last_seen`, and its files are the shallow shape.
  */
@@ -294,17 +304,31 @@ export interface WireProfile {
   role: string;
   fullname: string;
   description: string;
+  about: string;
+  about_display: string;
+  links: string[];
   cover: WireShallowFile | null;
   photo: WireShallowFile | null;
 }
 
-export const toWireProfile = (user: User): WireProfile => ({
+/** Profile page fields; a missing row serialises as an empty profile. */
+const toWireProfileExtras = (profile: UserProfile | null | undefined) => ({
+  about: toWireString(profile?.about),
+  about_display: toWireString(profile?.aboutDisplay),
+  links: toWireLinks(profile?.links),
+});
+
+export const toWireProfile = (
+  user: User,
+  profile?: UserProfile | null,
+): WireProfile => ({
   id: user.id,
   created_at: toWireDate(user.createdAt),
   username: toWireString(user.username),
   role: toWireString(user.role),
   fullname: toWireString(user.fullname),
   description: toWireString(user.description),
+  ...toWireProfileExtras(profile),
   cover: toWireShallowFile(user.cover),
   photo: toWireShallowFile(user.photo),
 });
@@ -321,6 +345,9 @@ export interface WireSelf {
   role: string;
   fullname: string;
   description: string;
+  about: string;
+  about_display: string;
+  links: string[];
   last_seen: string;
   /** Derived from this user's view of the Boris node; there is no such column. */
   last_seen_boris: string;
@@ -331,6 +358,7 @@ export interface WireSelf {
 export const toWireSelf = (
   user: User,
   lastSeenBoris: Date | null,
+  profile?: UserProfile | null,
 ): WireSelf => ({
   id: user.id,
   username: toWireString(user.username),
@@ -338,6 +366,7 @@ export const toWireSelf = (
   role: toWireString(user.role),
   fullname: toWireString(user.fullname),
   description: toWireString(user.description),
+  ...toWireProfileExtras(profile),
   last_seen: toWireDate(user.lastSeen),
   last_seen_boris: toWireDate(lastSeenBoris),
   photo: toWireShallowFile(user.photo),

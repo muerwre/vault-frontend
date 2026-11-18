@@ -344,11 +344,14 @@ describe('read endpoints (integration)', () => {
       const { body } = await http().get('/api/users/muro').expect(200);
 
       expect(Object.keys(body.user).sort()).toEqual([
+        'about',
+        'about_display',
         'cover',
         'created_at',
         'description',
         'fullname',
         'id',
+        'links',
         'photo',
         'role',
         'username',
@@ -414,6 +417,23 @@ describe('read endpoints (integration)', () => {
         .expect(200);
 
       expect(body.nodes.length).toBeGreaterThan(0);
+    });
+
+    it('honours a limit and ignores one out of range', async () => {
+      const small = await http()
+        .get('/api/users/muro/nodes')
+        .query({ limit: 2 })
+        .expect(200);
+
+      expect(small.body.nodes).toHaveLength(2);
+
+      const full = await http().get('/api/users/muro/nodes').expect(200);
+      const huge = await http()
+        .get('/api/users/muro/nodes')
+        .query({ limit: 100000 })
+        .expect(200);
+
+      expect(huge.body.nodes).toHaveLength(full.body.nodes.length);
     });
 
     it('404s an unknown username', async () => {

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 
 import { Filler } from '~/components/common/Filler';
 import { Group } from '~/components/common/Group';
@@ -19,8 +19,25 @@ interface UserSettingsViewProps {}
 
 const AVATAR_SIZE = 160;
 
+/** Mirrors the backend limit on profile links. */
+const MAX_PROFILE_LINKS = 4;
+
 const UserSettingsView: FC<UserSettingsViewProps> = () => {
-  const { values, handleChange, errors } = useSettings();
+  const { values, handleChange, errors, setFieldValue } = useSettings();
+
+  const linkSlots = Array.from(
+    { length: MAX_PROFILE_LINKS },
+    (_, i) => values.links?.[i] ?? '',
+  );
+
+  const setLink = useCallback(
+    (index: number) => (value: string) =>
+      setFieldValue(
+        'links',
+        linkSlots.map((it, i) => (i === index ? value : it)),
+      ),
+    [linkSlots, setFieldValue],
+  );
   const { isPhone } = useWindowSize();
   const { user } = useUser();
   const { updatePhoto, deletePhoto } = usePatchUser();
@@ -56,6 +73,30 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
           </Group>
         </Zone>
       </Group>
+
+      <Superpower>
+        <Zone title="Ссылки">
+          <Group>
+            {linkSlots.map((link, index) => (
+              <InputText
+                key={index}
+                value={link}
+                handler={setLink(index)}
+                placeholder="https://"
+                type="url"
+              />
+            ))}
+
+            {typeof errors.links === 'string' && (
+              <div className={styles.error}>{errors.links}</div>
+            )}
+
+            <div className={styles.small}>
+              Будут показаны на странице вашего профиля.
+            </div>
+          </Group>
+        </Zone>
+      </Superpower>
 
       <Superpower>
         <Zone title="Обложка">

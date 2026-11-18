@@ -72,6 +72,8 @@ describe('auth (integration)', () => {
 
       expect(typeof body.token).toBe('string');
       expect(Object.keys(body.user).sort()).toEqual([
+        'about',
+        'about_display',
         'cover',
         'description',
         'email',
@@ -79,6 +81,7 @@ describe('auth (integration)', () => {
         'id',
         'last_seen',
         'last_seen_boris',
+        'links',
         'photo',
         'role',
         'username',
@@ -314,6 +317,82 @@ describe('auth (integration)', () => {
         await bcrypt.hash(PASSWORD, 4),
         userId,
       ]);
+    });
+
+    it('reads an unsaved profile page as empty', async () => {
+      const { body } = await http().get(`/api/users/${username}`).expect(200);
+
+      expect(body.user.about).toBe('');
+      expect(body.user.about_display).toBe('');
+      expect(body.user.links).toEqual([]);
+    });
+
+    it('saves about, its size and links into the profile', async () => {
+      const links = ['https://vk.com/id1', 'https://t.me/someone'];
+      const { body } = await patch({
+        about: '# hello',
+        about_display: 'quadro',
+        links: [...links, '  '],
+      }).expect(200);
+
+      expect(body.user.about).toBe('# hello');
+      expect(body.user.about_display).toBe('quadro');
+      expect(body.user.links).toEqual(links);
+
+      const profile = await http().get(`/api/users/${username}`).expect(200);
+
+      expect(profile.body.user.about).toBe('# hello');
+      expect(profile.body.user.about_display).toBe('quadro');
+      expect(profile.body.user.links).toEqual(links);
+    });
+
+    it('updates one profile field without touching the others', async () => {
+      const { body } = await patch({ about_display: 'single' }).expect(200);
+
+      expect(body.user.about).toBe('# hello');
+      expect(body.user.about_display).toBe('single');
+      expect(body.user.links).toHaveLength(2);
+    });
+
+    it('keeps the profile when only user fields change', async () => {
+      const { body } = await patch({ fullname: 'Still Linked' }).expect(200);
+
+      expect(body.user.about).toBe('# hello');
+      expect(body.user.links).toHaveLength(2);
+    });
+
+    it('clears links with an empty list', async () => {
+      const { body } = await patch({ links: [] }).expect(200);
+
+      expect(body.user.links).toEqual([]);
+    });
+
+    it('rejects more than four links and non-http links', async () => {
+      const tooMany = await patch({
+        links: ['a', 'b', 'c', 'd', 'e'].map((x) => `https://${x}.com`),
+      }).expect(400);
+
+      expect(tooMany.body.errors).toEqual({ links: expect.any(String) });
+
+      const scheme = await patch({ links: ['javascript:alert(1)'] }).expect(
+        400,
+      );
+
+      expect(scheme.body.errors).toEqual({ links: expect.any(String) });
+    });
+
+    it('rejects an unknown about size', async () => {
+      const { body } = await patch({ about_display: 'huge' }).expect(400);
+
+      expect(body.errors).toEqual({ about_display: expect.any(String) });
+    });
+
+    it('rejects an overlong or non-string about', async () => {
+      const long = await patch({ about: 'x'.repeat(9000) }).expect(400);
+      expect(long.body.errors).toEqual({ about: expect.any(String) });
+
+      const wrong = await patch({ about: 42 }).expect(400);
+      expect(wrong.body.errors).toEqual({ about: expect.any(String) });
     });
 
     it('requires auth', async () => {

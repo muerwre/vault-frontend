@@ -10,6 +10,8 @@ import {
   ApiAuthGetUpdatesResult,
   ApiAuthGetUserProfileRequest,
   ApiAuthGetUserProfileResult,
+  ApiGetUserNodesRequest,
+  ApiGetUserNodesResult,
   ApiAuthGetUserResult,
   ApiCheckRestoreCodeRequest,
   ApiCheckRestoreCodeResult,
@@ -39,6 +41,17 @@ export const apiAuthGetUserProfile = ({
   username,
 }: ApiAuthGetUserProfileRequest) =>
   api.get<ApiAuthGetUserProfileResult>(API.USER.PROFILE(username)).then(unwrap);
+
+export const apiGetUserNodes = ({
+  username,
+  after,
+  limit,
+}: ApiGetUserNodesRequest) =>
+  api
+    .get<ApiGetUserNodesResult>(API.USER.NODES(username), {
+      params: { after, limit },
+    })
+    .then(unwrap);
 
 export const apiAuthGetUpdates = ({
   exclude_dialogs,
