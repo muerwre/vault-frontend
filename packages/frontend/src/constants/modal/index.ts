@@ -36,6 +36,18 @@ export enum Dialog {
   GoogleLoginDisabled = 'GoogleLoginDisabled',
 }
 
+/** Sign-in and signup dialogs: they share the login scene while switching. */
+export const AUTH_DIALOGS: readonly Dialog[] = [
+  Dialog.Login,
+  Dialog.Register,
+  Dialog.RegisterRequest,
+  Dialog.RegisterComplete,
+  Dialog.LoginSocialRegister,
+  Dialog.RestoreRequest,
+  Dialog.RestorePassword,
+  Dialog.GoogleLoginDisabled,
+];
+
 export const DIALOG_CONTENT = {
   [Dialog.Login]: LoginDialog,
   [Dialog.Register]: LoginDialog, // TODO: make inviting dialog
