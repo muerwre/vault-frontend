@@ -112,6 +112,25 @@ export const publicUrl = (path = ''): string =>
 export const getFrontendResetUrl = (): string =>
   process.env.FRONTEND_RESET_URL ?? '/restore/';
 
+export interface RegistrationConfig {
+  /** Guests may ask for an account by email. */
+  enabled: boolean;
+  /** Each request waits for an admin before the link is mailed. */
+  approval: boolean;
+  /** Unknown OAuth accounts may create a user; email registration ignores it. */
+  social: boolean;
+}
+
+/**
+ * The configured switches, all off by default. What is actually allowed also
+ * depends on mail working — see the features service.
+ */
+export const getRegistrationConfig = (): RegistrationConfig => ({
+  enabled: process.env.REGISTRATION_ENABLED === 'true',
+  approval: process.env.REGISTRATION_APPROVAL === 'true',
+  social: process.env.SOCIAL_REGISTRATION_ENABLED === 'true',
+});
+
 export interface OAuthProviderConfig {
   clientId: string;
   clientSecret: string;

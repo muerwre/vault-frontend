@@ -29,6 +29,9 @@ export const ERRORS = {
   OAUTH_CODE_IS_EMPTY: 'OAuth_Code_Is_Empty',
   OAUTH_UNKNOWN_PROVIDER: 'OAuth_Unknown_Provider',
   OAUTH_INVALID_DATA: 'OAuth_Invalid_Data',
+  OAUTH_ACCOUNT_NOT_FOUND: 'OAuth_Account_Not_Found',
+  REGISTRATION_CLOSED: 'Registration_Closed',
+  TOO_MANY_REQUESTS: 'Too_Many_Requests',
   USERNAME_IS_SHORT: 'Username_Is_Short',
   USERNAME_CONTAINS_INVALID_CHARS: 'Username_Contains_Invalid_Chars',
   PASSWORD_IS_SHORT: 'Password_Is_Short',
@@ -96,4 +99,7 @@ export const ERROR_LITERAL = {
   [ERRORS.COMMENT_TOO_LONG]: 'Комментарий слишком длинный',
   [ERRORS.NETWORK_ERROR]: 'Подключение не удалось',
   [ERRORS.NOTE_NOT_FOUND]: 'Заметка не найдена',
+  [ERRORS.OAUTH_ACCOUNT_NOT_FOUND]: 'Аккаунт не найден',
+  [ERRORS.REGISTRATION_CLOSED]: 'Регистрация сейчас закрыта',
+  [ERRORS.TOO_MANY_REQUESTS]: 'Слишком часто. Попробуйте через час',
 };

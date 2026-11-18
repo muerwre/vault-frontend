@@ -1,0 +1,87 @@
+@import 'src/styles/variables';
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: $gap * 1.5;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: $gap;
+}
+
+.title {
+  font: $font_24_semibold;
+  margin: 0;
+}
+
+.count {
+  opacity: 0.5;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $gap;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: $gap * 0.5;
+  padding: $gap;
+  border-radius: $radius;
+  background: $content_bg_light;
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $gap;
+}
+
+.email {
+  font: $font_16_semibold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reason {
+  font: $font_14_regular;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.muted {
+  font: $font_12_regular;
+  opacity: 0.6;
+  flex: none;
+}
+
+.error {
+  font: $font_12_regular;
+  color: $color_danger;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap * 0.5;
+  margin-top: $gap * 0.5;
+
+  &:empty {
+    display: none;
+  }
+}

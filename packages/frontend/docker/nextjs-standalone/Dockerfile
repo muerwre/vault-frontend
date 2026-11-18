@@ -15,6 +15,9 @@ WORKDIR /app
 ARG TELEGRAM_BOT_USERNAME
 
 ENV TELEGRAM_BOT_USERNAME=$TELEGRAM_BOT_USERNAME
+# Whether to render the registration buttons; inlined at build time too.
+ARG REGISTRATION_ENABLED=false
+ENV REGISTRATION_ENABLED=$REGISTRATION_ENABLED
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Manifests first, so a source-only change reuses the cached install layer.

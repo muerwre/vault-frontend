@@ -17,6 +17,7 @@ import { useScrollTop } from '~/hooks/dom/useScrollTop';
 import { useFlow } from '~/hooks/flow/useFlow';
 import { useModal } from '~/hooks/modal/useModal';
 import { useUpdates } from '~/hooks/updates/useUpdates';
+import { CONFIG } from '~/utils/config';
 import { useNotifications } from '~/utils/providers/NotificationProvider';
 
 import { UserButtonWithNotifications } from '../UserButtonWithNotifications';
@@ -30,12 +31,16 @@ const Header: FC<HeaderProps> = observer(() => {
   const { showModal } = useModal();
   const { isUser, user, fetched } = useAuth();
   const { hasFlowUpdates, hasLabUpdates } = useFlow();
-  const { borisCommentedAt } = useUpdates();
+  const { borisCommentedAt, pendingRegistrations } = useUpdates();
   const { indicatorEnabled } = useNotifications();
 
   const onLogin = useCallback(() => {
     umami.track('login-button');
     showModal(Dialog.Login, {});
+  }, [showModal]);
+
+  const onRegister = useCallback(() => {
+    showModal(Dialog.RegisterRequest, {});
   }, [showModal]);
 
   const top = useScrollTop();
@@ -104,7 +109,12 @@ const Header: FC<HeaderProps> = observer(() => {
             </Anchor>
 
             {user.role === Role.Admin && (
-              <Anchor className={styles.item} href={URLS.ADMIN.BASE}>
+              <Anchor
+                className={classNames(styles.item, styles.admin, {
+                  [styles.has_dot]: pendingRegistrations > 0,
+                })}
+                href={URLS.ADMIN.BASE}
+              >
                 АДМ
               </Anchor>
             )}
@@ -112,6 +122,16 @@ const Header: FC<HeaderProps> = observer(() => {
         </nav>
 
         {isUser && <UserButtonWithNotifications />}
+
+        {!isUser && CONFIG.registrationEnabled && (
+          <button
+            type="button"
+            className={styles.register_button}
+            onClick={onRegister}
+          >
+            Регистрация
+          </button>
+        )}
 
         {!isUser && (
           <Button className={styles.user_button} onClick={onLogin} round>

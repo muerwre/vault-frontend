@@ -24,6 +24,8 @@ export type ApiAuthGetUpdatesRequest = {
 export type ApiAuthGetUpdatesResult = {
   notifications: INotification[];
   boris: { commented_at: string };
+  /** Admins only. */
+  registrations?: { pending: number };
 };
 export type ApiCheckRestoreCodeRequest = { code: string };
 export type ApiCheckRestoreCodeResult = { user: IUser };

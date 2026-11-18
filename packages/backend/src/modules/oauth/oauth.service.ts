@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { Social } from '../../entities/social.entity';
 import { User } from '../../entities/user.entity';
 import { toWireString } from '../../wire/serialize';
+import { normalizeEmail } from '../auth/email';
 import { PasswordService } from '../auth/password.service';
 import { UploadService } from '../upload/upload.service';
 
@@ -148,15 +149,6 @@ export class OAuthService {
       .getOne();
   }
 
-  findUserByUsername(username: string): Promise<User | null> {
-    return this.users
-      .createQueryBuilder('user')
-      .where('user.username = :username AND user.deleted_at IS NULL', {
-        username,
-      })
-      .getOne();
-  }
-
   /** Creates an activated account owning the linked social. */
   async register(
     claim: OAuthClaim,
@@ -167,7 +159,7 @@ export class OAuthService {
       this.users.create({
         username,
         password: await this.passwords.hash(password),
-        email: claim.email,
+        email: claim.email ? normalizeEmail(claim.email) : null,
         fullname: claim.name,
         role: ROLES.USER,
         isActivated: true,

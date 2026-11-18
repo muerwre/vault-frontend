@@ -59,9 +59,11 @@ jobs:
           tags: ${{ steps.frontend_meta.outputs.tags }}
           labels: ${{ steps.frontend_meta.outputs.labels }}
           # The site's address is not baked in (read at runtime); only the bot,
-          # which must match the backend's token on each deployment.
+          # which must match the backend's token on each deployment, and
+          # whether to render registration (the REGISTRATION_ENABLED variable).
           build-args: |
             TELEGRAM_BOT_USERNAME=${{ github.ref_name == 'master' && 'vault48bot' || 'vault48testbot' }}
+            REGISTRATION_ENABLED=${{ vars.REGISTRATION_ENABLED || 'false' }}
 
       - name: Build backend
         uses: docker/build-push-action@v6
@@ -92,9 +94,11 @@ jobs:
           tags: ${{ steps.frontend_meta.outputs.tags }}
           labels: ${{ steps.frontend_meta.outputs.labels }}
           # The site's address is not baked in (read at runtime); only the bot,
-          # which must match the backend's token on each deployment.
+          # which must match the backend's token on each deployment, and
+          # whether to render registration (the REGISTRATION_ENABLED variable).
           build-args: |
             TELEGRAM_BOT_USERNAME=${{ github.ref_name == 'master' && 'vault48bot' || 'vault48testbot' }}
+            REGISTRATION_ENABLED=${{ vars.REGISTRATION_ENABLED || 'false' }}
 
       - name: Push backend
         uses: docker/build-push-action@v6

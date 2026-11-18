@@ -15,6 +15,7 @@ import { useLoginForm } from '~/hooks/auth/useLoginForm';
 import { useOAuth } from '~/hooks/auth/useOAuth';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { DialogComponentProps } from '~/types/modal';
+import { CONFIG } from '~/utils/config';
 
 import styles from './styles.module.scss';
 
@@ -33,6 +34,10 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
   const onRestoreRequest = useCallback(() => {
     showRestoreDialog({});
   }, [showRestoreDialog]);
+  const showRegisterDialog = useShowModal(Dialog.RegisterRequest);
+  const onRegister = useCallback(() => {
+    showRegisterDialog({});
+  }, [showRegisterDialog]);
   const showGoogleDisabledDialog = useShowModal(Dialog.GoogleLoginDisabled);
   const onGoogleLogin = useCallback(() => {
     showGoogleDisabledDialog({});
@@ -54,6 +59,7 @@ const LoginDialog: FC<LoginDialogProps> = ({ onRequestClose }) => {
           <LoginDialogButtons
             openOauthWindow={openOauthWindow}
             onGoogleLogin={onGoogleLogin}
+            onRegister={CONFIG.registrationEnabled ? onRegister : undefined}
           />
         }
         backdrop={backdrop}

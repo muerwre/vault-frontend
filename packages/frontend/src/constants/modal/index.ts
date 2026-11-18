@@ -3,6 +3,8 @@ import { lazy } from 'react';
 import { GoogleLoginDisabledDialog } from '~/containers/auth/GoogleLoginDisabledDialog';
 import { LoginDialog } from '~/containers/auth/LoginDialog';
 import { LoginSocialRegisterDialog } from '~/containers/auth/LoginSocialRegisterDialog';
+import { RegisterCompleteDialog } from '~/containers/auth/RegisterCompleteDialog';
+import { RegisterRequestDialog } from '~/containers/auth/RegisterRequestDialog';
 import { RestorePasswordDialog } from '~/containers/auth/RestorePasswordDialog';
 import { RestoreRequestDialog } from '~/containers/auth/RestoreRequestDialog';
 import { TelegramAttachDialog } from '~/containers/auth/TelegramAttachDialog';
@@ -20,6 +22,8 @@ const PhotoSwipe = lazy(() =>
 export enum Dialog {
   Login = 'Login',
   Register = 'Register',
+  RegisterRequest = 'RegisterRequest',
+  RegisterComplete = 'RegisterComplete',
   LoginSocialRegister = 'LoginSocialRegister',
   Loading = 'Loading',
   RestoreRequest = 'RestoreRequest',
@@ -35,6 +39,8 @@ export enum Dialog {
 export const DIALOG_CONTENT = {
   [Dialog.Login]: LoginDialog,
   [Dialog.Register]: LoginDialog, // TODO: make inviting dialog
+  [Dialog.RegisterRequest]: RegisterRequestDialog,
+  [Dialog.RegisterComplete]: RegisterCompleteDialog,
   [Dialog.LoginSocialRegister]: LoginSocialRegisterDialog,
   [Dialog.Loading]: LoadingDialog,
   [Dialog.Test]: TestDialog,

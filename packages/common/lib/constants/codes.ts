@@ -50,6 +50,9 @@ export const ERROR_CODES = {
   CantUpdateNotificationSettings: 'CantUpdateNotificationSettings',
   CantGetNotificationSettings: 'CantGetNotificationSettings',
   NoteNotFound: 'NoteNotFound',
+  OAuthAccountNotFound: 'OAuth_Account_Not_Found',
+  RegistrationClosed: 'Registration_Closed',
+  TooManyRequests: 'Too_Many_Requests',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

@@ -32,6 +32,11 @@ export const CONFIG = {
   remoteCurrent: `${publicUrl}/static/`,
   /** Telegram bot for the login widget and contact link; empty hides both. */
   botUsername: process.env.NEXT_PUBLIC_BOT_USERNAME || '',
+  /**
+   * Whether registration buttons are rendered. Baked in at build time; the
+   * backend's `/features` still says whether a request would be accepted.
+   */
+  registrationEnabled: process.env.NEXT_PUBLIC_REGISTRATION_ENABLED === 'true',
   /** The app always runs under Next now; kept for the components that ask. */
   isNextEnvironment: true,
 };

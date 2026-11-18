@@ -40,8 +40,10 @@ export class User {
   @Column(legacyVarchar())
   password: string;
 
-  @Column(legacyVarchar())
-  email: string;
+  /** Unique; `NULL` for an account without one, never `''`. */
+  @Index('uq_user_email', { unique: true })
+  @Column(legacyVarchar({ nullable: true }))
+  email: string | null;
 
   @Column({
     type: 'enum',

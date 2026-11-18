@@ -79,6 +79,24 @@
   cursor: pointer;
 }
 
+// Text-only, so ВДОХ stays the main action.
+.register_button {
+  flex: none;
+  font: $font_14_semibold;
+  text-transform: uppercase;
+  color: inherit;
+  opacity: 0.6;
+  background: none;
+  border: none;
+  padding: 0 $gap * 1.5;
+  cursor: pointer;
+  transition: opacity 0.25s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 .item {
   font: $font_16_medium;
   display: flex;
@@ -147,6 +165,11 @@
 
   &.boris::after {
     background: $color_primary;
+  }
+
+  // registration requests awaiting approval
+  &.admin::after {
+    background: $color_danger;
   }
 
   @include tablet {

@@ -9,12 +9,15 @@ import {
   apiLoginWithSocial,
 } from '~/api/auth';
 import { API } from '~/constants/api';
+import { ERRORS } from '~/constants/errors';
 import { Dialog } from '~/constants/modal';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useModal } from '~/hooks/modal/useModal';
 import { OAuthProvider } from '~/types/auth';
+import { CONFIG } from '~/utils/config';
 import { showErrorToast } from '~/utils/errors/showToast';
 import { path } from '~/utils/ramda';
+import { showToastError } from '~/utils/toast';
 
 export const useOAuth = () => {
   const { isUser, setToken } = useAuth();
@@ -47,6 +50,19 @@ export const useOAuth = () => {
 
         if (needsRegister && token) {
           showModal(Dialog.LoginSocialRegister, { token });
+          return;
+        }
+
+        // Unknown account: users register by email, not through a provider.
+        if (
+          path(['response', 'data', 'error'], error) ===
+          ERRORS.OAUTH_ACCOUNT_NOT_FOUND
+        ) {
+          showToastError(
+            CONFIG.registrationEnabled
+              ? 'Аккаунт не найден, зарегистрируйтесь'
+              : 'Аккаунт не найден',
+          );
           return;
         }
 

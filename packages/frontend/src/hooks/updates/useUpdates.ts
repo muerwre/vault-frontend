@@ -13,6 +13,8 @@ export const useUpdates = () => {
   );
 
   const borisCommentedAt = data?.boris?.commented_at || '';
+  /** Registration requests awaiting an admin; always 0 for everyone else. */
+  const pendingRegistrations = data?.registrations?.pending ?? 0;
 
-  return { borisCommentedAt };
+  return { borisCommentedAt, pendingRegistrations };
 };

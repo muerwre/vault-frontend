@@ -26,8 +26,8 @@ const makeController = (overrides: AuthMock = {}, passwordValid = true) => {
     getSelf: jest.fn().mockResolvedValue(SELF),
     signToken: jest.fn().mockReturnValue('token'),
     touchLastSeen: jest.fn().mockResolvedValue(undefined),
-    findByUsername: jest.fn().mockResolvedValue(null),
-    findByEmail: jest.fn().mockResolvedValue(null),
+    isUsernameTaken: jest.fn().mockResolvedValue(false),
+    isEmailTaken: jest.fn().mockResolvedValue(false),
     findByUsernameOrEmail: jest.fn().mockResolvedValue(null),
     save: jest.fn().mockImplementation(async (user: User) => user),
     setPassword: jest.fn().mockResolvedValue(undefined),
@@ -115,10 +115,10 @@ describe('AuthController', () => {
     ) => {
       const overrides: AuthMock = {};
       if (opts.taken === 'username') {
-        overrides.findByUsername = jest.fn().mockResolvedValue({ id: 2 });
+        overrides.isUsernameTaken = jest.fn().mockResolvedValue(true);
       }
       if (opts.taken === 'email') {
-        overrides.findByEmail = jest.fn().mockResolvedValue({ id: 2 });
+        overrides.isEmailTaken = jest.fn().mockResolvedValue(true);
       }
 
       const { controller } = makeController(
@@ -196,6 +196,26 @@ describe('AuthController', () => {
           { passwordValid: false },
         ),
       ).toBeNull();
+    });
+
+    it('treats an email differing only in case or spaces as unchanged', async () => {
+      const { controller, auth } = makeController({}, false);
+      const user = currentUser();
+
+      await controller.patch(user, { email: ' SomeOne@Example.com ' } as never);
+
+      expect(auth.isEmailTaken).not.toHaveBeenCalled();
+      expect(user.email).toBe('someone@example.com');
+    });
+
+    it('stores a changed email trimmed and lower-cased', async () => {
+      const { controller, auth } = makeController();
+      const user = currentUser();
+
+      await controller.patch(user, { email: ' New@Example.com' } as never);
+
+      expect(auth.isEmailTaken).toHaveBeenCalledWith('new@example.com', 1);
+      expect(user.email).toBe('new@example.com');
     });
 
     it('rejects a taken username and a taken email', async () => {

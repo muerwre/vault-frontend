@@ -34,7 +34,12 @@ const readRootEnv = (keys) => {
   return values;
 };
 
-const rootEnv = readRootEnv(['PUBLIC_URL', 'PORT', 'TELEGRAM_BOT_USERNAME']);
+const rootEnv = readRootEnv([
+  'PUBLIC_URL',
+  'PORT',
+  'TELEGRAM_BOT_USERNAME',
+  'REGISTRATION_ENABLED',
+]);
 
 /**
  * Addresses are read at runtime, not baked in: the browser uses its own origin,
@@ -55,6 +60,13 @@ process.env.BACKEND_URL = process.env.BACKEND_URL || localBackend;
 process.env.NEXT_PUBLIC_BOT_USERNAME = (
   rootEnv.TELEGRAM_BOT_USERNAME || ''
 ).replace(/^@/, '');
+
+// Whether to render the registration buttons at all; inlined at build time so
+// they never pop in after load. The backend still decides whether a request is
+// accepted (it also needs working mail), so this only hides the entry points.
+process.env.NEXT_PUBLIC_REGISTRATION_ENABLED = String(
+  rootEnv.REGISTRATION_ENABLED === 'true',
+);
 
 /** used to transpile UMD and CJS modules */
 const withBundleAnalyzer = require('@next/bundle-analyzer')({

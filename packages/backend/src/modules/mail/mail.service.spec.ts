@@ -11,6 +11,7 @@ describe('MailService', () => {
   const saved = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
 
   let sendMail: jest.Mock;
+  let verify: jest.Mock;
 
   beforeEach(() => {
     process.env.SMTP_HOST = 'smtp.example';
@@ -19,7 +20,8 @@ describe('MailService', () => {
     delete process.env.FRONTEND_RESET_URL;
 
     sendMail = jest.fn().mockResolvedValue({});
-    createTransport.mockReturnValue({ sendMail });
+    verify = jest.fn().mockResolvedValue(true);
+    createTransport.mockReturnValue({ sendMail, verify });
   });
 
   afterEach(() => {
@@ -94,5 +96,88 @@ describe('MailService', () => {
     );
 
     expect(sendMail).not.toHaveBeenCalled();
+  });
+
+  describe('registration mails', () => {
+    it('mails the registration link without a username', async () => {
+      const result = await new MailService().sendRegistrationLink(
+        'guest@example.org',
+        'code-1',
+      );
+
+      const [mail] = sendMail.mock.calls[0];
+      const link = 'https://vault48.example/register/code-1';
+
+      expect(result).toEqual({ sent: true });
+      expect(mail.to).toBe('guest@example.org');
+      expect(mail.text).toContain(link);
+      expect(mail.html).toContain(`<a href="${link}">`);
+      expect(mail.text).not.toContain('{');
+    });
+
+    it('reports why a send failed', async () => {
+      sendMail.mockRejectedValue(new Error('mailbox is full'));
+
+      await expect(
+        new MailService().sendRegistrationLink('guest@example.org', 'code-1'),
+      ).resolves.toEqual({ sent: false, error: 'mailbox is full' });
+    });
+
+    it('points an existing account at a password reset', async () => {
+      await new MailService().sendAlreadyRegistered(
+        'user@example.org',
+        'restore-1',
+      );
+
+      const [mail] = sendMail.mock.calls[0];
+
+      expect(mail.text).toContain('https://vault48.example/restore/restore-1');
+    });
+
+    it('mails every admin, escaping the guest-written reason', async () => {
+      await new MailService().sendApprovalRequest(
+        ['a@example.org', 'b@example.org'],
+        'guest@example.org',
+        '<script>hi</script>',
+      );
+
+      expect(sendMail.mock.calls.map(([mail]) => mail.to)).toEqual([
+        'a@example.org',
+        'b@example.org',
+      ]);
+
+      const [mail] = sendMail.mock.calls[0];
+      expect(mail.html).toContain('&lt;script&gt;hi&lt;/script&gt;');
+      expect(mail.text).toContain('<script>hi</script>');
+    });
+  });
+
+  describe('health', () => {
+    it('is unavailable until the first check passes', async () => {
+      const service = new MailService();
+
+      expect(service.isAvailable).toBe(false);
+      await expect(service.checkHealth()).resolves.toBe(true);
+      expect(service.isAvailable).toBe(true);
+    });
+
+    it('is unavailable after a failed check', async () => {
+      const service = new MailService();
+      await service.checkHealth();
+
+      verify.mockRejectedValue(new Error('connection refused'));
+
+      await expect(service.checkHealth()).resolves.toBe(false);
+      expect(service.isAvailable).toBe(false);
+    });
+
+    it('is unavailable without SMTP configured', async () => {
+      process.env.SMTP_HOST = '';
+      const service = new MailService();
+
+      await expect(service.checkHealth()).resolves.toBe(false);
+      expect(service.isAvailable).toBe(false);
+      expect(verify).not.toHaveBeenCalled();
+    });
   });
 });

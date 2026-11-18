@@ -25,7 +25,12 @@ import {
 import type { WireSelf } from '../../wire/serialize';
 
 import { AuthRequiredGuard, Uid, WithUser, WithUserGuard } from './auth.guards';
-import { AuthService, type WireRestoreUser } from './auth.service';
+import {
+  AuthService,
+  type WireRestoreUser,
+  type WireUpdates,
+} from './auth.service';
+import { isEmail, isSameEmail, normalizeEmail } from './email';
 import { PasswordService } from './password.service';
 
 interface LoginBody {
@@ -111,9 +116,9 @@ export class AuthController {
   }
 
   @Get('updates')
-  @UseGuards(AuthRequiredGuard)
-  getUpdates(): Promise<{ boris: { commented_at: string } }> {
-    return this.auth.getUpdates();
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  getUpdates(@WithUser() user: User): Promise<WireUpdates> {
+    return this.auth.getUpdates(user);
   }
 
   /**
@@ -132,7 +137,7 @@ export class AuthController {
 
     const wantsSensitiveChange =
       data.new_password !== undefined ||
-      (data.email !== undefined && data.email !== user.email) ||
+      (data.email !== undefined && !isSameEmail(data.email, user.email)) ||
       (data.username !== undefined && data.username !== user.username);
 
     if (
@@ -149,15 +154,18 @@ export class AuthController {
         !USERNAME_REGEX.test(data.username)
       ) {
         errors.username = 'Некорректное имя пользователя';
-      } else if (await this.auth.findByUsername(data.username)) {
+      } else if (await this.auth.isUsernameTaken(data.username)) {
         errors.username = 'Это имя уже занято, выберите другое';
       }
     }
 
-    if (data.email !== undefined && data.email !== user.email) {
-      if (!data.email.includes('@') || data.email.length < 2) {
+    const email =
+      data.email !== undefined ? normalizeEmail(String(data.email)) : undefined;
+
+    if (email !== undefined && !isSameEmail(email, user.email)) {
+      if (!isEmail(email)) {
         errors.email = 'Не похоже на email';
-      } else if (await this.auth.findByEmail(data.email)) {
+      } else if (await this.auth.isEmailTaken(email, user.id)) {
         errors.email = 'Этот email уже используется, выберите другой';
       }
     }
@@ -205,8 +213,8 @@ export class AuthController {
       user.fullname = data.fullname;
     }
 
-    if (data.email !== undefined) {
-      user.email = data.email;
+    if (email !== undefined && !isSameEmail(email, user.email)) {
+      user.email = email;
     }
 
     if (data.username !== undefined) {
@@ -279,7 +287,7 @@ export class AuthController {
 
     const code = await this.auth.findOrCreateRestoreCode(user.id);
 
-    await this.auth.sendRestoreCode(user.email, user.username, code);
+    await this.auth.sendRestoreCode(user.email ?? '', user.username, code);
   }
 
   /** Answers 201, not 200 — the client relies on the existing status. */

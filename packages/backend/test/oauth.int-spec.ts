@@ -296,6 +296,33 @@ describe('oauth (integration)', () => {
   });
 
   describe('PUT /oauth (login or register)', () => {
+    beforeAll(() => {
+      process.env.SOCIAL_REGISTRATION_ENABLED = 'true';
+    });
+
+    afterAll(() => {
+      delete process.env.SOCIAL_REGISTRATION_ENABLED;
+    });
+
+    it('404s an unknown account while social registration is off', async () => {
+      process.env.SOCIAL_REGISTRATION_ENABLED = 'false';
+
+      try {
+        const { body } = await http()
+          .put('/api/oauth/')
+          .send({
+            token: claimToken({ id: '900025' }),
+            username: `nope_${Date.now()}`,
+            password: 'hunter22',
+          })
+          .expect(404);
+
+        expect(body.error).toBe('OAuth_Account_Not_Found');
+      } finally {
+        process.env.SOCIAL_REGISTRATION_ENABLED = 'true';
+      }
+    });
+
     it('logs in when the account is already linked', async () => {
       await http()
         .post('/api/oauth/')
@@ -400,6 +427,27 @@ describe('oauth (integration)', () => {
         .send({
           token: claimToken({ id: '900023' }),
           username: row.username,
+          password: 'hunter22',
+        })
+        .expect(428);
+
+      expect(body.errors).toEqual({ username: expect.any(String) });
+    });
+
+    /** The unique index covers deleted accounts, so their names stay taken. */
+    it('428s a username only a deleted account holds', async () => {
+      const username = `oauthgone_${Date.now()}`;
+      const result = await db.query(
+        "INSERT INTO user (username, password, email, role, is_activated, deleted_at) VALUES (?, 'x', NULL, 'user', 1, NOW())",
+        [username],
+      );
+      userIds.push(Number(result.insertId));
+
+      const { body } = await http()
+        .put('/api/oauth/')
+        .send({
+          token: claimToken({ id: '900026' }),
+          username,
           password: 'hunter22',
         })
         .expect(428);
