@@ -51,6 +51,16 @@ describe('oauth popup', () => {
       );
     });
 
+    it("takes the public url's scheme for its own host", () => {
+      process.env.PUBLIC_URL = 'https://tunnel.vault48.org';
+
+      expect(popupTargetOrigin(asRequest('tunnel.vault48.org', 'http'))).toBe(
+        'https://tunnel.vault48.org',
+      );
+
+      delete process.env.PUBLIC_URL;
+    });
+
     it('falls back to the public url when there is no host header', () => {
       process.env.PUBLIC_URL = 'https://fallback.example';
 
