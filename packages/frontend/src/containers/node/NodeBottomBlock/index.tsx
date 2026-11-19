@@ -22,9 +22,11 @@ import styles from './styles.module.scss';
 
 interface Props {
   commentsOrder: 'ASC' | 'DESC';
+  /** Shows the node's inline content, such as its text or songs, above the comments. */
+  withInline?: boolean;
 }
 
-const NodeBottomBlock: FC<Props> = ({ commentsOrder }) => {
+const NodeBottomBlock: FC<Props> = ({ commentsOrder, withInline = true }) => {
   const { node, isLoading, backlinks } = useNodeContext();
   const {
     comments,
@@ -32,7 +34,8 @@ const NodeBottomBlock: FC<Props> = ({ commentsOrder }) => {
     onSaveComment,
   } = useCommentContext();
   const { related, isLoading: isLoadingRelated } = useNodeRelatedContext();
-  const { inline } = useNodeBlocks(node, isLoading);
+  const blocks = useNodeBlocks(node, isLoading);
+  const inline = withInline ? blocks.inline : null;
 
   if (node.deleted_at) {
     return <NodeDeletedBadge />;

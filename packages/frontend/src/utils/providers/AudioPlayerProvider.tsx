@@ -26,6 +26,8 @@ interface AudioPlayerProps {
   setFile: (file: IFile) => void;
   toTime: (time: number) => void;
   toPercent: (percent: number) => void;
+  /** Calls back when a track plays to its end; returns the unsubscribe. */
+  onEnded: (callback: () => void) => () => void;
 }
 
 const PlayerContext = createContext<AudioPlayerProps>({
@@ -40,6 +42,7 @@ const PlayerContext = createContext<AudioPlayerProps>({
   setFile: () => {},
   toTime: () => {},
   toPercent: () => {},
+  onEnded: () => () => {},
 });
 
 export const AudioPlayerProvider: FC = ({ children }) => {
@@ -63,6 +66,14 @@ export const AudioPlayerProvider: FC = ({ children }) => {
     setFile(undefined);
     setStatus(PlayerState.UNSET);
   }, [audio, setFile]);
+
+  const onEnded = useCallback(
+    (callback: () => void) => {
+      audio?.addEventListener('ended', callback);
+      return () => audio?.removeEventListener('ended', callback);
+    },
+    [audio],
+  );
 
   const toTime = useCallback(
     (time: number) => {
@@ -146,6 +157,7 @@ export const AudioPlayerProvider: FC = ({ children }) => {
         pause,
         stop,
         status,
+        onEnded,
       }}
     >
       {children}

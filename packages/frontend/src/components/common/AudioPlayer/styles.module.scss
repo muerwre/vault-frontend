@@ -136,3 +136,32 @@
   box-sizing: border-box;
   padding: 0 48px 0 0;
 }
+
+// Shorter row for previews: a smaller button, tighter padding and text.
+.compact {
+  height: 48px;
+
+  .playpause {
+    flex-basis: 48px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .content {
+    padding: 0 $gap 0 0;
+  }
+
+  .title {
+    font: $font_14_semibold;
+    padding: 0 $gap * 0.5;
+  }
+
+  &.playing .title {
+    top: 18px;
+    font-size: 11px;
+    padding-right: $gap * 0.5;
+  }
+}

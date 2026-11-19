@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
@@ -16,13 +16,51 @@ interface Props {
   images: IFile[];
 }
 
-/** The node's photos behind the whole page, crossfading one into the next. */
+/**
+ * The node's photos behind the first screen, crossfading one into the next.
+ * Fades out as that screen scrolls away.
+ */
 const AuraBackdrop: FC<Props> = ({ images }) => {
   const [current, setCurrent] = useState(0);
   // the page is pre-rendered, where there is no body to portal into
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => setIsMounted(true), []);
+
+  const wrap = useRef<HTMLDivElement>(null);
+
+  // set on the element directly, so scrolling doesn't re-render
+  useEffect(() => {
+    const element = wrap.current;
+
+    if (!element) {
+      return;
+    }
+
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      const faded = window.scrollY / (window.innerHeight * 0.5);
+      element.style.opacity = String(Math.max(0, 1 - faded));
+    };
+
+    const onScroll = () => {
+      if (!frame) {
+        frame = requestAnimationFrame(update);
+      }
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [isMounted]);
 
   useEffect(() => {
     setCurrent(0);
@@ -44,7 +82,7 @@ const AuraBackdrop: FC<Props> = ({ images }) => {
   }
 
   return createPortal(
-    <div className={styles.wrap}>
+    <div className={styles.wrap} ref={wrap}>
       <div className={styles.slides}>
         {images.map((image, index) => (
           <div

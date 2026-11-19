@@ -1,0 +1,8 @@
+@import 'src/styles/variables.scss';
+
+.cover {
+  height: 200px;
+  border-radius: $radius $radius 0 0;
+  background: no-repeat 50% 50%;
+  background-size: cover;
+}

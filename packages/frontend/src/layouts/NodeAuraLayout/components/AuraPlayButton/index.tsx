@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useCallback } from 'react';
+import { FC, MouseEvent, useCallback, useEffect } from 'react';
 
 import classNames from 'classnames';
 
@@ -30,12 +30,13 @@ const getAudioTitle = (file?: IFile): string =>
 
 /**
  * Starts the node's first song, or pauses and resumes whichever of its songs
- * is already in the player; prev and next step through the node's songs.
+ * is already in the player; prev and next step through the node's songs,
+ * and each one moves on to the next when it ends.
  * Below it, that song's title and progress; before any is played, the node's
  * title and the length of all its songs.
  */
 const AuraPlayButton: FC<Props> = ({ audios, nodeTitle }) => {
-  const { file, status, progress, setFile, play, pause, toPercent } =
+  const { file, status, progress, setFile, play, pause, toPercent, onEnded } =
     useAudioPlayer();
   const totalDuration = useTotalDuration(audios);
 
@@ -72,6 +73,15 @@ const AuraPlayButton: FC<Props> = ({ audios, nodeTitle }) => {
     },
     [toPercent],
   );
+
+  // a finished song hands over to the next one, until the last
+  useEffect(() => {
+    if (!isOwnFile || !hasNext) {
+      return;
+    }
+
+    return onEnded(() => playAt(index + 1));
+  }, [isOwnFile, hasNext, index, playAt, onEnded]);
 
   const onPrev = useCallback(() => playAt(index - 1), [playAt, index]);
   const onNext = useCallback(() => playAt(index + 1), [playAt, index]);

@@ -1,8 +1,13 @@
 @import 'src/styles/variables';
 
 .wrap {
-  position: fixed;
-  inset: 0;
+  // scrolls away with the page: it only fills the first screen
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
   z-index: -1;
   background: $page_background;
   pointer-events: none;

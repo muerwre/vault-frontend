@@ -24,6 +24,7 @@ import styles from './styles.module.scss';
 /**
  * A song node shown as an aura: its photos slide behind the page, and the
  * post itself starts low enough that only its title shows above the fold.
+ * The songs are played from the stage, so the body leaves them out.
  */
 const NodeAuraLayout = observer(() => {
   const { isUser } = useAuth();
@@ -95,7 +96,7 @@ const NodeAuraLayout = observer(() => {
           </div>
 
           <section>
-            <NodeBottomBlock commentsOrder="DESC" />
+            <NodeBottomBlock commentsOrder="DESC" withInline={false} />
           </section>
 
           <Footer />

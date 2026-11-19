@@ -13,12 +13,14 @@ import styles from './styles.module.scss';
 type Props = {
   file: IFile;
   isEditing?: boolean;
+  /** Shorter row with smaller text, for previews. */
+  compact?: boolean;
   onDelete?: (id: IFile['id']) => void;
   onTitleChange?: (file_id: IFile['id'], title: string) => void;
 };
 
 const AudioPlayer = memo(
-  ({ file, onDelete, isEditing, onTitleChange }: Props) => {
+  ({ file, onDelete, isEditing, onTitleChange, compact }: Props) => {
     const {
       toPercent,
       file: currentFile,
@@ -98,6 +100,7 @@ const AudioPlayer = memo(
       <div
         className={classNames(styles.wrap, {
           [styles.playing]: playing,
+          [styles.compact]: compact,
         })}
       >
         {onDelete && (
