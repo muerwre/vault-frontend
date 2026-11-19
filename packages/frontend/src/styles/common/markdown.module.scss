@@ -70,14 +70,34 @@ $margin: 1em;
     }
   }
 
+  // spaced as paragraphs are, items only apart from each other. Indented as
+  // the editor indents them: text 2em in, nested levels 0.6em further
+  ul,
+  ol {
+    padding-left: 2em;
+    margin-bottom: $gap;
+
+    li > ul,
+    li > ol {
+      padding-left: 0.6em;
+      margin: math.div($margin, 3) 0 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    li + li {
+      margin-top: math.div($margin, 3);
+    }
+  }
+
   ul {
     list-style: disc;
-    padding-left: 20px;
-    margin-bottom: $margin;
+  }
 
-    li {
-      margin: math.div($margin, 3) 0;
-    }
+  ol {
+    list-style: decimal;
   }
 
   strong {
