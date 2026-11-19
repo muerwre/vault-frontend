@@ -24,6 +24,7 @@ describe('media backlog release (integration)', () => {
   const commentIds: number[] = [];
   const mediaIds: number[] = [];
   let parked: Array<{ id: number }> = [];
+  let parkedJobs: Array<{ id: number }> = [];
 
   const lastId = async () =>
     Number((await db.query('SELECT LAST_INSERT_ID() AS id'))[0].id);
@@ -93,6 +94,17 @@ describe('media backlog release (integration)', () => {
       );
     }
 
+    // a release waits for an empty queue, so jobs queued before step aside too
+    parkedJobs = await db.query(
+      `SELECT id FROM media_job WHERE status = 'queued'`,
+    );
+    if (parkedJobs.length > 0) {
+      await db.query(
+        `UPDATE media_job SET status = 'cancelled' WHERE id IN (?)`,
+        [parkedJobs.map((row) => row.id)],
+      );
+    }
+
     const username = `blspec_${Date.now()}`;
     await db.query(
       `INSERT INTO user (username, password, email, role, is_activated, created_at, updated_at)
@@ -133,6 +145,13 @@ describe('media backlog release (integration)', () => {
       );
     }
 
+    if (parkedJobs.length > 0) {
+      await db.query(
+        `UPDATE media_job SET status = 'queued' WHERE id IN (?)`,
+        [parkedJobs.map((row) => row.id)],
+      );
+    }
+
     await app.close();
   });
 
@@ -152,7 +171,19 @@ describe('media backlog release (integration)', () => {
     });
   });
 
-  it('carries on with the next newest on the following release', async () => {
+  it('holds the next release while the queue still has work', async () => {
+    await app.get(MediaPlannerService).releaseBacklog();
+
+    expect(await statusOf(vid(3))).toBe('none');
+    expect(await statusOf(vid(1))).toBe('none');
+  });
+
+  it('carries on with the next newest once the queue has emptied', async () => {
+    await db.query(
+      `UPDATE media_job SET status = 'done' WHERE media_id IN (?) AND status = 'queued'`,
+      [mediaIds],
+    );
+
     await app.get(MediaPlannerService).releaseBacklog();
 
     expect(await statusOf(vid(3))).toBe('queued');

@@ -283,6 +283,19 @@ describe('MediaPlannerService', () => {
       );
     });
 
+    it('releases nothing while jobs are still queued', async () => {
+      const rows = [backlog('oldVideo001'), backlog('oldVideo002')];
+      const { planner, jobs } = setup({ rows, openJobs: 1 });
+
+      await planner.releaseBacklog();
+
+      expect(statusOf(rows)).toEqual({
+        oldVideo001: 'none',
+        oldVideo002: 'none',
+      });
+      expect(jobs).toHaveLength(0);
+    });
+
     it('never plans an item twice when a release and a fresh round overlap', async () => {
       const rows = [fresh('freshVideo1'), backlog('oldVideo001')];
       const { planner, saved } = setup({ rows });

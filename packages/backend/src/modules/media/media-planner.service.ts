@@ -44,8 +44,10 @@ const BACKLOG_JOB = 'media-backlog';
  * keeping.
  *
  * Fresh items are planned as soon as they appear. Items found in older content
- * wait in `none` and are released a batch at a time, newest content first. Planning
- * runs one round at a time, so an item is never planned twice at once.
+ * wait in `none` and are released a batch at a time, newest content first, and
+ * only once the job queue has emptied, so old content never piles up ahead of
+ * fresh. Planning runs one round at a time, so an item is never planned twice
+ * at once.
  */
 @Injectable()
 export class MediaPlannerService
@@ -110,7 +112,10 @@ export class MediaPlannerService
     return this.current;
   }
 
-  /** Plans the next batch of backlog items, newest content first. */
+  /**
+   * Plans the next batch of backlog items, newest content first. Skipped while
+   * any job is still waiting in the queue; a job already running doesn't count.
+   */
   releaseBacklog(): Promise<void> {
     return this.exclusive(() => this.planBacklog());
   }
@@ -163,6 +168,15 @@ export class MediaPlannerService
 
   private async planBacklog(): Promise<void> {
     try {
+      const queued = await this.jobs.count({
+        where: { status: MEDIA_JOB_STATUSES.QUEUED },
+      });
+
+      if (queued > 0) {
+        this.logger.log(`backlog held: ${queued} jobs still queued`);
+        return;
+      }
+
       const ids = await this.newestBacklog(
         Math.min(getMediaBacklogConfig().batch, BATCH_SIZE),
       );
