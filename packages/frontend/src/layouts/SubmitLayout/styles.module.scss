@@ -1,9 +1,7 @@
 @import 'src/styles/variables';
 
 // fills the screen below the header, keeping the wrap's bottom margin
-$screen_height: calc(
-  100vh - #{$header_height} - #{$page_top_offset} - #{$gap * 2}
-);
+$screen_height: calc(100vh - #{$header_height} - #{$page_top_offset} - #{$gap * 2});
 
 // fixed, so the columns below can leave room for it
 $tabs_height: 44px;
@@ -43,6 +41,7 @@ $tabs_height: 44px;
   display: flex;
   flex-direction: column;
   padding: $gap;
+  gap: $gap;
   // keeps the editors' own layers (the dropzone's, say) inside the card, so
   // they never cover the pane's popups, like the tag suggestions
   isolation: isolate;
@@ -54,24 +53,24 @@ $tabs_height: 44px;
   }
 }
 
-// The type tabs: a row of their own above the main card and the pane, as
-// wide as their buttons and centred.
-.tabs {
-  grid-column: 1 / -1;
-  justify-self: center;
-  display: flex;
-  align-items: center;
-  height: $tabs_height;
-  box-sizing: border-box;
-  padding: $gap * 0.5;
-  border-radius: $radius $radius 0 0;
-  background: $content_bg_dark;
+.head {
+  display: grid;
+  flex-direction: row;
+  width: 100%;
+  gap: $gap;
+  grid-template-columns: 1fr auto;
 
-  // full width on mobile, where it no longer joins the card directly
   @include tablet {
-    justify-self: stretch;
-    border-radius: $radius;
+    grid-template-columns: 1fr;
   }
+}
+
+.tabs {
+  flex: 0 0 auto;
+}
+
+.title {
+  flex: 1 1 200px;
 }
 
 .uploads {
@@ -134,15 +133,5 @@ $tabs_height: 44px;
     padding: $gap $gap $gap * 0.5;
     background: $content_bg_dark;
     border-radius: 0 0 $radius $radius;
-  }
-}
-
-// with the tabs above them, the columns still end at the screen's bottom
-.with_tabs .main,
-.with_tabs .pane {
-  min-height: calc(#{$screen_height} - #{$tabs_height});
-
-  @include tablet {
-    min-height: 0;
   }
 }

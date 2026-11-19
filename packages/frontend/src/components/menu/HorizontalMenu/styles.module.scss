@@ -14,13 +14,13 @@
     flex: 1;
   }
 
-  & > * {
+  &>* {
     padding: $gap;
   }
 }
 
 .item {
-  flex: 0 0 auto;
+  flex: 1 0 auto;
   padding: $gap * 0.5 $gap $gap * 0.5 $gap;
   fill: currentColor;
   color: $gray_50;
@@ -34,11 +34,6 @@
 
   &:hover {
     color: white;
-  }
-
-  @include tablet {
-    flex-direction: column;
-    flex: 1;
   }
 
   &.active {
@@ -79,14 +74,13 @@
   padding-right: $gap * 0.35;
 
   @include tablet {
-    padding-top: $gap * 0.5;
     font: $font_12_semibold;
   }
 }
 
 // A thin line between neighbouring options, hidden on either side of the
 // active one, whose own background already sets it apart.
-.separated .item + .item {
+.separated .item+.item {
   position: relative;
 
   &::before {
@@ -105,6 +99,6 @@
   }
 }
 
-.separated .item.active + .item::before {
+.separated .item.active+.item::before {
   display: none;
 }

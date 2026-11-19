@@ -134,84 +134,69 @@ const SubmitLayout: FC<Props> = observer(
     const color = values.is_promoted ? 'flow' : 'lab';
     const uploadButtons = UPLOAD_BUTTONS[currentType] ?? [];
 
-    const title = (
-      <InputText
-        title="Название"
-        value={values.title}
-        handler={handleChange('title')}
-        autoFocus={!isTablet}
-        maxLength={256}
-        disabled={isSubmitting}
-      />
-    );
-
     const hasTabs = !!onSwitchType && SWITCHABLE_TYPES.includes(currentType);
-
-    // Right under the name on desktop; on mobile, where the name tops the
-    // page, it opens the controls that follow the content.
-    const controls = (
-      <>
-        {HAS_FLOW_TOGGLE.includes(currentType) && <SubmitFlowToggle />}
-
-        <SubmitTags />
-
-        <div className={styles.footer}>
-          <SubmitCoverEditor />
-
-          {/* wrapped: a stretchy button is flex: 1, which collapses its
-              height as a direct child of the footer's column */}
-          <div className={styles.save}>
-            <Button
-              title="Сохранить"
-              iconRight="check"
-              color={color}
-              disabled={isSubmitting}
-              type="submit"
-              stretchy
-            />
-          </div>
-        </div>
-      </>
-    );
 
     return (
       <UploaderContextProvider value={uploader}>
         <FormikProvider value={formik}>
           <Container>
-            <form
-              onSubmit={handleSubmit}
-              className={classNames(styles.wrap, {
-                [styles.with_tabs]: hasTabs,
-              })}
-            >
-              {hasTabs && (
-                <div className={styles.tabs}>
-                  <SubmitTypeSwitch
-                    onChange={onSwitchType!}
-                    withLabels={!isTablet}
-                  />
-                </div>
-              )}
+            <form onSubmit={handleSubmit} className={classNames(styles.wrap)}>
+              <Card className={styles.content}>
+                <div className={styles.head}>
+                  <div className={styles.title}>
+                    <InputText
+                      title="Название"
+                      value={values.title}
+                      handler={handleChange('title')}
+                      autoFocus={!isTablet}
+                      maxLength={256}
+                      disabled={isSubmitting}
+                    />
+                  </div>
 
-              <div className={styles.main}>
-                {isTablet && <div className={styles.title}>{title}</div>}
-
-                <Card className={styles.content}>
-                  {uploadButtons.length > 0 && (
-                    <div className={styles.uploads}>
-                      {uploadButtons.map((button, index) =>
-                        createElement(button, { key: index }),
-                      )}
+                  {hasTabs || !isTablet ? (
+                    <div className={styles.tabs}>
+                      <SubmitTypeSwitch
+                        onChange={onSwitchType!}
+                        withLabels={!isTablet}
+                        readonly={!hasTabs}
+                      />
                     </div>
-                  )}
+                  ) : null}
+                </div>
 
-                  {createElement(PAGE_EDITORS[currentType])}
-                </Card>
-              </div>
+                {uploadButtons.length > 0 && (
+                  <div className={styles.uploads}>
+                    {uploadButtons.map((button, index) =>
+                      createElement(button, { key: index }),
+                    )}
+                  </div>
+                )}
+
+                {createElement(PAGE_EDITORS[currentType])}
+              </Card>
 
               <div className={styles.pane}>
-                {!isTablet && title}
-                {controls}
+                {HAS_FLOW_TOGGLE.includes(currentType) && <SubmitFlowToggle />}
+
+                <SubmitTags />
+
+                <div className={styles.footer}>
+                  <SubmitCoverEditor />
+
+                  {/* wrapped: a stretchy button is flex: 1, which collapses its
+              height as a direct child of the footer's column */}
+                  <div className={styles.save}>
+                    <Button
+                      title="Сохранить"
+                      iconRight="check"
+                      color={color}
+                      disabled={isSubmitting}
+                      type="submit"
+                      stretchy
+                    />
+                  </div>
+                </div>
               </div>
             </form>
           </Container>
