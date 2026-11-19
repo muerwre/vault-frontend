@@ -10,6 +10,7 @@ import {
   filterFiles,
   getThumbFromUrl,
   isBlockValid,
+  resolveSettings,
   truncateTitle,
   validateNodeContent,
 } from './node.content';
@@ -225,6 +226,44 @@ describe('node content rules', () => {
       ];
 
       expect(deriveDominantColor('text', files, '#old')).toBe('#old');
+    });
+  });
+
+  describe('resolveSettings', () => {
+    const image = file('image');
+    const audio = file('audio');
+    const aura = { layout: 'aura' as const };
+
+    it('keeps aura for a song node with a photo', () => {
+      expect(resolveSettings('audio', [audio, image], aura, null)).toEqual(
+        aura,
+      );
+    });
+
+    it('drops aura for a song node without photos', () => {
+      expect(resolveSettings('audio', [audio], aura, null)).toBeNull();
+    });
+
+    it('drops aura for other node types', () => {
+      expect(resolveSettings('image', [image], aura, null)).toBeNull();
+    });
+
+    it('keeps the stored layout when the request leaves it out', () => {
+      expect(resolveSettings('audio', [image], undefined, aura)).toEqual(aura);
+      expect(resolveSettings('audio', [image], {}, aura)).toEqual(aura);
+    });
+
+    it('stores nothing for the default or an unknown layout', () => {
+      expect(
+        resolveSettings('audio', [image], { layout: 'post' }, aura),
+      ).toBeNull();
+      expect(
+        resolveSettings('audio', [image], { layout: 'bogus' }, aura),
+      ).toBeNull();
+    });
+
+    it('drops a stored aura once the photos are gone', () => {
+      expect(resolveSettings('audio', [audio], undefined, aura)).toBeNull();
     });
   });
 });

@@ -17,6 +17,7 @@ import { SubmitAudioEditor } from '~/containers/submit/SubmitAudioEditor';
 import { SubmitCoverEditor } from '~/containers/submit/SubmitCoverEditor';
 import { SubmitFlowToggle } from '~/containers/submit/SubmitFlowToggle';
 import { SubmitImageEditor } from '~/containers/submit/SubmitImageEditor';
+import { SubmitLayoutToggle } from '~/containers/submit/SubmitLayoutToggle';
 import { SubmitTags } from '~/containers/submit/SubmitTags';
 import { SubmitTextEditor } from '~/containers/submit/SubmitTextEditor';
 import {
@@ -178,6 +179,8 @@ const SubmitLayout: FC<Props> = observer(
 
               <div className={styles.pane}>
                 {HAS_FLOW_TOGGLE.includes(currentType) && <SubmitFlowToggle />}
+
+                {currentType === NODE_TYPES.AUDIO && <SubmitLayoutToggle />}
 
                 <SubmitTags />
 

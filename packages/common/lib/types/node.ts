@@ -1,4 +1,8 @@
-import type { FlowDisplayVariant, NodeType } from '../constants/node';
+import type {
+  FlowDisplayVariant,
+  NodeLayout,
+  NodeType,
+} from '../constants/node';
 
 import type { IFile } from './file';
 import type { ITag } from './tag';
@@ -30,6 +34,14 @@ export interface INodeFlow {
   dominant_color?: string;
 }
 
+/**
+ * Per-node page settings. Every key is optional and absent means the default,
+ * so most nodes store none at all.
+ */
+export interface INodeSettings {
+  layout?: NodeLayout;
+}
+
 /** A `node_social_publications` row surfaced as a backlink. */
 export interface INodeBackLink {
   provider: string;
@@ -49,6 +61,7 @@ export interface INode {
 
   blocks: INodeBlock[];
   flow: INodeFlow;
+  settings?: INodeSettings;
 
   thumbnail?: string;
   description?: string;

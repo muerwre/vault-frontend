@@ -27,6 +27,9 @@ export const EMPTY_NODE: INode = {
   },
 };
 
+export { NODE_LAYOUTS } from '@vault/common/constants';
+export type { NodeLayout } from '@vault/common/constants';
+
 export const NODE_TYPES = {
   IMAGE: 'image',
   AUDIO: 'audio',

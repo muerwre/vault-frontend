@@ -1,6 +1,7 @@
 import {
   FILE_TYPES,
   MAX_NODE_TITLE_LENGTH,
+  NODE_LAYOUTS,
   NODE_TYPES,
   type NodeType,
 } from '@vault/common/constants';
@@ -9,7 +10,7 @@ import {
   type MediaProvider,
   parseMediaUrl,
 } from '@vault/common/media';
-import type { INodeBlock } from '@vault/common/types';
+import type { INodeBlock, INodeSettings } from '@vault/common/types';
 
 import type { File } from '../../entities/file.entity';
 
@@ -197,4 +198,34 @@ export const deriveDominantColor = (
   const image = firstFileOfType(files, FILE_TYPES.IMAGE);
 
   return image?.metadata?.dominant_color || current;
+};
+
+/**
+ * The settings a node keeps, merged from the request over what it has.
+ * Aura needs photos to show behind the page, so it only sticks to a song node
+ * with at least one image. Defaults and unknown values are dropped, and `null`
+ * means nothing is left to store.
+ */
+export const resolveSettings = (
+  type: NodeType,
+  files: File[],
+  requested: unknown,
+  current: INodeSettings | null | undefined,
+): INodeSettings | null => {
+  const asked =
+    requested && typeof requested === 'object'
+      ? (requested as Record<string, unknown>)
+      : {};
+
+  const layout = 'layout' in asked ? asked.layout : current?.layout;
+  const canAura =
+    type === NODE_TYPES.AUDIO && !!firstFileOfType(files, FILE_TYPES.IMAGE);
+
+  const settings: INodeSettings = {};
+
+  if (layout === NODE_LAYOUTS.AURA && canAura) {
+    settings.layout = NODE_LAYOUTS.AURA;
+  }
+
+  return Object.keys(settings).length > 0 ? settings : null;
 };

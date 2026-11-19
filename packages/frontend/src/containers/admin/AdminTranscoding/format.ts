@@ -1,3 +1,5 @@
+export { formatDuration } from '~/utils/date';
+
 const UNITS = ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ'];
 
 /** `1536` → `1.5 КБ`. */
@@ -11,16 +13,6 @@ export const formatBytes = (bytes: number): string => {
   }
 
   return `${unit === 0 ? value : value.toFixed(1)} ${UNITS[unit]}`;
-};
-
-/** `125` → `2:05`; `3725` → `1:02:05`. */
-export const formatDuration = (seconds: number): string => {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = Math.floor(seconds % 60);
-  const pad = (n: number) => String(n).padStart(2, '0');
-
-  return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
 };
 
 /** A moment relative to `now`: `5 мин назад`, `через 2 ч`. */

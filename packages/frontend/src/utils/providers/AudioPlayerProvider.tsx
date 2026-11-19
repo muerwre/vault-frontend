@@ -85,10 +85,14 @@ export const AudioPlayerProvider: FC = ({ children }) => {
   /** handles progress update */
   useEffect(() => {
     const onProgress = () => {
+      // duration stays NaN until the track's header is loaded
+      const total = Number.isFinite(audio?.duration) ? audio!.duration : 0;
+      const current = audio?.currentTime ?? 0;
+
       setProgress({
-        total: audio?.duration ?? 0,
-        current: audio?.currentTime ?? 0,
-        progress: audio ? (audio.currentTime / audio.duration) * 100 : 0,
+        total,
+        current,
+        progress: total > 0 ? (current / total) * 100 : 0,
       });
     };
 

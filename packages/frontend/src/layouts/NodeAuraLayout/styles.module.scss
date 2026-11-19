@@ -1,0 +1,42 @@
+@import 'src/styles/variables';
+
+.wrap {
+  --aura-title-height: #{$node_title_height};
+
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: $bar_height + $gap;
+}
+
+// The first screen below the header, minus the title that peeks from under it.
+.stage {
+  width: 100%;
+  height: calc(100vh - #{$header_height} - var(--aura-title-height));
+  height: calc(100svh - #{$header_height} - var(--aura-title-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  position: relative;
+  z-index: 3;
+}
+
+.node {
+  @include tablet {
+    border-radius: 0;
+  }
+}
+
+.panel {
+  @include row_shadow;
+
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: stretch;
+}

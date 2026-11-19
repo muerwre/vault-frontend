@@ -1,0 +1,15 @@
+@import 'src/styles/variables';
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+.hint {
+  padding: $gap $gap * 1.5;
+  border-radius: $radius;
+  background: $content_bg;
+  font: $font_12_medium;
+  color: $gray_50;
+}

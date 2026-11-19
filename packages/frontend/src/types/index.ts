@@ -1,5 +1,7 @@
 import { Context } from 'react';
 
+import type { INodeSettings } from '@vault/common/types';
+
 import { ERRORS } from '~/constants/errors';
 import { IUser } from '~/types/auth';
 
@@ -98,6 +100,7 @@ export interface INode {
   like_count?: number;
 
   flow: FlowDisplay;
+  settings?: INodeSettings;
   backlinks?: NodeBackLink[];
 
   tags: ITag[];

@@ -7,7 +7,11 @@ import {
   type NodeType,
 } from '@vault/common/constants';
 import { MEDIA_OWNER_TYPES, MEDIA_PRIORITIES } from '@vault/common/media';
-import type { INodeBlock, INodeFlow } from '@vault/common/types';
+import type {
+  INodeBlock,
+  INodeFlow,
+  INodeSettings,
+} from '@vault/common/types';
 import { In, IsNull, Repository } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
@@ -23,6 +27,7 @@ import {
   deriveThumbnail,
   filterBlocks,
   filterFiles,
+  resolveSettings,
   truncateTitle,
   validateNodeContent,
 } from './node.content';
@@ -41,6 +46,7 @@ export interface NodeUpsertBody {
   cover?: { id?: number } | null;
   files?: Array<{ id?: number; metadata?: { title?: string } } | null>;
   flow?: INodeFlow;
+  settings?: Partial<INodeSettings> | null;
 }
 
 export type UpsertFailure =
@@ -150,6 +156,12 @@ export class NodeUpsertService {
     node.blocks = blocks;
     node.filesOrder = resolvedFiles.map((file) => file.id);
     node.coverId = cover?.id ?? null;
+    node.settings = resolveSettings(
+      type,
+      resolvedFiles,
+      body?.settings,
+      node.settings,
+    );
 
     if (typeof body?.is_public === 'boolean') {
       node.isPublic = body.is_public;

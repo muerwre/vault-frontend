@@ -1,5 +1,9 @@
 import { NODE_TYPE_ENUM_ORDER, type NodeType } from '@vault/common/constants';
-import type { INodeBlock, INodeFlow } from '@vault/common/types';
+import type {
+  INodeBlock,
+  INodeFlow,
+  INodeSettings,
+} from '@vault/common/types';
 import {
   Column,
   Entity,
@@ -84,6 +88,13 @@ export class Node {
     transformer: jsonTransformer<INodeFlow>(null),
   })
   flow: INodeFlow | null;
+
+  /** Page settings as JSON; `NULL` when everything is at its default. */
+  @Column({
+    ...legacyText({ nullable: true }),
+    transformer: jsonTransformer<INodeSettings>(null),
+  })
+  settings: INodeSettings | null;
 
   @Column({ name: 'commented_at', ...LEGACY_DATETIME_NULLABLE })
   commentedAt: Date | null;

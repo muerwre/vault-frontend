@@ -1,5 +1,5 @@
 import { Role } from '~/constants/auth';
-import { NODE_TYPES } from '~/constants/node';
+import { NODE_LAYOUTS, NODE_TYPES } from '~/constants/node';
 import { ICommentGroup, INode } from '~/types';
 import { IUser } from '~/types/auth';
 import { path } from '~/utils/ramda';
@@ -86,3 +86,12 @@ export const pruneNodeContent = (node: INode): INode => {
       return node;
   }
 };
+
+/** Aura shows the photos behind the page, so a song node needs at least one. */
+export const canHaveAura = (node: Pick<INode, 'type' | 'files'>): boolean =>
+  node.type === NODE_TYPES.AUDIO &&
+  node.files.some((file) => file?.type === 'image');
+
+/** Whether the node page renders as an aura rather than a regular post. */
+export const isAuraNode = (node: INode): boolean =>
+  node.settings?.layout === NODE_LAYOUTS.AURA && canHaveAura(node);

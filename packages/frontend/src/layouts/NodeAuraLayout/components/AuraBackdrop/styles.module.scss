@@ -1,0 +1,51 @@
+@import 'src/styles/variables';
+
+.wrap {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: $page_background;
+  pointer-events: none;
+}
+
+// A vignette: photos are fully visible in the middle and fade into the page
+// background towards the edges.
+.slides {
+  position: absolute;
+  inset: 0;
+  mask-image: radial-gradient(
+    ellipse at 50% 45%,
+    black 30%,
+    rgba(0, 0, 0, 0.6) 55%,
+    transparent 85%
+  );
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  background: no-repeat 50% 50%;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  will-change: opacity;
+
+  &.active {
+    opacity: 1;
+  }
+}
+
+.stripes {
+  // body sets a white stroke for icons, which would outline every stripe
+  stroke: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+// the page's own colour, so the stripes blend into it rather than darken
+.stripe {
+  fill: $content_bg;
+  fill-opacity: 0.8;
+}

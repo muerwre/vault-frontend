@@ -15,6 +15,10 @@ interface HorizontalMenuItemProps {
   color?: 'green' | 'orange' | 'yellow' | 'flow' | 'lab';
   active?: boolean;
   stretchy?: boolean;
+  /** Puts the label below the icon. */
+  vertical?: boolean;
+  /** Dims the item and ignores clicks. */
+  disabled?: boolean;
   /** Tooltip; useful when the item shows only its icon. */
   title?: string;
   className?: string;
@@ -46,6 +50,8 @@ HorizontalMenu.Item = ({
   isLoading,
   active,
   stretchy,
+  vertical,
+  disabled,
   title,
   className,
   onClick,
@@ -63,12 +69,18 @@ HorizontalMenu.Item = ({
     <div
       className={classNames(
         styles.item,
-        { [styles.active]: active, [styles.stretchy]: stretchy },
+        {
+          [styles.active]: active,
+          [styles.stretchy]: stretchy,
+          [styles.vertical]: vertical,
+          [styles.disabled]: disabled,
+        },
         styles[color],
         className,
       )}
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
       title={title}
+      aria-disabled={disabled || undefined}
     >
       {!!icon && <Icon icon={icon} size={24} />}
       {!!children && <span className={styles.text}>{children}</span>}

@@ -44,6 +44,17 @@ export const NODE_FLOW_DISPLAY = {
 export type FlowDisplayVariant =
   (typeof NODE_FLOW_DISPLAY)[keyof typeof NODE_FLOW_DISPLAY];
 
+/**
+ * How a node page is laid out. `aura` puts the photos behind the page as a
+ * slideshow; only song nodes with at least one photo can use it.
+ */
+export const NODE_LAYOUTS = {
+  POST: 'post',
+  AURA: 'aura',
+} as const;
+
+export type NodeLayout = (typeof NODE_LAYOUTS)[keyof typeof NODE_LAYOUTS];
+
 /** Lab sort modes accepted by `GET /nodes/lab`. */
 export const LAB_SORT = {
   NEW: 'new',

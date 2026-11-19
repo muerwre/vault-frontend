@@ -14,6 +14,7 @@ import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useNodePageParams } from '~/hooks/node/useNodePageParams';
 import { useNodePermissions } from '~/hooks/node/useNodePermissions';
 import { useNodeTags } from '~/hooks/node/useNodeTags';
+import { NodeAuraLayout } from '~/layouts/NodeAuraLayout';
 import { NodeLayout } from '~/layouts/NodeLayout';
 import { NotFoundLayout } from '~/layouts/NotFoundLayout';
 import { IComment } from '~/types';
@@ -22,6 +23,7 @@ import { HTTP_RESPONSES } from '~/utils/api';
 import { CommentContextProvider } from '~/utils/context/CommentContextProvider';
 import { NodeContextProvider } from '~/utils/context/NodeContextProvider';
 import { TagsContextProvider } from '~/utils/context/TagsContextProvider';
+import { isAuraNode } from '~/utils/node';
 import { NodeRelatedProvider } from '~/utils/providers/NodeRelatedProvider';
 
 export const getStaticPaths = async () => {
@@ -159,7 +161,7 @@ const NodePage: FC<Props> = observer((props) => {
             onTagDelete={onTagDelete}
           >
             <NodeHeadMetadata />
-            <NodeLayout />
+            {isAuraNode(node) ? <NodeAuraLayout /> : <NodeLayout />}
           </TagsContextProvider>
         </CommentContextProvider>
       </NodeRelatedProvider>

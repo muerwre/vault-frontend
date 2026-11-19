@@ -550,4 +550,48 @@ describe('node upsert (integration)', () => {
       await db.query('DELETE FROM tag WHERE title = ?', [title]);
     });
   });
+
+  describe('settings', () => {
+    it('keeps aura on a song node with a photo, and drops it with the photo', async () => {
+      const audio = await makeFile('audio');
+      const image = await makeFile('image');
+
+      const { body } = await save(authorId, {
+        type: 'audio',
+        title: 'aura',
+        files: [{ id: audio }, { id: image }],
+        settings: { layout: 'aura' },
+      }).expect(200);
+      const nodeId = track(Number(body.node.id));
+
+      expect(body.node.settings).toEqual({ layout: 'aura' });
+
+      const { body: updated } = await save(authorId, {
+        id: nodeId,
+        title: 'aura',
+        files: [{ id: audio }],
+      }).expect(200);
+
+      expect(updated.node.settings).toEqual({});
+
+      const [row] = await db.query('SELECT settings FROM node WHERE id = ?', [
+        nodeId,
+      ]);
+      expect(row.settings).toBeNull();
+    });
+
+    it('stores nothing for a song node without photos', async () => {
+      const audio = await makeFile('audio');
+
+      const { body } = await save(authorId, {
+        type: 'audio',
+        title: 'no aura',
+        files: [{ id: audio }],
+        settings: { layout: 'aura' },
+      }).expect(200);
+      track(Number(body.node.id));
+
+      expect(body.node.settings).toEqual({});
+    });
+  });
 });

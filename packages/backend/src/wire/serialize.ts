@@ -1,4 +1,8 @@
-import type { INodeBlock, INodeFlow } from '@vault/common/types';
+import type {
+  INodeBlock,
+  INodeFlow,
+  INodeSettings,
+} from '@vault/common/types';
 
 import { isYoutubeThumbCacheEnabled } from '../config/env';
 import type { File } from '../entities/file.entity';
@@ -207,6 +211,7 @@ export interface WireNode {
   tags: WireTag[];
   commented_at: string;
   flow: INodeFlow;
+  settings: INodeSettings;
   is_liked: boolean;
   like_count: number;
 }
@@ -239,6 +244,7 @@ export const toWireNode = (
   tags: (node.tags ?? []).map(toWireTag),
   commented_at: toWireDate(node.commentedAt),
   flow: toWireFlow(node.flow),
+  settings: node.settings ?? {},
   is_liked: extra.isLiked ?? false,
   like_count: extra.likeCount ?? 0,
 });
