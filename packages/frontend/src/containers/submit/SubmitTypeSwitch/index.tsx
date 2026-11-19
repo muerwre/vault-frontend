@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 
 const TYPES = [
   { type: NODE_TYPES.IMAGE, icon: 'image', label: 'Фото' },
-  { type: NODE_TYPES.TEXT, icon: 'text', label: 'Пост' },
+  { type: NODE_TYPES.TEXT, icon: 'text', label: 'Блог' },
   { type: NODE_TYPES.VIDEO, icon: 'video', label: 'Видео' },
   { type: NODE_TYPES.AUDIO, icon: 'audio', label: 'Музыка' },
 ] as const;
