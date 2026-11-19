@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { Filler } from '~/components/common/Filler';
 import { Button } from '~/components/input/Button';
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 

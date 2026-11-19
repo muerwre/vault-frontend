@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { DialogContentProps, useModal } from '~/hooks/modal/useModal';
 
 export const useShowModal = <T extends Dialog>(dialog: T) => {

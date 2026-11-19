@@ -24,13 +24,14 @@ export const formatTextClickableUsernames = (text: string): string =>
   text.replace(/~([\wа-яА-Я-]+)/giu, '<span class="username">~$1</span>');
 
 /**
- * Makes gray comments
+ * Makes gray comments. The stars of block comment delimiters are escaped,
+ * otherwise markdown takes them for emphasis and eats them.
  */
 export const formatTextComments = (text: string): string =>
   text
     .replace(/:\/\//gim, ':|--|')
     .replace(/(\/\/[^\n]+)/gim, '<span class="grey">$1</span>')
-    .replace(/(\/\*[\s\S]*?\*\/)/gim, '<span class="grey">$1</span>')
+    .replace(/\/\*([\s\S]*?)\*\//gim, '<span class="grey">/\\*$1\\*/</span>')
     .replace(/:\|--\|/gim, '://');
 
 /**
@@ -60,6 +61,8 @@ export const formatTextDash = (text: string): string =>
   text.replace(' -- ', ' — ');
 
 /**
- * Formats with markdown
+ * Formats with markdown. Every newline is a line break, as people type them
+ * and as the editor shows them, not only blank lines between paragraphs.
  */
-export const formatTextMarkdown = (text: string): string => marked(text);
+export const formatTextMarkdown = (text: string): string =>
+  marked(text, { breaks: true });

@@ -13,40 +13,13 @@ import { EditorEditDialog } from '~/containers/dialogs/EditorEditDialog';
 import { LoadingDialog } from '~/containers/dialogs/LoadingDialog';
 import { TestDialog } from '~/containers/dialogs/TestDialog';
 
+import { Dialog } from './dialog';
+
 const PhotoSwipe = lazy(() =>
   import('~/containers/dialogs/PhotoSwipe').then((it) => ({
     default: it.PhotoSwipe,
   })),
 );
-
-export enum Dialog {
-  Login = 'Login',
-  Register = 'Register',
-  RegisterRequest = 'RegisterRequest',
-  RegisterComplete = 'RegisterComplete',
-  LoginSocialRegister = 'LoginSocialRegister',
-  Loading = 'Loading',
-  RestoreRequest = 'RestoreRequest',
-  RestorePassword = 'RestorePassword',
-  Test = 'Test',
-  Photoswipe = 'Photoswipe',
-  CreateNode = 'CreateNode',
-  EditNode = 'EditNode',
-  TelegramAttach = 'TelegramAttach',
-  GoogleLoginDisabled = 'GoogleLoginDisabled',
-}
-
-/** Sign-in and signup dialogs: they share the login scene while switching. */
-export const AUTH_DIALOGS: readonly Dialog[] = [
-  Dialog.Login,
-  Dialog.Register,
-  Dialog.RegisterRequest,
-  Dialog.RegisterComplete,
-  Dialog.LoginSocialRegister,
-  Dialog.RestoreRequest,
-  Dialog.RestorePassword,
-  Dialog.GoogleLoginDisabled,
-];
 
 export const DIALOG_CONTENT = {
   [Dialog.Login]: LoginDialog,

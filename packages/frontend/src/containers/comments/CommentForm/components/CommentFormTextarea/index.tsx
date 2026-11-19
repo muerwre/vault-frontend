@@ -1,44 +1,36 @@
-import {
-  forwardRef,
-  KeyboardEventHandler,
-  TextareaHTMLAttributes,
-  useCallback,
-} from 'react';
+import { FC, useCallback } from 'react';
 
-import { Textarea } from '~/components/input/Textarea';
+import {
+  MarkdownEditor,
+  MarkdownFormatter,
+} from '~/components/input/MarkdownEditor';
 import { useRandomPhrase } from '~/constants/phrases';
 import { useCommentFormContext } from '~/hooks/comments/useCommentFormFormik';
 
-interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  isLoading?: boolean;
+interface Props {
+  onPaste?: (event: ClipboardEvent) => void;
+  onFormatter?: (formatter: MarkdownFormatter | null) => void;
 }
 
-const CommentFormTextarea = forwardRef<HTMLTextAreaElement, Props>(
-  ({ ...rest }, ref) => {
-    const { values, handleChange, handleSubmit, isSubmitting } =
-      useCommentFormContext();
+const CommentFormTextarea: FC<Props> = ({ onPaste, onFormatter }) => {
+  const { values, handleChange, handleSubmit, isSubmitting } =
+    useCommentFormContext();
 
-    const onKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>(
-      ({ ctrlKey, key, metaKey }) => {
-        if ((ctrlKey || metaKey) && key === 'Enter') handleSubmit(undefined);
-      },
-      [handleSubmit],
-    );
+  const onSubmit = useCallback(() => handleSubmit(undefined), [handleSubmit]);
+  const placeholder = useRandomPhrase('SIMPLE');
 
-    const placeholder = useRandomPhrase('SIMPLE');
-
-    return (
-      <Textarea
-        {...rest}
-        ref={ref}
-        value={values.text}
-        handler={handleChange('text')}
-        onKeyDown={onKeyDown}
-        disabled={isSubmitting}
-        placeholder={placeholder}
-      />
-    );
-  },
-);
+  return (
+    <MarkdownEditor
+      value={values.text}
+      onChange={handleChange('text')}
+      onSubmit={onSubmit}
+      onPaste={onPaste}
+      onFormatter={onFormatter}
+      disabled={isSubmitting}
+      placeholder={placeholder}
+      loadOnIntent
+    />
+  );
+};
 
 export { CommentFormTextarea };

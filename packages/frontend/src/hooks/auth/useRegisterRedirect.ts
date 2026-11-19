@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { useModal } from '~/hooks/modal/useModal';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
 import { useAuthStore } from '~/store/auth/useAuthStore';

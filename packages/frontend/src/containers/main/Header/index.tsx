@@ -10,7 +10,7 @@ import { Filler } from '~/components/common/Filler';
 import { Logo } from '~/components/common/Logo';
 import { Button } from '~/components/input/Button';
 import { Role } from '~/constants/auth';
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useScrollTop } from '~/hooks/dom/useScrollTop';

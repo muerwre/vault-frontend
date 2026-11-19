@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { IFile } from '~/types';
 

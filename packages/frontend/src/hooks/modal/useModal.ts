@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
-import { Dialog, DIALOG_CONTENT } from '~/constants/modal';
+import type { DIALOG_CONTENT } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { useModalStore } from '~/store/modal/useModalStore';
 import { DialogComponentProps } from '~/types/modal';
 

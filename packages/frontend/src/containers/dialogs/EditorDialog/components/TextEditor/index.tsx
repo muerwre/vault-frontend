@@ -1,6 +1,10 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useState } from 'react';
 
-import { Textarea } from '~/components/input/Textarea';
+import {
+  MarkdownEditor,
+  MarkdownFormatter,
+} from '~/components/input/MarkdownEditor';
+import { MarkdownFormatButtons } from '~/components/input/MarkdownFormatButtons';
 import { useRandomPhrase } from '~/constants/phrases';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { NodeEditorProps } from '~/types/node';
@@ -13,6 +17,7 @@ type Props = NodeEditorProps & {};
 const TextEditor: FC<Props> = () => {
   const { values, setFieldValue } = useNodeFormContext();
   const placeholder = useRandomPhrase('SIMPLE');
+  const [formatter, setFormatter] = useState<MarkdownFormatter | null>(null);
 
   const setText = useCallback(
     (text: string) => setFieldValue('blocks', [{ type: 'text', text }]),
@@ -23,9 +28,13 @@ const TextEditor: FC<Props> = () => {
 
   return (
     <div className={styles.wrap}>
-      <Textarea
+      <MarkdownEditor
         value={text}
-        handler={setText}
+        onChange={setText}
+        onFormatter={setFormatter}
+        header={
+          formatter && <MarkdownFormatButtons formatter={formatter} headings />
+        }
         minRows={6}
         placeholder={placeholder}
       />

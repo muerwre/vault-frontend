@@ -1,7 +1,5 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .wrap {
-  & > div {
-    padding-bottom: 64px;
-  }
+  padding-bottom: 64px;
 }

@@ -6,7 +6,7 @@ import { Card } from '~/components/common/Card';
 import { Container } from '~/components/common/Container';
 import { Footer } from '~/components/common/Footer';
 import { NodeTitle } from '~/components/node/NodeTitle';
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
 import { NodeBottomBlock } from '~/containers/node/NodeBottomBlock';
 import { useAuth } from '~/hooks/auth/useAuth';

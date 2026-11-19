@@ -6,7 +6,7 @@ import { Group } from '~/components/common/Group';
 import { Padder } from '~/components/common/Padder';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { LoginDialogButtons } from '~/containers/auth/LoginDialog/components/LoginDialogButtons';
 import { useCloseOnEscape } from '~/hooks';
 import { useAuth } from '~/hooks/auth/useAuth';

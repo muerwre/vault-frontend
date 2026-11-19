@@ -5,6 +5,8 @@ import { observer } from 'mobx-react-lite';
 
 import { Filler } from '~/components/common/Filler';
 import { Button } from '~/components/input/Button';
+import { MarkdownFormatter } from '~/components/input/MarkdownEditor';
+import { MarkdownFormatButtons } from '~/components/input/MarkdownFormatButtons';
 import { ERROR_LITERAL } from '~/constants/errors';
 import { EMPTY_COMMENT } from '~/constants/node';
 import { useCommentFormFormik } from '~/hooks/comments/useCommentFormFormik';
@@ -14,7 +16,6 @@ import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
 
 import { CommentFormAttachButtons } from './components/CommentFormAttachButtons';
 import { CommentFormAttaches } from './components/CommentFormAttaches';
-import { CommentFormFormatButtons } from './components/CommentFormFormatButtons';
 import { CommentFormTextarea } from './components/CommentFormTextarea';
 import styles from './styles.module.scss';
 
@@ -28,7 +29,7 @@ interface Props {
 
 const CommentForm: FC<Props> = observer(
   ({ comment, allowUploads, saveComment, onCancelEdit }) => {
-    const [textarea, setTextArea] = useState<HTMLTextAreaElement | null>(null);
+    const [formatter, setFormatter] = useState<MarkdownFormatter | null>(null);
     const uploader = useUploaderContext();
 
     const formik = useCommentFormFormik(
@@ -61,7 +62,7 @@ const CommentForm: FC<Props> = observer(
       <form onSubmit={formik.handleSubmit} className={styles.wrap}>
         <FormikProvider value={formik}>
           <div className={styles.input}>
-            <CommentFormTextarea onPaste={onPaste} ref={setTextArea} />
+            <CommentFormTextarea onPaste={onPaste} onFormatter={setFormatter} />
 
             {!!error && (
               <div className={styles.error} onClick={clearError}>
@@ -80,12 +81,7 @@ const CommentForm: FC<Props> = observer(
             )}
 
             <div className={styles.button_column}>
-              {!!textarea && (
-                <CommentFormFormatButtons
-                  element={textarea}
-                  handler={formik.handleChange('text')}
-                />
-              )}
+              {!!formatter && <MarkdownFormatButtons formatter={formatter} />}
             </div>
 
             <Filler />

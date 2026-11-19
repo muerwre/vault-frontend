@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { features } from '~/constants/features';
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { URLS } from '~/constants/urls';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { useNavigation } from '~/hooks/navigation/useNavigation';

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { apiLockNode, apiPostNodeHeroic, apiPostNodeLike } from '~/api/node';
 import { features } from '~/constants/features';
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { URLS } from '~/constants/urls';
 import { useModal } from '~/hooks/modal/useModal';
 import { useNavigation } from '~/hooks/navigation/useNavigation';

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { DialogContentProps } from '~/hooks/modal/useModal';
 
 export class ModalStore {

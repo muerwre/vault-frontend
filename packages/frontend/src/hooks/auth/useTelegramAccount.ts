@@ -4,7 +4,7 @@ import { TelegramUser } from '@v9v/ts-react-telegram-login';
 import { mutate } from 'swr';
 
 import { API } from '~/constants/api';
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { showErrorToast } from '~/utils/errors/showToast';
 
 import { apiAttachTelegram } from '../../api/auth/index';

@@ -1,6 +1,10 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useState } from 'react';
 
-import { Textarea } from '~/components/input/Textarea';
+import {
+  MarkdownEditor,
+  MarkdownFormatter,
+} from '~/components/input/MarkdownEditor';
+import { MarkdownFormatButtons } from '~/components/input/MarkdownFormatButtons';
 import { useRandomPhrase } from '~/constants/phrases';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
@@ -10,12 +14,14 @@ import { NodeEditorProps } from '~/types/node';
 import styles from './styles.module.scss';
 
 /**
- * Text node content: one textarea that fills the main zone and grows past it.
- * Video blocks are kept, so switching the type back and forth loses nothing.
+ * Text node content: formatting buttons over a markdown editor that fills the
+ * main zone and grows past it. Video blocks are kept, so switching the type
+ * back and forth loses nothing.
  */
 const SubmitTextEditor: FC<NodeEditorProps> = () => {
-  const { values, setFieldValue } = useNodeFormContext();
+  const { values, setFieldValue, isSubmitting } = useNodeFormContext();
   const placeholder = useRandomPhrase('SIMPLE');
+  const [formatter, setFormatter] = useState<MarkdownFormatter | null>(null);
   // mobile has no free height to fill, so it starts taller instead
   const { isTablet } = useWindowSize();
 
@@ -36,12 +42,16 @@ const SubmitTextEditor: FC<NodeEditorProps> = () => {
 
   return (
     <div className={styles.wrap}>
-      <Textarea
+      <MarkdownEditor
         value={text}
-        handler={setText}
+        onChange={setText}
+        onFormatter={setFormatter}
+        header={
+          formatter && <MarkdownFormatButtons formatter={formatter} headings />
+        }
         minRows={isTablet ? 12 : 6}
         placeholder={placeholder}
-        className={styles.textarea}
+        disabled={isSubmitting}
       />
     </div>
   );

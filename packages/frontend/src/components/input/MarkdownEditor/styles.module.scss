@@ -1,0 +1,88 @@
+@import '~/styles/variables';
+
+.wrap,
+.wrap > *,
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.header {
+  display: flex;
+  padding: $gap * 0.5;
+  border-bottom: 1px solid $gray_90;
+}
+
+.textarea {
+  flex: 1 0 auto;
+  background: none;
+  color: inherit;
+  font: inherit;
+  width: 100%;
+  border: none;
+  padding: $gap;
+  outline: none;
+  resize: none;
+}
+
+// the package styles fill a fixed-height pane; here the editor grows with its
+// text like a textarea, and takes the site's colors
+.editor:global(.atomic-cm-editor) {
+  --atomic-editor-font: #{$font};
+  --atomic-editor-body-size: 1em;
+  --atomic-editor-body-leading: 1.5;
+  --atomic-editor-measure: none;
+  --atomic-editor-fg: #{$input_text_color};
+  --atomic-editor-accent: #{$color_primary};
+  --atomic-editor-accent-bright: #{$color_primary};
+  --atomic-editor-link: #{$color_link};
+  --atomic-editor-link-hover: #{$color_link};
+  --atomic-editor-code-bg: #{$content_bg_info};
+
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+
+  :global(.cm-editor) {
+    flex: 1 0 auto;
+    height: auto;
+  }
+
+  :global(.cm-scroller) {
+    flex: 1 0 auto;
+  }
+
+  :global(.cm-content) {
+    min-height: var(--min-height);
+    padding: $gap;
+    font-weight: 500;
+  }
+
+  :global(.cm-placeholder) {
+    font: $input_placeholder_font;
+    color: $input_grey_color;
+  }
+
+  // spaced as rendered posts space images; padding, not margin, as the
+  // editor measures widget heights by their boxes. The space above comes
+  // from the image's own line, which is collapsed, see extensions.ts
+  :global(.cm-atomic-image) {
+    padding: 0 0 1em;
+
+    img {
+      border-radius: $radius;
+    }
+  }
+
+  :global(.cm-line.cm-vault-image-source) {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  :global(.cm-vault-comment) {
+    color: #666666;
+  }
+}

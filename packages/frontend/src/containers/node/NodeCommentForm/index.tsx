@@ -3,7 +3,7 @@ import { FC, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { CommentForm } from '~/containers/comments/CommentForm';
 import { CommentWrapper } from '~/containers/comments/CommentWrapper';

@@ -3,7 +3,7 @@ import { FC, useCallback } from 'react';
 import { BetterScrollDialog } from '~/components/common/BetterScrollDialog';
 import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
-import { Dialog } from '~/constants/modal';
+import { Dialog } from '~/constants/modal/dialog';
 import { useCloseOnEscape } from '~/hooks';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { DialogComponentProps } from '~/types/modal';
