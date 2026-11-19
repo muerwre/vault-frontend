@@ -318,7 +318,9 @@ describe('nodes (integration)', () => {
       const [row] = await db.query(`
         SELECT nt.nodeId AS id FROM node_tags_tag nt
           JOIN tag t ON t.id = nt.tagId
-         WHERE t.title LIKE '/%' LIMIT 1
+          JOIN node n ON n.id = nt.nodeId
+         WHERE t.title LIKE '/%' AND n.is_promoted = 1 AND n.deleted_at IS NULL
+         LIMIT 1
       `);
 
       const { body } = await http()
@@ -343,6 +345,8 @@ describe('nodes (integration)', () => {
       const [row] = await db.query(`
         SELECT n.id FROM node n
          WHERE n.deleted_at IS NULL
+           AND n.is_promoted = 1
+           AND n.type IN ('image', 'video', 'text', 'audio')
            AND NOT EXISTS (SELECT 1 FROM node_tags_tag t WHERE t.nodeId = n.id)
          LIMIT 1
       `);
@@ -354,12 +358,89 @@ describe('nodes (integration)', () => {
       expect(body).toEqual({ related: { albums: {}, similar: [] } });
     });
 
-    it('returns empty results for an unknown node', async () => {
-      const { body } = await http()
-        .get('/api/nodes/99999999/related')
-        .expect(200);
+    it('404s an unknown node', async () => {
+      await http().get('/api/nodes/99999999/related').expect(404);
+    });
 
-      expect(body).toEqual({ related: { albums: {}, similar: [] } });
+    describe('flow and lab', () => {
+      const tagTitle = `relspec_${Date.now().toString(36)}`;
+      const nodeIds: number[] = [];
+      let tagId: number;
+      let flowSource: number;
+      let flowSibling: number;
+      let labSource: number;
+      let labSibling: number;
+
+      const lastId = async () =>
+        Number((await db.query('SELECT LAST_INSERT_ID() AS id'))[0].id);
+
+      /** A text node carrying the spec's tag. */
+      const tagged = async (isPromoted: boolean) => {
+        await db.query(
+          `INSERT INTO node (title, type, blocks, files_order, is_public, is_promoted,
+                             is_heroic, created_at, updated_at)
+           VALUES ('related spec', 'text', '[]', '', 1, ?, 0, NOW(), NOW())`,
+          [isPromoted ? 1 : 0],
+        );
+        const id = await lastId();
+        nodeIds.push(id);
+        await db.query(
+          'INSERT INTO node_tags_tag (nodeId, tagId) VALUES (?, ?)',
+          [id, tagId],
+        );
+        return id;
+      };
+
+      const similarIds = async (
+        nodeId: number,
+        headers: Record<string, string> = {},
+      ) => {
+        const { body } = await http()
+          .get(`/api/nodes/${nodeId}/related`)
+          .set(headers)
+          .expect(200);
+
+        return (body.related.similar as Array<{ id: number }>)
+          .map((item) => item.id)
+          .sort((a, b) => a - b);
+      };
+
+      beforeAll(async () => {
+        await db.query(
+          `INSERT INTO tag (title, data, created_at, updated_at)
+           VALUES (?, '{}', NOW(), NOW())`,
+          [tagTitle],
+        );
+        tagId = await lastId();
+
+        flowSource = await tagged(true);
+        flowSibling = await tagged(true);
+        labSource = await tagged(false);
+        labSibling = await tagged(false);
+      });
+
+      afterAll(async () => {
+        await db.query('DELETE FROM node_tags_tag WHERE tagId = ?', [tagId]);
+        await db.query('DELETE FROM node WHERE id IN (?)', [nodeIds]);
+        await db.query('DELETE FROM tag WHERE id = ?', [tagId]);
+      });
+
+      it('shows a guest only flow nodes', async () => {
+        expect(await similarIds(flowSource)).toEqual([flowSibling]);
+      });
+
+      it('shows a member flow and lab nodes alike', async () => {
+        expect(await similarIds(flowSource, authHeader(1))).toEqual(
+          [flowSibling, labSource, labSibling].sort((a, b) => a - b),
+        );
+        expect(await similarIds(labSource, authHeader(1))).toEqual(
+          [flowSource, flowSibling, labSibling].sort((a, b) => a - b),
+        );
+      });
+
+      it('404s a lab node to a guest', async () => {
+        await http().get(`/api/nodes/${labSource}/related`).expect(404);
+      });
     });
 
     it('400s a non-numeric id', async () => {

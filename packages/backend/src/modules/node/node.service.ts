@@ -172,11 +172,14 @@ export class NodeService {
    * `albums` by tag title, all other tags feed `similar` ranked by how many tags
    * are shared.
    *
-   * Both sides are restricted to the same `type` and `is_promoted` as the source
-   * node, and exclude it. A node with no tags yields empty results.
+   * Both sides are restricted to the source node's `type` and exclude it.
+   * Members see flow and lab nodes alike; guests see flow nodes only, and get
+   * `null` for a lab node, as if it did not exist. `null` for an unknown node
+   * too. A node with no tags yields empty results.
    */
-  async getRelated(id: number): Promise<WireRelated> {
+  async getRelated(id: number, uid: number): Promise<WireRelated | null> {
     const empty: WireRelated = { related: { albums: {}, similar: [] } };
+    const isGuest = uid === GUEST_USER_ID;
 
     const node = await this.nodes
       .createQueryBuilder('node')
@@ -184,7 +187,11 @@ export class NodeService {
       .where('node.id = :id', { id })
       .getOne();
 
-    if (!node || (node.tags ?? []).length === 0) {
+    if (!node || (isGuest && isHiddenFromGuests(node))) {
+      return null;
+    }
+
+    if ((node.tags ?? []).length === 0) {
       return empty;
     }
 
@@ -200,8 +207,8 @@ export class NodeService {
     }
 
     const [albums, similar] = await Promise.all([
-      this.getAlbumRelated(albumIds, node),
-      this.getSimilarRelated(similarIds, node),
+      this.getAlbumRelated(albumIds, node, isGuest),
+      this.getSimilarRelated(similarIds, node, isGuest),
     ]);
 
     return { related: { albums, similar } };
@@ -210,6 +217,7 @@ export class NodeService {
   private async getAlbumRelated(
     tagIds: number[],
     node: Node,
+    flowOnly: boolean,
   ): Promise<Record<string, WireRelatedItem[]>> {
     const albums: Record<string, WireRelatedItem[]> = {};
 
@@ -234,9 +242,9 @@ export class NodeService {
           AND \`node\`.\`type\` = ?
           AND \`node\`.\`id\` NOT IN (?)
           AND \`node\`.\`deleted_at\` IS NULL
-          AND \`node\`.\`is_promoted\` = ?
+          AND \`node\`.\`is_promoted\` >= ?
         LIMIT ?`,
-      [tagIds, node.type, [node.id], node.isPromoted ? 1 : 0, RELATED_LIMIT],
+      [tagIds, node.type, [node.id], flowOnly ? 1 : 0, RELATED_LIMIT],
     );
 
     for (const row of rows) {
@@ -257,6 +265,7 @@ export class NodeService {
   private async getSimilarRelated(
     tagIds: number[],
     node: Node,
+    flowOnly: boolean,
   ): Promise<WireRelatedItem[]> {
     if (tagIds.length === 0) {
       return [];
@@ -277,12 +286,12 @@ export class NodeService {
             WHERE \`tags\`.\`tagId\` IN (?) AND \`nodeId\` NOT IN (?)
          ) AS \`t1\` ON \`t1\`.\`nodeId\` = \`node\`.\`id\`
         WHERE \`node\`.\`type\` = ?
-          AND \`node\`.\`is_promoted\` = ?
+          AND \`node\`.\`is_promoted\` >= ?
           AND \`node\`.\`deleted_at\` IS NULL
         GROUP BY \`t1\`.\`nodeId\`
         ORDER BY \`count\` DESC
         LIMIT ?`,
-      [tagIds, [node.id], node.type, node.isPromoted ? 1 : 0, RELATED_LIMIT],
+      [tagIds, [node.id], node.type, flowOnly ? 1 : 0, RELATED_LIMIT],
     );
 
     return rows.map((row) => ({

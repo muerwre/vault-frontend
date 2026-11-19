@@ -190,9 +190,16 @@ export class NodeController {
     return this.lab.getStats();
   }
 
-  /** Public. An unknown or untagged node yields empty results, not a 404. */
+  /**
+   * Public, but a guest asking about a lab node gets a 404, the same as for an
+   * unknown one. An untagged node yields empty results.
+   */
   @Get(':id/related')
-  getRelated(@Param('id') id: string): Promise<WireRelated> {
+  @UseGuards(OptionalAuthGuard)
+  async getRelated(
+    @Param('id') id: string,
+    @Uid() uid: number,
+  ): Promise<WireRelated> {
     const nodeId = Number.parseInt(id, 10);
 
     if (!Number.isFinite(nodeId) || nodeId <= 0) {
@@ -202,7 +209,13 @@ export class NodeController {
       );
     }
 
-    return this.nodes.getRelated(nodeId);
+    const result = await this.nodes.getRelated(nodeId, uid);
+
+    if (!result) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    return result;
   }
 
   /** A missing or non-numeric id is a 404, not a validation error. */
