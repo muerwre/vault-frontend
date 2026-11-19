@@ -1,5 +1,7 @@
 import { BORIS_NODE_ID } from '@vault/common/constants';
 
+import { stripMarkdown } from '../../globals/markdown';
+
 /** One outgoing bot message. Text is Telegram HTML. */
 export interface TelegramMessage {
   text: string;
@@ -149,7 +151,10 @@ export const nodeMessage = (
   showPreview: true,
 });
 
-/** A new comment: author and linked node title, then the text when present. */
+/**
+ * A new comment: author and linked node title, then the text when present,
+ * stripped of markdown, which Telegram doesn't speak.
+ */
 export const commentMessage = (
   publicUrl: string,
   comment: CommentMessageSource,
@@ -160,11 +165,9 @@ export const commentMessage = (
     `<a href="${escapeAttr(url)}">"${escapeHtml(comment.node?.title ?? '')}"</a>`;
 
   const separator = ':\n\n';
-  const body = comment.text
-    ? escapeWithin(
-        comment.text,
-        TELEGRAM_MAX_TEXT - head.length - separator.length,
-      )
+  const text = comment.text ? stripMarkdown(comment.text) : '';
+  const body = text
+    ? escapeWithin(text, TELEGRAM_MAX_TEXT - head.length - separator.length)
     : '';
 
   return plain(body ? `${head}${separator}${body}` : head);

@@ -45,6 +45,17 @@ describe('vk post content', () => {
       ).toBe('Заголовок\n~muerwre\nhttps://v.org/post100\n\nОписание');
     });
 
+    it('strips markdown from the description', () => {
+      expect(
+        buildPostMessage(
+          node({ description: '# Заголовок\n\n**Описание**' }),
+          'https://v.org',
+        ),
+      ).toBe(
+        'Заголовок\n~muerwre\nhttps://v.org/post100\n\nЗаголовок\n\nОписание',
+      );
+    });
+
     it('omits the description block when there is none', () => {
       expect(buildPostMessage(node(), 'https://v.org')).not.toContain('\n\n');
     });

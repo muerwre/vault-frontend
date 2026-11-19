@@ -1,6 +1,7 @@
 import { BORIS_NODE_ID } from '@vault/common/constants';
 
 import type { Node } from '../../entities/node.entity';
+import { stripMarkdown } from '../../globals/markdown';
 
 /** Prefix on stored urls, standing in for the static host. */
 const URL_PREFIX = 'REMOTE_CURRENT://';
@@ -11,7 +12,7 @@ export const nodePermalink = (host: string, nodeId: number): string =>
 
 /**
  * Body of the wall post: title, author, link, then the description when there
- * is one.
+ * is one. VK shows plain text, so the description loses its markdown.
  */
 export const buildPostMessage = (
   node: Pick<Node, 'id' | 'title' | 'description'> & {
@@ -25,7 +26,9 @@ export const buildPostMessage = (
     nodePermalink(host, node.id),
   ].join('\n');
 
-  return node.description ? `${head}\n\n${node.description}` : head;
+  const description = node.description ? stripMarkdown(node.description) : '';
+
+  return description ? `${head}\n\n${description}` : head;
 };
 
 /**

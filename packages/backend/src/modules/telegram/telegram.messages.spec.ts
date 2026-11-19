@@ -123,6 +123,15 @@ describe('telegram messages', () => {
       ).toContain('1 &lt; 2');
     });
 
+    it('sends the body without markdown', () => {
+      expect(
+        commentMessage(SITE, {
+          ...comment,
+          text: '**жирно** и [ссылка](https://x.org)',
+        }).text,
+      ).toContain(':\n\nжирно и ссылка (https://x.org)');
+    });
+
     it('stays within the Telegram limit for the longest comment', () => {
       const { text } = commentMessage(SITE, {
         ...comment,
