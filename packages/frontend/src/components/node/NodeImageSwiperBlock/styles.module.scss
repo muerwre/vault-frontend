@@ -9,17 +9,23 @@
 
   :global(.swiper) {
     width: 100%;
+
+    &:hover :global(.swiper-pagination) {
+      opacity: 1;
+    }
   }
 
   :global(.swiper-pagination) {
     left: 50%;
-    bottom: $gap * 2;
+    bottom: $gap * 4;
     transform: translate(-50%, 25%);
     background: $content_bg_darker;
     width: auto;
     padding: 5px 10px;
     border-radius: 10px;
     font: $font_10_semibold;
+    cursor: pointer;
+    opacity: 0;
   }
 
   :global(.swiper-container) {

@@ -66,11 +66,17 @@
 // the photo slider's own rules, whatever order the sheets load in.
 .slider.slider {
   :global(.swiper) {
-    padding-bottom: $gap * 3;
+    padding-bottom: $gap;
+
+    &:hover :global(.swiper-pagination) {
+      opacity: 1;
+    }
   }
 
   :global(.swiper-pagination) {
-    bottom: 0;
+    bottom: $gap * 4;
     transform: translate(-50%, 0);
+    opacity: 0;
+    cursor: pointer;
   }
 }
