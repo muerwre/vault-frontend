@@ -12,13 +12,28 @@ export const useNavigation = () => {
   const push = useCallback(
     (url: string) => {
       if (CONFIG.isNextEnvironment) {
-        nextRouter.push(url);
-      } else {
-        craHistory.push(url);
+        return nextRouter.push(url);
       }
+
+      craHistory.push(url);
+
+      return Promise.resolve();
     },
     [craHistory, nextRouter],
   );
 
-  return { push };
+  const replace = useCallback(
+    (url: string) => {
+      if (CONFIG.isNextEnvironment) {
+        return nextRouter.replace(url);
+      }
+
+      craHistory.replace(url);
+
+      return Promise.resolve();
+    },
+    [craHistory, nextRouter],
+  );
+
+  return { push, replace };
 };
