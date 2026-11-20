@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 const BottomContainer = ({ children }) => (
   <div className={styles.wrap}>
     <div className={styles.content}>
-      <div className={styles.padder}></div>
+      <div className={styles.padder}>{children}</div>
     </div>
   </div>
 );

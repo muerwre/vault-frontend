@@ -1,82 +1,50 @@
-import { useCallback, VFC } from 'react';
+import { VFC } from 'react';
 
+import classNames from 'classnames';
+
+import { AudioPlayer } from '~/components/common/AudioPlayer';
 import { Icon } from '~/components/common/Icon';
 import { PlayerState } from '~/constants/player';
 import { IFile } from '~/types';
-import { PlayerProgress } from '~/types/player';
-import { path } from '~/utils/ramda';
 
 import styles from './styles.module.scss';
 
 interface Props {
-  progress: PlayerProgress;
   status: PlayerState;
   file?: IFile;
-  playerPlay: () => void;
-  playerPause: () => void;
-  playerSeek: (pos: number) => void;
   playerStop: () => void;
 }
 
-const PlayerBar: VFC<Props> = ({
-  status,
-  playerPlay,
-  playerPause,
-  playerSeek,
-  playerStop,
-  progress,
-  file,
-}) => {
-  const onClick = useCallback(() => {
-    if (status === PlayerState.PLAYING) return playerPause();
-    return playerPlay();
-  }, [playerPlay, playerPause, status]);
-
-  const onSeek = useCallback(
-    (event) => {
-      event.stopPropagation();
-      const { clientX, target } = event;
-      const { left, width } = target.getBoundingClientRect();
-      playerSeek(((clientX - left) / width) * 100);
-    },
-    [playerSeek],
-  );
-
-  if (status === PlayerState.UNSET) return null;
-
-  const metadata: IFile['metadata'] = path(['metadata'], file);
-  const title =
-    metadata &&
-    (metadata.title ||
-      [metadata.id3artist, metadata.id3title].filter((el) => !!el).join(' - '));
+/**
+ * The song in the player, at the bottom of the page: the same compact row a
+ * song list shows, its button and progress driven by the player, and a cross
+ * that stops it.
+ */
+const PlayerBar: VFC<Props> = ({ status, playerStop, file }) => {
+  if (status === PlayerState.UNSET || !file) return null;
 
   return (
-    <div className={styles.place}>
+    <div
+      className={classNames(styles.place, {
+        [styles.playing]: status === PlayerState.PLAYING,
+      })}
+    >
+      {/* glows around the bar while the song plays */}
+      <div className={styles.halo} aria-hidden />
+
       <div className={styles.wrap}>
-        <div className={styles.status}>
-          <div className={styles.playpause} onClick={onClick}>
-            {status === PlayerState.PLAYING ? (
-              <Icon icon="pause" />
-            ) : (
-              <Icon icon="play" />
-            )}
-          </div>
-
-          <div className={styles.info}>
-            <div className={styles.title}>{title}</div>
-
-            <div className={styles.progress} onClick={onSeek}>
-              <div
-                className={styles.bar}
-                style={{ width: `${progress.progress}%` }}
-              />
-            </div>
-          </div>
-
-          <div className={styles.close} onClick={playerStop}>
-            <Icon icon="close" />
-          </div>
+        <div className={styles.player}>
+          <AudioPlayer file={file} compact />
         </div>
+
+        <button
+          type="button"
+          className={styles.close}
+          onClick={playerStop}
+          aria-label="Остановить"
+        >
+          <Icon icon="close" />
+        </button>
       </div>
     </div>
   );

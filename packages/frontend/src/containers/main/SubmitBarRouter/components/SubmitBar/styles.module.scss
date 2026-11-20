@@ -28,9 +28,10 @@
   border: none;
   outline: none;
 
+  // sized to the bar
   svg {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
   }
 
   .lab & {
@@ -66,9 +67,10 @@
   fill: white;
   color: white;
 
+  // sized to the bar
   svg {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
   }
 
   &:first-child {
