@@ -1,6 +1,13 @@
 import '@atomic-editor/editor/styles.css';
 
-import { CSSProperties, FC, useEffect, useRef, useState } from 'react';
+import {
+  CSSProperties,
+  FC,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import { Annotation, Compartment, EditorState, Prec } from '@codemirror/state';
 import { EditorView, keymap, placeholder } from '@codemirror/view';
@@ -50,7 +57,9 @@ const MarkdownEditorView: FC<MarkdownEditorViewProps> = ({
   const callbacks = useRef({ onChange, onSubmit, onPaste, onFormatter });
   callbacks.current = { onChange, onSubmit, onPaste, onFormatter };
 
-  useEffect(() => {
+  // before paint, or the textarea it replaces gives way to an empty box for
+  // a frame
+  useLayoutEffect(() => {
     if (!root.current) {
       return;
     }

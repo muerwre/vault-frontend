@@ -15,12 +15,13 @@ export const useBoris = (comments: IComment[]) => {
   useEffect(() => {
     const last_comment = comments[0];
 
-    if (!last_comment) return;
+    if (!last_comment?.created_at) return;
 
+    // only moves forward: storing the same date again would hand out a new
+    // user object and render this page again, which stores it again
     if (
-      !last_comment.created_at ||
-      !lastSeen ||
-      isBefore(new Date(lastSeen), new Date(last_comment.created_at))
+      lastSeen &&
+      !isBefore(new Date(lastSeen), new Date(last_comment.created_at))
     ) {
       return;
     }
