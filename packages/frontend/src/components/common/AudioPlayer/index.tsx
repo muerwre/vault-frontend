@@ -102,6 +102,8 @@ const AudioPlayer = memo(
           [styles.playing]: playing,
           [styles.compact]: compact,
         })}
+        // markers for containers that route clicks to the controls
+        data-audio-row
       >
         {onDelete && (
           <div className={styles.drop} onMouseDown={onDropClick}>
@@ -111,6 +113,7 @@ const AudioPlayer = memo(
 
         <div
           className={styles.playpause}
+          data-audio-play
           onClick={onPlay}
           onMouseDown={stopPropagation}
         >
@@ -134,7 +137,7 @@ const AudioPlayer = memo(
           <div className={styles.content}>
             <div className={styles.title}>{title || ''}</div>
 
-            <div className={styles.progress} onClick={onSeek}>
+            <div className={styles.progress} data-audio-seek onClick={onSeek}>
               <div
                 className={styles.bar}
                 style={{

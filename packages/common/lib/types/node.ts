@@ -111,4 +111,8 @@ export interface INode {
 export type IFlowNode = Pick<
   INode,
   'id' | 'type' | 'flow' | 'description' | 'title' | 'thumbnail' | 'created_at'
->;
+> & {
+  /** A song node's tracks, at most ten, for its flow cell to play. */
+  songs?: IFile[];
+};
+

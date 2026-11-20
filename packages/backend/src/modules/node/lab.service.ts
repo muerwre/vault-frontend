@@ -6,7 +6,7 @@ import {
   LAB_SORT,
   type LabSort,
 } from '@vault/common/constants';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { Comment } from '../../entities/comment.entity';
 import { File } from '../../entities/file.entity';
@@ -15,7 +15,6 @@ import { Node } from '../../entities/node.entity';
 import { Tag } from '../../entities/tag.entity';
 import { NodeView } from '../../entities/views.entity';
 import {
-  sortFilesByOrder,
   toWireDateOrNull,
   toWireNode,
   toWireShallowNode,
@@ -25,6 +24,7 @@ import {
   type WireTag,
 } from '../../wire/serialize';
 
+import { filesOf, loadFilesById } from './node-files';
 import { applyIsLabNode } from './node.predicates';
 
 export interface WireLabItem {
@@ -144,13 +144,13 @@ export class LabService {
         this.getLastSeens(uid, ids),
         this.countLikes(ids),
         this.getLikedByUser(uid, ids),
-        this.loadFiles(rows),
+        loadFilesById(this.files, rows),
       ]);
 
     return {
       count,
       nodes: rows.map((node) => ({
-        node: toWireNode(node, this.filesOf(node, filesById), {
+        node: toWireNode(node, filesOf(node, filesById), {
           likeCount: likeCounts.get(node.id) ?? 0,
           isLiked: likedByMe.has(node.id),
         }),
@@ -232,33 +232,6 @@ export class LabService {
       .addOrderBy('node.created_at', 'DESC')
       .limit(HEROES_LIMIT)
       .getMany();
-  }
-
-  /**
-   * Every file the listed nodes reference, in one query. Cards render from
-   * `files` (an image node's picture, an audio node's tracks), so a node sent
-   * without them shows up empty.
-   */
-  private async loadFiles(nodes: Node[]): Promise<Map<number, File>> {
-    const ids = [...new Set(nodes.flatMap((node) => node.filesOrder ?? []))];
-
-    if (ids.length === 0) {
-      return new Map();
-    }
-
-    const files = await this.files.findBy({ id: In(ids) });
-
-    return new Map(files.map((file) => [file.id, file]));
-  }
-
-  /** A node's files from the batch, in its `files_order`. */
-  private filesOf(node: Node, filesById: Map<number, File>): File[] {
-    const order = node.filesOrder ?? [];
-
-    return sortFilesByOrder(
-      order.map((id) => filesById.get(id)).filter((f): f is File => !!f),
-      order,
-    );
   }
 
   private async countComments(ids: number[]): Promise<Map<number, number>> {

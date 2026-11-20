@@ -61,6 +61,45 @@ describe('nodes (integration)', () => {
       expect(body.valid).toEqual([]);
     });
 
+    it('sends the tracks of a song node for its cell to play', async () => {
+      const [song] = await db.query(
+        `SELECT n.id, n.created_at FROM node n
+         WHERE n.type = 'audio' AND n.is_promoted = 1 AND n.is_public = 1
+           AND n.deleted_at IS NULL
+           AND EXISTS (SELECT 1 FROM node_files_file nf
+             JOIN file f ON f.id = nf.fileId
+             WHERE nf.nodeId = n.id AND f.type = 'audio')
+         ORDER BY n.created_at DESC LIMIT 1`,
+      );
+
+      // the node is the newest one older than `end`, so it heads the page
+      const end = new Date(new Date(song.created_at).getTime() + 1000);
+      const { body } = await http()
+        .get('/api/nodes/')
+        .query({ end: end.toISOString(), take: 5 })
+        .expect(200);
+
+      const cell = body.after.find(
+        (it: { id: number }) => it.id === Number(song.id),
+      );
+      expect(cell).toBeDefined();
+
+      // the same tracks, in the same order, as the node page plays
+      const { body: page } = await http()
+        .get(`/api/nodes/${song.id}`)
+        .expect(200);
+      const tracks = page.node.files
+        .filter((file: { type: string }) => file.type === 'audio')
+        .slice(0, 10);
+
+      expect(cell.songs).toEqual(tracks);
+
+      const others = body.after.filter(
+        (it: { type: string }) => it.type !== 'audio',
+      );
+      expect(others.every((it: object) => !('songs' in it))).toBe(true);
+    });
+
     it('honours take for the after slice', async () => {
       const { body } = await http()
         .get('/api/nodes/')

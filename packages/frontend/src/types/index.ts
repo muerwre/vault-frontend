@@ -111,6 +111,8 @@ export interface INode {
   type?: string;
 
   blocks: IBlock[];
+  /** A song node's tracks, at most ten; sent on the flow only. */
+  songs?: IFile[];
   thumbnail?: string;
   description?: string;
   is_liked?: boolean;
@@ -133,7 +135,14 @@ export interface INode {
 
 export type IFlowNode = Pick<
   INode,
-  'id' | 'type' | 'flow' | 'description' | 'title' | 'thumbnail' | 'created_at'
+  | 'id'
+  | 'type'
+  | 'flow'
+  | 'description'
+  | 'title'
+  | 'thumbnail'
+  | 'created_at'
+  | 'songs'
 >;
 
 export interface NodeBackLink {

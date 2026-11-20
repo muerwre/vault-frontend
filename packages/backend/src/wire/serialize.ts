@@ -1,3 +1,4 @@
+import { FILE_TYPES } from '@vault/common/constants';
 import type { INodeBlock, INodeFlow, INodeSettings } from '@vault/common/types';
 
 import { isYoutubeThumbCacheEnabled } from '../config/env';
@@ -128,7 +129,19 @@ export interface WireShallowNode {
   flow: INodeFlow;
   user: WireShallowUser;
   is_promoted: boolean;
+  /** A song node's tracks, on the flow only, for its cell to play. */
+  songs?: WireFile[];
 }
+
+/** Most tracks the flow sends per song node; its cell cuts them anyway. */
+export const MAX_FLOW_SONGS = 10;
+
+/** A song node's audio files as its flow cell plays them. */
+export const toWireFlowSongs = (files: File[]): WireFile[] =>
+  files
+    .filter((file) => file.type === FILE_TYPES.AUDIO)
+    .slice(0, MAX_FLOW_SONGS)
+    .map(toWireFile);
 
 export const toWireShallowNode = (node: Node): WireShallowNode => ({
   id: node.id,

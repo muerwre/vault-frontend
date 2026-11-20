@@ -3,7 +3,6 @@ import { FC, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { NODE_TYPES } from '~/constants/node';
 import { flowDisplayToPreset, URLS } from '~/constants/urls';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { FlowDisplay, IFlowNode, INode } from '~/types';
@@ -45,7 +44,8 @@ export const FlowGrid: FC<Props> = observer(
               )}
               flow={node.flow}
               text={node.description}
-              isText={node.type === NODE_TYPES.TEXT}
+              type={node.type}
+              songs={node.songs}
               title={node.title}
               canEdit={fetched && isUser && canEditNode(node, user)}
               onChange={onChangeCellView}

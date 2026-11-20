@@ -4,6 +4,7 @@ import {
   GO_ZERO_TIME,
   sortFilesByOrder,
   toWireBlocks,
+  toWireFlowSongs,
   toWireDate,
   toWireDateOrNull,
   toWireFlow,
@@ -164,6 +165,29 @@ describe('wire serialisation', () => {
       expect(images.files?.map((it) => it.id)).toEqual([1]);
       expect(audio.files?.map((it) => it.id)).toEqual([2]);
       expect(audio.mode).toBeUndefined();
+    });
+  });
+
+  describe('flow songs', () => {
+    const song = (id: number) =>
+      ({ id, type: 'audio', url: `s${id}`, metadata: {} }) as File;
+
+    it('sends audio files only, up to the limit, in order', () => {
+      const files = [
+        { id: 99, type: 'image', url: 'p', metadata: {} } as File,
+        ...Array.from({ length: 12 }, (_, i) => song(i + 1)),
+      ];
+
+      const songs = toWireFlowSongs(files);
+
+      expect(songs.map((it) => it.id)).toEqual(
+        Array.from({ length: 10 }, (_, i) => i + 1),
+      );
+      expect(songs[0]).toMatchObject({
+        id: 1,
+        type: 'audio',
+        url: expect.any(String),
+      });
     });
   });
 

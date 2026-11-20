@@ -19,6 +19,7 @@ import {
   toWireDate,
   toWireFlow,
   toWireNode,
+  toWireFlowSongs,
   toWireShallowNode,
   toWireThumbnail,
   type WireNode,
@@ -26,6 +27,7 @@ import {
 } from '../../wire/serialize';
 import { UploadService } from '../upload/upload.service';
 
+import { filesOf, loadFilesById } from './node-files';
 import {
   type Actor,
   canEditNode,
@@ -417,12 +419,26 @@ export class NodeService {
       params.withValid ? this.getValidIds(params.start, params.end) : [],
     ]);
 
+    // song cells list their tracks: one query for the songs of every list
+    const songNodes = [before, after, heroes, updated, recent]
+      .flat()
+      .filter((node) => node.type === NODE_TYPES.AUDIO);
+    const filesById = await loadFilesById(this.files, songNodes);
+
+    const toFlowNode = (node: Node): WireShallowNode =>
+      node.type === NODE_TYPES.AUDIO
+        ? {
+            ...toWireShallowNode(node),
+            songs: toWireFlowSongs(filesOf(node, filesById)),
+          }
+        : toWireShallowNode(node);
+
     return {
-      before: before.map(toWireShallowNode),
-      after: after.map(toWireShallowNode),
-      heroes: heroes.map(toWireShallowNode),
-      updated: updated.map(toWireShallowNode),
-      recent: recent.map(toWireShallowNode),
+      before: before.map(toFlowNode),
+      after: after.map(toFlowNode),
+      heroes: heroes.map(toFlowNode),
+      updated: updated.map(toFlowNode),
+      recent: recent.map(toFlowNode),
       valid,
     };
   }
