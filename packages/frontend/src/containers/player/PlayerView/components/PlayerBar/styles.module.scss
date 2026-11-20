@@ -9,11 +9,12 @@
 
 .wrap {
   @include outer_shadow();
+  @include blur();
 
   display: flex;
   align-items: center;
   border-radius: $bar_item_size * 0.5;
-  background: $content_bg_lightest;
+  // background: $content_bg_lightest;
   position: absolute;
   top: 0;
   left: 0;
@@ -65,7 +66,7 @@
 }
 
 $halo_colors: #00d2b9, #3c75ff, #582cd0, #ffd60f;
-$halo_spread: $gap * 0.5;
+$halo_spread: -1 * $gap;
 $halo_blur: 12px;
 
 .halo {
