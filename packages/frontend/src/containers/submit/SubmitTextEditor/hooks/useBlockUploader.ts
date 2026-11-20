@@ -27,6 +27,7 @@ export const useBlockUploader = <T extends FileBlock>(
   type: UploadType,
   onChange: BlockUpdater<T>,
   left = Infinity,
+  onUploading?: (uploading: boolean) => void,
 ) => {
   const uploader = useUploader(
     UploadSubject.Editor,
@@ -62,6 +63,12 @@ export const useBlockUploader = <T extends FileBlock>(
     },
     [type, room, blockRoom, postRoom, upload],
   );
+
+  const isUploading = pendingCount > 0;
+
+  useEffect(() => {
+    onUploading?.(isUploading);
+  }, [isUploading, onUploading]);
 
   // order, membership and song titles are what the block keeps of its files
   const signature = uploader.files

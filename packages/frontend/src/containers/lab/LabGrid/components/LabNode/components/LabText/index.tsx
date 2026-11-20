@@ -4,14 +4,14 @@ import { Markdown } from '~/components/common/Markdown';
 import { Paragraph } from '~/components/placeholders/Paragraph';
 import { NodeComponentProps } from '~/constants/node';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
-import { getFirstText } from '~/utils/blocks';
+import { getAllText } from '~/utils/blocks';
 import { formatTextParagraphs } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
 const LabText: FC<NodeComponentProps> = ({ node, isLoading }) => {
   const content = useMemo(
-    () => formatTextParagraphs(getFirstText(node.blocks)),
+    () => formatTextParagraphs(getAllText(node.blocks)),
     [node],
   );
 

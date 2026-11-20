@@ -17,12 +17,13 @@ import styles from './styles.module.scss';
 
 /** A track list, uploaded like a song post's but without covers. */
 const SubmitAudioBlock: FC<BlockEditorProps<IBlockAudio>> = observer(
-  ({ block, onChange, left }) => {
+  ({ block, onChange, left, onUploading }) => {
     const { uploader, isFull } = useBlockUploader(
       block,
       UploadType.Audio,
       onChange,
       left,
+      onUploading,
     );
 
     const isEmpty = !uploader.files.length && !uploader.pendingAudios.length;

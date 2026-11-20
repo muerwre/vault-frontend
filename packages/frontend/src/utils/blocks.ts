@@ -66,7 +66,17 @@ export const getBlockFiles = (blocks: IBlock[]): IFile[] => {
     });
 };
 
-/** The first text block's text, which previews a text node. */
+/**
+ * The text of all text blocks, trimmed and joined by blank lines, as the
+ * server joins them into a text node's description.
+ */
+export const getAllText = (blocks: IBlock[] | undefined): string =>
+  (blocks ?? [])
+    .flatMap((it) => (it.type === 'text' ? [it.text.trim()] : []))
+    .filter(Boolean)
+    .join('\n\n');
+
+/** The first text block's text, the one the old editor edits. */
 export const getFirstText = (blocks: IBlock[] | undefined): string => {
   const block = blocks?.find((it) => it.type === 'text');
 

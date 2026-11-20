@@ -26,12 +26,13 @@ const MODES: { mode: ImageBlockMode; label: string }[] = [
  * post shows them: a grid, or a slider.
  */
 const SubmitImagesBlock: FC<BlockEditorProps<IBlockImages>> = observer(
-  ({ block, onChange, disabled, left }) => {
+  ({ block, onChange, disabled, left, onUploading }) => {
     const { uploader, isFull } = useBlockUploader(
       block,
       UploadType.Image,
       onChange,
       left,
+      onUploading,
     );
 
     return (

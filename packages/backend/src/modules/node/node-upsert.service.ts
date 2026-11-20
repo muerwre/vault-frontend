@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   FILE_TYPES,
   FLOW_NODE_TYPES,
+  NODE_TYPES,
   UPLOAD_TARGETS,
   type NodeType,
 } from '@vault/common/constants';
@@ -142,7 +143,12 @@ export class NodeUpsertService {
      * rather than the types the client claimed — otherwise a bogus payload
      * silently produces an empty node.
      */
-    const invalid = validateNodeContent(type, resolvedFiles, blocks);
+    const invalid = validateNodeContent(
+      type,
+      resolvedFiles,
+      blocks,
+      isUpdate ? (node.blocks ?? []) : [],
+    );
 
     if (invalid) {
       return { ok: false, failure: { kind: 'invalid', message: invalid } };
@@ -177,10 +183,16 @@ export class NodeUpsertService {
       node.thumbnail ?? '',
     );
 
+    // A new text node shows its text on its flow cell. The submission page
+    // has no switch for it, so what it sends is ignored; the cell's own menu
+    // turns it off afterwards.
+    const showsText = !isUpdate && type === NODE_TYPES.TEXT;
+
     const flow: INodeFlow = {
       display: body?.flow?.display ?? node.flow?.display ?? '',
       show_description:
-        body?.flow?.show_description ?? node.flow?.show_description ?? false,
+        showsText ||
+        (body?.flow?.show_description ?? node.flow?.show_description ?? false),
       dominant_color: deriveDominantColor(
         type,
         resolvedFiles,

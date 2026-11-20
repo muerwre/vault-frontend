@@ -133,7 +133,7 @@ export interface INode {
 
 export type IFlowNode = Pick<
   INode,
-  'id' | 'flow' | 'description' | 'title' | 'thumbnail' | 'created_at'
+  'id' | 'type' | 'flow' | 'description' | 'title' | 'thumbnail' | 'created_at'
 >;
 
 export interface NodeBackLink {

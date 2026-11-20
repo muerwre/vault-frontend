@@ -522,6 +522,85 @@ describe('node upsert (integration)', () => {
       expect(body.node.description).toBe(`opening\n\n${LONG}`);
     });
 
+    it('shows the text of a new text node on its flow cell', async () => {
+      const { body } = await save(authorId, {
+        type: 'text',
+        blocks: [text],
+        flow: { display: 'single', show_description: false },
+      }).expect(200);
+      const nodeId = track(body.node.id);
+
+      expect(body.node.flow.show_description).toBe(true);
+
+      // an edit keeps what the cell's menu chose
+      await db.query('UPDATE node SET flow = ? WHERE id = ?', [
+        JSON.stringify({ display: 'single', show_description: false }),
+        nodeId,
+      ]);
+
+      const { body: edited } = await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        blocks: [text],
+      }).expect(200);
+
+      expect(edited.node.flow.show_description).toBe(false);
+    });
+
+    it('edits an old post whose text is under the minimum', async () => {
+      const { body: created } = await save(authorId, {
+        type: 'text',
+        blocks: [text],
+      }).expect(200);
+      const nodeId = track(created.node.id);
+
+      // as stored before blocks: one short block, with the old empty url
+      await db.query('UPDATE node SET blocks = ? WHERE id = ?', [
+        JSON.stringify([{ type: 'text', text: 'short old post', url: '' }]),
+        nodeId,
+      ]);
+
+      // the editor sends the block back with its key, the title changed
+      const { body } = await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        title: 'retitled',
+        blocks: [{ type: 'text', text: 'short old post', url: '', key: 'k' }],
+      }).expect(200);
+
+      expect(body.node.title).toBe('retitled');
+      expect(body.node.blocks[0].text).toBe('short old post');
+
+      // changing the text holds it to the minimum
+      await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        blocks: [{ type: 'text', text: 'short old post, edited' }],
+      }).expect(400);
+    });
+
+    it('clears the thumbnail when the last photo goes', async () => {
+      const photo = await makeFile('image');
+
+      const { body: created } = await save(authorId, {
+        type: 'text',
+        blocks: [text, { type: 'images', mode: 'grid', files: [photo] }],
+        files: [{ id: photo }],
+      }).expect(200);
+      const nodeId = track(created.node.id);
+
+      expect(created.node.thumbnail).not.toBe('');
+
+      const { body } = await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        blocks: [text],
+      }).expect(200);
+
+      expect(body.node.thumbnail).toBe('');
+      expect(body.node.flow.dominant_color).toBe('');
+    });
+
     it('400s with less than 64 characters of text overall', async () => {
       const photo = await makeFile('image');
 

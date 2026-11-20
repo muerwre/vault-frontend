@@ -14,4 +14,6 @@ export interface BlockEditorProps<T extends IBlock = IBlock> {
    * whole post may take, the block's own already counted.
    */
   left?: number;
+  /** For photo and song blocks: called as uploads into the block start and end. */
+  onUploading?: (uploading: boolean) => void;
 }

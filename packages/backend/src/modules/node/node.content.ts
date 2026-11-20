@@ -242,6 +242,24 @@ export const joinTextBlocks = (blocks: INodeBlock[]): string =>
     .filter(Boolean)
     .join(TEXT_BLOCK_SEPARATOR);
 
+/** Characters of text over all text blocks, without the blanks around each. */
+export const textLength = (blocks: INodeBlock[]): number =>
+  blocks.reduce(
+    (sum, block) =>
+      sum + (block.type === 'text' ? block.text.trim().length : 0),
+    0,
+  );
+
+/** An edit that leaves a node's existing, non-empty text as it was. */
+const keepsShortText = (
+  blocks: INodeBlock[],
+  stored: INodeBlock[],
+): boolean => {
+  const text = joinTextBlocks(blocks);
+
+  return text.length > 0 && text === joinTextBlocks(stored);
+};
+
 /**
  * Node types whose thumbnail and colour come from their first photo. A text
  * node's photos are those of its photo blocks, in order.
@@ -260,12 +278,14 @@ const HAS_IMAGE_THUMBNAIL: readonly NodeType[] = [
  * requirement a type cannot satisfy would make it uncreatable. Audio therefore
  * requires only an audio file: audio nodes store no blocks at all. A text node
  * needs `MIN_TEXT_NODE_LENGTH` characters of text over all its text blocks,
- * whatever else it holds.
+ * whatever else it holds. Posts from before that rule keep their shorter text
+ * through edits that leave it alone; `stored` is what the node has now.
  */
 export const validateNodeContent = (
   type: NodeType,
   files: File[],
   blocks: INodeBlock[],
+  stored: INodeBlock[] = [],
 ): string | null => {
   switch (type) {
     case NODE_TYPES.IMAGE:
@@ -279,7 +299,8 @@ export const validateNodeContent = (
         : 'Прикрепите хотя бы один аудиофайл';
 
     case NODE_TYPES.TEXT:
-      return joinTextBlocks(blocks).length >= MIN_TEXT_NODE_LENGTH
+      return textLength(blocks) >= MIN_TEXT_NODE_LENGTH ||
+        keepsShortText(blocks, stored)
         ? null
         : `В посте должно быть хотя бы немного текста`;
 
@@ -315,8 +336,8 @@ export const deriveDescription = (
 
 /**
  * Image, audio and text nodes take their thumbnail from the first attached
- * image; video nodes from the first video block's URL. Anything else, or a
- * node with nothing to take it from, keeps its own.
+ * image; video nodes from the first video block's URL. A text node without
+ * photos has none; anything else with nothing to take it from keeps its own.
  */
 export const deriveThumbnail = (
   type: NodeType,
@@ -327,7 +348,8 @@ export const deriveThumbnail = (
   if (HAS_IMAGE_THUMBNAIL.includes(type)) {
     const image = firstFileOfType(files, FILE_TYPES.IMAGE);
 
-    return image ? image.url : current;
+    // a text node's photo is released with its block, so nothing is kept
+    return image?.url ?? (type === NODE_TYPES.TEXT ? '' : current);
   }
 
   if (type === NODE_TYPES.VIDEO) {
@@ -352,6 +374,10 @@ export const deriveDominantColor = (
   }
 
   const image = firstFileOfType(files, FILE_TYPES.IMAGE);
+
+  if (!image && type === NODE_TYPES.TEXT) {
+    return '';
+  }
 
   return image?.metadata?.dominant_color || current;
 };

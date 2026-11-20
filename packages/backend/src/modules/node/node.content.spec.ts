@@ -358,6 +358,35 @@ describe('node content rules', () => {
         expect(validateNodeContent('text', [], [])).toEqual(expect.any(String));
       });
 
+      it('lets an edit keep the short text a post already has', () => {
+        const stored = [{ type: 'text' as const, text: 'old and short' }];
+
+        expect(
+          validateNodeContent(
+            'text',
+            [],
+            [textBlock(' old and short ')],
+            stored,
+          ),
+        ).toBeNull();
+        expect(
+          validateNodeContent('text', [], [textBlock('changed')], stored),
+        ).toEqual(expect.any(String));
+        expect(validateNodeContent('text', [], [], [])).toEqual(
+          expect.any(String),
+        );
+      });
+
+      it('does not count what separates blocks', () => {
+        expect(
+          validateNodeContent(
+            'text',
+            [],
+            [textBlock('x'.repeat(31)), textBlock('x'.repeat(31))],
+          ),
+        ).toEqual(expect.any(String));
+      });
+
       it('does not count the blanks around a block', () => {
         expect(
           validateNodeContent(
@@ -437,6 +466,10 @@ describe('node content rules', () => {
       );
     });
 
+    it('clears a text node thumbnail once its photos are gone', () => {
+      expect(deriveThumbnail('text', [], [textBlock('x')], 'old')).toBe('');
+    });
+
     it('derives from the video block for a video node', () => {
       expect(deriveThumbnail('video', [], [videoBlock(YT)], '')).toBe(
         'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
@@ -446,7 +479,6 @@ describe('node content rules', () => {
     it('keeps the current value when nothing can be derived', () => {
       expect(deriveThumbnail('image', [], [], 'kept')).toBe('kept');
       expect(deriveThumbnail('video', [], [], 'kept')).toBe('kept');
-      expect(deriveThumbnail('text', [], [], 'kept')).toBe('kept');
     });
   });
 
@@ -471,6 +503,10 @@ describe('node content rules', () => {
       ];
 
       expect(deriveDominantColor('text', files, '#old')).toBe('#abcdef');
+    });
+
+    it('clears a text node colour once its photos are gone', () => {
+      expect(deriveDominantColor('text', [], '#old')).toBe('');
     });
 
     it('never touches video nodes', () => {

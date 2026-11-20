@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useRef } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { closestCenter, DndContext } from '@dnd-kit/core';
 import {
@@ -118,6 +118,31 @@ const SubmitTextEditor: FC<NodeEditorProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blocks.map(getKey).join(), setBlocks]);
 
+  // Blocks with uploads running. Their uploads land in the block's own
+  // uploader, so a block removed meanwhile would lose them; it stays until
+  // they are in.
+  const [uploading, setUploading] = useState<string[]>([]);
+
+  const uploadReporters = useMemo(() => {
+    const result: Record<string, (busy: boolean) => void> = {};
+
+    blocks.forEach(({ key }) => {
+      if (key) {
+        result[key] = (busy) =>
+          setUploading((prev) => {
+            if (busy === prev.includes(key)) {
+              return prev;
+            }
+
+            return busy ? [...prev, key] : prev.filter((it) => it !== key);
+          });
+      }
+    });
+
+    return result;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocks.map(getKey).join()]);
+
   const onSortEnd = useCallback(
     (next: IBlock[]) => setBlocks(() => next),
     [setBlocks],
@@ -164,6 +189,8 @@ const SubmitTextEditor: FC<NodeEditorProps> = () => {
                 id={key}
                 onRemove={() => remove(key)}
                 disabled={isSubmitting}
+                removeDisabled={uploading.includes(key)}
+                removeHint="Дождитесь, пока файлы загрузятся"
                 before={
                   <SubmitBlockInserter
                     onInsert={(type) => insert(index, type)}
@@ -178,6 +205,7 @@ const SubmitTextEditor: FC<NodeEditorProps> = () => {
                   onChange={updaters[key]}
                   disabled={isSubmitting}
                   left={block.type === 'text' ? undefined : left[block.type]}
+                  onUploading={uploadReporters[key]}
                 />
               </SubmitBlock>
             );

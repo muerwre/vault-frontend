@@ -25,10 +25,15 @@ interface Props {
   color?: string;
 
   text?: string;
+  /** A text post, whose text shows over its photo in every layout. */
+  isText?: boolean;
   flow: FlowDisplay;
   canEdit?: boolean;
   onChange: (id: INode['id'], flow: FlowDisplay) => void;
 }
+
+/** Characters of description past which a text post's text takes most of its cell. */
+const LONG_TEXT_LENGTH = 128;
 
 const FlowCell: FC<Props> = ({
   id,
@@ -37,6 +42,7 @@ const FlowCell: FC<Props> = ({
   image,
   flow,
   text,
+  isText,
   title,
   canEdit = false,
   onChange,
@@ -44,9 +50,13 @@ const FlowCell: FC<Props> = ({
   const { isTablet } = useWindowSize();
 
   const withText =
-    ((!!flow.display && flow.display !== 'single') || !image) &&
+    ((!!flow.display && flow.display !== 'single') || !image || isText) &&
     flow.show_description &&
     !!text;
+
+  // a long text post gets most of its cell for the text
+  const withLongText =
+    withText && isText && !!image && text!.length > LONG_TEXT_LENGTH;
 
   const {
     isActive: isMenuActive,
@@ -129,7 +139,9 @@ const FlowCell: FC<Props> = ({
       <Anchor className={styles.link} href={to}>
         {withText && (
           <FlowCellText
-            className={styles.text}
+            className={classNames(styles.text, {
+              [styles.long]: withLongText,
+            })}
             heading={<h4 className={styles.title}>{title}</h4>}
             color={color}
           >

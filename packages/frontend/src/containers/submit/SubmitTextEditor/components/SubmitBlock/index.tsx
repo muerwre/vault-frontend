@@ -13,7 +13,12 @@ interface Props {
   /** Shown above the block, moving with it: the separator to insert before. */
   before?: ReactNode;
   onRemove: () => void;
+  /** Locks the block while the post saves, its content included. */
   disabled?: boolean;
+  /** Keeps the block from being removed, while its uploads run, say. */
+  removeDisabled?: boolean;
+  /** Says why the cross is off. */
+  removeHint?: string;
   children: ReactNode;
 }
 
@@ -27,6 +32,8 @@ const SubmitBlock: FC<Props> = ({
   before,
   onRemove,
   disabled,
+  removeDisabled,
+  removeHint,
   children,
 }) => {
   const {
@@ -51,7 +58,13 @@ const SubmitBlock: FC<Props> = ({
       {before}
 
       <div className={styles.block}>
-        <div className={styles.content}>{children}</div>
+        <div
+          className={classNames(styles.content, {
+            [styles.locked]: disabled,
+          })}
+        >
+          {children}
+        </div>
 
         <div className={styles.panel}>
           <button
@@ -71,7 +84,8 @@ const SubmitBlock: FC<Props> = ({
             className={classNames(styles.button, styles.remove)}
             onClick={onRemove}
             aria-label="Убрать блок"
-            disabled={disabled}
+            title={removeDisabled ? removeHint : undefined}
+            disabled={disabled || removeDisabled}
           >
             <Icon icon="close" size={20} />
           </button>

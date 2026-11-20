@@ -16,8 +16,9 @@ interface ImageGridProps {
   onClick: (file: IFile) => void;
 }
 
-const singleSrcSet = '(max-width: 1024px) 40vw, 20vw';
-const multipleSrcSet = '(max-width: 1024px) 50vw, 20vw';
+// several photos share a row, so each is drawn smaller than a lone one
+const multipleSizes = '(max-width: 1024px) 40vw, 20vw';
+const singleSizes = '(max-width: 1024px) 50vw, 20vw';
 
 const ImageGrid: FC<ImageGridProps> = ({ files, onClick }) => {
   return (
@@ -38,7 +39,7 @@ const ImageGrid: FC<ImageGridProps> = ({ files, onClick }) => {
             src={getURL(file, imagePresets['300'])}
             alt={file.name}
             className={styles.image}
-            sizes={files.length > 1 ? singleSrcSet : multipleSrcSet}
+            sizes={files.length > 1 ? multipleSizes : singleSizes}
           />
         </Hoverable>
       ))}

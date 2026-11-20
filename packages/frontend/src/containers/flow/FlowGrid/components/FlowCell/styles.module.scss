@@ -83,6 +83,22 @@ $compact_size: 200px;
   .title {
     margin-bottom: 0.1em;
   }
+
+  // A long text post's text covers most of its photo: 85% of the height, or
+  // of the width when the cell is wide. A quadro cell gives it a full column.
+  // Doubled to outrank the layout's own rules above.
+  &.long.long {
+    inset: 15% 0 0 0;
+    border-radius: $radius;
+  }
+
+  .horizontal &.long.long {
+    inset: 0 15% 0 0;
+  }
+
+  .quadro &.long.long {
+    inset: 0 calc(50% + #{$gap * 0.5}) 0 0;
+  }
 }
 
 .title_wrapper {

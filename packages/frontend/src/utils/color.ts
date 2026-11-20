@@ -2,6 +2,7 @@ import {
   adjustHue,
   darken,
   desaturate,
+  getLuminance,
   parseToHsla,
   transparentize,
 } from 'color2k';
@@ -67,4 +68,24 @@ export const generateGradientFromColor = (
   });
 
   return `linear-gradient(${angle}deg, ${first}, ${second}, ${third})`;
+};
+
+/**
+ * How text sits over a photo, tinted with the photo's colour: the colour at
+ * half opacity behind it, and dark text instead of light on a bright one.
+ */
+export const getPhotoBackdrop = (
+  color?: string,
+): { backgroundColor?: string; color?: string } => {
+  if (!color) {
+    return {};
+  }
+
+  return {
+    backgroundColor: transparentize(color, 0.5),
+    color:
+      getLuminance(color) > 0.4
+        ? desaturate(darken(color, 0.5), 0.1)
+        : undefined,
+  };
 };

@@ -24,6 +24,13 @@
 .content {
   flex: 1;
   min-width: 0;
+
+  // grids, dropzones and uploads have no switch of their own; nothing in the
+  // block reacts to the pointer, drops included, until the save is done
+  &.locked {
+    pointer-events: none;
+    opacity: 0.6;
+  }
 }
 
 .panel {
