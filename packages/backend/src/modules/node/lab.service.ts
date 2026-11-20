@@ -5,6 +5,7 @@ import {
   GUEST_USER_ID,
   LAB_SORT,
   type LabSort,
+  MAX_LIST_SONGS,
 } from '@vault/common/constants';
 import { Repository } from 'typeorm';
 
@@ -24,7 +25,7 @@ import {
   type WireTag,
 } from '../../wire/serialize';
 
-import { filesOf, loadFilesById } from './node-files';
+import { capSongs, filesOf, loadFilesById } from './node-files';
 import { applyIsLabNode } from './node.predicates';
 
 export interface WireLabItem {
@@ -150,10 +151,14 @@ export class LabService {
     return {
       count,
       nodes: rows.map((node) => ({
-        node: toWireNode(node, filesOf(node, filesById), {
-          likeCount: likeCounts.get(node.id) ?? 0,
-          isLiked: likedByMe.has(node.id),
-        }),
+        node: toWireNode(
+          node,
+          capSongs(filesOf(node, filesById), MAX_LIST_SONGS),
+          {
+            likeCount: likeCounts.get(node.id) ?? 0,
+            isLiked: likedByMe.has(node.id),
+          },
+        ),
         comment_count: commentCounts.get(node.id) ?? 0,
         last_seen: toWireDateOrNull(lastSeens.get(node.id) ?? null),
       })),

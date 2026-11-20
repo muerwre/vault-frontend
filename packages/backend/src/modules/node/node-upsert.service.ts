@@ -176,11 +176,24 @@ export class NodeUpsertService {
     }
 
     node.description = deriveDescription(type, blocks, node.description ?? '');
+
+    const pictures = {
+      cover,
+      released: await this.releasedUrls(
+        previousFileIds.filter((fileId) => !node.filesOrder.includes(fileId)),
+        previousCoverId && previousCoverId !== node.coverId
+          ? previousCoverId
+          : null,
+      ),
+    };
+    const previousThumbnail = node.thumbnail ?? '';
+
     node.thumbnail = deriveThumbnail(
       type,
       resolvedFiles,
       blocks,
-      node.thumbnail ?? '',
+      previousThumbnail,
+      pictures,
     );
 
     // A new text node shows its text on its flow cell. The submission page
@@ -197,6 +210,8 @@ export class NodeUpsertService {
         type,
         resolvedFiles,
         body?.flow?.dominant_color ?? node.flow?.dominant_color ?? '',
+        pictures,
+        previousThumbnail,
       ),
     };
     node.flow = flow;
@@ -252,6 +267,25 @@ export class NodeUpsertService {
       .filter((file): file is File => file !== undefined);
 
     return filterFiles(type, ordered);
+  }
+
+  /**
+   * Addresses of the files this save releases: photos and songs dropped from
+   * the node, and a cover replaced or removed.
+   */
+  private async releasedUrls(
+    fileIds: number[],
+    coverId: number | null,
+  ): Promise<string[]> {
+    const ids = coverId ? [...fileIds, coverId] : fileIds;
+
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const rows = await this.files.findBy({ id: In(ids) });
+
+    return rows.map((file) => file.url).filter(Boolean);
   }
 
   private async resolveCover(

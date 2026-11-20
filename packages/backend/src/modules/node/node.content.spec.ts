@@ -358,6 +358,23 @@ describe('node content rules', () => {
         expect(validateNodeContent('text', [], [])).toEqual(expect.any(String));
       });
 
+      it('reads broken stored blocks without failing', () => {
+        const stored: unknown[] = [
+          null,
+          { type: 'text' },
+          { type: 'text', text: null as unknown },
+        ];
+
+        expect(
+          validateNodeContent(
+            'text',
+            [],
+            [textBlock('short')],
+            stored as never,
+          ),
+        ).toEqual(expect.any(String));
+      });
+
       it('lets an edit keep the short text a post already has', () => {
         const stored = [{ type: 'text' as const, text: 'old and short' }];
 
@@ -466,8 +483,31 @@ describe('node content rules', () => {
       );
     });
 
-    it('clears a text node thumbnail once its photos are gone', () => {
-      expect(deriveThumbnail('text', [], [textBlock('x')], 'old')).toBe('');
+    it('falls back to the cover for song and text nodes', () => {
+      const cover = file('image', { id: 7, url: 'cover' });
+
+      expect(deriveThumbnail('text', [], [], 'old', { cover })).toBe('cover');
+      expect(deriveThumbnail('audio', [], [], 'old', { cover })).toBe('cover');
+      // a photo of its own comes first
+      expect(
+        deriveThumbnail('audio', [file('image', { url: 'pic' })], [], '', {
+          cover,
+        }),
+      ).toBe('pic');
+      // photo nodes always have photos; their cover is only a background
+      expect(deriveThumbnail('image', [], [], 'old', { cover })).toBe('old');
+    });
+
+    it('keeps an old thumbnail unless its file was released', () => {
+      expect(deriveThumbnail('text', [], [textBlock('x')], 'old')).toBe('old');
+      expect(
+        deriveThumbnail('text', [], [textBlock('x')], 'gone', {
+          released: ['gone'],
+        }),
+      ).toBe('');
+      expect(
+        deriveThumbnail('audio', [], [], 'gone', { released: ['gone'] }),
+      ).toBe('');
     });
 
     it('derives from the video block for a video node', () => {
@@ -505,8 +545,22 @@ describe('node content rules', () => {
       expect(deriveDominantColor('text', files, '#old')).toBe('#abcdef');
     });
 
-    it('clears a text node colour once its photos are gone', () => {
-      expect(deriveDominantColor('text', [], '#old')).toBe('');
+    it('takes the colour from the cover when there is no photo', () => {
+      const cover = file('image', {
+        id: 7,
+        metadata: { dominant_color: '#c0ffee' },
+      });
+
+      expect(deriveDominantColor('text', [], '#old', { cover })).toBe(
+        '#c0ffee',
+      );
+    });
+
+    it('keeps the colour unless the thumbnail it went with was released', () => {
+      expect(deriveDominantColor('text', [], '#old')).toBe('#old');
+      expect(
+        deriveDominantColor('text', [], '#old', { released: ['gone'] }, 'gone'),
+      ).toBe('');
     });
 
     it('never touches video nodes', () => {

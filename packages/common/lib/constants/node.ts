@@ -67,6 +67,12 @@ export type ImageBlockMode =
 /** Most files a single photo or song block of a text node may hold. */
 export const MAX_BLOCK_FILES = 5;
 
+/**
+ * Most songs a song node brings to a list (the flow, the lab); its card
+ * previews them, its own page has them all.
+ */
+export const MAX_LIST_SONGS = 4;
+
 /** Fewest characters of text a text node needs across its text blocks. */
 export const MIN_TEXT_NODE_LENGTH = 64;
 

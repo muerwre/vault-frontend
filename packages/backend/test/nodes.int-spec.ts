@@ -90,7 +90,7 @@ describe('nodes (integration)', () => {
         .expect(200);
       const tracks = page.node.files
         .filter((file: { type: string }) => file.type === 'audio')
-        .slice(0, 10);
+        .slice(0, 4);
 
       expect(cell.songs).toEqual(tracks);
 
@@ -98,6 +98,52 @@ describe('nodes (integration)', () => {
         (it: { type: string }) => it.type !== 'audio',
       );
       expect(others.every((it: object) => !('songs' in it))).toBe(true);
+    });
+
+    it('gives a guest songs without the address to play them from', async () => {
+      const [song] = await db.query(
+        `SELECT n.id, n.created_at, n.userId FROM node n
+         WHERE n.type = 'audio' AND n.is_promoted = 1 AND n.is_public = 1
+           AND n.deleted_at IS NULL
+           AND EXISTS (SELECT 1 FROM node_files_file nf
+             JOIN file f ON f.id = nf.fileId
+             WHERE nf.nodeId = n.id AND f.type = 'audio')
+         ORDER BY n.created_at DESC LIMIT 1`,
+      );
+      const end = new Date(new Date(song.created_at).getTime() + 1000);
+      const audios = (files: Array<{ type: string; url: string }>) =>
+        files.filter((file) => file.type === 'audio');
+
+      const asGuest = await http()
+        .get('/api/nodes/')
+        .query({ end: end.toISOString(), take: 5 })
+        .expect(200);
+      const guestCell = asGuest.body.after.find(
+        (it: { id: number }) => it.id === Number(song.id),
+      );
+      expect(guestCell.songs.length).toBeGreaterThan(0);
+      expect(
+        guestCell.songs.every((it: { url: string }) => it.url === ''),
+      ).toBe(true);
+
+      const guestPage = await http().get(`/api/nodes/${song.id}`).expect(200);
+      expect(
+        audios(guestPage.body.node.files).every((it) => it.url === ''),
+      ).toBe(true);
+      // photos are not songs
+      expect(
+        guestPage.body.node.files
+          .filter((file: { type: string }) => file.type === 'image')
+          .every((file: { url: string }) => file.url !== ''),
+      ).toBe(true);
+
+      const memberPage = await http()
+        .get(`/api/nodes/${song.id}`)
+        .set(authHeader(Number(song.userId)))
+        .expect(200);
+      expect(
+        audios(memberPage.body.node.files).every((it) => it.url !== ''),
+      ).toBe(true);
     });
 
     it('honours take for the after slice', async () => {

@@ -14,6 +14,7 @@ import { AudioPlayer } from '~/components/common/AudioPlayer';
 import { Group } from '~/components/common/Group';
 import { ImageGrid } from '~/components/common/ImageGrid';
 import { UploadType } from '~/constants/uploads';
+import { useAskToLogIn } from '~/hooks/auth/useAskToLogIn';
 import { IComment, IFile } from '~/types';
 import { formatCommentText, getPrettyDate } from '~/utils/dom';
 import { append, assocPath, path, reduce } from '~/utils/ramda';
@@ -49,6 +50,7 @@ const CommentContent: FC<Props> = memo(
     prefix,
   }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const askToLogIn = useAskToLogIn('song');
 
     const startEditing = useCallback(() => setIsEditing(true), [setIsEditing]);
     const stopEditing = useCallback(() => setIsEditing(false), [setIsEditing]);
@@ -141,7 +143,7 @@ const CommentContent: FC<Props> = memo(
                   className={classnames(styles.block, styles.block_audio)}
                   key={file.id}
                 >
-                  <AudioPlayer file={file} />
+                  <AudioPlayer file={file} onDisabledPlayPress={askToLogIn} />
                 </div>
               ))}
           </div>

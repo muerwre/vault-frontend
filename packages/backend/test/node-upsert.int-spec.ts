@@ -601,6 +601,37 @@ describe('node upsert (integration)', () => {
       expect(body.node.flow.dominant_color).toBe('');
     });
 
+    it('falls back to the cover, and keeps an old thumbnail', async () => {
+      const cover = await makeFile('image');
+      const [row] = await db.query('SELECT url FROM file WHERE id = ?', [
+        cover,
+      ]);
+
+      const { body: created } = await save(authorId, {
+        type: 'text',
+        blocks: [text],
+        cover: { id: cover },
+      }).expect(200);
+      const nodeId = track(created.node.id);
+
+      expect(created.node.thumbnail).toContain(row.url);
+
+      // a thumbnail from before blocks, with no photo or cover behind it now
+      await db.query(
+        'UPDATE node SET thumbnail = ?, coverId = NULL WHERE id = ?',
+        ['legacy.jpg', nodeId],
+      );
+
+      const { body } = await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        title: 'retitled',
+        blocks: [text],
+      }).expect(200);
+
+      expect(body.node.thumbnail).toContain('legacy.jpg');
+    });
+
     it('400s with less than 64 characters of text overall', async () => {
       const photo = await makeFile('image');
 

@@ -57,6 +57,16 @@ export const AudioPlayerProvider: FC = ({ children }) => {
     total: 0,
   });
 
+  /**
+   * Guests get songs without an address (see `isPlayable`); one of those is
+   * never loaded, so whatever is playing keeps playing.
+   */
+  const selectFile = useCallback((next: IFile) => {
+    if (isPlayable(next)) {
+      setFile(next);
+    }
+  }, []);
+
   /** controls */
   const play = async () => audio?.play();
   const pause = () => audio?.pause();
@@ -148,7 +158,7 @@ export const AudioPlayerProvider: FC = ({ children }) => {
     <PlayerContext.Provider
       value={{
         file,
-        setFile,
+        setFile: selectFile,
         title,
         progress,
         toTime,
@@ -166,3 +176,9 @@ export const AudioPlayerProvider: FC = ({ children }) => {
 };
 
 export const useAudioPlayer = () => useContext(PlayerContext);
+
+/**
+ * Whether a song can be played here. A guest gets songs without their
+ * address; a player shows them as usual but does nothing when started.
+ */
+export const isPlayable = (file?: IFile): boolean => !!file?.url;

@@ -6,7 +6,10 @@ import { Icon } from '~/components/common/Icon';
 import { InputText } from '~/components/input/InputText';
 import { PlayerState } from '~/constants/player';
 import { IFile } from '~/types';
-import { useAudioPlayer } from '~/utils/providers/AudioPlayerProvider';
+import {
+  isPlayable,
+  useAudioPlayer,
+} from '~/utils/providers/AudioPlayerProvider';
 
 import styles from './styles.module.scss';
 
@@ -17,10 +20,22 @@ type Props = {
   compact?: boolean;
   onDelete?: (id: IFile['id']) => void;
   onTitleChange?: (file_id: IFile['id'], title: string) => void;
+  /**
+   * Called when play is pressed on a song that cannot play here (a guest gets
+   * songs without their address): to ask them to log in, say.
+   */
+  onDisabledPlayPress?: () => void;
 };
 
 const AudioPlayer = memo(
-  ({ file, onDelete, isEditing, onTitleChange, compact }: Props) => {
+  ({
+    file,
+    onDelete,
+    isEditing,
+    onTitleChange,
+    compact,
+    onDisabledPlayPress,
+  }: Props) => {
     const {
       toPercent,
       file: currentFile,
@@ -35,6 +50,12 @@ const AudioPlayer = memo(
       async (event) => {
         event.stopPropagation();
 
+        // play alone would resume whatever was loaded before
+        if (!isPlayable(file)) {
+          onDisabledPlayPress?.();
+          return;
+        }
+
         if (file.id !== currentFile?.id) {
           setFile(file);
           setTimeout(() => void play(), 0);
@@ -43,7 +64,7 @@ const AudioPlayer = memo(
 
         status === PlayerState.PLAYING ? pause() : await play();
       },
-      [play, pause, setFile, file, currentFile, status],
+      [play, pause, setFile, file, currentFile, status, onDisabledPlayPress],
     );
 
     const onSeek = useCallback(

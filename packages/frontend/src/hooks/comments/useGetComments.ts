@@ -5,13 +5,18 @@ import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { apiGetNodeComments } from '~/api/node';
 import { API } from '~/constants/api';
 import { COMMENTS_DISPLAY } from '~/constants/node';
+import { useUser } from '~/hooks/auth/useUser';
 import { IComment } from '~/types';
 import { flatten, isNil } from '~/utils/ramda';
 
-const getKey: (nodeId: number) => SWRInfiniteKeyLoader =
-  (nodeId: number) => (pageIndex, previousPageData: IComment[]) => {
+/**
+ * Keyed by viewer too: a guest gets comment songs without their address, so
+ * logging in loads the comments again.
+ */
+const getKey: (nodeId: number, userId: number) => SWRInfiniteKeyLoader =
+  (nodeId, userId) => (pageIndex, previousPageData: IComment[]) => {
     if (pageIndex > 0 && !previousPageData?.length) return null;
-    return `${API.NODES.COMMENT(nodeId)}?page=${pageIndex}`;
+    return `${API.NODES.COMMENT(nodeId)}?page=${pageIndex}&user=${userId}`;
   };
 
 const extractKey = (key: string) => {
@@ -27,9 +32,10 @@ const extractKey = (key: string) => {
 
 export const useGetComments = (nodeId: number, fallbackData?: IComment[]) => {
   const [isInitialLoaded, setIsInitialLoaded] = useState(false);
+  const { user } = useUser();
 
   const { data, isValidating, setSize, size, mutate } = useSWRInfinite(
-    getKey(nodeId),
+    getKey(nodeId, user.id),
     async (key: string) => {
       const result = await apiGetNodeComments({
         id: nodeId,

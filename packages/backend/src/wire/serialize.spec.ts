@@ -181,7 +181,7 @@ describe('wire serialisation', () => {
       const songs = toWireFlowSongs(files);
 
       expect(songs.map((it) => it.id)).toEqual(
-        Array.from({ length: 10 }, (_, i) => i + 1),
+        Array.from({ length: 4 }, (_, i) => i + 1),
       );
       expect(songs[0]).toMatchObject({
         id: 1,

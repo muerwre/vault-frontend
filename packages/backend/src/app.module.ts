@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 
 import { CONFIG } from './config/env';
 import { DATABASE } from './database/database.module';
+import { GuestAudioInterceptor } from './globals/guest-audio';
 import { JWT } from './globals/jwt';
 import { HealthController } from './health.controller';
 import { AdminModule } from './modules/admin/admin.module';
@@ -48,6 +50,9 @@ import { VkModule } from './modules/vk/vk.module';
     RegistrationModule,
   ],
   controllers: [HealthController],
-  providers: [],
+  providers: [
+    // guests get songs without the address to play them from
+    { provide: APP_INTERCEPTOR, useClass: GuestAudioInterceptor },
+  ],
 })
 export class AppModule {}

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  FILE_TYPES,
   GUEST_USER_ID,
   NODE_BACKLINK_PROVIDERS,
   NODE_TYPES,
@@ -419,11 +420,14 @@ export class NodeService {
       params.withValid ? this.getValidIds(params.start, params.end) : [],
     ]);
 
-    // song cells list their tracks: one query for the songs of every list
-    const songNodes = [before, after, heroes, updated, recent]
-      .flat()
-      .filter((node) => node.type === NODE_TYPES.AUDIO);
-    const filesById = await loadFilesById(this.files, songNodes);
+    // Song cells of the grid play their tracks: one query for the songs of
+    // both its lists. The side lists show no songs.
+    const songNodes = [...before, ...after].filter(
+      (node) => node.type === NODE_TYPES.AUDIO,
+    );
+    const filesById = await loadFilesById(this.files, songNodes, [
+      FILE_TYPES.AUDIO,
+    ]);
 
     const toFlowNode = (node: Node): WireShallowNode =>
       node.type === NODE_TYPES.AUDIO
@@ -436,9 +440,9 @@ export class NodeService {
     return {
       before: before.map(toFlowNode),
       after: after.map(toFlowNode),
-      heroes: heroes.map(toFlowNode),
-      updated: updated.map(toFlowNode),
-      recent: recent.map(toFlowNode),
+      heroes: heroes.map(toWireShallowNode),
+      updated: updated.map(toWireShallowNode),
+      recent: recent.map(toWireShallowNode),
       valid,
     };
   }

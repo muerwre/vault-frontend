@@ -1,10 +1,10 @@
 import { FC, MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 import classNames from 'classnames';
-import { transparentize } from 'color2k';
 
 import { AudioList } from '~/components/common/AudioList';
 import { Markdown } from '~/components/common/Markdown';
+import { useAskToLogIn } from '~/hooks/auth/useAskToLogIn';
 import { IFile } from '~/types';
 import { getPhotoBackdrop } from '~/utils/color';
 
@@ -22,12 +22,6 @@ interface Props {
   color?: string;
 }
 
-/**
- * A text or song post in the flow, laid out like its lab card: the photo
- * fills the cell, or the cell's own colour does, and the title and text sit
- * on a tinted panel at the bottom. Short text leaves the photo showing above
- * it; long text grows to the whole cell and fades out where it is cut.
- */
 /**
  * The cell is a link, so a click on its songs is kept from opening the post,
  * and a click on a song outside its controls plays it. Runs while capturing:
@@ -49,8 +43,15 @@ const onSongsClick = (event: MouseEvent) => {
     ?.click();
 };
 
+/**
+ * A text or song post in the flow, laid out like its lab card: the photo
+ * fills the cell, or the cell's own colour does, and the title and text sit
+ * on a tinted panel at the bottom. Short text leaves the photo showing above
+ * it; long text grows to the whole cell and fades out where it is cut.
+ */
 const FlowCellPost: FC<Props> = ({ title, text, songs, image, color }) => {
   const textRef = useRef<HTMLDivElement>(null);
+  const askToLogIn = useAskToLogIn('song');
   const [isCut, setIsCut] = useState(false);
 
   // the fade is only for text that does not fit, as the cell resizes too
@@ -72,18 +73,11 @@ const FlowCellPost: FC<Props> = ({ title, text, songs, image, color }) => {
     return () => observer.disconnect();
   }, [text, songs]);
 
-  // as on a lab card: over a bright photo, dark text and greys to match
-  const backdrop = useMemo(() => {
-    if (!image) {
-      return undefined;
-    }
-
-    const colors = getPhotoBackdrop(color);
-
-    return colors.color
-      ? { ...colors, '--lab_muted': transparentize(colors.color, 0.35) }
-      : colors;
-  }, [image, color]);
+  // as on a lab card
+  const backdrop = useMemo(
+    () => (image ? getPhotoBackdrop(color) : undefined),
+    [image, color],
+  );
 
   return (
     <div className={styles.wrap}>
@@ -110,7 +104,12 @@ const FlowCellPost: FC<Props> = ({ title, text, songs, image, color }) => {
 
             {!!songs?.length && (
               <div className={styles.players} onClickCapture={onSongsClick}>
-                <AudioList files={songs} className={styles.songs} compact />
+                <AudioList
+                  files={songs}
+                  className={styles.songs}
+                  onDisabledPlayPress={askToLogIn}
+                  compact
+                />
               </div>
             )}
           </div>

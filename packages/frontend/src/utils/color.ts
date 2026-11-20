@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 import {
   adjustHue,
   darken,
@@ -73,19 +75,27 @@ export const generateGradientFromColor = (
 /**
  * How text sits over a photo, tinted with the photo's colour: the colour at
  * half opacity behind it, and dark text instead of light on a bright one.
+ * With dark text, the greys (dates, counters, icons) follow it as a lighter
+ * shade, through `--photo_muted`.
  */
 export const getPhotoBackdrop = (
   color?: string,
-): { backgroundColor?: string; color?: string } => {
+): CSSProperties & { '--photo_muted'?: string } => {
   if (!color) {
     return {};
   }
 
+  const backgroundColor = transparentize(color, 0.5);
+
+  if (getLuminance(color) <= 0.4) {
+    return { backgroundColor };
+  }
+
+  const text = desaturate(darken(color, 0.5), 0.1);
+
   return {
-    backgroundColor: transparentize(color, 0.5),
-    color:
-      getLuminance(color) > 0.4
-        ? desaturate(darken(color, 0.5), 0.1)
-        : undefined,
+    backgroundColor,
+    color: text,
+    '--photo_muted': transparentize(text, 0.35),
   };
 };

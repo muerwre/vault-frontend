@@ -235,18 +235,26 @@ const firstBlockOfType = (
   blockType: string,
 ): INodeBlock | undefined => blocks.find((block) => block.type === blockType);
 
+/**
+ * A text block with text. Stored blocks are read as they are, and old ones
+ * may be null or lack their text.
+ */
+const isTextBlock = (
+  block: INodeBlock | null | undefined,
+): block is Extract<INodeBlock, { type: 'text' }> =>
+  block?.type === 'text' && typeof block.text === 'string';
+
 /** The text of all text blocks, trimmed and joined, as one text. */
 export const joinTextBlocks = (blocks: INodeBlock[]): string =>
   blocks
-    .flatMap((block) => (block.type === 'text' ? [block.text.trim()] : []))
+    .flatMap((block) => (isTextBlock(block) ? [block.text.trim()] : []))
     .filter(Boolean)
     .join(TEXT_BLOCK_SEPARATOR);
 
 /** Characters of text over all text blocks, without the blanks around each. */
 export const textLength = (blocks: INodeBlock[]): number =>
   blocks.reduce(
-    (sum, block) =>
-      sum + (block.type === 'text' ? block.text.trim().length : 0),
+    (sum, block) => sum + (isTextBlock(block) ? block.text.trim().length : 0),
     0,
   );
 
@@ -334,22 +342,62 @@ export const deriveDescription = (
   return joinTextBlocks(blocks) || current;
 };
 
+/** Node types that fall back to their cover for a picture. */
+const HAS_COVER_FALLBACK: readonly NodeType[] = [
+  NODE_TYPES.AUDIO,
+  NODE_TYPES.TEXT,
+];
+
+/** What a node's thumbnail and colour come from, when anything. */
+export interface PictureSources {
+  /** The node's cover, which song and text nodes fall back to. */
+  cover?: File | null;
+  /**
+   * Addresses of files this save released. A thumbnail still pointing at one
+   * is cleared rather than kept.
+   */
+  released?: string[];
+}
+
 /**
- * Image, audio and text nodes take their thumbnail from the first attached
- * image; video nodes from the first video block's URL. A text node without
- * photos has none; anything else with nothing to take it from keeps its own.
+ * The file a node's thumbnail and colour come from: its first photo; for song
+ * and text nodes without one, their cover.
+ */
+const pictureOf = (
+  type: NodeType,
+  files: File[],
+  cover: File | null | undefined,
+): File | undefined => {
+  if (!HAS_IMAGE_THUMBNAIL.includes(type)) {
+    return undefined;
+  }
+
+  const image = firstFileOfType(files, FILE_TYPES.IMAGE);
+
+  if (image) {
+    return image;
+  }
+
+  return cover && HAS_COVER_FALLBACK.includes(type) ? cover : undefined;
+};
+
+/**
+ * Image, audio and text nodes take their thumbnail from their picture (see
+ * `pictureOf`); video nodes from the first video block's URL. A node with
+ * nothing to take it from keeps its own, unless that points at a file this
+ * save released.
  */
 export const deriveThumbnail = (
   type: NodeType,
   files: File[],
   blocks: INodeBlock[],
   current: string,
+  { cover, released = [] }: PictureSources = {},
 ): string => {
-  if (HAS_IMAGE_THUMBNAIL.includes(type)) {
-    const image = firstFileOfType(files, FILE_TYPES.IMAGE);
+  const picture = pictureOf(type, files, cover);
 
-    // a text node's photo is released with its block, so nothing is kept
-    return image?.url ?? (type === NODE_TYPES.TEXT ? '' : current);
+  if (picture) {
+    return picture.url;
   }
 
   if (type === NODE_TYPES.VIDEO) {
@@ -360,26 +408,32 @@ export const deriveThumbnail = (
     return url || current;
   }
 
-  return current;
+  return released.includes(current) ? '' : current;
 };
 
-/** Carries the first attached image's dominant colour onto the flow settings. */
+/**
+ * Carries the picture's dominant colour (see `pictureOf`) onto the flow
+ * settings. Without a picture the colour stays, unless the thumbnail it went
+ * with was released.
+ */
 export const deriveDominantColor = (
   type: NodeType,
   files: File[],
   current: string,
+  { cover, released = [] }: PictureSources = {},
+  thumbnail = '',
 ): string => {
   if (!HAS_IMAGE_THUMBNAIL.includes(type)) {
     return current;
   }
 
-  const image = firstFileOfType(files, FILE_TYPES.IMAGE);
+  const picture = pictureOf(type, files, cover);
 
-  if (!image && type === NODE_TYPES.TEXT) {
-    return '';
+  if (picture) {
+    return picture.metadata?.dominant_color || current;
   }
 
-  return image?.metadata?.dominant_color || current;
+  return released.includes(thumbnail) ? '' : current;
 };
 
 /**

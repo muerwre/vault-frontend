@@ -7,6 +7,7 @@ import { AudioList } from '~/components/common/AudioList';
 import { ImageGrid } from '~/components/common/ImageGrid';
 import { YoutubeEmbed } from '~/components/media/YoutubeEmbed';
 import { NodeComponentProps } from '~/constants/node';
+import { useAskToLogIn } from '~/hooks/auth/useAskToLogIn';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useImageModal } from '~/hooks/navigation/useImageModal';
@@ -49,7 +50,11 @@ const ImagesContent: FC<{ files: IFile[]; mode: ImageBlockMode }> = ({
   );
 };
 
-const renderBlock = (block: IBlock, isTablet: boolean): ReactNode => {
+const renderBlock = (
+  block: IBlock,
+  isTablet: boolean,
+  onDisabledPlayPress: () => void,
+): ReactNode => {
   switch (block.type) {
     case 'text':
       return <TextContent text={block.text} />;
@@ -64,7 +69,11 @@ const renderBlock = (block: IBlock, isTablet: boolean): ReactNode => {
 
     case 'audio':
       return block.files.length ? (
-        <AudioList files={block.files} compact={isTablet} />
+        <AudioList
+          files={block.files}
+          compact={isTablet}
+          onDisabledPlayPress={onDisabledPlayPress}
+        />
       ) : null;
 
     default:
@@ -76,6 +85,7 @@ const renderBlock = (block: IBlock, isTablet: boolean): ReactNode => {
 const NodeTextBlock: FC<Props> = ({ node }) => {
   const background = useColorGradientFromString(node.title, 3, 2);
   const { isTablet } = useWindowSize();
+  const askToLogIn = useAskToLogIn('song');
 
   // the comments have a player of their own; this one plays the post's video
   return (
@@ -83,7 +93,7 @@ const NodeTextBlock: FC<Props> = ({ node }) => {
       <div className={classNames(styles.text)} style={{ background }}>
         {(node.blocks || []).map((block, index) => (
           <div className={styles.block} key={index}>
-            {renderBlock(block, isTablet)}
+            {renderBlock(block, isTablet, askToLogIn)}
           </div>
         ))}
       </div>
