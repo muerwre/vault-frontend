@@ -131,6 +131,15 @@ const NodePage: FC<Props> = observer((props) => {
     return null;
   }
 
+  // A lab post's page comes empty and is filled in the browser. Until then
+  // its layout is unknown, and one shown meanwhile would be swapped for the
+  // other, so nothing is.
+  const layout = !node.id ? null : isAuraNode(node) ? (
+    <NodeAuraLayout />
+  ) : (
+    <NodeLayout />
+  );
+
   return (
     <NodeContextProvider
       node={node}
@@ -161,7 +170,7 @@ const NodePage: FC<Props> = observer((props) => {
             onTagDelete={onTagDelete}
           >
             <NodeHeadMetadata />
-            {isAuraNode(node) ? <NodeAuraLayout /> : <NodeLayout />}
+            {layout}
           </TagsContextProvider>
         </CommentContextProvider>
       </NodeRelatedProvider>
