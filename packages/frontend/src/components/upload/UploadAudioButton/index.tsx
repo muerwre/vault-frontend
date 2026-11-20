@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
+import { UploadButton } from '~/components/upload/UploadButton';
 import { UploadType } from '~/constants/uploads';
-import { EditorUploadButton } from '~/containers/dialogs/EditorDialog/components/EditorButtons/components/EditorActionsPanel/components/EditorUploadButton';
 import { IEditorComponentProps } from '~/types/node';
 
 type Props = IEditorComponentProps & {};
 
-const EditorAudioUploadButton: FC<Props> = () => (
-  <EditorUploadButton
+const UploadAudioButton: FC<Props> = () => (
+  <UploadButton
     accept="audio/*"
     icon="audio"
     type={UploadType.Audio}
@@ -15,4 +15,4 @@ const EditorAudioUploadButton: FC<Props> = () => (
   />
 );
 
-export { EditorAudioUploadButton };
+export { UploadAudioButton };

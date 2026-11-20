@@ -35,6 +35,10 @@
     position: relative;
     z-index: 6;
   }
+
+  &.big {
+    min-height: $comment_height * 2;
+  }
 }
 
 .backdrop {
@@ -88,6 +92,46 @@
   justify-content: center;
 }
 
+// On a big preview the play button and the title sit at the bottom, in a row
+// as tall as the icon.
+.big .backdrop {
+  align-items: flex-end;
+  padding-bottom: $gap * 2.25;
+  box-sizing: border-box;
+}
+
+// above the preview, inside its corner
+.delete {
+  position: absolute;
+  top: $gap;
+  right: $gap * 1.5;
+  z-index: 20;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 100%;
+  background: $content_bg_darker;
+  color: white;
+  cursor: pointer;
+  transition: color 0.25s;
+
+  svg {
+    fill: currentColor;
+  }
+
+  &:hover {
+    color: $color_danger;
+  }
+}
+
+.big .play {
+  height: 32px;
+}
+
 .title {
   flex: 1;
   text-align: left;
@@ -98,6 +142,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  .big & {
+    line-height: 32px;
+  }
 }
 
 @keyframes appear {

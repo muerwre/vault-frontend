@@ -11,7 +11,7 @@ import { getFileSrcSet } from '~/utils/srcset';
 
 import styles from './styles.module.scss';
 
-interface CommentImageGridProps {
+interface ImageGridProps {
   files: IFile[];
   onClick: (file: IFile) => void;
 }
@@ -19,7 +19,7 @@ interface CommentImageGridProps {
 const singleSrcSet = '(max-width: 1024px) 40vw, 20vw';
 const multipleSrcSet = '(max-width: 1024px) 50vw, 20vw';
 
-const CommentImageGrid: FC<CommentImageGridProps> = ({ files, onClick }) => {
+const ImageGrid: FC<ImageGridProps> = ({ files, onClick }) => {
   return (
     <div
       className={classNames(styles.images, {
@@ -46,4 +46,4 @@ const CommentImageGrid: FC<CommentImageGridProps> = ({ files, onClick }) => {
   );
 };
 
-export { CommentImageGrid };
+export { ImageGrid };

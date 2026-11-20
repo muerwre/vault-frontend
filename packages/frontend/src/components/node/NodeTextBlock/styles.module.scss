@@ -3,6 +3,9 @@
 .text {
   @include outer_shadow();
 
+  display: flex;
+  flex-direction: column;
+  gap: $gap * 1.5;
   background: $content_bg;
   padding: $lab_gap;
   border-radius: $radius;
@@ -15,4 +18,8 @@
       margin-bottom: $gap;
     }
   }
+}
+
+.block:empty {
+  display: none;
 }

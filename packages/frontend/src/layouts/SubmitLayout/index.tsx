@@ -8,10 +8,10 @@ import { Card } from '~/components/common/Card';
 import { Container } from '~/components/common/Container';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
+import { UploadAudioButton } from '~/components/upload/UploadAudioButton';
+import { UploadImageButton } from '~/components/upload/UploadImageButton';
 import { NODE_TYPES } from '~/constants/node';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
-import { EditorAudioUploadButton } from '~/containers/dialogs/EditorDialog/components/EditorButtons/components/EditorActionsPanel/components/EditorAudioUploadButton';
-import { EditorImageUploadButton } from '~/containers/dialogs/EditorDialog/components/EditorButtons/components/EditorActionsPanel/components/EditorImageUploadButton';
 import { NODE_EDITORS } from '~/containers/dialogs/EditorDialog/constants';
 import { SubmitAudioEditor } from '~/containers/submit/SubmitAudioEditor';
 import { SubmitCoverEditor } from '~/containers/submit/SubmitCoverEditor';
@@ -50,7 +50,7 @@ const PAGE_EDITORS = {
  * cards in their grids instead.
  */
 const UPLOAD_BUTTONS: Partial<Record<NodeType, FC[]>> = {
-  [NODE_TYPES.ROOM]: [EditorAudioUploadButton, EditorImageUploadButton],
+  [NODE_TYPES.ROOM]: [UploadAudioButton, UploadImageButton],
 };
 
 /** Rooms always live outside the lab, so they get no flow/lab choice. */

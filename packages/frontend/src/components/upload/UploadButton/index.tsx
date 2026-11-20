@@ -17,7 +17,7 @@ type Props = IEditorComponentProps & {
   label?: string;
 };
 
-const EditorUploadButton: FC<Props> = ({
+const UploadButton: FC<Props> = ({
   accept = 'image/*',
   icon = 'plus',
   type = UploadType.Image,
@@ -56,4 +56,4 @@ const EditorUploadButton: FC<Props> = ({
   );
 };
 
-export { EditorUploadButton };
+export { UploadButton };

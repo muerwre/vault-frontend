@@ -1,11 +1,10 @@
 import { FC } from 'react';
 
+import { UploadAudioGrid } from '~/components/upload/UploadAudioGrid';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
+import { UploadImageGrid } from '~/components/upload/UploadImageGrid';
 import { NodeEditorProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
-
-import { AudioGrid } from '../AudioGrid';
-import { ImageGrid } from '../ImageGrid';
 
 import styles from './styles.module.scss';
 
@@ -23,13 +22,13 @@ const AudioEditor: FC<NodeEditorProps> = () => {
   return (
     <UploadDropzone onUpload={uploadFiles} helperClassName={styles.dropzone}>
       <div className={styles.wrap}>
-        <ImageGrid
+        <UploadImageGrid
           files={filesImages}
           setFiles={setImages}
           locked={pendingImages}
         />
 
-        <AudioGrid
+        <UploadAudioGrid
           files={filesAudios}
           setFiles={setAudios}
           locked={pendingAudios}

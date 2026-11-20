@@ -17,10 +17,11 @@ interface Props {
   existing: string[];
   onAdd: (blocks: IBlock[]) => void;
   /**
-   * A card with a textarea, for the end of the list; or a bare input and
-   * button, for the empty zone before the first video.
+   * A card with a textarea, for the end of the list; a bare input over a
+   * button, for the empty zone before the first video; or the two side by
+   * side, the input taking the width, for a text post's video block.
    */
-  variant?: 'card' | 'inline';
+  variant?: 'card' | 'inline' | 'row';
   className?: string;
 }
 
@@ -86,9 +87,9 @@ const SubmitVideoAddCard: FC<Props> = ({
     [add],
   );
 
-  if (variant === 'inline') {
+  if (variant === 'inline' || variant === 'row') {
     return (
-      <div className={classNames(styles.inline, className)}>
+      <div className={classNames(styles[variant], className)}>
         <div className={styles.input}>
           <InputText
             value={url}

@@ -1,0 +1,13 @@
+@import 'src/styles/variables';
+
+// an add button under the list, at its own width
+.pick {
+  display: flex;
+}
+
+// as tall as a song row, so the button sits in the middle of the block
+.center {
+  justify-content: center;
+  align-items: center;
+  min-height: $comment_height;
+}

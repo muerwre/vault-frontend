@@ -1,5 +1,6 @@
 import { Context } from 'react';
 
+import type { ImageBlockMode } from '@vault/common/constants';
 import type { INodeSettings } from '@vault/common/types';
 
 import { ERRORS } from '~/constants/errors';
@@ -66,7 +67,26 @@ export interface IBlockEmbed {
   url: string;
 }
 
-export type IBlock = IBlockText | IBlockEmbed;
+/** Photos shown together in a text node. */
+export interface IBlockImages {
+  type: 'images';
+  mode: ImageBlockMode;
+  files: IFile[];
+}
+
+/** Songs played in a text node. */
+export interface IBlockAudio {
+  type: 'audio';
+  files: IFile[];
+}
+
+/**
+ * `key` exists only in the editor, so a block keeps its state while it is
+ * moved; it is never sent.
+ */
+export type IBlock = (IBlockText | IBlockEmbed | IBlockImages | IBlockAudio) & {
+  key?: string;
+};
 export type FlowDisplayVariant =
   | 'single'
   | 'vertical'

@@ -147,6 +147,24 @@ describe('wire serialisation', () => {
     it('maps a null blob to an empty array', () => {
       expect(toWireBlocks(null)).toEqual([]);
     });
+
+    it('fills file blocks in from the node files, skipping missing ids', () => {
+      const photo = { id: 1, type: 'image', url: 'p' } as File;
+      const song = { id: 2, type: 'audio', url: 's' } as File;
+
+      const [images, audio] = toWireBlocks(
+        [
+          { type: 'images', mode: 'grid', files: [1, 99] },
+          { type: 'audio', files: [2] },
+        ],
+        [photo, song],
+      );
+
+      expect(images).toMatchObject({ type: 'images', mode: 'grid', text: '' });
+      expect(images.files?.map((it) => it.id)).toEqual([1]);
+      expect(audio.files?.map((it) => it.id)).toEqual([2]);
+      expect(audio.mode).toBeUndefined();
+    });
   });
 
   describe('toWireShallowUser', () => {

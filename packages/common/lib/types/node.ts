@@ -1,5 +1,6 @@
 import type {
   FlowDisplayVariant,
+  ImageBlockMode,
   NodeLayout,
   NodeType,
 } from '../constants/node';
@@ -18,8 +19,31 @@ export interface IBlockEmbed {
   url: string;
 }
 
+/**
+ * Photos shown together in a text node. Stored as file ids; the wire fills in
+ * the files themselves from the node's own.
+ */
+export interface IBlockImages<F = number> {
+  type: 'images';
+  mode: ImageBlockMode;
+  files: F[];
+}
+
+/** Songs played in a text node. Stored and sent like `IBlockImages`. */
+export interface IBlockAudio<F = number> {
+  type: 'audio';
+  files: F[];
+}
+
 /** `node.blocks` JSON blob is an array of these. */
-export type INodeBlock = IBlockText | IBlockEmbed;
+export type INodeBlock = IBlockText | IBlockEmbed | IBlockImages | IBlockAudio;
+
+/** A block as sent to clients: file blocks carry the files, not their ids. */
+export type IWireNodeBlock =
+  | IBlockText
+  | IBlockEmbed
+  | IBlockImages<IFile>
+  | IBlockAudio<IFile>;
 
 /**
  * `node.flow` JSON blob.
@@ -59,7 +83,7 @@ export interface INode {
   cover?: IFile;
   tags: ITag[];
 
-  blocks: INodeBlock[];
+  blocks: IWireNodeBlock[];
   flow: INodeFlow;
   settings?: INodeSettings;
 

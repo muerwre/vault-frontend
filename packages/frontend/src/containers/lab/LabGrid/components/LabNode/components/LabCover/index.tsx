@@ -8,8 +8,11 @@ import { getURL } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
-/** A song node's first photo as a short strip across the top of its card. */
-const LabAudioCover: FC<NodeComponentProps> = ({ node, isLoading }) => {
+/**
+ * A node's first photo as a short strip across the top of its card: a song
+ * node's cover, or a text node's first photo.
+ */
+const LabCover: FC<NodeComponentProps> = ({ node, isLoading }) => {
   const images = useNodeImages(node);
   const onClick = useGotoNode(node.id);
 
@@ -28,4 +31,4 @@ const LabAudioCover: FC<NodeComponentProps> = ({ node, isLoading }) => {
   );
 };
 
-export { LabAudioCover };
+export { LabCover };

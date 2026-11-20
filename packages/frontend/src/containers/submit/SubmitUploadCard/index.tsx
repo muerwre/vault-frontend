@@ -14,8 +14,8 @@ interface Props {
   type: UploadType;
   label: string;
   icon: string;
-  /** A square photo tile, or a row the height of a song. */
-  variant: 'tile' | 'row';
+  /** A square photo tile. */
+  variant: 'tile';
 }
 
 /** The last card of an upload grid: picks files of its type to upload. */

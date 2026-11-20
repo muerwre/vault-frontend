@@ -2,6 +2,12 @@ import { Role } from '~/constants/auth';
 import { NODE_LAYOUTS, NODE_TYPES } from '~/constants/node';
 import { ICommentGroup, INode } from '~/types';
 import { IUser } from '~/types/auth';
+import {
+  getBlockFiles,
+  isBlockEmpty,
+  stripBlockKey,
+  TEXT_NODE_BLOCKS,
+} from '~/utils/blocks';
 import { path } from '~/utils/ramda';
 
 export const canEditNode = (
@@ -49,22 +55,29 @@ export const canStarNode = (
 
 /**
  * Drops content the node's type cannot carry, mirroring what the backend
- * keeps: text nodes keep text blocks, video nodes video blocks, photo nodes
- * images, song nodes audio and images. Lets a form that switched types send
- * only what the final type uses. Types not listed are left as they are.
+ * keeps: text nodes keep their non-empty blocks and the files those show,
+ * video nodes video blocks, photo nodes images, song nodes audio and images.
+ * Lets a form that switched types send only what the final type uses. Types
+ * not listed are left as they are.
  */
 export const pruneNodeContent = (node: INode): INode => {
   switch (node.type) {
-    case NODE_TYPES.TEXT:
-    case NODE_TYPES.VIDEO: {
-      const blockType = node.type === NODE_TYPES.TEXT ? 'text' : 'video';
+    case NODE_TYPES.TEXT: {
+      const blocks = node.blocks
+        .filter((it) => TEXT_NODE_BLOCKS.includes(it.type) && !isBlockEmpty(it))
+        .map(stripBlockKey);
 
+      return { ...node, blocks, files: getBlockFiles(blocks) };
+    }
+
+    case NODE_TYPES.VIDEO:
       return {
         ...node,
-        blocks: node.blocks.filter((it) => it.type === blockType),
+        blocks: node.blocks
+          .filter((it) => it.type === 'video')
+          .map(stripBlockKey),
         files: [],
       };
-    }
 
     case NODE_TYPES.IMAGE:
       return {

@@ -1,14 +1,13 @@
 import { FC } from 'react';
 
+import { UploadButton } from '~/components/upload/UploadButton';
 import { UploadType } from '~/constants/uploads';
 import { IEditorComponentProps } from '~/types/node';
 
-import { EditorUploadButton } from '../EditorUploadButton';
-
 type Props = IEditorComponentProps & {};
 
-const EditorImageUploadButton: FC<Props> = () => (
-  <EditorUploadButton
+const UploadImageButton: FC<Props> = () => (
+  <UploadButton
     accept="image/*"
     icon="image"
     type={UploadType.Image}
@@ -16,4 +15,4 @@ const EditorImageUploadButton: FC<Props> = () => (
   />
 );
 
-export { EditorImageUploadButton };
+export { UploadImageButton };

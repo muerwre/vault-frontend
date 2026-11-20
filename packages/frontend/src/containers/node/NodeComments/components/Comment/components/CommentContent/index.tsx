@@ -12,13 +12,13 @@ import classnames from 'classnames';
 
 import { AudioPlayer } from '~/components/common/AudioPlayer';
 import { Group } from '~/components/common/Group';
+import { ImageGrid } from '~/components/common/ImageGrid';
 import { UploadType } from '~/constants/uploads';
 import { IComment, IFile } from '~/types';
 import { formatCommentText, getPrettyDate } from '~/utils/dom';
 import { append, assocPath, path, reduce } from '~/utils/ramda';
 
 import { CommentEditingForm } from './components/CommentEditingForm';
-import { CommentImageGrid } from './components/CommentImageGrid';
 import { CommentLike } from './components/CommentLike';
 import { CommentMenu } from './components/CommentMenu';
 import { COMMENT_BLOCK_RENDERERS } from './constants';
@@ -130,10 +130,7 @@ const CommentContent: FC<Props> = memo(
 
             {groupped.image && groupped.image.length > 0 && (
               <div className={classnames(styles.block, styles.block_image)}>
-                <CommentImageGrid
-                  files={groupped.image}
-                  onClick={onImageClick}
-                />
+                <ImageGrid files={groupped.image} onClick={onImageClick} />
               </div>
             )}
 

@@ -9,9 +9,17 @@ interface Props {
   setFiles: (val: IFile[]) => void;
   locked: UploadStatus[];
   trailing?: ReactNode;
+  /** Songs joined into one ridged list, like a post's player. */
+  outlined?: boolean;
 }
 
-const AudioGrid: FC<Props> = ({ files, setFiles, locked, trailing }) => {
+const UploadAudioGrid: FC<Props> = ({
+  files,
+  setFiles,
+  locked,
+  trailing,
+  outlined,
+}) => {
   const onMove = useCallback(
     (newFiles: IFile[]) => {
       setFiles(newFiles);
@@ -47,8 +55,9 @@ const AudioGrid: FC<Props> = ({ files, setFiles, locked, trailing }) => {
       items={files}
       locked={locked}
       trailing={trailing}
+      outlined={outlined}
     />
   );
 };
 
-export { AudioGrid };
+export { UploadAudioGrid };

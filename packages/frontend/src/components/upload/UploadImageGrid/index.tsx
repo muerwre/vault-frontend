@@ -5,14 +5,24 @@ import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
 
+import styles from './styles.module.scss';
+
 interface Props {
   files: IFile[];
   setFiles: (val: IFile[]) => void;
   locked: UploadStatus[];
   trailing?: ReactNode;
+  /** Smaller photos: five to a row, three on a tablet. */
+  compact?: boolean;
 }
 
-const ImageGrid: FC<Props> = ({ files, setFiles, locked, trailing }) => {
+const UploadImageGrid: FC<Props> = ({
+  files,
+  setFiles,
+  locked,
+  trailing,
+  compact,
+}) => {
   const { isTablet } = useWindowSize();
 
   const onMove = useCallback(
@@ -36,9 +46,10 @@ const ImageGrid: FC<Props> = ({ files, setFiles, locked, trailing }) => {
       items={files}
       locked={locked}
       trailing={trailing}
-      size={!isTablet ? 220 : (innerWidth - 60) / 2}
+      className={compact ? styles.compact : undefined}
+      size={compact ? undefined : !isTablet ? 220 : (innerWidth - 60) / 2}
     />
   );
 };
 
-export { ImageGrid };
+export { UploadImageGrid };

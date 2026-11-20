@@ -12,8 +12,8 @@ interface Props {
   className?: string;
 }
 
-/** The player in a comment: our copy when there is one, YouTube's otherwise. */
-export const CommentVideoFrame = ({ id, title, video, className }: Props) => (
+/** The player of an embed: our copy when there is one, YouTube's otherwise. */
+export const YoutubeEmbedFrame = ({ id, title, video, className }: Props) => (
   <div className={classNames(styles.wrap, className)}>
     <YoutubePlayer id={id} title={title} video={video} autoplay />
   </div>

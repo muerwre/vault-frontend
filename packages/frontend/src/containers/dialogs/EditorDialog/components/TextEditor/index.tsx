@@ -8,7 +8,7 @@ import { MarkdownFormatButtons } from '~/components/input/MarkdownFormatButtons'
 import { useRandomPhrase } from '~/constants/phrases';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { NodeEditorProps } from '~/types/node';
-import { path } from '~/utils/ramda';
+import { getFirstText } from '~/utils/blocks';
 
 import styles from './styles.module.scss';
 
@@ -19,12 +19,22 @@ const TextEditor: FC<Props> = () => {
   const placeholder = useRandomPhrase('SIMPLE');
   const [formatter, setFormatter] = useState<MarkdownFormatter | null>(null);
 
+  // edits the first text block, keeping any others the post has
   const setText = useCallback(
-    (text: string) => setFieldValue('blocks', [{ type: 'text', text }]),
-    [setFieldValue],
+    (text: string) => {
+      const index = values.blocks.findIndex((it) => it.type === 'text');
+
+      setFieldValue(
+        'blocks',
+        index < 0
+          ? [{ type: 'text', text }, ...values.blocks]
+          : values.blocks.map((it, i) => (i === index ? { ...it, text } : it)),
+      );
+    },
+    [setFieldValue, values.blocks],
   );
 
-  const text = (path(['blocks', 0, 'text'], values) as string) || '';
+  const text = getFirstText(values.blocks);
 
   return (
     <div className={styles.wrap}>

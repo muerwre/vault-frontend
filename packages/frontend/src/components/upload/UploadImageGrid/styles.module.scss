@@ -1,0 +1,9 @@
+@import 'src/styles/variables';
+
+.compact {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+
+  @include tablet {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

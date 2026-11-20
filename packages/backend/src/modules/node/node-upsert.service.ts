@@ -7,11 +7,7 @@ import {
   type NodeType,
 } from '@vault/common/constants';
 import { MEDIA_OWNER_TYPES, MEDIA_PRIORITIES } from '@vault/common/media';
-import type {
-  INodeBlock,
-  INodeFlow,
-  INodeSettings,
-} from '@vault/common/types';
+import type { INodeBlock, INodeFlow, INodeSettings } from '@vault/common/types';
 import { In, IsNull, Repository } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
@@ -27,6 +23,7 @@ import {
   deriveThumbnail,
   filterBlocks,
   filterFiles,
+  keptFiles,
   resolveSettings,
   truncateTitle,
   validateNodeContent,
@@ -136,8 +133,9 @@ export class NodeUpsertService {
     const previousFileIds = isUpdate ? [...(node.filesOrder ?? [])] : [];
     const previousCoverId = isUpdate ? node.coverId : null;
 
-    const resolvedFiles = await this.resolveFiles(type, body?.files ?? []);
-    const blocks = filterBlocks(type, body?.blocks);
+    const requestedFiles = await this.resolveFiles(type, body?.files ?? []);
+    const blocks = filterBlocks(type, body?.blocks, requestedFiles);
+    const resolvedFiles = keptFiles(type, requestedFiles, blocks);
 
     /**
      * Validated against the files that actually exist and match the node type,
