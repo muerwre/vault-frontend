@@ -1,6 +1,7 @@
 import { FC, useMemo } from 'react';
 
 import classNames from 'classnames';
+import { transparentize } from 'color2k';
 import { isAfter, parseISO } from 'date-fns';
 
 import { NODE_TYPES } from '~/constants/node';
@@ -43,13 +44,17 @@ const LabNode: FC<Props> = ({ node, isLoading, lastSeen, commentCount }) => {
   const images = useNodeImages(node);
   const cover = COVERED_TYPES.includes(node.type ?? '') ? images[0] : undefined;
 
-  const backdrop = useMemo(
-    () =>
-      getPhotoBackdrop(
-        node.flow?.dominant_color || cover?.metadata?.dominant_color,
-      ),
-    [node.flow?.dominant_color, cover],
-  );
+  // Over a bright photo the text turns dark, and the greys (date, counters,
+  // icons) follow it as a lighter shade of that colour.
+  const backdrop = useMemo(() => {
+    const colors = getPhotoBackdrop(
+      node.flow?.dominant_color || cover?.metadata?.dominant_color,
+    );
+
+    return colors.color
+      ? { ...colors, '--lab_muted': transparentize(colors.color, 0.35) }
+      : colors;
+  }, [node.flow?.dominant_color, cover]);
 
   return (
     <div

@@ -30,6 +30,6 @@
 }
 
 .star {
-  fill: $gray_50;
+  fill: var(--lab_muted, #{$gray_50});
   flex: 0 0 24px;
 }
