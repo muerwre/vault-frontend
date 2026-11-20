@@ -1,0 +1,28 @@
+@import 'src/styles/variables';
+
+.wrap {
+  // slides start at the left edge, not centred
+  justify-content: flex-start;
+  // as wide as the post body, past its padding
+  margin: 0 (-$lab_gap);
+  width: calc(100% + #{$lab_gap * 2});
+}
+
+.slide {
+  width: auto !important;
+  max-width: 85%;
+}
+
+.image {
+  display: block;
+  height: min(60vh, 480px);
+  width: auto;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: $radius;
+  cursor: pointer;
+
+  @include tablet {
+    height: min(50vh, 320px);
+  }
+}

@@ -9,6 +9,7 @@ import { NodeTitle } from '~/components/node/NodeTitle';
 import { Dialog } from '~/constants/modal/dialog';
 import { SubmitBarRouter } from '~/containers/main/SubmitBarRouter';
 import { NodeBottomBlock } from '~/containers/node/NodeBottomBlock';
+import { useAskToLogIn } from '~/hooks/auth/useAskToLogIn';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { useShowModal } from '~/hooks/modal/useShowModal';
 import { useNodeActions } from '~/hooks/node/useNodeActions';
@@ -29,6 +30,7 @@ import styles from './styles.module.scss';
 const NodeAuraLayout = observer(() => {
   const { isUser } = useAuth();
   const showRegisterDialog = useShowModal(Dialog.Register);
+  const askToLogIn = useAskToLogIn('song');
   const { node, isLoading, update } = useNodeContext();
   const [canEdit, canLike, canStar] = useNodePermissions(node);
   const { onLike, onStar, onLock, onEdit } = useNodeActions(node, update);
@@ -69,7 +71,11 @@ const NodeAuraLayout = observer(() => {
       <AuraBackdrop images={images} />
 
       <div className={styles.stage}>
-        <AuraPlayButton audios={audios} nodeTitle={node.title} />
+        <AuraPlayButton
+          audios={audios}
+          nodeTitle={node.title}
+          onDisabledPlayPress={askToLogIn}
+        />
       </div>
 
       <Container className={styles.content}>

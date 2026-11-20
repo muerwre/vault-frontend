@@ -1,11 +1,15 @@
 import { FC, ReactNode, useMemo } from 'react';
 
+import classNames from 'classnames';
+
 import { AudioPlayer } from '~/components/common/AudioPlayer';
 import { AudioUpload } from '~/components/upload/AudioUpload';
 import { UploadStatus } from '~/store/uploader/UploaderStore';
 import { IFile } from '~/types';
 
 import { SortableList } from '../SortableList';
+
+import styles from './styles.module.scss';
 
 type OnSortEnd = (newValue: IFile[]) => void;
 
@@ -17,6 +21,11 @@ interface SortableAudioGridProps {
   trailing?: ReactNode;
   onDelete: (file_id: IFile['id']) => void;
   onTitleChange: (file_id: IFile['id'], title: string) => void;
+  /**
+   * Songs joined into one list, ridged around and between like a post's
+   * player. `trailing` then goes under the list rather than in it.
+   */
+  outlined?: boolean;
 }
 const renderItem = ({
   item,
@@ -56,6 +65,7 @@ const SortableAudioGrid: FC<SortableAudioGridProps> = ({
   onSortEnd,
   trailing,
   onTitleChange,
+  outlined,
 }) => {
   const renderItemProps = useMemo(
     () => ({ onDelete, onTitleChange }),
@@ -63,7 +73,7 @@ const SortableAudioGrid: FC<SortableAudioGridProps> = ({
   );
   const renderLockedProps = useMemo(() => ({}), []);
 
-  return (
+  const list = (
     <SortableList
       items={items}
       locked={locked}
@@ -74,9 +84,20 @@ const SortableAudioGrid: FC<SortableAudioGridProps> = ({
       renderLocked={renderLocked}
       renderLockedProps={renderLockedProps}
       onSortEnd={onSortEnd}
-      className={className}
-      trailing={trailing}
+      className={classNames(className, { [styles.outlined]: outlined })}
+      trailing={outlined ? undefined : trailing}
     />
+  );
+
+  if (!outlined || !trailing) {
+    return list;
+  }
+
+  return (
+    <div className={styles.wrap}>
+      {list}
+      {trailing}
+    </div>
   );
 };
 

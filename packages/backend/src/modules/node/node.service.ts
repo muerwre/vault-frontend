@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  FILE_TYPES,
   GUEST_USER_ID,
   NODE_BACKLINK_PROVIDERS,
   NODE_TYPES,
@@ -19,6 +20,7 @@ import {
   toWireDate,
   toWireFlow,
   toWireNode,
+  toWireFlowSongs,
   toWireShallowNode,
   toWireThumbnail,
   type WireNode,
@@ -26,6 +28,7 @@ import {
 } from '../../wire/serialize';
 import { UploadService } from '../upload/upload.service';
 
+import { filesOf, loadFilesById } from './node-files';
 import {
   type Actor,
   canEditNode,
@@ -417,9 +420,26 @@ export class NodeService {
       params.withValid ? this.getValidIds(params.start, params.end) : [],
     ]);
 
+    // Song cells of the grid play their tracks: one query for the songs of
+    // both its lists. The side lists show no songs.
+    const songNodes = [...before, ...after].filter(
+      (node) => node.type === NODE_TYPES.AUDIO,
+    );
+    const filesById = await loadFilesById(this.files, songNodes, [
+      FILE_TYPES.AUDIO,
+    ]);
+
+    const toFlowNode = (node: Node): WireShallowNode =>
+      node.type === NODE_TYPES.AUDIO
+        ? {
+            ...toWireShallowNode(node),
+            songs: toWireFlowSongs(filesOf(node, filesById)),
+          }
+        : toWireShallowNode(node);
+
     return {
-      before: before.map(toWireShallowNode),
-      after: after.map(toWireShallowNode),
+      before: before.map(toFlowNode),
+      after: after.map(toFlowNode),
       heroes: heroes.map(toWireShallowNode),
       updated: updated.map(toWireShallowNode),
       recent: recent.map(toWireShallowNode),

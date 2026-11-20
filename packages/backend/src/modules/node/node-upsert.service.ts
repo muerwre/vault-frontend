@@ -3,15 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   FILE_TYPES,
   FLOW_NODE_TYPES,
+  NODE_TYPES,
   UPLOAD_TARGETS,
   type NodeType,
 } from '@vault/common/constants';
 import { MEDIA_OWNER_TYPES, MEDIA_PRIORITIES } from '@vault/common/media';
-import type {
-  INodeBlock,
-  INodeFlow,
-  INodeSettings,
-} from '@vault/common/types';
+import type { INodeBlock, INodeFlow, INodeSettings } from '@vault/common/types';
 import { In, IsNull, Repository } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
@@ -27,6 +24,7 @@ import {
   deriveThumbnail,
   filterBlocks,
   filterFiles,
+  keptFiles,
   resolveSettings,
   truncateTitle,
   validateNodeContent,
@@ -136,15 +134,21 @@ export class NodeUpsertService {
     const previousFileIds = isUpdate ? [...(node.filesOrder ?? [])] : [];
     const previousCoverId = isUpdate ? node.coverId : null;
 
-    const resolvedFiles = await this.resolveFiles(type, body?.files ?? []);
-    const blocks = filterBlocks(type, body?.blocks);
+    const requestedFiles = await this.resolveFiles(type, body?.files ?? []);
+    const blocks = filterBlocks(type, body?.blocks, requestedFiles);
+    const resolvedFiles = keptFiles(type, requestedFiles, blocks);
 
     /**
      * Validated against the files that actually exist and match the node type,
      * rather than the types the client claimed — otherwise a bogus payload
      * silently produces an empty node.
      */
-    const invalid = validateNodeContent(type, resolvedFiles, blocks);
+    const invalid = validateNodeContent(
+      type,
+      resolvedFiles,
+      blocks,
+      isUpdate ? (node.blocks ?? []) : [],
+    );
 
     if (invalid) {
       return { ok: false, failure: { kind: 'invalid', message: invalid } };
@@ -172,21 +176,42 @@ export class NodeUpsertService {
     }
 
     node.description = deriveDescription(type, blocks, node.description ?? '');
+
+    const pictures = {
+      cover,
+      released: await this.releasedUrls(
+        previousFileIds.filter((fileId) => !node.filesOrder.includes(fileId)),
+        previousCoverId && previousCoverId !== node.coverId
+          ? previousCoverId
+          : null,
+      ),
+    };
+    const previousThumbnail = node.thumbnail ?? '';
+
     node.thumbnail = deriveThumbnail(
       type,
       resolvedFiles,
       blocks,
-      node.thumbnail ?? '',
+      previousThumbnail,
+      pictures,
     );
+
+    // A new text node shows its text on its flow cell. The submission page
+    // has no switch for it, so what it sends is ignored; the cell's own menu
+    // turns it off afterwards.
+    const showsText = !isUpdate && type === NODE_TYPES.TEXT;
 
     const flow: INodeFlow = {
       display: body?.flow?.display ?? node.flow?.display ?? '',
       show_description:
-        body?.flow?.show_description ?? node.flow?.show_description ?? false,
+        showsText ||
+        (body?.flow?.show_description ?? node.flow?.show_description ?? false),
       dominant_color: deriveDominantColor(
         type,
         resolvedFiles,
         body?.flow?.dominant_color ?? node.flow?.dominant_color ?? '',
+        pictures,
+        previousThumbnail,
       ),
     };
     node.flow = flow;
@@ -242,6 +267,25 @@ export class NodeUpsertService {
       .filter((file): file is File => file !== undefined);
 
     return filterFiles(type, ordered);
+  }
+
+  /**
+   * Addresses of the files this save releases: photos and songs dropped from
+   * the node, and a cover replaced or removed.
+   */
+  private async releasedUrls(
+    fileIds: number[],
+    coverId: number | null,
+  ): Promise<string[]> {
+    const ids = coverId ? [...fileIds, coverId] : fileIds;
+
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const rows = await this.files.findBy({ id: In(ids) });
+
+    return rows.map((file) => file.url).filter(Boolean);
   }
 
   private async resolveCover(

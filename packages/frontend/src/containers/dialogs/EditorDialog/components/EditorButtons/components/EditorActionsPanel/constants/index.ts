@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
+import { UploadAudioButton } from '~/components/upload/UploadAudioButton';
+import { UploadImageButton } from '~/components/upload/UploadImageButton';
 import { NODE_TYPES } from '~/constants/node';
 import { IEditorComponentProps } from '~/types/node';
 
-import { EditorAudioUploadButton } from '../components/EditorAudioUploadButton';
 import { EditorFiller } from '../components/EditorFiller';
-import { EditorImageUploadButton } from '../components/EditorImageUploadButton';
 import { EditorPublicSwitch } from '../components/EditorPublicSwitch';
 import { EditorUploadCoverButton } from '../components/EditorUploadCoverButton';
 
@@ -24,21 +24,17 @@ export const NODE_PANEL_COMPONENTS: Record<
     EditorPublicSwitch,
   ],
   [NODE_TYPES.IMAGE]: [
-    EditorImageUploadButton,
+    UploadImageButton,
     EditorFiller,
     EditorUploadCoverButton,
     EditorPublicSwitch,
   ],
   [NODE_TYPES.AUDIO]: [
-    EditorAudioUploadButton,
-    EditorImageUploadButton,
+    UploadAudioButton,
+    UploadImageButton,
     EditorFiller,
     EditorUploadCoverButton,
     EditorPublicSwitch,
   ],
-  [NODE_TYPES.ROOM]: [
-    EditorAudioUploadButton,
-    EditorImageUploadButton,
-    EditorFiller,
-  ],
+  [NODE_TYPES.ROOM]: [UploadAudioButton, UploadImageButton, EditorFiller],
 };

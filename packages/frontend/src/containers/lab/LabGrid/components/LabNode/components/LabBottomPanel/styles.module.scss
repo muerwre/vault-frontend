@@ -10,14 +10,15 @@
 
 .timestamp {
   font: $font_12_regular;
-  color: $gray_50;
+  // the card sets a darker grey over a bright photo
+  color: var(--photo_muted, #{$gray_50});
 }
 
 .comments,
 .like {
   flex: 0;
   font: $font_16_semibold;
-  color: $gray_50;
+  color: var(--photo_muted, #{$gray_50});
   fill: currentColor;
   stroke: none;
   column-gap: $gap !important;

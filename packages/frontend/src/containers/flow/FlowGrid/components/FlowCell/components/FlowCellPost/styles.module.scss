@@ -1,0 +1,90 @@
+@import 'src/styles/variables';
+
+$compact_size: 200px;
+
+.wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.image.image {
+  position: absolute;
+  inset: 0;
+}
+
+// Anchored to the bottom and never taller than the cell: short content leaves
+// room above it, long content fills the cell and is cut by `.text`.
+.panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  // the padding, which the songs reach past to the panel's edges
+  --pad: #{$gap};
+
+  gap: $gap * 0.5;
+  padding: var(--pad);
+  box-sizing: border-box;
+  border-radius: $radius;
+  font: $font_14_medium;
+  line-height: 1.3em;
+
+  &.over {
+    // the photo's own tint, set inline, replaces this when there is one
+    @include blur;
+  }
+
+  & :global(.grey) {
+    color: inherit;
+    opacity: 0.5;
+  }
+}
+
+.title {
+  flex: 0 0 auto;
+  font: $font_cell_title;
+  line-height: 1.2em;
+  text-transform: uppercase;
+  word-break: break-word;
+  color: inherit;
+
+  @container (max-width: #{$compact_size}) {
+    font: $font_cell_title_compact;
+  }
+}
+
+.text {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  // Reaches the panel's sides and bottom, taking over its padding there:
+  // what it cuts is clipped at its edges, so the songs could not reach past
+  // a padding outside it.
+  margin: 0 calc(-1 * var(--pad)) calc(-1 * var(--pad));
+  padding: 0 var(--pad) var(--pad);
+
+  &.cut {
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 1) 60%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+}
+
+// Edge to edge and flush with the bottom, past the text's padding. The
+// space above adds to the panel's gap, so the title is as far from the songs
+// as from the panel's edges.
+.players {
+  margin: ($gap * 0.5) calc(-1 * var(--pad)) calc(-1 * var(--pad));
+  cursor: pointer;
+}
+
+// as on a lab card. Doubled to outrank the track list's own styles.
+.songs.songs {
+  @include ridged_songs;
+}

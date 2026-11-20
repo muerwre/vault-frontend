@@ -9,3 +9,32 @@
   grid-template-columns: auto;
   grid-template-rows: $comment_height;
 }
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// The ridge between the songs, as on a lab card: a dark line over a light one.
+$ridge_dark: transparentize(black, 0.5);
+$ridge_light: $gray_90;
+
+// One card holding the songs. Doubled to outrank the list's own gap.
+.outlined.outlined {
+  @include outer_shadow();
+
+  grid-row-gap: 0;
+  background: $content_bg;
+  border-radius: $radius;
+
+  &:empty {
+    display: none;
+  }
+
+  & > :not(:last-child) {
+    box-shadow:
+      inset $ridge_dark 0 -1px,
+      $ridge_light 0 1px;
+  }
+}

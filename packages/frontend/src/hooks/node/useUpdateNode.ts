@@ -1,6 +1,10 @@
 import { useCallback } from 'react';
 
+import { MAX_LIST_SONGS } from '@vault/common/constants';
+
 import { apiPostNode } from '~/api/node';
+import { NODE_TYPES } from '~/constants/node';
+import { UploadType } from '~/constants/uploads';
 import { useGetLabNodes } from '~/hooks/lab/useGetLabNodes';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
 import { useFlowStore } from '~/store/flow/useFlowStore';
@@ -22,7 +26,16 @@ export const useUpdateNode = (id: number) => {
       await update(result.node);
 
       if (node.is_promoted) {
-        flow.updateNode(result.node.id!, result.node);
+        // the flow brings a song node's first songs, which the edit may change
+        flow.updateNode(result.node.id!, {
+          ...result.node,
+          songs:
+            result.node.type === NODE_TYPES.AUDIO
+              ? result.node.files
+                  .filter((file) => file?.type === UploadType.Audio)
+                  .slice(0, MAX_LIST_SONGS)
+              : undefined,
+        });
       } else {
         await lab.updateNode(result.node.id!, result.node);
       }

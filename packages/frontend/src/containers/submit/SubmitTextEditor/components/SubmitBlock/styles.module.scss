@@ -1,0 +1,80 @@
+@import 'src/styles/variables';
+
+.wrap {
+  position: relative;
+
+  &.dragging {
+    z-index: 2;
+  }
+}
+
+.block {
+  display: flex;
+  align-items: flex-start;
+  gap: $gap;
+
+  .dragging & {
+    @include outer_shadow;
+
+    border-radius: $radius;
+    background: $content_bg;
+  }
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+
+  // grids, dropzones and uploads have no switch of their own; nothing in the
+  // block reacts to the pointer, drops included, until the save is done
+  &.locked {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+}
+
+.panel {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $gap * 0.25;
+}
+
+.button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: $radius;
+  background: $content_bg_lighter;
+  color: $gray_50;
+  fill: currentColor;
+  cursor: pointer;
+  transition: color 0.25s;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.handle {
+  // touch would scroll the page instead of dragging
+  touch-action: none;
+  cursor: grab;
+
+  &:hover:not(:disabled) {
+    color: white;
+  }
+
+  .dragging & {
+    cursor: grabbing;
+  }
+}
+
+.remove:hover:not(:disabled) {
+  color: $color_danger;
+}

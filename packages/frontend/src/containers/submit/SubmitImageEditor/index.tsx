@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
+import { UploadImageGrid } from '~/components/upload/UploadImageGrid';
 import { UploadType } from '~/constants/uploads';
-import { ImageGrid } from '~/containers/dialogs/EditorDialog/components/ImageGrid';
 import { NodeEditorProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
 import { values } from '~/utils/ramda';
@@ -37,7 +37,7 @@ const SubmitImageEditor: FC<NodeEditorProps> = () => {
 
   return (
     <UploadDropzone onUpload={uploadFiles}>
-      <ImageGrid
+      <UploadImageGrid
         files={files}
         setFiles={setFiles}
         locked={values(pending)}

@@ -10,3 +10,19 @@
   min-width: 0;
   border-radius: $radius;
 }
+
+// the photo behind a covered card
+.covered {
+  overflow: hidden;
+  background: no-repeat 50% 50%;
+  background-size: cover;
+}
+
+.content {
+  border-radius: inherit;
+
+  .covered & {
+    // the photo's own tint, set inline, replaces this when there is one
+    @include blur;
+  }
+}

@@ -1,11 +1,10 @@
 import { FC } from 'react';
 
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
+import { UploadImageGrid } from '~/components/upload/UploadImageGrid';
 import { NodeEditorProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
 import { values } from '~/utils/ramda';
-
-import { ImageGrid } from '../ImageGrid';
 
 import styles from './styles.module.scss';
 
@@ -17,7 +16,11 @@ const ImageEditor: FC<Props> = () => {
   return (
     <UploadDropzone onUpload={uploadFiles} helperClassName={styles.dropzone}>
       <div className={styles.wrap}>
-        <ImageGrid files={files} setFiles={setFiles} locked={values(pending)} />
+        <UploadImageGrid
+          files={files}
+          setFiles={setFiles}
+          locked={values(pending)}
+        />
       </div>
     </UploadDropzone>
   );

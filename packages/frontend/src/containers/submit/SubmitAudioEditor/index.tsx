@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
+import { UploadAudioGrid } from '~/components/upload/UploadAudioGrid';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
+import { UploadImageGrid } from '~/components/upload/UploadImageGrid';
 import { UploadType } from '~/constants/uploads';
-import { AudioGrid } from '~/containers/dialogs/EditorDialog/components/AudioGrid';
-import { ImageGrid } from '~/containers/dialogs/EditorDialog/components/ImageGrid';
 import { NodeEditorProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
 
@@ -25,8 +25,8 @@ const SubmitAudioEditor: FC<NodeEditorProps> = () => {
     pendingImages,
   } = useUploaderContext()!;
 
-  // With no photos yet, a lone square tile looks lost next to the song
-  // list, so the photo card starts as a row like the song one.
+  // With no photos yet, a lone square tile looks lost over the song list, so
+  // photos start as a button beside the song one.
   const hasImages = filesImages.length > 0 || pendingImages.length > 0;
 
   // before anything is added, the zone is just buttons to pick files
@@ -57,11 +57,12 @@ const SubmitAudioEditor: FC<NodeEditorProps> = () => {
   return (
     <UploadDropzone onUpload={uploadFiles}>
       <div className={styles.wrap}>
-        {hasImages ? (
-          <ImageGrid
+        {hasImages && (
+          <UploadImageGrid
             files={filesImages}
             setFiles={setImages}
             locked={pendingImages}
+            compact
             trailing={
               <SubmitUploadCard
                 type={UploadType.Image}
@@ -71,26 +72,31 @@ const SubmitAudioEditor: FC<NodeEditorProps> = () => {
               />
             }
           />
-        ) : (
-          <SubmitUploadCard
-            type={UploadType.Image}
-            icon="photo_add"
-            label="Добавить обложку"
-            variant="row"
-          />
         )}
 
-        <AudioGrid
+        <UploadAudioGrid
+          outlined
           files={filesAudios}
           setFiles={setAudios}
           locked={pendingAudios}
           trailing={
-            <SubmitUploadCard
-              type={UploadType.Audio}
-              icon="audio"
-              label="Добавить песню"
-              variant="row"
-            />
+            <div className={styles.pick}>
+              <SubmitPickButton
+                type={UploadType.Audio}
+                iconLeft="audio"
+                label="Добавить песню"
+              />
+
+              {/* until there is a cover grid with its own add tile */}
+              {!hasImages && (
+                <SubmitPickButton
+                  type={UploadType.Image}
+                  iconLeft="photo_add"
+                  label="Добавить обложку"
+                  color="gray"
+                />
+              )}
+            </div>
           }
         />
       </div>

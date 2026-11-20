@@ -6,7 +6,10 @@ import { Icon } from '~/components/common/Icon';
 import { PlayerState } from '~/constants/player';
 import { IFile } from '~/types';
 import { formatDuration } from '~/utils/date';
-import { useAudioPlayer } from '~/utils/providers/AudioPlayerProvider';
+import {
+  isPlayable,
+  useAudioPlayer,
+} from '~/utils/providers/AudioPlayerProvider';
 
 import { useTotalDuration } from '../../hooks/useTotalDuration';
 
@@ -16,6 +19,8 @@ interface Props {
   audios: IFile[];
   /** Shown until one of the songs gets into the player. */
   nodeTitle: string;
+  /** See `AudioPlayer`. */
+  onDisabledPlayPress?: () => void;
 }
 
 /** Same title the track list shows for a song. */
@@ -35,7 +40,11 @@ const getAudioTitle = (file?: IFile): string =>
  * Below it, that song's title and progress; before any is played, the node's
  * title and the length of all its songs.
  */
-const AuraPlayButton: FC<Props> = ({ audios, nodeTitle }) => {
+const AuraPlayButton: FC<Props> = ({
+  audios,
+  nodeTitle,
+  onDisabledPlayPress,
+}) => {
   const { file, status, progress, setFile, play, pause, toPercent, onEnded } =
     useAudioPlayer();
   const totalDuration = useTotalDuration(audios);
@@ -51,10 +60,16 @@ const AuraPlayButton: FC<Props> = ({ audios, nodeTitle }) => {
 
   const playAt = useCallback(
     (at: number) => {
+      // play alone would resume whatever was loaded before
+      if (!isPlayable(audios[at])) {
+        onDisabledPlayPress?.();
+        return;
+      }
+
       setFile(audios[at]);
       setTimeout(() => void play(), 0);
     },
-    [audios, setFile, play],
+    [audios, setFile, play, onDisabledPlayPress],
   );
 
   const onClick = useCallback(async () => {

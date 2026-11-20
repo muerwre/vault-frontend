@@ -31,3 +31,16 @@ export const AUTH_DIALOGS: readonly Dialog[] = [
   Dialog.RestorePassword,
   Dialog.GoogleLoginDisabled,
 ];
+
+/**
+ * Dialogs for someone not logged in: signing in, signing up, asking to reset a
+ * password. They never open for a logged-in user, whoever asks for them.
+ */
+export const GUEST_DIALOGS: readonly Dialog[] = [
+  Dialog.Login,
+  Dialog.Register,
+  Dialog.RegisterRequest,
+  Dialog.LoginSocialRegister,
+  Dialog.RestoreRequest,
+  Dialog.GoogleLoginDisabled,
+];

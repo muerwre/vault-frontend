@@ -4,16 +4,18 @@ import classNames from 'classnames';
 
 import { Anchor } from '~/components/common/Anchor';
 import { MenuDots } from '~/components/menu/MenuDots';
+import { NODE_TYPES } from '~/constants/node';
 import { useClickOutsideFocus } from '~/hooks/dom/useClickOutsideFocus';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useFlowCellControls } from '~/hooks/flow/useFlowCellControls';
-import { FlowDisplay, INode } from '~/types';
+import { FlowDisplay, IFile, INode } from '~/types';
 
 import { isFullyVisible } from '../../../../../utils/dom';
 
 import { CellShade } from './components/CellShade';
 import { FlowCellImage } from './components/FlowCellImage';
 import { FlowCellMenu } from './components/FlowCellMenu';
+import { FlowCellPost } from './components/FlowCellPost';
 import { FlowCellText } from './components/FlowCellText';
 import styles from './styles.module.scss';
 
@@ -25,10 +27,17 @@ interface Props {
   color?: string;
 
   text?: string;
+  /** Text and song posts get a preview of their own, like their lab card. */
+  type?: string;
+  /** A song post's tracks, listed in its preview. */
+  songs?: IFile[];
   flow: FlowDisplay;
   canEdit?: boolean;
   onChange: (id: INode['id'], flow: FlowDisplay) => void;
 }
+
+/** Post types shown by `FlowCellPost`. */
+const POST_TYPES: string[] = [NODE_TYPES.TEXT, NODE_TYPES.AUDIO];
 
 const FlowCell: FC<Props> = ({
   id,
@@ -37,13 +46,20 @@ const FlowCell: FC<Props> = ({
   image,
   flow,
   text,
+  type,
+  songs,
   title,
   canEdit = false,
   onChange,
 }) => {
   const { isTablet } = useWindowSize();
 
+  // a text or song post always has its own preview; the menu's text switch
+  // only decides whether the text shows under the title
+  const withPost = !!type && POST_TYPES.includes(type);
+
   const withText =
+    !withPost &&
     ((!!flow.display && flow.display !== 'single') || !image) &&
     flow.show_description &&
     !!text;
@@ -127,6 +143,16 @@ const FlowCell: FC<Props> = ({
       )}
 
       <Anchor className={styles.link} href={to}>
+        {withPost && (
+          <FlowCellPost
+            title={title}
+            text={flow.show_description ? text : undefined}
+            songs={songs}
+            image={image}
+            color={color}
+          />
+        )}
+
         {withText && (
           <FlowCellText
             className={styles.text}
@@ -137,7 +163,7 @@ const FlowCell: FC<Props> = ({
           </FlowCellText>
         )}
 
-        {image && (
+        {image && !withPost && (
           <FlowCellImage
             src={image}
             className={styles.thumb}
@@ -145,7 +171,7 @@ const FlowCell: FC<Props> = ({
           />
         )}
 
-        {!!title && !withText && (
+        {!!title && !withText && !withPost && (
           <CellShade
             color={color}
             className={styles.shade}
@@ -154,7 +180,7 @@ const FlowCell: FC<Props> = ({
           />
         )}
 
-        {!withText && (
+        {!withText && !withPost && (
           <div className={styles.title_wrapper}>
             <h4 className={styles.title}>{title}</h4>
           </div>

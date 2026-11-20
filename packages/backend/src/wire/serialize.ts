@@ -1,8 +1,5 @@
-import type {
-  INodeBlock,
-  INodeFlow,
-  INodeSettings,
-} from '@vault/common/types';
+import { FILE_TYPES, MAX_LIST_SONGS } from '@vault/common/constants';
+import type { INodeBlock, INodeFlow, INodeSettings } from '@vault/common/types';
 
 import { isYoutubeThumbCacheEnabled } from '../config/env';
 import type { File } from '../entities/file.entity';
@@ -59,18 +56,48 @@ export const toWireFlow = (flow: INodeFlow | null | undefined): INodeFlow => ({
   dominant_color: flow?.dominant_color ?? '',
 });
 
+/** A block on the wire. File blocks also carry `files`, photo blocks `mode`. */
+export interface WireBlock {
+  type: string;
+  text: string;
+  url: string;
+  mode?: string;
+  files?: WireFile[];
+}
+
 /**
- * Every block carries all three keys: a text block has an empty `url`, a video
- * block an empty `text`. Storage keeps only the used key.
+ * Every block carries `type`, `text` and `url`: a text block has an empty
+ * `url`, a video block an empty `text`. Storage keeps only the used key.
+ * File blocks store ids, which become the node's matching `files`; ids the
+ * node no longer has are skipped.
  */
 export const toWireBlocks = (
   blocks: INodeBlock[] | null | undefined,
-): Array<{ type: string; text: string; url: string }> =>
-  (blocks ?? []).map((block) => ({
-    type: block?.type ?? '',
-    text: (block as { text?: string })?.text ?? '',
-    url: (block as { url?: string })?.url ?? '',
-  }));
+  files: File[] = [],
+): WireBlock[] => {
+  const byId = new Map(files.map((file) => [file.id, file]));
+
+  return (blocks ?? []).map((block) => {
+    const wire: WireBlock = {
+      type: block?.type ?? '',
+      text: (block as { text?: string })?.text ?? '',
+      url: (block as { url?: string })?.url ?? '',
+    };
+
+    if (block?.type === 'images') {
+      wire.mode = block.mode;
+    }
+
+    if (block?.type === 'images' || block?.type === 'audio') {
+      wire.files = (block.files ?? [])
+        .map((id) => byId.get(id))
+        .filter((file): file is File => file !== undefined)
+        .map(toWireFile);
+    }
+
+    return wire;
+  });
+};
 
 /** `photo` is the file url, not an object. */
 export interface WireShallowUser {
@@ -102,7 +129,16 @@ export interface WireShallowNode {
   flow: INodeFlow;
   user: WireShallowUser;
   is_promoted: boolean;
+  /** A song node's tracks, on the flow only, for its cell to play. */
+  songs?: WireFile[];
 }
+
+/** A song node's audio files as its flow cell plays them. */
+export const toWireFlowSongs = (files: File[]): WireFile[] =>
+  files
+    .filter((file) => file.type === FILE_TYPES.AUDIO)
+    .slice(0, MAX_LIST_SONGS)
+    .map(toWireFile);
 
 export const toWireShallowNode = (node: Node): WireShallowNode => ({
   id: node.id,
@@ -203,7 +239,7 @@ export interface WireNode {
   is_heroic: boolean;
   thumbnail: string;
   description: string;
-  blocks: Array<{ type: string; text: string; url: string }>;
+  blocks: WireBlock[];
   cover: WireFile | null;
   user: WireUser | null;
   files_order: number[];
@@ -236,7 +272,7 @@ export const toWireNode = (
   is_heroic: Boolean(node.isHeroic),
   thumbnail: toWireThumbnail(node.thumbnail),
   description: toWireString(node.description),
-  blocks: toWireBlocks(node.blocks),
+  blocks: toWireBlocks(node.blocks, files),
   cover: node.cover ? toWireFile(node.cover) : null,
   user: toWireUser(node.user),
   files_order: node.filesOrder ?? [],

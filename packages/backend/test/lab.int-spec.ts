@@ -134,6 +134,35 @@ describe('lab (integration)', () => {
       ).toContain(nodeId);
     });
 
+    it('brings at most 4 songs of a node, and every photo', async () => {
+      const audios = await db.query(
+        "SELECT id FROM file WHERE type = 'audio' AND deleted_at IS NULL LIMIT 6",
+      );
+      const [image] = await db.query(
+        "SELECT id FROM file WHERE type = 'image' AND deleted_at IS NULL LIMIT 1",
+      );
+      const order = [
+        ...audios.map((row: { id: number }) => Number(row.id)),
+        Number(image.id),
+      ];
+      const nodeId = await makeLabNode({
+        title: `lab songs ${Date.now()}`,
+        filesOrder: order,
+      });
+
+      const { body } = await http()
+        .get('/api/nodes/lab')
+        .set(authHeader(userId))
+        .expect(200);
+
+      const item = body.nodes.find(
+        (it: { node: { id: number } }) => it.node.id === nodeId,
+      );
+      const ids = item.node.files.map((file: { id: number }) => file.id);
+
+      expect(ids).toEqual([...order.slice(0, 4), Number(image.id)]);
+    });
+
     /** The literal path must not be captured as a node id. */
     it('is not swallowed by the :id route', async () => {
       const { body } = await http()

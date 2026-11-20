@@ -55,6 +55,37 @@ export const NODE_LAYOUTS = {
 
 export type NodeLayout = (typeof NODE_LAYOUTS)[keyof typeof NODE_LAYOUTS];
 
+/** How a text node's photo block lays its photos out. */
+export const IMAGE_BLOCK_MODES = {
+  GRID: 'grid',
+  SLIDER: 'slider',
+} as const;
+
+export type ImageBlockMode =
+  (typeof IMAGE_BLOCK_MODES)[keyof typeof IMAGE_BLOCK_MODES];
+
+/** Most files a single photo or song block of a text node may hold. */
+export const MAX_BLOCK_FILES = 5;
+
+/**
+ * Most songs a song node brings to a list (the flow, the lab); its card
+ * previews them, its own page has them all.
+ */
+export const MAX_LIST_SONGS = 4;
+
+/** Fewest characters of text a text node needs across its text blocks. */
+export const MIN_TEXT_NODE_LENGTH = 64;
+
+/**
+ * Most photos, songs and videos a text node may hold across all its blocks.
+ * Keyed by block type.
+ */
+export const TEXT_NODE_LIMITS = {
+  images: 30,
+  audio: 15,
+  video: 6,
+} as const;
+
 /** Lab sort modes accepted by `GET /nodes/lab`. */
 export const LAB_SORT = {
   NEW: 'new',

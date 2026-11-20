@@ -306,16 +306,16 @@ describe('node upsert (integration)', () => {
 
     it('drops blocks the node type cannot carry', async () => {
       const { body } = await save(authorId, {
-        type: 'text',
+        type: 'video',
         blocks: [
-          { type: 'text', text: 'kept' },
+          { type: 'text', text: 'dropped' },
           { type: 'video', url: YT },
         ],
       }).expect(200);
 
       track(body.node.id);
       expect(body.node.blocks).toHaveLength(1);
-      expect(body.node.blocks[0].type).toBe('text');
+      expect(body.node.blocks[0].type).toBe('video');
     });
 
     it('truncates an over-long title', async () => {
@@ -348,6 +348,18 @@ describe('node upsert (integration)', () => {
         }).expect(400);
 
         expect(body.error).toBe('Incorrect_Data');
+      });
+
+      it('400s a text node with only empty blocks', async () => {
+        await save(authorId, {
+          type: 'text',
+          blocks: [
+            { type: 'text', text: '  ' },
+            { type: 'images', mode: 'grid', files: [] },
+            { type: 'audio', files: [imageId] },
+          ],
+          files: [{ id: imageId }],
+        }).expect(400);
       });
 
       it('400s a text node with no text block', async () => {
@@ -407,6 +419,247 @@ describe('node upsert (integration)', () => {
           .send({ type: 'image', files: [{ id: imageId }] })
           .expect(401);
       });
+    });
+  });
+
+  describe('text node blocks', () => {
+    const LONG = 'long enough text '.repeat(5).trim();
+    const text = { type: 'text', text: LONG };
+
+    it('keeps every kind of block in order, with the files they show', async () => {
+      const photo = await makeFile('image');
+      const song = await makeFile('audio');
+
+      const { body } = await save(authorId, {
+        type: 'text',
+        blocks: [
+          { type: 'images', mode: 'grid', files: [{ id: photo }] },
+          { type: 'text', text: '' },
+          { type: 'text', text: LONG },
+          { type: 'video', url: YT },
+          { type: 'audio', files: [song] },
+        ],
+        files: [{ id: song }, { id: photo }],
+      }).expect(200);
+
+      track(body.node.id);
+
+      expect(
+        body.node.blocks.map((block: { type: string }) => block.type),
+      ).toEqual(['images', 'text', 'video', 'audio']);
+      expect(body.node.blocks[0].mode).toBe('grid');
+      expect(
+        body.node.blocks[0].files.map((f: { id: number }) => f.id),
+      ).toEqual([photo]);
+      expect(
+        body.node.blocks[3].files.map((f: { id: number }) => f.id),
+      ).toEqual([song]);
+      expect(body.node.files_order).toEqual([photo, song]);
+
+      const [stored] = await db.query('SELECT blocks FROM node WHERE id = ?', [
+        body.node.id,
+      ]);
+      const blocks =
+        typeof stored.blocks === 'string'
+          ? JSON.parse(stored.blocks)
+          : stored.blocks;
+      expect(blocks[0]).toEqual({
+        type: 'images',
+        mode: 'grid',
+        files: [photo],
+      });
+    });
+
+    it('leaves out files no block shows, releasing them on edit', async () => {
+      const shown = await makeFile('image');
+      const dropped = await makeFile('image');
+
+      const { body: created } = await save(authorId, {
+        type: 'text',
+        blocks: [
+          text,
+          { type: 'images', mode: 'grid', files: [shown, dropped] },
+        ],
+        files: [{ id: shown }, { id: dropped }],
+      }).expect(200);
+      const nodeId = track(created.node.id);
+
+      const { body } = await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        blocks: [text, { type: 'images', mode: 'grid', files: [shown] }],
+        files: [{ id: shown }, { id: dropped }],
+      }).expect(200);
+
+      expect(body.node.files_order).toEqual([shown]);
+
+      const [row] = await db.query('SELECT target FROM file WHERE id = ?', [
+        dropped,
+      ]);
+      expect(row.target).toBeNull();
+    });
+
+    it('takes the thumbnail from the first photo and joins the text', async () => {
+      const first = await makeFile('image');
+      const second = await makeFile('image');
+
+      const { body } = await save(authorId, {
+        type: 'text',
+        blocks: [
+          { type: 'text', text: 'opening' },
+          { type: 'images', mode: 'slider', files: [first, second] },
+          text,
+        ],
+        files: [{ id: first }, { id: second }],
+      }).expect(200);
+
+      track(body.node.id);
+
+      const [row] = await db.query('SELECT url FROM file WHERE id = ?', [
+        first,
+      ]);
+      expect(body.node.thumbnail).toContain(row.url);
+      expect(body.node.description).toBe(`opening\n\n${LONG}`);
+    });
+
+    it('shows the text of a new text node on its flow cell', async () => {
+      const { body } = await save(authorId, {
+        type: 'text',
+        blocks: [text],
+        flow: { display: 'single', show_description: false },
+      }).expect(200);
+      const nodeId = track(body.node.id);
+
+      expect(body.node.flow.show_description).toBe(true);
+
+      // an edit keeps what the cell's menu chose
+      await db.query('UPDATE node SET flow = ? WHERE id = ?', [
+        JSON.stringify({ display: 'single', show_description: false }),
+        nodeId,
+      ]);
+
+      const { body: edited } = await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        blocks: [text],
+      }).expect(200);
+
+      expect(edited.node.flow.show_description).toBe(false);
+    });
+
+    it('edits an old post whose text is under the minimum', async () => {
+      const { body: created } = await save(authorId, {
+        type: 'text',
+        blocks: [text],
+      }).expect(200);
+      const nodeId = track(created.node.id);
+
+      // as stored before blocks: one short block, with the old empty url
+      await db.query('UPDATE node SET blocks = ? WHERE id = ?', [
+        JSON.stringify([{ type: 'text', text: 'short old post', url: '' }]),
+        nodeId,
+      ]);
+
+      // the editor sends the block back with its key, the title changed
+      const { body } = await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        title: 'retitled',
+        blocks: [{ type: 'text', text: 'short old post', url: '', key: 'k' }],
+      }).expect(200);
+
+      expect(body.node.title).toBe('retitled');
+      expect(body.node.blocks[0].text).toBe('short old post');
+
+      // changing the text holds it to the minimum
+      await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        blocks: [{ type: 'text', text: 'short old post, edited' }],
+      }).expect(400);
+    });
+
+    it('clears the thumbnail when the last photo goes', async () => {
+      const photo = await makeFile('image');
+
+      const { body: created } = await save(authorId, {
+        type: 'text',
+        blocks: [text, { type: 'images', mode: 'grid', files: [photo] }],
+        files: [{ id: photo }],
+      }).expect(200);
+      const nodeId = track(created.node.id);
+
+      expect(created.node.thumbnail).not.toBe('');
+
+      const { body } = await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        blocks: [text],
+      }).expect(200);
+
+      expect(body.node.thumbnail).toBe('');
+      expect(body.node.flow.dominant_color).toBe('');
+    });
+
+    it('falls back to the cover, and keeps an old thumbnail', async () => {
+      const cover = await makeFile('image');
+      const [row] = await db.query('SELECT url FROM file WHERE id = ?', [
+        cover,
+      ]);
+
+      const { body: created } = await save(authorId, {
+        type: 'text',
+        blocks: [text],
+        cover: { id: cover },
+      }).expect(200);
+      const nodeId = track(created.node.id);
+
+      expect(created.node.thumbnail).toContain(row.url);
+
+      // a thumbnail from before blocks, with no photo or cover behind it now
+      await db.query(
+        'UPDATE node SET thumbnail = ?, coverId = NULL WHERE id = ?',
+        ['legacy.jpg', nodeId],
+      );
+
+      const { body } = await save(authorId, {
+        id: nodeId,
+        type: 'text',
+        title: 'retitled',
+        blocks: [text],
+      }).expect(200);
+
+      expect(body.node.thumbnail).toContain('legacy.jpg');
+    });
+
+    it('400s with less than 64 characters of text overall', async () => {
+      const photo = await makeFile('image');
+
+      await save(authorId, {
+        type: 'text',
+        blocks: [
+          { type: 'text', text: 'x'.repeat(30) },
+          { type: 'images', mode: 'grid', files: [photo] },
+          { type: 'text', text: 'x'.repeat(30) },
+        ],
+        files: [{ id: photo }],
+      }).expect(400);
+    });
+
+    it('drops block files the node was not sent', async () => {
+      const sent = await makeFile('audio');
+      const unsent = await makeFile('audio');
+
+      const { body } = await save(authorId, {
+        type: 'text',
+        blocks: [{ type: 'audio', files: [sent, unsent] }, text],
+        files: [{ id: sent }],
+      }).expect(200);
+
+      track(body.node.id);
+      expect(
+        body.node.blocks[0].files.map((f: { id: number }) => f.id),
+      ).toEqual([sent]);
     });
   });
 

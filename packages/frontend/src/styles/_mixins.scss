@@ -319,3 +319,32 @@ Pass your rules for that breakpoint in @content:
   border-width: $size $size $size 0;
   border-color: transparent $color transparent transparent;
 }
+
+// A track list as a card preview shows it: ridged around and between the
+// songs, as between a node's head and body, a dark line over a light one,
+// instead of the list's own card. Include in a selector that outranks
+// `AudioList`'s own styles.
+@mixin ridged_songs {
+  $ridge_dark: transparentize(black, 0.5);
+  $ridge_light: $gray_90;
+
+  background: none;
+  border-radius: 0;
+  box-shadow:
+    inset $ridge_dark 0 1px,
+    inset $ridge_light 0 2px,
+    inset $ridge_dark 0 -1px,
+    $ridge_light 0 1px;
+
+  & > div {
+    // drops the track list's own shadow; the ridges replace it
+    box-shadow: none;
+    border-radius: 0;
+
+    &:not(:last-child) {
+      box-shadow:
+        inset $ridge_dark 0 -1px,
+        $ridge_light 0 1px;
+    }
+  }
+}
