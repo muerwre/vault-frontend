@@ -16,8 +16,8 @@ interface Props {
 }
 
 /**
- * The song in the player, at the bottom of the page: the same compact row a
- * song list shows, its button and progress driven by the player, and a cross
+ * The song in the player, at the bottom of the page: the same row a song
+ * list shows, its button and progress driven by the player, and a cross
  * that stops it.
  */
 const PlayerBar: VFC<Props> = ({ status, playerStop, file }) => {
@@ -34,7 +34,7 @@ const PlayerBar: VFC<Props> = ({ status, playerStop, file }) => {
 
       <div className={styles.wrap}>
         <div className={styles.player}>
-          <AudioPlayer file={file} compact />
+          <AudioPlayer file={file} />
         </div>
 
         <button

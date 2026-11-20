@@ -2,36 +2,34 @@
 
 .wrap {
   position: fixed;
-  bottom: 0;
+  bottom: $gap;
   left: 50%;
   transform: translate($content_width * 0.5 + $gap, 0);
   z-index: 14;
 
   @media (max-width: $content_width + ($bar_height + $gap) * 2) {
     left: 100%;
-    transform: translate(-$bar_height, 0);
+    transform: translate(-($bar_item_size + $gap), 0);
   }
 }
 
 .button {
   background: $flow_gradient;
-  width: $bar_height;
-  height: $bar_height;
-  border-radius: $bar_height * 0.5;
+  width: $bar_item_size;
+  height: $bar_item_size;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: $radius $radius 0 0;
+  border-radius: 50%;
   cursor: pointer;
   position: relative;
   z-index: 2;
   border: none;
   outline: none;
 
-  // sized to the bar
   svg {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
   }
 
   .lab & {
@@ -44,13 +42,16 @@
   position: absolute;
   bottom: 0;
   z-index: 1;
-  padding-bottom: $bar_height;
-  border-radius: $radius $radius 0 0;
-  transform: translate(0, 100%);
+  padding-bottom: $bar_item_size;
+  border-radius: $bar_item_size * 0.5;
+  overflow: hidden;
+  // unfolds from behind the button, so it never shows below it
+  transform-origin: 50% calc(100% - #{$bar_item_size * 0.5});
+  transform: scaleY(0);
   transition: transform 250ms 250ms;
 
   &.active {
-    transform: translate(0, 0);
+    transform: scaleY(1);
     transition: transform 250ms;
   }
 }
@@ -58,8 +59,8 @@
 .link {
   @include row_shadow;
 
-  height: $bar_height;
-  width: $bar_height;
+  height: $bar_item_size;
+  width: $bar_item_size;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,13 +68,8 @@
   fill: white;
   color: white;
 
-  // sized to the bar
   svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  &:first-child {
-    border-radius: $radius $radius 0 0;
+    width: 32px;
+    height: 32px;
   }
 }

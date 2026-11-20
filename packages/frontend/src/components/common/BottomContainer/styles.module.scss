@@ -2,10 +2,10 @@
 
 .wrap {
   position: fixed;
-  bottom: 0;
+  bottom: $gap;
   pointer-events: none;
   touch-action: none;
-  height: $bar_height;
+  height: $bar_item_size;
   display: flex;
   z-index: 10;
   width: 100%;
@@ -20,7 +20,7 @@
 .content {
   position: relative;
   flex: 0 1 $content_width;
-  height: $bar_height;
+  height: $bar_item_size;
   display: flex;
   align-items: center;
   justify-content: flex-start;

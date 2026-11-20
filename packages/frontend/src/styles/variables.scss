@@ -22,8 +22,10 @@ $lab_gap_mobile: $gap * 2;
 $grid_line: 5px;
 $content_width: $cell * 5 + $grid_line * 4;
 $comment_height: 72px;
-// the bottom bar: the playing song's compact player row, the submit button
-$bar_height: 48px;
+// room the page keeps at its bottom for the bottom bar: the playing song's
+// player row and the submit button, which float $gap above the edge
+$bar_height: 64px;
+$bar_item_size: $bar_height - $gap;
 $page_top_offset: 32px;
 
 $radius: 8px;

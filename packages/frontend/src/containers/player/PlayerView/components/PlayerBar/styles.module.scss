@@ -2,8 +2,8 @@
 
 .place {
   position: relative;
-  height: $bar_height;
-  flex: 0 1 500px;
+  height: $bar_item_size;
+  flex: 0 1 400px;
   display: flex;
 }
 
@@ -12,26 +12,38 @@
 
   display: flex;
   align-items: center;
-  border-radius: $radius $radius 0 0;
+  border-radius: $bar_item_size * 0.5;
   background: $content_bg_lightest;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: $bar_height;
+  height: $bar_item_size;
   z-index: 3;
   min-width: 0;
+  // the buttons' own squares give as much again
+  padding: 0 $gap;
+  box-sizing: border-box;
 }
 
 .player {
   flex: 1;
   min-width: 0;
   display: flex;
+
+  // the song row is taller than the bar; fitted to it through its markers
+  [data-audio-row] {
+    height: $bar_item_size;
+  }
+
+  [data-audio-play] {
+    flex-basis: $bar_item_size;
+  }
 }
 
 .close {
-  flex: 0 0 $bar_height;
-  height: $bar_height;
+  flex: 0 0 $bar_item_size;
+  height: $bar_item_size;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,24 +65,21 @@
 }
 
 $halo_colors: #00d2b9, #3c75ff, #582cd0, #ffd60f;
-$halo_spread: $gap * 0.75;
+$halo_spread: $gap * 0.5;
 $halo_blur: 12px;
 
 .halo {
   position: absolute;
-  // runs on past the page's bottom edge, so the blur fades out only above
-  // and beside the bar, not along its foot
-  inset: (-$halo_spread) (-$halo_spread) (-$halo_blur * 5);
+  inset: -$halo_spread;
   z-index: 2;
   overflow: hidden;
-  border-radius: $radius $radius 0 0;
+  border-radius: $bar_item_size * 0.5 + $halo_spread;
   filter: blur($halo_blur);
   opacity: 0;
   pointer-events: none;
   touch-action: none;
   transition: opacity 0.5s;
-  transform-origin: 50% 100%;
-  animation: halo_pulse 1s ease-in-out infinite alternate;
+  animation: halo_pulse 2s ease-in-out infinite alternate;
   animation-play-state: paused;
 
   .playing & {
@@ -87,7 +96,7 @@ $halo_blur: 12px;
     position: absolute;
     top: 0;
     left: 0;
-    width: 600%;
+    width: 1000%;
     height: 100%;
     // two cycles, each ending on the colour the next starts with
     background: linear-gradient(90deg,
@@ -109,11 +118,19 @@ $halo_blur: 12px;
 }
 
 @keyframes halo_pulse {
-  from {
-    transform: scale(0.99, 0.97);
+  0% {
+    transform: scale(0.97, 0.9);
   }
 
-  to {
+  33% {
+    transform: scale(1);
+  }
+
+  66% {
+    transform: scale(0.95, 0.8);
+  }
+
+  100% {
     transform: scale(1);
   }
 }
