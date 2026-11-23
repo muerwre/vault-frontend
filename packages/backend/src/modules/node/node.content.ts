@@ -117,7 +117,7 @@ export const normalizeBlock = (
       const ids = pickBlockFiles(block.files, BLOCK_FILE_TYPES.images, files);
       const mode = IMAGE_MODES.includes(block.mode)
         ? block.mode
-        : IMAGE_BLOCK_MODES.GRID;
+        : IMAGE_BLOCK_MODES.SLIDER;
 
       return ids.length > 0 ? { type: 'images', mode, files: ids } : null;
     }
@@ -342,15 +342,15 @@ export const deriveDescription = (
   return joinTextBlocks(blocks) || current;
 };
 
-/** Node types that fall back to their cover for a picture. */
-const HAS_COVER_FALLBACK: readonly NodeType[] = [
+/** Node types whose cover comes before their photos for a picture. */
+const HAS_COVER_PICTURE: readonly NodeType[] = [
   NODE_TYPES.AUDIO,
   NODE_TYPES.TEXT,
 ];
 
 /** What a node's thumbnail and colour come from, when anything. */
 export interface PictureSources {
-  /** The node's cover, which song and text nodes fall back to. */
+  /** The node's cover, which song and text nodes take before any photo. */
   cover?: File | null;
   /**
    * Addresses of files this save released. A thumbnail still pointing at one
@@ -360,8 +360,8 @@ export interface PictureSources {
 }
 
 /**
- * The file a node's thumbnail and colour come from: its first photo; for song
- * and text nodes without one, their cover.
+ * The file a node's thumbnail and colour come from: for song and text nodes,
+ * their cover when they have one; otherwise their first photo.
  */
 const pictureOf = (
   type: NodeType,
@@ -372,13 +372,11 @@ const pictureOf = (
     return undefined;
   }
 
-  const image = firstFileOfType(files, FILE_TYPES.IMAGE);
-
-  if (image) {
-    return image;
+  if (cover && HAS_COVER_PICTURE.includes(type)) {
+    return cover;
   }
 
-  return cover && HAS_COVER_FALLBACK.includes(type) ? cover : undefined;
+  return firstFileOfType(files, FILE_TYPES.IMAGE);
 };
 
 /**

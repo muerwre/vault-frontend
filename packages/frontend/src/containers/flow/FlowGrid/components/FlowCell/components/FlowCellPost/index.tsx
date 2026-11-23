@@ -6,7 +6,7 @@ import { AudioList } from '~/components/common/AudioList';
 import { Markdown } from '~/components/common/Markdown';
 import { useAskToLogIn } from '~/hooks/auth/useAskToLogIn';
 import { IFile } from '~/types';
-import { getPhotoBackdrop } from '~/utils/color';
+import { getPhotoShade } from '~/utils/color';
 
 import { FlowCellImage } from '../FlowCellImage';
 
@@ -75,7 +75,7 @@ const FlowCellPost: FC<Props> = ({ title, text, songs, image, color }) => {
 
   // as on a lab card
   const backdrop = useMemo(
-    () => (image ? getPhotoBackdrop(color) : undefined),
+    () => (image ? getPhotoShade(color) : undefined),
     [image, color],
   );
 

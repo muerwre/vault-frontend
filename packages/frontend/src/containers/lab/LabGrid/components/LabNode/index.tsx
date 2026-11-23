@@ -8,14 +8,14 @@ import { imagePresets } from '~/constants/urls';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { INode } from '~/types';
-import { getPhotoBackdrop } from '~/utils/color';
+import { getPhotoShade } from '~/utils/color';
 import { getURL } from '~/utils/dom';
 
 import { LabBottomPanel } from './components/LabBottomPanel';
 import { useLabNodeBlocks } from './hooks/useLabNodeBlocks';
 import styles from './styles.module.scss';
 
-/** Post types whose card has their first photo behind it. */
+/** Post types whose card has their cover, or else first photo, behind it. */
 const COVERED_TYPES: string[] = [NODE_TYPES.TEXT, NODE_TYPES.AUDIO];
 
 interface Props {
@@ -38,15 +38,17 @@ const LabNode: FC<Props> = ({ node, isLoading, lastSeen, commentCount }) => {
 
   const background = useColorGradientFromString(node.title, 3, 2);
 
-  // A text or song post with a photo has it behind the whole card, its
-  // content on a tinted backdrop over it, as a flow cell has its text.
+  // A text or song post with a cover or a photo has it behind the whole card,
+  // its content on a tinted backdrop over it, as a flow cell has its text.
   const images = useNodeImages(node);
-  const cover = COVERED_TYPES.includes(node.type ?? '') ? images[0] : undefined;
+  const cover = COVERED_TYPES.includes(node.type ?? '')
+    ? (node.cover ?? images[0])
+    : undefined;
 
   const backdrop = useMemo(
     () =>
-      getPhotoBackdrop(
-        node.flow?.dominant_color || cover?.metadata?.dominant_color,
+      getPhotoShade(
+        cover?.metadata?.dominant_color || node.flow?.dominant_color,
       ),
     [node.flow?.dominant_color, cover],
   );

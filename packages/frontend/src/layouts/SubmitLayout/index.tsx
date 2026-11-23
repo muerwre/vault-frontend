@@ -69,6 +69,8 @@ interface Props {
   onSubmit: (node: INode) => Promise<unknown>;
   /** Offers the type tabs when given. Existing posts keep their type. */
   onSwitchType?: (type: string) => void;
+  /** Offers a button beside the save one that leaves without saving. */
+  onCancel?: () => void;
 }
 
 const noop = () => {};
@@ -80,7 +82,7 @@ const noop = () => {};
  * and the rest follows the content.
  */
 const SubmitLayout: FC<Props> = observer(
-  ({ initial, type, onSubmit, onSwitchType }) => {
+  ({ initial, type, onSubmit, onSwitchType, onCancel }) => {
     const { isTablet } = useWindowSize();
 
     const { current: initialNode } = useRef(initial);
@@ -137,6 +139,31 @@ const SubmitLayout: FC<Props> = observer(
 
     const hasTabs = !!onSwitchType && SWITCHABLE_TYPES.includes(currentType);
 
+    // wrapped: a stretchy button is flex: 1, which collapses its height as a
+    // direct child of the footer's column
+    const saveButtons = (
+      <div className={styles.save}>
+        {!!onCancel && (
+          <Button
+            title="Отмена"
+            color="gray"
+            type="button"
+            onClick={onCancel}
+            disabled={isSubmitting}
+          />
+        )}
+
+        <Button
+          title="Сохранить"
+          iconRight="check"
+          color={color}
+          disabled={isSubmitting}
+          type="submit"
+          stretchy
+        />
+      </div>
+    );
+
     return (
       <UploaderContextProvider value={uploader}>
         <FormikProvider value={formik}>
@@ -187,20 +214,14 @@ const SubmitLayout: FC<Props> = observer(
                 <div className={styles.footer}>
                   <SubmitCoverEditor />
 
-                  {/* wrapped: a stretchy button is flex: 1, which collapses its
-              height as a direct child of the footer's column */}
-                  <div className={styles.save}>
-                    <Button
-                      title="Сохранить"
-                      iconRight="check"
-                      color={color}
-                      disabled={isSubmitting}
-                      type="submit"
-                      stretchy
-                    />
-                  </div>
+                  {!isTablet && saveButtons}
                 </div>
               </div>
+
+              {/* On mobile the pane follows the content, and a sticky element
+                  sticks only within its parent, so the buttons sit outside the
+                  pane to stay at the bottom all the way down the page */}
+              {isTablet && saveButtons}
             </form>
           </Container>
         </FormikProvider>

@@ -26,6 +26,11 @@ $comment_height: 72px;
 // player row and the submit button, which float $gap above the edge
 $bar_height: 64px;
 $bar_item_size: $bar_height - $gap;
+// Room under a page's content: a double gap, or the bar's own height and a
+// gap while the player shows (see `player_shown` in _global.scss)
+$page_bottom_room: var(--page_bottom_room);
+// How far above the screen's bottom edge the player reaches, or 0 without it
+$player_room: var(--player_room);
 $page_top_offset: 32px;
 
 $radius: 8px;

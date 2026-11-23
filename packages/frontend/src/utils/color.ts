@@ -5,6 +5,7 @@ import {
   darken,
   desaturate,
   getLuminance,
+  hsla,
   parseToHsla,
   transparentize,
 } from 'color2k';
@@ -97,5 +98,31 @@ export const getPhotoBackdrop = (
     backgroundColor,
     color: text,
     '--photo_muted': transparentize(text, 0.35),
+  };
+};
+
+/** Lightness the dark tint never goes over, and how much of it covers. */
+const SHADE_MAX_LIGHTNESS = 0.18;
+const SHADE_OPACITY = 0.7;
+
+/**
+ * A dark shade of the photo's colour over its blurred photo, for the cards of
+ * text and song posts: bright photos stay as dark as dim ones, so the light
+ * text over them always reads.
+ */
+export const getPhotoShade = (color?: string): CSSProperties => {
+  if (!color) {
+    return {};
+  }
+
+  const [hue, saturation, lightness] = parseToHsla(color);
+
+  return {
+    backgroundColor: hsla(
+      hue,
+      saturation,
+      Math.min(lightness, SHADE_MAX_LIGHTNESS),
+      SHADE_OPACITY,
+    ),
   };
 };

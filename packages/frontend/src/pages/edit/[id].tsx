@@ -37,6 +37,11 @@ const EditPage: FC = observer(() => {
     [updateNode, saveTags, router, id, node.tags],
   );
 
+  const onCancel = useCallback(
+    () => router.push(URLS.NODE_URL(id)),
+    [router, id],
+  );
+
   if (!router.isReady || !canRender) {
     return null;
   }
@@ -59,6 +64,7 @@ const EditPage: FC = observer(() => {
             initial={node}
             type={node.type as NodeType}
             onSubmit={onSubmit}
+            onCancel={onCancel}
           />
         </>
       ) : (

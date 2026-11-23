@@ -1,4 +1,4 @@
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .text {
   @include outer_shadow();
@@ -17,6 +17,12 @@
     &:not(:last-child) {
       margin-bottom: $gap;
     }
+  }
+
+  // as large as a comment's text
+  &.mixed p {
+    font-size: 16px;
+    line-height: 20px;
   }
 }
 

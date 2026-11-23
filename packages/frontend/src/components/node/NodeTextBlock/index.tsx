@@ -17,6 +17,7 @@ import { formatTextParagraphs } from '~/utils/dom';
 import { VideoPlayerProvider } from '~/utils/providers/VideoPlayerProvider';
 
 import { ImageSlider } from './components/ImageSlider';
+import { SinglePhoto } from './components/SinglePhoto';
 import styles from './styles.module.scss';
 
 interface Props extends NodeComponentProps {}
@@ -42,6 +43,10 @@ const ImagesContent: FC<{ files: IFile[]; mode: ImageBlockMode }> = ({
     (file: IFile) => showImageModal(files, files.indexOf(file)),
     [files, showImageModal],
   );
+
+  if (files.length === 1) {
+    return <SinglePhoto file={files[0]} onClick={onClick} />;
+  }
 
   return mode === IMAGE_BLOCK_MODES.SLIDER ? (
     <ImageSlider files={files} onClick={onClick} />
@@ -86,12 +91,19 @@ const NodeTextBlock: FC<Props> = ({ node }) => {
   const background = useColorGradientFromString(node.title, 3, 2);
   const { isTablet } = useWindowSize();
   const askToLogIn = useAskToLogIn('song');
+  const blocks = node.blocks || [];
+
+  // text alone reads large; among photos, video or songs, as a comment does
+  const isMixed = blocks.some((block) => block.type !== 'text');
 
   // the comments have a player of their own; this one plays the post's video
   return (
     <VideoPlayerProvider>
-      <div className={classNames(styles.text)} style={{ background }}>
-        {(node.blocks || []).map((block, index) => (
+      <div
+        className={classNames(styles.text, { [styles.mixed]: isMixed })}
+        style={{ background }}
+      >
+        {blocks.map((block, index) => (
           <div className={styles.block} key={index}>
             {renderBlock(block, isTablet, askToLogIn)}
           </div>

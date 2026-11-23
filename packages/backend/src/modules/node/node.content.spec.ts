@@ -173,14 +173,14 @@ describe('node content rules', () => {
         ).toEqual([{ type: 'images', mode: 'slider', files: [1] }]);
       });
 
-      it('falls back to the grid for an unknown photo mode', () => {
+      it('falls back to the slider for an unknown photo mode', () => {
         expect(
           filterBlocks(
             'text',
             [{ type: 'images', mode: 'carousel', files: [1] } as never],
             files,
           ),
-        ).toEqual([imagesBlock([1])]);
+        ).toEqual([{ type: 'images', mode: 'slider', files: [1] }]);
       });
 
       describe('overall limits of a text node', () => {
@@ -483,17 +483,26 @@ describe('node content rules', () => {
       );
     });
 
-    it('falls back to the cover for song and text nodes', () => {
+    it('takes the cover first for song and text nodes', () => {
       const cover = file('image', { id: 7, url: 'cover' });
 
       expect(deriveThumbnail('text', [], [], 'old', { cover })).toBe('cover');
       expect(deriveThumbnail('audio', [], [], 'old', { cover })).toBe('cover');
-      // a photo of its own comes first
+      // the cover comes before a photo of its own
       expect(
         deriveThumbnail('audio', [file('image', { url: 'pic' })], [], '', {
           cover,
         }),
-      ).toBe('pic');
+      ).toBe('cover');
+      expect(
+        deriveThumbnail(
+          'text',
+          [file('image', { id: 2, url: 'pic' })],
+          [imagesBlock([2])],
+          '',
+          { cover },
+        ),
+      ).toBe('cover');
       // photo nodes always have photos; their cover is only a background
       expect(deriveThumbnail('image', [], [], 'old', { cover })).toBe('old');
     });
@@ -552,6 +561,20 @@ describe('node content rules', () => {
       });
 
       expect(deriveDominantColor('text', [], '#old', { cover })).toBe(
+        '#c0ffee',
+      );
+    });
+
+    it('takes the colour from the cover before a photo', () => {
+      const cover = file('image', {
+        id: 7,
+        metadata: { dominant_color: '#c0ffee' },
+      });
+      const files = [
+        file('image', { id: 1, metadata: { dominant_color: '#abcdef' } }),
+      ];
+
+      expect(deriveDominantColor('text', files, '#old', { cover })).toBe(
         '#c0ffee',
       );
     });

@@ -17,13 +17,14 @@ import { BlockEditorProps } from '../../types';
 import styles from './styles.module.scss';
 
 const MODES: { mode: ImageBlockMode; label: string }[] = [
-  { mode: IMAGE_BLOCK_MODES.GRID, label: 'Сетка' },
   { mode: IMAGE_BLOCK_MODES.SLIDER, label: 'Слайдер' },
+  { mode: IMAGE_BLOCK_MODES.GRID, label: 'Сетка' },
 ];
 
 /**
  * Photos uploaded like a photo post's, up to the block limit, and how the
- * post shows them: a grid, or a slider.
+ * post shows them: a slider, or a grid. A single photo is shown on its own
+ * either way, so the choice is offered from the second one.
  */
 const SubmitImagesBlock: FC<BlockEditorProps<IBlockImages>> = observer(
   ({ block, onChange, disabled, left, onUploading }) => {
@@ -38,21 +39,23 @@ const SubmitImagesBlock: FC<BlockEditorProps<IBlockImages>> = observer(
     return (
       <UploaderContextProvider value={uploader}>
         <div className={styles.wrap}>
-          <div className={styles.modes}>
-            {MODES.map(({ mode, label }) => (
-              <button
-                key={mode}
-                type="button"
-                className={classNames(styles.mode, {
-                  [styles.active]: block.mode === mode,
-                })}
-                onClick={() => onChange((it) => ({ ...it, mode }))}
-                disabled={disabled}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+          {uploader.files.length > 1 && (
+            <div className={styles.modes}>
+              {MODES.map(({ mode, label }) => (
+                <button
+                  key={mode}
+                  type="button"
+                  className={classNames(styles.mode, {
+                    [styles.active]: block.mode === mode,
+                  })}
+                  onClick={() => onChange((it) => ({ ...it, mode }))}
+                  disabled={disabled}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
 
           <UploadDropzone onUpload={uploader.uploadFiles}>
             <UploadImageGrid

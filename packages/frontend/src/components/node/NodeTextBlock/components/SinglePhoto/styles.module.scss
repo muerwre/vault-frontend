@@ -1,0 +1,31 @@
+@import 'src/styles/variables';
+
+.wrap {
+  // the photo's height follows the width
+  container-type: inline-size;
+  position: relative;
+  overflow: hidden;
+  border-radius: $radius;
+  background: no-repeat 50% 50% / cover;
+}
+
+// the photo behind blurred and shaded, as on a post's card; the shade's colour
+// is set inline
+.shade {
+  @include blur(rgba(0, 0, 0, 0.5), 20px);
+
+  position: absolute;
+  inset: 0;
+}
+
+// As wide as the block and no taller than 16:9 of it: a narrower photo is
+// centred in it, the backdrop showing at its sides.
+.image {
+  max-height: calc(100cqw * 9 / 16);
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer;
+}

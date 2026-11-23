@@ -20,7 +20,7 @@ export const createBlock = (type: BlockType): IBlock => {
 
   switch (type) {
     case 'images':
-      return { type, mode: IMAGE_BLOCK_MODES.GRID, files: [], key };
+      return { type, mode: IMAGE_BLOCK_MODES.SLIDER, files: [], key };
     case 'audio':
       return { type, files: [], key };
     case 'video':

@@ -16,8 +16,17 @@
 @include theme_sanseviria.apply();
 
 html {
+  --page_bottom_room: #{$gap * 2};
+  --player_room: 0px;
+
   min-height: 100vh;
   box-sizing: border-box;
+}
+
+// set by the player while its bar shows at the bottom of the screen
+body.player_shown {
+  --page_bottom_room: #{$bar_height + $gap};
+  --player_room: #{$bar_height};
 }
 
 body {

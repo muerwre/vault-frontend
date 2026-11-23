@@ -12,13 +12,16 @@ $tabs_height: 44px;
   // the main card and the pane stretch to the taller of the two
   align-items: stretch;
   margin-top: $page_top_offset;
-  padding-bottom: $gap * 2;
+  padding-bottom: $page_bottom_room;
 
   @include tablet {
     grid-template-columns: 1fr;
     row-gap: $gap;
     margin-top: 0;
     padding: $gap * 0.5;
+    // the save buttons end the page here, so the player gets room of its own
+    // below them, not the page's usual room
+    padding-bottom: calc(#{$gap * 0.5} + #{$player_room});
   }
 }
 
@@ -103,7 +106,8 @@ $tabs_height: 44px;
 // it, and its own background covers whatever scrolls beneath.
 .footer {
   position: sticky;
-  bottom: 0;
+  // above the player, while it shows
+  bottom: $player_room;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -114,24 +118,40 @@ $tabs_height: 44px;
   // matches the pane's corners: square where it joins the content
   border-radius: 0 0 $radius 0;
 
-  // On mobile the background would take too much of the screen, so only the
-  // button sticks. A sticky element sticks within its parent, so the footer
-  // steps out of the way and the button sticks within the whole pane.
+  // On mobile the save buttons live outside the pane, sticking within the
+  // whole page, and the cover picker just follows the rest of the pane
   @include tablet {
     display: contents;
   }
 }
 
 .save {
+  display: flex;
+  gap: $gap;
+
+  // On mobile it follows the whole page, sticking to the screen's bottom edge
+  // all the way down; cancelling sits above saving
   @include tablet {
     position: sticky;
-    bottom: 0;
+    // above the player, while it shows
+    bottom: $player_room;
     z-index: 2;
-    // the pane's background behind the button, so content scrolling under
-    // it is covered
-    margin: 0 (-$gap) (-$gap * 0.5);
-    padding: $gap $gap $gap * 0.5;
+    flex-direction: column;
+    gap: $gap * 0.5;
+    // the pane's background behind the buttons, so content scrolling under
+    // them is covered
+    margin: 0 (-$gap * 0.5) (-$gap * 0.5);
+    padding: $gap * 0.5;
     background: $content_bg_dark;
-    border-radius: 0 0 $radius $radius;
+    border-radius: $radius $radius 0 0;
+  }
+}
+
+// Stacked on mobile, a stretchy button's flex: 1 would collapse its height.
+// Doubled to outrank the button's own styles.
+.save.save > * {
+  @include tablet {
+    flex: none;
+    width: 100%;
   }
 }

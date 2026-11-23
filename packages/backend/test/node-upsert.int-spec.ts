@@ -601,15 +601,17 @@ describe('node upsert (integration)', () => {
       expect(body.node.flow.dominant_color).toBe('');
     });
 
-    it('falls back to the cover, and keeps an old thumbnail', async () => {
+    it('takes the cover before a photo, and keeps an old thumbnail', async () => {
       const cover = await makeFile('image');
+      const photo = await makeFile('image');
       const [row] = await db.query('SELECT url FROM file WHERE id = ?', [
         cover,
       ]);
 
       const { body: created } = await save(authorId, {
         type: 'text',
-        blocks: [text],
+        blocks: [text, { type: 'images', mode: 'slider', files: [photo] }],
+        files: [{ id: photo }],
         cover: { id: cover },
       }).expect(200);
       const nodeId = track(created.node.id);
