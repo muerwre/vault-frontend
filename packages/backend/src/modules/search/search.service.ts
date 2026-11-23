@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import type { NodePlacement } from '@vault/common/constants';
 import { Repository } from 'typeorm';
 
 import { Node } from '../../entities/node.entity';
@@ -17,8 +18,7 @@ export interface WireSearchNode {
   thumbnail: string;
   title: string;
   created_at: string;
-  is_promoted: boolean;
-  is_profile: boolean;
+  is_promoted: NodePlacement;
 }
 
 export interface WireSearchResponse {

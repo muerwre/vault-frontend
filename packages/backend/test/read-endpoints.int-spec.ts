@@ -109,7 +109,6 @@ describe('read endpoints (integration)', () => {
         expect(Object.keys(node).sort()).toEqual([
           'created_at',
           'id',
-          'is_profile',
           'is_promoted',
           'thumbnail',
           'title',
@@ -236,7 +235,7 @@ describe('read endpoints (integration)', () => {
 
         expect(body.count).toBe(labCount);
         expect(
-          body.nodes.every((n: { is_promoted: boolean }) => !n.is_promoted),
+          body.nodes.every((n: { is_promoted: number }) => n.is_promoted === 0),
         ).toBe(true);
       });
 
@@ -538,13 +537,11 @@ describe('read endpoints (integration)', () => {
 
         expect(byId.get(pinnedFlowId)).toMatchObject({
           is_pinned: true,
-          is_promoted: true,
-          is_profile: false,
+          is_promoted: 1,
         });
         expect(byId.get(pinnedLabId)).toMatchObject({
           is_pinned: true,
-          is_promoted: false,
-          is_profile: false,
+          is_promoted: 0,
         });
       });
 

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { MAX_LIST_SONGS } from '@vault/common/constants';
+import { MAX_LIST_SONGS, NODE_PLACEMENT } from '@vault/common/constants';
 
 import { apiPostNode } from '~/api/node';
 import { NODE_TYPES } from '~/constants/node';
@@ -25,10 +25,12 @@ export const useUpdateNode = (id: number) => {
 
       await update(result.node);
 
-      if (result.node.is_profile) {
+      const placement = result.node.is_promoted;
+
+      if (placement === NODE_PLACEMENT.PROFILE) {
         // profile-only now: it leaves the flow it may have been in
         flow.setNodes(flow.nodes.filter((it) => it.id !== result.node.id));
-      } else if (node.is_promoted) {
+      } else if (placement === NODE_PLACEMENT.FLOW) {
         // the flow brings a song node's first songs, which the edit may change
         flow.updateNode(result.node.id!, {
           ...result.node,

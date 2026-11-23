@@ -1,5 +1,6 @@
 import { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 
+import type { NodePlacement } from '@vault/common/constants';
 import classNames from 'classnames';
 import { FlaskConicalIcon } from 'lucide-react';
 
@@ -18,8 +19,7 @@ type NodeThumbnailProps = {
   item: {
     thumbnail?: string;
     title?: string;
-    is_promoted?: boolean;
-    is_profile?: boolean;
+    is_promoted?: NodePlacement;
     id?: number;
     type?: string;
   };

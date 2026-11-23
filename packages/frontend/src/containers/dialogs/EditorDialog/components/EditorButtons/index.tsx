@@ -9,7 +9,7 @@ import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
-import { getNodePlacement } from '~/utils/node';
+import { getPlacementName } from '~/utils/node';
 
 import { EditorActionsPanel } from './components/EditorActionsPanel';
 
@@ -36,7 +36,7 @@ const EditorButtons: FC = () => {
         <Button
           title={isTablet ? undefined : 'Сохранить'}
           iconRight={<CheckIcon size={20} />}
-          color={getNodePlacement(values)}
+          color={getPlacementName(values)}
           disabled={isSubmitting}
           type="submit"
         />

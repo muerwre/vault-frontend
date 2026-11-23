@@ -31,7 +31,7 @@ import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useNodeFormFormik } from '~/hooks/node/useNodeFormFormik';
 import { INode } from '~/types';
 import { UploaderContextProvider } from '~/utils/context/UploaderContextProvider';
-import { getNodePlacement, pruneNodeContent } from '~/utils/node';
+import { getPlacementName, pruneNodeContent } from '~/utils/node';
 import { usePageCover } from '~/utils/providers/PageCoverProvider';
 
 import styles from './styles.module.scss';
@@ -135,7 +135,7 @@ const SubmitLayout: FC<Props> = observer(
     // the picked background shows behind the page, as on the node itself
     usePageCover(values.cover || undefined);
 
-    const color = getNodePlacement(values);
+    const color = getPlacementName(values);
     const uploadButtons = UPLOAD_BUTTONS[currentType] ?? [];
 
     const hasTabs = !!onSwitchType && SWITCHABLE_TYPES.includes(currentType);

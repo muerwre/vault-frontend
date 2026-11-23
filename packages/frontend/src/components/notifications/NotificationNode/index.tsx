@@ -1,5 +1,6 @@
 import { FC, useMemo } from 'react';
 
+import { NODE_PLACEMENT } from '@vault/common/constants';
 import classNames from 'classnames';
 
 import { NodeThumbnail } from '~/components/node/NodeThumbnail';
@@ -18,7 +19,7 @@ const NotificationNode: FC<NotificationNodeProps> = ({ item, isNew }) => {
     () => ({
       title: item.title,
       thumbnail: item.thumbnail,
-      is_promoted: true,
+      is_promoted: NODE_PLACEMENT.FLOW,
     }),
     [item],
   );

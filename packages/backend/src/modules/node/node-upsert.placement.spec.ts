@@ -10,25 +10,20 @@ describe('resolvePlacement', () => {
     expect(resolvePlacement(undefined, PROFILE)).toBe(PROFILE);
   });
 
-  it('maps is_promoted to flow or lab', () => {
-    expect(resolvePlacement({ is_promoted: true }, LAB)).toBe(FLOW);
+  it('takes a placement as is', () => {
+    expect(resolvePlacement({ is_promoted: PROFILE }, FLOW)).toBe(PROFILE);
+    expect(resolvePlacement({ is_promoted: LAB }, PROFILE)).toBe(LAB);
+    expect(resolvePlacement({ is_promoted: FLOW }, LAB)).toBe(FLOW);
+  });
+
+  it('maps the booleans older clients send to flow or lab', () => {
+    expect(resolvePlacement({ is_promoted: true }, PROFILE)).toBe(FLOW);
     expect(resolvePlacement({ is_promoted: false }, FLOW)).toBe(LAB);
   });
 
-  it('lets is_profile win over is_promoted', () => {
+  it('ignores an unknown placement', () => {
     expect(
-      resolvePlacement({ is_profile: true, is_promoted: false }, FLOW),
-    ).toBe(PROFILE);
-  });
-
-  it('moves a node off the profile to wherever is_promoted says', () => {
-    expect(
-      resolvePlacement({ is_profile: false, is_promoted: false }, PROFILE),
+      resolvePlacement({ is_promoted: 7 as unknown as typeof FLOW }, LAB),
     ).toBe(LAB);
-  });
-
-  it('moves a node off the profile to the flow by default', () => {
-    expect(resolvePlacement({ is_profile: false }, PROFILE)).toBe(FLOW);
-    expect(resolvePlacement({ is_profile: false }, LAB)).toBe(LAB);
   });
 });

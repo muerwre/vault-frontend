@@ -427,7 +427,6 @@ describe('nodes (integration)', () => {
         for (const item of items as Array<Record<string, unknown>>) {
           expect(Object.keys(item).sort()).toEqual([
             'id',
-            'is_profile',
             'is_promoted',
             'thumbnail',
             'title',

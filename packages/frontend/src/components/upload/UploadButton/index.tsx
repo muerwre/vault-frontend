@@ -7,7 +7,7 @@ import { UploadType } from '~/constants/uploads';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { IEditorComponentProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
-import { getNodePlacement } from '~/utils/node';
+import { getPlacementName } from '~/utils/node';
 import { getFileType } from '~/utils/uploader';
 
 import styles from './styles.module.scss';
@@ -41,7 +41,7 @@ const UploadButton: FC<Props> = ({
     [type, uploadFiles],
   );
 
-  const color = getNodePlacement(values);
+  const color = getPlacementName(values);
 
   return (
     <Button

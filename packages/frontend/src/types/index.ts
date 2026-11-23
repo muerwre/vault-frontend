@@ -1,6 +1,6 @@
 import { Context } from 'react';
 
-import type { ImageBlockMode } from '@vault/common/constants';
+import type { ImageBlockMode, NodePlacement } from '@vault/common/constants';
 import type { INodeSettings } from '@vault/common/types';
 
 import { ERRORS } from '~/constants/errors';
@@ -115,10 +115,11 @@ export interface INode {
   description?: string;
   is_liked?: boolean;
   is_heroic?: boolean;
-  /** In the flow. Neither this nor `is_profile` means the lab. */
-  is_promoted?: boolean;
-  /** Listed on the author's profile only, in neither feed. */
-  is_profile?: boolean;
+  /**
+   * Where the node is listed: lab, flow or the author's profile only. Compare
+   * against `NODE_PLACEMENT`; lab is 0, so never test it for truthiness.
+   */
+  is_promoted?: NodePlacement;
   /** Set by the author: leads their profile, wherever the node is listed. */
   is_pinned?: boolean;
   is_public?: boolean;

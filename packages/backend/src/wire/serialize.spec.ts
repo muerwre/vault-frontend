@@ -293,22 +293,10 @@ describe('wire serialisation', () => {
   });
 
   describe('toWirePlacement', () => {
-    it('keeps is_promoted as the flow flag', () => {
-      expect(toWirePlacement(1)).toEqual({
-        is_promoted: true,
-        is_profile: false,
-      });
-      expect(toWirePlacement(0)).toEqual({
-        is_promoted: false,
-        is_profile: false,
-      });
-    });
-
-    it('marks a profile-only node, not promoted', () => {
-      expect(toWirePlacement(2)).toEqual({
-        is_promoted: false,
-        is_profile: true,
-      });
+    it('sends the stored placement', () => {
+      expect(toWirePlacement(0)).toEqual({ is_promoted: 0 });
+      expect(toWirePlacement(1)).toEqual({ is_promoted: 1 });
+      expect(toWirePlacement(2)).toEqual({ is_promoted: 2 });
     });
   });
 });

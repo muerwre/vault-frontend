@@ -33,25 +33,24 @@ import {
 } from './node.content';
 import { canCreateNode, canEditNode } from './node.permissions';
 
+const PLACEMENTS: readonly number[] = Object.values(NODE_PLACEMENT);
+
 /**
- * `is_profile: true` wins over `is_promoted`. Leaving the profile without
- * saying where the node goes moves it to the flow, so it never falls back
- * into the lab unasked.
+ * `is_promoted` is one of `NODE_PLACEMENT`. Older clients send a boolean,
+ * meaning flow or lab. Anything else keeps the current placement.
  */
 export const resolvePlacement = (
-  body: Pick<NodeUpsertBody, 'is_promoted' | 'is_profile'> | undefined,
+  body: Pick<NodeUpsertBody, 'is_promoted'> | undefined,
   current: NodePlacement,
 ): NodePlacement => {
-  if (body?.is_profile === true) {
-    return NODE_PLACEMENT.PROFILE;
+  const value = body?.is_promoted;
+
+  if (typeof value === 'boolean') {
+    return value ? NODE_PLACEMENT.FLOW : NODE_PLACEMENT.LAB;
   }
 
-  if (typeof body?.is_promoted === 'boolean') {
-    return body.is_promoted ? NODE_PLACEMENT.FLOW : NODE_PLACEMENT.LAB;
-  }
-
-  if (body?.is_profile === false && current === NODE_PLACEMENT.PROFILE) {
-    return NODE_PLACEMENT.FLOW;
+  if (typeof value === 'number' && PLACEMENTS.includes(value)) {
+    return value as NodePlacement;
   }
 
   return current;
@@ -63,9 +62,8 @@ export interface NodeUpsertBody {
   title?: string;
   type?: string;
   is_public?: boolean;
-  is_promoted?: boolean;
-  /** Lists the node on its author's profile only; wins over `is_promoted`. */
-  is_profile?: boolean;
+  /** One of `NODE_PLACEMENT`; a boolean from older clients means flow/lab. */
+  is_promoted?: NodePlacement | boolean;
   thumbnail?: string;
   description?: string;
   blocks?: INodeBlock[];

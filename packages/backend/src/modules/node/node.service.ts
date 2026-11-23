@@ -7,6 +7,7 @@ import {
   NODE_PLACEMENT,
   NODE_TYPES,
   ROLES,
+  type NodePlacement,
 } from '@vault/common/constants';
 import type { INodeFlow } from '@vault/common/types';
 import { Repository, type SelectQueryBuilder } from 'typeorm';
@@ -84,8 +85,7 @@ export interface WireRelatedItem {
   title: string;
   /** Lets a thumbnail show a text or song post's title over its picture. */
   type: string;
-  is_promoted: boolean;
-  is_profile: boolean;
+  is_promoted: NodePlacement;
 }
 
 export interface WireRelated {

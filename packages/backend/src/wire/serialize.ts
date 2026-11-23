@@ -2,6 +2,7 @@ import {
   FILE_TYPES,
   MAX_LIST_SONGS,
   NODE_PLACEMENT,
+  type NodePlacement,
 } from '@vault/common/constants';
 import type { INodeBlock, INodeFlow, INodeSettings } from '@vault/common/types';
 
@@ -133,8 +134,7 @@ export interface WireShallowNode {
   created_at: string;
   flow: INodeFlow;
   user: WireShallowUser;
-  is_promoted: boolean;
-  is_profile: boolean;
+  is_promoted: NodePlacement;
   /** Leads the author's profile, wherever the node is listed. */
   is_pinned: boolean;
   /** A song node's tracks, on the flow only, for its cell to play. */
@@ -149,14 +149,14 @@ export const toWireFlowSongs = (files: File[]): WireFile[] =>
     .map(toWireFile);
 
 /**
- * `is_promoted` keeps its flow/lab meaning, so a profile-only node is neither
- * promoted nor lab: it carries `is_profile` instead.
+ * `is_promoted` carries the placement as stored: one of `NODE_PLACEMENT`.
+ * Flow and lab keep their old 1/0, which read the same as the old booleans
+ * to a client testing truthiness.
  */
 export const toWirePlacement = (
   placement: number | null | undefined,
-): { is_promoted: boolean; is_profile: boolean } => ({
-  is_promoted: Number(placement) === NODE_PLACEMENT.FLOW,
-  is_profile: Number(placement) === NODE_PLACEMENT.PROFILE,
+): { is_promoted: NodePlacement } => ({
+  is_promoted: (Number(placement) || NODE_PLACEMENT.LAB) as NodePlacement,
 });
 
 export const toWireShallowNode = (node: Node): WireShallowNode => ({
@@ -255,8 +255,7 @@ export interface WireNode {
   title: string;
   type: string;
   is_public: boolean;
-  is_promoted: boolean;
-  is_profile: boolean;
+  is_promoted: NodePlacement;
   /** Leads the author's profile, wherever the node is listed. */
   is_pinned: boolean;
   is_heroic: boolean;

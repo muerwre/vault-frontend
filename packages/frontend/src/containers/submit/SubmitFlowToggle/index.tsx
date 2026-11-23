@@ -1,14 +1,15 @@
 import { FC } from 'react';
 
+import { NODE_PLACEMENT, NodePlacement } from '@vault/common/constants';
 import { FlaskConicalIcon, UserIcon, WavesHorizontalIcon } from 'lucide-react';
 
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
-import { getNodePlacement, NodePlacement, placementFields } from '~/utils/node';
+import { getPlacementName, PlacementName } from '~/utils/node';
 
 import styles from './styles.module.scss';
 
-const HINTS: Record<NodePlacement, string> = {
+const HINTS: Record<PlacementName, string> = {
   flow: 'Пост показывается на главной странице и виден всем, даже незнакомцам',
   lab: 'Пост попадёт в раздел Лаб и будет виден только авторизованному персоналу',
   profile:
@@ -20,11 +21,11 @@ const HINTS: Record<NodePlacement, string> = {
  * the author's profile. A card below explains who will see it.
  */
 const SubmitFlowToggle: FC = () => {
-  const { values, setValues } = useNodeFormContext();
-  const placement = getNodePlacement(values);
+  const { values, setFieldValue } = useNodeFormContext();
+  const placement = getPlacementName(values);
 
   const select = (next: NodePlacement) => () =>
-    setValues({ ...values, ...placementFields(next) });
+    setFieldValue('is_promoted', next);
 
   return (
     <div className={styles.wrap}>
@@ -33,7 +34,7 @@ const SubmitFlowToggle: FC = () => {
           color="flow"
           icon={<WavesHorizontalIcon size={20} />}
           active={placement === 'flow'}
-          onClick={select('flow')}
+          onClick={select(NODE_PLACEMENT.FLOW)}
           stretchy
         >
           Флоу
@@ -43,7 +44,7 @@ const SubmitFlowToggle: FC = () => {
           color="lab"
           icon={<FlaskConicalIcon size={20} />}
           active={placement === 'lab'}
-          onClick={select('lab')}
+          onClick={select(NODE_PLACEMENT.LAB)}
           stretchy
         >
           Лаб
@@ -53,7 +54,7 @@ const SubmitFlowToggle: FC = () => {
           color="profile"
           icon={<UserIcon size={20} />}
           active={placement === 'profile'}
-          onClick={select('profile')}
+          onClick={select(NODE_PLACEMENT.PROFILE)}
           stretchy
         >
           Профиль
