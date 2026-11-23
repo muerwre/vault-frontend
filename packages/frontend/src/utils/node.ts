@@ -10,6 +10,24 @@ import {
 } from '~/utils/blocks';
 import { path } from '~/utils/ramda';
 
+type Placed = Pick<INode, 'is_promoted' | 'is_profile'>;
+
+export type NodePlacement = 'flow' | 'lab' | 'profile';
+
+export const getNodePlacement = (node: Partial<Placed>): NodePlacement => {
+  if (node.is_profile) return 'profile';
+  return node.is_promoted ? 'flow' : 'lab';
+};
+
+/** The form fields that put a node into `placement`. */
+export const placementFields = (placement: NodePlacement): Placed => ({
+  is_promoted: placement === 'flow',
+  is_profile: placement === 'profile',
+});
+
+export const isLabNode = (node: Partial<Placed>): boolean =>
+  getNodePlacement(node) === 'lab';
+
 export const canEditNode = (
   node?: Partial<INode>,
   user?: Partial<IUser>,
@@ -50,6 +68,7 @@ export const canStarNode = (
 ): boolean =>
   !!node &&
   !!user &&
+  !node.is_profile &&
   (node.type === NODE_TYPES.IMAGE || !node.is_promoted) &&
   user.role === Role.Admin;
 

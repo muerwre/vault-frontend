@@ -20,6 +20,7 @@ export const EMPTY_NODE: INode = {
   tags: [],
   is_public: true,
   is_promoted: true,
+  is_profile: false,
 
   flow: {
     display: 'single',

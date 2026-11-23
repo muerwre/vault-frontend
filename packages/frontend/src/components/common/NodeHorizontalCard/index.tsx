@@ -7,6 +7,7 @@ import { NodeThumbnail } from '~/components/node/NodeThumbnail';
 import { URLS } from '~/constants/urls';
 import { INode } from '~/types';
 import { getPrettyDate } from '~/utils/dom';
+import { isLabNode } from '~/utils/node';
 
 import { getNewCommentAnchor } from '../../../constants/dom/links';
 
@@ -32,7 +33,7 @@ const NodeHorizontalCard: FC<Props> = ({ node, hasNew, onClick }) => (
     <div
       className={classNames(styles.thumb, {
         [styles.new]: hasNew,
-        [styles.lab]: !node.is_promoted,
+        [styles.lab]: isLabNode(node),
       })}
     >
       <NodeThumbnail item={node} />

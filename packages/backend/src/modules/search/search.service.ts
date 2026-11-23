@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Node } from '../../entities/node.entity';
 import {
   toWireDate,
+  toWirePlacement,
   toWireString,
   toWireThumbnail,
 } from '../../wire/serialize';
@@ -17,6 +18,7 @@ export interface WireSearchNode {
   title: string;
   created_at: string;
   is_promoted: boolean;
+  is_profile: boolean;
 }
 
 export interface WireSearchResponse {
@@ -94,7 +96,7 @@ export class SearchService {
         thumbnail: toWireThumbnail(node.thumbnail),
         title: toWireString(node.title),
         created_at: toWireDate(node.createdAt),
-        is_promoted: Boolean(node.isPromoted),
+        ...toWirePlacement(node.placement),
       })),
     };
   }

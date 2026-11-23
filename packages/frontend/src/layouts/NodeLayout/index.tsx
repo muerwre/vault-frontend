@@ -16,6 +16,7 @@ import { useNodeBlocks } from '~/hooks/node/useNodeBlocks';
 import { useNodeCoverImage } from '~/hooks/node/useNodeCoverImage';
 import { useNodePermissions } from '~/hooks/node/useNodePermissions';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
+import { isLabNode } from '~/utils/node';
 
 import styles from './styles.module.scss';
 
@@ -25,7 +26,10 @@ const NodeLayout = observer(() => {
   const { node, isLoading, update } = useNodeContext();
   const { head, block } = useNodeBlocks(node, isLoading);
   const [canEdit, canLike, canStar] = useNodePermissions(node);
-  const { onLike, onStar, onLock, onEdit } = useNodeActions(node, update);
+  const { onLike, onStar, onPin, onLock, onEdit } = useNodeActions(
+    node,
+    update,
+  );
 
   useNodeCoverImage(node);
 
@@ -49,6 +53,7 @@ const NodeLayout = observer(() => {
               username={node.user?.username}
               likeCount={node?.like_count || 0}
               isHeroic={!!node.is_heroic}
+              isPinned={!!node.is_pinned}
               isLiked={!!node.is_liked}
               isLocked={!!node.deleted_at}
               isLoading={isLoading}
@@ -58,6 +63,8 @@ const NodeLayout = observer(() => {
               canStar={canStar}
               onLike={isUser ? onLike : onUnauthorizedLike}
               onStar={onStar}
+              canPin={canEdit}
+              onPin={onPin}
               onLock={onLock}
               onEdit={onEdit}
             />
@@ -71,7 +78,7 @@ const NodeLayout = observer(() => {
         </Card>
       </Container>
 
-      <SubmitBarRouter prefix="/post:id" isLab={!node.is_promoted} />
+      <SubmitBarRouter prefix="/post:id" isLab={isLabNode(node)} />
     </div>
   );
 });

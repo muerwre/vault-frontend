@@ -5,7 +5,7 @@ import {
 } from '@vault/common/constants';
 
 import type { Node } from '../../entities/node.entity';
-import { isFlowOrLabType } from '../node/node.permissions';
+import { isFlowOrLabType, isPostType } from '../node/node.permissions';
 
 /**
  * Who gets told about what. Kept free of I/O so the rules can be read and
@@ -20,17 +20,17 @@ export const isBorisNode = (node: Pick<Node, 'id'>): boolean =>
   node.id === BORIS_NODE_ID;
 
 /**
- * Flow watchers only hear about a node that is actually listed and visible, so
- * a private or unlisted node never reaches anyone else's feed.
+ * Flow watchers only hear about a node that is actually listed in a feed and
+ * visible, so a private, unlisted or profile-only node never reaches them.
  */
 export const shouldAnnounceNode = (
-  node: Pick<Node, 'type' | 'isPromoted' | 'isPublic'>,
+  node: Pick<Node, 'type' | 'placement' | 'isPublic'>,
 ): boolean => Boolean(node.isPublic) && isFlowOrLabType(node);
 
 /** Comments notify only on nodes listed in a feed, plus Boris. */
 export const shouldAnnounceComment = (
-  node: Pick<Node, 'id' | 'type' | 'isPromoted'>,
-): boolean => isFlowOrLabType(node) || isBorisNode(node);
+  node: Pick<Node, 'id' | 'type' | 'placement'>,
+): boolean => isPostType(node) || isBorisNode(node);
 
 /** Boris comments feed the separate `boris` subscription. */
 export const commentItemType = (

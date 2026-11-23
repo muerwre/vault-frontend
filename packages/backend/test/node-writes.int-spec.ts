@@ -216,6 +216,56 @@ describe('node writes (integration)', () => {
     });
   });
 
+  describe('POST /nodes/:id/pin', () => {
+    it('lets the author toggle the pin, leaving placement and hero alone', async () => {
+      const nodeId = await makeNode({ isPromoted: false, isHeroic: true });
+
+      const on = await http()
+        .post(`/api/nodes/${nodeId}/pin`)
+        .set(authHeader(authorId))
+        .expect(200);
+      expect(on.body).toEqual({ is_pinned: true });
+
+      const [row] = await db.query(
+        'SELECT is_pinned, is_promoted, is_heroic FROM node WHERE id = ?',
+        [nodeId],
+      );
+      expect(Number(row.is_pinned)).toBe(1);
+      expect(Number(row.is_promoted)).toBe(0);
+      expect(Number(row.is_heroic)).toBe(1);
+
+      const off = await http()
+        .post(`/api/nodes/${nodeId}/pin`)
+        .set(authHeader(authorId))
+        .expect(200);
+      expect(off.body).toEqual({ is_pinned: false });
+    });
+
+    it("lets an admin pin someone else's node", async () => {
+      const nodeId = await makeNode();
+
+      await http()
+        .post(`/api/nodes/${nodeId}/pin`)
+        .set(authHeader(adminId, 'admin'))
+        .expect(200);
+    });
+
+    it('404s for anyone else', async () => {
+      const nodeId = await makeNode();
+
+      await http()
+        .post(`/api/nodes/${nodeId}/pin`)
+        .set(authHeader(strangerId))
+        .expect(404);
+    });
+
+    it('401s for a guest', async () => {
+      const nodeId = await makeNode();
+
+      await http().post(`/api/nodes/${nodeId}/pin`).expect(401);
+    });
+  });
+
   describe('POST /nodes/:id/heroic', () => {
     it('lets an admin toggle the flag and persists it', async () => {
       const nodeId = await makeNode();

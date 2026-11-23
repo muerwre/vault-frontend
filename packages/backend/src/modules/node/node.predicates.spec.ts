@@ -4,6 +4,7 @@ import {
   applyIsFlowNode,
   applyIsFlowOrLabNode,
   applyIsLabNode,
+  applyIsPublicNode,
   applyVisibleToViewer,
 } from './node.predicates';
 
@@ -69,15 +70,15 @@ describe('node predicates', () => {
 
   describe('applyIsFlowOrLabNode', () => {
     /** Intentional: authed viewers also see non-public nodes here. */
-    it('checks neither is_public nor is_promoted', () => {
+    it('skips is_public and keeps profile nodes out', () => {
       const query = mockQuery();
       applyIsFlowOrLabNode(query, 'node');
 
-      expect(query.calls[0].sql).toBe(
-        'node.deleted_at IS NULL AND node.type IN (:...labTypes)',
-      );
       expect(query.calls[0].sql).not.toContain('is_public');
-      expect(query.calls[0].sql).not.toContain('is_promoted');
+      expect(query.calls[0].sql).toContain(
+        'node.is_promoted IN (:...feedPlacements)',
+      );
+      expect(query.calls[0].params?.feedPlacements).toEqual([0, 1]);
     });
 
     it('still excludes deleted nodes', () => {
@@ -88,15 +89,28 @@ describe('node predicates', () => {
     });
   });
 
+  describe('applyIsPublicNode', () => {
+    it('lists flow and profile nodes that are public', () => {
+      const query = mockQuery();
+      applyIsPublicNode(query, 'node');
+
+      expect(query.calls[0].sql).toContain(
+        'node.is_promoted IN (:...publicPlacements)',
+      );
+      expect(query.calls[0].sql).toContain('node.is_public = 1');
+      expect(query.calls[0].params?.publicPlacements).toEqual([1, 2]);
+    });
+  });
+
   describe('applyVisibleToViewer', () => {
-    it('restricts guests to the flow', () => {
+    it('restricts guests to flow and profile nodes', () => {
       const query = mockQuery();
       applyVisibleToViewer(query, 'node', false);
 
-      expect(query.calls[0].sql).toContain('is_promoted = 1');
+      expect(query.calls[0].params?.publicPlacements).toEqual([1, 2]);
     });
 
-    it('gives authed viewers flow-or-lab', () => {
+    it('gives authed viewers every post, lab included', () => {
       const query = mockQuery();
       applyVisibleToViewer(query, 'node', true);
 

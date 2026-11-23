@@ -1,9 +1,10 @@
-import { NODE_TYPE_ENUM_ORDER, type NodeType } from '@vault/common/constants';
-import type {
-  INodeBlock,
-  INodeFlow,
-  INodeSettings,
-} from '@vault/common/types';
+import {
+  NODE_PLACEMENT,
+  NODE_TYPE_ENUM_ORDER,
+  type NodePlacement,
+  type NodeType,
+} from '@vault/common/constants';
+import type { INodeBlock, INodeFlow, INodeSettings } from '@vault/common/types';
 import {
   Column,
   Entity,
@@ -69,12 +70,21 @@ export class Node {
   @Column({ name: 'is_public', ...legacyBool(1) })
   isPublic: boolean;
 
-  /** `true` → flow feed, `false` → lab. */
-  @Column({ name: 'is_promoted', ...legacyBool(1) })
-  isPromoted: boolean;
+  /** One of `NODE_PLACEMENT`: lab, flow or pinned to the author's profile. */
+  @Column({
+    name: 'is_promoted',
+    type: 'tinyint',
+    nullable: false,
+    default: NODE_PLACEMENT.FLOW,
+  })
+  placement: NodePlacement;
 
   @Column({ name: 'is_heroic', ...legacyBool(0) })
   isHeroic: boolean;
+
+  /** Set by the author: leads their profile. Independent of `placement`. */
+  @Column({ name: 'is_pinned', ...legacyBool(0) })
+  isPinned: boolean;
 
   /** May carry a `REMOTE_CURRENT:` prefix pointing at the legacy media host. */
   @Column(legacyVarchar({ nullable: true }))

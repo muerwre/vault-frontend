@@ -1,7 +1,9 @@
 import { memo, VFC } from 'react';
 
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames';
 
+import { Icon } from '~/components/common/Icon';
 import { SeparatedMenu } from '~/components/menu/SeparatedMenu';
 import { NodeEditMenu } from '~/components/node/NodeEditMenu';
 import { Placeholder } from '~/components/placeholders/Placeholder';
@@ -20,17 +22,22 @@ interface Props {
   likeCount: number;
 
   isHeroic: boolean;
+  /** Pinned to the top of the author's profile. */
+  isPinned?: boolean;
   isLocked: boolean;
   isLiked: boolean;
 
   canEdit: boolean;
   canLike: boolean;
   canStar: boolean;
+  /** Pin or unpin the node on its author's profile; editors only. */
+  canPin?: boolean;
 
   isLoading: boolean;
 
   onLike: () => void;
   onStar: () => void;
+  onPin?: () => void;
   onLock: () => void;
   onEdit: () => void;
 }
@@ -43,16 +50,19 @@ const NodeTitle: VFC<Props> = memo(
     likeCount,
 
     isHeroic,
+    isPinned,
     isLocked,
     isLiked,
 
     canStar,
+    canPin,
     canEdit,
     canLike,
 
     isLoading,
 
     onStar,
+    onPin,
     onLike,
     onLock,
     onEdit,
@@ -82,11 +92,28 @@ const NodeTitle: VFC<Props> = memo(
           </div>
 
           <SeparatedMenu className={styles.buttons}>
+            {isPinned && !isLoading && !(canEdit && canPin) && (
+              <Tippy
+                content={
+                  username
+                    ? `Закреплено наверху профиля ~${username.toLocaleLowerCase()}`
+                    : 'Закреплено наверху профиля автора'
+                }
+              >
+                <span className={styles.pin}>
+                  <Icon icon="pin" size={24} />
+                </span>
+              </Tippy>
+            )}
+
             {canEdit && (
               <NodeEditMenu
                 className={styles.button}
                 canStar={canStar}
+                canPin={canPin}
                 isHeroic={isHeroic}
+                isPinned={isPinned}
+                onPin={onPin}
                 isLocked={isLocked}
                 onStar={onStar}
                 onLock={onLock}

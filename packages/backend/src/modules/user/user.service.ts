@@ -54,9 +54,11 @@ export class UserService {
   }
 
   /**
-   * A user's nodes, newest first. `after` is a `created_at` cursor: only older
-   * nodes are returned. Guests see flow nodes only. A `limit` that is not a
-   * whole number within `1..USER_NODES_LIMIT` falls back to the maximum.
+   * A user's nodes: the ones the author pinned, newest first, then the rest,
+   * newest first, wherever each is listed. `after` is a `created_at` cursor over the unpinned
+   * ones; pinned nodes come only with the first page and do not count against
+   * its `limit`. Guests see no lab nodes. A `limit` that is not a whole number
+   * within `1..USER_NODES_LIMIT` falls back to the maximum.
    */
   async getUserNodes(
     userId: number,
@@ -64,32 +66,38 @@ export class UserService {
     after: Date | null,
     limit?: number,
   ): Promise<WireShallowNode[]> {
-    const query = applyVisibleToViewer(
-      this.nodes
-        .createQueryBuilder('node')
-        .leftJoinAndSelect('node.user', 'user')
-        .leftJoinAndSelect('user.photo', 'userPhoto')
-        .where('node.userId = :userId', { userId }),
-      'node',
-      isUser,
-    );
+    const take =
+      limit && Number.isInteger(limit) && limit > 0 && limit <= USER_NODES_LIMIT
+        ? limit
+        : USER_NODES_LIMIT;
+
+    const base = () =>
+      applyVisibleToViewer(
+        this.nodes
+          .createQueryBuilder('node')
+          .leftJoinAndSelect('node.user', 'user')
+          .leftJoinAndSelect('user.photo', 'userPhoto')
+          .where('node.userId = :userId', { userId }),
+        'node',
+        isUser,
+      ).orderBy('node.created_at', 'DESC');
+
+    const rest = base().andWhere('node.is_pinned = 0');
 
     if (after) {
-      query.andWhere('node.created_at < :after', { after });
+      rest.andWhere('node.created_at < :after', { after });
     }
 
-    const rows = await query
-      .orderBy('node.created_at', 'DESC')
-      .limit(
-        limit &&
-          Number.isInteger(limit) &&
-          limit > 0 &&
-          limit <= USER_NODES_LIMIT
-          ? limit
-          : USER_NODES_LIMIT,
-      )
-      .getMany();
+    const [pinned, rows] = await Promise.all([
+      after
+        ? Promise.resolve([])
+        : base()
+            .andWhere('node.is_pinned = 1')
+            .limit(USER_NODES_LIMIT)
+            .getMany(),
+      rest.limit(take).getMany(),
+    ]);
 
-    return rows.map(toWireShallowNode);
+    return [...pinned, ...rows].map(toWireShallowNode);
   }
 }

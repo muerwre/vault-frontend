@@ -9,6 +9,7 @@ import {
   toWireDateOrNull,
   toWireFlow,
   toWireLinks,
+  toWirePlacement,
   toWireShallowFile,
   toWireShallowUser,
   toWireString,
@@ -288,6 +289,26 @@ describe('wire serialisation', () => {
 
     it('returns the input untouched when there is no order', () => {
       expect(sortFilesByOrder(files, [])).toBe(files);
+    });
+  });
+
+  describe('toWirePlacement', () => {
+    it('keeps is_promoted as the flow flag', () => {
+      expect(toWirePlacement(1)).toEqual({
+        is_promoted: true,
+        is_profile: false,
+      });
+      expect(toWirePlacement(0)).toEqual({
+        is_promoted: false,
+        is_profile: false,
+      });
+    });
+
+    it('marks a profile-only node, not promoted', () => {
+      expect(toWirePlacement(2)).toEqual({
+        is_promoted: false,
+        is_profile: true,
+      });
     });
   });
 });

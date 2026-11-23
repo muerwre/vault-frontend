@@ -4,6 +4,7 @@ import {
   FILE_TYPES,
   GUEST_USER_ID,
   NODE_BACKLINK_PROVIDERS,
+  NODE_PLACEMENT,
   NODE_TYPES,
   ROLES,
 } from '@vault/common/constants';
@@ -21,6 +22,7 @@ import {
   toWireFlow,
   toWireNode,
   toWireFlowSongs,
+  toWirePlacement,
   toWireShallowNode,
   toWireThumbnail,
   type WireNode,
@@ -83,6 +85,7 @@ export interface WireRelatedItem {
   /** Lets a thumbnail show a text or song post's title over its picture. */
   type: string;
   is_promoted: boolean;
+  is_profile: boolean;
 }
 
 export interface WireRelated {
@@ -248,9 +251,17 @@ export class NodeService {
           AND \`node\`.\`type\` = ?
           AND \`node\`.\`id\` NOT IN (?)
           AND \`node\`.\`deleted_at\` IS NULL
-          AND \`node\`.\`is_promoted\` >= ?
+          AND \`node\`.\`is_promoted\` IN (?)
         LIMIT ?`,
-      [tagIds, node.type, [node.id], flowOnly ? 1 : 0, RELATED_LIMIT],
+      [
+        tagIds,
+        node.type,
+        [node.id],
+        flowOnly
+          ? [NODE_PLACEMENT.FLOW]
+          : [NODE_PLACEMENT.LAB, NODE_PLACEMENT.FLOW],
+        RELATED_LIMIT,
+      ],
     );
 
     for (const row of rows) {
@@ -261,7 +272,7 @@ export class NodeService {
         thumbnail: toWireThumbnail(row.thumbnail),
         title: row.title ?? '',
         type: row.type ?? '',
-        is_promoted: Boolean(row.is_promoted),
+        ...toWirePlacement(row.is_promoted),
       });
     }
 
@@ -295,12 +306,20 @@ export class NodeService {
             WHERE \`tags\`.\`tagId\` IN (?) AND \`nodeId\` NOT IN (?)
          ) AS \`t1\` ON \`t1\`.\`nodeId\` = \`node\`.\`id\`
         WHERE \`node\`.\`type\` = ?
-          AND \`node\`.\`is_promoted\` >= ?
+          AND \`node\`.\`is_promoted\` IN (?)
           AND \`node\`.\`deleted_at\` IS NULL
         GROUP BY \`t1\`.\`nodeId\`
         ORDER BY \`count\` DESC
         LIMIT ?`,
-      [tagIds, [node.id], node.type, flowOnly ? 1 : 0, RELATED_LIMIT],
+      [
+        tagIds,
+        [node.id],
+        node.type,
+        flowOnly
+          ? [NODE_PLACEMENT.FLOW]
+          : [NODE_PLACEMENT.LAB, NODE_PLACEMENT.FLOW],
+        RELATED_LIMIT,
+      ],
     );
 
     return rows.map((row) => ({
@@ -308,7 +327,7 @@ export class NodeService {
       thumbnail: toWireThumbnail(row.thumbnail),
       title: row.title ?? '',
       type: row.type ?? '',
-      is_promoted: Boolean(row.is_promoted),
+      ...toWirePlacement(row.is_promoted),
     }));
   }
 
@@ -601,6 +620,15 @@ export class NodeService {
     const next = !node.isHeroic;
 
     await this.nodes.update(node.id, { isHeroic: next });
+
+    return next;
+  }
+
+  /** Toggles `is_pinned` and returns the new value. */
+  async togglePinned(node: Node): Promise<boolean> {
+    const next = !node.isPinned;
+
+    await this.nodes.update(node.id, { isPinned: next });
 
     return next;
   }

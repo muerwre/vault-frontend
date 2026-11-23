@@ -13,6 +13,11 @@ export const useCreateNode = () => {
     async (node: INode) => {
       const result = await apiPostNode({ node });
 
+      // a profile node goes to neither feed
+      if (result.node.is_profile) {
+        return result.node;
+      }
+
       if (node.is_promoted) {
         flow.setNodes([result.node, ...flow.nodes]);
       } else {

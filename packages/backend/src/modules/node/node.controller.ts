@@ -289,6 +289,28 @@ export class NodeController {
   }
 
   /**
+   * The author or an admin. Toggles whether the node leads its author's
+   * profile; where it is listed does not change.
+   */
+  @Post(':id/pin')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  async pin(
+    @Param('id') id: string,
+    @WithUser() user: User,
+  ): Promise<{ is_pinned: boolean }> {
+    const node = await this.nodes.findLive(
+      this.parseId(id, HttpStatus.BAD_REQUEST),
+    );
+
+    if (!node || !this.nodes.canEdit(node, user)) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    return { is_pinned: await this.nodes.togglePinned(node) };
+  }
+
+  /**
    * Persists the flow grid display settings.
    *
    * Unlike reads, this **requires** a known display variant — an empty string is

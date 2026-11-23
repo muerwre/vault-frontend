@@ -18,6 +18,9 @@ import { usePageCover } from '~/utils/providers/PageCoverProvider';
 
 import styles from './styles.module.scss';
 
+/** The about card is hidden until its design settles; pinned posts lead instead. */
+const SHOW_ABOUT_CARD = false;
+
 const ABOUT_SIZES = {
   single: styles.single,
   horizontal: styles.horizontal,
@@ -67,7 +70,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
           />
         </Card>
 
-        {!isLoading && (
+        {SHOW_ABOUT_CARD && !isLoading && (
           <ProfileAboutCard
             className={styles.about}
             sizeClassNames={ABOUT_SIZES}

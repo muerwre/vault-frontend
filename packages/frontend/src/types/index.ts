@@ -115,7 +115,12 @@ export interface INode {
   description?: string;
   is_liked?: boolean;
   is_heroic?: boolean;
+  /** In the flow. Neither this nor `is_profile` means the lab. */
   is_promoted?: boolean;
+  /** Listed on the author's profile only, in neither feed. */
+  is_profile?: boolean;
+  /** Set by the author: leads their profile, wherever the node is listed. */
+  is_pinned?: boolean;
   is_public?: boolean;
   like_count?: number;
 
@@ -141,6 +146,7 @@ export type IFlowNode = Pick<
   | 'thumbnail'
   | 'created_at'
   | 'songs'
+  | 'is_pinned'
 >;
 
 export interface NodeBackLink {

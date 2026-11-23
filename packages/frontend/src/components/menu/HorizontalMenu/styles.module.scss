@@ -47,7 +47,8 @@
       background: $danger_gradient;
     }
 
-    &.yellow {
+    &.yellow,
+    &.profile {
       background: $warning_gradient;
     }
 

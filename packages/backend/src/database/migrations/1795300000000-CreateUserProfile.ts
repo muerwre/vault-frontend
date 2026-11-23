@@ -2,14 +2,15 @@ import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 /**
  * Profile page content, kept apart from the legacy `user` table: the about
- * text, the size of its card and the user's external links.
+ * text, the size of its card and the user's external links. Idempotent: some
+ * databases ran it under an earlier timestamp.
  */
-export class CreateUserProfile1795000000000 implements MigrationInterface {
-  name = 'CreateUserProfile1795000000000';
+export class CreateUserProfile1795300000000 implements MigrationInterface {
+  name = 'CreateUserProfile1795300000000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-CREATE TABLE \`user_profile\` (
+CREATE TABLE IF NOT EXISTS \`user_profile\` (
   \`userId\` int(11) NOT NULL,
   \`about\` text DEFAULT NULL,
   \`about_display\` varchar(16) DEFAULT NULL,

@@ -15,9 +15,17 @@ const PAGE_SIZE = 40;
 type Key = [url: string, after: string, isUser: boolean];
 
 /**
- * A user's nodes, newest first, a page at a time. Each page continues from the
- * oldest node of the previous one. Lab nodes come along for signed-in viewers,
- * so the viewer's state is part of the key.
+ * Pinned nodes ride along with the first page without counting against its
+ * size, so paging looks only at the rest.
+ */
+const unpinned = (page?: IFlowNode[]) =>
+  (page || []).filter((node) => !node.is_pinned);
+
+/**
+ * A user's nodes, a page at a time: the ones pinned to the profile first, then
+ * the rest, newest first. Each page continues from the oldest unpinned node of
+ * the previous one. Lab nodes come along for signed-in viewers, so the
+ * viewer's state is part of the key.
  */
 export const useUserNodes = (username?: string) => {
   const { isUser } = useAuth();
@@ -26,11 +34,12 @@ export const useUserNodes = (username?: string) => {
     (index: number, previous: IFlowNode[] | null): Key | null => {
       if (!username) return null;
       if (index === 0) return [API.USER.NODES(username), '', isUser];
-      if (!previous || previous.length < PAGE_SIZE) return null;
+      const rest = unpinned(previous || []);
+      if (rest.length < PAGE_SIZE) return null;
 
       return [
         API.USER.NODES(username),
-        previous[previous.length - 1].created_at || '',
+        rest[rest.length - 1].created_at || '',
         isUser,
       ];
     },
@@ -52,7 +61,7 @@ export const useUserNodes = (username?: string) => {
   );
 
   const nodes = useMemo(() => flatten(data || []), [data]);
-  const hasMore = (data?.[data.length - 1]?.length || 0) >= PAGE_SIZE;
+  const hasMore = unpinned(data?.[data.length - 1]).length >= PAGE_SIZE;
   const isLoading = isValidating && (!data || data.length < size);
 
   const loadMore = useCallback(() => {

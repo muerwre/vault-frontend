@@ -10,6 +10,7 @@ import { imagePresets } from '~/constants/urls';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
 import { getURL, getURLFromString } from '~/utils/dom';
+import { isLabNode } from '~/utils/node';
 
 import styles from './styles.module.scss';
 
@@ -18,6 +19,7 @@ type NodeThumbnailProps = {
     thumbnail?: string;
     title?: string;
     is_promoted?: boolean;
+    is_profile?: boolean;
     id?: number;
     type?: string;
   };
@@ -114,7 +116,7 @@ const NodeThumbnail: FC<NodeThumbnailProps> = memo(({ item }) => {
         </div>
       )}
 
-      {!!item.thumbnail && !item.is_promoted && (
+      {!!item.thumbnail && isLabNode(item) && (
         <div className={styles.suffix}>
           <FlaskConicalIcon size={12} />
         </div>

@@ -34,6 +34,20 @@ export const FLOW_NODE_TYPES: readonly NodeType[] = [
 /** Types listed in the lab feed — the same set as the flow. */
 export const LAB_NODE_TYPES: readonly NodeType[] = FLOW_NODE_TYPES;
 
+/**
+ * Where a node is listed, stored in `node.is_promoted`. The column started as
+ * a flow/lab boolean, so those keep their 1/0 values.
+ */
+export const NODE_PLACEMENT = {
+  LAB: 0,
+  FLOW: 1,
+  /** Kept out of both feeds and pinned to the top of the author's profile. */
+  PROFILE: 2,
+} as const;
+
+export type NodePlacement =
+  (typeof NODE_PLACEMENT)[keyof typeof NODE_PLACEMENT];
+
 export const NODE_FLOW_DISPLAY = {
   SINGLE: 'single',
   VERTICAL: 'vertical',

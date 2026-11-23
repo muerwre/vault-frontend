@@ -17,6 +17,7 @@ import { useNodeAudios } from '~/hooks/node/useNodeAudios';
 import { useNodeImages } from '~/hooks/node/useNodeImages';
 import { useNodePermissions } from '~/hooks/node/useNodePermissions';
 import { useNodeContext } from '~/utils/context/NodeContextProvider';
+import { isLabNode } from '~/utils/node';
 
 import { AuraBackdrop } from './components/AuraBackdrop';
 import { AuraPlayButton } from './components/AuraPlayButton';
@@ -33,7 +34,10 @@ const NodeAuraLayout = observer(() => {
   const askToLogIn = useAskToLogIn('song');
   const { node, isLoading, update } = useNodeContext();
   const [canEdit, canLike, canStar] = useNodePermissions(node);
-  const { onLike, onStar, onLock, onEdit } = useNodeActions(node, update);
+  const { onLike, onStar, onPin, onLock, onEdit } = useNodeActions(
+    node,
+    update,
+  );
   const images = useNodeImages(node);
   const audios = useNodeAudios(node);
 
@@ -87,6 +91,7 @@ const NodeAuraLayout = observer(() => {
               username={node.user?.username}
               likeCount={node?.like_count || 0}
               isHeroic={!!node.is_heroic}
+              isPinned={!!node.is_pinned}
               isLiked={!!node.is_liked}
               isLocked={!!node.deleted_at}
               isLoading={isLoading}
@@ -96,6 +101,8 @@ const NodeAuraLayout = observer(() => {
               canStar={canStar}
               onLike={isUser ? onLike : onUnauthorizedLike}
               onStar={onStar}
+              canPin={canEdit}
+              onPin={onPin}
               onLock={onLock}
               onEdit={onEdit}
             />
@@ -109,7 +116,7 @@ const NodeAuraLayout = observer(() => {
         </Card>
       </Container>
 
-      <SubmitBarRouter prefix="/post:id" isLab={!node.is_promoted} />
+      <SubmitBarRouter prefix="/post:id" isLab={isLabNode(node)} />
     </div>
   );
 });

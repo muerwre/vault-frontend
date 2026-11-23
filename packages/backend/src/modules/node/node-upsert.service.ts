@@ -3,8 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   FILE_TYPES,
   FLOW_NODE_TYPES,
+  NODE_PLACEMENT,
   NODE_TYPES,
   UPLOAD_TARGETS,
+  type NodePlacement,
   type NodeType,
 } from '@vault/common/constants';
 import { MEDIA_OWNER_TYPES, MEDIA_PRIORITIES } from '@vault/common/media';
@@ -31,6 +33,30 @@ import {
 } from './node.content';
 import { canCreateNode, canEditNode } from './node.permissions';
 
+/**
+ * `is_profile: true` wins over `is_promoted`. Leaving the profile without
+ * saying where the node goes moves it to the flow, so it never falls back
+ * into the lab unasked.
+ */
+export const resolvePlacement = (
+  body: Pick<NodeUpsertBody, 'is_promoted' | 'is_profile'> | undefined,
+  current: NodePlacement,
+): NodePlacement => {
+  if (body?.is_profile === true) {
+    return NODE_PLACEMENT.PROFILE;
+  }
+
+  if (typeof body?.is_promoted === 'boolean') {
+    return body.is_promoted ? NODE_PLACEMENT.FLOW : NODE_PLACEMENT.LAB;
+  }
+
+  if (body?.is_profile === false && current === NODE_PLACEMENT.PROFILE) {
+    return NODE_PLACEMENT.FLOW;
+  }
+
+  return current;
+};
+
 /** What the client may send. Anything else in the body is ignored. */
 export interface NodeUpsertBody {
   id?: number;
@@ -38,6 +64,8 @@ export interface NodeUpsertBody {
   type?: string;
   is_public?: boolean;
   is_promoted?: boolean;
+  /** Lists the node on its author's profile only; wins over `is_promoted`. */
+  is_profile?: boolean;
   thumbnail?: string;
   description?: string;
   blocks?: INodeBlock[];
@@ -124,7 +152,7 @@ export class NodeUpsertService {
         userId: user.id,
         // New nodes start visible and promoted; the body can override below.
         isPublic: true,
-        isPromoted: true,
+        placement: NODE_PLACEMENT.FLOW,
         blocks: [],
         filesOrder: [],
       });
@@ -171,8 +199,11 @@ export class NodeUpsertService {
       node.isPublic = body.is_public;
     }
 
-    if (typeof body?.is_promoted === 'boolean') {
-      node.isPromoted = body.is_promoted;
+    node.placement = resolvePlacement(body, node.placement);
+
+    // heroes are flow and lab only, and a profile-only node is in neither
+    if (node.placement === NODE_PLACEMENT.PROFILE) {
+      node.isHeroic = false;
     }
 
     node.description = deriveDescription(type, blocks, node.description ?? '');

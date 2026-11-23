@@ -6,6 +6,7 @@ import {
   LockIcon,
   LockOpenIcon,
   PencilIcon,
+  PinIcon,
   StarIcon,
 } from 'lucide-react';
 
@@ -15,15 +16,23 @@ import { MenuItemWithIcon } from '~/components/menu/MenuItemWithIcon';
 import { SeparatedMenu } from '~/components/menu/SeparatedMenu';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 
+const PIN_HINTS = {
+  pin: 'Закрепить наверху профиля',
+  unpin: 'Открепить в профиле',
+};
+
 interface NodeEditMenuProps {
   className?: string;
 
   canStar: boolean;
+  canPin?: boolean;
 
   isHeroic: boolean;
+  isPinned?: boolean;
   isLocked: boolean;
 
   onStar: () => void;
+  onPin?: () => void;
   onLock: () => void;
   onEdit: () => void;
 }
@@ -31,9 +40,12 @@ interface NodeEditMenuProps {
 const NodeEditMenu: VFC<NodeEditMenuProps> = ({
   className,
   canStar,
+  canPin,
   isHeroic,
+  isPinned,
   isLocked,
   onStar,
+  onPin,
   onLock,
   onEdit,
 }) => {
@@ -53,6 +65,15 @@ const NodeEditMenu: VFC<NodeEditMenuProps> = ({
             onClick={onStar}
           >
             {isHeroic ? 'Убрать с главной' : 'На главную'}
+          </MenuItemWithIcon>
+        )}
+
+        {canPin && (
+          <MenuItemWithIcon
+            icon={<PinIcon size={20} fill={isPinned ? 'currentColor' : 'none'} />}
+            onClick={onPin}
+          >
+            {isPinned ? PIN_HINTS.unpin : PIN_HINTS.pin}
           </MenuItemWithIcon>
         )}
 
@@ -76,6 +97,14 @@ const NodeEditMenu: VFC<NodeEditMenuProps> = ({
         <Tippy content={isHeroic ? 'Убрать с главной' : 'На главную'}>
           <button className={className} onClick={onStar}>
             {isHeroic ? <StarFilledIcon size={21} /> : <StarIcon size={21} />}
+          </button>
+        </Tippy>
+      )}
+
+      {canPin && (
+        <Tippy content={isPinned ? PIN_HINTS.unpin : PIN_HINTS.pin}>
+          <button className={className} onClick={onPin}>
+            <PinIcon size={21} fill={isPinned ? 'currentColor' : 'none'} />
           </button>
         </Tippy>
       )}

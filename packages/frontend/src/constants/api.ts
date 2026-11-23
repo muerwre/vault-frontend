@@ -54,6 +54,7 @@ export const API = {
     DELETE: (id: INode['id']) => `/nodes/${id}`,
     LIKE: (id: INode['id']) => `/nodes/${id}/like`,
     HEROIC: (id: INode['id']) => `/nodes/${id}/heroic`,
+    PIN: (id: INode['id']) => `/nodes/${id}/pin`,
     SET_CELL_VIEW: (id: INode['id']) => `/nodes/${id}/cell-view`,
     RELATED: (id: INode['id']) => `/nodes/${id}/related`,
 

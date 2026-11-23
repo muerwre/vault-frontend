@@ -28,6 +28,7 @@ type IButtonProps = DetailedHTMLProps<
     | 'gray'
     | 'flow'
     | 'lab'
+    | 'profile'
     | 'outline-white'
     | 'flat';
   iconLeft?: ReactNode;

@@ -25,7 +25,10 @@ export const useUpdateNode = (id: number) => {
 
       await update(result.node);
 
-      if (node.is_promoted) {
+      if (result.node.is_profile) {
+        // profile-only now: it leaves the flow it may have been in
+        flow.setNodes(flow.nodes.filter((it) => it.id !== result.node.id));
+      } else if (node.is_promoted) {
         // the flow brings a song node's first songs, which the edit may change
         flow.updateNode(result.node.id!, {
           ...result.node,

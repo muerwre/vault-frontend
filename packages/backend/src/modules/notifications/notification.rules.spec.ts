@@ -1,4 +1,8 @@
-import { BORIS_NODE_ID, NODE_TYPES } from '@vault/common/constants';
+import {
+  BORIS_NODE_ID,
+  NODE_PLACEMENT,
+  NODE_TYPES,
+} from '@vault/common/constants';
 
 import type { Node } from '../../entities/node.entity';
 
@@ -14,7 +18,7 @@ const node = (extra: Partial<Node> = {}): Node =>
   ({
     id: 1,
     type: NODE_TYPES.IMAGE,
-    isPromoted: true,
+    placement: NODE_PLACEMENT.FLOW,
     isPublic: true,
     ...extra,
   }) as Node;
@@ -34,13 +38,23 @@ describe('notification rules', () => {
 
     /** An unpromoted node is a lab node, which is still listed. */
     it('announces a public lab node', () => {
-      expect(shouldAnnounceNode(node({ isPromoted: false }))).toBe(true);
+      expect(shouldAnnounceNode(node({ placement: NODE_PLACEMENT.LAB }))).toBe(
+        true,
+      );
+    });
+
+    it('stays silent about a profile-only node', () => {
+      expect(
+        shouldAnnounceNode(node({ placement: NODE_PLACEMENT.PROFILE })),
+      ).toBe(false);
     });
 
     it('stays silent about a non-public node', () => {
       expect(shouldAnnounceNode(node({ isPublic: false }))).toBe(false);
       expect(
-        shouldAnnounceNode(node({ isPublic: false, isPromoted: false })),
+        shouldAnnounceNode(
+          node({ isPublic: false, placement: NODE_PLACEMENT.LAB }),
+        ),
       ).toBe(false);
     });
 
@@ -48,9 +62,9 @@ describe('notification rules', () => {
     it('stays silent about unlisted types', () => {
       for (const type of [NODE_TYPES.WEBM, NODE_TYPES.BORIS]) {
         expect(shouldAnnounceNode(node({ type }))).toBe(false);
-        expect(shouldAnnounceNode(node({ type, isPromoted: false }))).toBe(
-          false,
-        );
+        expect(
+          shouldAnnounceNode(node({ type, placement: NODE_PLACEMENT.LAB })),
+        ).toBe(false);
       }
     });
   });
@@ -58,7 +72,9 @@ describe('notification rules', () => {
   describe('shouldAnnounceComment', () => {
     it('announces on flow and lab nodes', () => {
       expect(shouldAnnounceComment(node())).toBe(true);
-      expect(shouldAnnounceComment(node({ isPromoted: false }))).toBe(true);
+      expect(
+        shouldAnnounceComment(node({ placement: NODE_PLACEMENT.LAB })),
+      ).toBe(true);
     });
 
     it('announces on Boris despite it being neither', () => {

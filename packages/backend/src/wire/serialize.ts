@@ -1,4 +1,8 @@
-import { FILE_TYPES, MAX_LIST_SONGS } from '@vault/common/constants';
+import {
+  FILE_TYPES,
+  MAX_LIST_SONGS,
+  NODE_PLACEMENT,
+} from '@vault/common/constants';
 import type { INodeBlock, INodeFlow, INodeSettings } from '@vault/common/types';
 
 import { isYoutubeThumbCacheEnabled } from '../config/env';
@@ -130,6 +134,9 @@ export interface WireShallowNode {
   flow: INodeFlow;
   user: WireShallowUser;
   is_promoted: boolean;
+  is_profile: boolean;
+  /** Leads the author's profile, wherever the node is listed. */
+  is_pinned: boolean;
   /** A song node's tracks, on the flow only, for its cell to play. */
   songs?: WireFile[];
 }
@@ -141,6 +148,17 @@ export const toWireFlowSongs = (files: File[]): WireFile[] =>
     .slice(0, MAX_LIST_SONGS)
     .map(toWireFile);
 
+/**
+ * `is_promoted` keeps its flow/lab meaning, so a profile-only node is neither
+ * promoted nor lab: it carries `is_profile` instead.
+ */
+export const toWirePlacement = (
+  placement: number | null | undefined,
+): { is_promoted: boolean; is_profile: boolean } => ({
+  is_promoted: Number(placement) === NODE_PLACEMENT.FLOW,
+  is_profile: Number(placement) === NODE_PLACEMENT.PROFILE,
+});
+
 export const toWireShallowNode = (node: Node): WireShallowNode => ({
   id: node.id,
   title: toWireString(node.title),
@@ -151,7 +169,8 @@ export const toWireShallowNode = (node: Node): WireShallowNode => ({
   created_at: toWireDate(node.createdAt),
   flow: toWireFlow(node.flow),
   user: toWireShallowUser(node.user),
-  is_promoted: Boolean(node.isPromoted),
+  ...toWirePlacement(node.placement),
+  is_pinned: Boolean(node.isPinned),
 });
 
 /** File. `orig_name`, `full_path`, `target` and the owner are never exposed. */
@@ -237,6 +256,9 @@ export interface WireNode {
   type: string;
   is_public: boolean;
   is_promoted: boolean;
+  is_profile: boolean;
+  /** Leads the author's profile, wherever the node is listed. */
+  is_pinned: boolean;
   is_heroic: boolean;
   thumbnail: string;
   description: string;
@@ -269,7 +291,8 @@ export const toWireNode = (
   title: toWireString(node.title),
   type: toWireString(node.type),
   is_public: Boolean(node.isPublic),
-  is_promoted: Boolean(node.isPromoted),
+  ...toWirePlacement(node.placement),
+  is_pinned: Boolean(node.isPinned),
   is_heroic: Boolean(node.isHeroic),
   thumbnail: toWireThumbnail(node.thumbnail),
   description: toWireString(node.description),
