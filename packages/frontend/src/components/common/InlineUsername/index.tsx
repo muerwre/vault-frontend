@@ -12,7 +12,7 @@ const InlineUsername: FC<InlineUsernameProps> = ({ children }) => {
   const backgroundColor = useColorFromString(children);
   return (
     <span style={{ backgroundColor }} className={styles.username}>
-      ~{children}
+      @{children}
     </span>
   );
 };

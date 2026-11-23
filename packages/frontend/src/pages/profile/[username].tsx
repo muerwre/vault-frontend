@@ -19,7 +19,7 @@ const ProfilePage: FC = () => {
 
   return (
     <>
-      <PageTitle title={getPageTitle(username ? `~${username}` : '')} />
+      <PageTitle title={getPageTitle(username ? `@${username}` : '')} />
       <ProfileLayout username={username} />
     </>
   );

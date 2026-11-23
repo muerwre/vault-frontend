@@ -80,7 +80,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
             placeholder={
               canEdit
                 ? 'Расскажите о себе'
-                : `~${profile.username} пока ничего не рассказал о себе`
+                : `@${profile.username} пока ничего не рассказал о себе`
             }
             canEdit={canEdit}
             onSaved={update}

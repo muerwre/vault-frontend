@@ -82,7 +82,7 @@ const NodeTitle: VFC<Props> = memo(
                 ) : (
                   <>
                     <ProfileLink username={username}>
-                      ~{username.toLocaleLowerCase()}
+                      @{username.toLocaleLowerCase()}
                     </ProfileLink>
                     {`, ${getPrettyDate(createdAt)}`}
                   </>
@@ -96,7 +96,7 @@ const NodeTitle: VFC<Props> = memo(
               <Tippy
                 content={
                   username
-                    ? `Закреплено наверху профиля ~${username.toLocaleLowerCase()}`
+                    ? `Закреплено наверху профиля @${username.toLocaleLowerCase()}`
                     : 'Закреплено наверху профиля автора'
                 }
               >

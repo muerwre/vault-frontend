@@ -13,8 +13,11 @@ export const URLS = {
     IMAGE: '/examples/image',
   },
   NODE_URL: (id: INode['id'] | string) => `/post${id}`,
-  /** Served by `pages/profile/[username]` through a rewrite. */
-  PROFILE_PAGE: (username: string) => `/~${encodeURIComponent(username)}`,
+  /**
+   * Served by `pages/profile/[username]` through a rewrite; the older `/~`
+   * and `/profile/` addresses redirect here.
+   */
+  PROFILE_PAGE: (username: string) => `/@${encodeURIComponent(username)}`,
   SETTINGS: {
     BASE: '/settings',
     NOTES: '/settings/notes',

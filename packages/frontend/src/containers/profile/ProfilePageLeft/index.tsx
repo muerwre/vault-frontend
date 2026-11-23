@@ -31,7 +31,7 @@ const ProfilePageLeft: FC<Props> = ({ username, profile, isLoading }) => (
         </div>
 
         <div className={styles.username}>
-          {isLoading ? <Placeholder /> : `~${profile.username}`}
+          {isLoading ? <Placeholder /> : `@${profile.username}`}
         </div>
       </div>
     </Card>

@@ -24,7 +24,7 @@ const ProfileSidebarHead: VFC<ProfileSidebarHeadProps> = () => {
           </ProfileLink>
         </div>
         <div className={styles.username}>
-          {!!user.fullname && `~${user.username}`}
+          {!!user.fullname && `@${user.username}`}
         </div>
       </Filler>
     </Group>

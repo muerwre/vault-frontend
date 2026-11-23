@@ -1,8 +1,7 @@
 import { FC } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
-import { MenuButton } from '~/components/menu/MenuButton';
-import { ProfileQuickInfo } from '~/containers/profile/ProfileQuickInfo';
+import { ProfileLink } from '~/components/profile/ProfileLink';
 import { IUser } from '~/types/auth';
 import { path } from '~/utils/ramda';
 
@@ -11,24 +10,20 @@ interface Props {
   className?: string;
 }
 
+/** Leads to the commenter's profile. */
 const CommentAvatar: FC<Props> = ({ user, className }) => {
   if (!user) {
     return <Avatar className={className} />;
   }
 
   return (
-    <MenuButton
-      position="auto"
-      icon={
-        <Avatar
-          url={path(['photo', 'url'], user)}
-          username={user.username}
-          className={className}
-        />
-      }
-    >
-      <ProfileQuickInfo user={user} />
-    </MenuButton>
+    <ProfileLink username={user.username}>
+      <Avatar
+        url={path(['photo', 'url'], user)}
+        username={user.username}
+        className={className}
+      />
+    </ProfileLink>
   );
 };
 

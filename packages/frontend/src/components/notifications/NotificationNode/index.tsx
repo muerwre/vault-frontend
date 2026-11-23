@@ -33,7 +33,7 @@ const NotificationNode: FC<NotificationNodeProps> = ({ item, isNew }) => {
       <div className={styles.text}>
         <div className={styles.title}>{item.title || '...'}</div>
         <div className={styles.user}>
-          ~{item.user.username}, {getPrettyDate(item.created_at)}
+          @{item.user.username}, {getPrettyDate(item.created_at)}
         </div>
       </div>
     </div>

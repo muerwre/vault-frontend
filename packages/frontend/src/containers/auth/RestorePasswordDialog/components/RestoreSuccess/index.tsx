@@ -17,7 +17,7 @@ const RestoreSuccess: VFC<RestoreSuccessProps> = ({ username, onClick }) => (
     <CheckIcon size={64} />
 
     <div>Пароль обновлен</div>
-    <div>Добро пожаловать домой{username ? `, ~${username}` : ''}!</div>
+    <div>Добро пожаловать домой{username ? `, @${username}` : ''}!</div>
 
     <div />
 

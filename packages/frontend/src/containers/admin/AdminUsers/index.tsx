@@ -67,12 +67,12 @@ const AdminUsers: FC = () => {
       event.stopPropagation();
 
       confirm(
-        `Удалить ~${user.username}? Пользователь больше не сможет войти, его посты и комментарии останутся.`,
+        `Удалить @${user.username}? Пользователь больше не сможет войти, его посты и комментарии останутся.`,
         async () => {
           try {
             await apiDeleteAdminUser(user.id);
             await mutate();
-            showToastSuccess(`~${user.username} удалён`);
+            showToastSuccess(`@${user.username} удалён`);
           } catch (error) {
             showErrorToast(error);
           }
@@ -132,7 +132,7 @@ const AdminUsers: FC = () => {
                       <span className={styles.badge}>админ</span>
                     )}
                   </div>
-                  <div className={styles.muted}>~{user.username}</div>
+                  <div className={styles.muted}>@{user.username}</div>
                   <div className={styles.muted}>{lastVisit(user)}</div>
                   {origins(user).map((origin) => (
                     <div key={origin} className={styles.origin}>

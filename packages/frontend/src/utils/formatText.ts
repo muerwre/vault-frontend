@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 
+import { URLS } from '~/constants/urls';
 import { stripHTMLTags } from '~/utils/stripHTMLTags';
 
 /**
@@ -18,10 +19,18 @@ export const formatTextSanitizeTags = (text: string): string =>
   stripHTMLTags(text);
 
 /**
- * Returns clickable usernames
+ * Links `@username` mentions to profiles, writing the older `~username` the
+ * same way. Runs on HTML, so a mark preceded by a word character, a slash or
+ * another mark is left alone: that keeps emails and URLs intact.
  */
 export const formatTextClickableUsernames = (text: string): string =>
-  text.replace(/~([\wа-яА-Я-]+)/giu, '<span class="username">~$1</span>');
+  text.replace(
+    /(^|[^\w@~\/-])[~@]([\wа-яёА-ЯЁ-]+)/gmu,
+    (_, before: string, username: string) =>
+      `${before}<a class="username" href="${URLS.PROFILE_PAGE(
+        username,
+      )}">@${username}</a>`,
+  );
 
 /**
  * Makes gray comments. The stars of block comment delimiters are escaped,
