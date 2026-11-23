@@ -350,6 +350,7 @@ describe('runDownloadJob', () => {
     expect(api.fail).toHaveBeenCalledWith(7, {
       reason: 'ERROR: [youtube] x: Video unavailable',
       retryable: false,
+      blocked: false,
     });
   });
 
@@ -365,8 +366,22 @@ describe('runDownloadJob', () => {
 
     expect(api.fail).toHaveBeenCalledWith(
       7,
-      expect.objectContaining({ retryable: true }),
+      expect.objectContaining({ retryable: true, blocked: true }),
     );
+  });
+
+  it('reports a 403 on the download as the fetcher being blocked', async () => {
+    const forbidden: Downloader = async () =>
+      failed('ERROR: unable to download video data: HTTP Error 403: Forbidden');
+    const { api, run } = track(setup({ downloads: [forbidden] }));
+
+    await expect(run()).resolves.toMatchObject({ rateLimited: true });
+
+    expect(api.fail).toHaveBeenCalledWith(7, {
+      reason: 'ERROR: unable to download video data: HTTP Error 403: Forbidden',
+      retryable: true,
+      blocked: true,
+    });
   });
 
   it('fails for good when no H.264/AAC format exists', async () => {
@@ -426,6 +441,7 @@ describe('runDownloadJob', () => {
     expect(api.fail).toHaveBeenCalledWith(7, {
       reason: 'fetcher stopping',
       retryable: true,
+      blocked: false,
     });
   });
 });

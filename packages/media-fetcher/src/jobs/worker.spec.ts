@@ -4,9 +4,21 @@ import type { BackendClient } from '../backend/api';
 import { IntervalLimiter } from '../shared/limiter';
 import type { YtDlpUpdater } from '../tools/updater';
 
-import { Worker } from './worker';
+import { blockPauseMs, Worker } from './worker';
 
 const job = (id: number) => ({ id, kind: 'download' }) as MediaClaimedJob;
+
+describe('blockPauseMs', () => {
+  it('doubles with every block in a row, up to eight times the base', () => {
+    expect(
+      [1, 2, 3, 4, 5, 9].map((streak) => blockPauseMs(30, streak)),
+    ).toEqual([30, 60, 120, 240, 240, 240]);
+  });
+
+  it('stays off when the base pause is off', () => {
+    expect(blockPauseMs(0, 3)).toBe(0);
+  });
+});
 
 describe('Worker', () => {
   beforeEach(() => {
@@ -120,5 +132,37 @@ describe('Worker', () => {
 
     expect(handler).toHaveBeenCalledTimes(2);
     expect(Date.now() - started).toBeGreaterThanOrEqual(290);
+  });
+
+  it('pauses longer while blocks keep coming, and resets after a success', async () => {
+    const { abort, api, updater } = setup([job(1), job(2), job(3), job(4)]);
+    const blocked = { extractorFailure: false, rateLimited: true };
+    const fine = { extractorFailure: false, rateLimited: false };
+    const handler = jest
+      .fn()
+      .mockResolvedValueOnce(blocked)
+      .mockResolvedValueOnce(blocked)
+      .mockResolvedValueOnce(fine)
+      .mockResolvedValueOnce(blocked);
+    const starts: number[] = [];
+    const timed = jest.fn(async (claimed: MediaClaimedJob) => {
+      starts.push(Date.now());
+      return handler(claimed);
+    });
+
+    await new Worker('heavy', ['download'], timed, {
+      api,
+      limiter: new IntervalLimiter(0),
+      updater,
+      idlePollMs: 1,
+      rateLimitPauseMs: 100,
+    }).run(abort.signal);
+
+    const gaps = starts.slice(1).map((at, i) => at - starts[i]);
+
+    // 100 after the first block, 200 after the second, none after a success.
+    expect(gaps[0]).toBeGreaterThanOrEqual(90);
+    expect(gaps[1]).toBeGreaterThanOrEqual(190);
+    expect(gaps[2]).toBeLessThan(90);
   });
 });

@@ -42,9 +42,13 @@ const reasonOf = (output: string): string => {
   return (error ?? lines.pop() ?? 'yt-dlp failed').slice(0, 500);
 };
 
-/** YouTube telling an automated client to back off. */
+/**
+ * YouTube refusing this fetcher's address rather than one video: a 403 on
+ * the media download, or being told to back off.
+ */
 const RATE_LIMITED = [
-  /HTTP Error 4(29|30)\b/i,
+  /HTTP Error 4(03|29|30)\b/i,
+  /\b403:? Forbidden\b/i,
   /too many requests/i,
   /sign in to confirm you.?re not a bot/i,
   /rate.?limit/i,

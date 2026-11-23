@@ -28,6 +28,7 @@ import {
   type MediaProgressRequest,
   type MediaSkipRequest,
   type MediaUploadSlot,
+  type MediaVideoStatus,
 } from '@vault/common/media';
 import type { DataSource, EntityManager, Repository } from 'typeorm';
 
@@ -446,6 +447,11 @@ export class MediaJobsService {
     const job = await this.leased(fetcher, jobId);
     const reason = String(request?.reason ?? '').slice(0, 2000) || 'unknown';
 
+    if (request?.blocked) {
+      await this.requeue(job, reason);
+      return;
+    }
+
     if (request?.retryable) {
       await this.retryLater(job, reason);
       return;
@@ -518,12 +524,40 @@ export class MediaJobsService {
   private async retryLater(job: MediaJob, reason: string): Promise<void> {
     const failures = job.attempts + 1;
 
+    await this.release(job, reason, {
+      attempts: failures,
+      nextAttemptAt: new Date(Date.now() + retryDelayMs(failures)),
+      videoStatus: MEDIA_VIDEO_STATUSES.FAILED,
+    });
+  }
+
+  /**
+   * Back to the queue, due at once and with no failure counted: the fetcher
+   * was refused, not the video, and it stays away from YouTube on its own.
+   */
+  private async requeue(job: MediaJob, reason: string): Promise<void> {
+    await this.release(job, reason, {
+      attempts: job.attempts,
+      nextAttemptAt: new Date(),
+      videoStatus: MEDIA_VIDEO_STATUSES.QUEUED,
+    });
+  }
+
+  private async release(
+    job: MediaJob,
+    reason: string,
+    next: {
+      attempts: number;
+      nextAttemptAt: Date;
+      videoStatus: MediaVideoStatus;
+    },
+  ): Promise<void> {
     await this.discard(this.uploadsOf(job));
 
     await this.jobs.update(job.id, {
       status: MEDIA_JOB_STATUSES.QUEUED,
-      attempts: failures,
-      nextAttemptAt: new Date(Date.now() + retryDelayMs(failures)),
+      attempts: next.attempts,
+      nextAttemptAt: next.nextAttemptAt,
       lastError: reason,
       leaseOwner: null,
       leaseUntil: null,
@@ -532,9 +566,7 @@ export class MediaJobsService {
     });
 
     if (job.mediaId && job.kind === MEDIA_JOB_KINDS.DOWNLOAD) {
-      await this.media.update(job.mediaId, {
-        videoStatus: MEDIA_VIDEO_STATUSES.FAILED,
-      });
+      await this.media.update(job.mediaId, { videoStatus: next.videoStatus });
     }
   }
 

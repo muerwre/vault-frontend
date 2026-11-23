@@ -75,6 +75,12 @@ export interface MediaFailRequest {
   reason: string;
   /** False for failures that cannot change, such as a removed video. */
   retryable: boolean;
+  /**
+   * YouTube refused the fetcher rather than the video (a ban or rate limit on
+   * its address). The job goes back to the queue as it was, without counting
+   * a failure against it.
+   */
+  blocked?: boolean;
 }
 
 /** `POST /jobs/:id/skip` */

@@ -30,6 +30,7 @@ describe('classifyFailure', () => {
   it.each([
     'ERROR: [youtube] x: Unable to download API page: HTTP Error 429: Too Many Requests',
     'ERROR: unable to download video data: HTTP Error 430',
+    'ERROR: unable to download video data: HTTP Error 403: Forbidden',
     "ERROR: [youtube] x: Sign in to confirm you're not a bot",
   ])('notices YouTube asking to slow down in %p', (output) => {
     expect(classifyFailure(output)).toMatchObject({

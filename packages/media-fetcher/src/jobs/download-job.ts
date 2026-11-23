@@ -100,6 +100,7 @@ export const runDownloadJob = async (
       api.fail(job.id, {
         reason: verdict.reason,
         retryable: willRetry,
+        blocked: willRetry && verdict.rateLimited,
       }),
     );
 

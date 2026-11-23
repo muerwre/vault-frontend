@@ -402,6 +402,33 @@ describe('media jobs API (integration)', () => {
       ]);
     });
 
+    it('requeues a job the fetcher was blocked on without counting it', async () => {
+      const { jobId, mediaId } = await queueDownload(vid(0));
+
+      await claim().expect(200);
+      await report(jobId, 'fail', {
+        reason: 'HTTP Error 403: Forbidden',
+        retryable: true,
+        blocked: true,
+      }).expect(204);
+
+      expect(await job(jobId)).toMatchObject({
+        status: 'queued',
+        attempts: 0,
+        last_error: 'HTTP Error 403: Forbidden',
+        lease_owner: null,
+      });
+      expect((await media(mediaId)).video_status).toBe('queued');
+      expect(await waitOf(jobId)).toBeLessThanOrEqual(0);
+
+      // Due straight away, still on its first try.
+      expect((await claim().expect(200)).body.attempt).toBe(1);
+
+      await db.query(`UPDATE media_job SET status = 'cancelled' WHERE id = ?`, [
+        jobId,
+      ]);
+    });
+
     it('gives up on failures that cannot change', async () => {
       const { jobId, mediaId } = await queueDownload(vid(3));
 

@@ -22,6 +22,13 @@ const describeWait = (ms: number): string =>
 /** Wait after the backend could not be reached. */
 const BACKEND_RETRY_MS = 30_000;
 
+/** The pause after a block doubles each time in a row, up to this multiple. */
+const MAX_PAUSE_FACTOR = 8;
+
+/** Pause after the `streak`-th block in a row: base, then twice, four times… */
+export const blockPauseMs = (baseMs: number, streak: number): number =>
+  baseMs * Math.min(2 ** Math.max(streak - 1, 0), MAX_PAUSE_FACTOR);
+
 /**
  * Claims jobs of its kinds one at a time and runs them, until `signal` aborts.
  * A job interrupted by shutdown is reported as a retryable failure, so another
@@ -37,7 +44,7 @@ export class Worker {
       limiter: IntervalLimiter;
       updater: YtDlpUpdater;
       idlePollMs: number;
-      /** Pause after YouTube asked to slow down. */
+      /** Pause after YouTube first refused the fetcher; grows if it keeps doing so. */
       rateLimitPauseMs: number;
     },
   ) {}
@@ -47,6 +54,8 @@ export class Worker {
 
     /** So an empty queue is mentioned once, not on every poll. */
     let idle = false;
+    /** Jobs in a row YouTube refused; the next success clears it. */
+    let blocks = 0;
 
     while (!signal.aborted) {
       await this.deps.updater.maybeUpdate();
@@ -81,13 +90,25 @@ export class Worker {
       const outcome = await this.runJob(job, signal);
       this.deps.limiter.done();
 
-      if (outcome?.rateLimited && this.deps.rateLimitPauseMs > 0) {
+      if (!outcome) {
+        continue;
+      }
+
+      if (!outcome.rateLimited) {
+        blocks = 0;
+        continue;
+      }
+
+      blocks += 1;
+      const pauseMs = blockPauseMs(this.deps.rateLimitPauseMs, blocks);
+
+      if (pauseMs > 0) {
         log.info(
-          `${this.name}: YouTube asked to slow down, pausing ${Math.round(
-            this.deps.rateLimitPauseMs / 60_000,
+          `${this.name}: YouTube is refusing us (${blocks} in a row), pausing ${Math.round(
+            pauseMs / 60_000,
           )} min`,
         );
-        await sleep(this.deps.rateLimitPauseMs, signal);
+        await sleep(pauseMs, signal);
       }
     }
 
