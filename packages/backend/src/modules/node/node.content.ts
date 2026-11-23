@@ -461,5 +461,10 @@ export const resolveSettings = (
     settings.layout = NODE_LAYOUTS.AURA;
   }
 
+  // set from the profile grid, never by the editor, so a save keeps it
+  if (current?.profile_flow) {
+    settings.profile_flow = current.profile_flow;
+  }
+
   return Object.keys(settings).length > 0 ? settings : null;
 };

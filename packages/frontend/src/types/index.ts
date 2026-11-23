@@ -122,6 +122,8 @@ export interface INode {
   is_promoted?: NodePlacement;
   /** Set by the author: leads their profile, wherever the node is listed. */
   is_pinned?: boolean;
+  /** Profile grid only: `flow` is the profile's own, not the flow's. */
+  has_profile_flow?: boolean;
   is_public?: boolean;
   like_count?: number;
 
@@ -148,6 +150,7 @@ export type IFlowNode = Pick<
   | 'created_at'
   | 'songs'
   | 'is_pinned'
+  | 'has_profile_flow'
 >;
 
 export interface NodeBackLink {

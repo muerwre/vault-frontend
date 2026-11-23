@@ -173,6 +173,33 @@ export const toWireShallowNode = (node: Node): WireShallowNode => ({
   is_pinned: Boolean(node.isPinned),
 });
 
+/**
+ * How the node's cell looks on its author's profile: the profile's own
+ * display, or the flow's when it has none. The colour is always the flow's.
+ */
+export const toWireProfileFlow = (
+  node: Pick<Node, 'flow' | 'settings'>,
+): INodeFlow => {
+  const flow = toWireFlow(node.flow);
+  const own = node.settings?.profile_flow;
+
+  return own
+    ? { ...flow, display: own.display, show_description: own.show_description }
+    : flow;
+};
+
+/** A node as the profile grid lists it. */
+export interface WireProfileNode extends WireShallowNode {
+  /** `flow` is the profile's own rather than the flow's. */
+  has_profile_flow: boolean;
+}
+
+export const toWireProfileNode = (node: Node): WireProfileNode => ({
+  ...toWireShallowNode(node),
+  flow: toWireProfileFlow(node),
+  has_profile_flow: !!node.settings?.profile_flow,
+});
+
 /** File. `orig_name`, `full_path`, `target` and the owner are never exposed. */
 export interface WireFile {
   id: number;

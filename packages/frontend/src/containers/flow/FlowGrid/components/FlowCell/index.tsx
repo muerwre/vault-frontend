@@ -34,6 +34,8 @@ interface Props {
   flow: FlowDisplay;
   canEdit?: boolean;
   onChange: (id: INode['id'], flow: FlowDisplay) => void;
+  /** Shown in the menu when the cell has its own look to drop. */
+  onReset?: () => void;
 }
 
 /** Post types shown by `FlowCellPost`. */
@@ -51,6 +53,7 @@ const FlowCell: FC<Props> = ({
   title,
   canEdit = false,
   onChange,
+  onReset,
 }) => {
   const { isTablet } = useWindowSize();
 
@@ -138,6 +141,14 @@ const FlowCell: FC<Props> = ({
             setViewSingle={setViewSingle}
             setViewVertical={setViewVertical}
             toggleViewDescription={toggleViewDescription}
+            onReset={
+              onReset
+                ? () => {
+                    deactivate();
+                    onReset();
+                  }
+                : undefined
+            }
           />
         </div>
       )}

@@ -56,6 +56,8 @@ export const API = {
     HEROIC: (id: INode['id']) => `/nodes/${id}/heroic`,
     PIN: (id: INode['id']) => `/nodes/${id}/pin`,
     SET_CELL_VIEW: (id: INode['id']) => `/nodes/${id}/cell-view`,
+    SET_PROFILE_CELL_VIEW: (id: INode['id']) =>
+      `/nodes/${id}/profile-cell-view`,
     RELATED: (id: INode['id']) => `/nodes/${id}/related`,
 
     UPDATE_TAGS: (id: INode['id']) => `/nodes/${id}/tags`,

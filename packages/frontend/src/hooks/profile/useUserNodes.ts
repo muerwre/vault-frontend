@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react';
 import useSWRInfinite from 'swr/infinite';
 
 import { apiGetUserNodes } from '~/api/auth';
-import { postCellView } from '~/api/flow';
+import { postProfileCellView } from '~/api/flow';
 import { API } from '~/constants/api';
 import { useAuth } from '~/hooks/auth/useAuth';
 import { FlowDisplay, IFlowNode, INode } from '~/types';
@@ -69,25 +69,58 @@ export const useUserNodes = (username?: string) => {
     setSize(size + 1);
   }, [hasMore, isLoading, setSize, size]);
 
-  const onChangeCellView = useCallback(
-    async (id: INode['id'], flow: FlowDisplay) => {
-      await mutate(
+  const patchNode = useCallback(
+    (id: INode['id'], patch: Partial<IFlowNode>) =>
+      mutate(
         (pages) =>
           pages?.map((page) =>
-            page.map((node) => (node.id === id ? { ...node, flow } : node)),
+            page.map((node) => (node.id === id ? { ...node, ...patch } : node)),
           ),
         false,
-      );
+      ),
+    [mutate],
+  );
+
+  /** Changes the cell on the profile only; the flow keeps its own. */
+  const onChangeCellView = useCallback(
+    async (id: INode['id'], flow: FlowDisplay) => {
+      await patchNode(id, { flow, has_profile_flow: true });
 
       try {
-        await postCellView({ id, flow });
+        await postProfileCellView({
+          id,
+          flow: {
+            display: flow.display,
+            show_description: flow.show_description,
+          },
+        });
       } catch (error) {
         showErrorToast(error);
         await mutate();
       }
     },
-    [mutate],
+    [mutate, patchNode],
   );
 
-  return { nodes, hasMore, isLoading, loadMore, onChangeCellView };
+  /** Drops the profile's own cell, so it looks as it does in the flow. */
+  const onResetCellView = useCallback(
+    async (id: INode['id']) => {
+      try {
+        const result = await postProfileCellView({ id, flow: null });
+        await patchNode(id, result);
+      } catch (error) {
+        showErrorToast(error);
+      }
+    },
+    [patchNode],
+  );
+
+  return {
+    nodes,
+    hasMore,
+    isLoading,
+    loadMore,
+    onChangeCellView,
+    onResetCellView,
+  };
 };

@@ -9,7 +9,7 @@ import {
 import { ERROR_CODES, GUEST_USER_ID } from '@vault/common/constants';
 
 import { VaultException } from '../../globals/exceptions';
-import type { WireProfile, WireShallowNode } from '../../wire/serialize';
+import type { WireProfile, WireProfileNode } from '../../wire/serialize';
 import { OptionalAuthGuard, Uid } from '../auth/auth.guards';
 
 import { UserService } from './user.service';
@@ -44,7 +44,7 @@ export class UserController {
     @Uid() uid: number,
     @Query('after') after?: string,
     @Query('limit') limit?: string,
-  ): Promise<{ nodes: WireShallowNode[] }> {
+  ): Promise<{ nodes: WireProfileNode[] }> {
     const user = username ? await this.users.findByUsername(username) : null;
 
     if (!user) {

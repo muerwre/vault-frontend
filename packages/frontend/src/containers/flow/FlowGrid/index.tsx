@@ -17,10 +17,12 @@ interface Props {
   nodes: IFlowNode[];
   user: Partial<IUser>;
   onChangeCellView: (id: INode['id'], flow: FlowDisplay) => void;
+  /** Where cells can have their own look, as on a profile: drops it. */
+  onResetCellView?: (id: INode['id']) => void;
 }
 
 export const FlowGrid: FC<Props> = observer(
-  ({ user, nodes, onChangeCellView }) => {
+  ({ user, nodes, onChangeCellView, onResetCellView }) => {
     const { fetched, isUser } = useAuth();
 
     if (!nodes) {
@@ -49,6 +51,11 @@ export const FlowGrid: FC<Props> = observer(
               title={node.title}
               canEdit={fetched && isUser && canEditNode(node, user)}
               onChange={onChangeCellView}
+              onReset={
+                node.has_profile_flow && onResetCellView
+                  ? () => onResetCellView(node.id)
+                  : undefined
+              }
             />
           </div>
         ))}

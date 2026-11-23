@@ -10,6 +10,7 @@ import {
   toWireFlow,
   toWireLinks,
   toWirePlacement,
+  toWireProfileFlow,
   toWireShallowFile,
   toWireShallowUser,
   toWireString,
@@ -297,6 +298,33 @@ describe('wire serialisation', () => {
       expect(toWirePlacement(0)).toEqual({ is_promoted: 0 });
       expect(toWirePlacement(1)).toEqual({ is_promoted: 1 });
       expect(toWirePlacement(2)).toEqual({ is_promoted: 2 });
+    });
+  });
+
+  describe('toWireProfileFlow', () => {
+    const flow = {
+      display: 'single' as const,
+      show_description: false,
+      dominant_color: '#123456',
+    };
+
+    it("falls back to the flow's cell", () => {
+      expect(toWireProfileFlow({ flow, settings: null })).toEqual(flow);
+    });
+
+    it('uses the profile cell, keeping the flow colour', () => {
+      expect(
+        toWireProfileFlow({
+          flow,
+          settings: {
+            profile_flow: { display: 'quadro', show_description: true },
+          },
+        }),
+      ).toEqual({
+        display: 'quadro',
+        show_description: true,
+        dominant_color: '#123456',
+      });
     });
   });
 });

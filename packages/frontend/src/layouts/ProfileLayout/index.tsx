@@ -38,6 +38,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
     loadMore,
     isLoading: isLoadingNodes,
     onChangeCellView,
+    onResetCellView,
   } = useUserNodes(username);
 
   const canEdit = !!user.id && user.id === profile.id;
@@ -90,6 +91,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
           nodes={nodes}
           user={user}
           onChangeCellView={onChangeCellView}
+          onResetCellView={onResetCellView}
         />
       </div>
     </Container>

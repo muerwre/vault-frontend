@@ -9,7 +9,11 @@ import {
   ROLES,
   type NodePlacement,
 } from '@vault/common/constants';
-import type { INodeFlow } from '@vault/common/types';
+import type {
+  INodeFlow,
+  INodeProfileFlow,
+  INodeSettings,
+} from '@vault/common/types';
 import { Repository, type SelectQueryBuilder } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
@@ -24,6 +28,7 @@ import {
   toWireNode,
   toWireFlowSongs,
   toWirePlacement,
+  toWireProfileFlow,
   toWireShallowNode,
   toWireThumbnail,
   type WireNode,
@@ -649,6 +654,34 @@ export class NodeService {
     await this.nodes.update(node.id, { flow: stored });
 
     return toWireFlow(stored);
+  }
+
+  /**
+   * Sets the node's cell on its author's profile, or with `null` goes back to
+   * the flow's. Returns the cell as the profile will now show it.
+   */
+  async setProfileFlow(
+    node: Node,
+    flow: INodeProfileFlow | null,
+  ): Promise<{ flow: INodeFlow; has_profile_flow: boolean }> {
+    const { profile_flow: _previous, ...rest } = node.settings ?? {};
+    const settings: INodeSettings = flow
+      ? {
+          ...rest,
+          profile_flow: {
+            display: flow.display,
+            show_description: Boolean(flow.show_description),
+          },
+        }
+      : rest;
+    const stored = Object.keys(settings).length > 0 ? settings : null;
+
+    await this.nodes.update(node.id, { settings: stored });
+
+    return {
+      flow: toWireProfileFlow({ flow: node.flow, settings: stored }),
+      has_profile_flow: !!flow,
+    };
   }
 
   /**

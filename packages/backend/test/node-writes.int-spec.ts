@@ -324,6 +324,116 @@ describe('node writes (integration)', () => {
     });
   });
 
+  describe('POST /nodes/:id/profile-cell-view', () => {
+    const flowCell = {
+      display: 'single',
+      show_description: false,
+      dominant_color: '#123456',
+    };
+
+    const profileNodes = async () => {
+      const [author] = await db.query(
+        'SELECT username FROM user WHERE id = ?',
+        [authorId],
+      );
+      const { body } = await http()
+        .get(`/api/users/${author.username}/nodes`)
+        .set(authHeader(authorId))
+        .expect(200);
+
+      return body.nodes as Array<{
+        id: number;
+        flow: typeof flowCell;
+        has_profile_flow: boolean;
+      }>;
+    };
+
+    it("gives the profile its own cell, leaving the flow's alone", async () => {
+      const nodeId = await makeNode();
+
+      await http()
+        .post(`/api/nodes/${nodeId}/cell-view`)
+        .set(authHeader(authorId))
+        .send({ flow: flowCell })
+        .expect(200);
+
+      const { body } = await http()
+        .post(`/api/nodes/${nodeId}/profile-cell-view`)
+        .set(authHeader(authorId))
+        .send({ flow: { display: 'quadro', show_description: true } })
+        .expect(200);
+
+      const own = {
+        display: 'quadro',
+        show_description: true,
+        dominant_color: '#123456',
+      };
+      expect(body).toEqual({ flow: own, has_profile_flow: true });
+
+      const read = await http().get(`/api/nodes/${nodeId}`).expect(200);
+      expect(read.body.node.flow).toEqual(flowCell);
+
+      const listed = (await profileNodes()).find((node) => node.id === nodeId);
+      expect(listed).toMatchObject({ flow: own, has_profile_flow: true });
+    });
+
+    it("falls back to the flow's cell once reset", async () => {
+      const nodeId = await makeNode();
+
+      await http()
+        .post(`/api/nodes/${nodeId}/cell-view`)
+        .set(authHeader(authorId))
+        .send({ flow: flowCell })
+        .expect(200);
+      await http()
+        .post(`/api/nodes/${nodeId}/profile-cell-view`)
+        .set(authHeader(authorId))
+        .send({ flow: { display: 'vertical', show_description: false } })
+        .expect(200);
+
+      const { body } = await http()
+        .post(`/api/nodes/${nodeId}/profile-cell-view`)
+        .set(authHeader(authorId))
+        .send({ flow: null })
+        .expect(200);
+
+      expect(body).toEqual({ flow: flowCell, has_profile_flow: false });
+
+      const [row] = await db.query('SELECT settings FROM node WHERE id = ?', [
+        nodeId,
+      ]);
+      expect(row.settings).toBeNull();
+
+      const listed = (await profileNodes()).find((node) => node.id === nodeId);
+      expect(listed).toMatchObject({ flow: flowCell, has_profile_flow: false });
+    });
+
+    it('rejects an unknown display', async () => {
+      const nodeId = await makeNode();
+
+      await http()
+        .post(`/api/nodes/${nodeId}/profile-cell-view`)
+        .set(authHeader(authorId))
+        .send({ flow: { display: 'huge', show_description: false } })
+        .expect(400);
+      await http()
+        .post(`/api/nodes/${nodeId}/profile-cell-view`)
+        .set(authHeader(authorId))
+        .send({})
+        .expect(400);
+    });
+
+    it('404s for anyone but the author or an admin', async () => {
+      const nodeId = await makeNode();
+
+      await http()
+        .post(`/api/nodes/${nodeId}/profile-cell-view`)
+        .set(authHeader(strangerId))
+        .send({ flow: { display: 'quadro', show_description: false } })
+        .expect(404);
+    });
+  });
+
   describe('POST /nodes/:id/cell-view', () => {
     it('persists the flow settings for the author', async () => {
       const nodeId = await makeNode();

@@ -7,9 +7,9 @@ import { UserProfile } from '../../entities/user-profile.entity';
 import { User } from '../../entities/user.entity';
 import {
   toWireProfile,
-  toWireShallowNode,
+  toWireProfileNode,
   type WireProfile,
-  type WireShallowNode,
+  type WireProfileNode,
 } from '../../wire/serialize';
 import { applyVisibleToViewer } from '../node/node.predicates';
 
@@ -65,7 +65,7 @@ export class UserService {
     isUser: boolean,
     after: Date | null,
     limit?: number,
-  ): Promise<WireShallowNode[]> {
+  ): Promise<WireProfileNode[]> {
     const take =
       limit && Number.isInteger(limit) && limit > 0 && limit <= USER_NODES_LIMIT
         ? limit
@@ -98,6 +98,6 @@ export class UserService {
       rest.limit(take).getMany(),
     ]);
 
-    return [...pinned, ...rows].map(toWireShallowNode);
+    return [...pinned, ...rows].map(toWireProfileNode);
   }
 }

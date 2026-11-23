@@ -50,6 +50,21 @@
   }
 }
 
+.reset {
+  margin-top: $gap;
+  padding: 0 4px;
+  font: $font_12_semibold;
+  text-transform: uppercase;
+  text-align: right;
+  color: white;
+  opacity: 0.7;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 .close {
   position: absolute;
   top: 0;
