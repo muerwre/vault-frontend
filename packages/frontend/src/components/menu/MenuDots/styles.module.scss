@@ -37,3 +37,26 @@
     }
   }
 }
+
+/* With an extra icon before the dots, they sit side by side instead of centred. */
+.wide {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: auto;
+  padding: 0 0 0 6px;
+
+  svg {
+    position: static;
+    transform: none;
+  }
+}
+
+.extra {
+  display: flex;
+  margin-right: -2px;
+
+  svg {
+    opacity: 1;
+  }
+}

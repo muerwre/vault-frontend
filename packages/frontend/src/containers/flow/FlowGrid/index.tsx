@@ -19,10 +19,12 @@ interface Props {
   onChangeCellView: (id: INode['id'], flow: FlowDisplay) => void;
   /** Where cells can have their own look, as on a profile: drops it. */
   onResetCellView?: (id: INode['id']) => void;
+  /** Marks pinned nodes; only the author's profile orders by the pin. */
+  showPins?: boolean;
 }
 
 export const FlowGrid: FC<Props> = observer(
-  ({ user, nodes, onChangeCellView, onResetCellView }) => {
+  ({ user, nodes, onChangeCellView, onResetCellView, showPins = false }) => {
     const { fetched, isUser } = useAuth();
 
     if (!nodes) {
@@ -51,6 +53,7 @@ export const FlowGrid: FC<Props> = observer(
               title={node.title}
               canEdit={fetched && isUser && canEditNode(node, user)}
               onChange={onChangeCellView}
+              isPinned={showPins && !!node.is_pinned}
               onReset={
                 node.has_profile_flow && onResetCellView
                   ? () => onResetCellView(node.id)

@@ -92,6 +92,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
           user={user}
           onChangeCellView={onChangeCellView}
           onResetCellView={onResetCellView}
+          showPins
         />
       </div>
     </Container>
