@@ -1,11 +1,17 @@
-import { FC, FormEvent, useCallback, useState } from 'react';
+import { FC, FormEvent, ReactNode, useCallback, useState } from 'react';
 
 import classNames from 'classnames';
+import { PencilIcon } from 'lucide-react';
 
 import { Card } from '~/components/common/Card';
 import { Filler } from '~/components/common/Filler';
-import { Icon } from '~/components/common/Icon';
 import { Markdown } from '~/components/common/Markdown';
+import {
+  CellDoubleHIcon,
+  CellDoubleVIcon,
+  CellQuadroIcon,
+  CellSingleIcon,
+} from '~/components/icons';
 import { Button } from '~/components/input/Button';
 import { useSaveProfile } from '~/hooks/profile/useSaveProfile';
 import { FlowDisplayVariant } from '~/types';
@@ -18,13 +24,29 @@ export const DEFAULT_ABOUT_DISPLAY: FlowDisplayVariant = 'horizontal';
 
 const SIZES: Array<{
   display: FlowDisplayVariant;
-  icon: string;
+  icon: ReactNode;
   title: string;
 }> = [
-  { display: 'single', icon: 'cell-single', title: 'Маленький' },
-  { display: 'horizontal', icon: 'cell-double-h', title: 'Широкий' },
-  { display: 'vertical', icon: 'cell-double-v', title: 'Высокий' },
-  { display: 'quadro', icon: 'cell-quadro', title: 'Большой' },
+  {
+    display: 'single',
+    icon: <CellSingleIcon size={24} />,
+    title: 'Маленький',
+  },
+  {
+    display: 'horizontal',
+    icon: <CellDoubleHIcon size={24} />,
+    title: 'Широкий',
+  },
+  {
+    display: 'vertical',
+    icon: <CellDoubleVIcon size={24} />,
+    title: 'Высокий',
+  },
+  {
+    display: 'quadro',
+    icon: <CellQuadroIcon size={24} />,
+    title: 'Большой',
+  },
 ];
 
 interface Props {
@@ -128,7 +150,7 @@ const ProfileAboutCard: FC<Props> = ({
                     })}
                     onClick={() => setPendingDisplay(size.display)}
                   >
-                    <Icon icon={size.icon} size={24} />
+                    {size.icon}
                   </button>
                 ))}
               </div>
@@ -157,7 +179,7 @@ const ProfileAboutCard: FC<Props> = ({
                 onClick={startEditing}
                 title="Изменить"
               >
-                <Icon icon="edit" size={20} />
+                <PencilIcon size={20} />
               </button>
             )}
 

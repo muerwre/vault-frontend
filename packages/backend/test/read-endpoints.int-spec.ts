@@ -352,6 +352,7 @@ describe('read endpoints (integration)', () => {
         'fullname',
         'id',
         'links',
+        'nodes_view',
         'photo',
         'role',
         'username',
@@ -543,6 +544,35 @@ describe('read endpoints (integration)', () => {
           is_pinned: true,
           is_promoted: 0,
         });
+      });
+
+      it('lists lab-card items in the same order with full=true', async () => {
+        const auth = await member();
+        const flow = await http()
+          .get('/api/users/muro/nodes')
+          .set(auth)
+          .query({ limit: 3 })
+          .expect(200);
+        const lab = await http()
+          .get('/api/users/muro/nodes')
+          .set(auth)
+          .query({ limit: 3, full: 'true' })
+          .expect(200);
+
+        expect(
+          lab.body.nodes.map((item: { node: { id: number } }) => item.node.id),
+        ).toEqual(ids(flow.body));
+        expect(Object.keys(lab.body.nodes[0]).sort()).toEqual([
+          'comment_count',
+          'last_seen',
+          'node',
+        ]);
+        expect(lab.body.nodes[0].node).toHaveProperty('blocks');
+        // the profile's cell look, as in the flow-cell listing
+        expect(lab.body.nodes[0].node.flow).toEqual(flow.body.nodes[0].flow);
+        expect(lab.body.nodes[0].node.has_profile_flow).toBe(
+          flow.body.nodes[0].has_profile_flow,
+        );
       });
 
       it('leaves pinned nodes out of later pages', async () => {

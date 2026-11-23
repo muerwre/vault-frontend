@@ -1,3 +1,4 @@
+import type { IUserProfileSettings } from '@vault/common/types';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 
 import { jsonTransformer } from './columns';
@@ -42,13 +43,13 @@ export class UserProfile {
   })
   aboutDisplay: string | null;
 
-  /** External links, as a JSON array of URLs. */
+  /** Links and page preferences, as JSON. Read leniently; see the wire layer. */
   @Column({
     type: 'text',
     nullable: true,
-    transformer: jsonTransformer<string[]>(null),
+    transformer: jsonTransformer<IUserProfileSettings>(null),
   })
-  links: string[] | null;
+  settings: IUserProfileSettings | null;
 
   @Column(CREATED_AT)
   createdAt: Date;

@@ -1,5 +1,6 @@
-import { IFile, IFlowNode, INotification } from '~/types';
+import { IFile, INotification } from '~/types';
 import { ISocialAccount, IUser } from '~/types/auth';
+import { ILabNode } from '~/types/lab';
 
 export type ApiUserLoginRequest = Record<'username' | 'password', string>;
 export type ApiUserLoginResult = { token: string; user: IUser };
@@ -23,7 +24,8 @@ export type ApiGetUserNodesRequest = {
   after?: string;
   limit?: number;
 };
-export type ApiGetUserNodesResult = { nodes: IFlowNode[] };
+/** Lab-card items; each node's `flow` is its look on the profile. */
+export type ApiGetUserNodesResult = { nodes: ILabNode[] };
 export type ApiAuthGetUpdatesRequest = {
   exclude_dialogs: number;
   last: string;

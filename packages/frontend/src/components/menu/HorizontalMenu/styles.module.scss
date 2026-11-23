@@ -59,6 +59,10 @@
     &.lab {
       background: $lab_gradient;
     }
+
+    &.neutral {
+      background: $content_bg_lightest;
+    }
   }
 
   &.stretchy {

@@ -23,9 +23,17 @@ interface Props {
   lastSeen: string | null | undefined;
   isLoading?: boolean;
   commentCount: number;
+  /** Marks a pinned node in the footer; for the author's profile. */
+  showPin?: boolean;
 }
 
-const LabNode: FC<Props> = ({ node, isLoading, lastSeen, commentCount }) => {
+const LabNode: FC<Props> = ({
+  node,
+  isLoading,
+  lastSeen,
+  commentCount,
+  showPin = false,
+}) => {
   const blocks = useLabNodeBlocks(node, !!isLoading);
 
   const hasNewComments = useMemo(
@@ -72,6 +80,7 @@ const LabNode: FC<Props> = ({ node, isLoading, lastSeen, commentCount }) => {
           isLoading={isLoading}
           hasNewComments={hasNewComments}
           commentCount={commentCount}
+          isPinned={showPin && !!node.is_pinned}
         />
       </div>
     </div>

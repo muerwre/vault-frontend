@@ -10,7 +10,7 @@ import {
   REGISTRATION_STATUSES,
   ROLES,
 } from '@vault/common/constants';
-import type { ITokenClaims } from '@vault/common/types';
+import type { ITokenClaims, IUserProfileSettings } from '@vault/common/types';
 import { IsNull, Repository } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
@@ -190,22 +190,35 @@ export class AuthService {
     return toWireSelf(user, lastSeenBoris, profile);
   }
 
-  /** Writes the given profile page fields, creating the row on first save. */
+  /**
+   * Writes the given profile page fields, creating the row on first save.
+   * `settings` keys are merged over the stored ones, so saving one keeps the
+   * rest.
+   */
   async saveProfile(
     userId: number,
-    fields: Partial<Pick<UserProfile, 'about' | 'aboutDisplay' | 'links'>>,
+    fields: Partial<Pick<UserProfile, 'about' | 'aboutDisplay'>> & {
+      settings?: Partial<IUserProfileSettings>;
+    },
   ): Promise<void> {
-    if (Object.keys(fields).length === 0) {
+    const { settings, ...columns } = fields;
+    const hasSettings = !!settings && Object.keys(settings).length > 0;
+
+    if (Object.keys(columns).length === 0 && !hasSettings) {
       return;
     }
 
-    const existing = await this.profiles.findOneBy({ userId });
+    const profile =
+      (await this.profiles.findOneBy({ userId })) ??
+      this.profiles.create({ userId });
 
-    await this.profiles.save(
-      existing
-        ? Object.assign(existing, fields)
-        : this.profiles.create({ userId, ...fields }),
-    );
+    Object.assign(profile, columns);
+
+    if (hasSettings) {
+      profile.settings = { ...(profile.settings ?? {}), ...settings };
+    }
+
+    await this.profiles.save(profile);
   }
 
   /** Bumps `user.last_seen`. Failures are not worth failing the request over. */

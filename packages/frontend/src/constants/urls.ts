@@ -15,9 +15,11 @@ export const URLS = {
   NODE_URL: (id: INode['id'] | string) => `/post${id}`,
   /**
    * Served by `pages/profile/[username]` through a rewrite; the older `/~`
-   * and `/profile/` addresses redirect here.
+   * and `/profile/` addresses redirect here. Always lowercase: usernames
+   * match regardless of case, so one address per profile.
    */
-  PROFILE_PAGE: (username: string) => `/@${encodeURIComponent(username)}`,
+  PROFILE_PAGE: (username: string) =>
+    `/@${encodeURIComponent(username.toLocaleLowerCase())}`,
   SETTINGS: {
     BASE: '/settings',
     NOTES: '/settings/notes',

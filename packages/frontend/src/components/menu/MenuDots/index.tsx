@@ -16,7 +16,9 @@ interface Props extends ButtonProps {
 }
 
 const MenuDots: FC<Props> = ({ extraIcon, extraIconTooltip, ...rest }) => {
-  const extra = !!extraIcon && <span className={styles.extra}>{extraIcon}</span>;
+  const extra = !!extraIcon && (
+    <span className={styles.extra}>{extraIcon}</span>
+  );
 
   return (
     <button {...rest} className={classNames(styles.button, rest.className)}>

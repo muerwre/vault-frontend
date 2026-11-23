@@ -70,7 +70,9 @@ const NodeEditMenu: VFC<NodeEditMenuProps> = ({
 
         {canPin && (
           <MenuItemWithIcon
-            icon={<PinIcon size={20} fill={isPinned ? 'currentColor' : 'none'} />}
+            icon={
+              <PinIcon size={20} fill={isPinned ? 'currentColor' : 'none'} />
+            }
             onClick={onPin}
           >
             {isPinned ? PIN_HINTS.unpin : PIN_HINTS.pin}

@@ -1,0 +1,38 @@
+@import 'src/styles/variables';
+
+.wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: $gap;
+}
+
+.avatar {
+  width: 144px;
+  height: 144px;
+  border-radius: $radius;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font: $font_24_semibold;
+  color: white;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  margin-bottom: 4px;
+}
+
+.username {
+  font: $font_14_regular;
+  color: $gray_50;
+}
+
+.links {
+  margin-top: $gap;
+}

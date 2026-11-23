@@ -2,6 +2,7 @@ import { marked } from 'marked';
 
 import { URLS } from '~/constants/urls';
 import { stripHTMLTags } from '~/utils/stripHTMLTags';
+import { formatUsername } from '~/utils/user';
 
 /**
  * Cleans youtube urls
@@ -29,7 +30,7 @@ export const formatTextClickableUsernames = (text: string): string =>
     (_, before: string, username: string) =>
       `${before}<a class="username" href="${URLS.PROFILE_PAGE(
         username,
-      )}">@${username}</a>`,
+      )}">${formatUsername(username)}</a>`,
   );
 
 /**

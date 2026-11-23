@@ -2,13 +2,14 @@ import { memo, VFC } from 'react';
 
 import Tippy from '@tippyjs/react';
 import classNames from 'classnames';
+import { PinIcon } from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
 import { SeparatedMenu } from '~/components/menu/SeparatedMenu';
 import { NodeEditMenu } from '~/components/node/NodeEditMenu';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { ProfileLink } from '~/components/profile/ProfileLink';
 import { getPrettyDate } from '~/utils/dom';
+import { formatUsername } from '~/utils/user';
 
 import { NodeLikeButton } from '../NodeLikeButton';
 
@@ -82,7 +83,7 @@ const NodeTitle: VFC<Props> = memo(
                 ) : (
                   <>
                     <ProfileLink username={username}>
-                      @{username.toLocaleLowerCase()}
+                      {formatUsername(username)}
                     </ProfileLink>
                     {`, ${getPrettyDate(createdAt)}`}
                   </>
@@ -96,12 +97,12 @@ const NodeTitle: VFC<Props> = memo(
               <Tippy
                 content={
                   username
-                    ? `Закреплено наверху профиля @${username.toLocaleLowerCase()}`
+                    ? `Закреплено наверху профиля ${formatUsername(username)}`
                     : 'Закреплено наверху профиля автора'
                 }
               >
                 <span className={styles.pin}>
-                  <Icon icon="pin" size={24} />
+                  <PinIcon size={21} fill="currentColor" />
                 </span>
               </Tippy>
             )}

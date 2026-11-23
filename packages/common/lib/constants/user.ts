@@ -35,3 +35,12 @@ export const MAX_PROFILE_LINK_LENGTH = 255;
 
 /** Longest accepted profile about text. */
 export const MAX_PROFILE_ABOUT_LENGTH = 8192;
+
+/** How a profile lists its nodes: as flow cells or as lab cards. */
+export const PROFILE_NODES_VIEW = {
+  FLOW: 'flow',
+  LAB: 'lab',
+} as const;
+
+export type ProfileNodesView =
+  (typeof PROFILE_NODES_VIEW)[keyof typeof PROFILE_NODES_VIEW];

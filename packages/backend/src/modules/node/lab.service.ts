@@ -137,6 +137,15 @@ export class LabService {
     }
 
     const rows = await query.limit(limit).offset(offset).getMany();
+    return { count, nodes: await this.toItems(rows, uid) };
+  }
+
+  /**
+   * Lab cards for the given nodes, in their order: each full node with its
+   * files, likes and comment count, and when `uid` last opened it. `rows` need
+   * their user and photo joined.
+   */
+  async toItems(rows: Node[], uid: number): Promise<WireLabItem[]> {
     const ids = rows.map((node) => node.id);
 
     const [commentCounts, lastSeens, likeCounts, likedByMe, filesById] =
@@ -148,21 +157,18 @@ export class LabService {
         loadFilesById(this.files, rows),
       ]);
 
-    return {
-      count,
-      nodes: rows.map((node) => ({
-        node: toWireNode(
-          node,
-          capSongs(filesOf(node, filesById), MAX_LIST_SONGS),
-          {
-            likeCount: likeCounts.get(node.id) ?? 0,
-            isLiked: likedByMe.has(node.id),
-          },
-        ),
-        comment_count: commentCounts.get(node.id) ?? 0,
-        last_seen: toWireDateOrNull(lastSeens.get(node.id) ?? null),
-      })),
-    };
+    return rows.map((node) => ({
+      node: toWireNode(
+        node,
+        capSongs(filesOf(node, filesById), MAX_LIST_SONGS),
+        {
+          likeCount: likeCounts.get(node.id) ?? 0,
+          isLiked: likedByMe.has(node.id),
+        },
+      ),
+      comment_count: commentCounts.get(node.id) ?? 0,
+      last_seen: toWireDateOrNull(lastSeens.get(node.id) ?? null),
+    }));
   }
 
   /** Lab nodes commented on since the caller last opened them. */

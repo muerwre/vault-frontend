@@ -35,7 +35,11 @@ import {
 } from './auth.service';
 import { isSameEmail } from './email';
 import { PasswordService } from './password.service';
-import { parseAboutDisplay, parseProfileLinks } from './profile-fields';
+import {
+  parseAboutDisplay,
+  parseNodesView,
+  parseProfileLinks,
+} from './profile-fields';
 
 interface LoginBody {
   username?: string;
@@ -52,6 +56,7 @@ interface PatchBody {
   about?: unknown;
   about_display?: unknown;
   links?: unknown;
+  nodes_view?: unknown;
 }
 
 interface FileBody {
@@ -256,6 +261,15 @@ export class AuthController {
       errors.about_display = aboutDisplay.error;
     }
 
+    const nodesView =
+      data.nodes_view !== undefined
+        ? parseNodesView(data.nodes_view)
+        : undefined;
+
+    if (nodesView && 'error' in nodesView) {
+      errors.nodes_view = nodesView.error;
+    }
+
     if (
       data.about !== undefined &&
       (typeof data.about !== 'string' ||
@@ -296,7 +310,11 @@ export class AuthController {
         'value' in aboutDisplay && {
           aboutDisplay: aboutDisplay.value,
         }),
-      ...(links && 'value' in links && { links: links.value }),
+      settings: {
+        ...(links && 'value' in links && { links: links.value }),
+        ...(nodesView &&
+          'value' in nodesView && { nodes_view: nodesView.value }),
+      },
     });
 
     if (data.new_password !== undefined) {

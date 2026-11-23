@@ -6,13 +6,14 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ERROR_CODES, GUEST_USER_ID } from '@vault/common/constants';
+import { ERROR_CODES } from '@vault/common/constants';
 
 import { VaultException } from '../../globals/exceptions';
+import { parseQueryBool } from '../../globals/query';
 import type { WireProfile, WireProfileNode } from '../../wire/serialize';
 import { OptionalAuthGuard, Uid } from '../auth/auth.guards';
 
-import { UserService } from './user.service';
+import { UserService, type WireProfileItem } from './user.service';
 
 @Controller('users')
 export class UserController {
@@ -35,7 +36,8 @@ export class UserController {
   /**
    * A user's nodes. `after` is an ISO `created_at` cursor; omitting it returns
    * the newest page. An unparseable value is ignored rather than rejected, and
-   * so is a `limit` outside the accepted range.
+   * so is a `limit` outside the accepted range. `full=true` returns lab-card
+   * items, with whole nodes, instead of flow cells.
    */
   @Get(':username/nodes')
   @UseGuards(OptionalAuthGuard)
@@ -44,7 +46,8 @@ export class UserController {
     @Uid() uid: number,
     @Query('after') after?: string,
     @Query('limit') limit?: string,
-  ): Promise<{ nodes: WireProfileNode[] }> {
+    @Query('full') full?: string,
+  ): Promise<{ nodes: WireProfileNode[] | WireProfileItem[] }> {
     const user = username ? await this.users.findByUsername(username) : null;
 
     if (!user) {
@@ -56,9 +59,10 @@ export class UserController {
     return {
       nodes: await this.users.getUserNodes(
         user.id,
-        uid !== GUEST_USER_ID,
+        uid,
         cursor && !Number.isNaN(cursor.getTime()) ? cursor : null,
         limit ? Number(limit) : undefined,
+        parseQueryBool(full) === true,
       ),
     };
   }

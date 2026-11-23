@@ -225,7 +225,17 @@ describe('AuthController', () => {
 
       expect(auth.saveProfile).toHaveBeenCalledWith(1, {
         about: 'text',
-        links: ['https://a.com'],
+        settings: { links: ['https://a.com'] },
+      });
+    });
+
+    it('saves the nodes view into the profile settings', async () => {
+      const { controller, auth } = makeController();
+
+      await controller.patch(currentUser(), { nodes_view: 'lab' });
+
+      expect(auth.saveProfile).toHaveBeenCalledWith(1, {
+        settings: { nodes_view: 'lab' },
       });
     });
 
@@ -234,11 +244,13 @@ describe('AuthController', () => {
         await patchErrors({
           about_display: 'huge',
           links: ['nope'],
+          nodes_view: 'grid',
           about: 'x'.repeat(9000),
         }),
       ).toEqual({
         about_display: expect.any(String),
         links: expect.any(String),
+        nodes_view: expect.any(String),
         about: expect.any(String),
       });
     });

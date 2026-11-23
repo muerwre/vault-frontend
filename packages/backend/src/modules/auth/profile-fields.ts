@@ -2,6 +2,8 @@ import {
   MAX_PROFILE_LINK_LENGTH,
   MAX_PROFILE_LINKS,
   NODE_FLOW_DISPLAY,
+  PROFILE_NODES_VIEW,
+  type ProfileNodesView,
 } from '@vault/common/constants';
 
 type Parsed<T> = { value: T } | { error: string };
@@ -55,3 +57,11 @@ export const parseAboutDisplay = (input: unknown): Parsed<string> =>
   typeof input === 'string' && DISPLAY_VARIANTS.includes(input)
     ? { value: input }
     : { error: 'Неизвестный размер' };
+
+const NODES_VIEWS: readonly string[] = Object.values(PROFILE_NODES_VIEW);
+
+/** How visitors first see the profile's nodes. */
+export const parseNodesView = (input: unknown): Parsed<ProfileNodesView> =>
+  typeof input === 'string' && NODES_VIEWS.includes(input)
+    ? { value: input as ProfileNodesView }
+    : { error: 'Неизвестный вид' };

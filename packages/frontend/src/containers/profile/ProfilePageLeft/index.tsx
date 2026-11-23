@@ -6,6 +6,7 @@ import { Placeholder } from '~/components/placeholders/Placeholder';
 import { imagePresets } from '~/constants/urls';
 import { ProfileLinks } from '~/containers/profile/ProfileLinks';
 import { IUser } from '~/types/auth';
+import { formatUsername } from '~/utils/user';
 
 import styles from './styles.module.scss';
 
@@ -31,7 +32,7 @@ const ProfilePageLeft: FC<Props> = ({ username, profile, isLoading }) => (
         </div>
 
         <div className={styles.username}>
-          {isLoading ? <Placeholder /> : `@${profile.username}`}
+          {isLoading ? <Placeholder /> : formatUsername(profile.username)}
         </div>
       </div>
     </Card>

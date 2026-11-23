@@ -82,6 +82,7 @@ describe('auth (integration)', () => {
         'last_seen',
         'last_seen_boris',
         'links',
+        'nodes_view',
         'photo',
         'role',
         'username',
@@ -363,6 +364,7 @@ describe('auth (integration)', () => {
       expect(body.user.about).toBe('');
       expect(body.user.about_display).toBe('');
       expect(body.user.links).toEqual([]);
+      expect(body.user.nodes_view).toBe('flow');
     });
 
     it('saves about, its size and links into the profile', async () => {
@@ -397,6 +399,29 @@ describe('auth (integration)', () => {
 
       expect(body.user.about).toBe('# hello');
       expect(body.user.links).toHaveLength(2);
+    });
+
+    it('keeps links and the nodes view side by side in settings', async () => {
+      const { body } = await patch({ nodes_view: 'lab' }).expect(200);
+
+      expect(body.user.nodes_view).toBe('lab');
+      expect(body.user.links).toHaveLength(2);
+
+      const [row] = await db.query(
+        'SELECT settings FROM user_profile WHERE userId = ?',
+        [userId],
+      );
+      expect(JSON.parse(row.settings)).toEqual({
+        links: ['https://vk.com/id1', 'https://t.me/someone'],
+        nodes_view: 'lab',
+      });
+
+      const profile = await http().get(`/api/users/${username}`).expect(200);
+      expect(profile.body.user.nodes_view).toBe('lab');
+    });
+
+    it('rejects an unknown nodes view', async () => {
+      await patch({ nodes_view: 'grid' }).expect(400);
     });
 
     it('clears links with an empty list', async () => {

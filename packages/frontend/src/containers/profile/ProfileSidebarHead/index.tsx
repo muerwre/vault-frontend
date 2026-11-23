@@ -5,6 +5,7 @@ import { Group } from '~/components/common/Group';
 import { ProfileAvatar } from '~/components/profile/ProfileAvatar';
 import { ProfileLink } from '~/components/profile/ProfileLink';
 import { useUser } from '~/hooks/auth/useUser';
+import { formatUsername } from '~/utils/user';
 
 import styles from './styles.module.scss';
 
@@ -24,7 +25,7 @@ const ProfileSidebarHead: VFC<ProfileSidebarHeadProps> = () => {
           </ProfileLink>
         </div>
         <div className={styles.username}>
-          {!!user.fullname && `@${user.username}`}
+          {!!user.fullname && formatUsername(user.username)}
         </div>
       </Filler>
     </Group>

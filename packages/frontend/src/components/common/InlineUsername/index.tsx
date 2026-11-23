@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { useColorFromString } from '~/hooks/color/useColorFromString';
+import { formatUsername } from '~/utils/user';
 
 import styles from './styles.module.scss';
 
@@ -12,7 +13,7 @@ const InlineUsername: FC<InlineUsernameProps> = ({ children }) => {
   const backgroundColor = useColorFromString(children);
   return (
     <span style={{ backgroundColor }} className={styles.username}>
-      @{children}
+      {formatUsername(children)}
     </span>
   );
 };

@@ -1,3 +1,5 @@
+import type { ProfileNodesView } from '@vault/common/constants';
+
 import { Role } from '~/constants/auth';
 import { FlowDisplayVariant, IFile } from '~/types';
 
@@ -17,6 +19,8 @@ export interface IUser {
   about_display?: FlowDisplayVariant | '';
   /** External links shown on the profile page. */
   links?: string[];
+  /** How visitors first see the profile's nodes; the owner's choice. */
+  nodes_view?: ProfileNodesView;
 
   last_seen: string;
   last_seen_messages: string;

@@ -25,6 +25,7 @@ import { getPrettyDate } from '~/utils/dom';
 import { showErrorToast } from '~/utils/errors/showToast';
 import { showToastSuccess } from '~/utils/toast';
 import { isUserActive } from '~/utils/user';
+import { formatUsername } from '~/utils/user';
 
 import styles from './styles.module.scss';
 
@@ -67,12 +68,12 @@ const AdminUsers: FC = () => {
       event.stopPropagation();
 
       confirm(
-        `Удалить @${user.username}? Пользователь больше не сможет войти, его посты и комментарии останутся.`,
+        `Удалить ${formatUsername(user.username)}? Пользователь больше не сможет войти, его посты и комментарии останутся.`,
         async () => {
           try {
             await apiDeleteAdminUser(user.id);
             await mutate();
-            showToastSuccess(`@${user.username} удалён`);
+            showToastSuccess(`${formatUsername(user.username)} удалён`);
           } catch (error) {
             showErrorToast(error);
           }
@@ -132,7 +133,9 @@ const AdminUsers: FC = () => {
                       <span className={styles.badge}>админ</span>
                     )}
                   </div>
-                  <div className={styles.muted}>@{user.username}</div>
+                  <div className={styles.muted}>
+                    {formatUsername(user.username)}
+                  </div>
                   <div className={styles.muted}>{lastVisit(user)}</div>
                   {origins(user).map((origin) => (
                     <div key={origin} className={styles.origin}>

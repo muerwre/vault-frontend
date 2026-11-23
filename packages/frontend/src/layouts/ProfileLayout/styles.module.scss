@@ -12,6 +12,7 @@
   display: flex;
   flex-direction: row;
   gap: $gap;
+  grid-column: 2 / -1;
 }
 
 /* About card sizes, as in the flow grid. */
@@ -26,23 +27,59 @@
 }
 
 .left {
-  grid-row-start: 1;
-  grid-row-end: span 2;
-  grid-column-start: 1;
-  grid-column-end: span 1;
+  grid-row: 1 / span 2;
+  grid-column: 1 / span 1;
 }
 
 .grid {
-  @include flow_grid();
+  @include flow_grid;
 
   @include flow_breakpoint(4);
   @include flow_breakpoint(3);
 
   // Too narrow for anything but the full width.
   @include flow_breakpoint(2) {
+
     .left,
-    .about {
+    .about,
+    .controls {
       grid-column: 1 / -1;
     }
+
+    // the sidebar is full width here too, so it goes under the controls
+    &.with_controls .left {
+      grid-row: 2 / span 2;
+    }
   }
+}
+
+/* The owner's controls get a first row of their own, as tall as they are,
+   beside the top of the sidebar, which runs one row longer to match. */
+.with_controls {
+  grid-template-rows: auto;
+
+  .left {
+    grid-row: 1 / span 3;
+  }
+}
+
+/* Lab cards take the full width, the profile among them as their first card;
+   every row is as tall as what it holds. */
+.lab_grid {
+  grid-template-rows: none;
+  grid-auto-rows: auto;
+
+  .controls {
+    grid-column: 1 / -1;
+  }
+}
+
+.lab {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: -1 * $gap -1 * $gap 0;
+}
+
+.search {
+  padding-left: 60px;
 }

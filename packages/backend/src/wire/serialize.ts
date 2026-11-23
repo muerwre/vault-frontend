@@ -2,7 +2,9 @@ import {
   FILE_TYPES,
   MAX_LIST_SONGS,
   NODE_PLACEMENT,
+  PROFILE_NODES_VIEW,
   type NodePlacement,
+  type ProfileNodesView,
 } from '@vault/common/constants';
 import type { INodeBlock, INodeFlow, INodeSettings } from '@vault/common/types';
 
@@ -384,6 +386,14 @@ export const toWireLinks = (links: unknown): string[] =>
     ? links.filter((link): link is string => typeof link === 'string' && !!link)
     : [];
 
+const NODES_VIEWS: readonly string[] = Object.values(PROFILE_NODES_VIEW);
+
+/** How the profile lists nodes; anything unknown reads as the flow. */
+export const toWireNodesView = (view: unknown): ProfileNodesView =>
+  typeof view === 'string' && NODES_VIEWS.includes(view)
+    ? (view as ProfileNodesView)
+    : PROFILE_NODES_VIEW.FLOW;
+
 /**
  * Public profile. Narrower than the user embedded in nodes: it carries
  * `created_at` but no `last_seen`, and its files are the shallow shape.
@@ -398,6 +408,7 @@ export interface WireProfile {
   about: string;
   about_display: string;
   links: string[];
+  nodes_view: ProfileNodesView;
   cover: WireShallowFile | null;
   photo: WireShallowFile | null;
 }
@@ -406,7 +417,8 @@ export interface WireProfile {
 const toWireProfileExtras = (profile: UserProfile | null | undefined) => ({
   about: toWireString(profile?.about),
   about_display: toWireString(profile?.aboutDisplay),
-  links: toWireLinks(profile?.links),
+  links: toWireLinks(profile?.settings?.links),
+  nodes_view: toWireNodesView(profile?.settings?.nodes_view),
 });
 
 export const toWireProfile = (
@@ -439,6 +451,7 @@ export interface WireSelf {
   about: string;
   about_display: string;
   links: string[];
+  nodes_view: ProfileNodesView;
   last_seen: string;
   /** Derived from this user's view of the Boris node; there is no such column. */
   last_seen_boris: string;

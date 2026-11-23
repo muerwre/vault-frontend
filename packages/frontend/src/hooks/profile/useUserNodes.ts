@@ -6,11 +6,12 @@ import { apiGetUserNodes } from '~/api/auth';
 import { postProfileCellView } from '~/api/flow';
 import { API } from '~/constants/api';
 import { useAuth } from '~/hooks/auth/useAuth';
-import { FlowDisplay, IFlowNode, INode } from '~/types';
+import { FlowDisplay, INode } from '~/types';
+import { ILabNode } from '~/types/lab';
 import { showErrorToast } from '~/utils/errors/showToast';
 import { flatten } from '~/utils/ramda';
 
-const PAGE_SIZE = 40;
+const PAGE_SIZE = 30;
 
 type Key = [url: string, after: string, isUser: boolean];
 
@@ -18,32 +19,36 @@ type Key = [url: string, after: string, isUser: boolean];
  * Pinned nodes ride along with the first page without counting against its
  * size, so paging looks only at the rest.
  */
-const unpinned = (page?: IFlowNode[]) =>
-  (page || []).filter((node) => !node.is_pinned);
+const unpinned = (page?: ILabNode[]) =>
+  (page || []).filter((item) => !item.node.is_pinned);
 
 /**
  * A user's nodes, a page at a time: the ones pinned to the profile first, then
  * the rest, newest first. Each page continues from the oldest unpinned node of
  * the previous one. Lab nodes come along for signed-in viewers, so the
  * viewer's state is part of the key.
+ *
+ * Items are whole nodes with their comment counts, so the profile draws flow
+ * cells (`nodes`) or lab cards (`items`) from the same listing.
  */
-export const useUserNodes = (username?: string) => {
+export const useUserNodes = (username?: string, enabled = true) => {
   const { isUser } = useAuth();
 
   const getKey = useCallback(
-    (index: number, previous: IFlowNode[] | null): Key | null => {
-      if (!username) return null;
+    (index: number, previous: ILabNode[] | null): Key | null => {
+      if (!username || !enabled) return null;
       if (index === 0) return [API.USER.NODES(username), '', isUser];
+
       const rest = unpinned(previous || []);
       if (rest.length < PAGE_SIZE) return null;
 
       return [
         API.USER.NODES(username),
-        rest[rest.length - 1].created_at || '',
+        rest[rest.length - 1].node.created_at || '',
         isUser,
       ];
     },
-    [username, isUser],
+    [username, enabled, isUser],
   );
 
   const { data, isValidating, setSize, size, mutate } = useSWRInfinite(
@@ -60,7 +65,8 @@ export const useUserNodes = (username?: string) => {
     { revalidateFirstPage: false },
   );
 
-  const nodes = useMemo(() => flatten(data || []), [data]);
+  const items = useMemo(() => flatten(data || []), [data]);
+  const nodes = useMemo(() => items.map((item) => item.node), [items]);
   const hasMore = unpinned(data?.[data.length - 1]).length >= PAGE_SIZE;
   const isLoading = isValidating && (!data || data.length < size);
 
@@ -70,11 +76,15 @@ export const useUserNodes = (username?: string) => {
   }, [hasMore, isLoading, setSize, size]);
 
   const patchNode = useCallback(
-    (id: INode['id'], patch: Partial<IFlowNode>) =>
+    (id: INode['id'], patch: Partial<INode>) =>
       mutate(
         (pages) =>
           pages?.map((page) =>
-            page.map((node) => (node.id === id ? { ...node, ...patch } : node)),
+            page.map((item) =>
+              item.node.id === id
+                ? { ...item, node: { ...item.node, ...patch } }
+                : item,
+            ),
           ),
         false,
       ),
@@ -116,6 +126,7 @@ export const useUserNodes = (username?: string) => {
   );
 
   return {
+    items,
     nodes,
     hasMore,
     isLoading,

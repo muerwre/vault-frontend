@@ -1,5 +1,5 @@
 import type { OAuthProvider } from '../constants/oauth';
-import type { Role } from '../constants/user';
+import type { ProfileNodesView, Role } from '../constants/user';
 
 import type { IFile } from './file';
 
@@ -22,6 +22,17 @@ export interface IUser {
   last_seen_messages: string;
   /** Derived server-side; there is no such column. */
   last_seen_boris: string;
+}
+
+/**
+ * `user_profile.settings`. Every key is optional; absent means the default.
+ * Never trust the stored shape: it is read leniently.
+ */
+export interface IUserProfileSettings {
+  /** External links, absolute http(s) URLs. */
+  links?: string[];
+  /** The owner's choice of how visitors first see the profile's nodes. */
+  nodes_view?: ProfileNodesView;
 }
 
 /** Compact user embedded in lists. */

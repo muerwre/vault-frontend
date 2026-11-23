@@ -4,6 +4,7 @@ import { CheckIcon } from 'lucide-react';
 
 import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
+import { formatUsername } from '~/utils/user';
 
 import styles from './styles.module.scss';
 
@@ -17,7 +18,9 @@ const RestoreSuccess: VFC<RestoreSuccessProps> = ({ username, onClick }) => (
     <CheckIcon size={64} />
 
     <div>Пароль обновлен</div>
-    <div>Добро пожаловать домой{username ? `, @${username}` : ''}!</div>
+    <div>
+      Добро пожаловать домой{username ? `, ${formatUsername(username)}` : ''}!
+    </div>
 
     <div />
 

@@ -42,6 +42,10 @@ export const apiAuthGetUserProfile = ({
 }: ApiAuthGetUserProfileRequest) =>
   api.get<ApiAuthGetUserProfileResult>(API.USER.PROFILE(username)).then(unwrap);
 
+/**
+ * A user's nodes as lab-card items, whole nodes with comment counts, so the
+ * profile can draw them as flow cells or lab cards from the same listing.
+ */
 export const apiGetUserNodes = ({
   username,
   after,
@@ -49,7 +53,7 @@ export const apiGetUserNodes = ({
 }: ApiGetUserNodesRequest) =>
   api
     .get<ApiGetUserNodesResult>(API.USER.NODES(username), {
-      params: { after, limit },
+      params: { after, limit, full: true },
     })
     .then(unwrap);
 

@@ -4,8 +4,8 @@ import classNames from 'classnames';
 
 import { ProfileLink } from '~/components/profile/ProfileLink';
 import { IUser } from '~/types/auth';
-import { path } from '~/utils/ramda';
 import { DivProps } from '~/utils/types';
+import { formatUsername } from '~/utils/user';
 
 import { CommentAvatar } from './components/CommentAvatar';
 import styles from './styles.module.scss';
@@ -43,7 +43,7 @@ const CommentWrapper: FC<Props> = ({
       />
       <div className={styles.thumb_user}>
         <ProfileLink username={user?.username}>
-          @{path(['username'], user)}
+          {formatUsername(user?.username)}
         </ProfileLink>
       </div>
     </div>
