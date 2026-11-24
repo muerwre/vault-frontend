@@ -50,10 +50,11 @@ export const apiGetUserNodes = ({
   username,
   after,
   limit,
+  search,
 }: ApiGetUserNodesRequest) =>
   api
     .get<ApiGetUserNodesResult>(API.USER.NODES(username), {
-      params: { after, limit, full: true },
+      params: { after, limit, search, full: true },
     })
     .then(unwrap);
 

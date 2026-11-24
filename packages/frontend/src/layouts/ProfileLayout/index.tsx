@@ -21,6 +21,7 @@ import { ProfileLabCard } from '~/containers/profile/ProfileLabCard';
 import { ProfileNodesViewSwitch } from '~/containers/profile/ProfileNodesViewSwitch';
 import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
 import { useUser } from '~/hooks/auth/useUser';
+import { useDebouncedValue } from '~/hooks/data/useDebouncedValue';
 import { useGridRowSpan } from '~/hooks/dom/useGridRowSpan';
 import { useInfiniteLoader } from '~/hooks/dom/useInfiniteLoader';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
@@ -65,7 +66,13 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
   const view = pickedView ?? profile.nodes_view ?? PROFILE_NODES_VIEW.FLOW;
   const isLab = view === PROFILE_NODES_VIEW.LAB;
 
-  useEffect(() => setPickedView(undefined), [username]);
+  const [search, setSearch] = useState('');
+  const searchDebounced = useDebouncedValue(search.trim());
+
+  useEffect(() => {
+    setPickedView(undefined);
+    setSearch('');
+  }, [username]);
 
   const { submit: saveProfile } = useSaveProfile(update);
 
@@ -96,7 +103,10 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
     isLoading: isLoadingNodes,
     onChangeCellView,
     onResetCellView,
-  } = useUserNodes(username, !isLoading);
+  } = useUserNodes(username, !isLoading, searchDebounced);
+
+  const isNothingFound =
+    !!searchDebounced && !isLoadingNodes && items.length === 0;
 
   useInfiniteLoader(loadMore, isLoadingNodes);
 
@@ -147,7 +157,11 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
             <Filler />
 
             <div className={styles.search}>
-              <SearchInput />
+              <SearchInput
+                value={search}
+                handler={setSearch}
+                placeholder="Поиск по постам"
+              />
             </div>
           </div>
         )}
@@ -183,6 +197,12 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
             canEdit={canEdit}
             onSaved={update}
           />
+        )}
+
+        {isNothingFound && (
+          <div className={styles.nothing_found}>
+            Ничего не нашлось по запросу «{searchDebounced}»
+          </div>
         )}
 
         {isLab ? (

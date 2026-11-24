@@ -13,7 +13,7 @@ import { flatten } from '~/utils/ramda';
 
 const PAGE_SIZE = 30;
 
-type Key = [url: string, after: string, isUser: boolean];
+type Key = [url: string, after: string, isUser: boolean, search: string];
 
 /**
  * Pinned nodes ride along with the first page without counting against its
@@ -31,13 +31,18 @@ const unpinned = (page?: ILabNode[]) =>
  * Items are whole nodes with their comment counts, so the profile draws flow
  * cells (`nodes`) or lab cards (`items`) from the same listing.
  */
-export const useUserNodes = (username?: string, enabled = true) => {
+export const useUserNodes = (
+  username?: string,
+  enabled = true,
+  /** Keeps nodes whose title or description contains it. */
+  search = '',
+) => {
   const { isUser } = useAuth();
 
   const getKey = useCallback(
     (index: number, previous: ILabNode[] | null): Key | null => {
       if (!username || !enabled) return null;
-      if (index === 0) return [API.USER.NODES(username), '', isUser];
+      if (index === 0) return [API.USER.NODES(username), '', isUser, search];
 
       const rest = unpinned(previous || []);
       if (rest.length < PAGE_SIZE) return null;
@@ -46,18 +51,20 @@ export const useUserNodes = (username?: string, enabled = true) => {
         API.USER.NODES(username),
         rest[rest.length - 1].node.created_at || '',
         isUser,
+        search,
       ];
     },
-    [username, enabled, isUser],
+    [username, enabled, isUser, search],
   );
 
   const { data, isValidating, setSize, size, mutate } = useSWRInfinite(
     getKey,
-    async (_: string, after: string) => {
+    async (_: string, after: string, __: boolean, query: string) => {
       const result = await apiGetUserNodes({
         username: username!,
         after: after || undefined,
         limit: PAGE_SIZE,
+        search: query || undefined,
       });
 
       return result.nodes;

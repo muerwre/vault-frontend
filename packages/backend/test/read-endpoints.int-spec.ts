@@ -441,6 +441,38 @@ describe('read endpoints (integration)', () => {
       await http().get('/api/users/__nobody__/nodes').expect(404);
     });
 
+    it('narrows the listing to a search in titles and descriptions', async () => {
+      const [row] = await db.query(`
+        SELECT n.title FROM node n JOIN user u ON u.id = n.userId
+         WHERE u.username = 'muro' AND n.deleted_at IS NULL
+           AND n.is_public = 1 AND n.is_promoted = 1
+           AND CHAR_LENGTH(n.title) >= 4
+         ORDER BY n.created_at DESC LIMIT 1
+      `);
+      const term = String(row.title).slice(0, 4);
+
+      const { body } = await http()
+        .get('/api/users/muro/nodes')
+        .query({ search: `  ${term}  ` })
+        .expect(200);
+
+      expect(body.nodes.length).toBeGreaterThan(0);
+      for (const node of body.nodes) {
+        expect(`${node.title} ${node.description}`.toLowerCase()).toContain(
+          term.toLowerCase(),
+        );
+      }
+    });
+
+    it('finds nothing, pinned nodes included, for a term in no node', async () => {
+      const { body } = await http()
+        .get('/api/users/muro/nodes')
+        .query({ search: 'zzqx-no-such-text' })
+        .expect(200);
+
+      expect(body.nodes).toEqual([]);
+    });
+
     describe('with pinned, profile-only and lab nodes', () => {
       /** Oldest first, so pinning has to reorder. */
       let pinnedFlowId: number;

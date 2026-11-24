@@ -90,3 +90,16 @@
 .search {
   padding-left: 60px;
 }
+
+/* Where the cells would be, when a search finds none. */
+.nothing_found {
+  grid-column: 2 / -1;
+  padding: $gap * 2;
+  text-align: center;
+  font: $font_14_medium;
+  color: $gray_50;
+
+  .lab_grid & {
+    grid-column: 1 / -1;
+  }
+}

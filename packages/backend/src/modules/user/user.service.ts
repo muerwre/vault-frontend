@@ -19,6 +19,15 @@ import { applyVisibleToViewer } from '../node/node.predicates';
 /** Most rows returned per request by the node listing, and the default. */
 export const USER_NODES_LIMIT = 100;
 
+/** Which of a user's nodes to list. */
+export interface UserNodesQuery {
+  /** A `created_at` cursor: only older unpinned nodes. */
+  after?: Date | null;
+  limit?: number;
+  /** Kept to nodes whose title or description contains it. */
+  search?: string;
+}
+
 /** A lab-card item whose node carries the profile's cell look. */
 export interface WireProfileItem extends WireLabItem {
   node: WireLabItem['node'] & { has_profile_flow: boolean };
@@ -71,16 +80,9 @@ export class UserService {
   async getUserNodes(
     userId: number,
     uid: number,
-    after: Date | null,
-    limit?: number,
-    full = false,
+    { full = false, ...query }: UserNodesQuery & { full?: boolean } = {},
   ): Promise<WireProfileNode[] | WireProfileItem[]> {
-    const rows = await this.findUserNodes(
-      userId,
-      uid !== GUEST_USER_ID,
-      after,
-      limit,
-    );
+    const rows = await this.findUserNodes(userId, uid !== GUEST_USER_ID, query);
 
     if (!full) {
       return rows.map(toWireProfileNode);
@@ -104,20 +106,20 @@ export class UserService {
    * over the unpinned ones; pinned nodes come only with the first page and do
    * not count against its `limit`. Guests see no lab nodes. A `limit` that is
    * not a whole number within `1..USER_NODES_LIMIT` falls back to the maximum.
+   * `search` keeps the nodes whose title or description contains it.
    */
   private async findUserNodes(
     userId: number,
     isUser: boolean,
-    after: Date | null,
-    limit?: number,
+    { after = null, limit, search = '' }: UserNodesQuery,
   ): Promise<Node[]> {
     const take =
       limit && Number.isInteger(limit) && limit > 0 && limit <= USER_NODES_LIMIT
         ? limit
         : USER_NODES_LIMIT;
 
-    const base = () =>
-      applyVisibleToViewer(
+    const base = () => {
+      const query = applyVisibleToViewer(
         this.nodes
           .createQueryBuilder('node')
           .leftJoinAndSelect('node.user', 'user')
@@ -126,6 +128,16 @@ export class UserService {
         'node',
         isUser,
       ).orderBy('node.created_at', 'DESC');
+
+      if (search) {
+        query.andWhere(
+          "(node.title LIKE CONCAT('%', :search, '%') OR node.description LIKE CONCAT('%', :search, '%'))",
+          { search },
+        );
+      }
+
+      return query;
+    };
 
     const rest = base().andWhere('node.is_pinned = 0');
 

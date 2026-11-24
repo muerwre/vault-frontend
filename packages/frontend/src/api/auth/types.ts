@@ -25,6 +25,8 @@ export type ApiGetUserNodesRequest = {
   /** `created_at` of the oldest node already loaded. */
   after?: string;
   limit?: number;
+  /** Keeps nodes whose title or description contains it. */
+  search?: string;
 };
 /** Lab-card items; each node's `flow` is its look on the profile. */
 export type ApiGetUserNodesResult = { nodes: ILabNode[] };

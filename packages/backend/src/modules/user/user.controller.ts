@@ -15,6 +15,9 @@ import { OptionalAuthGuard, Uid } from '../auth/auth.guards';
 
 import { UserService, type WireProfileItem } from './user.service';
 
+/** Longer search text is cut to this. */
+const MAX_USER_NODES_SEARCH_LENGTH = 64;
+
 @Controller('users')
 export class UserController {
   constructor(private readonly users: UserService) {}
@@ -37,7 +40,9 @@ export class UserController {
    * A user's nodes. `after` is an ISO `created_at` cursor; omitting it returns
    * the newest page. An unparseable value is ignored rather than rejected, and
    * so is a `limit` outside the accepted range. `full=true` returns lab-card
-   * items, with whole nodes, instead of flow cells.
+   * items, with whole nodes, instead of flow cells. `search` filters by title
+   * and description; only its first `MAX_USER_NODES_SEARCH_LENGTH`
+   * characters count.
    */
   @Get(':username/nodes')
   @UseGuards(OptionalAuthGuard)
@@ -47,6 +52,7 @@ export class UserController {
     @Query('after') after?: string,
     @Query('limit') limit?: string,
     @Query('full') full?: string,
+    @Query('search') search?: string,
   ): Promise<{ nodes: WireProfileNode[] | WireProfileItem[] }> {
     const user = username ? await this.users.findByUsername(username) : null;
 
@@ -57,13 +63,15 @@ export class UserController {
     const cursor = after ? new Date(after) : null;
 
     return {
-      nodes: await this.users.getUserNodes(
-        user.id,
-        uid,
-        cursor && !Number.isNaN(cursor.getTime()) ? cursor : null,
-        limit ? Number(limit) : undefined,
-        parseQueryBool(full) === true,
-      ),
+      nodes: await this.users.getUserNodes(user.id, uid, {
+        after: cursor && !Number.isNaN(cursor.getTime()) ? cursor : null,
+        limit: limit ? Number(limit) : undefined,
+        full: parseQueryBool(full) === true,
+        search:
+          typeof search === 'string'
+            ? search.trim().slice(0, MAX_USER_NODES_SEARCH_LENGTH)
+            : '',
+      }),
     };
   }
 }
