@@ -405,7 +405,7 @@ export const toWireProfileInfo = (info: unknown): IProfileInfoItem[] =>
 
 const NODES_VIEWS: readonly string[] = Object.values(PROFILE_NODES_VIEW);
 
-/** How the profile lists nodes; anything unknown reads as the flow. */
+/** How the profile shows; unset or unknown reads as the flow. */
 export const toWireNodesView = (view: unknown): ProfileNodesView =>
   typeof view === 'string' && NODES_VIEWS.includes(view)
     ? (view as ProfileNodesView)

@@ -135,6 +135,8 @@ export const useUserNodes = (
   return {
     items,
     nodes,
+    /** The first page has arrived; until then the listing is not yet known. */
+    isLoaded: !!data,
     hasMore,
     isLoading,
     loadMore,

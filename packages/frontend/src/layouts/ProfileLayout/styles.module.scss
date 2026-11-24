@@ -8,11 +8,17 @@
   flex-direction: column;
 }
 
-.controls {
-  display: flex;
-  flex-direction: row;
-  gap: $gap;
-  grid-column: 2 / -1;
+/* An aura fills the screen below the header, its content in the middle. */
+.aura_page {
+  box-sizing: border-box;
+  min-height: calc(100vh - #{$header_height + $page_top_offset});
+  justify-content: center;
+}
+
+/* Room at the bottom for the owner's floating controls, and the player below
+   them while it shows, so neither covers the last of the page. */
+.with_controls {
+  padding-bottom: calc(#{$bar_height + $gap * 2} + #{$player_room});
 }
 
 /* About card sizes, as in the flow grid. */
@@ -27,13 +33,14 @@
 }
 
 .left {
+  @include blur();
+
   grid-row: 1 / span 2;
   grid-column: 1 / span 1;
   // the column's width, not its longest line: one-line info is cut instead
   min-width: 0;
-  // Sized by the rows it spans, never by its content: a long profile would
-  // otherwise stretch the content-sized controls row beside it. Its span is
-  // measured to fit; should that come up short, it scrolls.
+  // Sized by the rows it spans, never by its content. Its span is measured
+  // to fit; should that come up short, it scrolls.
   contain: size;
   overflow-y: auto;
 }
@@ -48,25 +55,9 @@
   @include flow_breakpoint(2) {
 
     .left,
-    .about,
-    .controls {
+    .about {
       grid-column: 1 / -1;
     }
-
-    // the sidebar is full width here too, so it goes under the controls
-    &.with_controls .left {
-      grid-row: 2 / span 2;
-    }
-  }
-}
-
-/* The owner's controls get a first row of their own, as tall as they are,
-   beside the top of the sidebar, which runs one row longer to match. */
-.with_controls {
-  grid-template-rows: auto;
-
-  .left {
-    grid-row: 1 / span 3;
   }
 }
 
@@ -75,20 +66,12 @@
 .lab_grid {
   grid-template-rows: none;
   grid-auto-rows: auto;
-
-  .controls {
-    grid-column: 1 / -1;
-  }
 }
 
 .lab {
   grid-column: 1 / -1;
   min-width: 0;
   margin: -1 * $gap -1 * $gap 0;
-}
-
-.search {
-  padding-left: 60px;
 }
 
 /* Where the cells would be, when a search finds none. */

@@ -46,10 +46,15 @@ export const MAX_PROFILE_INFO_VALUE_LENGTH = 64;
 /** Longest accepted profile about text. */
 export const MAX_PROFILE_ABOUT_LENGTH = 8192;
 
-/** How a profile lists its nodes: as flow cells or as lab cards. */
+/**
+ * How a profile shows: its nodes as flow cells or as lab cards, or as an
+ * aura, the profile alone over its cover. Flow is the default; a profile
+ * with few posts shows as an aura whatever is picked.
+ */
 export const PROFILE_NODES_VIEW = {
   FLOW: 'flow',
   LAB: 'lab',
+  AURA: 'aura',
 } as const;
 
 export type ProfileNodesView =

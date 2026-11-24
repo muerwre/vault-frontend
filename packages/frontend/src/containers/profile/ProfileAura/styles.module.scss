@@ -1,0 +1,58 @@
+@import 'src/styles/variables';
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $gap * 2;
+  padding: $gap * 4 $gap;
+  text-align: center;
+}
+
+.avatar {
+  width: 200px;
+  height: 200px;
+}
+
+.names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+}
+
+.name {
+  font: $font_24_semibold;
+  color: white;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.username {
+  font: $font_14_regular;
+  color: $gray_50;
+}
+
+.description {
+  max-width: 400px;
+  font: $font_14_regular;
+  line-height: 1.25em;
+  opacity: 0.7;
+}
+
+/* Entries side by side, wrapping, within 400px. */
+.info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: $gap;
+  max-width: 400px;
+}
+
+.info_item {
+  flex: 0 1 auto;
+  max-width: 200px;
+  min-width: 0;
+  text-align: left;
+}

@@ -1,7 +1,11 @@
 import { FC } from 'react';
 
 import { PROFILE_NODES_VIEW, ProfileNodesView } from '@vault/common/constants';
-import { LayoutPanelLeftIcon, Rows3Icon } from 'lucide-react';
+import {
+  LayoutPanelLeftIcon,
+  Rows3Icon,
+  SquareSparklesIcon,
+} from 'lucide-react';
 
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 
@@ -11,8 +15,8 @@ interface Props {
 }
 
 /**
- * Flow cells or lab cards for the profile's nodes. Only how they are drawn:
- * both views show the same listing.
+ * Flow cells or lab cards for the profile's nodes, or the aura: the profile
+ * alone. The first two only change how the same listing is drawn.
  */
 const ProfileNodesViewSwitch: FC<Props> = ({ value, onChange }) => (
   <HorizontalMenu>
@@ -28,6 +32,13 @@ const ProfileNodesViewSwitch: FC<Props> = ({ value, onChange }) => (
       icon={<Rows3Icon size={20} />}
       active={value === PROFILE_NODES_VIEW.LAB}
       onClick={() => onChange(PROFILE_NODES_VIEW.LAB)}
+    />
+
+    <HorizontalMenu.Item
+      color="neutral"
+      icon={<SquareSparklesIcon size={20} />}
+      active={value === PROFILE_NODES_VIEW.AURA}
+      onClick={() => onChange(PROFILE_NODES_VIEW.AURA)}
     />
   </HorizontalMenu>
 );

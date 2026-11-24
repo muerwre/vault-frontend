@@ -2,23 +2,20 @@ import { FC, useCallback, useEffect, useState } from 'react';
 
 import { PROFILE_NODES_VIEW, ProfileNodesView } from '@vault/common/constants';
 import classNames from 'classnames';
-import { SettingsIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
 import { Card } from '~/components/common/Card';
 import { Columns } from '~/components/common/Columns';
 import { Container } from '~/components/common/Container';
-import { Filler } from '~/components/common/Filler';
 import { Hoverable } from '~/components/common/Hoverable';
 import { PageTitle } from '~/components/common/PageTitle';
-import { Button } from '~/components/input/Button';
-import { SearchInput } from '~/components/input/SearchInput';
 import { URLS } from '~/constants/urls';
 import { FlowGrid } from '~/containers/flow/FlowGrid';
 import { LabNode } from '~/containers/lab/LabGrid/components/LabNode';
 import { ProfileAboutCard } from '~/containers/profile/ProfileAboutCard';
+import { ProfileAura } from '~/containers/profile/ProfileAura';
+import { ProfileControlsBar } from '~/containers/profile/ProfileControlsBar';
 import { ProfileLabCard } from '~/containers/profile/ProfileLabCard';
-import { ProfileNodesViewSwitch } from '~/containers/profile/ProfileNodesViewSwitch';
 import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
 import { useUser } from '~/hooks/auth/useUser';
 import { useDebouncedValue } from '~/hooks/data/useDebouncedValue';
@@ -38,6 +35,11 @@ const capitalize = (value: string) =>
   value ? value[0].toLocaleUpperCase() + value.slice(1) : value;
 
 import styles from './styles.module.scss';
+
+/** Fewer posts than this and the profile is always shown as an aura. */
+const MIN_POSTS = 3;
+
+const noop = () => {};
 
 /** Lab cards by window width: three on wide screens, as the page is wide. */
 const LAB_COLUMNS = { default: 3, 1200: 2, 840: 1 };
@@ -63,8 +65,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
   // Only the owner switches, and their choice is saved: everyone sees the
   // profile as its owner set it. The pick shows at once, ahead of the save.
   const [pickedView, setPickedView] = useState<ProfileNodesView>();
-  const view = pickedView ?? profile.nodes_view ?? PROFILE_NODES_VIEW.FLOW;
-  const isLab = view === PROFILE_NODES_VIEW.LAB;
+  const savedView = pickedView ?? profile.nodes_view ?? PROFILE_NODES_VIEW.FLOW;
 
   const [search, setSearch] = useState('');
   const searchDebounced = useDebouncedValue(search.trim());
@@ -81,7 +82,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
   // failed save drops the pick, back to the stored view.
   const onChangeView = useCallback(
     async (next: ProfileNodesView) => {
-      if (!canEdit || next === view) return;
+      if (!canEdit || next === savedView) return;
 
       setPickedView(next);
 
@@ -91,13 +92,14 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
         setPickedView(undefined);
       }
     },
-    [canEdit, view, saveProfile],
+    [canEdit, savedView, saveProfile],
   );
 
   // the same listing for both views; the switch only picks how it is drawn
   const {
     items,
     nodes,
+    isLoaded,
     hasMore,
     loadMore,
     isLoading: isLoadingNodes,
@@ -105,23 +107,26 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
     onResetCellView,
   } = useUserNodes(username, !isLoading, searchDebounced);
 
+  // A profile with fewer than three posts is always an aura. Judged on the
+  // whole listing only, not on what a search leaves.
+  const isAuraForced =
+    !searchDebounced && isLoaded && !hasMore && items.length < MIN_POSTS;
+  const view = isAuraForced ? PROFILE_NODES_VIEW.AURA : savedView;
+  const isLab = view === PROFILE_NODES_VIEW.LAB;
+  const isAura = view === PROFILE_NODES_VIEW.AURA;
+
   const isNothingFound =
     !!searchDebounced && !isLoadingNodes && items.length === 0;
 
-  useInfiniteLoader(loadMore, isLoadingNodes);
+  useInfiniteLoader(isAura ? noop : loadMore, isLoadingNodes);
 
   // As many grid rows as the profile beside the cells needs, so a long one
-  // neither stretches the controls' row nor gets cut off.
+  // is not cut off.
   const [grid, setGrid] = useState<HTMLDivElement | null>(null);
-  const [controls, setControls] = useState<HTMLDivElement | null>(null);
-  const [sidebar, setSidebar] = useState<HTMLDivElement | null>(null);
   const [sidebarContent, setSidebarContent] = useState<HTMLDivElement | null>(
     null,
   );
-  const sidebarSpan = useGridRowSpan(
-    { grid, content: sidebarContent, header: controls, item: sidebar },
-    canEdit ? 3 : 2,
-  );
+  const sidebarSpan = useGridRowSpan({ grid, content: sidebarContent }, 2);
 
   const title = capitalize(profile.fullname || profile.username || username);
   usePageCover(profile.cover);
@@ -130,45 +135,51 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
     return <NotFoundLayout />;
   }
 
+  const controlsBar = canEdit && (
+    <ProfileControlsBar
+      view={view}
+      onChangeView={onChangeView}
+      canSwitchView={!isAuraForced}
+      onSettings={() => push(URLS.SETTINGS.BASE)}
+      plain={isAura}
+      search={isAura ? undefined : { value: search, onChange: setSearch }}
+    />
+  );
+
+  if (isAura) {
+    return (
+      <Container
+        className={classNames(styles.wrap, styles.aura_page, {
+          [styles.with_controls]: canEdit,
+        })}
+      >
+        <PageTitle title={getPageTitle(title)} />
+
+        <ProfileAura
+          profile={profile}
+          username={username}
+          isLoading={isLoading}
+        />
+
+        {controlsBar}
+      </Container>
+    );
+  }
+
   return (
-    <Container className={styles.wrap}>
+    <Container
+      className={classNames(styles.wrap, { [styles.with_controls]: canEdit })}
+    >
       <PageTitle title={getPageTitle(title)} />
+
+      {controlsBar}
 
       <div
         ref={setGrid}
-        className={classNames(styles.grid, {
-          [styles.with_controls]: canEdit,
-          [styles.lab_grid]: isLab,
-        })}
+        className={classNames(styles.grid, { [styles.lab_grid]: isLab })}
       >
-        {canEdit && (
-          <div ref={setControls} className={styles.controls}>
-            <ProfileNodesViewSwitch value={view} onChange={onChangeView} />
-
-            <Button
-              type="button"
-              color="primary"
-              iconLeft={<SettingsIcon size={20} />}
-              onClick={() => push(URLS.SETTINGS.BASE)}
-            >
-              Настройки
-            </Button>
-
-            <Filler />
-
-            <div className={styles.search}>
-              <SearchInput
-                value={search}
-                handler={setSearch}
-                placeholder="Поиск по постам"
-              />
-            </div>
-          </div>
-        )}
-
         {!isLab && (
           <Card
-            ref={setSidebar}
             className={styles.left}
             style={{ gridRowEnd: `span ${sidebarSpan}` }}
             seamless

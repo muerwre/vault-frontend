@@ -1,0 +1,34 @@
+@import 'src/styles/variables';
+
+// A pill like the player's, above it while it shows.
+.bar {
+  @include outer_shadow();
+  @include blur();
+
+  position: fixed;
+  left: 50%;
+  bottom: calc(#{$gap} + #{$player_room});
+  transform: translate(-50%, 0);
+  z-index: 13;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $gap;
+  max-width: calc(100vw - #{$gap * 2});
+  padding: $gap * 0.5;
+  box-sizing: border-box;
+  border-radius: $radius;
+}
+
+.plain {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.search {
+  flex: 0 1 240px;
+  min-width: 0;
+}

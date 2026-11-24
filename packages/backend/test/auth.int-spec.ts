@@ -426,6 +426,14 @@ describe('auth (integration)', () => {
       expect(profile.body.user.nodes_view).toBe('lab');
     });
 
+    it('accepts the aura view', async () => {
+      const { body } = await patch({ nodes_view: 'aura' }).expect(200);
+
+      expect(body.user.nodes_view).toBe('aura');
+
+      await patch({ nodes_view: 'lab' }).expect(200);
+    });
+
     it('rejects an unknown nodes view', async () => {
       await patch({ nodes_view: 'grid' }).expect(400);
     });
