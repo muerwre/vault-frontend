@@ -47,7 +47,8 @@
       background: $danger_gradient;
     }
 
-    &.yellow {
+    &.yellow,
+    &.profile {
       background: $warning_gradient;
     }
 
@@ -57,6 +58,10 @@
 
     &.lab {
       background: $lab_gradient;
+    }
+
+    &.neutral {
+      background: $content_bg_lightest;
     }
   }
 

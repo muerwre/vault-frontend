@@ -614,6 +614,22 @@ describe('node content rules', () => {
       expect(resolveSettings('image', [image], aura, null)).toBeNull();
     });
 
+    it('keeps the profile cell, which the editor never sends', () => {
+      const profile_flow = {
+        display: 'quadro' as const,
+        show_description: true,
+      };
+
+      expect(
+        resolveSettings(
+          'image',
+          [image],
+          { profile_flow: null },
+          { profile_flow },
+        ),
+      ).toEqual({ profile_flow });
+    });
+
     it('keeps the stored layout when the request leaves it out', () => {
       expect(resolveSettings('audio', [image], undefined, aura)).toEqual(aura);
       expect(resolveSettings('audio', [image], {}, aura)).toEqual(aura);

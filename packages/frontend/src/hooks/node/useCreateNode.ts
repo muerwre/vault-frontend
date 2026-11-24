@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { NODE_PLACEMENT } from '@vault/common/constants';
+
 import { apiPostNode } from '~/api/node';
 import { useGetLabNodes } from '~/hooks/lab/useGetLabNodes';
 import { useFlowStore } from '~/store/flow/useFlowStore';
@@ -13,9 +15,11 @@ export const useCreateNode = () => {
     async (node: INode) => {
       const result = await apiPostNode({ node });
 
-      if (node.is_promoted) {
+      const placement = result.node.is_promoted;
+
+      if (placement === NODE_PLACEMENT.FLOW) {
         flow.setNodes([result.node, ...flow.nodes]);
-      } else {
+      } else if (placement === NODE_PLACEMENT.LAB) {
         await lab.unshift({
           node: result.node,
           comment_count: 0,

@@ -1,12 +1,15 @@
 import { IFile, INotification } from '~/types';
 import { ISocialAccount, IUser } from '~/types/auth';
+import { ILabNode } from '~/types/lab';
 
 export type ApiUserLoginRequest = Record<'username' | 'password', string>;
 export type ApiUserLoginResult = { token: string; user: IUser };
 export type ApiAuthGetUserRequest = {};
 export type ApiAuthGetUserResult = { user: IUser };
 export type ApiUpdateUserRequest = {
-  user: Partial<IUser & { password: string; newPassword: string }>;
+  user: Partial<
+    IUser & { password: string; newPassword: string; new_password: string }
+  >;
 };
 export type ApiUpdatePhotoRequest = {
   file: IFile;
@@ -17,6 +20,16 @@ export type ApiUpdateUserResult = {
 };
 export type ApiAuthGetUserProfileRequest = { username: string };
 export type ApiAuthGetUserProfileResult = { user: IUser };
+export type ApiGetUserNodesRequest = {
+  username: string;
+  /** `created_at` of the oldest node already loaded. */
+  after?: string;
+  limit?: number;
+  /** Keeps nodes whose title or description contains it. */
+  search?: string;
+};
+/** Lab-card items; each node's `flow` is its look on the profile. */
+export type ApiGetUserNodesResult = { nodes: ILabNode[] };
 export type ApiAuthGetUpdatesRequest = {
   exclude_dialogs: number;
   last: string;

@@ -22,3 +22,80 @@
     padding: 0;
   }
 }
+
+// A ridge: a dark line along one edge of a section, a light one along the
+// facing edge of the next. Both are drawn inside, so neither casts on the
+// other section.
+$ridge_dark: transparentize(black, 0.5);
+$ridge_light: $gray_90;
+
+.row {
+  padding: $gap;
+  box-sizing: border-box;
+
+  &:first-child {
+    border-top-left-radius: $panel_radius;
+    border-top-right-radius: $panel_radius;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: $panel_radius;
+    border-bottom-right-radius: $panel_radius;
+  }
+
+  &:not(:last-child) {
+    box-shadow: inset $ridge_dark 0 -1px;
+  }
+
+  & + & {
+    box-shadow: inset $ridge_light 0 1px;
+  }
+
+  & + &:not(:last-child) {
+    box-shadow:
+      inset $ridge_light 0 1px,
+      inset $ridge_dark 0 -1px;
+  }
+}
+
+.row_seamless {
+  padding: 0;
+}
+
+// Sized by the row, so columns follow the card rather than the window.
+.row_columns {
+  container-type: inline-size;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+
+  @container (min-width: 760px) {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+}
+
+.column {
+  padding: $gap * 1.5;
+  box-sizing: border-box;
+  min-width: 0;
+
+  // stacked, columns split like rows
+  & + & {
+    box-shadow:
+      inset $ridge_dark 0 1px,
+      inset $ridge_light 0 2px;
+  }
+
+  // side by side, the split runs down between them
+  @container (min-width: 760px) {
+    & + & {
+      box-shadow:
+        inset $ridge_dark 1px 0,
+        inset $ridge_light 2px 0;
+    }
+  }
+}

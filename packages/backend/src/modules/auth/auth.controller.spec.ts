@@ -35,8 +35,8 @@ const makeController = (overrides: AuthMock = {}, passwordValid = true) => {
     isUsernameTaken: jest.fn().mockResolvedValue(false),
     isEmailTaken: jest.fn().mockResolvedValue(false),
     findByUsernameOrEmail: jest.fn().mockResolvedValue(null),
-    save: jest.fn().mockImplementation(async (user: User) => user),
     setPassword: jest.fn().mockResolvedValue(undefined),
+    saveSelf: jest.fn().mockImplementation(async (user: User) => user),
     setPhoto: jest.fn().mockResolvedValue(undefined),
     setCover: jest.fn().mockResolvedValue(undefined),
     findImage: jest.fn().mockResolvedValue({ id: 5 }),
@@ -214,13 +214,62 @@ describe('AuthController', () => {
       }
     };
 
+    it('passes only the profile fields that were sent', async () => {
+      const { controller, auth } = makeController();
+
+      await controller.patch(currentUser(), {
+        about: 'text',
+        info: [
+          { title: 'Сайт', value: 'a.com' },
+          { title: '', value: '' },
+        ],
+      });
+
+      expect(auth.saveSelf).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 1 }),
+        {
+          about: 'text',
+          settings: { info: [{ title: 'Сайт', value: 'a.com' }] },
+        },
+      );
+    });
+
+    it('saves the nodes view into the profile settings', async () => {
+      const { controller, auth } = makeController();
+
+      await controller.patch(currentUser(), { nodes_view: 'lab' });
+
+      expect(auth.saveSelf).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 1 }),
+        {
+          settings: { nodes_view: 'lab' },
+        },
+      );
+    });
+
+    it('rejects bad profile fields under their own names', async () => {
+      expect(
+        await patchErrors({
+          about_display: 'huge',
+          info: 'nope',
+          nodes_view: 'grid',
+          about: 'x'.repeat(9000),
+        }),
+      ).toEqual({
+        about_display: expect.any(String),
+        info: expect.any(String),
+        nodes_view: expect.any(String),
+        about: expect.any(String),
+      });
+    });
+
     it('applies description without touching fullname', async () => {
       const { controller, auth } = makeController();
       const user = currentUser();
 
       await controller.patch(user, { description: 'new desc' });
 
-      const saved = auth.save.mock.calls[0][0] as User;
+      const saved = auth.saveSelf.mock.calls[0][0] as User;
       expect(saved.description).toBe('new desc');
       expect(saved.fullname).toBe('Full');
     });
@@ -231,7 +280,7 @@ describe('AuthController', () => {
 
       await controller.patch(user, { fullname: 'New Name' });
 
-      const saved = auth.save.mock.calls[0][0] as User;
+      const saved = auth.saveSelf.mock.calls[0][0] as User;
       expect(saved.fullname).toBe('New Name');
       expect(saved.description).toBe('Desc');
     });
@@ -276,7 +325,7 @@ describe('AuthController', () => {
       await expect(
         controller.patch(user, { email: 'new@example.com' } as never),
       ).rejects.toMatchObject({ fields: { email: expect.any(String) } });
-      expect(auth.save).not.toHaveBeenCalled();
+      expect(auth.saveSelf).not.toHaveBeenCalled();
       expect(user.email).toBe('someone@example.com');
     });
 
@@ -326,10 +375,20 @@ describe('AuthController', () => {
       });
     });
 
+    it('tells a too long fullname from an empty one', async () => {
+      const empty = await patchErrors({ fullname: '' });
+      const long = await patchErrors({ fullname: 'x'.repeat(41) });
+
+      expect(long).toEqual({ fullname: expect.stringContaining('40') });
+      expect(long?.fullname).not.toBe(empty?.fullname);
+      expect(await patchErrors({ fullname: 'x'.repeat(40) })).toBeNull();
+    });
+
     it('rejects an over-long description', async () => {
-      expect(await patchErrors({ description: 'x'.repeat(513) })).toEqual({
-        description: expect.any(String),
+      expect(await patchErrors({ description: 'x'.repeat(65) })).toEqual({
+        description: expect.stringContaining('64'),
       });
+      expect(await patchErrors({ description: 'x'.repeat(64) })).toBeNull();
     });
 
     it('reports every failing field at once', async () => {

@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ERROR_CODES, NODE_FLOW_DISPLAY, ROLES } from '@vault/common/constants';
-import type { INodeFlow } from '@vault/common/types';
+import type { INodeFlow, INodeProfileFlow } from '@vault/common/types';
 
 import { Tag } from '../../entities/tag.entity';
 import { User } from '../../entities/user.entity';
@@ -289,6 +289,37 @@ export class NodeController {
   }
 
   /**
+   * The author or an admin. Sets whether the node leads its author's
+   * profile, to `is_pinned` as sent, so a repeated request changes nothing;
+   * where it is listed does not change.
+   */
+  @Post(':id/pin')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  async pin(
+    @Param('id') id: string,
+    @WithUser() user: User,
+    @Body() body: { is_pinned?: unknown },
+  ): Promise<{ is_pinned: boolean }> {
+    if (typeof body?.is_pinned !== 'boolean') {
+      throw new VaultException(
+        ERROR_CODES.IncorrectData,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const node = await this.nodes.findLive(
+      this.parseId(id, HttpStatus.BAD_REQUEST),
+    );
+
+    if (!node || !this.nodes.canEdit(node, user)) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    return { is_pinned: await this.nodes.setPinned(node, body.is_pinned) };
+  }
+
+  /**
    * Persists the flow grid display settings.
    *
    * Unlike reads, this **requires** a known display variant — an empty string is
@@ -320,6 +351,42 @@ export class NodeController {
     }
 
     return { flow: await this.nodes.setFlow(node, flow) };
+  }
+
+  /**
+   * The node's cell on its author's profile, apart from the flow's. `flow:
+   * null` drops it, so the profile shows the flow's again. Same rights as
+   * `cell-view`.
+   */
+  @Post(':id/profile-cell-view')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthRequiredGuard, WithUserGuard)
+  async profileCellView(
+    @Param('id') id: string,
+    @WithUser() user: User,
+    @Body() body: { flow?: INodeProfileFlow | null },
+  ): Promise<{ flow: INodeFlow; has_profile_flow: boolean }> {
+    const flow = body?.flow;
+
+    if (
+      flow === undefined ||
+      (flow !== null && !FLOW_DISPLAYS.includes(flow?.display))
+    ) {
+      throw new VaultException(
+        ERROR_CODES.IncorrectData,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const node = await this.nodes.findLive(
+      this.parseId(id, HttpStatus.BAD_REQUEST),
+    );
+
+    if (!node || !this.nodes.canEdit(node, user)) {
+      throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
+    }
+
+    return this.nodes.setProfileFlow(node, flow);
   }
 
   /**

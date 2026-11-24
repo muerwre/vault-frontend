@@ -10,6 +10,8 @@ import {
   ApiAuthGetUpdatesResult,
   ApiAuthGetUserProfileRequest,
   ApiAuthGetUserProfileResult,
+  ApiGetUserNodesRequest,
+  ApiGetUserNodesResult,
   ApiAuthGetUserResult,
   ApiCheckRestoreCodeRequest,
   ApiCheckRestoreCodeResult,
@@ -40,6 +42,22 @@ export const apiAuthGetUserProfile = ({
 }: ApiAuthGetUserProfileRequest) =>
   api.get<ApiAuthGetUserProfileResult>(API.USER.PROFILE(username)).then(unwrap);
 
+/**
+ * A user's nodes as lab-card items, whole nodes with comment counts, so the
+ * profile can draw them as flow cells or lab cards from the same listing.
+ */
+export const apiGetUserNodes = ({
+  username,
+  after,
+  limit,
+  search,
+}: ApiGetUserNodesRequest) =>
+  api
+    .get<ApiGetUserNodesResult>(API.USER.NODES(username), {
+      params: { after, limit, search, full: true },
+    })
+    .then(unwrap);
+
 export const apiAuthGetUpdates = ({
   exclude_dialogs,
   last,
@@ -61,6 +79,9 @@ export const apiDeletePhoto = () =>
 
 export const apiUpdateCover = ({ file }: ApiUpdatePhotoRequest) =>
   api.post<ApiUpdateUserResult>(API.USER.UPDATE_COVER, file).then(unwrap);
+
+export const apiDeleteCover = () =>
+  api.delete<ApiUpdateUserResult>(API.USER.UPDATE_COVER).then(unwrap);
 
 export const apiRequestRestoreCode = (field: string) =>
   api.post<{ field: string }>(API.USER.REQUEST_CODE(), { field }).then(unwrap);

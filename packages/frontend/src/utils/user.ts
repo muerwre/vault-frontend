@@ -18,3 +18,10 @@ export const isUserActive = (lastSeen?: string, now = new Date()): boolean => {
     return false;
   }
 };
+
+/**
+ * A username as shown: `@` and lowercase, like its profile address. Empty for
+ * a missing one.
+ */
+export const formatUsername = (username?: string | null): string =>
+  username ? `@${username.toLocaleLowerCase()}` : '';

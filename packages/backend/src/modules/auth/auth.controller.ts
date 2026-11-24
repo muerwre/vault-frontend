@@ -14,6 +14,11 @@ import {
 } from '@nestjs/common';
 import {
   ERROR_CODES,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_FULLNAME_LENGTH,
+  MAX_PASSWORD_LENGTH,
+  MAX_PROFILE_ABOUT_LENGTH,
+  MAX_USERNAME_LENGTH,
   MIN_PASSWORD_LENGTH,
   USERNAME_REGEX,
 } from '@vault/common/constants';
@@ -34,6 +39,11 @@ import {
 } from './auth.service';
 import { isSameEmail } from './email';
 import { PasswordService } from './password.service';
+import {
+  parseAboutDisplay,
+  parseNodesView,
+  parseProfileInfo,
+} from './profile-fields';
 
 interface LoginBody {
   username?: string;
@@ -47,16 +57,15 @@ interface PatchBody {
   new_password?: string;
   email?: string;
   description?: string;
+  about?: unknown;
+  about_display?: unknown;
+  info?: unknown;
+  nodes_view?: unknown;
 }
 
 interface FileBody {
   id?: number;
 }
-
-const MAX_USERNAME_LENGTH = 64;
-const MAX_FULLNAME_LENGTH = 64;
-const MAX_PASSWORD_LENGTH = 64;
-const MAX_DESCRIPTION_LENGTH = 512;
 
 const MINUTE_MS = 60 * 1000;
 
@@ -221,18 +230,53 @@ export class AuthController {
       }
     }
 
-    if (
-      data.fullname !== undefined &&
-      (data.fullname.length < 1 || data.fullname.length > MAX_FULLNAME_LENGTH)
-    ) {
+    if (data.fullname !== undefined && data.fullname.length < 1) {
       errors.fullname = 'Слишком коротко';
+    } else if (
+      data.fullname !== undefined &&
+      data.fullname.length > MAX_FULLNAME_LENGTH
+    ) {
+      errors.fullname = `Не длиннее ${MAX_FULLNAME_LENGTH} символов`;
     }
 
     if (
       data.description !== undefined &&
       data.description.length > MAX_DESCRIPTION_LENGTH
     ) {
-      errors.description = 'Слишком длинно';
+      errors.description = `Не длиннее ${MAX_DESCRIPTION_LENGTH} символов`;
+    }
+
+    const info =
+      data.info !== undefined ? parseProfileInfo(data.info) : undefined;
+
+    if (info && 'error' in info) {
+      errors.info = info.error;
+    }
+
+    const aboutDisplay =
+      data.about_display !== undefined
+        ? parseAboutDisplay(data.about_display)
+        : undefined;
+
+    if (aboutDisplay && 'error' in aboutDisplay) {
+      errors.about_display = aboutDisplay.error;
+    }
+
+    const nodesView =
+      data.nodes_view !== undefined
+        ? parseNodesView(data.nodes_view)
+        : undefined;
+
+    if (nodesView && 'error' in nodesView) {
+      errors.nodes_view = nodesView.error;
+    }
+
+    if (
+      data.about !== undefined &&
+      (typeof data.about !== 'string' ||
+        data.about.length > MAX_PROFILE_ABOUT_LENGTH)
+    ) {
+      errors.about = 'Слишком длинно';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -259,7 +303,18 @@ export class AuthController {
       user.username = data.username;
     }
 
-    await this.auth.save(user);
+    await this.auth.saveSelf(user, {
+      ...(typeof data.about === 'string' && { about: data.about }),
+      ...(aboutDisplay &&
+        'value' in aboutDisplay && {
+          aboutDisplay: aboutDisplay.value,
+        }),
+      settings: {
+        ...(info && 'value' in info && { info: info.value }),
+        ...(nodesView &&
+          'value' in nodesView && { nodes_view: nodesView.value }),
+      },
+    });
 
     if (data.new_password !== undefined) {
       await this.auth.setPassword(user.id, data.new_password);

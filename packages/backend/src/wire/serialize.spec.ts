@@ -8,10 +8,14 @@ import {
   toWireDate,
   toWireDateOrNull,
   toWireFlow,
+  toWireProfileInfo,
+  toWirePlacement,
+  toWireProfileFlow,
   toWireShallowFile,
   toWireShallowUser,
   toWireString,
   toWireThumbnail,
+  toWireUser,
 } from './serialize';
 
 /**
@@ -215,6 +219,39 @@ describe('wire serialisation', () => {
     });
   });
 
+  describe('toWireUser', () => {
+    /** Bylines on nodes and comments must stay small. */
+    it('carries no profile page fields', () => {
+      const wire = toWireUser({ id: 1, username: 'someone' } as never);
+
+      for (const key of ['about', 'about_display', 'info']) {
+        expect(key in (wire as object)).toBe(false);
+      }
+    });
+  });
+
+  describe('toWireProfileInfo', () => {
+    it('serialises a missing blob as an empty array', () => {
+      expect(toWireProfileInfo(null)).toEqual([]);
+      expect(toWireProfileInfo({ not: 'an array' })).toEqual([]);
+    });
+
+    it('drops entries without a value and fills in a missing title', () => {
+      expect(
+        toWireProfileInfo([
+          { title: 'a', value: 'x' },
+          { title: 'b', value: '' },
+          'https://old-style',
+          null,
+          { value: 'y' },
+        ]),
+      ).toEqual([
+        { title: 'a', value: 'x' },
+        { title: '', value: 'y' },
+      ]);
+    });
+  });
+
   describe('toWireShallowFile', () => {
     it('returns null for a missing file', () => {
       expect(toWireShallowFile(null)).toBeNull();
@@ -261,6 +298,41 @@ describe('wire serialisation', () => {
 
     it('returns the input untouched when there is no order', () => {
       expect(sortFilesByOrder(files, [])).toBe(files);
+    });
+  });
+
+  describe('toWirePlacement', () => {
+    it('sends the stored placement', () => {
+      expect(toWirePlacement(0)).toEqual({ is_promoted: 0 });
+      expect(toWirePlacement(1)).toEqual({ is_promoted: 1 });
+      expect(toWirePlacement(2)).toEqual({ is_promoted: 2 });
+    });
+  });
+
+  describe('toWireProfileFlow', () => {
+    const flow = {
+      display: 'single' as const,
+      show_description: false,
+      dominant_color: '#123456',
+    };
+
+    it("falls back to the flow's cell", () => {
+      expect(toWireProfileFlow({ flow, settings: null })).toEqual(flow);
+    });
+
+    it('uses the profile cell, keeping the flow colour', () => {
+      expect(
+        toWireProfileFlow({
+          flow,
+          settings: {
+            profile_flow: { display: 'quadro', show_description: true },
+          },
+        }),
+      ).toEqual({
+        display: 'quadro',
+        show_description: true,
+        dominant_color: '#123456',
+      });
     });
   });
 });

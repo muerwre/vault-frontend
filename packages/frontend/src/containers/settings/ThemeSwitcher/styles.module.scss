@@ -4,6 +4,20 @@
   flex: 1;
 }
 
+/* Too narrow on phones for every theme in one row: they wrap, two or more
+   to a row. The group's one-row margins give way to an even gap. */
+.themes {
+  @include tablet {
+    flex-wrap: wrap;
+    gap: $gap;
+
+    & > * {
+      margin: 0 !important;
+      flex: 1 1 40%;
+    }
+  }
+}
+
 .card {
   padding: $gap;
   flex: 1;

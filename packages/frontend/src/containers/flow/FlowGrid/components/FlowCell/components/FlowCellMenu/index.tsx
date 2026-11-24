@@ -28,6 +28,8 @@ interface Props {
   setViewHorizontal: () => void;
   setViewVertical: () => void;
   setViewQuadro: () => void;
+  /** Goes back to the flow's look; only where the cell has its own. */
+  onReset?: () => void;
 }
 
 const FlowCellMenu: FC<Props> = ({
@@ -40,6 +42,7 @@ const FlowCellMenu: FC<Props> = ({
   setViewHorizontal,
   setViewVertical,
   setViewQuadro,
+  onReset,
 }) => {
   return (
     <div className={classNames(styles.dropdown)}>
@@ -78,6 +81,12 @@ const FlowCellMenu: FC<Props> = ({
             <Toggle color="white" value={descriptionEnabled} />
             <span>Текст</span>
           </Group>
+        )}
+
+        {!!onReset && (
+          <button className={styles.reset} onClick={onReset} type="button">
+            Как во флоу
+          </button>
         )}
       </div>
     </div>

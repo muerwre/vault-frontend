@@ -192,7 +192,7 @@ describe('node upsert (integration)', () => {
 
       track(body.node.id);
       expect(body.node.is_public).toBe(true);
-      expect(body.node.is_promoted).toBe(true);
+      expect(body.node.is_promoted).toBe(1);
     });
 
     it('honours an explicit unpromoted flag, creating a lab node', async () => {
@@ -203,7 +203,32 @@ describe('node upsert (integration)', () => {
       }).expect(200);
 
       track(body.node.id);
-      expect(body.node.is_promoted).toBe(false);
+      expect(body.node.is_promoted).toBe(0);
+    });
+
+    it('lists a node on the profile only, and back in the flow', async () => {
+      const created = await save(authorId, {
+        type: 'image',
+        is_promoted: 2,
+        files: [{ id: imageId }],
+      }).expect(200);
+
+      track(created.body.node.id);
+      expect(created.body.node.is_promoted).toBe(2);
+
+      const [row] = await db.query(
+        'SELECT is_promoted FROM node WHERE id = ?',
+        [created.body.node.id],
+      );
+      expect(Number(row.is_promoted)).toBe(2);
+
+      const moved = await save(authorId, {
+        id: created.body.node.id,
+        is_promoted: 1,
+        files: [{ id: imageId }],
+      }).expect(200);
+
+      expect(moved.body.node.is_promoted).toBe(1);
     });
 
     it('creates a text node from a text block', async () => {
@@ -759,7 +784,7 @@ describe('node upsert (integration)', () => {
         files: [{ id: imageId }],
       }).expect(200);
 
-      expect(body.node.is_promoted).toBe(false);
+      expect(body.node.is_promoted).toBe(0);
     });
 
     it('sets and clears the cover', async () => {

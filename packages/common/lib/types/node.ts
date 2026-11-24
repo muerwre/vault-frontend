@@ -64,6 +64,14 @@ export interface INodeFlow {
  */
 export interface INodeSettings {
   layout?: NodeLayout;
+  /** The cell on the author's profile; absent means the flow's own. */
+  profile_flow?: INodeProfileFlow;
+}
+
+/** A profile cell's look. Its colour always comes from the flow settings. */
+export interface INodeProfileFlow {
+  display: FlowDisplayVariant;
+  show_description: boolean;
 }
 
 /** A `node_social_publications` row surfaced as a backlink. */
@@ -115,4 +123,3 @@ export type IFlowNode = Pick<
   /** A song node's tracks, at most ten, for its flow cell to play. */
   songs?: IFile[];
 };
-

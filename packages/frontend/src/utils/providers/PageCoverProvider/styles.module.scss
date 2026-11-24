@@ -35,4 +35,10 @@
   @include tablet {
     display: none;
   }
+
+  &.keep_on_mobile {
+    @include tablet {
+      display: block;
+    }
+  }
 }

@@ -1,10 +1,12 @@
 import { FC, useMemo } from 'react';
 
+import { NODE_PLACEMENT } from '@vault/common/constants';
 import classNames from 'classnames';
 
 import { NodeThumbnail } from '~/components/node/NodeThumbnail';
 import { NotificationItem } from '~/types/notifications';
 import { getPrettyDate } from '~/utils/dom';
+import { formatUsername } from '~/utils/user';
 
 import styles from './styles.module.scss';
 
@@ -18,7 +20,7 @@ const NotificationNode: FC<NotificationNodeProps> = ({ item, isNew }) => {
     () => ({
       title: item.title,
       thumbnail: item.thumbnail,
-      is_promoted: true,
+      is_promoted: NODE_PLACEMENT.FLOW,
     }),
     [item],
   );
@@ -32,7 +34,7 @@ const NotificationNode: FC<NotificationNodeProps> = ({ item, isNew }) => {
       <div className={styles.text}>
         <div className={styles.title}>{item.title || '...'}</div>
         <div className={styles.user}>
-          ~{item.user.username}, {getPrettyDate(item.created_at)}
+          {formatUsername(item.user.username)}, {getPrettyDate(item.created_at)}
         </div>
       </div>
     </div>

@@ -2,9 +2,10 @@ import { FC } from 'react';
 
 import classNames from 'classnames';
 
+import { ProfileLink } from '~/components/profile/ProfileLink';
 import { IUser } from '~/types/auth';
-import { path } from '~/utils/ramda';
 import { DivProps } from '~/utils/types';
+import { formatUsername } from '~/utils/user';
 
 import { CommentAvatar } from './components/CommentAvatar';
 import styles from './styles.module.scss';
@@ -40,7 +41,11 @@ const CommentWrapper: FC<Props> = ({
         user={user}
         className={classNames(styles.thumb_image, { [styles.pointer]: user })}
       />
-      <div className={styles.thumb_user}>~{path(['username'], user)}</div>
+      <div className={styles.thumb_user}>
+        <ProfileLink username={user?.username}>
+          {formatUsername(user?.username)}
+        </ProfileLink>
+      </div>
     </div>
 
     <div className={styles.text}>{children}</div>

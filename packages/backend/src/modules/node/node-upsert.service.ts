@@ -3,8 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   FILE_TYPES,
   FLOW_NODE_TYPES,
+  NODE_PLACEMENT,
   NODE_TYPES,
   UPLOAD_TARGETS,
+  type NodePlacement,
   type NodeType,
 } from '@vault/common/constants';
 import { MEDIA_OWNER_TYPES, MEDIA_PRIORITIES } from '@vault/common/media';
@@ -31,13 +33,37 @@ import {
 } from './node.content';
 import { canCreateNode, canEditNode } from './node.permissions';
 
+const PLACEMENTS: readonly number[] = Object.values(NODE_PLACEMENT);
+
+/**
+ * `is_promoted` is one of `NODE_PLACEMENT`. Older clients send a boolean,
+ * meaning flow or lab. Anything else keeps the current placement.
+ */
+export const resolvePlacement = (
+  body: Pick<NodeUpsertBody, 'is_promoted'> | undefined,
+  current: NodePlacement,
+): NodePlacement => {
+  const value = body?.is_promoted;
+
+  if (typeof value === 'boolean') {
+    return value ? NODE_PLACEMENT.FLOW : NODE_PLACEMENT.LAB;
+  }
+
+  if (typeof value === 'number' && PLACEMENTS.includes(value)) {
+    return value as NodePlacement;
+  }
+
+  return current;
+};
+
 /** What the client may send. Anything else in the body is ignored. */
 export interface NodeUpsertBody {
   id?: number;
   title?: string;
   type?: string;
   is_public?: boolean;
-  is_promoted?: boolean;
+  /** One of `NODE_PLACEMENT`; a boolean from older clients means flow/lab. */
+  is_promoted?: NodePlacement | boolean;
   thumbnail?: string;
   description?: string;
   blocks?: INodeBlock[];
@@ -124,7 +150,7 @@ export class NodeUpsertService {
         userId: user.id,
         // New nodes start visible and promoted; the body can override below.
         isPublic: true,
-        isPromoted: true,
+        placement: NODE_PLACEMENT.FLOW,
         blocks: [],
         filesOrder: [],
       });
@@ -171,8 +197,11 @@ export class NodeUpsertService {
       node.isPublic = body.is_public;
     }
 
-    if (typeof body?.is_promoted === 'boolean') {
-      node.isPromoted = body.is_promoted;
+    node.placement = resolvePlacement(body, node.placement);
+
+    // heroes are flow and lab only, and a profile-only node is in neither
+    if (node.placement === NODE_PLACEMENT.PROFILE) {
+      node.isHeroic = false;
     }
 
     node.description = deriveDescription(type, blocks, node.description ?? '');

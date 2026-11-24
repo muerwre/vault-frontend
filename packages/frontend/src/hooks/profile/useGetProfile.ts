@@ -7,12 +7,11 @@ import { API } from '~/constants/api';
 import { EMPTY_USER } from '~/constants/auth';
 import { IUser } from '~/types/auth';
 
-const getKey = (username?: string): string | null => {
-  return username ? `${API.USER.PROFILE}/${username}` : null;
-};
+const getKey = (username?: string): string | null =>
+  username ? API.USER.PROFILE(username) : null;
 
 export const useGetProfile = (username?: string) => {
-  const { data, isValidating, mutate } = useSWR(
+  const { data, isValidating, mutate, error } = useSWR(
     getKey(username),
     async () => {
       const result = await apiAuthGetUserProfile({ username: username || '' });
@@ -25,12 +24,21 @@ export const useGetProfile = (username?: string) => {
 
   const profile = data || EMPTY_USER;
 
+  /** Patches the cached profile without refetching it. */
   const update = useCallback(
     async (user: Partial<IUser>) => {
-      await mutate({ ...profile, ...user });
+      await mutate(
+        (current) => ({ ...(current || EMPTY_USER), ...user }),
+        false,
+      );
     },
-    [mutate, profile],
+    [mutate],
   );
 
-  return { profile, isLoading: !data && isValidating, update };
+  return {
+    profile,
+    isLoading: !data && !error && isValidating,
+    notFound: !!error && !data,
+    update,
+  };
 };

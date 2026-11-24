@@ -1,6 +1,6 @@
 import { Context } from 'react';
 
-import type { ImageBlockMode } from '@vault/common/constants';
+import type { ImageBlockMode, NodePlacement } from '@vault/common/constants';
 import type { INodeSettings } from '@vault/common/types';
 
 import { ERRORS } from '~/constants/errors';
@@ -115,7 +115,15 @@ export interface INode {
   description?: string;
   is_liked?: boolean;
   is_heroic?: boolean;
-  is_promoted?: boolean;
+  /**
+   * Where the node is listed: lab, flow or the author's profile only. Compare
+   * against `NODE_PLACEMENT`; lab is 0, so never test it for truthiness.
+   */
+  is_promoted?: NodePlacement;
+  /** Set by the author: leads their profile, wherever the node is listed. */
+  is_pinned?: boolean;
+  /** Profile grid only: `flow` is the profile's own, not the flow's. */
+  has_profile_flow?: boolean;
   is_public?: boolean;
   like_count?: number;
 
@@ -141,6 +149,8 @@ export type IFlowNode = Pick<
   | 'thumbnail'
   | 'created_at'
   | 'songs'
+  | 'is_pinned'
+  | 'has_profile_flow'
 >;
 
 export interface NodeBackLink {

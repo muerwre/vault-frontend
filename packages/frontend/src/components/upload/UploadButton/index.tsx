@@ -7,6 +7,7 @@ import { UploadType } from '~/constants/uploads';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { IEditorComponentProps } from '~/types/node';
 import { useUploaderContext } from '~/utils/context/UploaderContextProvider';
+import { getPlacementName } from '~/utils/node';
 import { getFileType } from '~/utils/uploader';
 
 import styles from './styles.module.scss';
@@ -40,7 +41,7 @@ const UploadButton: FC<Props> = ({
     [type, uploadFiles],
   );
 
-  const color = values.is_promoted ? 'flow' : 'lab';
+  const color = getPlacementName(values);
 
   return (
     <Button

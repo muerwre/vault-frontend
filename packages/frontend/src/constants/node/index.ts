@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { NODE_PLACEMENT } from '@vault/common/constants';
+
 import { NodeAudioBlock } from '~/components/node/NodeAudioBlock';
 import { NodeAudioImageBlock } from '~/components/node/NodeAudioImageBlock';
 import { NodeImageSwiperBlock } from '~/components/node/NodeImageSwiperBlock';
@@ -19,7 +21,7 @@ export const EMPTY_NODE: INode = {
   blocks: [],
   tags: [],
   is_public: true,
-  is_promoted: true,
+  is_promoted: NODE_PLACEMENT.FLOW,
 
   flow: {
     display: 'single',

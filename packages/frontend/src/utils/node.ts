@@ -1,3 +1,5 @@
+import { NODE_PLACEMENT, NodePlacement } from '@vault/common/constants';
+
 import { Role } from '~/constants/auth';
 import { NODE_LAYOUTS, NODE_TYPES } from '~/constants/node';
 import { ICommentGroup, INode } from '~/types';
@@ -9,6 +11,24 @@ import {
   TEXT_NODE_BLOCKS,
 } from '~/utils/blocks';
 import { path } from '~/utils/ramda';
+
+type Placed = Pick<INode, 'is_promoted'>;
+
+/** Names for placements, as used by the `flow`/`lab`/`profile` colours. */
+export type PlacementName = 'flow' | 'lab' | 'profile';
+
+const PLACEMENT_NAMES: Record<NodePlacement, PlacementName> = {
+  [NODE_PLACEMENT.LAB]: 'lab',
+  [NODE_PLACEMENT.FLOW]: 'flow',
+  [NODE_PLACEMENT.PROFILE]: 'profile',
+};
+
+/** A node without a placement yet is about to go to the flow. */
+export const getPlacementName = (node: Partial<Placed>): PlacementName =>
+  PLACEMENT_NAMES[node.is_promoted ?? NODE_PLACEMENT.FLOW] ?? 'flow';
+
+export const isLabNode = (node: Partial<Placed>): boolean =>
+  node.is_promoted === NODE_PLACEMENT.LAB;
 
 export const canEditNode = (
   node?: Partial<INode>,
@@ -50,7 +70,9 @@ export const canStarNode = (
 ): boolean =>
   !!node &&
   !!user &&
-  (node.type === NODE_TYPES.IMAGE || !node.is_promoted) &&
+  (node.is_promoted === NODE_PLACEMENT.LAB ||
+    (node.is_promoted === NODE_PLACEMENT.FLOW &&
+      node.type === NODE_TYPES.IMAGE)) &&
   user.role === Role.Admin;
 
 /**

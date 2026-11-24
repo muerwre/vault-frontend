@@ -1,0 +1,34 @@
+@import 'src/styles/variables';
+
+// As the node editor's background picker, but across the whole width.
+.wrap {
+  @include outer_shadow();
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  // a quarter lower than the node editor's 5 / 2
+  aspect-ratio: 10 / 3;
+  border-radius: $radius;
+  background: $content_bg_lighter 50% 50% no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.label {
+  font: $font_14_semibold;
+  text-transform: uppercase;
+  color: $gray_50;
+  // keeps clear of the controls below
+  margin-bottom: $gap * 2;
+}
+
+.pill {
+  position: absolute;
+  left: 50%;
+  bottom: $gap;
+  transform: translate(-50%, 0);
+}

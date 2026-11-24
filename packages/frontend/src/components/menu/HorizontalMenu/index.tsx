@@ -11,7 +11,15 @@ interface HorizontalMenuProps extends DivProps {}
 interface HorizontalMenuItemProps {
   isLoading?: boolean;
   icon?: ReactNode;
-  color?: 'green' | 'orange' | 'yellow' | 'flow' | 'lab';
+  /** `neutral` marks the active item without a colour of its own. */
+  color?:
+    | 'green'
+    | 'orange'
+    | 'yellow'
+    | 'flow'
+    | 'lab'
+    | 'profile'
+    | 'neutral';
   active?: boolean;
   stretchy?: boolean;
   /** Puts the label below the icon. */

@@ -8,43 +8,82 @@
   flex-direction: column;
 }
 
-.description {
-  grid-column: 2 / span 2;
+/* An aura fills the screen below the header, its content in the middle. */
+.aura_page {
+  box-sizing: border-box;
+  min-height: calc(100vh - #{$header_height + $page_top_offset});
+  justify-content: center;
+}
+
+/* Room at the bottom for the owner's floating controls, and the player below
+   them while it shows, so neither covers the last of the page. */
+.with_controls {
+  padding-bottom: calc(#{$bar_height + $gap * 2} + #{$player_room});
+}
+
+/* About card sizes, as in the flow grid. */
+.horizontal,
+.quadro {
+  grid-column-end: span 2;
+}
+
+.vertical,
+.quadro {
+  grid-row-end: span 2;
+}
+
+.left {
+  @include blur();
+
   grid-row: 1 / span 2;
-  height: 100%;
-  font: $font_14_medium;
-  overflow: auto;
-  height: 100%;
-  // display: none;
+  grid-column: 1 / span 1;
+  // the column's width, not its longest line: one-line info is cut instead
+  min-width: 0;
+  // Sized by the rows it spans, never by its content. Its span is measured
+  // to fit; should that come up short, it scrolls.
+  contain: size;
+  overflow-y: auto;
+  border-radius: $radius;
 }
 
 .grid {
-  @include flow_grid();
+  @include flow_grid;
 
   @include flow_breakpoint(4);
   @include flow_breakpoint(3);
 
+  // Too narrow for anything but the full width.
   @include flow_breakpoint(2) {
-    .left {
+
+    .left,
+    .about {
       grid-column: 1 / -1;
     }
   }
 }
 
-.row {
-  margin-bottom: $gap;
-  height: 100%;
+/* Lab cards take the full width, the profile among them as their first card;
+   every row is as tall as what it holds. */
+.lab_grid {
+  grid-template-rows: none;
+  grid-auto-rows: auto;
 }
 
-.left {
-  grid-row-start: 1;
-  grid-row-end: span 2;
-  grid-column-start: 1;
-  grid-column-end: span 1;
+.lab {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: -1 * $gap -1 * $gap 0;
 }
 
-.controls {
-  display: flex;
-  flex-direction: row;
-  gap: $gap;
+/* Where the cells would be, when a search finds none. */
+.nothing_found {
+  grid-column: 2 / -1;
+  padding: $gap * 2;
+  text-align: center;
+  font: $font_14_medium;
+  color: $gray_50;
+
+  .lab_grid & {
+    grid-column: 1 / -1;
+  }
 }

@@ -83,8 +83,24 @@ module.exports = withBundleAnalyzer(
           destination: '/node/:id',
         },
         {
-          source: '/~:username',
+          source: '/@:username',
           destination: '/profile/:username',
+        },
+      ];
+    },
+
+    /** profiles live on /@username; older addresses lead there */
+    async redirects() {
+      return [
+        {
+          source: '/~:username',
+          destination: '/@:username',
+          permanent: true,
+        },
+        {
+          source: '/profile/:username',
+          destination: '/@:username',
+          permanent: true,
         },
       ];
     },

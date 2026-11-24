@@ -1,6 +1,8 @@
 import { FC, useCallback, useMemo } from 'react';
 
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames';
+import { PinIcon } from 'lucide-react';
 
 import { Anchor } from '~/components/common/Anchor';
 import { MenuDots } from '~/components/menu/MenuDots';
@@ -34,10 +36,16 @@ interface Props {
   flow: FlowDisplay;
   canEdit?: boolean;
   onChange: (id: INode['id'], flow: FlowDisplay) => void;
+  /** Shown in the menu when the cell has its own look to drop. */
+  onReset?: () => void;
+  /** Marks the cell as pinned to the top of its author's profile. */
+  isPinned?: boolean;
 }
 
 /** Post types shown by `FlowCellPost`. */
 const POST_TYPES: string[] = [NODE_TYPES.TEXT, NODE_TYPES.AUDIO];
+
+const PIN_TOOLTIP = 'Закреплено наверху профиля';
 
 const FlowCell: FC<Props> = ({
   id,
@@ -51,6 +59,8 @@ const FlowCell: FC<Props> = ({
   title,
   canEdit = false,
   onChange,
+  onReset,
+  isPinned = false,
 }) => {
   const { isTablet } = useWindowSize();
 
@@ -120,9 +130,23 @@ const FlowCell: FC<Props> = ({
       className={classNames(styles.cell, styles[flow.display || 'single'])}
       ref={ref as any}
     >
-      {canEdit && !isMenuActive && (
+      {(canEdit || isPinned) && !isMenuActive && (
         <div className={styles.menu}>
-          <MenuDots onClick={activate} />
+          {canEdit ? (
+            <MenuDots
+              onClick={activate}
+              extraIcon={
+                isPinned ? <PinIcon size={16} fill="currentColor" /> : undefined
+              }
+              extraIconTooltip={PIN_TOOLTIP}
+            />
+          ) : (
+            <Tippy content={PIN_TOOLTIP}>
+              <div className={styles.pin}>
+                <PinIcon size={16} fill="currentColor" />
+              </div>
+            </Tippy>
+          )}
         </div>
       )}
 
@@ -138,6 +162,14 @@ const FlowCell: FC<Props> = ({
             setViewSingle={setViewSingle}
             setViewVertical={setViewVertical}
             toggleViewDescription={toggleViewDescription}
+            onReset={
+              onReset
+                ? () => {
+                    deactivate();
+                    onReset();
+                  }
+                : undefined
+            }
           />
         </div>
       )}

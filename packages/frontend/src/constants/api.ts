@@ -30,8 +30,9 @@ export const API = {
       `${CONFIG.apiHost}oauth/${provider}/redirect/`,
     ME: '/auth',
     UPDATE_PHOTO: '/auth/photo',
-    UPDATE_COVER: '/auth/photo',
+    UPDATE_COVER: '/auth/cover',
     PROFILE: (username: string) => `/users/${username}`,
+    NODES: (username: string) => `/users/${username}/nodes`,
     MESSAGES: (username: string) => `/users/${username}/messages`,
     MESSAGE_SEND: (username: string) => `/users/${username}/messages`,
     MESSAGE_DELETE: (username: string, id: number) =>
@@ -53,7 +54,10 @@ export const API = {
     DELETE: (id: INode['id']) => `/nodes/${id}`,
     LIKE: (id: INode['id']) => `/nodes/${id}/like`,
     HEROIC: (id: INode['id']) => `/nodes/${id}/heroic`,
+    PIN: (id: INode['id']) => `/nodes/${id}/pin`,
     SET_CELL_VIEW: (id: INode['id']) => `/nodes/${id}/cell-view`,
+    SET_PROFILE_CELL_VIEW: (id: INode['id']) =>
+      `/nodes/${id}/profile-cell-view`,
     RELATED: (id: INode['id']) => `/nodes/${id}/related`,
 
     UPDATE_TAGS: (id: INode['id']) => `/nodes/${id}/tags`,

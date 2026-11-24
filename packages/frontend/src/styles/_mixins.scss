@@ -218,10 +218,12 @@ Pass your custom rows here, like:
    grid-template-rows: 220px; // will add 220px first row
 }
 **/
-@mixin flow_grid {
+/** `$rows` sets `grid-template-rows`; left out by default (`null` emits nothing). */
+@mixin flow_grid($rows: null) {
   display: grid;
   gap: #{$gap};
   grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: $rows;
   grid-auto-rows: calc((100cqw - 4 * #{$gap} / 2) / 5);
   grid-auto-flow: row dense;
 

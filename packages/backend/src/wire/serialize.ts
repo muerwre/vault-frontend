@@ -1,9 +1,22 @@
-import { FILE_TYPES, MAX_LIST_SONGS } from '@vault/common/constants';
-import type { INodeBlock, INodeFlow, INodeSettings } from '@vault/common/types';
+import {
+  FILE_TYPES,
+  MAX_LIST_SONGS,
+  NODE_PLACEMENT,
+  PROFILE_NODES_VIEW,
+  type NodePlacement,
+  type ProfileNodesView,
+} from '@vault/common/constants';
+import type {
+  INodeBlock,
+  INodeFlow,
+  INodeSettings,
+  IProfileInfoItem,
+} from '@vault/common/types';
 
 import { isYoutubeThumbCacheEnabled } from '../config/env';
 import type { File } from '../entities/file.entity';
 import type { Node } from '../entities/node.entity';
+import type { UserProfile } from '../entities/user-profile.entity';
 import type { User } from '../entities/user.entity';
 import { localizeYoutubeThumb } from '../modules/upload/upload.paths';
 
@@ -128,7 +141,9 @@ export interface WireShallowNode {
   created_at: string;
   flow: INodeFlow;
   user: WireShallowUser;
-  is_promoted: boolean;
+  is_promoted: NodePlacement;
+  /** Leads the author's profile, wherever the node is listed. */
+  is_pinned: boolean;
   /** A song node's tracks, on the flow only, for its cell to play. */
   songs?: WireFile[];
 }
@@ -140,6 +155,17 @@ export const toWireFlowSongs = (files: File[]): WireFile[] =>
     .slice(0, MAX_LIST_SONGS)
     .map(toWireFile);
 
+/**
+ * `is_promoted` carries the placement as stored: one of `NODE_PLACEMENT`.
+ * Flow and lab keep their old 1/0, which read the same as the old booleans
+ * to a client testing truthiness.
+ */
+export const toWirePlacement = (
+  placement: number | null | undefined,
+): { is_promoted: NodePlacement } => ({
+  is_promoted: (Number(placement) || NODE_PLACEMENT.LAB) as NodePlacement,
+});
+
 export const toWireShallowNode = (node: Node): WireShallowNode => ({
   id: node.id,
   title: toWireString(node.title),
@@ -150,7 +176,35 @@ export const toWireShallowNode = (node: Node): WireShallowNode => ({
   created_at: toWireDate(node.createdAt),
   flow: toWireFlow(node.flow),
   user: toWireShallowUser(node.user),
-  is_promoted: Boolean(node.isPromoted),
+  ...toWirePlacement(node.placement),
+  is_pinned: Boolean(node.isPinned),
+});
+
+/**
+ * How the node's cell looks on its author's profile: the profile's own
+ * display, or the flow's when it has none. The colour is always the flow's.
+ */
+export const toWireProfileFlow = (
+  node: Pick<Node, 'flow' | 'settings'>,
+): INodeFlow => {
+  const flow = toWireFlow(node.flow);
+  const own = node.settings?.profile_flow;
+
+  return own
+    ? { ...flow, display: own.display, show_description: own.show_description }
+    : flow;
+};
+
+/** A node as the profile grid lists it. */
+export interface WireProfileNode extends WireShallowNode {
+  /** `flow` is the profile's own rather than the flow's. */
+  has_profile_flow: boolean;
+}
+
+export const toWireProfileNode = (node: Node): WireProfileNode => ({
+  ...toWireShallowNode(node),
+  flow: toWireProfileFlow(node),
+  has_profile_flow: !!node.settings?.profile_flow,
 });
 
 /** File. `orig_name`, `full_path`, `target` and the owner are never exposed. */
@@ -235,7 +289,9 @@ export interface WireNode {
   title: string;
   type: string;
   is_public: boolean;
-  is_promoted: boolean;
+  is_promoted: NodePlacement;
+  /** Leads the author's profile, wherever the node is listed. */
+  is_pinned: boolean;
   is_heroic: boolean;
   thumbnail: string;
   description: string;
@@ -268,7 +324,8 @@ export const toWireNode = (
   title: toWireString(node.title),
   type: toWireString(node.type),
   is_public: Boolean(node.isPublic),
-  is_promoted: Boolean(node.isPromoted),
+  ...toWirePlacement(node.placement),
+  is_pinned: Boolean(node.isPinned),
   is_heroic: Boolean(node.isHeroic),
   thumbnail: toWireThumbnail(node.thumbnail),
   description: toWireString(node.description),
@@ -326,6 +383,35 @@ export const toWireShallowFile = (
     : null;
 
 /**
+ * Additional info. Entries that are not a `{ title, value }` with a value
+ * are dropped, so a malformed blob degrades to less info, not a broken page.
+ */
+export const toWireProfileInfo = (info: unknown): IProfileInfoItem[] =>
+  Array.isArray(info)
+    ? info.flatMap((item) =>
+        item &&
+        typeof item === 'object' &&
+        typeof item.value === 'string' &&
+        item.value
+          ? [
+              {
+                title: typeof item.title === 'string' ? item.title : '',
+                value: item.value,
+              },
+            ]
+          : [],
+      )
+    : [];
+
+const NODES_VIEWS: readonly string[] = Object.values(PROFILE_NODES_VIEW);
+
+/** How the profile shows; unset or unknown reads as the flow. */
+export const toWireNodesView = (view: unknown): ProfileNodesView =>
+  typeof view === 'string' && NODES_VIEWS.includes(view)
+    ? (view as ProfileNodesView)
+    : PROFILE_NODES_VIEW.FLOW;
+
+/**
  * Public profile. Narrower than the user embedded in nodes: it carries
  * `created_at` but no `last_seen`, and its files are the shallow shape.
  */
@@ -336,17 +422,33 @@ export interface WireProfile {
   role: string;
   fullname: string;
   description: string;
+  about: string;
+  about_display: string;
+  info: IProfileInfoItem[];
+  nodes_view: ProfileNodesView;
   cover: WireShallowFile | null;
   photo: WireShallowFile | null;
 }
 
-export const toWireProfile = (user: User): WireProfile => ({
+/** Profile page fields; a missing row serialises as an empty profile. */
+const toWireProfileExtras = (profile: UserProfile | null | undefined) => ({
+  about: toWireString(profile?.about),
+  about_display: toWireString(profile?.aboutDisplay),
+  info: toWireProfileInfo(profile?.settings?.info),
+  nodes_view: toWireNodesView(profile?.settings?.nodes_view),
+});
+
+export const toWireProfile = (
+  user: User,
+  profile?: UserProfile | null,
+): WireProfile => ({
   id: user.id,
   created_at: toWireDate(user.createdAt),
   username: toWireString(user.username),
   role: toWireString(user.role),
   fullname: toWireString(user.fullname),
   description: toWireString(user.description),
+  ...toWireProfileExtras(profile),
   cover: toWireShallowFile(user.cover),
   photo: toWireShallowFile(user.photo),
 });
@@ -363,6 +465,10 @@ export interface WireSelf {
   role: string;
   fullname: string;
   description: string;
+  about: string;
+  about_display: string;
+  info: IProfileInfoItem[];
+  nodes_view: ProfileNodesView;
   last_seen: string;
   /** Derived from this user's view of the Boris node; there is no such column. */
   last_seen_boris: string;
@@ -373,6 +479,7 @@ export interface WireSelf {
 export const toWireSelf = (
   user: User,
   lastSeenBoris: Date | null,
+  profile?: UserProfile | null,
 ): WireSelf => ({
   id: user.id,
   username: toWireString(user.username),
@@ -380,6 +487,7 @@ export const toWireSelf = (
   role: toWireString(user.role),
   fullname: toWireString(user.fullname),
   description: toWireString(user.description),
+  ...toWireProfileExtras(profile),
   last_seen: toWireDate(user.lastSeen),
   last_seen_boris: toWireDate(lastSeenBoris),
   photo: toWireShallowFile(user.photo),

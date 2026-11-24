@@ -4,10 +4,16 @@ import {
   FILE_TYPES,
   GUEST_USER_ID,
   NODE_BACKLINK_PROVIDERS,
+  NODE_PLACEMENT,
   NODE_TYPES,
   ROLES,
+  type NodePlacement,
 } from '@vault/common/constants';
-import type { INodeFlow } from '@vault/common/types';
+import type {
+  INodeFlow,
+  INodeProfileFlow,
+  INodeSettings,
+} from '@vault/common/types';
 import { Repository, type SelectQueryBuilder } from 'typeorm';
 
 import { File } from '../../entities/file.entity';
@@ -21,6 +27,8 @@ import {
   toWireFlow,
   toWireNode,
   toWireFlowSongs,
+  toWirePlacement,
+  toWireProfileFlow,
   toWireShallowNode,
   toWireThumbnail,
   type WireNode,
@@ -82,7 +90,7 @@ export interface WireRelatedItem {
   title: string;
   /** Lets a thumbnail show a text or song post's title over its picture. */
   type: string;
-  is_promoted: boolean;
+  is_promoted: NodePlacement;
 }
 
 export interface WireRelated {
@@ -248,9 +256,17 @@ export class NodeService {
           AND \`node\`.\`type\` = ?
           AND \`node\`.\`id\` NOT IN (?)
           AND \`node\`.\`deleted_at\` IS NULL
-          AND \`node\`.\`is_promoted\` >= ?
+          AND \`node\`.\`is_promoted\` IN (?)
         LIMIT ?`,
-      [tagIds, node.type, [node.id], flowOnly ? 1 : 0, RELATED_LIMIT],
+      [
+        tagIds,
+        node.type,
+        [node.id],
+        flowOnly
+          ? [NODE_PLACEMENT.FLOW]
+          : [NODE_PLACEMENT.LAB, NODE_PLACEMENT.FLOW],
+        RELATED_LIMIT,
+      ],
     );
 
     for (const row of rows) {
@@ -261,7 +277,7 @@ export class NodeService {
         thumbnail: toWireThumbnail(row.thumbnail),
         title: row.title ?? '',
         type: row.type ?? '',
-        is_promoted: Boolean(row.is_promoted),
+        ...toWirePlacement(row.is_promoted),
       });
     }
 
@@ -295,12 +311,20 @@ export class NodeService {
             WHERE \`tags\`.\`tagId\` IN (?) AND \`nodeId\` NOT IN (?)
          ) AS \`t1\` ON \`t1\`.\`nodeId\` = \`node\`.\`id\`
         WHERE \`node\`.\`type\` = ?
-          AND \`node\`.\`is_promoted\` >= ?
+          AND \`node\`.\`is_promoted\` IN (?)
           AND \`node\`.\`deleted_at\` IS NULL
         GROUP BY \`t1\`.\`nodeId\`
         ORDER BY \`count\` DESC
         LIMIT ?`,
-      [tagIds, [node.id], node.type, flowOnly ? 1 : 0, RELATED_LIMIT],
+      [
+        tagIds,
+        [node.id],
+        node.type,
+        flowOnly
+          ? [NODE_PLACEMENT.FLOW]
+          : [NODE_PLACEMENT.LAB, NODE_PLACEMENT.FLOW],
+        RELATED_LIMIT,
+      ],
     );
 
     return rows.map((row) => ({
@@ -308,7 +332,7 @@ export class NodeService {
       thumbnail: toWireThumbnail(row.thumbnail),
       title: row.title ?? '',
       type: row.type ?? '',
-      is_promoted: Boolean(row.is_promoted),
+      ...toWirePlacement(row.is_promoted),
     }));
   }
 
@@ -605,7 +629,13 @@ export class NodeService {
     return next;
   }
 
-  /** Persists the flow display settings and returns them as stored. */
+  /** Sets `is_pinned` and returns it as stored. */
+  async setPinned(node: Node, isPinned: boolean): Promise<boolean> {
+    await this.nodes.update(node.id, { isPinned });
+
+    return isPinned;
+  }
+
   /**
    * Replaces the node's flow settings with the client's, as a whole. Only the
    * known keys are kept: anything else a client sends is not stored.
@@ -621,6 +651,34 @@ export class NodeService {
     await this.nodes.update(node.id, { flow: stored });
 
     return toWireFlow(stored);
+  }
+
+  /**
+   * Sets the node's cell on its author's profile, or with `null` goes back to
+   * the flow's. Returns the cell as the profile will now show it.
+   */
+  async setProfileFlow(
+    node: Node,
+    flow: INodeProfileFlow | null,
+  ): Promise<{ flow: INodeFlow; has_profile_flow: boolean }> {
+    const { profile_flow: _previous, ...rest } = node.settings ?? {};
+    const settings: INodeSettings = flow
+      ? {
+          ...rest,
+          profile_flow: {
+            display: flow.display,
+            show_description: Boolean(flow.show_description),
+          },
+        }
+      : rest;
+    const stored = Object.keys(settings).length > 0 ? settings : null;
+
+    await this.nodes.update(node.id, { settings: stored });
+
+    return {
+      flow: toWireProfileFlow({ flow: node.flow, settings: stored }),
+      has_profile_flow: !!flow,
+    };
   }
 
   /**

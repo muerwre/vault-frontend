@@ -15,7 +15,7 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <Group horizontal>
+    <Group horizontal className={styles.themes}>
       {Object.entries(themeColors).map(([id, item]) => (
         <Card
           key={id}

@@ -235,7 +235,7 @@ describe('read endpoints (integration)', () => {
 
         expect(body.count).toBe(labCount);
         expect(
-          body.nodes.every((n: { is_promoted: boolean }) => !n.is_promoted),
+          body.nodes.every((n: { is_promoted: number }) => n.is_promoted === 0),
         ).toBe(true);
       });
 
@@ -344,11 +344,15 @@ describe('read endpoints (integration)', () => {
       const { body } = await http().get('/api/users/muro').expect(200);
 
       expect(Object.keys(body.user).sort()).toEqual([
+        'about',
+        'about_display',
         'cover',
         'created_at',
         'description',
         'fullname',
         'id',
+        'info',
+        'nodes_view',
         'photo',
         'role',
         'username',
@@ -416,8 +420,265 @@ describe('read endpoints (integration)', () => {
       expect(body.nodes.length).toBeGreaterThan(0);
     });
 
+    it('honours a limit and ignores one out of range', async () => {
+      const small = await http()
+        .get('/api/users/muro/nodes')
+        .query({ limit: 2 })
+        .expect(200);
+
+      expect(small.body.nodes).toHaveLength(2);
+
+      const full = await http().get('/api/users/muro/nodes').expect(200);
+      const huge = await http()
+        .get('/api/users/muro/nodes')
+        .query({ limit: 100000 })
+        .expect(200);
+
+      expect(huge.body.nodes).toHaveLength(full.body.nodes.length);
+    });
+
     it('404s an unknown username', async () => {
       await http().get('/api/users/__nobody__/nodes').expect(404);
+    });
+
+    it('narrows the listing to a search in titles and descriptions', async () => {
+      const [row] = await db.query(`
+        SELECT n.title FROM node n JOIN user u ON u.id = n.userId
+         WHERE u.username = 'muro' AND n.deleted_at IS NULL
+           AND n.is_public = 1 AND n.is_promoted = 1
+           AND CHAR_LENGTH(n.title) >= 4
+         ORDER BY n.created_at DESC LIMIT 1
+      `);
+      const term = String(row.title).slice(0, 4);
+
+      const { body } = await http()
+        .get('/api/users/muro/nodes')
+        .query({ search: `  ${term}  ` })
+        .expect(200);
+
+      expect(body.nodes.length).toBeGreaterThan(0);
+      for (const node of body.nodes) {
+        expect(`${node.title} ${node.description}`.toLowerCase()).toContain(
+          term.toLowerCase(),
+        );
+      }
+    });
+
+    it('finds nothing, pinned nodes included, for a term in no node', async () => {
+      const { body } = await http()
+        .get('/api/users/muro/nodes')
+        .query({ search: 'zzqx-no-such-text' })
+        .expect(200);
+
+      expect(body.nodes).toEqual([]);
+    });
+
+    describe('with pinned, profile-only and lab nodes', () => {
+      /** Oldest first, so pinning has to reorder. */
+      let pinnedFlowId: number;
+      let pinnedLabId: number;
+      let profileId: number;
+      let labId: number;
+      /** A cursor whose page starts at the newest fixture node. */
+      let pastFixtures: string;
+      let restore: Array<{
+        id: number;
+        is_promoted: number;
+        is_pinned: number;
+        created_at: Date;
+      }>;
+
+      const ids = (body: { nodes: Array<{ id: number }> }) =>
+        body.nodes.map((node) => node.id);
+
+      const member = async () => {
+        const [user] = await db.query(
+          "SELECT id FROM user WHERE username = 'muro'",
+        );
+        return authHeader(Number(user.id));
+      };
+
+      beforeAll(async () => {
+        const rows: Array<{
+          id: number;
+          is_promoted: number;
+          is_pinned: number;
+          created_at: Date;
+        }> = await db.query(`
+          SELECT n.id, n.is_promoted, n.is_pinned, n.created_at FROM node n
+            JOIN user u ON u.id = n.userId
+           WHERE u.username = 'muro' AND n.deleted_at IS NULL
+             AND n.is_public = 1 AND n.type IN ('image', 'text')
+           ORDER BY n.created_at ASC LIMIT 4
+        `);
+        restore = rows;
+        [pinnedFlowId, pinnedLabId, profileId, labId] = rows.map((row) =>
+          Number(row.id),
+        );
+        pastFixtures = new Date(
+          new Date(rows[3].created_at).getTime() + 1000,
+        ).toISOString();
+
+        const set = (id: number, placement: number, pinned: number) =>
+          db.query(
+            'UPDATE node SET is_promoted = ?, is_pinned = ? WHERE id = ?',
+            [placement, pinned, id],
+          );
+
+        await set(pinnedFlowId, 1, 1);
+        await set(pinnedLabId, 0, 1);
+        await set(profileId, 2, 0);
+        await set(labId, 0, 0);
+      });
+
+      afterAll(async () => {
+        for (const row of restore) {
+          await db.query(
+            'UPDATE node SET is_promoted = ?, is_pinned = ? WHERE id = ?',
+            [row.is_promoted, row.is_pinned, row.id],
+          );
+        }
+      });
+
+      it('lists pinned nodes first, on top of a full page', async () => {
+        const { body } = await http()
+          .get('/api/users/muro/nodes')
+          .set(await member())
+          .query({ limit: 3 })
+          .expect(200);
+
+        expect(ids(body).slice(0, 2).sort()).toEqual(
+          [pinnedFlowId, pinnedLabId].sort(),
+        );
+        expect(body.nodes[0].is_pinned).toBe(true);
+        expect(body.nodes.slice(2)).toHaveLength(3);
+        expect(
+          body.nodes
+            .slice(2)
+            .some((node: { is_pinned: boolean }) => node.is_pinned),
+        ).toBe(false);
+      });
+
+      it('keeps placement apart from the pin', async () => {
+        const { body } = await http()
+          .get('/api/users/muro/nodes')
+          .set(await member())
+          .expect(200);
+        const byId = new Map(
+          body.nodes.map((node: { id: number }) => [node.id, node]),
+        );
+
+        expect(byId.get(pinnedFlowId)).toMatchObject({
+          is_pinned: true,
+          is_promoted: 1,
+        });
+        expect(byId.get(pinnedLabId)).toMatchObject({
+          is_pinned: true,
+          is_promoted: 0,
+        });
+      });
+
+      it('lists lab-card items in the same order with full=true', async () => {
+        const auth = await member();
+        const flow = await http()
+          .get('/api/users/muro/nodes')
+          .set(auth)
+          .query({ limit: 3 })
+          .expect(200);
+        const lab = await http()
+          .get('/api/users/muro/nodes')
+          .set(auth)
+          .query({ limit: 3, full: 'true' })
+          .expect(200);
+
+        expect(
+          lab.body.nodes.map((item: { node: { id: number } }) => item.node.id),
+        ).toEqual(ids(flow.body));
+        expect(Object.keys(lab.body.nodes[0]).sort()).toEqual([
+          'comment_count',
+          'last_seen',
+          'node',
+        ]);
+        expect(lab.body.nodes[0].node).toHaveProperty('blocks');
+        // the profile's cell look, as in the flow-cell listing
+        expect(lab.body.nodes[0].node.flow).toEqual(flow.body.nodes[0].flow);
+        expect(lab.body.nodes[0].node.has_profile_flow).toBe(
+          flow.body.nodes[0].has_profile_flow,
+        );
+      });
+
+      it('leaves pinned nodes out of later pages', async () => {
+        const { body } = await http()
+          .get('/api/users/muro/nodes')
+          .set(await member())
+          .query({ after: new Date().toISOString() })
+          .expect(200);
+
+        expect(ids(body)).not.toContain(pinnedFlowId);
+        expect(ids(body)).not.toContain(pinnedLabId);
+      });
+
+      it('shows guests flow and profile-only nodes, never lab ones', async () => {
+        const first = await http().get('/api/users/muro/nodes').expect(200);
+        const older = await http()
+          .get('/api/users/muro/nodes')
+          .query({ after: pastFixtures })
+          .expect(200);
+
+        expect(ids(first.body)).toContain(pinnedFlowId);
+        expect(ids(first.body)).not.toContain(pinnedLabId);
+        expect(ids(older.body)).toContain(profileId);
+        expect(ids(older.body)).not.toContain(labId);
+      });
+
+      it('shows signed-in viewers lab nodes too', async () => {
+        const { body } = await http()
+          .get('/api/users/muro/nodes')
+          .query({ after: pastFixtures })
+          .set(await member())
+          .expect(200);
+
+        expect(ids(body)).toEqual(expect.arrayContaining([profileId, labId]));
+      });
+
+      it('keeps profile-only nodes out of the flow and the lab, but not pinned ones', async () => {
+        const auth = await member();
+        const [oldest] = restore;
+
+        const flow = await http()
+          .get('/api/nodes/')
+          .set(auth)
+          .query({
+            start: new Date().toISOString(),
+            end: new Date(
+              new Date(oldest.created_at).getTime() - 1000,
+            ).toISOString(),
+            take: 100000,
+            with_recent: 'true',
+            with_valid: 'true',
+          })
+          .expect(200);
+        const flowIds = [
+          ...flow.body.before,
+          ...flow.body.after,
+          ...flow.body.recent,
+        ]
+          .map((node: { id: number }) => node.id)
+          .concat(flow.body.valid);
+
+        const lab = await http()
+          .get('/api/nodes/lab')
+          .set(auth)
+          .query({ limit: 1000 })
+          .expect(200);
+        const labIds = lab.body.nodes.map(
+          (item: { node: { id: number } }) => item.node.id,
+        );
+
+        expect(flowIds).toContain(pinnedFlowId);
+        expect(flowIds).not.toContain(profileId);
+        expect(labIds).not.toContain(profileId);
+      });
     });
   });
 

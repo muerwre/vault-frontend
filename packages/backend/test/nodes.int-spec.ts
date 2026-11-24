@@ -337,6 +337,15 @@ describe('nodes (integration)', () => {
       expect('email' in body.node.user).toBe(false);
     });
 
+    /** Profile page content belongs to the profile, not to every byline. */
+    it('excludes profile page fields from the embedded author', async () => {
+      const { body } = await http().get(`/api/nodes/${nodeId}`).expect(200);
+
+      for (const key of ['about', 'about_display', 'links']) {
+        expect(key in body.node.user).toBe(false);
+      }
+    });
+
     it('returns backlinks as provider/link pairs', async () => {
       const { body } = await http().get(`/api/nodes/${nodeId}`).expect(200);
 
@@ -460,13 +469,13 @@ describe('nodes (integration)', () => {
       const lastId = async () =>
         Number((await db.query('SELECT LAST_INSERT_ID() AS id'))[0].id);
 
-      /** A text node carrying the spec's tag. */
-      const tagged = async (isPromoted: boolean) => {
+      /** A text node carrying the spec's tag; placement as in `is_promoted`. */
+      const tagged = async (placement: 0 | 1 | 2) => {
         await db.query(
           `INSERT INTO node (title, type, blocks, files_order, is_public, is_promoted,
                              is_heroic, created_at, updated_at)
            VALUES ('related spec', 'text', '[]', '', 1, ?, 0, NOW(), NOW())`,
-          [isPromoted ? 1 : 0],
+          [placement],
         );
         const id = await lastId();
         nodeIds.push(id);
@@ -499,10 +508,12 @@ describe('nodes (integration)', () => {
         );
         tagId = await lastId();
 
-        flowSource = await tagged(true);
-        flowSibling = await tagged(true);
-        labSource = await tagged(false);
-        labSibling = await tagged(false);
+        flowSource = await tagged(1);
+        flowSibling = await tagged(1);
+        labSource = await tagged(0);
+        labSibling = await tagged(0);
+        // never related to anything: it is listed on its author's profile only
+        await tagged(2);
       });
 
       afterAll(async () => {

@@ -121,6 +121,22 @@ $compact_size: 200px;
   z-index: 6;
 }
 
+/* The pin alone, for viewers without the menu; matches the menu's pill. */
+.pin {
+  @include blur;
+
+  margin: 5px 5px 0 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius;
+  background: $content_bg;
+  color: white;
+  fill: white;
+}
+
 .link {
   display: flex;
   width: 100%;

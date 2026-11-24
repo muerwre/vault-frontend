@@ -1,3 +1,5 @@
+import { NODE_PLACEMENT, type NodePlacement } from '@vault/common/constants';
+
 import type { Node } from '../../entities/node.entity';
 
 import {
@@ -8,17 +10,23 @@ import {
   isFlowType,
   isHiddenFromGuests,
   isLabType,
+  isPostType,
+  isProfileType,
 } from './node.permissions';
+
+const { FLOW, LAB, PROFILE } = NODE_PLACEMENT;
 
 const node = (
   type: string,
-  isPromoted: boolean,
+  placement: NodePlacement | boolean,
   userId: number | null = 7,
-): Pick<Node, 'type' | 'isPromoted' | 'userId'> =>
-  ({ type, isPromoted, userId }) as Pick<
-    Node,
-    'type' | 'isPromoted' | 'userId'
-  >;
+): Pick<Node, 'type' | 'placement' | 'userId'> =>
+  ({
+    type,
+    placement:
+      placement === true ? FLOW : placement === false ? LAB : placement,
+    userId,
+  }) as Pick<Node, 'type' | 'placement' | 'userId'>;
 
 const author = { id: 7, role: 'user' };
 const stranger = { id: 8, role: 'user' };
@@ -45,6 +53,13 @@ describe('node permissions', () => {
       }
     });
 
+    it('treats a profile placement as neither flow nor lab, but a post', () => {
+      expect(isProfileType(node('image', PROFILE))).toBe(true);
+      expect(isFlowOrLabType(node('image', PROFILE))).toBe(false);
+      expect(isPostType(node('image', PROFILE))).toBe(true);
+      expect(isPostType(node('boris', PROFILE))).toBe(false);
+    });
+
     it('accepts every flow-listed type', () => {
       for (const type of ['image', 'video', 'text', 'audio']) {
         expect(isFlowOrLabType(node(type, true))).toBe(true);
@@ -59,8 +74,9 @@ describe('node permissions', () => {
       expect(isHiddenFromGuests(node('boris', true))).toBe(true);
     });
 
-    it('shows flow posts and webm', () => {
+    it('shows flow and profile posts and webm', () => {
       expect(isHiddenFromGuests(node('image', true))).toBe(false);
+      expect(isHiddenFromGuests(node('image', PROFILE))).toBe(false);
       expect(isHiddenFromGuests(node('webm', false))).toBe(false);
     });
   });
@@ -103,6 +119,11 @@ describe('node permissions', () => {
     it('allows editing a lab node', () => {
       expect(canEditNode(node('image', false), author)).toBe(true);
     });
+
+    it('allows editing a profile node', () => {
+      expect(canEditNode(node('image', PROFILE), author)).toBe(true);
+      expect(canEditNode(node('image', PROFILE), stranger)).toBe(false);
+    });
   });
 
   describe('canHeroNode', () => {
@@ -118,6 +139,10 @@ describe('node permissions', () => {
 
     it('allows admins on a lab post', () => {
       expect(canHeroNode(node('image', false), admin)).toBe(true);
+    });
+
+    it('denies admins on a profile post', () => {
+      expect(canHeroNode(node('image', PROFILE), admin)).toBe(false);
     });
   });
 });

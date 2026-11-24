@@ -41,6 +41,39 @@
   border-bottom: 1px solid $gray_90;
   padding: $gap;
 
+  // On phones the notifications switch goes under the name, which gets the
+  // row's width
+  @include tablet {
+    grid-template-columns: 20px 1fr 20px;
+    grid-template-areas:
+      'photo name drop'
+      '. notifications notifications';
+    row-gap: $gap * 0.5;
+
+    .account__photo {
+      grid-area: photo;
+    }
+
+    .account__name {
+      grid-area: name;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .account__notifications {
+      grid-area: notifications;
+    }
+
+    .account__drop {
+      grid-area: drop;
+    }
+
+    // keeps the desktop columns lined up; on phones it would add a row
+    .account__spacer {
+      display: none;
+    }
+  }
+
   &:last-child {
     border-bottom: none;
   }

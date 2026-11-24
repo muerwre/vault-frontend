@@ -81,7 +81,7 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
                     />
                   </label>
                 ) : (
-                  <div />
+                  <div className={styles.account__spacer} />
                 )}
 
                 <div className={styles.account__drop}>

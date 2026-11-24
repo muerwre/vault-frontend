@@ -1,5 +1,7 @@
 import { FC, useCallback, useMemo, useRef } from 'react';
 
+import { NODE_PLACEMENT } from '@vault/common/constants';
+
 import { EMPTY_NODE, NODE_TYPES } from '~/constants/node';
 import { EditorDialog } from '~/containers/dialogs/EditorDialog';
 import { useCreateNode } from '~/hooks/node/useCreateNode';
@@ -22,7 +24,11 @@ const EditorCreateDialog: FC<EditorCreateDialogProps> = ({
     [type],
   );
 
-  const data = useRef({ ...EMPTY_NODE, type, is_promoted: !isInLab });
+  const data = useRef({
+    ...EMPTY_NODE,
+    type,
+    is_promoted: isInLab ? NODE_PLACEMENT.LAB : NODE_PLACEMENT.FLOW,
+  });
 
   const createNode = useCreateNode();
 

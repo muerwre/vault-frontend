@@ -1,5 +1,6 @@
 import { FC, useCallback } from 'react';
 
+import { NODE_PLACEMENT } from '@vault/common/constants';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 
@@ -55,7 +56,11 @@ const SubmitPage: FC = observer(() => {
       <SubmitLayout
         key={String(isInLab)}
         // read once: switching the type later keeps the form
-        initial={{ ...EMPTY_NODE, type, is_promoted: !isInLab }}
+        initial={{
+          ...EMPTY_NODE,
+          type,
+          is_promoted: isInLab ? NODE_PLACEMENT.LAB : NODE_PLACEMENT.FLOW,
+        }}
         type={type}
         onSubmit={onSubmit}
         onSwitchType={onSwitchType}

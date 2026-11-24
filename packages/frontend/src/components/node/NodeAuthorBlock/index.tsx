@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { Avatar } from '~/components/common/Avatar';
 import { Card } from '~/components/common/Card';
+import { ProfileLink } from '~/components/profile/ProfileLink';
 import { useUserDescription } from '~/hooks/auth/useUserDescription';
 import { INodeUser } from '~/types';
 
@@ -22,10 +23,18 @@ const NodeAuthorBlock: FC<Props> = ({ user }) => {
 
   return (
     <Card className={styles.block} elevation={-1}>
-      <Avatar username={username} url={photo?.url} className={styles.avatar} />
+      <ProfileLink username={username}>
+        <Avatar
+          username={username}
+          url={photo?.url}
+          className={styles.avatar}
+        />
+      </ProfileLink>
 
       <div className={styles.info}>
-        <div className={styles.username}>{fullname || username}</div>
+        <div className={styles.username}>
+          <ProfileLink username={username}>{fullname || username}</ProfileLink>
+        </div>
         <div className={styles.description}>{description}</div>
       </div>
     </Card>

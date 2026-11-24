@@ -146,10 +146,9 @@ describe('media backlog release (integration)', () => {
     }
 
     if (parkedJobs.length > 0) {
-      await db.query(
-        `UPDATE media_job SET status = 'queued' WHERE id IN (?)`,
-        [parkedJobs.map((row) => row.id)],
-      );
+      await db.query(`UPDATE media_job SET status = 'queued' WHERE id IN (?)`, [
+        parkedJobs.map((row) => row.id),
+      ]);
     }
 
     await app.close();

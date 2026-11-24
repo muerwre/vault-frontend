@@ -37,6 +37,6 @@ import { NodeService } from './node.service';
   ],
   controllers: [NodeController],
   providers: [NodeService, NodeTagsService, NodeUpsertService, LabService],
-  exports: [NodeService],
+  exports: [NodeService, LabService],
 })
 export class NodeModule {}

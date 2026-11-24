@@ -1,25 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GUEST_USER_ID } from '@vault/common/constants';
 import { Repository } from 'typeorm';
 
 import { Node } from '../../entities/node.entity';
+import { UserProfile } from '../../entities/user-profile.entity';
 import { User } from '../../entities/user.entity';
 import {
   toWireProfile,
-  toWireShallowNode,
+  toWireProfileFlow,
+  toWireProfileNode,
   type WireProfile,
-  type WireShallowNode,
+  type WireProfileNode,
 } from '../../wire/serialize';
+import { LabService, type WireLabItem } from '../node/lab.service';
 import { applyVisibleToViewer } from '../node/node.predicates';
 
-/** Rows returned per request by the node listing. */
-const USER_NODES_LIMIT = 100;
+/** Most rows returned per request by the node listing, and the default. */
+export const USER_NODES_LIMIT = 100;
+
+/** Which of a user's nodes to list. */
+export interface UserNodesQuery {
+  /** A `created_at` cursor: only older unpinned nodes. */
+  after?: Date | null;
+  limit?: number;
+  /** Kept to nodes whose title or description contains it. */
+  search?: string;
+}
+
+/** A lab-card item whose node carries the profile's cell look. */
+export interface WireProfileItem extends WireLabItem {
+  node: WireLabItem['node'] & { has_profile_flow: boolean };
+}
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
+    @InjectRepository(UserProfile)
+    private readonly profiles: Repository<UserProfile>,
     @InjectRepository(Node) private readonly nodes: Repository<Node>,
+    private readonly lab: LabService,
   ) {}
 
   /** Lookup is by exact username. Soft-deleted accounts are not found. */
@@ -32,7 +53,14 @@ export class UserService {
       .andWhere('user.deleted_at IS NULL')
       .getOne();
 
-    return user ? toWireProfile(user) : null;
+    if (!user) {
+      return null;
+    }
+
+    return toWireProfile(
+      user,
+      await this.profiles.findOneBy({ userId: user.id }),
+    );
   }
 
   findByUsername(username: string): Promise<User | null> {
@@ -44,33 +72,89 @@ export class UserService {
   }
 
   /**
-   * A user's nodes, newest first. `after` is a `created_at` cursor: only older
-   * nodes are returned. Guests see flow nodes only.
+   * A user's nodes as flow cells, or with `full`, as lab-card items: full
+   * nodes with their comment counts, enough for the profile to draw either
+   * view from one listing. Both carry the profile's own cell look in `flow`.
+   * See `findUserNodes` for which nodes and in what order.
    */
   async getUserNodes(
     userId: number,
-    isUser: boolean,
-    after: Date | null,
-  ): Promise<WireShallowNode[]> {
-    const query = applyVisibleToViewer(
-      this.nodes
-        .createQueryBuilder('node')
-        .leftJoinAndSelect('node.user', 'user')
-        .leftJoinAndSelect('user.photo', 'userPhoto')
-        .where('node.userId = :userId', { userId }),
-      'node',
-      isUser,
-    );
+    uid: number,
+    { full = false, ...query }: UserNodesQuery & { full?: boolean } = {},
+  ): Promise<WireProfileNode[] | WireProfileItem[]> {
+    const rows = await this.findUserNodes(userId, uid !== GUEST_USER_ID, query);
 
-    if (after) {
-      query.andWhere('node.created_at < :after', { after });
+    if (!full) {
+      return rows.map(toWireProfileNode);
     }
 
-    const rows = await query
-      .orderBy('node.created_at', 'DESC')
-      .limit(USER_NODES_LIMIT)
-      .getMany();
+    const items = await this.lab.toItems(rows, uid);
 
-    return rows.map(toWireShallowNode);
+    return items.map((item, index) => ({
+      ...item,
+      node: {
+        ...item.node,
+        flow: toWireProfileFlow(rows[index]),
+        has_profile_flow: !!rows[index].settings?.profile_flow,
+      },
+    }));
+  }
+
+  /**
+   * A user's nodes: the ones the author pinned, newest first, then the rest,
+   * newest first, wherever each is listed. `after` is a `created_at` cursor
+   * over the unpinned ones; pinned nodes come only with the first page and do
+   * not count against its `limit`. Guests see no lab nodes. A `limit` that is
+   * not a whole number within `1..USER_NODES_LIMIT` falls back to the maximum.
+   * `search` keeps the nodes whose title or description contains it.
+   */
+  private async findUserNodes(
+    userId: number,
+    isUser: boolean,
+    { after = null, limit, search = '' }: UserNodesQuery,
+  ): Promise<Node[]> {
+    const take =
+      limit && Number.isInteger(limit) && limit > 0 && limit <= USER_NODES_LIMIT
+        ? limit
+        : USER_NODES_LIMIT;
+
+    const base = () => {
+      const query = applyVisibleToViewer(
+        this.nodes
+          .createQueryBuilder('node')
+          .leftJoinAndSelect('node.user', 'user')
+          .leftJoinAndSelect('user.photo', 'userPhoto')
+          .where('node.userId = :userId', { userId }),
+        'node',
+        isUser,
+      ).orderBy('node.created_at', 'DESC');
+
+      if (search) {
+        query.andWhere(
+          "(node.title LIKE CONCAT('%', :search, '%') OR node.description LIKE CONCAT('%', :search, '%'))",
+          { search },
+        );
+      }
+
+      return query;
+    };
+
+    const rest = base().andWhere('node.is_pinned = 0');
+
+    if (after) {
+      rest.andWhere('node.created_at < :after', { after });
+    }
+
+    const [pinned, rows] = await Promise.all([
+      after
+        ? Promise.resolve([])
+        : base()
+            .andWhere('node.is_pinned = 1')
+            .limit(USER_NODES_LIMIT)
+            .getMany(),
+      rest.limit(take).getMany(),
+    ]);
+
+    return [...pinned, ...rows];
   }
 }

@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import type { NodePlacement } from '@vault/common/constants';
 import { Repository } from 'typeorm';
 
 import { Node } from '../../entities/node.entity';
 import {
   toWireDate,
+  toWirePlacement,
   toWireString,
   toWireThumbnail,
 } from '../../wire/serialize';
@@ -16,7 +18,7 @@ export interface WireSearchNode {
   thumbnail: string;
   title: string;
   created_at: string;
-  is_promoted: boolean;
+  is_promoted: NodePlacement;
 }
 
 export interface WireSearchResponse {
@@ -94,7 +96,7 @@ export class SearchService {
         thumbnail: toWireThumbnail(node.thumbnail),
         title: toWireString(node.title),
         created_at: toWireDate(node.createdAt),
-        is_promoted: Boolean(node.isPromoted),
+        ...toWirePlacement(node.placement),
       })),
     };
   }

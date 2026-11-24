@@ -1,4 +1,4 @@
-import { IComment, INode, ITag, NodeBackLink } from '~/types';
+import { FlowDisplay, IComment, INode, ITag, NodeBackLink } from '~/types';
 
 export interface IEditorComponentProps {}
 
@@ -26,6 +26,16 @@ export type PostCellViewRequest = {
   flow: INode['flow'];
 };
 export type PostCellViewResult = unknown; // TODO: update it with actual type
+
+/** `flow: null` drops the profile's own cell, falling back to the flow's. */
+export type PostProfileCellViewRequest = {
+  id: INode['id'];
+  flow: Pick<FlowDisplay, 'display' | 'show_description'> | null;
+};
+export type PostProfileCellViewResult = {
+  flow: FlowDisplay;
+  has_profile_flow: boolean;
+};
 
 export type ApiGetNodeRequest = {
   id: string | number;
@@ -76,6 +86,9 @@ export type ApiPostNodeLikeResult = { is_liked: boolean };
 
 export type ApiPostNodeHeroicRequest = { id: INode['id'] };
 export type ApiPostNodeHeroicResponse = { is_heroic: boolean };
+
+export type ApiPostNodePinRequest = { id: INode['id']; is_pinned: boolean };
+export type ApiPostNodePinResponse = { is_pinned: boolean };
 
 export type ApiLockNodeRequest = {
   id: INode['id'];

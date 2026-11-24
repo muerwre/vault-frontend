@@ -1,0 +1,53 @@
+@import 'src/styles/variables';
+
+.wrap {
+  @include blur();
+
+  border-radius: $radius;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  gap: $gap;
+  flex-direction: row;
+}
+
+.avatar {
+  width: 144px;
+  height: 144px;
+  border-radius: $radius;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font: $font_24_semibold;
+  color: white;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  margin-bottom: 4px;
+}
+
+.username {
+  font: $font_14_regular;
+  color: $gray_50;
+}
+
+.extra {
+  margin-top: $gap;
+}
+
+.footer {
+  // the card's width, so its one-line info is cut rather than widening it
+  align-self: stretch;
+  min-width: 0;
+}

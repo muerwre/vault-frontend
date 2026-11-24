@@ -1,0 +1,41 @@
+@import 'src/styles/variables';
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  min-width: 0;
+}
+
+.item {
+  min-width: 0;
+}
+
+.title {
+  // small beside its value: uppercase reads larger than its size
+  font: $font_10_semibold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: $gray_50;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Wraps, long addresses included, and stops at two lines. */
+.value {
+  @include clamp(2);
+
+  font: $font_14_medium;
+  overflow-wrap: anywhere;
+}
+
+.link {
+  color: $color_link;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -72,13 +72,17 @@ describe('auth (integration)', () => {
 
       expect(typeof body.token).toBe('string');
       expect(Object.keys(body.user).sort()).toEqual([
+        'about',
+        'about_display',
         'cover',
         'description',
         'email',
         'fullname',
         'id',
+        'info',
         'last_seen',
         'last_seen_boris',
+        'nodes_view',
         'photo',
         'role',
         'username',
@@ -352,6 +356,150 @@ describe('auth (integration)', () => {
         await bcrypt.hash(PASSWORD, 4),
         userId,
       ]);
+    });
+
+    it('reads an unsaved profile page as empty', async () => {
+      const { body } = await http().get(`/api/users/${username}`).expect(200);
+
+      expect(body.user.about).toBe('');
+      expect(body.user.about_display).toBe('');
+      expect(body.user.info).toEqual([]);
+      expect(body.user.nodes_view).toBe('flow');
+    });
+
+    it('saves about, its size and info into the profile', async () => {
+      const info = [
+        { title: 'ВК', value: 'vk.com/id1' },
+        { title: '', value: 'Люблю котов' },
+      ];
+      const { body } = await patch({
+        about: '# hello',
+        about_display: 'quadro',
+        info: [...info, { title: 'пусто', value: '  ' }],
+      }).expect(200);
+
+      expect(body.user.about).toBe('# hello');
+      expect(body.user.about_display).toBe('quadro');
+      expect(body.user.info).toEqual(info);
+
+      const profile = await http().get(`/api/users/${username}`).expect(200);
+
+      expect(profile.body.user.about).toBe('# hello');
+      expect(profile.body.user.about_display).toBe('quadro');
+      expect(profile.body.user.info).toEqual(info);
+    });
+
+    it('updates one profile field without touching the others', async () => {
+      const { body } = await patch({ about_display: 'single' }).expect(200);
+
+      expect(body.user.about).toBe('# hello');
+      expect(body.user.about_display).toBe('single');
+      expect(body.user.info).toHaveLength(2);
+    });
+
+    it('keeps the profile when only user fields change', async () => {
+      const { body } = await patch({ fullname: 'Still Linked' }).expect(200);
+
+      expect(body.user.about).toBe('# hello');
+      expect(body.user.info).toHaveLength(2);
+    });
+
+    it('keeps info and the nodes view side by side in settings', async () => {
+      const { body } = await patch({ nodes_view: 'lab' }).expect(200);
+
+      expect(body.user.nodes_view).toBe('lab');
+      expect(body.user.info).toHaveLength(2);
+
+      const [row] = await db.query(
+        'SELECT settings FROM user_profile WHERE userId = ?',
+        [userId],
+      );
+      expect(JSON.parse(row.settings)).toEqual({
+        info: [
+          { title: 'ВК', value: 'vk.com/id1' },
+          { title: '', value: 'Люблю котов' },
+        ],
+        nodes_view: 'lab',
+      });
+
+      const profile = await http().get(`/api/users/${username}`).expect(200);
+      expect(profile.body.user.nodes_view).toBe('lab');
+    });
+
+    it('accepts the aura view', async () => {
+      const { body } = await patch({ nodes_view: 'aura' }).expect(200);
+
+      expect(body.user.nodes_view).toBe('aura');
+
+      await patch({ nodes_view: 'lab' }).expect(200);
+    });
+
+    it('rejects an unknown nodes view', async () => {
+      await patch({ nodes_view: 'grid' }).expect(400);
+    });
+
+    it('clears info with an empty list', async () => {
+      const { body } = await patch({ info: [] }).expect(200);
+
+      expect(body.user.info).toEqual([]);
+    });
+
+    it('takes any text, keeping only the first five entries', async () => {
+      const { body } = await patch({
+        info: ['a', 'b', 'c', 'd', 'e', 'f'].map((value) => ({
+          title: '',
+          value: `javascript:${value}`,
+        })),
+      }).expect(200);
+
+      expect(body.user.info.map((it: { value: string }) => it.value)).toEqual([
+        'javascript:a',
+        'javascript:b',
+        'javascript:c',
+        'javascript:d',
+        'javascript:e',
+      ]);
+    });
+
+    it('rejects a malformed info list', async () => {
+      const { body } = await patch({ info: ['just a string'] }).expect(400);
+
+      expect(body.errors).toEqual({ info: expect.any(String) });
+    });
+
+    it('creates the profile once when first saves race, keeping both', async () => {
+      await db.query('DELETE FROM user_profile WHERE userId = ?', [userId]);
+
+      const [first, second] = await Promise.all([
+        patch({ info: [{ title: '', value: 'raced' }] }),
+        patch({ nodes_view: 'lab' }),
+      ]);
+
+      expect(first.status).toBe(200);
+      expect(second.status).toBe(200);
+
+      const [row] = await db.query(
+        'SELECT settings FROM user_profile WHERE userId = ?',
+        [userId],
+      );
+      expect(JSON.parse(row.settings)).toEqual({
+        info: [{ title: '', value: 'raced' }],
+        nodes_view: 'lab',
+      });
+    });
+
+    it('rejects an unknown about size', async () => {
+      const { body } = await patch({ about_display: 'huge' }).expect(400);
+
+      expect(body.errors).toEqual({ about_display: expect.any(String) });
+    });
+
+    it('rejects an overlong or non-string about', async () => {
+      const long = await patch({ about: 'x'.repeat(9000) }).expect(400);
+      expect(long.body.errors).toEqual({ about: expect.any(String) });
+
+      const wrong = await patch({ about: 42 }).expect(400);
+      expect(wrong.body.errors).toEqual({ about: expect.any(String) });
     });
 
     it('requires auth', async () => {
