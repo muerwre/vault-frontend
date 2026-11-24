@@ -12,6 +12,7 @@
 .avatar {
   width: 200px;
   height: 200px;
+  margin-bottom: $gap * 2;
 }
 
 .names {
@@ -46,13 +47,14 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: $gap;
+  gap: $gap * 2;
   max-width: 400px;
+  margin-top: $gap * 5;
 }
 
 .info_item {
   flex: 0 1 auto;
   max-width: 200px;
   min-width: 0;
-  text-align: left;
+  text-align: center;
 }

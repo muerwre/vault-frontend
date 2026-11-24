@@ -18,30 +18,34 @@ interface Props {
 
 /** The profile as the first of its lab cards: avatar, then who and info. */
 const ProfileLabCard: FC<Props> = ({ username, profile, isLoading }) => (
-  <Card className={styles.wrap} elevation={0}>
-    <Avatar
-      username={username}
-      url={profile?.photo?.url}
-      className={styles.avatar}
-      preset={imagePresets['300']}
-    />
+  <div className={styles.wrap}>
+    <Card.Row className={styles.head}>
+      <Avatar
+        username={username}
+        url={profile?.photo?.url}
+        className={styles.avatar}
+        preset={imagePresets['300']}
+      />
 
-    <div className={styles.info}>
-      <div className={styles.name}>
-        {isLoading ? <Placeholder /> : profile.fullname || profile.username}
+      <div className={styles.info}>
+        <div className={styles.name}>
+          {isLoading ? <Placeholder /> : profile.fullname || profile.username}
+        </div>
+
+        <div className={styles.username}>
+          {isLoading ? <Placeholder /> : formatUsername(profile.username)}
+        </div>
       </div>
+    </Card.Row>
 
-      <div className={styles.username}>
-        {isLoading ? <Placeholder /> : formatUsername(profile.username)}
-      </div>
-
+    <Card.Row className={styles.footer}>
       {!isLoading && !!profile.info?.length && (
         <div className={styles.extra}>
           <ProfileExtraInfo info={profile.info} />
         </div>
       )}
-    </div>
-  </Card>
+    </Card.Row>
+  </div>
 );
 
 export { ProfileLabCard };

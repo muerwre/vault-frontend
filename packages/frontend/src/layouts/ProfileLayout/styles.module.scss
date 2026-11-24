@@ -43,6 +43,7 @@
   // to fit; should that come up short, it scrolls.
   contain: size;
   overflow-y: auto;
+  border-radius: $radius;
 }
 
 .grid {

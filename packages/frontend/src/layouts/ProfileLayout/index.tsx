@@ -4,7 +4,6 @@ import { PROFILE_NODES_VIEW, ProfileNodesView } from '@vault/common/constants';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { Card } from '~/components/common/Card';
 import { Columns } from '~/components/common/Columns';
 import { Container } from '~/components/common/Container';
 import { Hoverable } from '~/components/common/Hoverable';
@@ -179,10 +178,9 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
         className={classNames(styles.grid, { [styles.lab_grid]: isLab })}
       >
         {!isLab && (
-          <Card
+          <div
             className={styles.left}
             style={{ gridRowEnd: `span ${sidebarSpan}` }}
-            seamless
           >
             <div ref={setSidebarContent}>
               <ProfilePageLeft
@@ -191,7 +189,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
                 isLoading={isLoading}
               />
             </div>
-          </Card>
+          </div>
         )}
 
         {SHOW_ABOUT_CARD && !isLoading && (

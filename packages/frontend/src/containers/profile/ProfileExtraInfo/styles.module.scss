@@ -11,22 +11,24 @@
   min-width: 0;
 }
 
-.title,
-.value {
+.title {
+  // small beside its value: uppercase reads larger than its size
+  font: $font_10_semibold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: $gray_50;
+  margin-bottom: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.title {
-  font: $font_12_semibold;
-  text-transform: uppercase;
-  color: $gray_50;
-  margin-bottom: 2px;
-}
-
+/* Wraps, long addresses included, and stops at two lines. */
 .value {
+  @include clamp(2);
+
   font: $font_14_medium;
+  overflow-wrap: anywhere;
 }
 
 .link {
