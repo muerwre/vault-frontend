@@ -21,6 +21,7 @@ import { ProfileLabCard } from '~/containers/profile/ProfileLabCard';
 import { ProfileNodesViewSwitch } from '~/containers/profile/ProfileNodesViewSwitch';
 import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
 import { useUser } from '~/hooks/auth/useUser';
+import { useGridRowSpan } from '~/hooks/dom/useGridRowSpan';
 import { useInfiniteLoader } from '~/hooks/dom/useInfiniteLoader';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
 import { useGetProfile } from '~/hooks/profile/useGetProfile';
@@ -99,6 +100,19 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
 
   useInfiniteLoader(loadMore, isLoadingNodes);
 
+  // As many grid rows as the profile beside the cells needs, so a long one
+  // neither stretches the controls' row nor gets cut off.
+  const [grid, setGrid] = useState<HTMLDivElement | null>(null);
+  const [controls, setControls] = useState<HTMLDivElement | null>(null);
+  const [sidebar, setSidebar] = useState<HTMLDivElement | null>(null);
+  const [sidebarContent, setSidebarContent] = useState<HTMLDivElement | null>(
+    null,
+  );
+  const sidebarSpan = useGridRowSpan(
+    { grid, content: sidebarContent, header: controls, item: sidebar },
+    canEdit ? 3 : 2,
+  );
+
   const title = capitalize(profile.fullname || profile.username || username);
   usePageCover(profile.cover);
 
@@ -111,13 +125,14 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
       <PageTitle title={getPageTitle(title)} />
 
       <div
+        ref={setGrid}
         className={classNames(styles.grid, {
           [styles.with_controls]: canEdit,
           [styles.lab_grid]: isLab,
         })}
       >
         {canEdit && (
-          <div className={styles.controls}>
+          <div ref={setControls} className={styles.controls}>
             <ProfileNodesViewSwitch value={view} onChange={onChangeView} />
 
             <Button
@@ -138,12 +153,19 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
         )}
 
         {!isLab && (
-          <Card className={styles.left} seamless>
-            <ProfilePageLeft
-              profile={profile}
-              username={username}
-              isLoading={isLoading}
-            />
+          <Card
+            ref={setSidebar}
+            className={styles.left}
+            style={{ gridRowEnd: `span ${sidebarSpan}` }}
+            seamless
+          >
+            <div ref={setSidebarContent}>
+              <ProfilePageLeft
+                profile={profile}
+                username={username}
+                isLoading={isLoading}
+              />
+            </div>
           </Card>
         )}
 

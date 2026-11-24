@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, forwardRef } from 'react';
 
 import classNames from 'classnames';
 
@@ -6,29 +6,27 @@ import { DivProps } from '~/utils/types';
 
 import styles from './styles.module.scss';
 
-export type CardProps = DivProps & {
+export type CardProps = Omit<DivProps, 'ref'> & {
   seamless?: boolean;
   elevation?: -1 | 0 | 1;
 };
 
-const CardBase: FC<CardProps> = ({
-  className,
-  children,
-  seamless,
-  elevation = 1,
-  ...props
-}) => (
-  <div
-    className={classNames(
-      styles.card,
-      { seamless },
-      styles[`elevation-${elevation}`],
-      className,
-    )}
-    {...props}
-  >
-    {children}
-  </div>
+/** Forwards its ref to the div, for callers that measure the card. */
+const CardBase = forwardRef<HTMLDivElement, CardProps>(
+  ({ className, children, seamless, elevation = 1, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={classNames(
+        styles.card,
+        { seamless },
+        styles[`elevation-${elevation}`],
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  ),
 );
 
 type RowProps = DivProps & {

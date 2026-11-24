@@ -31,6 +31,11 @@
   grid-column: 1 / span 1;
   // the column's width, not its longest line: one-line info is cut instead
   min-width: 0;
+  // Sized by the rows it spans, never by its content: a long profile would
+  // otherwise stretch the content-sized controls row beside it. Its span is
+  // measured to fit; should that come up short, it scrolls.
+  contain: size;
+  overflow-y: auto;
 }
 
 .grid {
