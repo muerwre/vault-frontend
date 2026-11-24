@@ -32,3 +32,11 @@
   flex: 0 1 240px;
   min-width: 0;
 }
+
+/* On phones the view is picked in the settings and there is no search, so
+   only the settings button is left. */
+.desktop_only {
+  @include tablet {
+    display: none;
+  }
+}

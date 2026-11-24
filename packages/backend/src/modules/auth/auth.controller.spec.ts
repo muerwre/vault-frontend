@@ -35,9 +35,8 @@ const makeController = (overrides: AuthMock = {}, passwordValid = true) => {
     isUsernameTaken: jest.fn().mockResolvedValue(false),
     isEmailTaken: jest.fn().mockResolvedValue(false),
     findByUsernameOrEmail: jest.fn().mockResolvedValue(null),
-    save: jest.fn().mockImplementation(async (user: User) => user),
     setPassword: jest.fn().mockResolvedValue(undefined),
-    saveProfile: jest.fn().mockResolvedValue(undefined),
+    saveSelf: jest.fn().mockImplementation(async (user: User) => user),
     setPhoto: jest.fn().mockResolvedValue(undefined),
     setCover: jest.fn().mockResolvedValue(undefined),
     findImage: jest.fn().mockResolvedValue({ id: 5 }),
@@ -226,10 +225,13 @@ describe('AuthController', () => {
         ],
       });
 
-      expect(auth.saveProfile).toHaveBeenCalledWith(1, {
-        about: 'text',
-        settings: { info: [{ title: 'Сайт', value: 'a.com' }] },
-      });
+      expect(auth.saveSelf).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 1 }),
+        {
+          about: 'text',
+          settings: { info: [{ title: 'Сайт', value: 'a.com' }] },
+        },
+      );
     });
 
     it('saves the nodes view into the profile settings', async () => {
@@ -237,9 +239,12 @@ describe('AuthController', () => {
 
       await controller.patch(currentUser(), { nodes_view: 'lab' });
 
-      expect(auth.saveProfile).toHaveBeenCalledWith(1, {
-        settings: { nodes_view: 'lab' },
-      });
+      expect(auth.saveSelf).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 1 }),
+        {
+          settings: { nodes_view: 'lab' },
+        },
+      );
     });
 
     it('rejects bad profile fields under their own names', async () => {
@@ -264,7 +269,7 @@ describe('AuthController', () => {
 
       await controller.patch(user, { description: 'new desc' });
 
-      const saved = auth.save.mock.calls[0][0] as User;
+      const saved = auth.saveSelf.mock.calls[0][0] as User;
       expect(saved.description).toBe('new desc');
       expect(saved.fullname).toBe('Full');
     });
@@ -275,7 +280,7 @@ describe('AuthController', () => {
 
       await controller.patch(user, { fullname: 'New Name' });
 
-      const saved = auth.save.mock.calls[0][0] as User;
+      const saved = auth.saveSelf.mock.calls[0][0] as User;
       expect(saved.fullname).toBe('New Name');
       expect(saved.description).toBe('Desc');
     });
@@ -320,7 +325,7 @@ describe('AuthController', () => {
       await expect(
         controller.patch(user, { email: 'new@example.com' } as never),
       ).rejects.toMatchObject({ fields: { email: expect.any(String) } });
-      expect(auth.save).not.toHaveBeenCalled();
+      expect(auth.saveSelf).not.toHaveBeenCalled();
       expect(user.email).toBe('someone@example.com');
     });
 

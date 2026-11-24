@@ -629,16 +629,13 @@ export class NodeService {
     return next;
   }
 
-  /** Toggles `is_pinned` and returns the new value. */
-  async togglePinned(node: Node): Promise<boolean> {
-    const next = !node.isPinned;
+  /** Sets `is_pinned` and returns it as stored. */
+  async setPinned(node: Node, isPinned: boolean): Promise<boolean> {
+    await this.nodes.update(node.id, { isPinned });
 
-    await this.nodes.update(node.id, { isPinned: next });
-
-    return next;
+    return isPinned;
   }
 
-  /** Persists the flow display settings and returns them as stored. */
   /**
    * Replaces the node's flow settings with the client's, as a whole. Only the
    * known keys are kept: anything else a client sends is not stored.

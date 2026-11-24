@@ -144,8 +144,10 @@ export const apiPostNodeLike = ({ id }: ApiPostNodeLikeRequest) =>
 export const apiPostNodeHeroic = ({ id }: ApiPostNodeHeroicRequest) =>
   api.post<ApiPostNodeHeroicResponse>(API.NODES.HEROIC(id)).then(unwrap);
 
-export const apiPostNodePin = ({ id }: ApiPostNodePinRequest) =>
-  api.post<ApiPostNodePinResponse>(API.NODES.PIN(id)).then(unwrap);
+export const apiPostNodePin = ({ id, is_pinned }: ApiPostNodePinRequest) =>
+  api
+    .post<ApiPostNodePinResponse>(API.NODES.PIN(id), { is_pinned })
+    .then(unwrap);
 
 export const apiLockNode = ({ id, is_locked }: ApiLockNodeRequest) =>
   api

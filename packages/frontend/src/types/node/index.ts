@@ -87,7 +87,7 @@ export type ApiPostNodeLikeResult = { is_liked: boolean };
 export type ApiPostNodeHeroicRequest = { id: INode['id'] };
 export type ApiPostNodeHeroicResponse = { is_heroic: boolean };
 
-export type ApiPostNodePinRequest = { id: INode['id'] };
+export type ApiPostNodePinRequest = { id: INode['id']; is_pinned: boolean };
 export type ApiPostNodePinResponse = { is_pinned: boolean };
 
 export type ApiLockNodeRequest = {

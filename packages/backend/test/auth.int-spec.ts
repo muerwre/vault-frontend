@@ -467,6 +467,27 @@ describe('auth (integration)', () => {
       expect(body.errors).toEqual({ info: expect.any(String) });
     });
 
+    it('creates the profile once when first saves race, keeping both', async () => {
+      await db.query('DELETE FROM user_profile WHERE userId = ?', [userId]);
+
+      const [first, second] = await Promise.all([
+        patch({ info: [{ title: '', value: 'raced' }] }),
+        patch({ nodes_view: 'lab' }),
+      ]);
+
+      expect(first.status).toBe(200);
+      expect(second.status).toBe(200);
+
+      const [row] = await db.query(
+        'SELECT settings FROM user_profile WHERE userId = ?',
+        [userId],
+      );
+      expect(JSON.parse(row.settings)).toEqual({
+        info: [{ title: '', value: 'raced' }],
+        nodes_view: 'lab',
+      });
+    });
+
     it('rejects an unknown about size', async () => {
       const { body } = await patch({ about_display: 'huge' }).expect(400);
 

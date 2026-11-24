@@ -8,6 +8,7 @@ import {
   MAX_PROFILE_INFO_TITLE_LENGTH,
   MAX_PROFILE_INFO_VALUE_LENGTH,
   MAX_USERNAME_LENGTH,
+  PROFILE_NODES_VIEW,
 } from '@vault/common/constants';
 
 import { Card } from '~/components/common/Card';
@@ -19,6 +20,7 @@ import { ProfilePhotoEditor } from '~/components/profile/ProfilePhotoEditor';
 import { SuperPowersToggle } from '~/containers/auth/SuperPowersToggle';
 import { ProfileAccounts } from '~/containers/profile/ProfileAccounts';
 import { ProfileCoverEditor } from '~/containers/profile/ProfileCoverEditor';
+import { ProfileNodesViewSwitch } from '~/containers/profile/ProfileNodesViewSwitch';
 import { ThemeSwitcher } from '~/containers/settings/ThemeSwitcher';
 import { usePatchUser } from '~/hooks/auth/usePatchUser';
 import { useUser } from '~/hooks/auth/useUser';
@@ -66,7 +68,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
   const { values, handleChange, errors, setFieldValue } = useSettings();
   const { isPhone } = useWindowSize();
   const { user } = useUser();
-  const { updatePhoto, deletePhoto } = usePatchUser();
+  const { updatePhoto, deletePhoto, save } = usePatchUser();
 
   const infoInputs = toInfoInputs(values.info);
 
@@ -204,6 +206,15 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
                 любимую группу, телеграм. Ссылки станут кликабельными сами.
               </div>
             </Group>
+          </Zone>
+
+          {/* On phones the profile's floating bar has no view switch */}
+          <Zone title="Вид профиля" className={styles.mobile_only}>
+            <ProfileNodesViewSwitch
+              value={user.nodes_view ?? PROFILE_NODES_VIEW.FLOW}
+              onChange={(nodes_view) => void save({ nodes_view })}
+              withTitles
+            />
           </Zone>
 
           <Zone title="Тема">

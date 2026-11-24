@@ -303,9 +303,7 @@ export class AuthController {
       user.username = data.username;
     }
 
-    await this.auth.save(user);
-
-    await this.auth.saveProfile(user.id, {
+    await this.auth.saveSelf(user, {
       ...(typeof data.about === 'string' && { about: data.about }),
       ...(aboutDisplay &&
         'value' in aboutDisplay && {

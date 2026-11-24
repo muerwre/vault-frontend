@@ -44,6 +44,13 @@ export interface WireRestoreUser {
   photo: WireShallowFile | null;
 }
 
+/** The profile page fields a save may change. */
+export type ProfileFields = Partial<
+  Pick<UserProfile, 'about' | 'aboutDisplay'>
+> & {
+  settings?: Partial<IUserProfileSettings>;
+};
+
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger('Auth');
@@ -191,34 +198,53 @@ export class AuthService {
   }
 
   /**
-   * Writes the given profile page fields, creating the row on first save.
-   * `settings` keys are merged over the stored ones, so saving one keeps the
-   * rest.
+   * Saves the user and their profile page fields together, in one
+   * transaction: either both are stored or neither is. The profile row is
+   * created on first save; `settings` keys are merged over the stored ones,
+   * so saving one keeps the rest.
+   *
+   * The row is inserted if missing and then locked before merging, so two
+   * saves at once neither collide on creating it nor drop each other's
+   * settings.
    */
-  async saveProfile(
-    userId: number,
-    fields: Partial<Pick<UserProfile, 'about' | 'aboutDisplay'>> & {
-      settings?: Partial<IUserProfileSettings>;
-    },
-  ): Promise<void> {
+  async saveSelf(user: User, fields: ProfileFields = {}): Promise<User> {
     const { settings, ...columns } = fields;
     const hasSettings = !!settings && Object.keys(settings).length > 0;
+    const hasProfile = Object.keys(columns).length > 0 || hasSettings;
 
-    if (Object.keys(columns).length === 0 && !hasSettings) {
-      return;
-    }
+    return this.users.manager.transaction(async (manager) => {
+      const saved = await manager.save(User, user);
 
-    const profile =
-      (await this.profiles.findOneBy({ userId })) ??
-      this.profiles.create({ userId });
+      if (!hasProfile) {
+        return saved;
+      }
 
-    Object.assign(profile, columns);
+      const profiles = manager.getRepository(UserProfile);
 
-    if (hasSettings) {
-      profile.settings = { ...(profile.settings ?? {}), ...settings };
-    }
+      await profiles
+        .createQueryBuilder()
+        .insert()
+        .values({ userId: user.id })
+        .orIgnore()
+        .execute();
 
-    await this.profiles.save(profile);
+      const profile = await profiles.findOneOrFail({
+        where: { userId: user.id },
+        lock: { mode: 'pessimistic_write' },
+      });
+
+      // An update, not `save()`: that checks for the row with a plain read,
+      // which sees the transaction's snapshot and can miss a row another
+      // save has just created, then fail inserting it again.
+      await profiles.update(user.id, {
+        ...columns,
+        ...(hasSettings && {
+          settings: { ...(profile.settings ?? {}), ...settings },
+        }),
+      });
+
+      return saved;
+    });
   }
 
   /** Bumps `user.last_seen`. Failures are not worth failing the request over. */

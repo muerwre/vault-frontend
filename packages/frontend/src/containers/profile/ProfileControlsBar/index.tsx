@@ -36,7 +36,9 @@ const ProfileControlsBar: FC<Props> = ({
 }) => (
   <div className={classNames(styles.bar)}>
     {canSwitchView && (
-      <ProfileNodesViewSwitch value={view} onChange={onChangeView} />
+      <div className={styles.desktop_only}>
+        <ProfileNodesViewSwitch value={view} onChange={onChangeView} />
+      </div>
     )}
 
     <Button
@@ -49,7 +51,7 @@ const ProfileControlsBar: FC<Props> = ({
     </Button>
 
     {!!search && (
-      <div className={styles.search}>
+      <div className={classNames(styles.search, styles.desktop_only)}>
         <SearchInput
           value={search.value}
           handler={search.onChange}

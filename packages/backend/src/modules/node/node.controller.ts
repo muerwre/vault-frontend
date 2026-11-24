@@ -289,8 +289,9 @@ export class NodeController {
   }
 
   /**
-   * The author or an admin. Toggles whether the node leads its author's
-   * profile; where it is listed does not change.
+   * The author or an admin. Sets whether the node leads its author's
+   * profile, to `is_pinned` as sent, so a repeated request changes nothing;
+   * where it is listed does not change.
    */
   @Post(':id/pin')
   @HttpCode(HttpStatus.OK)
@@ -298,7 +299,15 @@ export class NodeController {
   async pin(
     @Param('id') id: string,
     @WithUser() user: User,
+    @Body() body: { is_pinned?: unknown },
   ): Promise<{ is_pinned: boolean }> {
+    if (typeof body?.is_pinned !== 'boolean') {
+      throw new VaultException(
+        ERROR_CODES.IncorrectData,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const node = await this.nodes.findLive(
       this.parseId(id, HttpStatus.BAD_REQUEST),
     );
@@ -307,7 +316,7 @@ export class NodeController {
       throw new VaultException(ERROR_CODES.NodeNotFound, HttpStatus.NOT_FOUND);
     }
 
-    return { is_pinned: await this.nodes.togglePinned(node) };
+    return { is_pinned: await this.nodes.setPinned(node, body.is_pinned) };
   }
 
   /**

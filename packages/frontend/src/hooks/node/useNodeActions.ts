@@ -49,12 +49,15 @@ export const useNodeActions = (
   // only reorders the author's profile; the feeds are unaffected
   const onPin = useCallback(async () => {
     try {
-      const result = await apiPostNodePin({ id: node.id });
+      const result = await apiPostNodePin({
+        id: node.id,
+        is_pinned: !node.is_pinned,
+      });
       await update({ is_pinned: result.is_pinned });
     } catch (error) {
       showErrorToast(error);
     }
-  }, [node.id, update]);
+  }, [node.id, node.is_pinned, update]);
 
   const onLock = useCallback(async () => {
     try {

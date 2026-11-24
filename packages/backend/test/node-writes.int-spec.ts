@@ -217,12 +217,13 @@ describe('node writes (integration)', () => {
   });
 
   describe('POST /nodes/:id/pin', () => {
-    it('lets the author toggle the pin, leaving placement and hero alone', async () => {
+    it('lets the author set the pin, leaving placement and hero alone', async () => {
       const nodeId = await makeNode({ isPromoted: false, isHeroic: true });
 
       const on = await http()
         .post(`/api/nodes/${nodeId}/pin`)
         .set(authHeader(authorId))
+        .send({ is_pinned: true })
         .expect(200);
       expect(on.body).toEqual({ is_pinned: true });
 
@@ -237,6 +238,7 @@ describe('node writes (integration)', () => {
       const off = await http()
         .post(`/api/nodes/${nodeId}/pin`)
         .set(authHeader(authorId))
+        .send({ is_pinned: false })
         .expect(200);
       expect(off.body).toEqual({ is_pinned: false });
     });
@@ -247,6 +249,7 @@ describe('node writes (integration)', () => {
       await http()
         .post(`/api/nodes/${nodeId}/pin`)
         .set(authHeader(adminId, 'admin'))
+        .send({ is_pinned: true })
         .expect(200);
     });
 
@@ -256,13 +259,41 @@ describe('node writes (integration)', () => {
       await http()
         .post(`/api/nodes/${nodeId}/pin`)
         .set(authHeader(strangerId))
+        .send({ is_pinned: true })
         .expect(404);
     });
 
     it('401s for a guest', async () => {
       const nodeId = await makeNode();
 
-      await http().post(`/api/nodes/${nodeId}/pin`).expect(401);
+      await http()
+        .post(`/api/nodes/${nodeId}/pin`)
+        .send({ is_pinned: true })
+        .expect(401);
+    });
+
+    it('changes nothing on a repeated request', async () => {
+      const nodeId = await makeNode();
+
+      for (let i = 0; i < 2; i++) {
+        const { body } = await http()
+          .post(`/api/nodes/${nodeId}/pin`)
+          .set(authHeader(authorId))
+          .send({ is_pinned: true })
+          .expect(200);
+
+        expect(body).toEqual({ is_pinned: true });
+      }
+    });
+
+    it('requires is_pinned as a boolean', async () => {
+      const nodeId = await makeNode();
+
+      await http()
+        .post(`/api/nodes/${nodeId}/pin`)
+        .set(authHeader(authorId))
+        .send({})
+        .expect(400);
     });
   });
 

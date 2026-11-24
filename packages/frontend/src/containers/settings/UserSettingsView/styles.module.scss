@@ -34,6 +34,16 @@ div.base_info.base_info {
   display: grid;
   grid-template-columns: 2fr 3fr;
   gap: $gap;
+
+  // the title above its value, and the pairs a little apart
+  @include tablet {
+    grid-template-columns: 1fr;
+    gap: $gap * 0.5;
+
+    & + & {
+      margin-top: $gap * 1.5 !important;
+    }
+  }
 }
 
 /* The inputs' wrappers are the grid items; without this a narrow screen
@@ -52,5 +62,14 @@ div.zones.zones > * {
 
   &:last-child {
     margin-bottom: 0;
+  }
+}
+
+/* Settings only phones need, such as the profile view. */
+.mobile_only {
+  display: none;
+
+  @include tablet {
+    display: block;
   }
 }
