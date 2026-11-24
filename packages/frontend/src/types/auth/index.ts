@@ -1,4 +1,5 @@
 import type { ProfileNodesView } from '@vault/common/constants';
+import type { IProfileInfoItem } from '@vault/common/types';
 
 import { Role } from '~/constants/auth';
 import { FlowDisplayVariant, IFile } from '~/types';
@@ -17,8 +18,8 @@ export interface IUser {
   about?: string;
   /** Size of the about card; empty means the page default. */
   about_display?: FlowDisplayVariant | '';
-  /** External links shown on the profile page. */
-  links?: string[];
+  /** Additional info shown on the profile page: links or any text. */
+  info?: IProfileInfoItem[];
   /** How visitors first see the profile's nodes; the owner's choice. */
   nodes_view?: ProfileNodesView;
 

@@ -23,7 +23,12 @@ const validationSchema = object({
   fullname: string().default(''),
   newPassword: string().optional(),
   description: string().default(''),
-  links: array(string().default('')).default([]),
+  info: array(
+    object({
+      title: string().default(''),
+      value: string().default(''),
+    }),
+  ).default([]),
   email: string().default(''),
   password: string().optional(),
 });
@@ -36,19 +41,26 @@ export const useSettingsForm = (
   onSaved?: (user: IUser) => void,
 ) => {
   const initialValues = useRef(values).current;
+  // what the server last stored, to send only the fields that changed
+  const saved = useRef(values);
 
   const onSubmit = useCallback<FormikConfig<ProfileFormData>['onSubmit']>(
     async (values, { setErrors, setValues }) => {
       try {
         // Only the fields this form edits: the values start from the whole
         // user, and echoing back the rest (such as an unset `about_display`)
-        // would be refused. `email` is read-only and goes back unchanged,
-        // which the backend accepts; any other value it refuses.
+        // would be refused. The name and description go only when changed,
+        // so one stored before a stricter limit does not block saving the
+        // rest. `email` is read-only and goes back unchanged, which the
+        // backend accepts; any other value it refuses.
+        const changed = <K extends 'fullname' | 'description'>(key: K) =>
+          values[key] !== saved.current[key] ? values[key] : undefined;
+
         const fields = {
           username: values.username,
-          fullname: values.fullname,
-          description: values.description,
-          links: values.links,
+          fullname: changed('fullname'),
+          description: changed('description'),
+          info: values.info,
           email: values.email,
           password: values.password?.length ? values.password : undefined,
           new_password: values.newPassword?.length
@@ -58,9 +70,15 @@ export const useSettingsForm = (
 
         const result = await submitter(fields);
 
+        saved.current = {
+          ...saved.current,
+          fullname: result.fullname,
+          description: result.description,
+        };
+
         setValues({
           ...result,
-          links: result.links ?? [],
+          info: result.info ?? [],
           password: '',
           newPassword: '',
         });
@@ -98,7 +116,7 @@ export const SettingsProvider: FC<PropsWithChildren<SettingsProviderProps>> = ({
   const { save } = usePatchUser();
 
   const formik = useSettingsForm(
-    { ...user, links: user.links ?? [], password: '', newPassword: '' },
+    { ...user, info: user.info ?? [], password: '', newPassword: '' },
     save,
     onSaved,
   );

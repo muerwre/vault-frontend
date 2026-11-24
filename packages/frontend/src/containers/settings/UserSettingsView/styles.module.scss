@@ -28,3 +28,29 @@ div.base_info.base_info {
   color: $color_danger;
   padding: 0 $gap 0;
 }
+
+/* A title and its value side by side, the value the wider. */
+.info_row {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: $gap;
+}
+
+/* The inputs' wrappers are the grid items; without this a narrow screen
+   would not shrink them below an input's default width. */
+.info_row > * {
+  min-width: 0;
+}
+
+/* Zones a $gap further apart than a group spaces its children. */
+div.zones.zones > * {
+  margin: $gap 0;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

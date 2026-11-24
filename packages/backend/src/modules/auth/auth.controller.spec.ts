@@ -220,12 +220,15 @@ describe('AuthController', () => {
 
       await controller.patch(currentUser(), {
         about: 'text',
-        links: ['https://a.com', ''],
+        info: [
+          { title: 'Сайт', value: 'a.com' },
+          { title: '', value: '' },
+        ],
       });
 
       expect(auth.saveProfile).toHaveBeenCalledWith(1, {
         about: 'text',
-        settings: { links: ['https://a.com'] },
+        settings: { info: [{ title: 'Сайт', value: 'a.com' }] },
       });
     });
 
@@ -243,13 +246,13 @@ describe('AuthController', () => {
       expect(
         await patchErrors({
           about_display: 'huge',
-          links: ['nope'],
+          info: 'nope',
           nodes_view: 'grid',
           about: 'x'.repeat(9000),
         }),
       ).toEqual({
         about_display: expect.any(String),
-        links: expect.any(String),
+        info: expect.any(String),
         nodes_view: expect.any(String),
         about: expect.any(String),
       });
@@ -367,10 +370,20 @@ describe('AuthController', () => {
       });
     });
 
+    it('tells a too long fullname from an empty one', async () => {
+      const empty = await patchErrors({ fullname: '' });
+      const long = await patchErrors({ fullname: 'x'.repeat(41) });
+
+      expect(long).toEqual({ fullname: expect.stringContaining('40') });
+      expect(long?.fullname).not.toBe(empty?.fullname);
+      expect(await patchErrors({ fullname: 'x'.repeat(40) })).toBeNull();
+    });
+
     it('rejects an over-long description', async () => {
-      expect(await patchErrors({ description: 'x'.repeat(513) })).toEqual({
-        description: expect.any(String),
+      expect(await patchErrors({ description: 'x'.repeat(65) })).toEqual({
+        description: expect.stringContaining('64'),
       });
+      expect(await patchErrors({ description: 'x'.repeat(64) })).toBeNull();
     });
 
     it('reports every failing field at once', async () => {

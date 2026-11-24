@@ -1,0 +1,39 @@
+@import 'src/styles/variables';
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  min-width: 0;
+}
+
+.item {
+  min-width: 0;
+}
+
+.title,
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title {
+  font: $font_12_semibold;
+  text-transform: uppercase;
+  color: $gray_50;
+  margin-bottom: 2px;
+}
+
+.value {
+  font: $font_14_medium;
+}
+
+.link {
+  color: $color_link;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

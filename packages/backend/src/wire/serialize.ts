@@ -6,7 +6,12 @@ import {
   type NodePlacement,
   type ProfileNodesView,
 } from '@vault/common/constants';
-import type { INodeBlock, INodeFlow, INodeSettings } from '@vault/common/types';
+import type {
+  INodeBlock,
+  INodeFlow,
+  INodeSettings,
+  IProfileInfoItem,
+} from '@vault/common/types';
 
 import { isYoutubeThumbCacheEnabled } from '../config/env';
 import type { File } from '../entities/file.entity';
@@ -378,12 +383,24 @@ export const toWireShallowFile = (
     : null;
 
 /**
- * Profile links. Anything that is not a non-empty string is dropped, so a
- * malformed blob degrades to fewer links rather than a broken page.
+ * Additional info. Entries that are not a `{ title, value }` with a value
+ * are dropped, so a malformed blob degrades to less info, not a broken page.
  */
-export const toWireLinks = (links: unknown): string[] =>
-  Array.isArray(links)
-    ? links.filter((link): link is string => typeof link === 'string' && !!link)
+export const toWireProfileInfo = (info: unknown): IProfileInfoItem[] =>
+  Array.isArray(info)
+    ? info.flatMap((item) =>
+        item &&
+        typeof item === 'object' &&
+        typeof item.value === 'string' &&
+        item.value
+          ? [
+              {
+                title: typeof item.title === 'string' ? item.title : '',
+                value: item.value,
+              },
+            ]
+          : [],
+      )
     : [];
 
 const NODES_VIEWS: readonly string[] = Object.values(PROFILE_NODES_VIEW);
@@ -407,7 +424,7 @@ export interface WireProfile {
   description: string;
   about: string;
   about_display: string;
-  links: string[];
+  info: IProfileInfoItem[];
   nodes_view: ProfileNodesView;
   cover: WireShallowFile | null;
   photo: WireShallowFile | null;
@@ -417,7 +434,7 @@ export interface WireProfile {
 const toWireProfileExtras = (profile: UserProfile | null | undefined) => ({
   about: toWireString(profile?.about),
   about_display: toWireString(profile?.aboutDisplay),
-  links: toWireLinks(profile?.settings?.links),
+  info: toWireProfileInfo(profile?.settings?.info),
   nodes_view: toWireNodesView(profile?.settings?.nodes_view),
 });
 
@@ -450,7 +467,7 @@ export interface WireSelf {
   description: string;
   about: string;
   about_display: string;
-  links: string[];
+  info: IProfileInfoItem[];
   nodes_view: ProfileNodesView;
   last_seen: string;
   /** Derived from this user's view of the Boris node; there is no such column. */

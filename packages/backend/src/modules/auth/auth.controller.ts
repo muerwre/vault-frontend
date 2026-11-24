@@ -14,7 +14,11 @@ import {
 } from '@nestjs/common';
 import {
   ERROR_CODES,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_FULLNAME_LENGTH,
+  MAX_PASSWORD_LENGTH,
   MAX_PROFILE_ABOUT_LENGTH,
+  MAX_USERNAME_LENGTH,
   MIN_PASSWORD_LENGTH,
   USERNAME_REGEX,
 } from '@vault/common/constants';
@@ -38,7 +42,7 @@ import { PasswordService } from './password.service';
 import {
   parseAboutDisplay,
   parseNodesView,
-  parseProfileLinks,
+  parseProfileInfo,
 } from './profile-fields';
 
 interface LoginBody {
@@ -55,18 +59,13 @@ interface PatchBody {
   description?: string;
   about?: unknown;
   about_display?: unknown;
-  links?: unknown;
+  info?: unknown;
   nodes_view?: unknown;
 }
 
 interface FileBody {
   id?: number;
 }
-
-const MAX_USERNAME_LENGTH = 64;
-const MAX_FULLNAME_LENGTH = 64;
-const MAX_PASSWORD_LENGTH = 64;
-const MAX_DESCRIPTION_LENGTH = 512;
 
 const MINUTE_MS = 60 * 1000;
 
@@ -231,25 +230,27 @@ export class AuthController {
       }
     }
 
-    if (
-      data.fullname !== undefined &&
-      (data.fullname.length < 1 || data.fullname.length > MAX_FULLNAME_LENGTH)
-    ) {
+    if (data.fullname !== undefined && data.fullname.length < 1) {
       errors.fullname = 'Слишком коротко';
+    } else if (
+      data.fullname !== undefined &&
+      data.fullname.length > MAX_FULLNAME_LENGTH
+    ) {
+      errors.fullname = `Не длиннее ${MAX_FULLNAME_LENGTH} символов`;
     }
 
     if (
       data.description !== undefined &&
       data.description.length > MAX_DESCRIPTION_LENGTH
     ) {
-      errors.description = 'Слишком длинно';
+      errors.description = `Не длиннее ${MAX_DESCRIPTION_LENGTH} символов`;
     }
 
-    const links =
-      data.links !== undefined ? parseProfileLinks(data.links) : undefined;
+    const info =
+      data.info !== undefined ? parseProfileInfo(data.info) : undefined;
 
-    if (links && 'error' in links) {
-      errors.links = links.error;
+    if (info && 'error' in info) {
+      errors.info = info.error;
     }
 
     const aboutDisplay =
@@ -311,7 +312,7 @@ export class AuthController {
           aboutDisplay: aboutDisplay.value,
         }),
       settings: {
-        ...(links && 'value' in links && { links: links.value }),
+        ...(info && 'value' in info && { info: info.value }),
         ...(nodesView &&
           'value' in nodesView && { nodes_view: nodesView.value }),
       },

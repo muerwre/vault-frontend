@@ -8,7 +8,7 @@ import {
   toWireDate,
   toWireDateOrNull,
   toWireFlow,
-  toWireLinks,
+  toWireProfileInfo,
   toWirePlacement,
   toWireProfileFlow,
   toWireShallowFile,
@@ -224,22 +224,30 @@ describe('wire serialisation', () => {
     it('carries no profile page fields', () => {
       const wire = toWireUser({ id: 1, username: 'someone' } as never);
 
-      for (const key of ['about', 'about_display', 'links']) {
+      for (const key of ['about', 'about_display', 'info']) {
         expect(key in (wire as object)).toBe(false);
       }
     });
   });
 
-  describe('toWireLinks', () => {
+  describe('toWireProfileInfo', () => {
     it('serialises a missing blob as an empty array', () => {
-      expect(toWireLinks(null)).toEqual([]);
-      expect(toWireLinks({ not: 'an array' })).toEqual([]);
+      expect(toWireProfileInfo(null)).toEqual([]);
+      expect(toWireProfileInfo({ not: 'an array' })).toEqual([]);
     });
 
-    it('drops entries that are not non-empty strings', () => {
-      expect(toWireLinks(['https://a', '', 42, null, 'https://b'])).toEqual([
-        'https://a',
-        'https://b',
+    it('drops entries without a value and fills in a missing title', () => {
+      expect(
+        toWireProfileInfo([
+          { title: 'a', value: 'x' },
+          { title: 'b', value: '' },
+          'https://old-style',
+          null,
+          { value: 'y' },
+        ]),
+      ).toEqual([
+        { title: 'a', value: 'x' },
+        { title: '', value: 'y' },
       ]);
     });
   });

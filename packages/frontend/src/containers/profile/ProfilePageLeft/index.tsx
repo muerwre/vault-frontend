@@ -4,7 +4,7 @@ import { Avatar } from '~/components/common/Avatar';
 import { Card } from '~/components/common/Card';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { imagePresets } from '~/constants/urls';
-import { ProfileLinks } from '~/containers/profile/ProfileLinks';
+import { ProfileExtraInfoItem } from '~/containers/profile/ProfileExtraInfo';
 import { IUser } from '~/types/auth';
 import { formatUsername } from '~/utils/user';
 
@@ -16,9 +16,13 @@ interface Props {
   username: string;
 }
 
+/**
+ * The profile beside its flow cells, as rows of the card around it: who it
+ * is, the description, then each entry of additional info.
+ */
 const ProfilePageLeft: FC<Props> = ({ username, profile, isLoading }) => (
-  <Card className={styles.wrap} elevation={0} seamless>
-    <Card seamless>
+  <>
+    <Card.Row className={styles.top} seamless>
       <Avatar
         username={username}
         url={profile?.photo?.url}
@@ -35,20 +39,21 @@ const ProfilePageLeft: FC<Props> = ({ username, profile, isLoading }) => (
           {isLoading ? <Placeholder /> : formatUsername(profile.username)}
         </div>
       </div>
-    </Card>
+    </Card.Row>
 
     {!isLoading && !!profile.description && (
-      <div className={styles.region}>
+      <Card.Row>
         <div className={styles.description}>{profile.description}</div>
-      </div>
+      </Card.Row>
     )}
 
-    {!isLoading && !!profile.links?.length && (
-      <div className={styles.region}>
-        <ProfileLinks links={profile.links} />
-      </div>
-    )}
-  </Card>
+    {!isLoading &&
+      profile.info?.map((item, index) => (
+        <Card.Row key={index} className={styles.info}>
+          <ProfileExtraInfoItem item={item} />
+        </Card.Row>
+      ))}
+  </>
 );
 
 export { ProfilePageLeft };

@@ -79,9 +79,9 @@ describe('auth (integration)', () => {
         'email',
         'fullname',
         'id',
+        'info',
         'last_seen',
         'last_seen_boris',
-        'links',
         'nodes_view',
         'photo',
         'role',
@@ -363,27 +363,30 @@ describe('auth (integration)', () => {
 
       expect(body.user.about).toBe('');
       expect(body.user.about_display).toBe('');
-      expect(body.user.links).toEqual([]);
+      expect(body.user.info).toEqual([]);
       expect(body.user.nodes_view).toBe('flow');
     });
 
-    it('saves about, its size and links into the profile', async () => {
-      const links = ['https://vk.com/id1', 'https://t.me/someone'];
+    it('saves about, its size and info into the profile', async () => {
+      const info = [
+        { title: 'ВК', value: 'vk.com/id1' },
+        { title: '', value: 'Люблю котов' },
+      ];
       const { body } = await patch({
         about: '# hello',
         about_display: 'quadro',
-        links: [...links, '  '],
+        info: [...info, { title: 'пусто', value: '  ' }],
       }).expect(200);
 
       expect(body.user.about).toBe('# hello');
       expect(body.user.about_display).toBe('quadro');
-      expect(body.user.links).toEqual(links);
+      expect(body.user.info).toEqual(info);
 
       const profile = await http().get(`/api/users/${username}`).expect(200);
 
       expect(profile.body.user.about).toBe('# hello');
       expect(profile.body.user.about_display).toBe('quadro');
-      expect(profile.body.user.links).toEqual(links);
+      expect(profile.body.user.info).toEqual(info);
     });
 
     it('updates one profile field without touching the others', async () => {
@@ -391,28 +394,31 @@ describe('auth (integration)', () => {
 
       expect(body.user.about).toBe('# hello');
       expect(body.user.about_display).toBe('single');
-      expect(body.user.links).toHaveLength(2);
+      expect(body.user.info).toHaveLength(2);
     });
 
     it('keeps the profile when only user fields change', async () => {
       const { body } = await patch({ fullname: 'Still Linked' }).expect(200);
 
       expect(body.user.about).toBe('# hello');
-      expect(body.user.links).toHaveLength(2);
+      expect(body.user.info).toHaveLength(2);
     });
 
-    it('keeps links and the nodes view side by side in settings', async () => {
+    it('keeps info and the nodes view side by side in settings', async () => {
       const { body } = await patch({ nodes_view: 'lab' }).expect(200);
 
       expect(body.user.nodes_view).toBe('lab');
-      expect(body.user.links).toHaveLength(2);
+      expect(body.user.info).toHaveLength(2);
 
       const [row] = await db.query(
         'SELECT settings FROM user_profile WHERE userId = ?',
         [userId],
       );
       expect(JSON.parse(row.settings)).toEqual({
-        links: ['https://vk.com/id1', 'https://t.me/someone'],
+        info: [
+          { title: 'ВК', value: 'vk.com/id1' },
+          { title: '', value: 'Люблю котов' },
+        ],
         nodes_view: 'lab',
       });
 
@@ -424,24 +430,33 @@ describe('auth (integration)', () => {
       await patch({ nodes_view: 'grid' }).expect(400);
     });
 
-    it('clears links with an empty list', async () => {
-      const { body } = await patch({ links: [] }).expect(200);
+    it('clears info with an empty list', async () => {
+      const { body } = await patch({ info: [] }).expect(200);
 
-      expect(body.user.links).toEqual([]);
+      expect(body.user.info).toEqual([]);
     });
 
-    it('rejects more than four links and non-http links', async () => {
-      const tooMany = await patch({
-        links: ['a', 'b', 'c', 'd', 'e'].map((x) => `https://${x}.com`),
-      }).expect(400);
+    it('takes any text, keeping only the first five entries', async () => {
+      const { body } = await patch({
+        info: ['a', 'b', 'c', 'd', 'e', 'f'].map((value) => ({
+          title: '',
+          value: `javascript:${value}`,
+        })),
+      }).expect(200);
 
-      expect(tooMany.body.errors).toEqual({ links: expect.any(String) });
+      expect(body.user.info.map((it: { value: string }) => it.value)).toEqual([
+        'javascript:a',
+        'javascript:b',
+        'javascript:c',
+        'javascript:d',
+        'javascript:e',
+      ]);
+    });
 
-      const scheme = await patch({ links: ['javascript:alert(1)'] }).expect(
-        400,
-      );
+    it('rejects a malformed info list', async () => {
+      const { body } = await patch({ info: ['just a string'] }).expect(400);
 
-      expect(scheme.body.errors).toEqual({ links: expect.any(String) });
+      expect(body.errors).toEqual({ info: expect.any(String) });
     });
 
     it('rejects an unknown about size', async () => {

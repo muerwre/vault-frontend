@@ -351,7 +351,7 @@ describe('read endpoints (integration)', () => {
         'description',
         'fullname',
         'id',
-        'links',
+        'info',
         'nodes_view',
         'photo',
         'role',

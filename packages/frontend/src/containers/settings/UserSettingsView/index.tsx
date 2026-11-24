@@ -1,6 +1,14 @@
 import { FC, useCallback } from 'react';
 
-import { MAX_PROFILE_LINKS } from '@vault/common/constants';
+import {
+  MAX_DESCRIPTION_LENGTH,
+  MAX_FULLNAME_LENGTH,
+  MAX_PASSWORD_LENGTH,
+  MAX_PROFILE_INFO_ITEMS,
+  MAX_PROFILE_INFO_TITLE_LENGTH,
+  MAX_PROFILE_INFO_VALUE_LENGTH,
+  MAX_USERNAME_LENGTH,
+} from '@vault/common/constants';
 
 import { Card } from '~/components/common/Card';
 import { Group } from '~/components/common/Group';
@@ -23,27 +31,32 @@ interface UserSettingsViewProps {}
 
 const AVATAR_SIZE = 160;
 
+type InfoItem = { title: string; value: string };
+
+const isEmpty = (item: InfoItem) => !item.title && !item.value;
+
 /**
- * The links as inputs: the ones there are, then a single empty one to add the
- * next, until the limit. Emptied inputs stay while being edited, so typing is
- * not thrown off; blanks are dropped on save.
+ * The info as pairs of inputs: the entries there are, then a single empty
+ * pair once every entry has a value, until the limit. Entries emptied while
+ * editing stay, so typing is not thrown off; those without a value are
+ * dropped on save.
  */
-const toLinkInputs = (links: string[] = []): string[] => {
-  const inputs = [...links];
+const toInfoInputs = (info: InfoItem[] = []): InfoItem[] => {
+  const inputs = [...info];
 
   while (
     inputs.length > 1 &&
-    !inputs[inputs.length - 1] &&
-    !inputs[inputs.length - 2]
+    isEmpty(inputs[inputs.length - 1]) &&
+    isEmpty(inputs[inputs.length - 2])
   ) {
     inputs.pop();
   }
 
   if (
-    inputs.length < MAX_PROFILE_LINKS &&
-    (inputs.length === 0 || inputs[inputs.length - 1])
+    inputs.length < MAX_PROFILE_INFO_ITEMS &&
+    inputs.every((item) => item.value)
   ) {
-    inputs.push('');
+    inputs.push({ title: '', value: '' });
   }
 
   return inputs;
@@ -55,21 +68,25 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
   const { user } = useUser();
   const { updatePhoto, deletePhoto } = usePatchUser();
 
-  const linkInputs = toLinkInputs(values.links);
+  const infoInputs = toInfoInputs(values.info);
 
-  const setLink = useCallback(
-    (index: number) => (value: string) =>
+  const setInfo = useCallback(
+    (index: number, field: keyof InfoItem) => (text: string) =>
       setFieldValue(
-        'links',
-        toLinkInputs(linkInputs.map((it, i) => (i === index ? value : it))),
+        'info',
+        toInfoInputs(
+          infoInputs.map((it, i) =>
+            i === index ? { ...it, [field]: text } : it,
+          ),
+        ),
       ),
-    [linkInputs, setFieldValue],
+    [infoInputs, setFieldValue],
   );
 
   return (
     <Card.Row columns>
       <Card.Column>
-        <Group>
+        <Group className={styles.zones}>
           <Group horizontal={!isPhone} className={styles.base_info}>
             <ProfilePhotoEditor
               photo={user.photo}
@@ -84,6 +101,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
                   value={values.fullname}
                   handler={handleChange('fullname')}
                   title="Полное имя"
+                  maxLength={MAX_FULLNAME_LENGTH}
                   error={errors.fullname}
                 />
 
@@ -91,6 +109,8 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
                   value={values.description}
                   handler={handleChange('description')}
                   title="Описание"
+                  maxLength={MAX_DESCRIPTION_LENGTH}
+                  error={errors.description}
                 />
 
                 <div className={styles.small}>
@@ -107,6 +127,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
                 value={values.username}
                 handler={handleChange('username')}
                 title="Логин"
+                maxLength={MAX_USERNAME_LENGTH}
                 error={errors.username}
               />
 
@@ -124,6 +145,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
                 value={values.newPassword}
                 handler={handleChange('newPassword')}
                 title="Новый пароль"
+                maxLength={MAX_PASSWORD_LENGTH}
                 type="password"
                 error={errors.newPassword}
               />
@@ -132,6 +154,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
                 value={values.password}
                 handler={handleChange('password')}
                 title="Старый пароль"
+                maxLength={MAX_PASSWORD_LENGTH}
                 type="password"
                 error={errors.password}
               />
@@ -149,22 +172,37 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
       </Card.Column>
 
       <Card.Column>
-        <Group>
-          <Zone title="Ссылки">
+        <Group className={styles.zones}>
+          <Zone title="Дополнительная информация">
             <Group>
-              {linkInputs.map((link, index) => (
-                <InputText
-                  key={index}
-                  value={link}
-                  handler={setLink(index)}
-                  placeholder="https://"
-                  type="url"
-                />
+              {infoInputs.map((item, index) => (
+                <div key={index} className={styles.info_row}>
+                  <InputText
+                    value={item.title}
+                    handler={setInfo(index, 'title')}
+                    placeholder="Название"
+                    maxLength={MAX_PROFILE_INFO_TITLE_LENGTH}
+                    className={styles.info_title}
+                  />
+
+                  <InputText
+                    value={item.value}
+                    handler={setInfo(index, 'value')}
+                    placeholder="Ссылка или что угодно"
+                    maxLength={MAX_PROFILE_INFO_VALUE_LENGTH}
+                    className={styles.info_value}
+                  />
+                </div>
               ))}
 
-              {typeof errors.links === 'string' && (
-                <div className={styles.error}>{errors.links}</div>
+              {typeof errors.info === 'string' && (
+                <div className={styles.error}>{errors.info}</div>
               )}
+
+              <div className={styles.small}>
+                Ссылки на соцсети и сайты или что угодно ещё о вас: город,
+                любимую группу, телеграм. Ссылки станут кликабельными сами.
+              </div>
             </Group>
           </Zone>
 

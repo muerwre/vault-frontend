@@ -1,53 +1,43 @@
 import {
-  MAX_PROFILE_LINK_LENGTH,
-  MAX_PROFILE_LINKS,
+  MAX_PROFILE_INFO_ITEMS,
+  MAX_PROFILE_INFO_TITLE_LENGTH,
+  MAX_PROFILE_INFO_VALUE_LENGTH,
   NODE_FLOW_DISPLAY,
   PROFILE_NODES_VIEW,
   type ProfileNodesView,
 } from '@vault/common/constants';
+import type { IProfileInfoItem } from '@vault/common/types';
 
 type Parsed<T> = { value: T } | { error: string };
 
-const isHttpUrl = (value: string): boolean => {
-  try {
-    const url = new URL(value);
-    return (
-      (url.protocol === 'http:' || url.protocol === 'https:') && !!url.host
-    );
-  } catch {
-    return false;
-  }
-};
+const asString = (value: unknown): string =>
+  typeof value === 'string' ? value.trim() : '';
 
 /**
- * Profile links as sent by the client. Entries are trimmed and blank ones
- * dropped, so clearing an input removes the link; what remains must be
- * absolute http(s) URLs.
+ * Additional info as sent by the client: `{ title, value }` entries, links or
+ * any other text. Content is taken as written; entries are trimmed, too long
+ * ones cut, those without a value dropped, and only the first
+ * `MAX_PROFILE_INFO_ITEMS` kept. Only a malformed list is refused.
  */
-export const parseProfileLinks = (input: unknown): Parsed<string[]> => {
-  if (!Array.isArray(input)) {
-    return { error: 'Неверный формат ссылок' };
+export const parseProfileInfo = (
+  input: unknown,
+): Parsed<IProfileInfoItem[]> => {
+  if (
+    !Array.isArray(input) ||
+    input.some((item) => !item || typeof item !== 'object')
+  ) {
+    return { error: 'Неверный формат' };
   }
 
-  if (input.some((link) => typeof link !== 'string')) {
-    return { error: 'Неверный формат ссылок' };
-  }
+  const items = (input as Array<Record<string, unknown>>)
+    .map((item) => ({
+      title: asString(item.title).slice(0, MAX_PROFILE_INFO_TITLE_LENGTH),
+      value: asString(item.value).slice(0, MAX_PROFILE_INFO_VALUE_LENGTH),
+    }))
+    .filter((item) => item.value)
+    .slice(0, MAX_PROFILE_INFO_ITEMS);
 
-  const links = (input as string[]).map((link) => link.trim()).filter(Boolean);
-
-  if (links.length > MAX_PROFILE_LINKS) {
-    return { error: `Не больше ${MAX_PROFILE_LINKS} ссылок` };
-  }
-
-  if (links.some((link) => link.length > MAX_PROFILE_LINK_LENGTH)) {
-    return { error: 'Слишком длинная ссылка' };
-  }
-
-  if (!links.every(isHttpUrl)) {
-    return { error: 'Это не похоже на ссылку' };
-  }
-
-  return { value: links };
+  return { value: items };
 };
 
 const DISPLAY_VARIANTS: readonly string[] = Object.values(NODE_FLOW_DISPLAY);

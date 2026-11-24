@@ -29,6 +29,8 @@
 .left {
   grid-row: 1 / span 2;
   grid-column: 1 / span 1;
+  // the column's width, not its longest line: one-line info is cut instead
+  min-width: 0;
 }
 
 .grid {

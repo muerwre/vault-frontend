@@ -43,7 +43,7 @@ export class UserProfile {
   })
   aboutDisplay: string | null;
 
-  /** Links and page preferences, as JSON. Read leniently; see the wire layer. */
+  /** Additional info and page preferences, as JSON. Read leniently. */
   @Column({
     type: 'text',
     nullable: true,

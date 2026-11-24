@@ -2,7 +2,7 @@ import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 /**
  * Profile page content, kept apart from the legacy `user` table: the about
- * text, the size of its card, and `settings` JSON with the user's links and
+ * text, the size of its card, and `settings` JSON with the user's additional info and
  * page preferences. Idempotent: some databases ran it under an earlier
  * timestamp.
  */

@@ -14,6 +14,9 @@ export const ROLES_CAN_CREATE_NODE: readonly Role[] = [ROLES.USER, ROLES.ADMIN];
 export const GUEST_USER_ID = 0;
 
 export const MIN_PASSWORD_LENGTH = 6;
+export const MAX_PASSWORD_LENGTH = 64;
+
+export const MAX_USERNAME_LENGTH = 64;
 
 /** Usernames are 3–64 chars of `[a-zA-Z0-9_-]`. */
 export const USERNAME_REGEX = /^[a-zA-Z0-9_-]{3,64}$/;
@@ -27,11 +30,18 @@ export const USER_INACTIVITY_DAYS = 40;
  */
 export const PASSWORD_PLACEHOLDER = 'NO_PASSWORD';
 
-/** A profile lists at most this many external links. */
-export const MAX_PROFILE_LINKS = 4;
+/** Longest full name. Covers every existing one, with room to spare. */
+export const MAX_FULLNAME_LENGTH = 40;
 
-/** Longest accepted profile link. */
-export const MAX_PROFILE_LINK_LENGTH = 255;
+/** Longest profile description: a line shown by the avatar. */
+export const MAX_DESCRIPTION_LENGTH = 64;
+
+/** A profile keeps at most this many entries of additional info. */
+export const MAX_PROFILE_INFO_ITEMS = 5;
+
+/** Longer titles and values of additional info are cut to these. */
+export const MAX_PROFILE_INFO_TITLE_LENGTH = 16;
+export const MAX_PROFILE_INFO_VALUE_LENGTH = 64;
 
 /** Longest accepted profile about text. */
 export const MAX_PROFILE_ABOUT_LENGTH = 8192;

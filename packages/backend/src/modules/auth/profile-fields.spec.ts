@@ -1,73 +1,51 @@
-import { parseAboutDisplay, parseProfileLinks } from './profile-fields';
+import { parseAboutDisplay, parseProfileInfo } from './profile-fields';
 
 describe('profile fields', () => {
-  describe('parseProfileLinks', () => {
-    it('accepts up to four http(s) links', () => {
-      const links = [
-        'https://vk.com/id1',
-        'http://example.com',
-        'https://t.me/someone',
-        'https://github.com/someone',
+  describe('parseProfileInfo', () => {
+    it('takes any text as written, links or not', () => {
+      const info = [
+        { title: 'ВК', value: 'vk.com/id1' },
+        { title: '', value: 'Люблю котов' },
       ];
 
-      expect(parseProfileLinks(links)).toEqual({ value: links });
+      expect(parseProfileInfo(info)).toEqual({ value: info });
     });
 
-    it('trims entries and drops blank ones', () => {
-      expect(parseProfileLinks([' https://a.com ', '', '   '])).toEqual({
-        value: ['https://a.com'],
-      });
-    });
-
-    it('accepts an empty list, which clears the links', () => {
-      expect(parseProfileLinks([])).toEqual({ value: [] });
-    });
-
-    it('rejects more than four links', () => {
+    it('trims entries and drops those without a value', () => {
       expect(
-        parseProfileLinks([
-          'https://a.com',
-          'https://b.com',
-          'https://c.com',
-          'https://d.com',
-          'https://e.com',
+        parseProfileInfo([
+          { title: ' a ', value: ' x ' },
+          { title: 'b', value: '   ' },
         ]),
-      ).toEqual({ error: expect.any(String) });
+      ).toEqual({ value: [{ title: 'a', value: 'x' }] });
     });
 
-    it('counts only non-blank entries against the limit', () => {
+    it('accepts an empty list, which clears the info', () => {
+      expect(parseProfileInfo([])).toEqual({ value: [] });
+    });
+
+    it('keeps only the first entries and cuts long ones', () => {
+      const parsed = parseProfileInfo(
+        Array.from({ length: 6 }, (_, i) => ({
+          title: 't'.repeat(100),
+          value: `${i}${'v'.repeat(300)}`,
+        })),
+      );
+
+      expect('value' in parsed && parsed.value).toHaveLength(5);
+      expect('value' in parsed && parsed.value[0].title).toHaveLength(16);
+      expect('value' in parsed && parsed.value[0].value).toHaveLength(64);
+    });
+
+    it('treats a missing or non-string field as empty', () => {
       expect(
-        parseProfileLinks([
-          'https://a.com',
-          '',
-          'https://b.com',
-          'https://c.com',
-          'https://d.com',
-        ]),
-      ).toEqual({ value: expect.any(Array) });
+        parseProfileInfo([{ value: 'x' }, { title: 1, value: 2 }]),
+      ).toEqual({ value: [{ title: '', value: 'x' }] });
     });
 
-    it.each([
-      ['a relative path', '/node/1'],
-      ['a bare word', 'hello'],
-      ['another scheme', 'javascript:alert(1)'],
-      ['a data url', 'data:text/html,hi'],
-    ])('rejects %s', (_, link) => {
-      expect(parseProfileLinks([link])).toEqual({ error: expect.any(String) });
-    });
-
-    it('rejects an overlong link', () => {
-      expect(parseProfileLinks([`https://a.com/${'x'.repeat(300)}`])).toEqual({
-        error: expect.any(String),
-      });
-    });
-
-    it.each([
-      ['a string', 'https://a.com'],
-      ['null', null],
-      ['numbers', [1]],
-    ])('rejects %s instead of an array of strings', (_, input) => {
-      expect(parseProfileLinks(input)).toEqual({
+    it('refuses anything but a list of objects', () => {
+      expect(parseProfileInfo('x')).toEqual({ error: expect.any(String) });
+      expect(parseProfileInfo(['https://a.com'])).toEqual({
         error: expect.any(String),
       });
     });
