@@ -1,13 +1,13 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
 import { useFormik } from 'formik';
+import { CheckIcon } from 'lucide-react';
 
 import { apiRequestRegistration } from '~/api/registration';
 import { ApiRegistrationOutcome } from '~/api/registration/types';
 import { BetterScrollDialog } from '~/components/common/BetterScrollDialog';
 import { DialogTitle } from '~/components/common/DialogTitle';
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/common/Icon';
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
 import { Textarea } from '~/components/input/Textarea';
@@ -77,7 +77,7 @@ const RegisterRequestDialog: FC<DialogComponentProps> = ({
 
   const overlay = outcome ? (
     <Group className={styles.shade}>
-      <Icon icon="check" size={64} />
+      <CheckIcon size={64} />
       <div>{SENT_TEXT[outcome]}</div>
       <div />
       <Button type="button" onClick={onRequestClose}>

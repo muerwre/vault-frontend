@@ -1,8 +1,9 @@
 import { FC } from 'react';
 
 import classnames from 'classnames';
+import { HeartIcon } from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
+import { HeartFilledIcon } from '~/components/icons';
 
 import styles from './styles.module.scss';
 
@@ -34,7 +35,7 @@ const CommentLike: FC<CommentLikeProps> = ({
       })}
     >
       <div className={styles.icon}>
-        <Icon icon={count ? 'heart_full' : 'heart'} size={18} />
+        {count ? <HeartFilledIcon size={16} /> : <HeartIcon size={16} />}
       </div>
 
       {Boolean(count) && <span className={styles.count}>{count}</span>}

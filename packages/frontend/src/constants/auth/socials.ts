@@ -1,9 +1,12 @@
+import type { LucideIcon } from 'lucide-react';
+
+import { GoogleIcon, TelegramIcon, VkIcon } from '~/components/icons';
 import { OAuthProvider } from '~/types/auth';
 
-export const SOCIAL_ICONS: Record<OAuthProvider, string> = {
-  vkontakte: 'vk',
-  google: 'google',
-  telegram: 'telegram',
+export const SOCIAL_ICONS: Record<OAuthProvider, LucideIcon> = {
+  vkontakte: VkIcon,
+  google: GoogleIcon,
+  telegram: TelegramIcon,
 };
 
 export type BacklinkSource = 'vkontakte';

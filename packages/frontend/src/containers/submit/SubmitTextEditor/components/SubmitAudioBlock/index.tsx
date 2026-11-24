@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import classNames from 'classnames';
+import { EighthNotesIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
 import { UploadAudioGrid } from '~/components/upload/UploadAudioGrid';
@@ -46,7 +47,7 @@ const SubmitAudioBlock: FC<BlockEditorProps<IBlockAudio>> = observer(
                 >
                   <SubmitPickButton
                     type={UploadType.Audio}
-                    iconLeft="audio"
+                    iconLeft={<EighthNotesIcon size={20} />}
                     label="Добавить песню"
                   />
                 </div>

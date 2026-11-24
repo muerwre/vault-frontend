@@ -1,5 +1,7 @@
 import { FC, useEffect } from 'react';
 
+import { PanelsRightBottomIcon, SquareSparklesIcon } from 'lucide-react';
+
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { NODE_LAYOUTS, NodeLayout } from '~/constants/node';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
@@ -36,7 +38,7 @@ const SubmitLayoutToggle: FC = () => {
     <div className={styles.wrap}>
       <HorizontalMenu>
         <HorizontalMenu.Item
-          icon="text"
+          icon={<PanelsRightBottomIcon size={20} />}
           active={!isAura}
           onClick={() => setLayout(NODE_LAYOUTS.POST)}
           stretchy
@@ -46,7 +48,7 @@ const SubmitLayoutToggle: FC = () => {
         </HorizontalMenu.Item>
 
         <HorizontalMenu.Item
-          icon="photo"
+          icon={<SquareSparklesIcon size={20} />}
           active={isAura}
           disabled={!hasImages}
           onClick={() => setLayout(NODE_LAYOUTS.AURA)}

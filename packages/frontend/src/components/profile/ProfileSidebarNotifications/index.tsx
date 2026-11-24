@@ -1,5 +1,7 @@
 import { useState, VFC } from 'react';
 
+import { ChevronRightIcon } from 'lucide-react';
+
 import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
@@ -49,7 +51,11 @@ const ProfileSidebarNotifications: VFC<
             </HorizontalMenu.Item>
           </HorizontalMenu>
 
-          <Button iconLeft="right" color="link" onClick={closeAllTabs} />
+          <Button
+            iconLeft={<ChevronRightIcon size={20} />}
+            color="link"
+            onClick={closeAllTabs}
+          />
         </Group>
 
         <div className={styles.list}>

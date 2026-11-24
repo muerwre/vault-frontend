@@ -1,8 +1,9 @@
 import { memo, useCallback, useMemo } from 'react';
 
 import classNames from 'classnames';
+import { XIcon } from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
+import { PauseFilledIcon, PlayFilledIcon } from '~/components/icons';
 import { InputText } from '~/components/input/InputText';
 import { PlayerState } from '~/constants/player';
 import { IFile } from '~/types';
@@ -128,7 +129,7 @@ const AudioPlayer = memo(
       >
         {onDelete && (
           <div className={styles.drop} onMouseDown={onDropClick}>
-            <Icon icon="close" />
+            <XIcon size={20} />
           </div>
         )}
 
@@ -139,9 +140,9 @@ const AudioPlayer = memo(
           onMouseDown={stopPropagation}
         >
           {playing && status === PlayerState.PLAYING ? (
-            <Icon icon="pause" />
+            <PauseFilledIcon size={16} />
           ) : (
-            <Icon icon="play" />
+            <PlayFilledIcon size={16} />
           )}
         </div>
 

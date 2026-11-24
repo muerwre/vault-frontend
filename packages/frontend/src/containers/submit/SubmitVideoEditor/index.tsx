@@ -1,8 +1,8 @@
 import { FC, useCallback, useMemo } from 'react';
 
+import { XIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
-import { Icon } from '~/components/common/Icon';
 import { SortableGrid } from '~/components/sortable/SortableGrid';
 import { imagePresets } from '~/constants/urls';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
@@ -47,7 +47,7 @@ const SubmitVideoCard: FC<CardProps> = observer(({ item, onRemove }) => {
           onMouseDown={() => onRemove(id)}
           aria-label="Убрать видео"
         >
-          <Icon icon="close" size={20} />
+          <XIcon size={20} />
         </button>
       </div>
 

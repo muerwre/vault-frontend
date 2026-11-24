@@ -1,6 +1,7 @@
 import { FC, useCallback } from 'react';
 
-import { Icon } from '~/components/common/Icon';
+import { FlaskConicalIcon, WavesHorizontalIcon } from 'lucide-react';
+
 import { Button } from '~/components/input/Button';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import { IEditorComponentProps } from '~/types/node';
@@ -32,10 +33,10 @@ const EditorPublicSwitch: FC<Props> = () => {
       round
     >
       {values.is_promoted ? (
-        <Icon icon="waves" size={24} />
+        <WavesHorizontalIcon size={20} />
       ) : (
         <div className={styles.lab_wrapper}>
-          <Icon icon="lab" size={24} />
+          <FlaskConicalIcon size={20} />
         </div>
       )}
     </Button>

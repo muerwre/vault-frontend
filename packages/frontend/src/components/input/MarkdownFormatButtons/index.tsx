@@ -1,6 +1,7 @@
 import { FC, MouseEvent } from 'react';
 
 import classNames from 'classnames';
+import { BoldIcon, Heading2Icon, ItalicIcon, Link2Icon } from 'lucide-react';
 
 import { Button } from '~/components/input/Button';
 import { ButtonGroup } from '~/components/input/ButtonGroup';
@@ -31,7 +32,7 @@ const MarkdownFormatButtons: FC<Props> = ({
     <ButtonGroup className={classNames(styles.wrap, className)}>
       <Button
         onClick={run(() => formatter.wrap('**', '**'))}
-        iconLeft="bold"
+        iconLeft={<BoldIcon size={16} />}
         size="small"
         color="gray"
         iconOnly
@@ -42,7 +43,7 @@ const MarkdownFormatButtons: FC<Props> = ({
 
       <Button
         onClick={run(() => formatter.wrap('*', '*'))}
-        iconLeft="italic"
+        iconLeft={<ItalicIcon size={16} />}
         size="small"
         color="gray"
         iconOnly
@@ -69,7 +70,7 @@ const MarkdownFormatButtons: FC<Props> = ({
       ) : (
         <Button
           onClick={run(() => formatter.setHeading(2))}
-          iconLeft="title"
+          iconLeft={<Heading2Icon size={16} />}
           size="small"
           color="gray"
           iconOnly
@@ -81,7 +82,7 @@ const MarkdownFormatButtons: FC<Props> = ({
 
       <Button
         onClick={run(() => formatter.wrap('[ссылка](', ')'))}
-        iconLeft="link"
+        iconLeft={<Link2Icon size={16} />}
         size="small"
         color="gray"
         iconOnly

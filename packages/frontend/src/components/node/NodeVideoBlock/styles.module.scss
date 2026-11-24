@@ -44,7 +44,7 @@
   border-radius: 12px;
   background: transparentize(black, 0.4);
   backdrop-filter: blur(4px);
-  fill: white;
+  color: white;
   transition: transform 0.25s;
 
   .thumb:hover & {

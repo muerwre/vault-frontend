@@ -1,8 +1,7 @@
-import { Children, PropsWithChildren } from 'react';
+import { Children, PropsWithChildren, ReactNode } from 'react';
 
 import classNames from 'classnames';
 
-import { Icon } from '~/components/common/Icon';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { DivProps } from '~/utils/types';
 
@@ -11,7 +10,7 @@ import styles from './styles.module.scss';
 interface HorizontalMenuProps extends DivProps {}
 interface HorizontalMenuItemProps {
   isLoading?: boolean;
-  icon?: string;
+  icon?: ReactNode;
   color?: 'green' | 'orange' | 'yellow' | 'flow' | 'lab';
   active?: boolean;
   stretchy?: boolean;
@@ -82,7 +81,7 @@ HorizontalMenu.Item = ({
       title={title}
       aria-disabled={disabled || undefined}
     >
-      {!!icon && <Icon icon={icon} size={24} />}
+      {icon}
       {!!children && <span className={styles.text}>{children}</span>}
     </div>
   );

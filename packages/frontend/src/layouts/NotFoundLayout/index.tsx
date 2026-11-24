@@ -1,5 +1,6 @@
 import { useCallback, VFC } from 'react';
 
+import { ChevronLeftIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
 
 import { Button } from '~/components/input/Button';
@@ -27,7 +28,7 @@ const NotFoundLayout: VFC<NotFoundLayoutProps> = () => {
               color="outline-white"
               size="giant"
               className={styles.button}
-              iconLeft="left"
+              iconLeft={<ChevronLeftIcon size={20} />}
               onClick={goHome}
             >
               Пойдём домой

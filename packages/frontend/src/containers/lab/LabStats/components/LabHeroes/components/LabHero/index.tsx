@@ -1,7 +1,7 @@
 import { FC, useCallback } from 'react';
 
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/common/Icon';
+import { StarFilledIcon } from '~/components/icons';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { URLS } from '~/constants/urls';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
@@ -25,7 +25,7 @@ const LabHero: FC<Props> = ({ node, isLoading }) => {
     return (
       <Group horizontal className={styles.wrap1}>
         <div className={styles.star}>
-          <Icon icon="star_full" size={32} />
+          <StarFilledIcon size={32} />
         </div>
 
         <div className={styles.content}>
@@ -39,7 +39,7 @@ const LabHero: FC<Props> = ({ node, isLoading }) => {
   return (
     <Group horizontal className={styles.wrap} onClick={onClick}>
       <div className={styles.star}>
-        <Icon icon="star_full" size={32} />
+        <StarFilledIcon size={32} />
       </div>
 
       <div className={styles.content}>

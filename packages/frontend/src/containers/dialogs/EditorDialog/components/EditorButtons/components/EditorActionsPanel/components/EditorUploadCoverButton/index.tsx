@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, useCallback, useEffect } from 'react';
 
-import { Icon } from '~/components/common/Icon';
+import { XIcon } from 'lucide-react';
+
 import { UploadSubject, UploadTarget, UploadType } from '~/constants/uploads';
 import { imagePresets } from '~/constants/urls';
 import { useUploader } from '~/hooks/data/useUploader';
@@ -63,7 +64,7 @@ const EditorUploadCoverButton: FC<Props> = () => {
 
         {values.cover && (
           <div className={styles.button} onClick={onDropCover}>
-            <Icon icon="close" />
+            <XIcon size={20} />
           </div>
         )}
       </div>

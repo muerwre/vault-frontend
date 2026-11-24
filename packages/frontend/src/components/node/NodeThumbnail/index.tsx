@@ -1,8 +1,8 @@
 import { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 
 import classNames from 'classnames';
+import { FlaskConicalIcon } from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
 import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 import { Square } from '~/components/common/Square';
 import { imagePresets } from '~/constants/urls';
@@ -95,7 +95,7 @@ const NodeThumbnail: FC<NodeThumbnailProps> = memo(({ item }) => {
         >
           {!item.is_promoted && (
             <div className={styles.suffix}>
-              <Icon icon="lab" size={12} />
+              <FlaskConicalIcon size={12} />
             </div>
           )}
         </Square>

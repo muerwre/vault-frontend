@@ -1,11 +1,11 @@
 import { FC, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
+import { PlayIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 import { Keyboard, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { Icon } from '~/components/common/Icon';
 import { CopyBadges } from '~/components/media/CopyBadges';
 import { YoutubePlayer } from '~/components/media/YoutubePlayer';
 import { NodeComponentProps } from '~/constants/node';
@@ -59,7 +59,7 @@ const VideoThumb: FC<{
       >
         {playable && (
           <span className={styles.play}>
-            <Icon icon="play" size={32} />
+            <PlayIcon size={32} />
           </span>
         )}
       </button>

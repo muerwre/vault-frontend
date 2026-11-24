@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
-import { Icon } from '~/components/common/Icon';
+import { SearchIcon } from 'lucide-react';
+
 import { InfiniteScroll } from '~/components/common/InfiniteScroll';
 import { NodeHorizontalCard } from '~/components/common/NodeHorizontalCard';
 import { INode } from '~/types';
@@ -18,7 +19,7 @@ const FlowSearchResults: FC<Props> = ({ results, onLoadMore, hasMore }) => {
   if (!results.length) {
     return (
       <div className={styles.loading}>
-        <Icon size={96} icon="search" />
+        <SearchIcon size={96} />
         <div className={styles.nothing}>Ничего не найдено</div>
       </div>
     );

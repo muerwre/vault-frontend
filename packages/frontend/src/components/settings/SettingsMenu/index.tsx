@@ -1,5 +1,6 @@
 import { VFC } from 'react';
 
+import { CornerDownLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Filler } from '~/components/common/Filler';
@@ -35,7 +36,7 @@ const SettingsMenu: VFC<SettingsMenuProps> = () => (
       <Group horizontal>
         <Filler />
 
-        <Button color="outline" iconLeft="enter">
+        <Button color="outline" iconLeft={<CornerDownLeftIcon size={20} />}>
           Выйти
         </Button>
       </Group>

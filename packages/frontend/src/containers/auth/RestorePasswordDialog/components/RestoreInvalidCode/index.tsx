@@ -1,7 +1,8 @@
 import { VFC } from 'react';
 
+import { XIcon } from 'lucide-react';
+
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/common/Icon';
 import { Button } from '~/components/input/Button';
 import { ERROR_LITERAL, ERRORS } from '~/constants/errors';
 
@@ -17,7 +18,7 @@ const RestoreInvalidCode: VFC<RestoreInvalidCodeProps> = ({
   onClose,
 }) => (
   <Group className={styles.error_shade}>
-    <Icon icon="close" size={64} />
+    <XIcon size={64} />
 
     <div>{error || ERROR_LITERAL[ERRORS.CODE_IS_INVALID]}</div>
 

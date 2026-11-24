@@ -1,9 +1,9 @@
 import { VFC } from 'react';
 
 import classNames from 'classnames';
+import { XIcon } from 'lucide-react';
 
 import { AudioPlayer } from '~/components/common/AudioPlayer';
-import { Icon } from '~/components/common/Icon';
 import { PlayerState } from '~/constants/player';
 import { IFile } from '~/types';
 
@@ -43,7 +43,7 @@ const PlayerBar: VFC<Props> = ({ status, playerStop, file }) => {
           onClick={playerStop}
           aria-label="Остановить"
         >
-          <Icon icon="close" />
+          <XIcon size={20} />
         </button>
       </div>
     </div>

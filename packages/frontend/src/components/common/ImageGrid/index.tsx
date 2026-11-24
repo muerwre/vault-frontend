@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
 import classNames from 'classnames';
+import { ZoomInIcon } from 'lucide-react';
 
 import { Hoverable } from '~/components/common/Hoverable';
-import { Icon } from '~/components/common/Icon';
 import { imagePresets } from '~/constants/urls';
 import { IFile } from '~/types';
 import { getURL } from '~/utils/dom';
@@ -32,7 +32,7 @@ const ImageGrid: FC<ImageGridProps> = ({ files, onClick }) => {
           key={file.id}
           onClick={() => onClick(file)}
           className={styles.item}
-          icon={<Icon icon="zoom" size={30} />}
+          icon={<ZoomInIcon size={30} />}
         >
           <img
             srcSet={getFileSrcSet(file)}

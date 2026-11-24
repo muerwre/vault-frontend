@@ -18,8 +18,6 @@ export interface ITag {
   readonly updated_at: string;
 }
 
-export type IIcon = string;
-
 export type ValueOf<T> = T[keyof T];
 export type ContextValue<T> = T extends Context<infer U> ? U : never;
 

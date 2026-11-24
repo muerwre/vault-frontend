@@ -1,10 +1,9 @@
 import { FC, ReactNode } from 'react';
 
-import { Icon } from '~/components/common/Icon';
 import { WithDescription } from '~/components/common/WithDescription';
 
 interface Props {
-  icon: string;
+  icon: ReactNode;
   title: string;
   subtitle: string;
   link: string;
@@ -24,7 +23,7 @@ const BorisContactItem: FC<Props> = ({
     <div>
       {prefix}
       <WithDescription
-        icon={<Icon icon={icon} size={32} />}
+        icon={icon}
         title={title}
         link={link}
         subtitle={subtitle}

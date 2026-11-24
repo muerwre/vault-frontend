@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { CheckIcon } from 'lucide-react';
+
 import { Filler } from '~/components/common/Filler';
 import { Group } from '~/components/common/Group';
 import { Padder } from '~/components/common/Padder';
@@ -32,7 +34,7 @@ const EditorButtons: FC = () => {
 
         <Button
           title={isTablet ? undefined : 'Сохранить'}
-          iconRight="check"
+          iconRight={<CheckIcon size={20} />}
           color={values.is_promoted ? 'flow' : 'lab'}
           disabled={isSubmitting}
           type="submit"

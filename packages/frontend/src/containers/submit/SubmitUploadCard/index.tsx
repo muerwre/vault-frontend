@@ -1,8 +1,7 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import classNames from 'classnames';
 
-import { Icon } from '~/components/common/Icon';
 import { UploadType } from '~/constants/uploads';
 
 import { SubmitCard } from '../SubmitCard';
@@ -13,7 +12,7 @@ import styles from './styles.module.scss';
 interface Props {
   type: UploadType;
   label: string;
-  icon: string;
+  icon: ReactNode;
   /** A square photo tile. */
   variant: 'tile';
 }
@@ -29,7 +28,7 @@ const SubmitUploadCard: FC<Props> = ({ type, label, icon, variant }) => {
       title={label}
     >
       <span className={styles.content}>
-        <Icon icon={icon} size={24} />
+        {icon}
         <span className={styles.label}>{label}</span>
       </span>
 

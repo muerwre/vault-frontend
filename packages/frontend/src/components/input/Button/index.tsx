@@ -3,15 +3,14 @@ import {
   DetailedHTMLProps,
   FC,
   memo,
+  ReactNode,
   useMemo,
 } from 'react';
 
 import Tippy from '@tippyjs/react';
 import classnames from 'classnames';
 
-import { Icon } from '~/components/common/Icon';
 import { LoaderCircle } from '~/components/common/LoaderCircle';
-import { IIcon } from '~/types';
 
 import styles from './styles.module.scss';
 
@@ -31,8 +30,8 @@ type IButtonProps = DetailedHTMLProps<
     | 'lab'
     | 'outline-white'
     | 'flat';
-  iconLeft?: IIcon;
-  iconRight?: IIcon;
+  iconLeft?: ReactNode;
+  iconRight?: ReactNode;
   title?: string;
   stretchy?: boolean;
   iconOnly?: boolean;
@@ -96,21 +95,15 @@ const Button: FC<IButtonProps> = memo(
       <Tippy content={label || ''} disabled={!label}>
         <button className={computedClassName} {...props}>
           {iconLeft && (
-            <Icon
-              icon={iconLeft}
-              size={20}
-              key={0}
-              className={styles.icon_left}
-            />
+            <span key={0} className={styles.icon_left}>
+              {iconLeft}
+            </span>
           )}
           {!!title ? <span>{title}</span> : children}
           {iconRight && (
-            <Icon
-              icon={iconRight}
-              size={20}
-              key={2}
-              className={styles.icon_right}
-            />
+            <span key={2} className={styles.icon_right}>
+              {iconRight}
+            </span>
           )}
           {loading && (
             <div className={styles.loading}>

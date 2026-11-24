@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { FlaskConicalIcon, WavesHorizontalIcon } from 'lucide-react';
+
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 
@@ -17,7 +19,7 @@ const SubmitFlowToggle: FC = () => {
       <HorizontalMenu>
         <HorizontalMenu.Item
           color="flow"
-          icon="waves"
+          icon={<WavesHorizontalIcon size={20} />}
           active={!!values.is_promoted}
           onClick={() => setFieldValue('is_promoted', true)}
           stretchy
@@ -27,7 +29,7 @@ const SubmitFlowToggle: FC = () => {
 
         <HorizontalMenu.Item
           color="lab"
-          icon="lab"
+          icon={<FlaskConicalIcon size={20} />}
           active={!values.is_promoted}
           onClick={() => setFieldValue('is_promoted', false)}
           stretchy

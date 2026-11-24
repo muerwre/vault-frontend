@@ -40,8 +40,7 @@
   cursor: pointer;
 
   svg {
-    fill: white;
-    stroke: white;
+    color: white;
     color: white;
   }
 }
@@ -79,9 +78,7 @@
   align-items: center;
   justify-content: center;
   color: $gray_90;
-  fill: currentColor;
   font: $font_18_semibold;
-  stroke: none;
   line-height: 26px;
   flex: 1;
 

@@ -1,5 +1,12 @@
 import { FC } from 'react';
 
+import {
+  EighthNotesIcon,
+  ImageIcon,
+  RectangleLandscapePlayIcon,
+  TextAlignStartIcon,
+} from 'lucide-react';
+
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { NODE_TYPES } from '~/constants/node';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
@@ -7,10 +14,22 @@ import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
 import styles from './styles.module.scss';
 
 const TYPES = [
-  { type: NODE_TYPES.IMAGE, icon: 'image', label: 'Фото' },
-  { type: NODE_TYPES.TEXT, icon: 'text', label: 'Блог' },
-  { type: NODE_TYPES.VIDEO, icon: 'video', label: 'Видео' },
-  { type: NODE_TYPES.AUDIO, icon: 'audio', label: 'Музыка' },
+  { type: NODE_TYPES.IMAGE, icon: <ImageIcon size={20} />, label: 'Фото' },
+  {
+    type: NODE_TYPES.TEXT,
+    icon: <TextAlignStartIcon size={20} />,
+    label: 'Блог',
+  },
+  {
+    type: NODE_TYPES.VIDEO,
+    icon: <RectangleLandscapePlayIcon size={20} />,
+    label: 'Видео',
+  },
+  {
+    type: NODE_TYPES.AUDIO,
+    icon: <EighthNotesIcon size={20} />,
+    label: 'Музыка',
+  },
 ] as const;
 
 export const SWITCHABLE_TYPES = TYPES.map((it) => it.type);

@@ -2,12 +2,10 @@ import { FC, ReactNode } from 'react';
 
 import classNames from 'classnames';
 
-import { Icon } from '~/components/common/Icon';
-
 import styles from './styles.module.scss';
 
 interface Props {
-  icon?: string;
+  icon?: ReactNode;
   title?: string;
   hint?: string;
   /** Whatever adds the first item: buttons, or a form. */
@@ -28,7 +26,7 @@ const SubmitEmptyState: FC<Props> = ({
   vertical,
 }) => (
   <div className={styles.wrap}>
-    {!!icon && <Icon icon={icon} size={64} className={styles.icon} />}
+    {!!icon && <div className={styles.icon}>{icon}</div>}
     {!!title && <div className={styles.title}>{title}</div>}
     {!!hint && <div className={styles.hint}>{hint}</div>}
 

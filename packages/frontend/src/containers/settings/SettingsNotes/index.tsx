@@ -1,5 +1,7 @@
 import { FC, useCallback, useState, VFC } from 'react';
 
+import { PlusIcon } from 'lucide-react';
+
 import { Filler } from '~/components/common/Filler';
 import { Group } from '~/components/common/Group';
 import { Button } from '~/components/input/Button';
@@ -58,7 +60,7 @@ const SettingsNotes: VFC<SettingsNotesProps> = () => {
               <Button
                 onClick={() => setFormIsShown(true)}
                 size="mini"
-                iconRight="plus"
+                iconRight={<PlusIcon size={20} />}
               >
                 Добавить
               </Button>

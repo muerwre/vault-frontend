@@ -1,8 +1,7 @@
 import { FC, useCallback } from 'react';
 
 import classNames from 'classnames';
-
-import { Icon } from '~/components/common/Icon';
+import { XIcon } from 'lucide-react';
 
 import styles from './styles.module.scss';
 
@@ -68,7 +67,7 @@ const TagWrapper: FC<Props> = ({
 
       {deletable && (
         <button type="button" className={styles.delete} onClick={onDeletePress}>
-          <Icon icon="close" size={12} />
+          <XIcon size={12} />
         </button>
       )}
     </div>

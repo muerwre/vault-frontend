@@ -56,12 +56,12 @@
   svg {
     width: 24px;
     height: 24px;
-    fill: $gray_50;
-    transition: fill 250ms;
+    color: $gray_50;
+    transition: color 250ms;
   }
 
   &:hover svg {
-    fill: white;
+    color: white;
   }
 }
 

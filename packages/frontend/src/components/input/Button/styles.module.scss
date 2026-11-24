@@ -28,8 +28,6 @@
   background: $color_primary;
   border-radius: $radius;
 
-  fill: white;
-  stroke: white;
   user-select: none;
 
   display: flex;
@@ -50,8 +48,6 @@
   }
 
   svg.icon {
-    fill: white;
-    stroke: white;
   }
 
   span {
@@ -90,7 +86,8 @@
     padding-left: 10px;
     padding-right: 10px;
 
-    svg {
+    .icon_left,
+    .icon_right {
       margin: 0 !important;
     }
   }
@@ -116,20 +113,12 @@
     background: transparent;
     box-shadow: inset $gray_75 0 0 0 2px;
     color: $gray_75;
-
-    svg {
-      fill: $gray_75;
-    }
   }
 
   &.outline-white {
     background: transparent;
     box-shadow: inset $white 0 0 0 2px;
     color: $white;
-
-    svg {
-      fill: $white;
-    }
   }
 
   &.gray {
@@ -141,10 +130,6 @@
     color: white;
     box-shadow: none;
     padding: 0 $gap;
-
-    svg {
-      fill: white;
-    }
   }
 }
 
@@ -217,15 +202,13 @@
 }
 
 .icon_left {
+  display: inline-flex;
   margin-right: $gap * 0.5 !important;
-  width: 20px;
-  height: 20px;
 }
 
 .icon_right {
+  display: inline-flex;
   margin-left: $gap * 0.5 !important;
-  width: 20px;
-  height: 20px;
 }
 
 .primary {

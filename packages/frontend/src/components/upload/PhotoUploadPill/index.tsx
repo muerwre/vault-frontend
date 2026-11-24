@@ -8,8 +8,8 @@ import {
 } from 'react';
 
 import classNames from 'classnames';
+import { ImagePlusIcon, XIcon } from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
 import { LoaderCircle } from '~/components/common/LoaderCircle';
 
 import styles from './styles.module.scss';
@@ -89,12 +89,12 @@ const PhotoUploadPill: FC<Props> = ({
               onClick={onDeleteClick}
               title={deleteTitle}
             >
-              <Icon icon="close" size={20} />
+              <XIcon size={20} />
             </button>
           )}
 
           <label className={styles.action} title={uploadTitle}>
-            <Icon icon="photo_add" size={20} />
+            <ImagePlusIcon size={20} />
             <input
               ref={inputRef}
               type="file"

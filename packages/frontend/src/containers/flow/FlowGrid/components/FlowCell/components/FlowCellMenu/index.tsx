@@ -1,9 +1,18 @@
 import { FC } from 'react';
 
 import classNames from 'classnames';
+import { XIcon } from 'lucide-react';
 
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/common/Icon';
+import {
+  CellDoubleHIcon,
+  CellDoubleHTextIcon,
+  CellDoubleVIcon,
+  CellDoubleVTextIcon,
+  CellQuadroIcon,
+  CellQuadroTextIcon,
+  CellSingleIcon,
+} from '~/components/icons';
 import { Toggle } from '~/components/input/Toggle';
 import { FlowDisplayVariant } from '~/types';
 
@@ -36,28 +45,28 @@ const FlowCellMenu: FC<Props> = ({
     <div className={classNames(styles.dropdown)}>
       {onClose && (
         <button className={styles.close} onClick={onClose} type="button">
-          <Icon icon="close" size={24} />
+          <XIcon size={24} />
         </button>
       )}
 
       <div className={styles.menu}>
         <div className={styles.display}>
-          <Icon icon="cell-single" onMouseDown={setViewSingle} size={48} />
-          <Icon
-            icon={descriptionEnabled ? 'cell-double-h-text' : 'cell-double-h'}
-            onMouseDown={setViewHorizontal}
-            size={48}
-          />
-          <Icon
-            icon={descriptionEnabled ? 'cell-double-v-text' : 'cell-double-v'}
-            onMouseDown={setViewVertical}
-            size={48}
-          />
-          <Icon
-            icon={descriptionEnabled ? 'cell-quadro-text' : 'cell-quadro'}
-            onMouseDown={setViewQuadro}
-            size={48}
-          />
+          <CellSingleIcon onMouseDown={setViewSingle} size={48} />
+          {descriptionEnabled ? (
+            <CellDoubleHTextIcon onMouseDown={setViewHorizontal} size={48} />
+          ) : (
+            <CellDoubleHIcon onMouseDown={setViewHorizontal} size={48} />
+          )}
+          {descriptionEnabled ? (
+            <CellDoubleVTextIcon onMouseDown={setViewVertical} size={48} />
+          ) : (
+            <CellDoubleVIcon onMouseDown={setViewVertical} size={48} />
+          )}
+          {descriptionEnabled ? (
+            <CellQuadroTextIcon onMouseDown={setViewQuadro} size={48} />
+          ) : (
+            <CellQuadroIcon onMouseDown={setViewQuadro} size={48} />
+          )}
         </div>
 
         {hasDescription && currentView !== 'single' && (

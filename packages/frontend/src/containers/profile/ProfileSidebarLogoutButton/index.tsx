@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { LogOutIcon } from 'lucide-react';
+
 import { Group } from '~/components/common/Group';
 import { Padder } from '~/components/common/Padder';
 import { Button } from '~/components/input/Button';
@@ -16,7 +18,7 @@ const ProfileSidebarLogoutButton: FC<ProfileSidebarLogoutButtonProps> = ({
 }) => (
   <MenuButton
     icon={
-      <Button color="link" iconRight="logout">
+      <Button color="link" iconRight={<LogOutIcon size={20} />}>
         Выйти
       </Button>
     }

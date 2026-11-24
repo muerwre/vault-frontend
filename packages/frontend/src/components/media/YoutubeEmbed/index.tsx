@@ -1,9 +1,9 @@
 import { FC, useCallback, useMemo } from 'react';
 
 import classNames from 'classnames';
+import { PlayIcon, XIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
-import { Icon } from '~/components/common/Icon';
 import { imagePresets } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
@@ -75,14 +75,14 @@ const YoutubeEmbed: FC<Props> = observer(({ url, big, asLink, onDelete }) => {
           onClick={onDelete}
           aria-label="Убрать видео"
         >
-          <Icon icon="close" size={20} />
+          <XIcon size={20} />
         </button>
       )}
 
       {playing === address ? (
         <div className={styles.video}>
           <div className={styles.close} onClick={closeVideo}>
-            <Icon icon="close" />
+            <XIcon size={20} />
           </div>
           <div className={styles.animation}>
             <YoutubeEmbedFrame id={id} title={title} video={video} />
@@ -98,7 +98,7 @@ const YoutubeEmbed: FC<Props> = observer(({ url, big, asLink, onDelete }) => {
           <div style={{ backgroundImage: `url("${preview}")` }}>
             <div className={styles.backdrop}>
               <div className={styles.play}>
-                <Icon icon="play" size={32} />
+                <PlayIcon size={32} />
               </div>
 
               <div className={styles.title}>{title}</div>

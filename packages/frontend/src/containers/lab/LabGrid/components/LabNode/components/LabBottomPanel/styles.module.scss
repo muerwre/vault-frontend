@@ -19,8 +19,6 @@
   flex: 0;
   font: $font_16_semibold;
   color: var(--photo_muted, #{$gray_50});
-  fill: currentColor;
-  stroke: none;
   column-gap: $gap !important;
   align-items: center;
   justify-content: center;

@@ -27,11 +27,6 @@
   border: none;
   outline: none;
 
-  svg {
-    width: 32px;
-    height: 32px;
-  }
-
   .lab & {
     background: $info_gradient;
   }
@@ -65,11 +60,5 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  fill: white;
   color: white;
-
-  svg {
-    width: 32px;
-    height: 32px;
-  }
 }

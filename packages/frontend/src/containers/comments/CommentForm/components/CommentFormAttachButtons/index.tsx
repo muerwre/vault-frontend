@@ -1,5 +1,7 @@
 import { FC, useCallback } from 'react';
 
+import { EighthNotesIcon, ImagePlusIcon } from 'lucide-react';
+
 import { Button } from '~/components/input/Button';
 import { ButtonGroup } from '~/components/input/ButtonGroup';
 import { COMMENT_FILE_TYPES } from '~/constants/uploads';
@@ -25,12 +27,18 @@ const CommentFormAttachButtons: FC<Props> = ({ onUpload }) => {
 
   return (
     <ButtonGroup>
-      <Button iconLeft="photo" size="small" color="gray" iconOnly type="button">
+      <Button
+        iconLeft={<ImagePlusIcon size={16} />}
+        size="small"
+        color="gray"
+        iconOnly
+        type="button"
+      >
         <input type="file" onInput={onInputChange} multiple accept="image/*" />
       </Button>
 
       <Button
-        iconRight="audio"
+        iconRight={<EighthNotesIcon size={16} />}
         size="small"
         color="gray"
         iconOnly

@@ -1,5 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 
+import { Link2Icon } from 'lucide-react';
 import useSWR, { useSWRConfig } from 'swr';
 
 import {
@@ -134,7 +135,7 @@ const AdminRegistrations: FC = () => {
             <Button
               size="small"
               color="gray"
-              iconLeft="link"
+              iconLeft={<Link2Icon size={20} />}
               iconOnly
               label="Скопировать ссылку"
               onClick={() => copyLink(request.link ?? '')}

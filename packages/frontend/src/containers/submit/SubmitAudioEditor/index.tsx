@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { EighthNotesIcon, ImagePlusIcon } from 'lucide-react';
+
 import { UploadAudioGrid } from '~/components/upload/UploadAudioGrid';
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { UploadImageGrid } from '~/components/upload/UploadImageGrid';
@@ -40,12 +42,12 @@ const SubmitAudioEditor: FC<NodeEditorProps> = () => {
         >
           <SubmitPickButton
             type={UploadType.Audio}
-            iconLeft="audio"
+            iconLeft={<EighthNotesIcon size={20} />}
             label="Добавить песню"
           />
           <SubmitPickButton
             type={UploadType.Image}
-            iconLeft="photo_add"
+            iconLeft={<ImagePlusIcon size={20} />}
             label="Добавить обложку"
             color="gray"
           />
@@ -66,7 +68,7 @@ const SubmitAudioEditor: FC<NodeEditorProps> = () => {
             trailing={
               <SubmitUploadCard
                 type={UploadType.Image}
-                icon="photo_add"
+                icon={<ImagePlusIcon size={24} />}
                 label="Обложка"
                 variant="tile"
               />
@@ -83,7 +85,7 @@ const SubmitAudioEditor: FC<NodeEditorProps> = () => {
             <div className={styles.pick}>
               <SubmitPickButton
                 type={UploadType.Audio}
-                iconLeft="audio"
+                iconLeft={<EighthNotesIcon size={20} />}
                 label="Добавить песню"
               />
 
@@ -91,7 +93,7 @@ const SubmitAudioEditor: FC<NodeEditorProps> = () => {
               {!hasImages && (
                 <SubmitPickButton
                   type={UploadType.Image}
-                  iconLeft="photo_add"
+                  iconLeft={<ImagePlusIcon size={20} />}
                   label="Добавить обложку"
                   color="gray"
                 />

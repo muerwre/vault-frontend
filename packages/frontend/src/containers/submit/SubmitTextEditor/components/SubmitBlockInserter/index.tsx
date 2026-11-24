@@ -1,17 +1,22 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import classNames from 'classnames';
+import {
+  EighthNotesIcon,
+  ImagePlusIcon,
+  RectangleLandscapePlayIcon,
+  TextAlignStartIcon,
+} from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
 import { BlockType, TEXT_NODE_BLOCKS } from '~/utils/blocks';
 
 import styles from './styles.module.scss';
 
-const BLOCK_BUTTONS: Record<BlockType, { icon: string; label: string }> = {
-  text: { icon: 'text', label: 'Текст' },
-  images: { icon: 'photo_add', label: 'Фото' },
-  video: { icon: 'youtube', label: 'Видео' },
-  audio: { icon: 'audio', label: 'Музыка' },
+const BLOCK_BUTTONS: Record<BlockType, { icon: ReactNode; label: string }> = {
+  text: { icon: <TextAlignStartIcon size={16} />, label: 'Текст' },
+  images: { icon: <ImagePlusIcon size={16} />, label: 'Фото' },
+  video: { icon: <RectangleLandscapePlayIcon size={16} />, label: 'Видео' },
+  audio: { icon: <EighthNotesIcon size={16} />, label: 'Музыка' },
 };
 
 interface Props {
@@ -45,7 +50,7 @@ const SubmitBlockInserter: FC<Props> = ({
               : BLOCK_BUTTONS[type].label
           }
         >
-          <Icon icon={BLOCK_BUTTONS[type].icon} size={16} />
+          {BLOCK_BUTTONS[type].icon}
           <span className={styles.label}>{BLOCK_BUTTONS[type].label}</span>
         </button>
       ))}

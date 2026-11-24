@@ -1,6 +1,7 @@
 import { FC, useCallback, useState } from 'react';
 
 import { FormikProvider } from 'formik';
+import { CheckIcon, CornerDownLeftIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
 import { Filler } from '~/components/common/Filler';
@@ -102,7 +103,13 @@ const CommentForm: FC<Props> = observer(
                 type="submit"
                 size="small"
                 color="gray"
-                iconRight={!isEditing ? 'enter' : 'check'}
+                iconRight={
+                  !isEditing ? (
+                    <CornerDownLeftIcon size={20} />
+                  ) : (
+                    <CheckIcon size={20} />
+                  )
+                }
                 disabled={isLoading}
                 loading={isLoading}
               >

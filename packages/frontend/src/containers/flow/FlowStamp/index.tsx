@@ -1,12 +1,12 @@
 import { FC, FormEvent, useCallback, useMemo } from 'react';
 
 import classNames from 'classnames';
+import { SearchIcon, XIcon } from 'lucide-react';
 
 import { Card } from '~/components/common/Card';
-import { Icon } from '~/components/common/Icon';
 import { NodeHorizontalCard } from '~/components/common/NodeHorizontalCard';
 import { SubTitle } from '~/components/common/SubTitle';
-import { InputText } from '~/components/input/InputText';
+import { SearchInput } from '~/components/input/SearchInput';
 import styles from '~/containers/flow/FlowStamp/styles.module.scss';
 import { useFlowContext } from '~/utils/providers/FlowProvider';
 import { useSearchContext } from '~/utils/providers/SearchProvider';
@@ -48,14 +48,13 @@ const FlowStamp: FC<Props> = ({ isFluid, onToggleLayout }) => {
   const after = useMemo(
     () =>
       searchText ? (
-        <Icon
-          icon="close"
-          size={24}
+        <XIcon
+          size={22}
           className={styles.close_icon}
           onClick={onClearSearch}
         />
       ) : (
-        <Icon icon="search" size={24} className={styles.search_icon} />
+        <SearchIcon size={22} className={styles.search_icon} />
       ),
     [onClearSearch, searchText],
   );
@@ -64,11 +63,10 @@ const FlowStamp: FC<Props> = ({ isFluid, onToggleLayout }) => {
     <div className={styles.wrap}>
       <Card className={styles.search}>
         <form onSubmit={onSearchSubmit}>
-          <InputText
-            title="Поиск"
+          <SearchInput
             value={searchText}
             handler={setSearchText}
-            suffix={after}
+            placeholder="Поиск"
             onKeyUp={onKeyUp}
           />
         </form>

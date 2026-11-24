@@ -9,8 +9,8 @@ import {
 } from 'react';
 
 import classNames from 'classnames';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
 import { InputWrapper } from '~/components/input/InputWrapper';
 import { useTranslatedError } from '~/hooks/data/useTranslatedError';
 import { useFocusEvent } from '~/hooks/dom/useFocusEvent';
@@ -61,6 +61,7 @@ const InputText: FC<InputTextProps> = ({
   const translatedError = useTranslatedError(error);
 
   const type = props.type === 'password' && revealed ? 'text' : props.type;
+  const RevealIcon = revealed ? EyeOffIcon : EyeIcon;
 
   return (
     <InputWrapper
@@ -91,8 +92,8 @@ const InputText: FC<InputTextProps> = ({
           <div className={styles.suffix}>
             {suffix}
             {props.type === 'password' && (
-              <Icon
-                icon="eye"
+              <RevealIcon
+                size={20}
                 onClick={toggleRevealed}
                 className={styles.reveal}
               />

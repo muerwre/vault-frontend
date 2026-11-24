@@ -1,10 +1,17 @@
-import { FC, useCallback } from 'react';
+import { FC, ReactNode, useCallback } from 'react';
 
 import classNames from 'classnames';
+import { ChevronRightIcon, CornerDownLeftIcon } from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
+import { TagIcon } from '~/components/icons';
 
 import styles from './styles.module.scss';
+
+const ICONS: Record<Props['type'], ReactNode> = {
+  enter: <CornerDownLeftIcon size={16} />,
+  right: <ChevronRightIcon size={16} />,
+  tag: <TagIcon size={16} />,
+};
 
 interface Props {
   selected: boolean;
@@ -23,7 +30,7 @@ const TagAutocompleteRow: FC<Props> = ({ selected, type, title, onSelect }) => {
       })}
       onClick={onClick}
     >
-      <Icon icon={type} size={16} />
+      {ICONS[type]}
       <span>{title}</span>
     </div>
   );

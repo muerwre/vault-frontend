@@ -31,7 +31,7 @@
   }
 
   svg {
-    fill: white;
+    color: white;
     position: relative;
     z-index: 6;
   }
@@ -118,10 +118,6 @@
   color: white;
   cursor: pointer;
   transition: color 0.25s;
-
-  svg {
-    fill: currentColor;
-  }
 
   &:hover {
     color: $color_danger;

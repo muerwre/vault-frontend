@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react';
 
 import 'photoswipe/style.css';
 
+import { ChevronLeftIcon, ChevronRightIcon, XIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 import PSWP from 'photoswipe';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import { Icon } from '~/components/common/Icon';
 import { imagePresets } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useModal } from '~/hooks/modal/useModal';
@@ -20,9 +20,9 @@ export interface Props extends DialogComponentProps {
   index: number;
 }
 
-const arrowNextSVG = renderToStaticMarkup(<Icon icon="right" size={40} />);
-const arrowPrevSVG = renderToStaticMarkup(<Icon icon="left" size={40} />);
-const closeSVG = renderToStaticMarkup(<Icon icon="close" size={32} />);
+const arrowNextSVG = renderToStaticMarkup(<ChevronRightIcon size={40} />);
+const arrowPrevSVG = renderToStaticMarkup(<ChevronLeftIcon size={40} />);
+const closeSVG = renderToStaticMarkup(<XIcon size={32} />);
 
 const padding = { top: 10, left: 10, right: 10, bottom: 10 } as const;
 

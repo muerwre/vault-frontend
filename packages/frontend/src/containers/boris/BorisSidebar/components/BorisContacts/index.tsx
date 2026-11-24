@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { Padder } from '~/components/common/Padder';
+import { GithubIcon, TelegramIcon, VkIcon } from '~/components/icons';
 import { Button } from '~/components/input/Button';
 import { CONFIG } from '~/utils/config';
 
@@ -15,14 +16,14 @@ interface Props {
 const BorisContacts: FC<Props> = ({ canConnectTelegram, connectTelegram }) => (
   <div className={styles.contacts}>
     <BorisContactItem
-      icon="vk"
+      icon={<VkIcon size={32} />}
       title="Суицидальные роботы"
       link="https://vk.com/vault48"
       subtitle="паблик вконтакте"
     />
 
     <BorisContactItem
-      icon="github"
+      icon={<GithubIcon size={32} />}
       title="Github"
       link="https://github.com/muerwre?tab=repositories&q=vault"
       subtitle="исходники Убежища"
@@ -30,7 +31,7 @@ const BorisContacts: FC<Props> = ({ canConnectTelegram, connectTelegram }) => (
 
     {CONFIG.botUsername && (
       <BorisContactItem
-        icon="telegram"
+        icon={<TelegramIcon size={32} />}
         title="Телеграм-бот"
         link={`https://t.me/${CONFIG.botUsername}`}
         subtitle={`@${CONFIG.botUsername}`}

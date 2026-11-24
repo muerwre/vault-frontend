@@ -8,8 +8,8 @@ import {
 } from 'react';
 
 import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
+import { XIcon } from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
 import { LoaderCircle } from '~/components/common/LoaderCircle';
 
 import { DialogBackdropContext } from './context';
@@ -59,7 +59,7 @@ const BetterScrollDialog: FC<Props> = ({
       <div className={styles.container} style={{ maxWidth: width }}>
         {onClose && (
           <div className={styles.close} onClick={onClose}>
-            <Icon icon="close" />
+            <XIcon size={20} />
           </div>
         )}
         {header && <div className={styles.header}>{header}</div>}

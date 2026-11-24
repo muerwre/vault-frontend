@@ -1,8 +1,9 @@
 import { VFC } from 'react';
 
+import { SearchIcon } from 'lucide-react';
+
 import { Filler } from '~/components/common/Filler';
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/common/Icon';
 import { NodeHorizontalCard } from '~/components/common/NodeHorizontalCard';
 import { Padder } from '~/components/common/Padder';
 import { InputText } from '~/components/input/InputText';
@@ -26,7 +27,7 @@ const SettingsDeleted: VFC<SettingsDeletedProps> = () => {
 
         <Filler />
 
-        <InputText suffix={<Icon icon="search" size={24} />} />
+        <InputText suffix={<SearchIcon size={24} />} />
       </Group>
 
       <br />

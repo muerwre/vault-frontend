@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { ImagePlusIcon } from 'lucide-react';
+
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
 import { UploadImageGrid } from '~/components/upload/UploadImageGrid';
 import { UploadType } from '~/constants/uploads';
@@ -27,7 +29,7 @@ const SubmitImageEditor: FC<NodeEditorProps> = () => {
         >
           <SubmitPickButton
             type={UploadType.Image}
-            iconLeft="photo_add"
+            iconLeft={<ImagePlusIcon size={20} />}
             label="Добавить фото"
           />
         </SubmitEmptyState>
@@ -44,7 +46,7 @@ const SubmitImageEditor: FC<NodeEditorProps> = () => {
         trailing={
           <SubmitUploadCard
             type={UploadType.Image}
-            icon="photo_add"
+            icon={<ImagePlusIcon size={24} />}
             label="Добавить"
             variant="tile"
           />

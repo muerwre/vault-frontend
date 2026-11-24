@@ -8082,6 +8082,11 @@ lru.min@^1.1.0, lru.min@^1.1.4:
   resolved "https://registry.yarnpkg.com/lru.min/-/lru.min-1.1.4.tgz#6ea1737a8c1ba2300cc87ad46910a4bdffa0117b"
   integrity sha512-DqC6n3QQ77zdFpCMASA1a3Jlb64Hv2N2DciFGkO/4L9+q/IpIAuRlKOvCXabtRW6cQf8usbmM6BE/TOPysCdIA==
 
+lucide-react@^1.78.0:
+  version "1.78.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-1.78.0.tgz#9df160c8c5777d87df1b1a688a27112117d11cf8"
+  integrity sha512-61NFdT5ZfAY8xs3LWKkB78GVeuiCcjYFEXeHWxWP+mQhP+UWLGsA9hJZQPtIyXRDhOvT8kgmWwAIyH5L7RIhAA==
+
 luxon@~3.7.0:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.7.2.tgz#d697e48f478553cca187a0f8436aff468e3ba0ba"

@@ -1,17 +1,16 @@
 @import 'src/styles/variables';
 
 .like {
-  transition: fill, stroke 0.25s;
+  transition: color 0.25s;
   will-change: transform;
   position: relative;
   flex: 0 0 32px;
-  fill: currentColor;
 
   &.is_liked {
     opacity: 1;
 
     svg {
-      fill: $color_like;
+      color: $color_like;
     }
 
     .like_count {
@@ -22,7 +21,7 @@
   &:hover {
     @include pulse;
 
-    fill: $color_like;
+    color: $color_like;
 
     .count {
       opacity: 0;

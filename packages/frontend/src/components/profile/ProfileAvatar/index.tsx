@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, useCallback } from 'react';
 
 import classNames from 'classnames';
+import { ImagePlusIcon } from 'lucide-react';
 
 import { Avatar } from '~/components/common/Avatar';
 import { Button } from '~/components/input/Button';
@@ -43,7 +44,7 @@ const ProfileAvatar: FC<ProfileAvatarProps> = ({
         <Button
           type="button"
           color="info"
-          iconLeft="photo_add"
+          iconLeft={<ImagePlusIcon size={20} />}
           round
           iconOnly
           className={styles.button}

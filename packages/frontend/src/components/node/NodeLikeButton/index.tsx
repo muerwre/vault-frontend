@@ -1,8 +1,9 @@
 import { FC } from 'react';
 
 import classNames from 'classnames';
+import { HeartIcon } from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
+import { HeartFilledIcon } from '~/components/icons';
 
 import styles from './styles.module.scss';
 
@@ -26,9 +27,9 @@ const NodeLikeButton: FC<NodeLikeButtonProps> = ({
     })}
   >
     {count ? (
-      <Icon icon="heart_full" size={24} onClick={onClick} />
+      <HeartFilledIcon size={22} onClick={onClick} />
     ) : (
-      <Icon icon="heart" size={24} onClick={onClick} />
+      <HeartIcon size={22} onClick={onClick} />
     )}
 
     {!!count && count > 0 && <div className={styles.count}>{count}</div>}

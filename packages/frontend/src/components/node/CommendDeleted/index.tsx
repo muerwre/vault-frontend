@@ -1,5 +1,7 @@
 import { FC, useCallback } from 'react';
 
+import { RotateCcwIcon } from 'lucide-react';
+
 import { Button } from '~/components/input/Button';
 import { IComment } from '~/types';
 
@@ -20,7 +22,7 @@ const CommendDeleted: FC<Props> = ({ id, onDelete }) => {
         size="mini"
         onClick={onRestore}
         color="link"
-        iconLeft="restore"
+        iconLeft={<RotateCcwIcon size={20} />}
         className={styles.button}
       >
         Восстановить

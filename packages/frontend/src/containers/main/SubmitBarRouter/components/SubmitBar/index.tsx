@@ -1,9 +1,16 @@
 import { FC, useCallback, useState } from 'react';
 
 import classNames from 'classnames';
+import {
+  EighthNotesIcon,
+  FlaskConicalIcon,
+  ImageIcon,
+  PlusIcon,
+  RectangleLandscapePlayIcon,
+  TextAlignStartIcon,
+} from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
-import { Icon } from '~/components/common/Icon';
 import { useStartNodeSubmission } from '~/hooks/node/useStartNodeSubmission';
 
 import styles from './styles.module.scss';
@@ -26,25 +33,25 @@ const SubmitBar: FC<SubmitBarProps> = observer(({ isLab }) => {
     [isLab, startSubmission],
   );
 
-  const icon = isLab ? 'lab' : 'plus';
+  const SubmitIcon = isLab ? FlaskConicalIcon : PlusIcon;
 
   return (
     <div className={classNames(styles.wrap, { [styles.lab]: isLab })}>
       <div className={classNames(styles.panel, { [styles.active]: focused })}>
         <button onClick={createUrl('image')} className={styles.link}>
-          <Icon icon="image" size={32} />
+          <ImageIcon size={26} />
         </button>
 
         <button onClick={createUrl('text')} className={styles.link}>
-          <Icon icon="text" size={32} />
+          <TextAlignStartIcon size={26} />
         </button>
 
         <button onClick={createUrl('video')} className={styles.link}>
-          <Icon icon="video" size={32} />
+          <RectangleLandscapePlayIcon size={26} />
         </button>
 
         <button onClick={createUrl('audio')} className={styles.link}>
-          <Icon icon="audio" size={32} />
+          <EighthNotesIcon size={26} />
         </button>
       </div>
 
@@ -54,7 +61,7 @@ const SubmitBar: FC<SubmitBarProps> = observer(({ isLab }) => {
         onBlur={onBlur}
         type="button"
       >
-        <Icon icon={icon} />
+        <SubmitIcon size={26} />
       </button>
     </div>
   );

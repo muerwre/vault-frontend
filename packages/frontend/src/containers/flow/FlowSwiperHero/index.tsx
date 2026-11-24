@@ -1,12 +1,12 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import Image from 'next/future/image';
 import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper/types/swiper-class';
 
-import { Icon } from '~/components/common/Icon';
 import { LoaderCircle } from '~/components/common/LoaderCircle';
 import { imagePresets, URLS } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
@@ -81,11 +81,11 @@ export const FlowSwiperHero: FC<Props> = ({ heroes }) => {
 
           <div className={styles.buttons}>
             <button className={styles.button} onClick={onPrev} type="button">
-              <Icon icon="left" />
+              <ChevronLeftIcon size={20} />
             </button>
 
             <button className={styles.button} onClick={onNext} type="button">
-              <Icon icon="right" />
+              <ChevronRightIcon size={20} />
             </button>
           </div>
         </div>

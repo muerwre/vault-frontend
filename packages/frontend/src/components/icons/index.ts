@@ -1,0 +1,16 @@
+export { CellDoubleHIcon } from './CellDoubleHIcon';
+export { CellDoubleHTextIcon } from './CellDoubleHTextIcon';
+export { CellDoubleVIcon } from './CellDoubleVIcon';
+export { CellDoubleVTextIcon } from './CellDoubleVTextIcon';
+export { CellQuadroIcon } from './CellQuadroIcon';
+export { CellQuadroTextIcon } from './CellQuadroTextIcon';
+export { CellSingleIcon } from './CellSingleIcon';
+export { GithubIcon } from './GithubIcon';
+export { GoogleIcon } from './GoogleIcon';
+export { HeartFilledIcon } from './HeartFilledIcon';
+export { PauseFilledIcon } from './PauseFilledIcon';
+export { PlayFilledIcon } from './PlayFilledIcon';
+export { StarFilledIcon } from './StarFilledIcon';
+export { TagIcon } from './TagIcon';
+export { TelegramIcon } from './TelegramIcon';
+export { VkIcon } from './VkIcon';

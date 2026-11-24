@@ -21,15 +21,13 @@
   svg {
     width: 32px;
     height: 32px;
-    fill: $gray_50;
-    stroke: $gray_50;
-    transition: fill 250ms, stroke 250ms;
+    color: $gray_50;
+    transition: color 250ms;
   }
 
   &:hover {
     svg {
-      fill: white;
-      stroke: white;
+      color: white;
     }
   }
 }

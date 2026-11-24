@@ -1,7 +1,8 @@
 import { VFC } from 'react';
 
+import { CheckIcon } from 'lucide-react';
+
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/common/Icon';
 import { Button } from '~/components/input/Button';
 
 import styles from './styles.module.scss';
@@ -13,7 +14,7 @@ interface RestoreSuccessProps {
 
 const RestoreSuccess: VFC<RestoreSuccessProps> = ({ username, onClick }) => (
   <Group className={styles.shade}>
-    <Icon icon="check" size={64} />
+    <CheckIcon size={64} />
 
     <div>Пароль обновлен</div>
     <div>Добро пожаловать домой{username ? `, ~${username}` : ''}!</div>

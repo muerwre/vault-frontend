@@ -6,7 +6,6 @@ import { Modal } from '~/containers/dialogs/Modal';
 import { PlayerView } from '~/containers/player/PlayerView';
 import { DragDetectorProvider } from '~/hooks/dom/useDragDetector';
 import { MainLayout } from '~/layouts/MainLayout';
-import { Sprites } from '~/sprites/Sprites';
 import { getMOBXStore } from '~/store';
 import { CONFIG } from '~/utils/config';
 import { StoreContextProvider } from '~/utils/context/StoreContextProvider';
@@ -67,7 +66,6 @@ export default class MyApp extends App {
                               <MainLayout>
                                 <ToastProvider />
                                 <Modal />
-                                <Sprites />
                                 <Component {...pageProps} />
                               </MainLayout>
 

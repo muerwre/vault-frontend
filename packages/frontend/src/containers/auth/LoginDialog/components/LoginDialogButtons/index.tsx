@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { Grid } from '~/components/common/Grid';
 import { Group } from '~/components/common/Group';
+import { GoogleIcon, VkIcon } from '~/components/icons';
 import { Button } from '~/components/input/Button';
 import { OAuthProvider } from '~/types/auth';
 
@@ -31,7 +32,7 @@ const LoginDialogButtons: FC<Props> = ({
     <Grid columns="repeat(2, 1fr)">
       <Button
         color="outline"
-        iconLeft="google"
+        iconLeft={<GoogleIcon size={20} />}
         type="button"
         onClick={onGoogleLogin}
       >
@@ -40,7 +41,7 @@ const LoginDialogButtons: FC<Props> = ({
 
       <Button
         color="outline"
-        iconLeft="vk"
+        iconLeft={<VkIcon size={20} />}
         type="button"
         onClick={() => openOauthWindow('vkontakte')}
       >

@@ -1,8 +1,9 @@
 import { FC, MouseEvent, useCallback, useEffect } from 'react';
 
 import classNames from 'classnames';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
-import { Icon } from '~/components/common/Icon';
+import { PauseFilledIcon, PlayFilledIcon } from '~/components/icons';
 import { PlayerState } from '~/constants/player';
 import { IFile } from '~/types';
 import { formatDuration } from '~/utils/date';
@@ -116,7 +117,7 @@ const AuraPlayButton: FC<Props> = ({
             disabled={!hasPrev}
             aria-label="Предыдущая"
           >
-            <Icon icon="left" size={20} />
+            <ChevronLeftIcon size={20} />
           </button>
         )}
 
@@ -128,7 +129,11 @@ const AuraPlayButton: FC<Props> = ({
           onClick={onClick}
           aria-label={isPlaying ? 'Пауза' : 'Играть'}
         >
-          <Icon icon={isPlaying ? 'pause' : 'play'} size={32} />
+          {isPlaying ? (
+            <PauseFilledIcon size={25} />
+          ) : (
+            <PlayFilledIcon size={25} />
+          )}
         </button>
 
         {audios.length > 1 && (
@@ -139,7 +144,7 @@ const AuraPlayButton: FC<Props> = ({
             disabled={!hasNext}
             aria-label="Следующая"
           >
-            <Icon icon="right" size={20} />
+            <ChevronRightIcon size={20} />
           </button>
         )}
       </div>

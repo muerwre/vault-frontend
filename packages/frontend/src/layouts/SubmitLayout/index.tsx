@@ -2,6 +2,7 @@ import { createElement, FC, useCallback, useEffect, useRef } from 'react';
 
 import classNames from 'classnames';
 import { FormikProvider } from 'formik';
+import { CheckIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
 import { Card } from '~/components/common/Card';
@@ -155,7 +156,7 @@ const SubmitLayout: FC<Props> = observer(
 
         <Button
           title="Сохранить"
-          iconRight="check"
+          iconRight={<CheckIcon size={20} />}
           color={color}
           disabled={isSubmitting}
           type="submit"

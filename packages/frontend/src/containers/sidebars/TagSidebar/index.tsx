@@ -1,6 +1,7 @@
 import { useMemo, VFC } from 'react';
 
-import { Icon } from '~/components/common/Icon';
+import { FrownIcon } from 'lucide-react';
+
 import { InfiniteScroll } from '~/components/common/InfiniteScroll';
 import { SidebarStack } from '~/components/sidebar/SidebarStack';
 import { SidebarStackCard } from '~/components/sidebar/SidebarStackCard';
@@ -38,7 +39,7 @@ const TagSidebar: VFC<TagSidebarProps> = ({ tag, feature, onRequestClose }) => {
             <div className={styles.content}>
               {!nodes.length && !isLoading ? (
                 <div className={styles.none}>
-                  <Icon icon="sad" size={120} />
+                  <FrownIcon size={120} />
                   <div>
                     У этого тэга нет постов
                     <br />

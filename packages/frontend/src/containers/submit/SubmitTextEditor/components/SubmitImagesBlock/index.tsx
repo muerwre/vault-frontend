@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { IMAGE_BLOCK_MODES, ImageBlockMode } from '@vault/common/constants';
 import classNames from 'classnames';
+import { ImagePlusIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
 import { UploadDropzone } from '~/components/upload/UploadDropzone';
@@ -67,7 +68,7 @@ const SubmitImagesBlock: FC<BlockEditorProps<IBlockImages>> = observer(
                 !isFull && (
                   <SubmitUploadCard
                     type={UploadType.Image}
-                    icon="photo_add"
+                    icon={<ImagePlusIcon size={24} />}
                     label="Добавить"
                     variant="tile"
                   />

@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { createElement, FC, useMemo } from 'react';
 
 import { Card } from '~/components/common/Card';
 import { SubTitle } from '~/components/common/SubTitle';
@@ -35,7 +35,7 @@ const NodeBacklinks: FC<NodeBacklinksProps> = ({ list }) => {
         {validBacklinks.map((it) => (
           <Card elevation={-1} seamless key={it.link} className={styles.card}>
             <Backlink
-              icon={SOCIAL_ICONS[it.provider]}
+              icon={createElement(SOCIAL_ICONS[it.provider], { size: 20 })}
               title={
                 has(it.provider, BACKLINK_TITLES)
                   ? BACKLINK_TITLES[it.provider]

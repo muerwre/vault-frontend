@@ -1,5 +1,7 @@
 import { FC, ReactNode, useMemo } from 'react';
 
+import { ChevronRightIcon, XIcon } from 'lucide-react';
+
 import { Filler } from '~/components/common/Filler';
 import { Button } from '~/components/input/Button';
 
@@ -20,7 +22,12 @@ const SidebarStackCard: FC<SidebarStackCardProps> = ({
   onBackPress,
 }) => {
   const style = useMemo(() => ({ maxWidth: width, flexBasis: width }), [width]);
-  const backIcon = headerFeature === 'close' ? 'close' : 'right';
+  const backIcon =
+    headerFeature === 'close' ? (
+      <XIcon size={20} />
+    ) : (
+      <ChevronRightIcon size={20} />
+    );
 
   return (
     <div style={style} className={styles.card}>

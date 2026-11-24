@@ -3,7 +3,7 @@ import { FC } from 'react';
 import Tippy from '@tippyjs/react';
 
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/common/Icon';
+import { StarFilledIcon } from '~/components/icons';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { NodeComponentProps } from '~/constants/node';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
@@ -25,7 +25,7 @@ const LabNodeTitle: FC<NodeComponentProps> = ({ node, isLoading }) => {
         <Placeholder active={isLoading} width="24px" height={24}>
           <Tippy content="Важный пост">
             <div className={styles.star}>
-              <Icon icon="star_full" size={24} />
+              <StarFilledIcon size={24} />
             </div>
           </Tippy>
         </Placeholder>

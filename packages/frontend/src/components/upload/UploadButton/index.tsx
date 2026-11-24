@@ -1,6 +1,7 @@
-import { ChangeEvent, FC, useCallback } from 'react';
+import { ChangeEvent, FC, useCallback, ReactNode } from 'react';
 
-import { Icon } from '~/components/common/Icon';
+import { PlusIcon } from 'lucide-react';
+
 import { Button } from '~/components/input/Button';
 import { UploadType } from '~/constants/uploads';
 import { useNodeFormContext } from '~/hooks/node/useNodeFormFormik';
@@ -12,14 +13,14 @@ import styles from './styles.module.scss';
 
 type Props = IEditorComponentProps & {
   accept?: string;
-  icon?: string;
+  icon?: ReactNode;
   type?: UploadType;
   label?: string;
 };
 
 const UploadButton: FC<Props> = ({
   accept = 'image/*',
-  icon = 'plus',
+  icon = <PlusIcon size={24} />,
   type = UploadType.Image,
   label,
 }) => {
@@ -50,7 +51,7 @@ const UploadButton: FC<Props> = ({
       label={label}
       color={color}
     >
-      <Icon icon={icon} size={24} />
+      {icon}
       <input type="file" onChange={onInputChange} accept={accept} multiple />
     </Button>
   );

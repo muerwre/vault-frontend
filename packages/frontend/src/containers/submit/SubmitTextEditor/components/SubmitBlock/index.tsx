@@ -3,8 +3,7 @@ import { FC, ReactNode } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import classNames from 'classnames';
-
-import { Icon } from '~/components/common/Icon';
+import { GripVerticalIcon, XIcon } from 'lucide-react';
 
 import styles from './styles.module.scss';
 
@@ -76,7 +75,7 @@ const SubmitBlock: FC<Props> = ({
             {...attributes}
             {...listeners}
           >
-            <Icon icon="drag" size={20} />
+            <GripVerticalIcon size={20} />
           </button>
 
           <button
@@ -87,7 +86,7 @@ const SubmitBlock: FC<Props> = ({
             title={removeDisabled ? removeHint : undefined}
             disabled={disabled || removeDisabled}
           >
-            <Icon icon="close" size={20} />
+            <XIcon size={20} />
           </button>
         </div>
       </div>

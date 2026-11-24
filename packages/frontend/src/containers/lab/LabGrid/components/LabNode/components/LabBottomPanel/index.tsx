@@ -1,11 +1,16 @@
 import { FC, useCallback } from 'react';
 
 import classNames from 'classnames';
+import {
+  HeartIcon,
+  MessageSquareDotIcon,
+  MessageSquareIcon,
+} from 'lucide-react';
 
 import { Filler } from '~/components/common/Filler';
 import { Grid } from '~/components/common/Grid';
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/common/Icon';
+import { HeartFilledIcon } from '~/components/icons';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { URLS } from '~/constants/urls';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
@@ -51,7 +56,11 @@ const LabBottomPanel: FC<Props> = ({
               [styles.active]: hasNewComments,
             })}
           >
-            <Icon icon={hasNewComments ? 'comment_new' : 'comment'} size={24} />
+            {hasNewComments ? (
+              <MessageSquareDotIcon size={24} />
+            ) : (
+              <MessageSquareIcon size={24} />
+            )}
             <span>{commentCount}</span>
           </Grid>
         )}
@@ -60,7 +69,11 @@ const LabBottomPanel: FC<Props> = ({
       <Placeholder active={isLoading} width="48px" height={24}>
         {!!node.like_count && node.like_count > 0 && (
           <Grid horizontal className={classNames(styles.like)}>
-            <Icon icon={node.is_liked ? 'heart_full' : 'heart'} size={24} />
+            {node.is_liked ? (
+              <HeartFilledIcon size={24} />
+            ) : (
+              <HeartIcon size={24} />
+            )}
             <span>{node.like_count}</span>
           </Grid>
         )}

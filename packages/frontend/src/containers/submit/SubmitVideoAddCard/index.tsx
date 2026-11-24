@@ -1,6 +1,7 @@
 import { FC, KeyboardEvent, useCallback, useState } from 'react';
 
 import classNames from 'classnames';
+import { PlusIcon } from 'lucide-react';
 
 import { Button } from '~/components/input/Button';
 import { InputText } from '~/components/input/InputText';
@@ -101,7 +102,12 @@ const SubmitVideoAddCard: FC<Props> = ({
           />
         </div>
 
-        <Button type="button" onClick={add} iconLeft="plus" round>
+        <Button
+          type="button"
+          onClick={add}
+          iconLeft={<PlusIcon size={20} />}
+          round
+        >
           Добавить
         </Button>
       </div>
@@ -125,7 +131,7 @@ const SubmitVideoAddCard: FC<Props> = ({
       <Button
         type="button"
         onClick={add}
-        iconLeft="plus"
+        iconLeft={<PlusIcon size={20} />}
         size="small"
         className={styles.button}
       >

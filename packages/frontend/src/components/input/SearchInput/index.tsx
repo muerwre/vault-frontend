@@ -1,12 +1,13 @@
 import { VFC } from 'react';
 
-import { Icon } from '~/components/common/Icon';
+import { SearchIcon } from 'lucide-react';
+
 import { InputText, InputTextProps } from '~/components/input/InputText';
 
 interface SearchInputProps extends Omit<InputTextProps, 'prefix' | 'suffix'> {}
 
 const SearchInput: VFC<SearchInputProps> = ({ ...props }) => (
-  <InputText {...props} prefix={<Icon icon="search" />} />
+  <InputText {...props} prefix={<SearchIcon size={18} />} />
 );
 
 export { SearchInput };

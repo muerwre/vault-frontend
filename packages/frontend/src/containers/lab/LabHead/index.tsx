@@ -1,6 +1,9 @@
 import { FC } from 'react';
 
+import { FlameIcon, RotateCcwClockIcon } from 'lucide-react';
+
 import { Filler } from '~/components/common/Filler';
+import { StarFilledIcon } from '~/components/icons';
 import { SearchInput } from '~/components/input/SearchInput';
 import { HorizontalMenu } from '~/components/menu/HorizontalMenu';
 import { LabNodesSort } from '~/types/lab';
@@ -20,7 +23,7 @@ const LabHead: FC<Props> = ({ isLoading }) => {
       <HorizontalMenu>
         <HorizontalMenu.Item
           color="green"
-          icon="recent"
+          icon={<RotateCcwClockIcon size={20} />}
           active={sort === LabNodesSort.New}
           isLoading={isLoading}
           onClick={() => setSort(LabNodesSort.New)}
@@ -30,7 +33,7 @@ const LabHead: FC<Props> = ({ isLoading }) => {
 
         <HorizontalMenu.Item
           color="orange"
-          icon="hot"
+          icon={<FlameIcon size={20} />}
           active={sort === LabNodesSort.Hot}
           isLoading={isLoading}
           onClick={() => setSort(LabNodesSort.Hot)}
@@ -40,7 +43,7 @@ const LabHead: FC<Props> = ({ isLoading }) => {
 
         <HorizontalMenu.Item
           color="yellow"
-          icon="star_full"
+          icon={<StarFilledIcon size={20} />}
           isLoading={isLoading}
           active={sort === LabNodesSort.Heroic}
           onClick={() => setSort(LabNodesSort.Heroic)}

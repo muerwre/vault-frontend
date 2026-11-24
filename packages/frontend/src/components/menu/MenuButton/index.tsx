@@ -2,9 +2,9 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 
 import { Placement } from '@popperjs/core';
 import classNames from 'classnames';
+import { EllipsisVerticalIcon } from 'lucide-react';
 import { usePopper } from 'react-popper';
 
-import { Icon } from '~/components/common/Icon';
 import { useFocusEvent } from '~/hooks/dom/useFocusEvent';
 
 import styles from './styles.module.scss';
@@ -22,7 +22,7 @@ const MenuButton: FC<MenuButtonProps> = ({
   position = 'auto',
   children,
   className,
-  icon = <Icon icon="dots-vertical" size={24} />,
+  icon = <EllipsisVerticalIcon size={24} />,
   translucent = true,
   activate = 'focus',
   fixed,

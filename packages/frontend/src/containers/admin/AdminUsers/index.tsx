@@ -1,6 +1,7 @@
 import { FC, MouseEvent, useCallback } from 'react';
 
 import classNames from 'classnames';
+import { XIcon } from 'lucide-react';
 import Link from 'next/link';
 import useSWR from 'swr';
 
@@ -146,7 +147,7 @@ const AdminUsers: FC = () => {
                     className={styles.delete}
                     size="small"
                     color="gray"
-                    iconLeft="close"
+                    iconLeft={<XIcon size={20} />}
                     iconOnly
                     type="button"
                     label="Удалить пользователя"

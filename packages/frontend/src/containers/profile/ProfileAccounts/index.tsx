@@ -1,7 +1,9 @@
-import { FC, Fragment } from 'react';
+import { createElement, FC, Fragment } from 'react';
+
+import { XIcon } from 'lucide-react';
 
 import { Group } from '~/components/common/Group';
-import { Icon } from '~/components/common/Icon';
+import { GoogleIcon, TelegramIcon, VkIcon } from '~/components/icons';
 import { Button } from '~/components/input/Button';
 import { Toggle } from '~/components/input/Toggle';
 import { Placeholder } from '~/components/placeholders/Placeholder';
@@ -61,7 +63,7 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
                   }}
                 >
                   <div className={styles.account__provider}>
-                    <Icon icon={SOCIAL_ICONS[it.provider]} size={12} />
+                    {createElement(SOCIAL_ICONS[it.provider], { size: 12 })}
                   </div>
                 </div>
 
@@ -83,8 +85,7 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
                 )}
 
                 <div className={styles.account__drop}>
-                  <Icon
-                    icon="close"
+                  <XIcon
                     size={22}
                     onClick={() => dropAccount(it.provider, it.id)}
                   />
@@ -98,7 +99,7 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
         <Button
           size="small"
           type="button"
-          iconLeft="telegram"
+          iconLeft={<TelegramIcon size={20} />}
           color="gray"
           onClick={showTelegramModal}
           disabled={hasTelegram}
@@ -109,7 +110,7 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
         <Button
           size="small"
           type="button"
-          iconLeft="vk"
+          iconLeft={<VkIcon size={20} />}
           color="gray"
           onClick={() => openOauthWindow('vkontakte')}
         >
@@ -119,7 +120,7 @@ const ProfileAccounts: FC<ProfileAccountsProps> = () => {
         <Button
           size="small"
           type="button"
-          iconLeft="google"
+          iconLeft={<GoogleIcon size={20} />}
           color="gray"
           onClick={() => openOauthWindow('google')}
         >
