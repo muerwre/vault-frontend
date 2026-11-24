@@ -5,6 +5,7 @@ import { FlaskConicalIcon } from 'lucide-react';
 
 import { ImageWithSSRLoad } from '~/components/common/ImageWithSSRLoad';
 import { Square } from '~/components/common/Square';
+import { NODE_TYPES } from '~/constants/node';
 import { imagePresets } from '~/constants/urls';
 import { useColorGradientFromString } from '~/hooks/color/useColorGradientFromString';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
@@ -18,8 +19,12 @@ type NodeThumbnailProps = {
     title?: string;
     is_promoted?: boolean;
     id?: number;
+    type?: string;
   };
 };
+
+/** Post types whose thumbnail keeps the title, over the picture if any. */
+const TITLED_TYPES: string[] = [NODE_TYPES.TEXT, NODE_TYPES.AUDIO];
 
 type CellSize = 'small' | 'medium' | 'large';
 
@@ -71,6 +76,8 @@ const NodeThumbnail: FC<NodeThumbnailProps> = memo(({ item }) => {
     return 'small';
   }, [width]);
 
+  const hasTitle = !item.thumbnail || TITLED_TYPES.includes(item.type ?? '');
+
   const image = useMemo(
     () => getURL({ url: item.thumbnail }, imagePresets.avatar),
     [item.thumbnail],
@@ -92,24 +99,24 @@ const NodeThumbnail: FC<NodeThumbnailProps> = memo(({ item }) => {
           className={classNames(styles.thumb, {
             [styles.is_loaded]: is_loaded,
           })}
-        >
-          {!item.is_promoted && (
-            <div className={styles.suffix}>
-              <FlaskConicalIcon size={12} />
-            </div>
-          )}
-        </Square>
+        />
       )}
 
-      {!item.thumbnail && size === 'small' && (
-        <div className={styles.letters} style={{ background }}>
-          {getTitleLetters(item.title)}
+      {hasTitle && (
+        <div
+          className={classNames(
+            size === 'small' ? styles.letters : styles.title,
+            { [styles.over_photo]: !!item.thumbnail },
+          )}
+          style={item.thumbnail ? undefined : { background }}
+        >
+          {size === 'small' ? getTitleLetters(item.title) : item.title}
         </div>
       )}
 
-      {!item.thumbnail && size !== 'small' && (
-        <div className={styles.title} style={{ background }}>
-          {item.title}
+      {!!item.thumbnail && !item.is_promoted && (
+        <div className={styles.suffix}>
+          <FlaskConicalIcon size={12} />
         </div>
       )}
 

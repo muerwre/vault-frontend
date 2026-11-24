@@ -421,6 +421,7 @@ describe('nodes (integration)', () => {
             'is_promoted',
             'thumbnail',
             'title',
+            'type',
           ]);
         }
       }

@@ -75,7 +75,7 @@
   z-index: 2;
   cursor: pointer;
 
-  & > div {
+  &>div {
     width: 100%;
     border-radius: $radius;
     position: relative;
@@ -90,6 +90,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  // sized and tinted like the audio player's play button
+  svg {
+    color: $gray_50;
+    transition: color 250ms;
+  }
+
+  .preview:hover & svg {
+    color: white;
+  }
 }
 
 // On a big preview the play button and the title sit at the bottom, in a row

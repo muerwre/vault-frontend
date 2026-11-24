@@ -1,9 +1,10 @@
 import { FC, useCallback, useMemo } from 'react';
 
 import classNames from 'classnames';
-import { PlayIcon, XIcon } from 'lucide-react';
+import { XIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
+import { PlayFilledIcon } from '~/components/icons';
 import { imagePresets } from '~/constants/urls';
 import { useWindowSize } from '~/hooks/dom/useWindowSize';
 import { useYoutubeMetadata } from '~/hooks/metadata/useYoutubeMetadata';
@@ -98,7 +99,7 @@ const YoutubeEmbed: FC<Props> = observer(({ url, big, asLink, onDelete }) => {
           <div style={{ backgroundImage: `url("${preview}")` }}>
             <div className={styles.backdrop}>
               <div className={styles.play}>
-                <PlayIcon size={32} />
+                <PlayFilledIcon size={24} />
               </div>
 
               <div className={styles.title}>{title}</div>

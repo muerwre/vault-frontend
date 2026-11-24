@@ -80,6 +80,8 @@ export interface WireRelatedItem {
   id: number;
   thumbnail: string;
   title: string;
+  /** Lets a thumbnail show a text or song post's title over its picture. */
+  type: string;
   is_promoted: boolean;
 }
 
@@ -233,11 +235,12 @@ export class NodeService {
       id: number;
       thumbnail: string | null;
       title: string | null;
+      type: string | null;
       is_promoted: number;
     }> = await this.nodes.query(
       `SELECT \`tag\`.\`title\` AS album, \`node\`.\`id\` AS id,
               \`node\`.\`thumbnail\` AS thumbnail, \`node\`.\`title\` AS title,
-              \`node\`.\`is_promoted\` AS is_promoted
+              \`node\`.\`type\` AS type, \`node\`.\`is_promoted\` AS is_promoted
          FROM \`node_tags_tag\` \`tags\`
          LEFT JOIN \`tag\` ON \`tags\`.\`tagId\` = \`tag\`.\`id\`
          LEFT JOIN \`node\` ON \`tags\`.\`nodeId\` = \`node\`.\`id\`
@@ -257,6 +260,7 @@ export class NodeService {
         id: Number(row.id),
         thumbnail: toWireThumbnail(row.thumbnail),
         title: row.title ?? '',
+        type: row.type ?? '',
         is_promoted: Boolean(row.is_promoted),
       });
     }
@@ -278,10 +282,12 @@ export class NodeService {
       id: number;
       thumbnail: string | null;
       title: string | null;
+      type: string | null;
       is_promoted: number;
     }> = await this.nodes.query(
       `SELECT \`node\`.\`id\` AS id, \`node\`.\`thumbnail\` AS thumbnail,
-              \`node\`.\`title\` AS title, \`node\`.\`is_promoted\` AS is_promoted,
+              \`node\`.\`title\` AS title, \`node\`.\`type\` AS type,
+              \`node\`.\`is_promoted\` AS is_promoted,
               COUNT(\`t1\`.\`nodeId\`) AS \`count\`
          FROM \`node\`
          JOIN (
@@ -301,6 +307,7 @@ export class NodeService {
       id: Number(row.id),
       thumbnail: toWireThumbnail(row.thumbnail),
       title: row.title ?? '',
+      type: row.type ?? '',
       is_promoted: Boolean(row.is_promoted),
     }));
   }
