@@ -1,5 +1,9 @@
 @import 'src/styles/variables';
 
+.superpowers {
+  padding-top: $gap * 2;
+}
+
 .about {
   flex: 4;
 }

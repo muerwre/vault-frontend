@@ -8,6 +8,7 @@ import {
 } from 'formik';
 import { array, Asserts, object, string } from 'yup';
 
+import { ApiUpdateUserRequest } from '~/api/auth/types';
 import { ERRORS } from '~/constants/errors';
 import { getRandomPhrase } from '~/constants/phrases';
 import { usePatchUser } from '~/hooks/auth/usePatchUser';
@@ -31,17 +32,24 @@ export type ProfileFormData = Asserts<typeof validationSchema>;
 
 export const useSettingsForm = (
   values: ProfileFormData,
-  submitter: (data: ProfileFormData) => Promise<IUser>,
+  submitter: (data: ApiUpdateUserRequest['user']) => Promise<IUser>,
+  onSaved?: (user: IUser) => void,
 ) => {
   const initialValues = useRef(values).current;
 
   const onSubmit = useCallback<FormikConfig<ProfileFormData>['onSubmit']>(
     async (values, { setErrors, setValues }) => {
       try {
-        // `email` is read-only and goes back unchanged, which the backend
-        // accepts; any other value it refuses.
+        // Only the fields this form edits: the values start from the whole
+        // user, and echoing back the rest (such as an unset `about_display`)
+        // would be refused. `email` is read-only and goes back unchanged,
+        // which the backend accepts; any other value it refuses.
         const fields = {
-          ...values,
+          username: values.username,
+          fullname: values.fullname,
+          description: values.description,
+          links: values.links,
+          email: values.email,
           password: values.password?.length ? values.password : undefined,
           new_password: values.newPassword?.length
             ? values.newPassword
@@ -57,6 +65,7 @@ export const useSettingsForm = (
           newPassword: '',
         });
         showToastSuccess(getRandomPhrase('SUCCESS'));
+        onSaved?.(result);
       } catch (error) {
         showErrorToast(error);
 
@@ -66,7 +75,7 @@ export const useSettingsForm = (
         }
       }
     },
-    [submitter],
+    [submitter, onSaved],
   );
 
   return useFormik({
@@ -76,13 +85,22 @@ export const useSettingsForm = (
   });
 };
 
-export const SettingsProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
+interface SettingsProviderProps {
+  /** Runs after a successful save, with the saved user. */
+  onSaved?: (user: IUser) => void;
+}
+
+export const SettingsProvider: FC<PropsWithChildren<SettingsProviderProps>> = ({
+  children,
+  onSaved,
+}) => {
   const { user } = useUser();
   const { save } = usePatchUser();
 
   const formik = useSettingsForm(
     { ...user, links: user.links ?? [], password: '', newPassword: '' },
     save,
+    onSaved,
   );
 
   return <FormikProvider value={formik}>{children}</FormikProvider>;

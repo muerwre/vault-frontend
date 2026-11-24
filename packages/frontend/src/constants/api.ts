@@ -30,7 +30,7 @@ export const API = {
       `${CONFIG.apiHost}oauth/${provider}/redirect/`,
     ME: '/auth',
     UPDATE_PHOTO: '/auth/photo',
-    UPDATE_COVER: '/auth/photo',
+    UPDATE_COVER: '/auth/cover',
     PROFILE: (username: string) => `/users/${username}`,
     NODES: (username: string) => `/users/${username}/nodes`,
     MESSAGES: (username: string) => `/users/${username}/messages`,

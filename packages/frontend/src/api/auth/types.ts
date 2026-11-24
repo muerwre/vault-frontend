@@ -7,7 +7,9 @@ export type ApiUserLoginResult = { token: string; user: IUser };
 export type ApiAuthGetUserRequest = {};
 export type ApiAuthGetUserResult = { user: IUser };
 export type ApiUpdateUserRequest = {
-  user: Partial<IUser & { password: string; newPassword: string }>;
+  user: Partial<
+    IUser & { password: string; newPassword: string; new_password: string }
+  >;
 };
 export type ApiUpdatePhotoRequest = {
   file: IFile;

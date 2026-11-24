@@ -1,6 +1,12 @@
 import { useCallback } from 'react';
 
-import { apiDeletePhoto, apiUpdatePhoto, apiUpdateUser } from '~/api/auth';
+import {
+  apiDeleteCover,
+  apiDeletePhoto,
+  apiUpdateCover,
+  apiUpdatePhoto,
+  apiUpdateUser,
+} from '~/api/auth';
 import { ApiUpdateUserRequest } from '~/api/auth/types';
 import { UploadSubject, UploadTarget } from '~/constants/uploads';
 import { useUser } from '~/hooks/auth/useUser';
@@ -50,5 +56,33 @@ export const usePatchUser = () => {
     }
   }, [update]);
 
-  return { updatePhoto, deletePhoto, save };
+  /** The profile's cover, shown behind the profile and settings pages. */
+  const updateCover = useCallback(
+    async (cover: File) => {
+      try {
+        const file = await uploadFile(cover);
+
+        if (!file) {
+          return;
+        }
+
+        const result = await apiUpdateCover({ file });
+        await update(result.user);
+      } catch (error) {
+        showErrorToast(error);
+      }
+    },
+    [uploadFile, update],
+  );
+
+  const deleteCover = useCallback(async () => {
+    try {
+      const result = await apiDeleteCover();
+      await update(result.user);
+    } catch (error) {
+      showErrorToast(error);
+    }
+  }, [update]);
+
+  return { updatePhoto, deletePhoto, updateCover, deleteCover, save };
 };

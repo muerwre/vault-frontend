@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 
 import { PROFILE_NODES_VIEW, ProfileNodesView } from '@vault/common/constants';
 import classNames from 'classnames';
+import { SettingsIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
 import { Card } from '~/components/common/Card';
@@ -10,7 +11,9 @@ import { Container } from '~/components/common/Container';
 import { Filler } from '~/components/common/Filler';
 import { Hoverable } from '~/components/common/Hoverable';
 import { PageTitle } from '~/components/common/PageTitle';
+import { Button } from '~/components/input/Button';
 import { SearchInput } from '~/components/input/SearchInput';
+import { URLS } from '~/constants/urls';
 import { FlowGrid } from '~/containers/flow/FlowGrid';
 import { LabNode } from '~/containers/lab/LabGrid/components/LabNode';
 import { ProfileAboutCard } from '~/containers/profile/ProfileAboutCard';
@@ -19,6 +22,7 @@ import { ProfileNodesViewSwitch } from '~/containers/profile/ProfileNodesViewSwi
 import { ProfilePageLeft } from '~/containers/profile/ProfilePageLeft';
 import { useUser } from '~/hooks/auth/useUser';
 import { useInfiniteLoader } from '~/hooks/dom/useInfiniteLoader';
+import { useNavigation } from '~/hooks/navigation/useNavigation';
 import { useGetProfile } from '~/hooks/profile/useGetProfile';
 import { useSaveProfile } from '~/hooks/profile/useSaveProfile';
 import { useUserNodes } from '~/hooks/profile/useUserNodes';
@@ -32,6 +36,9 @@ const capitalize = (value: string) =>
   value ? value[0].toLocaleUpperCase() + value.slice(1) : value;
 
 import styles from './styles.module.scss';
+
+/** Lab cards by window width: three on wide screens, as the page is wide. */
+const LAB_COLUMNS = { default: 3, 1200: 2, 840: 1 };
 
 /** The about card is hidden until its design settles; pinned posts lead instead. */
 const SHOW_ABOUT_CARD = false;
@@ -49,6 +56,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
   const { user } = useUser();
   const { profile, isLoading, notFound, update } = useGetProfile(username);
   const canEdit = !!user.id && user.id === profile.id;
+  const { push } = useNavigation();
 
   // Only the owner switches, and their choice is saved: everyone sees the
   // profile as its owner set it. The pick shows at once, ahead of the save.
@@ -109,13 +117,24 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
         })}
       >
         {canEdit && (
-          <Card className={styles.controls}>
+          <div className={styles.controls}>
             <ProfileNodesViewSwitch value={view} onChange={onChangeView} />
+
+            <Button
+              type="button"
+              color="primary"
+              iconLeft={<SettingsIcon size={20} />}
+              onClick={() => push(URLS.SETTINGS.BASE)}
+            >
+              Настройки
+            </Button>
+
             <Filler />
+
             <div className={styles.search}>
               <SearchInput />
             </div>
-          </Card>
+          </div>
         )}
 
         {!isLab && (
@@ -146,7 +165,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
 
         {isLab ? (
           <div className={styles.lab}>
-            <Columns hasMore={hasMore && !isLoadingNodes}>
+            <Columns cols={LAB_COLUMNS} hasMore={hasMore && !isLoadingNodes}>
               <ProfileLabCard
                 profile={profile}
                 username={username}

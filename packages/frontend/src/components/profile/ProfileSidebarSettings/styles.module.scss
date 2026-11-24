@@ -11,6 +11,9 @@
 
 .scroller {
   flex: 1;
+  // the card's full width: the settings' columns are sized by their pane, so
+  // they would not widen a shrink-to-fit one
+  align-self: stretch;
   overflow: auto;
   padding: $gap;
 }

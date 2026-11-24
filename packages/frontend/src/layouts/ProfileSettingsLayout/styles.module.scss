@@ -1,0 +1,17 @@
+@import 'src/styles/variables';
+
+.wrap {
+  @include flow_container();
+  margin-top: $page_top_offset;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  grid-column-gap: $gap;
+}

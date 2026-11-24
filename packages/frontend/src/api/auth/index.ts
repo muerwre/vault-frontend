@@ -79,6 +79,9 @@ export const apiDeletePhoto = () =>
 export const apiUpdateCover = ({ file }: ApiUpdatePhotoRequest) =>
   api.post<ApiUpdateUserResult>(API.USER.UPDATE_COVER, file).then(unwrap);
 
+export const apiDeleteCover = () =>
+  api.delete<ApiUpdateUserResult>(API.USER.UPDATE_COVER).then(unwrap);
+
 export const apiRequestRestoreCode = (field: string) =>
   api.post<{ field: string }>(API.USER.REQUEST_CODE(), { field }).then(unwrap);
 
