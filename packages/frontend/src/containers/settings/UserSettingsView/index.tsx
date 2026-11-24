@@ -217,7 +217,7 @@ const UserSettingsView: FC<UserSettingsViewProps> = () => {
             />
           </Zone>
 
-          <Zone title="Тема">
+          <Zone title="Тема оформления">
             <ThemeSwitcher />
           </Zone>
 

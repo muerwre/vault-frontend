@@ -128,7 +128,8 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
   const sidebarSpan = useGridRowSpan({ grid, content: sidebarContent }, 2);
 
   const title = capitalize(profile.fullname || profile.username || username);
-  usePageCover(profile.cover, { keepOnMobile: isAura });
+  // the profile is the page: its cover stays behind it on phones too
+  usePageCover(profile.cover, { keepOnMobile: true });
 
   if (notFound) {
     return <NotFoundLayout />;

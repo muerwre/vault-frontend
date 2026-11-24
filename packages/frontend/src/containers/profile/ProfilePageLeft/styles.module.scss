@@ -23,6 +23,13 @@
   font: $font_24_semibold;
   color: white;
   text-transform: uppercase;
+  // a word wider than the sidebar breaks rather than spilling out
+  overflow-wrap: anywhere;
+
+  // the sidebar is the screen's width on phones; a big name crowds it
+  @include tablet {
+    font: $font_18_semibold;
+  }
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 4px;
@@ -30,6 +37,7 @@
 
 .username {
   font: $font_14_regular;
+  overflow-wrap: anywhere;
   box-sizing: border-box;
   width: 100%;
   color: $gray_50;

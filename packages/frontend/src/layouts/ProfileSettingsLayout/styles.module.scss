@@ -1,8 +1,20 @@
 @import 'src/styles/variables';
 
+/* Spaced as the submit form is: the page's room at the bottom, and on
+   phones a slim inset all round, the player's room below the buttons. */
 .wrap {
   @include flow_container();
   margin-top: $page_top_offset;
+  padding-bottom: $page_bottom_room;
+
+  // doubled, to win over the container's own phone padding on this element
+  &#{&} {
+    @include tablet {
+      margin-top: 0;
+      padding: $gap * 0.5;
+      padding-bottom: calc(#{$gap * 0.5} + #{$player_room});
+    }
+  }
 }
 
 .header {
@@ -10,8 +22,14 @@
   flex-direction: row;
 }
 
+/* Stays at the screen's bottom edge while the form scrolls, above the
+   player while it shows, covering what passes beneath. */
 .buttons {
+  position: sticky;
+  bottom: $player_room;
+  z-index: 2;
   display: grid;
   grid-template-columns: 1fr auto auto;
   grid-column-gap: $gap;
+  background-color: $content_bg;
 }
