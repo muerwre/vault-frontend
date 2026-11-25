@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
-import Image from 'next/future/image';
-
+import { NodeImageLazy } from '~/components/node/NodeImageLazy';
 import { Placeholder } from '~/components/placeholders/Placeholder';
 import { NodeComponentProps } from '~/constants/node';
 import { imagePresets } from '~/constants/urls';
@@ -27,7 +26,7 @@ const LabImage: FC<Props> = ({ node, isLoading }) => {
   return (
     <Placeholder active={isLoading} width="100%" height={400}>
       <div className={styles.wrapper}>
-        <Image
+        <NodeImageLazy
           src={getURL(file, imagePresets[600])}
           width={file.metadata?.width}
           height={file.metadata?.height}

@@ -4,7 +4,7 @@ import { Card } from '~/components/common/Card';
 import { Markdown } from '~/components/common/Markdown';
 import { Padder } from '~/components/common/Padder';
 import { NoteMenu } from '~/components/notes/NoteMenu';
-import { formatText, getPrettyDate } from '~/utils/dom';
+import { getPrettyDate } from '~/utils/dom';
 
 import { NoteCreationForm } from '../NoteCreationForm';
 
@@ -48,7 +48,7 @@ const NoteCard: VFC<NoteCardProps> = ({
           <Padder>
             <NoteMenu onEdit={toggleEditing} onDelete={remove} />
 
-            <Markdown className={styles.wrap}>{formatText(content)}</Markdown>
+            <Markdown className={styles.wrap}>{content}</Markdown>
           </Padder>
 
           <Padder className={styles.footer}>{getPrettyDate(createdAt)}</Padder>

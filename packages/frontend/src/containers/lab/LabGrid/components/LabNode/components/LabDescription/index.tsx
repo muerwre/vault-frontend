@@ -4,7 +4,6 @@ import { Markdown } from '~/components/common/Markdown';
 import { Paragraph } from '~/components/placeholders/Paragraph';
 import { NodeComponentProps } from '~/constants/node';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
-import { formatText } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
@@ -21,7 +20,7 @@ const LabDescription: FC<NodeComponentProps> = ({ node, isLoading }) => {
     </div>
   ) : (
     <Markdown className={styles.wrap} onClick={onClick}>
-      {formatText(node.description)}
+      {node.description}
     </Markdown>
   );
 };

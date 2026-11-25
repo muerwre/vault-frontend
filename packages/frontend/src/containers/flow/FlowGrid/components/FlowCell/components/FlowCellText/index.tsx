@@ -4,7 +4,6 @@ import classNames from 'classnames';
 
 import { Markdown } from '~/components/common/Markdown';
 import { getPhotoBackdrop } from '~/utils/color';
-import { formatText } from '~/utils/dom';
 import { DivProps } from '~/utils/types';
 
 import styles from './styles.module.scss';
@@ -23,7 +22,7 @@ const FlowCellText: FC<Props> = ({ children, heading, color, ...rest }) => {
       style={getPhotoBackdrop(color)}
     >
       {heading && <div className={styles.heading}>{heading}</div>}
-      <Markdown className={styles.description}>{formatText(children)}</Markdown>
+      <Markdown className={styles.description}>{children}</Markdown>
     </div>
   );
 };

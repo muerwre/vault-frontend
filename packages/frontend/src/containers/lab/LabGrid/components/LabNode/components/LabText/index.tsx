@@ -5,15 +5,11 @@ import { Paragraph } from '~/components/placeholders/Paragraph';
 import { NodeComponentProps } from '~/constants/node';
 import { useGotoNode } from '~/hooks/node/useGotoNode';
 import { getAllText } from '~/utils/blocks';
-import { formatTextParagraphs } from '~/utils/dom';
 
 import styles from './styles.module.scss';
 
 const LabText: FC<NodeComponentProps> = ({ node, isLoading }) => {
-  const content = useMemo(
-    () => formatTextParagraphs(getAllText(node.blocks)),
-    [node],
-  );
+  const content = useMemo(() => getAllText(node.blocks), [node]);
 
   const onClick = useGotoNode(node.id);
 
