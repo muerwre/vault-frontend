@@ -166,7 +166,7 @@
 }
 
 .normal {
-  height: 38px;
+  height: $input_height;
 
   &:global(.round) {
     border-radius: 19px;

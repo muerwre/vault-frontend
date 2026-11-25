@@ -35,12 +35,6 @@ const ProfileControlsBar: FC<Props> = ({
   search,
 }) => (
   <div className={classNames(styles.bar)}>
-    {canSwitchView && (
-      <div className={styles.desktop_only}>
-        <ProfileNodesViewSwitch value={view} onChange={onChangeView} />
-      </div>
-    )}
-
     <Button
       type="button"
       color="primary"
@@ -49,6 +43,12 @@ const ProfileControlsBar: FC<Props> = ({
     >
       Настройки
     </Button>
+
+    {canSwitchView && (
+      <div className={styles.desktop_only}>
+        <ProfileNodesViewSwitch value={view} onChange={onChangeView} />
+      </div>
+    )}
 
     {!!search && (
       <div className={classNames(styles.search, styles.desktop_only)}>
