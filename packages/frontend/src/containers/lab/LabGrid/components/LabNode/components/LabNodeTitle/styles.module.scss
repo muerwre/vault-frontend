@@ -29,7 +29,10 @@
   }
 }
 
-.star {
-  color: var(--photo_muted, #{$gray_50});
+.icon {
+  // a solid colour faded as a whole: the muted greys are translucent, and an
+  // icon with both a stroke and a fill would show a darker edge where they meet
+  color: inherit;
+  opacity: 0.5;
   flex: 0 0 24px;
 }

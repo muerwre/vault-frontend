@@ -1,12 +1,10 @@
 import { FC, useCallback } from 'react';
 
-import Tippy from '@tippyjs/react';
 import classNames from 'classnames';
 import {
   HeartIcon,
   MessageSquareDotIcon,
   MessageSquareIcon,
-  PinIcon,
 } from 'lucide-react';
 
 import { Filler } from '~/components/common/Filler';
@@ -26,7 +24,6 @@ type Props = {
   isLoading?: boolean;
   hasNewComments: boolean;
   commentCount: number;
-  isPinned?: boolean;
 };
 
 const LabBottomPanel: FC<Props> = ({
@@ -34,7 +31,6 @@ const LabBottomPanel: FC<Props> = ({
   hasNewComments,
   commentCount,
   isLoading,
-  isPinned,
 }) => {
   const { push } = useNavigation();
   const onClick = useCallback(
@@ -51,14 +47,6 @@ const LabBottomPanel: FC<Props> = ({
       </div>
 
       <Filler />
-
-      {isPinned && !isLoading && (
-        <Tippy content="Закреплено наверху профиля">
-          <span className={styles.pin}>
-            <PinIcon size={20} fill="currentColor" />
-          </span>
-        </Tippy>
-      )}
 
       <Placeholder active={isLoading} width="48px" height={24}>
         {commentCount > 0 && (

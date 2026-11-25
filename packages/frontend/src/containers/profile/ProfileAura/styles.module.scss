@@ -7,6 +7,10 @@
   gap: $gap * 2;
   padding: $gap * 4 $gap;
   text-align: center;
+
+  @include tablet {
+    padding: 0;
+  }
 }
 
 .avatar {
@@ -28,6 +32,10 @@
   color: white;
   text-transform: uppercase;
   overflow-wrap: anywhere;
+
+  @include tablet {
+    font: $font_16_semibold;
+  }
 }
 
 .username {

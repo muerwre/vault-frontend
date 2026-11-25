@@ -1,7 +1,9 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 
+import Tippy from '@tippyjs/react';
 import { PROFILE_NODES_VIEW, ProfileNodesView } from '@vault/common/constants';
 import classNames from 'classnames';
+import { PinIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
 import { Columns } from '~/components/common/Columns';
@@ -22,8 +24,8 @@ import { useGridRowSpan } from '~/hooks/dom/useGridRowSpan';
 import { useInfiniteLoader } from '~/hooks/dom/useInfiniteLoader';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
 import { useGetProfile } from '~/hooks/profile/useGetProfile';
+import { useProfileNodes } from '~/hooks/profile/useProfileNodes';
 import { useSaveProfile } from '~/hooks/profile/useSaveProfile';
-import { useUserNodes } from '~/hooks/profile/useUserNodes';
 import { NotFoundLayout } from '~/layouts/NotFoundLayout';
 import { usePageCover } from '~/utils/providers/PageCoverProvider';
 import { getPageTitle } from '~/utils/ssr/getPageTitle';
@@ -104,7 +106,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
     isLoading: isLoadingNodes,
     onChangeCellView,
     onResetCellView,
-  } = useUserNodes(username, !isLoading, searchDebounced);
+  } = useProfileNodes(username, !isLoading, searchDebounced);
 
   // A profile with fewer than three posts is always an aura. Judged on the
   // whole listing only, not on what a search leaves.
@@ -230,7 +232,15 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
                     node={item.node}
                     lastSeen={item.last_seen}
                     commentCount={item.comment_count}
-                    showPin
+                    titleIcon={
+                      item.node.is_pinned ? (
+                        <Tippy content="Закреплено наверху профиля">
+                          <span>
+                            <PinIcon size={24} fill="currentColor" />
+                          </span>
+                        </Tippy>
+                      ) : null
+                    }
                   />
                 </Hoverable>
               ))}

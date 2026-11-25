@@ -2,10 +2,15 @@
 
 .wrap {
   @include flow_container();
+
   margin-top: $page_top_offset;
   gap: $gap;
   display: flex;
   flex-direction: column;
+
+  @include tablet {
+    padding: 0 $gap;
+  }
 }
 
 /* An aura fills the screen below the header, its content in the middle. */

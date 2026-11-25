@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 
 import classNames from 'classnames';
 import { isAfter, parseISO } from 'date-fns';
@@ -23,8 +23,8 @@ interface Props {
   lastSeen: string | null | undefined;
   isLoading?: boolean;
   commentCount: number;
-  /** Marks a pinned node in the footer; for the author's profile. */
-  showPin?: boolean;
+  /** Replaces the heroic star by the title; `null` shows nothing there. */
+  titleIcon?: ReactNode;
 }
 
 const LabNode: FC<Props> = ({
@@ -32,9 +32,9 @@ const LabNode: FC<Props> = ({
   isLoading,
   lastSeen,
   commentCount,
-  showPin = false,
+  titleIcon,
 }) => {
-  const blocks = useLabNodeBlocks(node, !!isLoading);
+  const blocks = useLabNodeBlocks(node, !!isLoading, titleIcon);
 
   const hasNewComments = useMemo(
     () =>
@@ -80,7 +80,6 @@ const LabNode: FC<Props> = ({
           isLoading={isLoading}
           hasNewComments={hasNewComments}
           commentCount={commentCount}
-          isPinned={showPin && !!node.is_pinned}
         />
       </div>
     </div>

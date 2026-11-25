@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { NODE_TYPES, NodeComponentProps } from '~/constants/node';
 
@@ -10,7 +10,12 @@ import { LabPad } from '../components/LabPad';
 import { LabText } from '../components/LabText';
 import { LabVideo } from '../components/LabVideo';
 
-export const LAB_PREVIEW_LAYOUT: Record<string, FC<NodeComponentProps>[]> = {
+export type LabBlockProps = NodeComponentProps & {
+  /** Shown by the title in place of the heroic star, when given. */
+  titleIcon?: ReactNode;
+};
+
+export const LAB_PREVIEW_LAYOUT: Record<string, FC<LabBlockProps>[]> = {
   [NODE_TYPES.IMAGE]: [LabImage, LabPad, LabNodeTitle, LabDescription],
   [NODE_TYPES.VIDEO]: [LabVideo, LabPad, LabNodeTitle, LabDescription],
   [NODE_TYPES.AUDIO]: [LabPad, LabNodeTitle, LabPad, LabAudio, LabPad],

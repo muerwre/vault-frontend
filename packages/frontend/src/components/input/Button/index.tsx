@@ -100,7 +100,7 @@ const Button: FC<IButtonProps> = memo(
               {iconLeft}
             </span>
           )}
-          {!!title ? <span>{title}</span> : children}
+          {!!title ? <span className={styles.title}>{title}</span> : children}
           {iconRight && (
             <span key={2} className={styles.icon_right}>
               {iconRight}

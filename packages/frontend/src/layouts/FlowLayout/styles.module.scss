@@ -21,7 +21,6 @@ $cols: math.div($content_width, $cell);
 
   @include tablet {
     padding: 0 $gap;
-    margin-top: 0;
   }
 }
 
@@ -35,6 +34,7 @@ $cols: math.div($content_width, $cell);
 
   @include flow_breakpoint(5);
   @include flow_breakpoint(4);
+
   @include flow_breakpoint(3) {
     grid-template-rows: calc(66cqw - #{$gap}) auto;
   }

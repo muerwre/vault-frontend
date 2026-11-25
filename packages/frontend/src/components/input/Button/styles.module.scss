@@ -4,6 +4,7 @@
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.3;
   }
@@ -47,10 +48,7 @@
     opacity: 0;
   }
 
-  svg.icon {
-  }
-
-  span {
+  .title {
     flex: 1;
   }
 
@@ -93,6 +91,7 @@
   }
 
   &:global(.is_loading) {
+
     span,
     svg {
       animation: pulse 0.25s infinite alternate;

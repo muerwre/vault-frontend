@@ -149,9 +149,10 @@ $tabs_height: 44px;
 
 // Stacked on mobile, a stretchy button's flex: 1 would collapse its height.
 // Doubled to outrank the button's own styles.
-.save.save > * {
+.save.save>* {
+  width: 100%;
+
   @include tablet {
     flex: none;
-    width: 100%;
   }
 }

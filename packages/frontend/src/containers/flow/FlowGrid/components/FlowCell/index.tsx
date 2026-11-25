@@ -65,8 +65,12 @@ const FlowCell: FC<Props> = ({
   const { isTablet } = useWindowSize();
 
   // a text or song post always has its own preview; the menu's text switch
-  // only decides whether the text shows under the title
+  // only decides whether a song post's text shows under the title
   const withPost = !!type && POST_TYPES.includes(type);
+
+  // a text post is its text, so it is always shown and can't be switched off
+  const isTextPost = type === NODE_TYPES.TEXT;
+  const showDescription = isTextPost || flow.show_description;
 
   const withText =
     !withPost &&
@@ -155,8 +159,8 @@ const FlowCell: FC<Props> = ({
           <FlowCellMenu
             onClose={deactivate}
             currentView={flow.display}
-            descriptionEnabled={flow.show_description}
-            hasDescription={hasDescription}
+            descriptionEnabled={showDescription}
+            hasDescription={!isTextPost && hasDescription}
             setViewHorizontal={setViewHorizontal}
             setViewQuadro={setViewQuadro}
             setViewSingle={setViewSingle}
@@ -178,7 +182,7 @@ const FlowCell: FC<Props> = ({
         {withPost && (
           <FlowCellPost
             title={title}
-            text={flow.show_description ? text : undefined}
+            text={showDescription ? text : undefined}
             songs={songs}
             image={image}
             color={color}

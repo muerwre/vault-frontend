@@ -1,22 +1,26 @@
-import { createElement, FC, useCallback, useMemo } from 'react';
+import { createElement, FC, ReactNode, useCallback, useMemo } from 'react';
 
-import { NodeComponentProps } from '~/constants/node';
 import { INode } from '~/types';
 import { isNil, prop } from '~/utils/ramda';
 
-import { LAB_PREVIEW_LAYOUT } from '../constants';
+import { LAB_PREVIEW_LAYOUT, LabBlockProps } from '../constants';
 
 // useNodeBlocks returns head, block and inline blocks of node
-export const useLabNodeBlocks = (node: INode, isLoading: boolean) => {
+export const useLabNodeBlocks = (
+  node: INode,
+  isLoading: boolean,
+  titleIcon?: ReactNode,
+) => {
   const createBlock = useCallback(
-    (block?: FC<NodeComponentProps>, key = 0) =>
+    (block?: FC<LabBlockProps>, key = 0) =>
       !isNil(block) &&
       createElement(block, {
         node,
         isLoading,
+        titleIcon,
         key: `${node.id}-${key}`,
       }),
-    [node, isLoading],
+    [node, isLoading, titleIcon],
   );
 
   return useMemo(

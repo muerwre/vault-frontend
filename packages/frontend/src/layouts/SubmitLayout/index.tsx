@@ -145,23 +145,27 @@ const SubmitLayout: FC<Props> = observer(
     const saveButtons = (
       <div className={styles.save}>
         {!!onCancel && (
-          <Button
-            title="Отмена"
-            color="gray"
-            type="button"
-            onClick={onCancel}
-            disabled={isSubmitting}
-          />
+          <div className={styles.button}>
+            <Button
+              title="Отмена"
+              color="gray"
+              type="button"
+              onClick={onCancel}
+              disabled={isSubmitting}
+            />
+          </div>
         )}
 
-        <Button
-          title="Сохранить"
-          iconRight={<CheckIcon size={20} />}
-          color={color}
-          disabled={isSubmitting}
-          type="submit"
-          stretchy
-        />
+        <div className={styles.button}>
+          <Button
+            title="Сохранить"
+            iconRight={<CheckIcon size={20} />}
+            color={color}
+            disabled={isSubmitting}
+            type="submit"
+            stretchy
+          />
+        </div>
       </div>
     );
 

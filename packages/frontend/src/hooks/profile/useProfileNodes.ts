@@ -23,18 +23,11 @@ const unpinned = (page?: ILabNode[]) =>
   (page || []).filter((item) => !item.node.is_pinned);
 
 /**
- * A user's nodes, a page at a time: the ones pinned to the profile first, then
- * the rest, newest first. Each page continues from the oldest unpinned node of
- * the previous one. Lab nodes come along for signed-in viewers, so the
- * viewer's state is part of the key.
- *
- * Items are whole nodes with their comment counts, so the profile draws flow
- * cells (`nodes`) or lab cards (`items`) from the same listing.
+ * Nodes for user profile
  */
-export const useUserNodes = (
+export const useProfileNodes = (
   username?: string,
   enabled = true,
-  /** Keeps nodes whose title or description contains it. */
   search = '',
 ) => {
   const { isUser } = useAuth();
@@ -107,7 +100,7 @@ export const useUserNodes = (
         await postProfileCellView({
           id,
           flow: {
-            display: flow.display,
+            display: flow.display ?? 'single',
             show_description: flow.show_description,
           },
         });
