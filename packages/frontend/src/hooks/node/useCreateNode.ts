@@ -4,12 +4,14 @@ import { NODE_PLACEMENT } from '@vault/common/constants';
 
 import { apiPostNode } from '~/api/node';
 import { useGetLabNodes } from '~/hooks/lab/useGetLabNodes';
+import { useInvalidateProfileNodes } from '~/hooks/profile/useProfileNodes';
 import { useFlowStore } from '~/store/flow/useFlowStore';
 import { INode } from '~/types';
 
 export const useCreateNode = () => {
   const flow = useFlowStore();
   const lab = useGetLabNodes();
+  const invalidateProfile = useInvalidateProfileNodes();
 
   return useCallback(
     async (node: INode) => {
@@ -27,8 +29,10 @@ export const useCreateNode = () => {
         });
       }
 
+      await invalidateProfile(result.node.user?.username);
+
       return result.node;
     },
-    [flow, lab],
+    [flow, lab, invalidateProfile],
   );
 };

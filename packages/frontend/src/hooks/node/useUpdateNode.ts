@@ -7,6 +7,7 @@ import { NODE_TYPES } from '~/constants/node';
 import { UploadType } from '~/constants/uploads';
 import { useGetLabNodes } from '~/hooks/lab/useGetLabNodes';
 import { useLoadNode } from '~/hooks/node/useLoadNode';
+import { useInvalidateProfileNodes } from '~/hooks/profile/useProfileNodes';
 import { useFlowStore } from '~/store/flow/useFlowStore';
 import { INode } from '~/types';
 
@@ -14,6 +15,7 @@ export const useUpdateNode = (id: number) => {
   const { update } = useLoadNode(id);
   const flow = useFlowStore();
   const lab = useGetLabNodes();
+  const invalidateProfile = useInvalidateProfileNodes();
 
   return useCallback(
     async (node: INode) => {
@@ -24,6 +26,7 @@ export const useUpdateNode = (id: number) => {
       }
 
       await update(result.node);
+      await invalidateProfile(result.node.user?.username);
 
       const placement = result.node.is_promoted;
 
@@ -45,6 +48,6 @@ export const useUpdateNode = (id: number) => {
         await lab.updateNode(result.node.id!, result.node);
       }
     },
-    [update, flow, lab],
+    [update, flow, lab, invalidateProfile],
   );
 };

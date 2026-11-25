@@ -1,11 +1,13 @@
 import { useCallback, useMemo } from 'react';
 
+import { useSWRConfig } from 'swr';
 import useSWRInfinite from 'swr/infinite';
 
 import { apiGetUserNodes } from '~/api/auth';
 import { postProfileCellView } from '~/api/flow';
 import { API } from '~/constants/api';
 import { useAuth } from '~/hooks/auth/useAuth';
+import { useUser } from '~/hooks/auth/useUser';
 import { FlowDisplay, INode } from '~/types';
 import { ILabNode } from '~/types/lab';
 import { showErrorToast } from '~/utils/errors/showToast';
@@ -21,6 +23,47 @@ type Key = [url: string, after: string, isUser: boolean, search: string];
  */
 const unpinned = (page?: ILabNode[]) =>
   (page || []).filter((item) => !item.node.is_pinned);
+
+/** Where SWR files a hashed key, and the whole of an infinite listing. */
+const PAGE_PREFIX = '@';
+const INFINITE_PREFIX = '$inf$';
+
+/**
+ * Drops the cached profile listings of the current user and of the given
+ * authors, so a node's change shows there: a mounted listing refetches at
+ * once, the others on their next visit. The listing never refetches its first
+ * page on its own, so without this it would keep the node as it was.
+ */
+export const useInvalidateProfileNodes = () => {
+  const { cache, mutate } = useSWRConfig();
+  const { user } = useUser();
+
+  return useCallback(
+    async (...usernames: Array<string | undefined>) => {
+      const prefixes = Array.from(
+        new Set([user.username, ...usernames].filter(Boolean) as string[]),
+      ).map((name) => `${PAGE_PREFIX}${JSON.stringify(API.USER.NODES(name))},`);
+
+      if (!prefixes.length) return;
+
+      const listings: string[] = [];
+
+      // the default cache is a Map; the pages go, the listings refetch them
+      for (const key of Array.from((cache as Map<string, unknown>).keys())) {
+        if (prefixes.some((prefix) => key.startsWith(prefix))) {
+          cache.delete(key);
+        } else if (
+          prefixes.some((prefix) => key.startsWith(INFINITE_PREFIX + prefix))
+        ) {
+          listings.push(key);
+        }
+      }
+
+      await Promise.all(listings.map((key) => mutate(key)));
+    },
+    [cache, mutate, user.username],
+  );
+};
 
 /**
  * Nodes for user profile

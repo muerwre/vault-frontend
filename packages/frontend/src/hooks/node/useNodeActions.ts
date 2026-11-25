@@ -11,6 +11,7 @@ import { Dialog } from '~/constants/modal/dialog';
 import { URLS } from '~/constants/urls';
 import { useModal } from '~/hooks/modal/useModal';
 import { useNavigation } from '~/hooks/navigation/useNavigation';
+import { useInvalidateProfileNodes } from '~/hooks/profile/useProfileNodes';
 import { INode } from '~/types';
 import { showErrorToast } from '~/utils/errors/showToast';
 
@@ -21,6 +22,7 @@ export const useNodeActions = (
   const { showModal } = useModal();
   const { push } = useNavigation();
   const editOnPage = !features.editorModals;
+  const invalidateProfile = useInvalidateProfileNodes();
 
   const onLike = useCallback(async () => {
     try {
@@ -54,10 +56,11 @@ export const useNodeActions = (
         is_pinned: !node.is_pinned,
       });
       await update({ is_pinned: result.is_pinned });
+      await invalidateProfile(node.user?.username);
     } catch (error) {
       showErrorToast(error);
     }
-  }, [node.id, node.is_pinned, update]);
+  }, [node.id, node.is_pinned, node.user?.username, update, invalidateProfile]);
 
   const onLock = useCallback(async () => {
     try {
@@ -66,10 +69,17 @@ export const useNodeActions = (
         is_locked: !node.deleted_at,
       });
       await update({ deleted_at: result.deleted_at });
+      await invalidateProfile(node.user?.username);
     } catch (error) {
       showErrorToast(error);
     }
-  }, [node.deleted_at, node.id, update]);
+  }, [
+    node.deleted_at,
+    node.id,
+    node.user?.username,
+    update,
+    invalidateProfile,
+  ]);
 
   // on the submission page, unless the old modals are switched back on
   const onEdit = useCallback(() => {
