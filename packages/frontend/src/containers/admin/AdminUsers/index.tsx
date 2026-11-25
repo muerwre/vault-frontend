@@ -11,8 +11,8 @@ import {
   apiGetAdminUsers,
 } from '~/api/admin';
 import { Avatar } from '~/components/common/Avatar';
-import { Columns } from '~/components/common/Columns';
 import { LoaderCircle } from '~/components/common/LoaderCircle';
+import { MasonryGrid } from '~/components/common/MasonryGrid';
 import { Button } from '~/components/input/Button';
 import { API } from '~/constants/api';
 import { Role } from '~/constants/auth';
@@ -56,6 +56,8 @@ const lastVisit = (user: IUser) =>
  * Every user, most recently seen first, as the backend orders them. Pending
  * registrations and unused invites come first.
  */
+const getUserKey = (user: ApiAdminUser) => user.id;
+
 const AdminUsers: FC = () => {
   const { data, mutate } = useSWR(API.ADMIN.USERS, apiGetAdminUsers);
   const { user: me } = useAuth();
@@ -100,9 +102,11 @@ const AdminUsers: FC = () => {
         <span className={styles.count}>{data.users.length}</span>
       </header>
 
-      <Columns>
-        {data.users.map((user) => (
-          <div key={user.id}>
+      <MasonryGrid
+        items={data.users}
+        itemKey={getUserKey}
+        render={(user) => (
+          <div>
             <Link href={URLS.PROFILE_PAGE(user.username)} passHref>
               <a
                 className={classNames(styles.card, {
@@ -160,8 +164,8 @@ const AdminUsers: FC = () => {
               </a>
             </Link>
           </div>
-        ))}
-      </Columns>
+        )}
+      />
     </div>
   );
 };

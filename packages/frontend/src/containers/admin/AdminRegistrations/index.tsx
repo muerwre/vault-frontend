@@ -8,7 +8,7 @@ import {
   apiRegistrationAction,
 } from '~/api/registration';
 import { ApiRegistrationRequest } from '~/api/registration/types';
-import { Columns } from '~/components/common/Columns';
+import { MasonryGrid } from '~/components/common/MasonryGrid';
 import { Button } from '~/components/input/Button';
 import { API } from '~/constants/api';
 import { getPrettyDate } from '~/utils/dom';
@@ -61,6 +61,8 @@ const copyLink = async (link: string) => {
 };
 
 /** Failed or expired invites need a retry; working ones can be sent again. */
+const getRequestKey = (request: ApiRegistrationRequest) => request.id;
+
 const needsRetry = (request: ApiRegistrationRequest) =>
   request.delivery === 'failed' || request.is_expired;
 
@@ -106,7 +108,7 @@ const AdminRegistrations: FC = () => {
   );
 
   const renderCard = (request: ApiRegistrationRequest) => (
-    <div key={request.id}>
+    <div>
       <div className={styles.card}>
         <div className={styles.head}>
           <span className={styles.email}>{request.email}</span>
@@ -199,7 +201,11 @@ const AdminRegistrations: FC = () => {
             <h2 className={styles.title}>Заявки</h2>
             <span className={styles.count}>{pending.length}</span>
           </header>
-          <Columns>{pending.map(renderCard)}</Columns>
+          <MasonryGrid
+            items={pending}
+            itemKey={getRequestKey}
+            render={renderCard}
+          />
         </section>
       )}
 
@@ -209,7 +215,11 @@ const AdminRegistrations: FC = () => {
             <h2 className={styles.title}>Приглашения</h2>
             <span className={styles.count}>{invites.length}</span>
           </header>
-          <Columns>{invites.map(renderCard)}</Columns>
+          <MasonryGrid
+            items={invites}
+            itemKey={getRequestKey}
+            render={renderCard}
+          />
         </section>
       )}
     </div>

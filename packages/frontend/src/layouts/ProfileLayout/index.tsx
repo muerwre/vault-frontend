@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import Tippy from '@tippyjs/react';
 import { PROFILE_NODES_VIEW, ProfileNodesView } from '@vault/common/constants';
@@ -6,9 +6,12 @@ import classNames from 'classnames';
 import { PinIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
-import { Columns } from '~/components/common/Columns';
 import { Container } from '~/components/common/Container';
 import { Hoverable } from '~/components/common/Hoverable';
+import {
+  MasonryGrid,
+  MasonryGridColumns,
+} from '~/components/common/MasonryGrid';
 import { PageTitle } from '~/components/common/PageTitle';
 import { URLS } from '~/constants/urls';
 import { FlowGrid } from '~/containers/flow/FlowGrid';
@@ -27,6 +30,7 @@ import { useGetProfile } from '~/hooks/profile/useGetProfile';
 import { useProfileNodes } from '~/hooks/profile/useProfileNodes';
 import { useSaveProfile } from '~/hooks/profile/useSaveProfile';
 import { NotFoundLayout } from '~/layouts/NotFoundLayout';
+import { ILabNode } from '~/types/lab';
 import { usePageCover } from '~/utils/providers/PageCoverProvider';
 import { getPageTitle } from '~/utils/ssr/getPageTitle';
 import { formatUsername } from '~/utils/user';
@@ -43,7 +47,21 @@ const MIN_POSTS = 3;
 const noop = () => {};
 
 /** Lab cards by window width: three on wide screens, as the page is wide. */
-const LAB_COLUMNS = { default: 3, 1200: 2, 840: 1 };
+const LAB_COLUMNS: MasonryGridColumns = { default: 3, 1200: 2, 840: 1 };
+
+/**
+ * Stands for the profile card, which leads the lab grid. An object, as the
+ * grid caches cells by item in a WeakMap.
+ */
+const PROFILE_CARD = { profileCard: true } as const;
+
+type LabGridItem = ILabNode | typeof PROFILE_CARD;
+
+const isProfileCard = (it: LabGridItem): it is typeof PROFILE_CARD =>
+  it === PROFILE_CARD;
+
+const getLabItemKey = (it: LabGridItem) =>
+  isProfileCard(it) ? 'profile' : it.node.id!;
 
 /** The about card is hidden until its design settles; pinned posts lead instead. */
 const SHOW_ABOUT_CARD = false;
@@ -120,6 +138,40 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
     !!searchDebounced && !isLoadingNodes && items.length === 0;
 
   useInfiniteLoader(isAura || isLab ? noop : loadMore, isLoadingNodes);
+
+  const labItems = useMemo<LabGridItem[]>(
+    () => [PROFILE_CARD, ...items],
+    [items],
+  );
+
+  const renderLabItem = useCallback(
+    (item: LabGridItem) =>
+      isProfileCard(item) ? (
+        <ProfileLabCard
+          profile={profile}
+          username={username}
+          isLoading={isLoading}
+        />
+      ) : (
+        <Hoverable effect="shine">
+          <LabNode
+            node={item.node}
+            lastSeen={item.last_seen}
+            commentCount={item.comment_count}
+            titleIcon={
+              item.node.is_pinned ? (
+                <Tippy content="Закреплено наверху профиля">
+                  <span>
+                    <PinIcon size={24} fill="currentColor" />
+                  </span>
+                </Tippy>
+              ) : null
+            }
+          />
+        </Hoverable>
+      ),
+    [profile, username, isLoading],
+  );
 
   // As many grid rows as the profile beside the cells needs, so a long one
   // is not cut off.
@@ -219,36 +271,14 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
 
         {isLab ? (
           <div className={styles.lab}>
-            <Columns
+            <MasonryGrid
+              items={labItems}
+              itemKey={getLabItemKey}
+              render={renderLabItem}
               cols={LAB_COLUMNS}
               hasMore={hasMore && !isLoadingNodes}
-              onScrollEnd={loadMore}
-            >
-              <ProfileLabCard
-                profile={profile}
-                username={username}
-                isLoading={isLoading}
-              />
-
-              {items.map((item) => (
-                <Hoverable key={item.node.id} effect="shine">
-                  <LabNode
-                    node={item.node}
-                    lastSeen={item.last_seen}
-                    commentCount={item.comment_count}
-                    titleIcon={
-                      item.node.is_pinned ? (
-                        <Tippy content="Закреплено наверху профиля">
-                          <span>
-                            <PinIcon size={24} fill="currentColor" />
-                          </span>
-                        </Tippy>
-                      ) : null
-                    }
-                  />
-                </Hoverable>
-              ))}
-            </Columns>
+              onLoadMore={loadMore}
+            />
           </div>
         ) : (
           <FlowGrid
