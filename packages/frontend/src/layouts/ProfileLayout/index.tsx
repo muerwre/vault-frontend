@@ -119,7 +119,7 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
   const isNothingFound =
     !!searchDebounced && !isLoadingNodes && items.length === 0;
 
-  useInfiniteLoader(isAura ? noop : loadMore, isLoadingNodes);
+  useInfiniteLoader(isAura || isLab ? noop : loadMore, isLoadingNodes);
 
   // As many grid rows as the profile beside the cells needs, so a long one
   // is not cut off.
@@ -219,7 +219,11 @@ const ProfileLayout: FC<Props> = observer(({ username }) => {
 
         {isLab ? (
           <div className={styles.lab}>
-            <Columns cols={LAB_COLUMNS} hasMore={hasMore && !isLoadingNodes}>
+            <Columns
+              cols={LAB_COLUMNS}
+              hasMore={hasMore && !isLoadingNodes}
+              onScrollEnd={loadMore}
+            >
               <ProfileLabCard
                 profile={profile}
                 username={username}

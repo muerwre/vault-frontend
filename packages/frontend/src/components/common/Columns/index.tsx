@@ -1,8 +1,7 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef } from 'react';
 
 import Masonry from 'react-masonry-css';
-
-import { useScrollEnd } from '~/hooks/dom/useScrollEnd';
+import { throttle } from 'throttle-debounce';
 
 import styles from './styles.module.scss';
 
@@ -10,6 +9,9 @@ const defaultColumns = {
   default: 2,
   840: 1,
 };
+
+/** Load more once the shortest column ends within this many viewports */
+const SCROLL_END_THRESHOLD = 2;
 
 interface ColumnsProps {
   cols?: Record<number, number>;
@@ -24,20 +26,64 @@ const Columns: FC<ColumnsProps> = ({
   hasMore,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [columns, setColumns] = useState<Element[]>([]);
 
+  // Masonry deals cards round-robin, so columns end up of different heights.
+  // Loading is driven by the shortest column, re-measured on scroll and
+  // whenever any column resizes (images loading, new cards, breakpoints).
   useEffect(() => {
-    const childs = ref.current?.querySelectorAll(`.${styles.column}`);
+    const wrap = ref.current;
 
-    if (!childs) return;
+    if (!wrap || !hasMore || !onScrollEnd) return;
 
-    const timeout = setTimeout(() => setColumns([...childs.values()]), 150);
+    const check = throttle(300, () => {
+      const columns = wrap.querySelectorAll(`.${styles.column}`);
 
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref.current]);
+      if (!columns.length) return;
 
-  useScrollEnd(columns, onScrollEnd, { active: hasMore, threshold: 2 });
+      const shortest = Math.min(
+        ...Array.from(columns, (it) => it.getBoundingClientRect().bottom),
+      );
+
+      if (shortest < window.innerHeight * SCROLL_END_THRESHOLD) {
+        onScrollEnd();
+      }
+    });
+
+    const columnObserver = new ResizeObserver(check);
+    let observed: Element[] = [];
+
+    // Masonry may replace column elements when the column count changes
+    const bindColumns = () => {
+      const next = Array.from(wrap.querySelectorAll(`.${styles.column}`));
+
+      if (
+        next.length === observed.length &&
+        next.every((it, i) => it === observed[i])
+      ) {
+        return;
+      }
+
+      columnObserver.disconnect();
+      next.forEach((it) => columnObserver.observe(it));
+      observed = next;
+    };
+
+    const wrapObserver = new ResizeObserver(() => {
+      bindColumns();
+      check();
+    });
+
+    wrapObserver.observe(wrap);
+    bindColumns();
+    window.addEventListener('scroll', check, { passive: true });
+
+    return () => {
+      check.cancel();
+      wrapObserver.disconnect();
+      columnObserver.disconnect();
+      window.removeEventListener('scroll', check);
+    };
+  }, [hasMore, onScrollEnd]);
 
   return (
     <div ref={ref}>
